@@ -113,11 +113,19 @@ public final class SwitchStmt extends Statement {
         return this;
     }
 
+    /**
+     * @deprecated use a method on getEntries instead
+     */
+    @Deprecated
     public SwitchStmt setEntry(int i, SwitchEntryStmt entry) {
         getEntries().set(i, entry);
         return this;
     }
 
+    /**
+     * @deprecated use a method on getEntries instead
+     */
+    @Deprecated
     public SwitchStmt addEntry(SwitchEntryStmt entry) {
         getEntries().add(entry);
         return this;
@@ -199,6 +207,7 @@ public final class SwitchStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SwitchStmt> toSwitchStmt() {
         return Optional.of(this);
     }

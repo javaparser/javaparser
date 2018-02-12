@@ -37,6 +37,7 @@ import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 
 /**
@@ -49,6 +50,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
 
     private Expression scope;
 
+    @OptionalProperty
     private NodeList<Type> typeArguments;
 
     private SimpleName name;
@@ -142,7 +144,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     /**
      * Sets the scope
      *
-     * @param scope the scope, can be null
+     * @param scope the scope, can not be null
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -253,6 +255,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<FieldAccessExpr> toFieldAccessExpr() {
         return Optional.of(this);
     }

@@ -1,0 +1,13 @@
+class Node {
+
+}
+
+class ClassCast {
+
+    public static <N extends Node> List<N> getNodesByType(Node container, Class<N> clazz) {
+        List<N> nodes = new ArrayList<N>();
+        Node child;
+        return clazz.cast(child);
+    }
+
+}

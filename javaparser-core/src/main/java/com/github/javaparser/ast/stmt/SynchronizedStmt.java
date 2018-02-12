@@ -174,6 +174,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SynchronizedStmt> toSynchronizedStmt() {
         return Optional.of(this);
     }

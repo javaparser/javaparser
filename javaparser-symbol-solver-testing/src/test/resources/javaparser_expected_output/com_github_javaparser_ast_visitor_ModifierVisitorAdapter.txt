@@ -1,0 +1,662 @@
+
+[ Class com.github.javaparser.ast.visitor.ModifierVisitorAdapter ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.GenericVisitor
+  Line 124) int i = list.size() - 1 ==> int
+  Line 124) list.size() - 1 ==> int
+  Line 124) i >= 0 ==> boolean
+  Line 124) i-- ==> int
+  Line 125) list.get(i) == null ==> boolean
+  Line 126) list.remove(i) ==> ?
+  Line 132) n.getJavaDoc() != null ==> boolean
+  Line 133) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 135) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 135) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 136) annotations != null ==> boolean
+  Line 137) int i = 0 ==> int
+  Line 137) 0 ==> int
+  Line 137) i < annotations.size() ==> boolean
+  Line 137) i++ ==> int
+  Line 138) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 140) removeNulls(annotations) ==> void
+  Line 142) final List<BodyDeclaration> members = n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 142) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 143) members != null ==> boolean
+  Line 144) int i = 0 ==> int
+  Line 144) 0 ==> int
+  Line 144) i < members.size() ==> boolean
+  Line 144) i++ ==> int
+  Line 145) members.set(i, (BodyDeclaration) members.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 147) removeNulls(members) ==> void
+  Line 149) n ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 153) n.getJavaDoc() != null ==> boolean
+  Line 154) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 156) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 156) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 157) annotations != null ==> boolean
+  Line 158) int i = 0 ==> int
+  Line 158) 0 ==> int
+  Line 158) i < annotations.size() ==> boolean
+  Line 158) i++ ==> int
+  Line 159) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 161) removeNulls(annotations) ==> void
+  Line 163) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 164) n.getDefaultValue() != null ==> boolean
+  Line 165) n.setDefaultValue((Expression) n.getDefaultValue().accept(this, arg)) ==> void
+  Line 167) n ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 171) n.setName((Expression) n.getName().accept(this, arg)) ==> void
+  Line 172) n.setIndex((Expression) n.getIndex().accept(this, arg)) ==> void
+  Line 173) n ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 177) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 178) n.getDimensions() != null ==> boolean
+  Line 179) final List<Expression> dimensions = n.getDimensions() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 179) n.getDimensions() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 180) dimensions != null ==> boolean
+  Line 181) int i = 0 ==> int
+  Line 181) 0 ==> int
+  Line 181) i < dimensions.size() ==> boolean
+  Line 181) i++ ==> int
+  Line 182) dimensions.set(i, (Expression) dimensions.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 184) removeNulls(dimensions) ==> void
+  Line 187) n.setInitializer((ArrayInitializerExpr) n.getInitializer().accept(this, arg)) ==> void
+  Line 189) n ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 193) n.getValues() != null ==> boolean
+  Line 194) final List<Expression> values = n.getValues() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 194) n.getValues() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 195) values != null ==> boolean
+  Line 196) int i = 0 ==> int
+  Line 196) 0 ==> int
+  Line 196) i < values.size() ==> boolean
+  Line 196) i++ ==> int
+  Line 197) values.set(i, (Expression) values.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 199) removeNulls(values) ==> void
+  Line 202) n ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 206) n.setCheck((Expression) n.getCheck().accept(this, arg)) ==> void
+  Line 207) n.getMessage() != null ==> boolean
+  Line 208) n.setMessage((Expression) n.getMessage().accept(this, arg)) ==> void
+  Line 210) n ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 214) n.setTarget((Expression) n.getTarget().accept(this, arg)) ==> void
+  Line 215) n.setValue((Expression) n.getValue().accept(this, arg)) ==> void
+  Line 216) n ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 220) n.setLeft((Expression) n.getLeft().accept(this, arg)) ==> void
+  Line 221) n.setRight((Expression) n.getRight().accept(this, arg)) ==> void
+  Line 222) n ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 226) final List<Statement> stmts = n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 226) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 227) stmts != null ==> boolean
+  Line 228) int i = 0 ==> int
+  Line 228) 0 ==> int
+  Line 228) i < stmts.size() ==> boolean
+  Line 228) i++ ==> int
+  Line 229) stmts.set(i, (Statement) stmts.get(i).accept(this, arg)) ==> com.github.javaparser.ast.stmt.Statement
+  Line 231) removeNulls(stmts) ==> void
+  Line 233) n ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 237) n ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 241) n ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 245) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 246) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 247) n ==> com.github.javaparser.ast.expr.CastExpr
+  Line 251) n.setExcept((MultiTypeParameter) n.getExcept().accept(this, arg)) ==> void
+  Line 252) n.setCatchBlock((BlockStmt) n.getCatchBlock().accept(this, arg)) ==> void
+  Line 253) n ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 258) n ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 262) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 263) n ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 267) n.getJavaDoc() != null ==> boolean
+  Line 268) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 270) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 270) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 271) annotations != null ==> boolean
+  Line 272) int i = 0 ==> int
+  Line 272) 0 ==> int
+  Line 272) i < annotations.size() ==> boolean
+  Line 272) i++ ==> int
+  Line 273) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 275) removeNulls(annotations) ==> void
+  Line 277) final List<TypeParameter> typeParameters = n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 277) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 278) typeParameters != null ==> boolean
+  Line 279) int i = 0 ==> int
+  Line 279) 0 ==> int
+  Line 279) i < typeParameters.size() ==> boolean
+  Line 279) i++ ==> int
+  Line 280) typeParameters.set(i, (TypeParameter) typeParameters.get(i).accept(this, arg)) ==> com.github.javaparser.ast.TypeParameter
+  Line 282) removeNulls(typeParameters) ==> void
+  Line 284) final List<ClassOrInterfaceType> extendz = n.getExtends() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 284) n.getExtends() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 285) extendz != null ==> boolean
+  Line 286) int i = 0 ==> int
+  Line 286) 0 ==> int
+  Line 286) i < extendz.size() ==> boolean
+  Line 286) i++ ==> int
+  Line 287) extendz.set(i, (ClassOrInterfaceType) extendz.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 289) removeNulls(extendz) ==> void
+  Line 291) final List<ClassOrInterfaceType> implementz = n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 291) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 292) implementz != null ==> boolean
+  Line 293) int i = 0 ==> int
+  Line 293) 0 ==> int
+  Line 293) i < implementz.size() ==> boolean
+  Line 293) i++ ==> int
+  Line 294) implementz.set(i, (ClassOrInterfaceType) implementz.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 296) removeNulls(implementz) ==> void
+  Line 298) final List<BodyDeclaration> members = n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 298) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 299) members != null ==> boolean
+  Line 300) int i = 0 ==> int
+  Line 300) 0 ==> int
+  Line 300) i < members.size() ==> boolean
+  Line 300) i++ ==> int
+  Line 301) members.set(i, (BodyDeclaration) members.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 303) removeNulls(members) ==> void
+  Line 305) n ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 309) n.getScope() != null ==> boolean
+  Line 310) n.setScope((ClassOrInterfaceType) n.getScope().accept(this, arg)) ==> void
+  Line 312) final List<Type> typeArgs = n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 312) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 313) typeArgs != null ==> boolean
+  Line 314) int i = 0 ==> int
+  Line 314) 0 ==> int
+  Line 314) i < typeArgs.size() ==> boolean
+  Line 314) i++ ==> int
+  Line 315) typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.Type
+  Line 317) removeNulls(typeArgs) ==> void
+  Line 319) n ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 323) n.getPackage() != null ==> boolean
+  Line 324) n.setPackage((PackageDeclaration) n.getPackage().accept(this, arg)) ==> void
+  Line 326) final List<ImportDeclaration> imports = n.getImports() ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 326) n.getImports() ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 327) imports != null ==> boolean
+  Line 328) int i = 0 ==> int
+  Line 328) 0 ==> int
+  Line 328) i < imports.size() ==> boolean
+  Line 328) i++ ==> int
+  Line 329) imports.set(i, (ImportDeclaration) imports.get(i).accept(this, arg)) ==> com.github.javaparser.ast.ImportDeclaration
+  Line 331) removeNulls(imports) ==> void
+  Line 333) final List<TypeDeclaration> types = n.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 333) n.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 334) types != null ==> boolean
+  Line 335) int i = 0 ==> int
+  Line 335) 0 ==> int
+  Line 335) i < types.size() ==> boolean
+  Line 335) i++ ==> int
+  Line 336) types.set(i, (TypeDeclaration) types.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.TypeDeclaration
+  Line 338) removeNulls(types) ==> void
+  Line 340) n ==> com.github.javaparser.ast.CompilationUnit
+  Line 344) n.setCondition((Expression) n.getCondition().accept(this, arg)) ==> void
+  Line 345) n.setThenExpr((Expression) n.getThenExpr().accept(this, arg)) ==> void
+  Line 346) n.setElseExpr((Expression) n.getElseExpr().accept(this, arg)) ==> void
+  Line 347) n ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 351) n.getJavaDoc() != null ==> boolean
+  Line 352) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 354) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 354) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 355) annotations != null ==> boolean
+  Line 356) int i = 0 ==> int
+  Line 356) 0 ==> int
+  Line 356) i < annotations.size() ==> boolean
+  Line 356) i++ ==> int
+  Line 357) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 359) removeNulls(annotations) ==> void
+  Line 361) final List<TypeParameter> typeParameters = n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 361) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 362) typeParameters != null ==> boolean
+  Line 363) int i = 0 ==> int
+  Line 363) 0 ==> int
+  Line 363) i < typeParameters.size() ==> boolean
+  Line 363) i++ ==> int
+  Line 364) typeParameters.set(i, (TypeParameter) typeParameters.get(i).accept(this, arg)) ==> com.github.javaparser.ast.TypeParameter
+  Line 366) removeNulls(typeParameters) ==> void
+  Line 368) final List<Parameter> parameters = n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 368) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 369) parameters != null ==> boolean
+  Line 370) int i = 0 ==> int
+  Line 370) 0 ==> int
+  Line 370) i < parameters.size() ==> boolean
+  Line 370) i++ ==> int
+  Line 371) parameters.set(i, (Parameter) parameters.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.Parameter
+  Line 373) removeNulls(parameters) ==> void
+  Line 375) final List<NameExpr> throwz = n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 375) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 376) throwz != null ==> boolean
+  Line 377) int i = 0 ==> int
+  Line 377) 0 ==> int
+  Line 377) i < throwz.size() ==> boolean
+  Line 377) i++ ==> int
+  Line 378) throwz.set(i, (NameExpr) throwz.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 380) removeNulls(throwz) ==> void
+  Line 382) n.setBlock((BlockStmt) n.getBlock().accept(this, arg)) ==> void
+  Line 383) n ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 387) n ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 391) n.setBody((Statement) n.getBody().accept(this, arg)) ==> void
+  Line 392) n.setCondition((Expression) n.getCondition().accept(this, arg)) ==> void
+  Line 393) n ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 397) n ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 401) n.getJavaDoc() != null ==> boolean
+  Line 402) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 404) n ==> com.github.javaparser.ast.body.EmptyMemberDeclaration
+  Line 408) n ==> com.github.javaparser.ast.stmt.EmptyStmt
+  Line 412) n.getJavaDoc() != null ==> boolean
+  Line 413) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 415) n ==> com.github.javaparser.ast.body.EmptyTypeDeclaration
+  Line 419) n.setInner((Expression) n.getInner().accept(this, arg)) ==> void
+  Line 420) n ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 424) n.getJavaDoc() != null ==> boolean
+  Line 425) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 427) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 427) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 428) annotations != null ==> boolean
+  Line 429) int i = 0 ==> int
+  Line 429) 0 ==> int
+  Line 429) i < annotations.size() ==> boolean
+  Line 429) i++ ==> int
+  Line 430) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 432) removeNulls(annotations) ==> void
+  Line 434) final List<Expression> args = n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 434) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 435) args != null ==> boolean
+  Line 436) int i = 0 ==> int
+  Line 436) 0 ==> int
+  Line 436) i < args.size() ==> boolean
+  Line 436) i++ ==> int
+  Line 437) args.set(i, (Expression) args.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 439) removeNulls(args) ==> void
+  Line 441) final List<BodyDeclaration> classBody = n.getClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 441) n.getClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 442) classBody != null ==> boolean
+  Line 443) int i = 0 ==> int
+  Line 443) 0 ==> int
+  Line 443) i < classBody.size() ==> boolean
+  Line 443) i++ ==> int
+  Line 444) classBody.set(i, (BodyDeclaration) classBody.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 446) removeNulls(classBody) ==> void
+  Line 448) n ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 452) n.getJavaDoc() != null ==> boolean
+  Line 453) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 455) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 455) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 456) annotations != null ==> boolean
+  Line 457) int i = 0 ==> int
+  Line 457) 0 ==> int
+  Line 457) i < annotations.size() ==> boolean
+  Line 457) i++ ==> int
+  Line 458) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 460) removeNulls(annotations) ==> void
+  Line 462) final List<ClassOrInterfaceType> implementz = n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 462) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 463) implementz != null ==> boolean
+  Line 464) int i = 0 ==> int
+  Line 464) 0 ==> int
+  Line 464) i < implementz.size() ==> boolean
+  Line 464) i++ ==> int
+  Line 465) implementz.set(i, (ClassOrInterfaceType) implementz.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 467) removeNulls(implementz) ==> void
+  Line 469) final List<EnumConstantDeclaration> entries = n.getEntries() ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 469) n.getEntries() ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 470) entries != null ==> boolean
+  Line 471) int i = 0 ==> int
+  Line 471) 0 ==> int
+  Line 471) i < entries.size() ==> boolean
+  Line 471) i++ ==> int
+  Line 472) entries.set(i, (EnumConstantDeclaration) entries.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 474) removeNulls(entries) ==> void
+  Line 476) final List<BodyDeclaration> members = n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 476) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 477) members != null ==> boolean
+  Line 478) int i = 0 ==> int
+  Line 478) 0 ==> int
+  Line 478) i < members.size() ==> boolean
+  Line 478) i++ ==> int
+  Line 479) members.set(i, (BodyDeclaration) members.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 481) removeNulls(members) ==> void
+  Line 483) n ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 487) !n.isThis() ==> boolean
+  Line 488) n.getExpr() != null ==> boolean
+  Line 489) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 492) final List<Type> typeArgs = n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 492) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 493) typeArgs != null ==> boolean
+  Line 494) int i = 0 ==> int
+  Line 494) 0 ==> int
+  Line 494) i < typeArgs.size() ==> boolean
+  Line 494) i++ ==> int
+  Line 495) typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.Type
+  Line 497) removeNulls(typeArgs) ==> void
+  Line 499) final List<Expression> args = n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 499) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 500) args != null ==> boolean
+  Line 501) int i = 0 ==> int
+  Line 501) 0 ==> int
+  Line 501) i < args.size() ==> boolean
+  Line 501) i++ ==> int
+  Line 502) args.set(i, (Expression) args.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 504) removeNulls(args) ==> void
+  Line 506) n ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 510) n.setExpression((Expression) n.getExpression().accept(this, arg)) ==> void
+  Line 511) n ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 515) n.setScope((Expression) n.getScope().accept(this, arg)) ==> void
+  Line 516) n ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 520) n.getJavaDoc() != null ==> boolean
+  Line 521) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 523) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 523) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 524) annotations != null ==> boolean
+  Line 525) int i = 0 ==> int
+  Line 525) 0 ==> int
+  Line 525) i < annotations.size() ==> boolean
+  Line 525) i++ ==> int
+  Line 526) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 528) removeNulls(annotations) ==> void
+  Line 530) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 531) final List<VariableDeclarator> variables = n.getVariables() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 531) n.getVariables() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 532) int i = 0 ==> int
+  Line 532) 0 ==> int
+  Line 532) i < variables.size() ==> boolean
+  Line 532) i++ ==> int
+  Line 533) variables.set(i, (VariableDeclarator) variables.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 535) removeNulls(variables) ==> void
+  Line 536) n ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 540) n.setVariable((VariableDeclarationExpr) n.getVariable().accept(this, arg)) ==> void
+  Line 541) n.setIterable((Expression) n.getIterable().accept(this, arg)) ==> void
+  Line 542) n.setBody((Statement) n.getBody().accept(this, arg)) ==> void
+  Line 543) n ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 547) final List<Expression> init = n.getInit() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 547) n.getInit() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 548) init != null ==> boolean
+  Line 549) int i = 0 ==> int
+  Line 549) 0 ==> int
+  Line 549) i < init.size() ==> boolean
+  Line 549) i++ ==> int
+  Line 550) init.set(i, (Expression) init.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 552) removeNulls(init) ==> void
+  Line 554) n.getCompare() != null ==> boolean
+  Line 555) n.setCompare((Expression) n.getCompare().accept(this, arg)) ==> void
+  Line 557) final List<Expression> update = n.getUpdate() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 557) n.getUpdate() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 558) update != null ==> boolean
+  Line 559) int i = 0 ==> int
+  Line 559) 0 ==> int
+  Line 559) i < update.size() ==> boolean
+  Line 559) i++ ==> int
+  Line 560) update.set(i, (Expression) update.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 562) removeNulls(update) ==> void
+  Line 564) n.setBody((Statement) n.getBody().accept(this, arg)) ==> void
+  Line 565) n ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 569) n.setCondition((Expression) n.getCondition().accept(this, arg)) ==> void
+  Line 570) n.setThenStmt((Statement) n.getThenStmt().accept(this, arg)) ==> void
+  Line 571) n.getElseStmt() != null ==> boolean
+  Line 572) n.setElseStmt((Statement) n.getElseStmt().accept(this, arg)) ==> void
+  Line 574) n ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 578) n.setName((NameExpr) n.getName().accept(this, arg)) ==> void
+  Line 579) n ==> com.github.javaparser.ast.ImportDeclaration
+  Line 583) n.getJavaDoc() != null ==> boolean
+  Line 584) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 586) n.setBlock((BlockStmt) n.getBlock().accept(this, arg)) ==> void
+  Line 587) n ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 591) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 592) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 593) n ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 597) n ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 601) n ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 605) n ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 609) n.setStmt((Statement) n.getStmt().accept(this, arg)) ==> void
+  Line 610) n ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 614) n ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 618) n ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 622) n.setName((NameExpr) n.getName().accept(this, arg)) ==> void
+  Line 623) n ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 627) n.setValue((Expression) n.getValue().accept(this, arg)) ==> void
+  Line 628) n ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 632) n.getScope() != null ==> boolean
+  Line 633) n.setScope((Expression) n.getScope().accept(this, arg)) ==> void
+  Line 635) final List<Type> typeArgs = n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 635) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 636) typeArgs != null ==> boolean
+  Line 637) int i = 0 ==> int
+  Line 637) 0 ==> int
+  Line 637) i < typeArgs.size() ==> boolean
+  Line 637) i++ ==> int
+  Line 638) typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.Type
+  Line 640) removeNulls(typeArgs) ==> void
+  Line 642) final List<Expression> args = n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 642) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 643) args != null ==> boolean
+  Line 644) int i = 0 ==> int
+  Line 644) 0 ==> int
+  Line 644) i < args.size() ==> boolean
+  Line 644) i++ ==> int
+  Line 645) args.set(i, (Expression) args.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 647) removeNulls(args) ==> void
+  Line 649) n ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 653) n.getJavaDoc() != null ==> boolean
+  Line 654) n.setJavaDoc((JavadocComment) n.getJavaDoc().accept(this, arg)) ==> void
+  Line 656) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 656) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 657) annotations != null ==> boolean
+  Line 658) int i = 0 ==> int
+  Line 658) 0 ==> int
+  Line 658) i < annotations.size() ==> boolean
+  Line 658) i++ ==> int
+  Line 659) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 661) removeNulls(annotations) ==> void
+  Line 663) final List<TypeParameter> typeParameters = n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 663) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 664) typeParameters != null ==> boolean
+  Line 665) int i = 0 ==> int
+  Line 665) 0 ==> int
+  Line 665) i < typeParameters.size() ==> boolean
+  Line 665) i++ ==> int
+  Line 666) typeParameters.set(i, (TypeParameter) typeParameters.get(i).accept(this, arg)) ==> com.github.javaparser.ast.TypeParameter
+  Line 668) removeNulls(typeParameters) ==> void
+  Line 670) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 671) final List<Parameter> parameters = n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 671) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 672) parameters != null ==> boolean
+  Line 673) int i = 0 ==> int
+  Line 673) 0 ==> int
+  Line 673) i < parameters.size() ==> boolean
+  Line 673) i++ ==> int
+  Line 674) parameters.set(i, (Parameter) parameters.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.Parameter
+  Line 676) removeNulls(parameters) ==> void
+  Line 678) final List<NameExpr> throwz = n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 678) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 679) throwz != null ==> boolean
+  Line 680) int i = 0 ==> int
+  Line 680) 0 ==> int
+  Line 680) i < throwz.size() ==> boolean
+  Line 680) i++ ==> int
+  Line 681) throwz.set(i, (NameExpr) throwz.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 683) removeNulls(throwz) ==> void
+  Line 685) n.getBody() != null ==> boolean
+  Line 686) n.setBody((BlockStmt) n.getBody().accept(this, arg)) ==> void
+  Line 688) n ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 692) n ==> com.github.javaparser.ast.expr.NameExpr
+  Line 696) n.setName((NameExpr) n.getName().accept(this, arg)) ==> void
+  Line 697) final List<MemberValuePair> pairs = n.getPairs() ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 697) n.getPairs() ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 698) pairs != null ==> boolean
+  Line 699) int i = 0 ==> int
+  Line 699) 0 ==> int
+  Line 699) i < pairs.size() ==> boolean
+  Line 699) i++ ==> int
+  Line 700) pairs.set(i, (MemberValuePair) pairs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 702) removeNulls(pairs) ==> void
+  Line 704) n ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 708) n ==> com.github.javaparser.ast.expr.NullLiteralExpr
+  Line 712) n.getScope() != null ==> boolean
+  Line 713) n.setScope((Expression) n.getScope().accept(this, arg)) ==> void
+  Line 715) final List<Type> typeArgs = n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 715) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 716) typeArgs != null ==> boolean
+  Line 717) int i = 0 ==> int
+  Line 717) 0 ==> int
+  Line 717) i < typeArgs.size() ==> boolean
+  Line 717) i++ ==> int
+  Line 718) typeArgs.set(i, (Type) typeArgs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.Type
+  Line 720) removeNulls(typeArgs) ==> void
+  Line 722) n.setType((ClassOrInterfaceType) n.getType().accept(this, arg)) ==> void
+  Line 723) final List<Expression> args = n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 723) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 724) args != null ==> boolean
+  Line 725) int i = 0 ==> int
+  Line 725) 0 ==> int
+  Line 725) i < args.size() ==> boolean
+  Line 725) i++ ==> int
+  Line 726) args.set(i, (Expression) args.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.Expression
+  Line 728) removeNulls(args) ==> void
+  Line 730) final List<BodyDeclaration> anonymousClassBody = n.getAnonymousClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 730) n.getAnonymousClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 731) anonymousClassBody != null ==> boolean
+  Line 732) int i = 0 ==> int
+  Line 732) 0 ==> int
+  Line 732) i < anonymousClassBody.size() ==> boolean
+  Line 732) i++ ==> int
+  Line 733) anonymousClassBody.set(i, (BodyDeclaration) anonymousClassBody.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 735) removeNulls(anonymousClassBody) ==> void
+  Line 737) n ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 741) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 741) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 742) annotations != null ==> boolean
+  Line 743) int i = 0 ==> int
+  Line 743) 0 ==> int
+  Line 743) i < annotations.size() ==> boolean
+  Line 743) i++ ==> int
+  Line 744) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 746) removeNulls(annotations) ==> void
+  Line 748) n.setName((NameExpr) n.getName().accept(this, arg)) ==> void
+  Line 749) n ==> com.github.javaparser.ast.PackageDeclaration
+  Line 753) visit((BaseParameter) n, arg) ==> com.github.javaparser.ast.Node
+  Line 754) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 755) n ==> com.github.javaparser.ast.body.Parameter
+  Line 759) visit((BaseParameter) n, arg) ==> com.github.javaparser.ast.Node
+  Line 760) List<Type> types = new LinkedList<Type>() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 760) new LinkedList<Type>() ==> java.util.LinkedList<com.github.javaparser.ast.type.Type>
+  Line 761) Type type ==> com.github.javaparser.ast.type.Type
+  Line 761) n.getTypes() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 762) types.add((Type) type.accept(this, arg)) ==> boolean
+  Line 764) n.setTypes(types) ==> void
+  Line 765) n ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 769) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 769) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 770) annotations != null ==> boolean
+  Line 771) int i = 0 ==> int
+  Line 771) 0 ==> int
+  Line 771) i < annotations.size() ==> boolean
+  Line 771) i++ ==> int
+  Line 772) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 774) removeNulls(annotations) ==> void
+  Line 777) n.setId((VariableDeclaratorId) n.getId().accept(this, arg)) ==> void
+  Line 778) n ==> com.github.javaparser.ast.body.BaseParameter
+  Line 782) n ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 786) n.setQualifier((NameExpr) n.getQualifier().accept(this, arg)) ==> void
+  Line 787) n ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 791) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 792) n ==> com.github.javaparser.ast.type.ReferenceType
+  Line 796) n.getExpr() != null ==> boolean
+  Line 797) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 799) n ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 803) n.setName((NameExpr) n.getName().accept(this, arg)) ==> void
+  Line 804) n.setMemberValue((Expression) n.getMemberValue().accept(this, arg)) ==> void
+  Line 805) n ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 809) n ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 813) n.getClassExpr() != null ==> boolean
+  Line 814) n.setClassExpr((Expression) n.getClassExpr().accept(this, arg)) ==> void
+  Line 816) n ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 820) n.getLabel() != null ==> boolean
+  Line 821) n.setLabel((Expression) n.getLabel().accept(this, arg)) ==> void
+  Line 823) final List<Statement> stmts = n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 823) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 824) stmts != null ==> boolean
+  Line 825) int i = 0 ==> int
+  Line 825) 0 ==> int
+  Line 825) i < stmts.size() ==> boolean
+  Line 825) i++ ==> int
+  Line 826) stmts.set(i, (Statement) stmts.get(i).accept(this, arg)) ==> com.github.javaparser.ast.stmt.Statement
+  Line 828) removeNulls(stmts) ==> void
+  Line 830) n ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 834) n.setSelector((Expression) n.getSelector().accept(this, arg)) ==> void
+  Line 835) final List<SwitchEntryStmt> entries = n.getEntries() ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 835) n.getEntries() ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 836) entries != null ==> boolean
+  Line 837) int i = 0 ==> int
+  Line 837) 0 ==> int
+  Line 837) i < entries.size() ==> boolean
+  Line 837) i++ ==> int
+  Line 838) entries.set(i, (SwitchEntryStmt) entries.get(i).accept(this, arg)) ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 840) removeNulls(entries) ==> void
+  Line 842) n ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 847) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 848) n.setBlock((BlockStmt) n.getBlock().accept(this, arg)) ==> void
+  Line 849) n ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 853) n.getClassExpr() != null ==> boolean
+  Line 854) n.setClassExpr((Expression) n.getClassExpr().accept(this, arg)) ==> void
+  Line 856) n ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 860) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 861) n ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 865) n.setTryBlock((BlockStmt) n.getTryBlock().accept(this, arg)) ==> void
+  Line 866) final List<CatchClause> catchs = n.getCatchs() ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 866) n.getCatchs() ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 867) catchs != null ==> boolean
+  Line 868) int i = 0 ==> int
+  Line 868) 0 ==> int
+  Line 868) i < catchs.size() ==> boolean
+  Line 868) i++ ==> int
+  Line 869) catchs.set(i, (CatchClause) catchs.get(i).accept(this, arg)) ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 871) removeNulls(catchs) ==> void
+  Line 873) n.getFinallyBlock() != null ==> boolean
+  Line 874) n.setFinallyBlock((BlockStmt) n.getFinallyBlock().accept(this, arg)) ==> void
+  Line 876) n ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 880) n.setTypeDeclaration((TypeDeclaration) n.getTypeDeclaration().accept(this, arg)) ==> void
+  Line 881) n ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 885) final List<ClassOrInterfaceType> typeBound = n.getTypeBound() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 885) n.getTypeBound() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 886) typeBound != null ==> boolean
+  Line 887) int i = 0 ==> int
+  Line 887) 0 ==> int
+  Line 887) i < typeBound.size() ==> boolean
+  Line 887) i++ ==> int
+  Line 888) typeBound.set(i, (ClassOrInterfaceType) typeBound.get(i).accept(this, arg)) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 890) removeNulls(typeBound) ==> void
+  Line 892) n ==> com.github.javaparser.ast.TypeParameter
+  Line 896) n.setExpr((Expression) n.getExpr().accept(this, arg)) ==> void
+  Line 897) n ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 901) n ==> com.github.javaparser.ast.type.UnknownType
+  Line 905) final List<AnnotationExpr> annotations = n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 905) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 906) annotations != null ==> boolean
+  Line 907) int i = 0 ==> int
+  Line 907) 0 ==> int
+  Line 907) i < annotations.size() ==> boolean
+  Line 907) i++ ==> int
+  Line 908) annotations.set(i, (AnnotationExpr) annotations.get(i).accept(this, arg)) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 910) removeNulls(annotations) ==> void
+  Line 912) n.setType((Type) n.getType().accept(this, arg)) ==> void
+  Line 913) final List<VariableDeclarator> vars = n.getVars() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 913) n.getVars() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 914) int i = 0 ==> int
+  Line 914) 0 ==> int
+  Line 914) i < vars.size() ==> boolean
+  Line 914) i++ ==> int
+  Line 915) vars.set(i, (VariableDeclarator) vars.get(i).accept(this, arg)) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 917) removeNulls(vars) ==> void
+  Line 918) n ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 922) n.setId((VariableDeclaratorId) n.getId().accept(this, arg)) ==> void
+  Line 923) n.getInit() != null ==> boolean
+  Line 924) n.setInit((Expression) n.getInit().accept(this, arg)) ==> void
+  Line 926) n ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 930) n ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 934) n ==> com.github.javaparser.ast.type.VoidType
+  Line 938) n.setCondition((Expression) n.getCondition().accept(this, arg)) ==> void
+  Line 939) n.setBody((Statement) n.getBody().accept(this, arg)) ==> void
+  Line 940) n ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 944) n.getExtends() != null ==> boolean
+  Line 945) n.setExtends((ReferenceType) n.getExtends().accept(this, arg)) ==> void
+  Line 947) n.getSuper() != null ==> boolean
+  Line 948) n.setSuper((ReferenceType) n.getSuper().accept(this, arg)) ==> void
+  Line 950) n ==> com.github.javaparser.ast.type.WildcardType
+  Line 954) n ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 958) n ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 962) n ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 966) n ==> com.github.javaparser.ast.comments.BlockComment
+  Line 970) n ==> com.github.javaparser.ast.comments.LineComment

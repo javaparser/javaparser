@@ -54,10 +54,11 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Comparator.*;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
- * operating on the AST and then used them to reproduce the source code 
+ * operating on the AST and then used them to reproduce the source code
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
@@ -65,7 +66,8 @@ public class LexicalPreservingPrinter {
     /**
      * The nodetext for a node is stored in the node's data field. This is the key to set and retrieve it.
      */
-    public static final DataKey<NodeText> NODE_TEXT_DATA = new DataKey<NodeText>() { };
+    public static final DataKey<NodeText> NODE_TEXT_DATA = new DataKey<NodeText>() {
+    };
 
     //
     // Factory methods
@@ -73,6 +75,7 @@ public class LexicalPreservingPrinter {
 
     /**
      * Parse the code and setup the LexicalPreservingPrinter.
+     *
      * @deprecated use setup(Node) and the static methods on this class.
      */
     public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart,
@@ -90,11 +93,12 @@ public class LexicalPreservingPrinter {
      * Prepares the node so it can be used in the print methods.
      * The correct order is:
      * <ol>
-     *     <li>Parse some code</li>
-     *     <li>Call this setup method on the result</li>
-     *     <li>Make changes to the AST as desired</li>
-     *     <li>Use one of the print methods on this class to print out the original source code with your changes added</li>
+     * <li>Parse some code</li>
+     * <li>Call this setup method on the result</li>
+     * <li>Make changes to the AST as desired</li>
+     * <li>Use one of the print methods on this class to print out the original source code with your changes added</li>
      * </ol>
+     *
      * @return the node passed as a parameter for your convenience.
      */
     public static <N extends Node> N setup(N node) {
@@ -110,7 +114,7 @@ public class LexicalPreservingPrinter {
         });
         return node;
     }
-    
+
     //
     // Constructor and setup
     //
@@ -143,13 +147,13 @@ public class LexicalPreservingPrinter {
                     if (oldValue == null) {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
-                        nodeText.addChild(index, (Comment)newValue);
+                        nodeText.addChild(index, (Comment) newValue);
                         nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                     } else if (newValue == null) {
                         if (oldValue instanceof JavadocComment) {
-                            JavadocComment javadocComment = (JavadocComment)oldValue;
+                            JavadocComment javadocComment = (JavadocComment) oldValue;
                             List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
-                            && ((TokenTextElement)e).getText().equals("/**"+javadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
+                                    && ((TokenTextElement) e).getText().equals("/**" + javadocComment.getContent() + "*/")).map(e -> (TokenTextElement) e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
                             }
@@ -163,13 +167,13 @@ public class LexicalPreservingPrinter {
                         }
                     } else {
                         if (oldValue instanceof JavadocComment) {
-                            JavadocComment oldJavadocComment = (JavadocComment)oldValue;
+                            JavadocComment oldJavadocComment = (JavadocComment) oldValue;
                             List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
-                                    && ((TokenTextElement)e).getText().equals("/**"+oldJavadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
+                                    && ((TokenTextElement) e).getText().equals("/**" + oldJavadocComment.getContent() + "*/")).map(e -> (TokenTextElement) e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
                             }
-                            JavadocComment newJavadocComment = (JavadocComment)newValue;
+                            JavadocComment newJavadocComment = (JavadocComment) newValue;
                             nodeText.replace(matchingTokens.get(0), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
                         } else {
                             throw new UnsupportedOperationException();
@@ -191,7 +195,7 @@ public class LexicalPreservingPrinter {
                 if (type == ListChangeType.REMOVAL) {
                     new LexicalDifferenceCalculator().calculateListRemovalDifference(findNodeListName(changedList), changedList, index).apply(nodeText, changedList.getParentNodeForChildren());
                 } else if (type == ListChangeType.ADDITION) {
-                    new LexicalDifferenceCalculator().calculateListAdditionDifference(findNodeListName(changedList),changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
+                    new LexicalDifferenceCalculator().calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
                 } else {
                     throw new UnsupportedOperationException();
                 }
@@ -208,26 +212,15 @@ public class LexicalPreservingPrinter {
     private static void storeInitialText(Node root) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
-        // Take all nodes and sort them to get the leaves first
-        List<Node> nodesDepthFirst = new LinkedList<>();
-        new TreeVisitor(){
-            @Override
-            public void process(Node node) {
-                // we do not consider "phantom" nodes here, like the fake type of variable in FieldDeclaration
-                if (!PhantomNodeLogic.isPhantomNode(node)) {
-                    nodesDepthFirst.add(node);
-                }
-            }
-        }.visitLeavesFirst(root);
-
-        // We go over tokens and find to which nodes they belong. Note that we start from the most specific nodes
-        // and we move up to more general nodes
+        // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
+        // on a list but as they were organized in a tree. At each time we select only the branch corresponding to the
+        // range of interest and ignore all other branches
         for (JavaToken token : root.getTokenRange().get()) {
             Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-            Node owner = nodesDepthFirst.stream()
-                    .filter(n -> n.getRange().get().contains(tokenRange))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+            Node owner = findNodeForToken(root, tokenRange);
+            if (owner == null) {
+                throw new RuntimeException("Token without node owning it: " + token);
+            }
             if (!tokensByNode.containsKey(owner)) {
                 tokensByNode.put(owner, new LinkedList<>());
             }
@@ -243,6 +236,23 @@ public class LexicalPreservingPrinter {
                 }
             }
         }.visitBreadthFirst(root);
+    }
+
+    private static Node findNodeForToken(Node node, Range tokenRange) {
+        if (PhantomNodeLogic.isPhantomNode(node)) {
+            return null;
+        }
+        if (node.getRange().get().contains(tokenRange)) {
+            for (Node child : node.getChildNodes()) {
+                Node found = findNodeForToken(child, tokenRange);
+                if (found != null) {
+                    return found;
+                }
+            }
+            return node;
+        } else {
+            return null;
+        }
     }
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {
@@ -261,10 +271,10 @@ public class LexicalPreservingPrinter {
         for (JavaToken token : nodeTokens) {
             elements.add(new Pair<>(token.getRange().get(), new TokenTextElement(token)));
         }
-        elements.sort(Comparator.comparing(e -> e.a.begin));
+        elements.sort(comparing(e -> e.a.begin));
         node.setData(NODE_TEXT_DATA, new NodeText(elements.stream().map(p -> p.b).collect(Collectors.toList())));
     }
-    
+
     //
     // Iterators
     //
@@ -325,9 +335,9 @@ public class LexicalPreservingPrinter {
     // Methods to handle transformations
     //
 
-    private static NodeText prettyPrintingTextNode(Node node, NodeText nodeText) {
+    private static void prettyPrintingTextNode(Node node, NodeText nodeText) {
         if (node instanceof PrimitiveType) {
-            PrimitiveType primitiveType = (PrimitiveType)node;
+            PrimitiveType primitiveType = (PrimitiveType) node;
             switch (primitiveType.getType()) {
                 case BOOLEAN:
                     nodeText.addToken(BOOLEAN, node.toString());
@@ -356,14 +366,14 @@ public class LexicalPreservingPrinter {
                 default:
                     throw new IllegalArgumentException();
             }
-            return nodeText;
+            return;
         }
         if (node instanceof JavadocComment) {
-            nodeText.addToken(JAVADOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
-            return nodeText;
+            nodeText.addToken(JAVADOC_COMMENT, "/**" + ((JavadocComment) node).getContent() + "*/");
+            return;
         }
 
-        return interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
+        interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }
 
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
@@ -373,7 +383,7 @@ public class LexicalPreservingPrinter {
 
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
-            if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken)element).isNewLine())) {
+            if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken) element).isNewLine())) {
                 indentation.forEach(nodeText::addElement);
             }
             pendingIndentation = false;
@@ -386,7 +396,7 @@ public class LexicalPreservingPrinter {
                     pendingIndentation = true;
                 }
             } else if (element instanceof CsmMix) {
-                CsmMix csmMix = (CsmMix)element;
+                CsmMix csmMix = (CsmMix) element;
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
@@ -395,16 +405,16 @@ public class LexicalPreservingPrinter {
         // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
         // so they have to be handled in a special way
         if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator)node;
-            if (!variableDeclarator.getParentNode().isPresent()) {
-                throw new RuntimeException("VariableDeclarator without parent: I cannot handle the array levels");
-            }
-            NodeWithVariables<?> nodeWithVariables = (NodeWithVariables)variableDeclarator.getParentNode().get();
-            int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - nodeWithVariables.getMaximumCommonType().getArrayLevel();
-            for (int i=0; i<extraArrayLevels; i++) {
-                nodeText.addElement(new TokenTextElement(LBRACKET));
-                nodeText.addElement(new TokenTextElement(RBRACKET));
-            }
+            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
+            variableDeclarator.getParentNode().ifPresent(parent ->
+                    ((NodeWithVariables<?>) parent).getMaximumCommonType().ifPresent(mct -> {
+                        int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - mct.getArrayLevel();
+                        for (int i = 0; i < extraArrayLevels; i++) {
+                            nodeText.addElement(new TokenTextElement(LBRACKET));
+                            nodeText.addElement(new TokenTextElement(RBRACKET));
+                        }
+                    })
+            );
         }
         return nodeText;
     }
@@ -433,7 +443,7 @@ public class LexicalPreservingPrinter {
             }
         }
         Collections.reverse(followingNewlines);
-        for (int i=0;i<followingNewlines.size();i++){
+        for (int i = 0; i < followingNewlines.size(); i++) {
             if (!followingNewlines.get(i).isSpaceOrTab()) {
                 return followingNewlines.subList(0, i);
             }
@@ -466,7 +476,7 @@ public class LexicalPreservingPrinter {
                     if (!(raw instanceof NodeList)) {
                         throw new IllegalStateException("Expected NodeList, found " + raw.getClass().getCanonicalName());
                     }
-                    NodeList result = (NodeList)raw;
+                    NodeList result = (NodeList) raw;
                     if (result == nodeList) {
                         String name = m.getName();
                         if (name.startsWith("get")) {
@@ -479,7 +489,7 @@ public class LexicalPreservingPrinter {
                 }
             } else if (m.getParameterCount() == 0 && isReturningOptionalNodeList(m)) {
                 try {
-                    Optional<NodeList> raw = (Optional<NodeList>)m.invoke(parent);
+                    Optional<NodeList<?>> raw = (Optional<NodeList<?>>) m.invoke(parent);
                     if (raw.isPresent() && raw.get() == nodeList) {
                         String name = m.getName();
                         if (name.startsWith("get")) {

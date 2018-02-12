@@ -46,6 +46,7 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
@@ -63,6 +64,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     private Type type;
 
+    @OptionalProperty
     private BlockStmt body;
 
     public MethodDeclaration() {
@@ -218,7 +220,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 sb.append("synchronized ");
             }
         }
-        // TODO verify it does not print comments connected to the type
         sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
         sb.append(getName());
@@ -340,6 +341,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodDeclaration> toMethodDeclaration() {
         return Optional.of(this);
     }

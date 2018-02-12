@@ -79,20 +79,42 @@ The project binaries are available in Maven Central.  Just add the following to 
 
 [Please refer to the Migration Guide when upgrading from 2.5.1 to 3.0.0+](https://github.com/javaparser/javaparser/wiki/Migration-Guide)
 
-For Maven: 
+**Maven**: 
+
+```xml
+<dependency>
+    <groupId>com.github.javaparser</groupId>
+    <artifactId>javaparser-symbol-solver-core</artifactId>
+    <version>3.5.14</version>
+</dependency>
+```
+
+**Gradle**:
+
+```
+compile 'com.github.javaparser:javaparser-symbol-solver-core:3.5.14'
+```
+
+
+
+Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. While JavaParser generates an Abstract Syntax Tree, JavaSymbolSolver analyzes that AST and is able to find the relation between an element and its declaration (e.g. for a variable name it could be a parameter of a method, providing information about its type, position in the AST, ect).
+
+Using the dependency above will add both JavaParser and JavaSymbolSolver to your project. If you only need the core functionality of parsing Java source code in order to traverse and manipulate the generated AST, you can reduce your projects boilerplate by only including JavaParser to your project:
+
+**Maven**: 
 
 ```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.5.6</version>
+    <version>3.5.14</version>
 </dependency>
 ```
 
-For Gradle:
+**Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.5.6'
+compile 'com.github.javaparser:javaparser-core:3.5.14'
 ```
 
 ## How To Compile Sources

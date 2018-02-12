@@ -1,0 +1,8 @@
+
+[ Class com.github.javaparser.ast.type.UnknownType ]
+  superclass: com.github.javaparser.ast.type.Type
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) v.visit(this, arg) ==> R
+  Line 46) v.visit(this, arg) ==> void

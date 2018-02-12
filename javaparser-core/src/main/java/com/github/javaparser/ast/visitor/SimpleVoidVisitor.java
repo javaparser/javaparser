@@ -296,4 +296,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(CatchClause n, A arg) { defaultAction(n, arg); }
+
+    @Override
+    public void visit(VarType n, A arg) { defaultAction(n, arg); }
 }

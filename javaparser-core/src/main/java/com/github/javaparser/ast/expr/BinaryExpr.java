@@ -47,7 +47,25 @@ public final class BinaryExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        OR("||"), AND("&&"), BINARY_OR("|"), BINARY_AND("&"), XOR("^"), EQUALS("=="), NOT_EQUALS("!="), LESS("<"), GREATER(">"), LESS_EQUALS("<="), GREATER_EQUALS(">="), LEFT_SHIFT("<<"), SIGNED_RIGHT_SHIFT(">>"), UNSIGNED_RIGHT_SHIFT(">>>"), PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"), REMAINDER("%");
+        OR("||"),
+        AND("&&"),
+        BINARY_OR("|"),
+        BINARY_AND("&"),
+        XOR("^"),
+        EQUALS("=="),
+        NOT_EQUALS("!="),
+        LESS("<"),
+        GREATER(">"),
+        LESS_EQUALS("<="),
+        GREATER_EQUALS(">="),
+        LEFT_SHIFT("<<"),
+        SIGNED_RIGHT_SHIFT(">>"),
+        UNSIGNED_RIGHT_SHIFT(">>>"),
+        PLUS("+"),
+        MINUS("-"),
+        MULTIPLY("*"),
+        DIVIDE("/"),
+        REMAINDER("%");
 
         private final String codeRepresentation;
 
@@ -57,6 +75,35 @@ public final class BinaryExpr extends Expression {
 
         public String asString() {
             return codeRepresentation;
+        }
+
+        public Optional<AssignExpr.Operator> toAssignOperator() {
+            switch(this) {
+                case BINARY_OR:
+                    return Optional.of(AssignExpr.Operator.BINARY_OR);
+                case BINARY_AND:
+                    return Optional.of(AssignExpr.Operator.BINARY_AND);
+                case XOR:
+                    return Optional.of(AssignExpr.Operator.XOR);
+                case LEFT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.LEFT_SHIFT);
+                case SIGNED_RIGHT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.SIGNED_RIGHT_SHIFT);
+                case UNSIGNED_RIGHT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT);
+                case PLUS:
+                    return Optional.of(AssignExpr.Operator.PLUS);
+                case MINUS:
+                    return Optional.of(AssignExpr.Operator.MINUS);
+                case MULTIPLY:
+                    return Optional.of(AssignExpr.Operator.MULTIPLY);
+                case DIVIDE:
+                    return Optional.of(AssignExpr.Operator.DIVIDE);
+                case REMAINDER:
+                    return Optional.of(AssignExpr.Operator.REMAINDER);
+                default:
+                    return Optional.empty();
+            }
         }
     }
 
@@ -207,6 +254,7 @@ public final class BinaryExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BinaryExpr> toBinaryExpr() {
         return Optional.of(this);
     }

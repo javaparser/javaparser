@@ -1,0 +1,32 @@
+
+[ Class com.github.javaparser.ast.type.ReferenceType ]
+  superclass: com.github.javaparser.ast.type.Type
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 45) setType(type) ==> void
+  Line 49) setType(type) ==> void
+  Line 50) setArrayCount(arrayCount) ==> void
+  Line 55) beginLine ==> int
+  Line 55) beginColumn ==> int
+  Line 55) endLine ==> int
+  Line 55) endColumn ==> int
+  Line 56) setType(type) ==> void
+  Line 57) setArrayCount(arrayCount) ==> void
+  Line 64) beginLine ==> int
+  Line 64) beginColumn ==> int
+  Line 64) endLine ==> int
+  Line 64) endColumn ==> int
+  Line 64) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 65) setType(type) ==> void
+  Line 66) setArrayCount(arrayCount) ==> void
+  Line 67) this.arraysAnnotations = arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 71) v.visit(this, arg) ==> R
+  Line 75) v.visit(this, arg) ==> void
+  Line 79) arrayCount ==> int
+  Line 83) type ==> com.github.javaparser.ast.type.Type
+  Line 87) this.arrayCount = arrayCount ==> int
+  Line 91) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 92) setAsParentNodeOf(this.type) ==> void
+  Line 116) arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 123) this.arraysAnnotations = arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>

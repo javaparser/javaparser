@@ -61,7 +61,8 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
         /**
          * The [] were found on the name, like "int a[]" or "String abc()[][]"
          */
-        NAME, /**
+        NAME,
+        /**
          * The [] were found on the type, like "int[] a" or "String[][] abc()"
          */
         TYPE
@@ -285,6 +286,7 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
     }

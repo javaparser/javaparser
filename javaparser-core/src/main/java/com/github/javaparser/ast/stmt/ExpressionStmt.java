@@ -146,6 +146,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExpressionStmt> toExpressionStmt() {
         return Optional.of(this);
     }

@@ -1,0 +1,27 @@
+
+[ Class com.github.javaparser.ast.expr.ConditionalExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 42) setCondition(condition) ==> void
+  Line 43) setThenExpr(thenExpr) ==> void
+  Line 44) setElseExpr(elseExpr) ==> void
+  Line 48) beginLine ==> int
+  Line 48) beginColumn ==> int
+  Line 48) endLine ==> int
+  Line 48) endColumn ==> int
+  Line 49) setCondition(condition) ==> void
+  Line 50) setThenExpr(thenExpr) ==> void
+  Line 51) setElseExpr(elseExpr) ==> void
+  Line 56) v.visit(this, arg) ==> R
+  Line 61) v.visit(this, arg) ==> void
+  Line 65) condition ==> com.github.javaparser.ast.expr.Expression
+  Line 69) elseExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 73) thenExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 77) this.condition = condition ==> com.github.javaparser.ast.expr.Expression
+  Line 78) setAsParentNodeOf(this.condition) ==> void
+  Line 82) this.elseExpr = elseExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 83) setAsParentNodeOf(this.elseExpr) ==> void
+  Line 87) this.thenExpr = thenExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 88) setAsParentNodeOf(this.thenExpr) ==> void

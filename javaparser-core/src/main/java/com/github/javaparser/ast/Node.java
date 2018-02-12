@@ -35,10 +35,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.InternalProperty;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -55,6 +52,8 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -109,11 +108,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         /**
          * Notify exclusively for changes happening on this node alone.
          */
-        JUST_THIS_NODE, /**
+        JUST_THIS_NODE,
+        /**
          * Notify for changes happening on this node and all its descendants existing at the moment in
          * which the observer was registered. Nodes attached later will not be observed.
          */
-        THIS_NODE_AND_EXISTING_DESCENDANTS, /**
+        THIS_NODE_AND_EXISTING_DESCENDANTS,
+        /**
          * Notify for changes happening on this node and all its descendants. The descendants existing at the moment in
          * which the observer was registered will be observed immediately. As new nodes are attached later they are
          * automatically registered to be observed.
@@ -164,6 +165,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @InternalProperty
     private IdentityHashMap<DataKey<?>, Object> data = null;
 
+    @OptionalProperty
     private Comment comment;
 
     @InternalProperty
@@ -431,7 +433,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use find(Class)
+     * @deprecated use findAll(Class)
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {

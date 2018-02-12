@@ -38,6 +38,8 @@ import java.util.List;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NodeListTest {
 
@@ -138,6 +140,46 @@ public class NodeListTest {
     }
 
     @Test
+    public void removeFirstNode() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeFirst();
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0"), changes);
+        assertEquals(cd.getMembers().size(), 4);
+
+        for (int i = 3; i >= 0; i--) {
+            assertTrue(cd.getMembers().removeFirst() != null);
+            assertEquals(cd.getMembers().size(), i);
+        }
+
+        assertEquals(cd.getMembers().size(), 0);
+    }
+
+    @Test
+    public void removeLastNode() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeLast();
+        assertEquals(Arrays.asList("'int e;' REMOVAL in list at 4"), changes);
+        assertEquals(cd.getMembers().size(), 4);
+
+        for (int i = 3; i >= 0; i--) {
+            assertTrue(cd.getMembers().removeLast() != null);
+            assertEquals(cd.getMembers().size(), i);
+        }
+
+        assertEquals(cd.getMembers().size(), 0);
+    }
+
+    @Test
     public void removeObject() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
@@ -226,22 +268,22 @@ public class NodeListTest {
 
         assertEquals("[abc, bcd, cde]", list.toString());
     }
-    
+
     @Test
     public void addFirst() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addFirst(new Name("xxx"));
-        
+
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
-    
+
     @Test
     public void addLast() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addLast(new Name("xxx"));
-        
+
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 
@@ -251,7 +293,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
         list.addBefore(new Name("xxx"), n);
-        
+
         assertEquals("[abc, xxx, bcd, cde]", list.toString());
     }
 
@@ -261,7 +303,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
         list.addAfter(new Name("xxx"), n);
-        
+
         assertEquals("[abc, bcd, xxx, cde]", list.toString());
     }
 
@@ -271,7 +313,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(abc, new Name("bcd"), new Name("cde"));
 
         list.addBefore(new Name("xxx"), abc);
-        
+
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
 
@@ -281,7 +323,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), cde);
 
         list.addAfter(new Name("xxx"), cde);
-        
+
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 }

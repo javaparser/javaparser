@@ -254,6 +254,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
         return Optional.of(this);
     }

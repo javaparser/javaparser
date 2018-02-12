@@ -150,6 +150,7 @@ public final class LocalClassDeclarationStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
         return Optional.of(this);
     }

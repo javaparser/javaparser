@@ -53,11 +53,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
-        this((Node) null);
-    }
-
-    public NodeList(Node parent) {
-        setParentNode(parent);
+        parentNode = null;
     }
 
     public NodeList(Collection<N> n) {
@@ -89,6 +85,14 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             node.setParentNode(null);
         }
         return innerList.remove(node);
+    }
+
+    public N removeFirst() {
+        return remove(0);
+    }
+
+    public N removeLast() {
+        return remove(innerList.size() - 1);
     }
 
     @SafeVarargs
@@ -140,6 +144,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             return element;
         }
         notifyElementReplaced(index, element);
+        innerList.get(index).setParentNode(null);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }

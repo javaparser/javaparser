@@ -1,0 +1,34 @@
+
+[ Class com.github.javaparser.ast.body.EnumConstantDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 49) setName(name) ==> void
+  Line 53) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 54) setName(name) ==> void
+  Line 55) setArgs(args) ==> void
+  Line 56) setClassBody(classBody) ==> void
+  Line 60) beginLine ==> int
+  Line 60) beginColumn ==> int
+  Line 60) endLine ==> int
+  Line 60) endColumn ==> int
+  Line 60) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 61) setName(name) ==> void
+  Line 62) setArgs(args) ==> void
+  Line 63) setClassBody(classBody) ==> void
+  Line 68) v.visit(this, arg) ==> R
+  Line 73) v.visit(this, arg) ==> void
+  Line 77) args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 81) classBody ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 85) name ==> java.lang.String
+  Line 89) this.args = args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 90) setAsParentNodeOf(this.args) ==> void
+  Line 94) this.classBody = classBody ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 95) setAsParentNodeOf(this.classBody) ==> void
+  Line 99) this.name = name ==> java.lang.String
+  Line 104) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 109) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

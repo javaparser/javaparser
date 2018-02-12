@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
@@ -50,8 +51,10 @@ import java.util.function.Consumer;
  */
 public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr>, NodeWithArguments<MethodCallExpr>, NodeWithSimpleName<MethodCallExpr>, NodeWithOptionalScope<MethodCallExpr> {
 
+    @OptionalProperty
     private Expression scope;
 
+    @OptionalProperty
     private NodeList<Type> typeArguments;
 
     private SimpleName name;
@@ -291,6 +294,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodCallExpr> toMethodCallExpr() {
         return Optional.of(this);
     }

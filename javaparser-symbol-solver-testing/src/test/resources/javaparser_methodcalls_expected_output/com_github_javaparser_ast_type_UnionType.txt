@@ -1,0 +1,6 @@
+  Line 20) setElements(elements) ==> com.github.javaparser.ast.type.UnionType.setElements(java.util.List<com.github.javaparser.ast.type.ReferenceType>)
+  Line 25) setElements(elements) ==> com.github.javaparser.ast.type.UnionType.setElements(java.util.List<com.github.javaparser.ast.type.ReferenceType>)
+  Line 35) element.setParentNode(null) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 39) setAsParentNodeOf(this.elements) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)
+  Line 45) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.type.UnionType, A)
+  Line 50) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.type.UnionType, A)

@@ -174,6 +174,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<InstanceOfExpr> toInstanceOfExpr() {
         return Optional.of(this);
     }

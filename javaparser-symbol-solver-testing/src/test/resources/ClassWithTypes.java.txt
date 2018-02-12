@@ -1,0 +1,19 @@
+class Super {
+    protected boolean k;
+    private static char m;
+
+}
+
+class A extends Super {
+
+    class B {
+        class C {
+
+        }
+    }
+
+    enum E {
+        E1, E2
+    }
+
+}

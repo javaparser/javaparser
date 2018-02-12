@@ -1077,4 +1077,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         r.setComment(comment);
         return r;
     }
+
+    @Override
+    public Visitable visit(final VarType n, final Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        VarType r = new VarType(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        return r;
+    }
 }

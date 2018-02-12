@@ -157,6 +157,7 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleExportsStmt> toModuleExportsStmt() {
         return Optional.of(this);
     }

@@ -1,0 +1,38 @@
+class CompilationUnit {
+
+}
+
+public interface VoidVisitor<A> {
+
+	void visit(CompilationUnit n, A arg);
+
+	void visit(JavadocComment n, A arg);
+}
+
+public interface GenericVisitor<R, A> {
+
+	R visit(CompilationUnit n, A arg);
+
+	R visit(JavadocComment n, A arg);
+}
+
+class JavadocComment {
+
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return v.visit(this, arg);
+    }
+
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+        v.visit(this, arg);
+    }
+
+}
+
+public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
+
+	@Override public void visit(final AnnotationDeclaration n, final A arg) {
+	    JavadocComment javadocComment;
+		javadocComment.accept(this, arg);
+	}
+
+}

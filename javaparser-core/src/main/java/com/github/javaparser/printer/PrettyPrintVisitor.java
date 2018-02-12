@@ -44,6 +44,7 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -53,14 +54,33 @@ import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
     protected final PrettyPrinterConfiguration configuration;
     protected final SourcePrinter printer;
+    private Deque<Position> methodChainPositions = new LinkedList<>();
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
         printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
+        pushMethodChainPosition(printer.getCursor()); // initialize a default position for methodChainPositions, it is expected by method #resetMethodChainPosition()
     }
 
     public String getSource() {
         return printer.getSource();
+    }
+
+    public void resetMethodChainPosition(Position position) {
+        this.methodChainPositions.pop();
+        this.methodChainPositions.push(position);
+    }
+
+    public void pushMethodChainPosition(Position position) {
+        this.methodChainPositions.push(position);
+    }
+
+    public Position peekMethodChainPosition() {
+        return this.methodChainPositions.peek();
+    }
+
+    public Position popMethodChainPosition() {
+        return this.methodChainPositions.pop();
     }
 
     private void printModifiers(final EnumSet<Modifier> modifiers) {
@@ -314,10 +334,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             boolean skippingLeadingEmptyLines = true;
             boolean prependEmptyLine = false;
             for (String line : lines) {
-                line = line.trim();
-                if (line.startsWith("*")) {
-                    line = line.substring(1).trim();
+                final String trimmedLine = line.trim();
+                if (trimmedLine.startsWith("*")) {
+                    line = trimmedLine.substring(1);
                 }
+                line = trimTrailingSpaces(line);
                 if (line.isEmpty()) {
                     if (!skippingLeadingEmptyLines) {
                         prependEmptyLine = true;
@@ -328,7 +349,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                         printer.println(" *");
                         prependEmptyLine = false;
                     }
-                    printer.println(" * " + line);
+                    printer.println(" *" + line);
                 }
             }
             printer.println(" */");
@@ -468,7 +489,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         if (!n.getVariables().isEmpty()) {
-            n.getMaximumCommonType().accept(this, arg);
+            Optional<Type> maximumCommonType = n.getMaximumCommonType();
+            maximumCommonType.ifPresent(t -> t.accept(this, arg));
+            if (!maximumCommonType.isPresent()) {
+                printer.print("???");
+            }
         }
 
         printer.print(" ");
@@ -488,25 +513,24 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Optional<NodeWithVariables> ancestor = n.getAncestorOfType(NodeWithVariables.class);
-        if (!ancestor.isPresent()) {
-            throw new RuntimeException("Unable to work with VariableDeclarator not owned by a NodeWithVariables");
-        }
-        Type commonType = ancestor.get().getMaximumCommonType();
+        n.getAncestorOfType(NodeWithVariables.class).ifPresent(ancestor -> {
+            ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
-        Type type = n.getType();
+                final Type type = n.getType();
 
-        ArrayType arrayType = null;
+                ArrayType arrayType = null;
 
-        for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-            if (arrayType == null) {
-                arrayType = (ArrayType) type;
-            } else {
-                arrayType = (ArrayType) arrayType.getComponentType();
-            }
-            printAnnotations(arrayType.getAnnotations(), true, arg);
-            printer.print("[]");
-        }
+                for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
+                    if (arrayType == null) {
+                        arrayType = (ArrayType) type;
+                    } else {
+                        arrayType = (ArrayType) arrayType.getComponentType();
+                    }
+                    printAnnotations(arrayType.getAnnotations(), true, arg);
+                    printer.print("[]");
+                }
+            });
+        });
 
         if (n.getInitializer().isPresent()) {
             printer.print(" = ");
@@ -537,6 +561,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printer.print("void");
+    }
+
+    @Override
+    public void visit(final VarType n, final Void arg) {
+        printComment(n.getComment(), arg);
+        printAnnotations(n.getAnnotations(), false, arg);
+        printer.print("var");
     }
 
     @Override
@@ -705,18 +736,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getScope().get().accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
                 if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr) n.getScope().get()).getScope().isPresent())) {
-                    printer.resetMethodChainPosition(printer.getCursor());
+                    resetMethodChainPosition(printer.getCursor());
                 } else {
-                    printer.wrapToColumn(printer.peekMethodChainPosition().column);
+                    printer.wrapToColumn(peekMethodChainPosition().column);
                 }
             }
             printer.print(".");
         }
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
-        printer.pushMethodChainPosition(printer.getCursor());
+        pushMethodChainPosition(printer.getCursor());
         printArguments(n.getArguments(), arg);
-        printer.popMethodChainPosition();
+        popMethodChainPosition();
     }
 
     @Override
@@ -899,7 +930,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         if (!n.getVariables().isEmpty()) {
-            n.getMaximumCommonType().accept(this, arg);
+            n.getMaximumCommonType().ifPresent(t -> t.accept(this, arg));
         }
         printer.print(" ");
 
@@ -1047,13 +1078,22 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printer.println(" {");
         printer.indent();
-        if (n.getEntries() != null) {
+        if (n.getEntries().isNonEmpty()) {
+            final boolean alignVertically =
+                    // Either we hit the constant amount limit in the configurations, or...
+                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() ||
+                            // any of the constants has a comment.
+                            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
-                    printer.print(", ");
+                    if (alignVertically) {
+                        printer.println(",");
+                    } else {
+                        printer.print(", ");
+                    }
                 }
             }
         }
@@ -1353,10 +1393,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        printer
-                .print("/*")
-                .print(normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter()))
-                .println("*/");
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        String[] lines = commentContent.split("\\R", -1); // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
+        printer.print("/*");
+        for (int i = 0; i < (lines.length - 1); i++) {
+            printer.print(lines[i]);
+            printer.print(configuration.getEndOfLineCharacter()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+        }
+        printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
+        printer.println("*/");
     }
 
     @Override

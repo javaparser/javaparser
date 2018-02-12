@@ -1,0 +1,2 @@
+  Line 12) bound.describe() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.describe()
+  Line 35) bound.isAssignableBy(other) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isAssignableBy(com.github.javaparser.symbolsolver.model.typesystem.Type)

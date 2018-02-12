@@ -174,6 +174,7 @@ public final class LabeledStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LabeledStmt> toLabeledStmt() {
         return Optional.of(this);
     }

@@ -26,8 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import java.util.Arrays;
-import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
@@ -284,46 +283,57 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CallableDeclaration> toCallableDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ConstructorDeclaration> toConstructorDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumConstantDeclaration> toEnumConstantDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumDeclaration> toEnumDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<FieldDeclaration> toFieldDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<InitializerDeclaration> toInitializerDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodDeclaration> toMethodDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.empty();
     }

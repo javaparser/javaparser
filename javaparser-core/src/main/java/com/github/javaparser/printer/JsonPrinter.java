@@ -4,9 +4,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
@@ -33,43 +34,41 @@ public class JsonPrinter {
         List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).collect(toList());
         List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
 
-        final SeparatedItemStringBuilder content;
-        if (name == null) {
-            content = new SeparatedItemStringBuilder("{", ",", "}");
-        } else {
-            content = new SeparatedItemStringBuilder(q(name) + ":{", ",", "}");
-        }
+        final List<String> content = new ArrayList<>();
 
         if (outputNodeType) {
-            content.append(q("type") + ":" + q(metaModel.getTypeName()));
+            content.add(q("type") + ":" + q(metaModel.getTypeName()));
         }
 
         for (PropertyMetaModel attributeMetaModel : attributes) {
-            content.append(q(attributeMetaModel.getName()) + ":" + q(attributeMetaModel.getValue(node).toString()));
+            content.add(q(attributeMetaModel.getName()) + ":" + q(attributeMetaModel.getValue(node).toString()));
         }
 
         for (PropertyMetaModel subNodeMetaModel : subNodes) {
             Node value = (Node) subNodeMetaModel.getValue(node);
             if (value != null) {
-                content.append(output(value, subNodeMetaModel.getName(), level + 1));
+                content.add(output(value, subNodeMetaModel.getName(), level + 1));
             }
         }
 
         for (PropertyMetaModel subListMetaModel : subLists) {
             NodeList<? extends Node> subList = (NodeList<? extends Node>) subListMetaModel.getValue(node);
             if (subList != null && !subList.isEmpty()) {
-                SeparatedItemStringBuilder listContent = new SeparatedItemStringBuilder(q(subListMetaModel.getName()) + ":[", ",", "]");
+                final List<String> listContent = new ArrayList<>();
                 for (Node subListNode : subList) {
-                    listContent.append(output(subListNode, null, level + 1));
+                    listContent.add(output(subListNode, null, level + 1));
                 }
-                content.append(listContent.toString());
+                content.add(listContent.stream().collect(Collectors.joining(",", q(subListMetaModel.getName()) + ":[", "]")));
             }
         }
 
-        return content.toString();
+        if (name == null) {
+            return content.stream().collect(Collectors.joining(",", "{", "}"));
+        }
+        return content.stream().collect(Collectors.joining(",", q(name) + ":{", "}"));
     }
 
     private static String q(String value) {
-        return "\"" + value + "\"";
+        return "\"" + value.replace("\"", "\\\"") + "\"";
     }
 }

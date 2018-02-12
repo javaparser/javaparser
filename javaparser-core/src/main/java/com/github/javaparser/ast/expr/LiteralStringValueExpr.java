@@ -116,6 +116,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LiteralStringValueExpr> toLiteralStringValueExpr() {
         return Optional.of(this);
     }

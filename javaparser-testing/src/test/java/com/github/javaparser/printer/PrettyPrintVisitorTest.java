@@ -42,22 +42,22 @@ public class PrettyPrintVisitorTest {
     @Test
     public void getMaximumCommonTypeWithoutAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
-        assertEquals("int[]", vde1.getMaximumCommonType().toString());
+        assertEquals("int[]", vde1.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
-        assertEquals("int[][][]", vde2.getMaximumCommonType().toString());
+        assertEquals("int[][][]", vde2.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
-        assertEquals("int[][]", vde3.getMaximumCommonType().toString());
+        assertEquals("int[][]", vde3.getMaximumCommonType().get().toString());
     }
 
     @Test
     public void getMaximumCommonTypeWithAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
-        assertEquals("int", vde1.getMaximumCommonType().toString());
+        assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
-        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().toString());
+        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().get().toString());
     }
 
     private String print(Node node) {
@@ -178,13 +178,13 @@ public class PrettyPrintVisitorTest {
     @Test
     public void multilineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
+        cu.addClass("X").addMethod("abc").setJavadocComment(" line1\n   line2 *\n * line3");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
-                "     * line2 *\n" +
+                "     *   line2 *\n" +
                 "     * line3\n" +
                 "     */\n" +
                 "    void abc() {\n" +
@@ -209,7 +209,7 @@ public class PrettyPrintVisitorTest {
     @Test
     public void multilineJavadocWithLotsOfEmptyLinesGetsFormattedNeatly() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\nab\n\n\ncd\n\n\n");
+        cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\n ab\n\n\n cd\n\n\n");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +
@@ -226,7 +226,7 @@ public class PrettyPrintVisitorTest {
     @Test
     public void singlelineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment("line1");
+        cu.addClass("X").addMethod("abc").setJavadocComment(" line1");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +

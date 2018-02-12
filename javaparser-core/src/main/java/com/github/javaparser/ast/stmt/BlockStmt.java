@@ -155,6 +155,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockStmt> toBlockStmt() {
         return Optional.of(this);
     }

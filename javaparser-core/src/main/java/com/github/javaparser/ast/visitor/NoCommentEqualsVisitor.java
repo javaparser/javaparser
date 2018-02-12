@@ -1145,6 +1145,14 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
+    public Boolean visit(final VarType n, final Visitable arg) {
+        final VarType n2 = (VarType) arg;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
     public Boolean visit(StubUnit n, Visitable arg) {
         // TODO Auto-generated method stub
         return null;

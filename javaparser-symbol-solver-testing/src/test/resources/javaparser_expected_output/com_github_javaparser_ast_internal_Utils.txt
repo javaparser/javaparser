@@ -1,0 +1,5 @@
+
+[ Class com.github.javaparser.ast.internal.Utils ]
+  superclass: java.lang.Object
+  Line 35) list == null ? Collections.<T>emptyList() : list ==> java.util.List<T>
+  Line 39) collection == null || collection.isEmpty() ==> boolean

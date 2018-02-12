@@ -188,6 +188,7 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnionType> toUnionType() {
         return Optional.of(this);
     }

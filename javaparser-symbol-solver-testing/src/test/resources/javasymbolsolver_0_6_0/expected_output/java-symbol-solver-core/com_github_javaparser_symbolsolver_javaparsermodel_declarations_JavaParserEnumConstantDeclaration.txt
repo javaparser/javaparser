@@ -1,0 +1,3 @@
+  Line 42) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 47) wrappedNode.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 47) wrappedNode.getName() ==> com.github.javaparser.ast.body.EnumConstantDeclaration.getName()

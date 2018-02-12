@@ -103,6 +103,7 @@ public abstract class ReferenceType extends Type {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ReferenceType> toReferenceType() {
         return Optional.of(this);
     }

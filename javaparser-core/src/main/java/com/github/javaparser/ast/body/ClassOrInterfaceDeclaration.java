@@ -279,6 +279,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
         return Optional.of(this);
     }

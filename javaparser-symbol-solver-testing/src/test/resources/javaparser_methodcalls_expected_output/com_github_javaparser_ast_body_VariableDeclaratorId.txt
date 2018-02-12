@@ -1,0 +1,7 @@
+  Line 48) setName(name) ==> com.github.javaparser.ast.body.VariableDeclaratorId.setName(java.lang.String)
+  Line 53) setName(name) ==> com.github.javaparser.ast.body.VariableDeclaratorId.setName(java.lang.String)
+  Line 54) setArrayBracketPairsAfterId(arrayBracketPairsAfterId) ==> com.github.javaparser.ast.body.VariableDeclaratorId.setArrayBracketPairsAfterId(java.util.List<com.github.javaparser.ast.ArrayBracketPair>)
+  Line 59) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.body.VariableDeclaratorId, A)
+  Line 64) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.body.VariableDeclaratorId, A)
+  Line 79) ensureNotNull(arrayBracketPairsAfterId) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 85) setAsParentNodeOf(arrayBracketPairsAfterId) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

@@ -1,0 +1,16 @@
+
+[ Class com.github.javaparser.ast.stmt.BreakStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 38) this.id = id ==> java.lang.String
+  Line 42) beginLine ==> int
+  Line 42) beginColumn ==> int
+  Line 42) endLine ==> int
+  Line 42) endColumn ==> int
+  Line 43) this.id = id ==> java.lang.String
+  Line 47) v.visit(this, arg) ==> R
+  Line 51) v.visit(this, arg) ==> void
+  Line 55) id ==> java.lang.String
+  Line 59) this.id = id ==> java.lang.String

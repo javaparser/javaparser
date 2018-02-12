@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.stmt.SynchronizedStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) setExpr(expr) ==> void
+  Line 42) setBlock(block) ==> void
+  Line 48) beginLine ==> int
+  Line 48) beginColumn ==> int
+  Line 48) endLine ==> int
+  Line 48) endColumn ==> int
+  Line 49) setExpr(expr) ==> void
+  Line 50) setBlock(block) ==> void
+  Line 55) v.visit(this, arg) ==> R
+  Line 60) v.visit(this, arg) ==> void
+  Line 64) block ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 68) expr ==> com.github.javaparser.ast.expr.Expression
+  Line 72) this.block = block ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 73) setAsParentNodeOf(this.block) ==> void
+  Line 77) this.expr = expr ==> com.github.javaparser.ast.expr.Expression
+  Line 78) setAsParentNodeOf(this.expr) ==> void

@@ -1,0 +1,7 @@
+public class JavaTest {
+    public String[] field;
+
+    public void foo(String[] arg){
+        arg;
+    }
+}

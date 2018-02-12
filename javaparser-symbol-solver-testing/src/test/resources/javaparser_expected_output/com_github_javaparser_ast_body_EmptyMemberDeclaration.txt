@@ -1,0 +1,18 @@
+
+[ Class com.github.javaparser.ast.body.EmptyMemberDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 35) null ==> null
+  Line 39) beginLine ==> int
+  Line 39) beginColumn ==> int
+  Line 39) endLine ==> int
+  Line 39) endColumn ==> int
+  Line 39) null ==> null
+  Line 44) v.visit(this, arg) ==> R
+  Line 49) v.visit(this, arg) ==> void
+  Line 54) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 59) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

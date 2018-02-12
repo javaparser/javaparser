@@ -1,3 +1,52 @@
+Version 3.5.14
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/77?closed=1)
+* Java 10's `var` can now be parsed and will be turned into a `VarType` node.
+It can not be resolved yet.
+* `NodeList` now has a pretty complete set of `...First` and `...Last` methods.
+Thanks stephenramthun !
+
+Version 3.5.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/76?closed=1)
+* The Javadoc parser has received a lot of attention.
+
+Version 3.5.12
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/75?closed=1)
+* Thanks to un0btanium for fixing the readme file!
+
+Version 3.5.11
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/74?closed=1)
+* BREAKING: `AssignExpr.Operator.AND` is now `AssignExpr.Operator.BINARY_AND`.
+* BREAKING: `AssignExpr.Operator.OR` is now `AssignExpr.Operator.BINARY_OR`.
+* `getPrimaryTypeName` and `getPrimaryType` give access to the type that has the same name as the file it came from.
+* Enums will now get their constants aligned vertically if there are more than five.
+* You can now convert between `AssignExpr.Operator` and `AssignExpr.Operator` if you like.
+
+Version 3.5.10
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/73?closed=1)
+* JavaSymbolSolver is now in the same project as JavaParser, meaning they get released together from now on.
+* LexicalPreservingPrinter has had a big speed optimization.
+
+Version 3.5.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/72?closed=1)
+* BREAKING: the very confusing constructor `NodeList(Node)` (which sets the parent) was removed.
+* To avoid using the int type for token kinds, use the new `JavaToken.Kind` enum.
+It can convert to and from the int kind. 
+
+Version 3.5.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/71?closed=1)
+* the module name is now set to com.github.javaparser.core
+
+Version 3.5.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/70?closed=1)
+
 Version 3.5.6
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/69?closed=1)

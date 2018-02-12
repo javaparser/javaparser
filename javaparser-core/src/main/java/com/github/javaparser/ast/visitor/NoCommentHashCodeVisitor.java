@@ -504,6 +504,11 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
+    public Integer visit(final VarType n, final Void arg) {
+        return (n.getAnnotations().accept(this, arg));
+    }
+
+    @Override
     public Integer visit(StubUnit n, Void arg) {
         // TODO Auto-generated method stub
         return null;

@@ -28,22 +28,17 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.resolution.SymbolResolver;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
@@ -56,7 +51,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
-    private final CommentsInserter commentsInserter;
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
@@ -77,7 +71,6 @@ public final class JavaParser {
      */
     public JavaParser(ParserConfiguration configuration) {
         this.configuration = configuration;
-        commentsInserter = new CommentsInserter(configuration);
     }
 
     /**
@@ -132,20 +125,13 @@ public final class JavaParser {
         final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
-            if (configuration.isAttributeComments()) {
-                final CommentsCollection comments = parser.getCommentsCollection();
-                commentsInserter.insertComments(resultNode, comments.copy().getComments());
-            }
-            if(configuration.isLexicalPreservationEnabled()){
-                LexicalPreservingPrinter.setup(resultNode);
-            }
-
-            configuration.getValidator().accept(resultNode, new ProblemReporter(parser.problems));
-            parser.problems.sort(PROBLEM_BY_BEGIN_POSITION);
-
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
-            considerInjectingSymbolResolver(result, configuration);
+
+            configuration.getPostProcessors().forEach(postProcessor ->
+                    postProcessor.process(result, configuration));
+
+            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
 
             return result;
         } catch (Exception e) {
@@ -684,13 +670,5 @@ public final class JavaParser {
      */
     public static PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
         return simplifiedParse(PACKAGE_DECLARATION, provider(packageDeclaration));
-    }
-
-    private static void considerInjectingSymbolResolver(ParseResult<?> parseResult, ParserConfiguration parserConfiguration) {
-        Optional<SymbolResolver> symbolResolver = parserConfiguration.getSymbolResolver();
-        if (symbolResolver.isPresent() && parseResult.getResult().get() instanceof CompilationUnit) {
-            CompilationUnit compilationUnit = (CompilationUnit)parseResult.getResult().get();
-            compilationUnit.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver.get());
-        }
     }
 }

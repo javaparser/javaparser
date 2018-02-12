@@ -1,0 +1,17 @@
+
+[ Class com.github.javaparser.ast.stmt.BlockStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setStmts(stmts) ==> void
+  Line 45) beginLine ==> int
+  Line 45) beginColumn ==> int
+  Line 45) endLine ==> int
+  Line 45) endColumn ==> int
+  Line 46) setStmts(stmts) ==> void
+  Line 51) v.visit(this, arg) ==> R
+  Line 56) v.visit(this, arg) ==> void
+  Line 60) stmts ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 64) this.stmts = stmts ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 65) setAsParentNodeOf(this.stmts) ==> void

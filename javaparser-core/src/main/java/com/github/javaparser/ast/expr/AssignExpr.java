@@ -39,6 +39,9 @@ import java.util.Optional;
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
  * <br/><code>a=5</code>
  * <br/><code>time+=500</code>
+ * <br/><code>watch.time+=500</code>
+ * <br/><code>(((time)))=100*60</code>
+ * <br/><code>peanut[a]=true</code>
  *
  * @author Julio Vilmar Gesser
  */
@@ -46,7 +49,18 @@ public final class AssignExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        ASSIGN("="), PLUS("+="), MINUS("-="), MULTIPLY("*="), DIVIDE("/="), AND("&="), OR("|="), XOR("^="), REMAINDER("%="), LEFT_SHIFT("<<="), SIGNED_RIGHT_SHIFT(">>="), UNSIGNED_RIGHT_SHIFT(">>>=");
+        ASSIGN("="),
+        PLUS("+="),
+        MINUS("-="),
+        MULTIPLY("*="),
+        DIVIDE("/="),
+        BINARY_AND("&="),
+        BINARY_OR("|="),
+        XOR("^="),
+        REMAINDER("%="),
+        LEFT_SHIFT("<<="),
+        SIGNED_RIGHT_SHIFT(">>="),
+        UNSIGNED_RIGHT_SHIFT(">>>=");
 
         private final String codeRepresentation;
 
@@ -56,6 +70,35 @@ public final class AssignExpr extends Expression {
 
         public String asString() {
             return codeRepresentation;
+        }
+
+        public Optional<BinaryExpr.Operator> toBinaryOperator() {
+            switch(this) {
+                case PLUS:
+                    return Optional.of(BinaryExpr.Operator.PLUS);
+                case MINUS:
+                    return Optional.of(BinaryExpr.Operator.MINUS);
+                case MULTIPLY:
+                    return Optional.of(BinaryExpr.Operator.MULTIPLY);
+                case DIVIDE:
+                    return Optional.of(BinaryExpr.Operator.DIVIDE);
+                case BINARY_AND:
+                    return Optional.of(BinaryExpr.Operator.BINARY_AND);
+                case BINARY_OR:
+                    return Optional.of(BinaryExpr.Operator.BINARY_OR);
+                case XOR:
+                    return Optional.of(BinaryExpr.Operator.XOR);
+                case REMAINDER:
+                    return Optional.of(BinaryExpr.Operator.REMAINDER);
+                case LEFT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.LEFT_SHIFT);
+                case SIGNED_RIGHT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.SIGNED_RIGHT_SHIFT);
+                case UNSIGNED_RIGHT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT);
+                default:
+                    return Optional.empty();
+            }
         }
     }
 
@@ -206,6 +249,7 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AssignExpr> toAssignExpr() {
         return Optional.of(this);
     }

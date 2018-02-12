@@ -1,0 +1,17 @@
+
+[ Class com.github.javaparser.ast.body.BodyDeclaration ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  interface: java.lang.Cloneable
+  Line 41) setAnnotations(annotations) ==> void
+  Line 45) beginLine ==> int
+  Line 45) beginColumn ==> int
+  Line 45) endLine ==> int
+  Line 45) endColumn ==> int
+  Line 46) setAnnotations(annotations) ==> void
+  Line 50) annotations == null ==> boolean
+  Line 51) annotations = new ArrayList<AnnotationExpr>() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 53) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 57) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 58) setAsParentNodeOf(this.annotations) ==> void

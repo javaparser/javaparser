@@ -1,0 +1,17 @@
+class Main {
+	
+	class Foo { }
+	
+	interface GenericBase <F> { }
+	
+	class GenericDerived <F extends Foo> implements GenericBase<F> { }
+
+	private <B extends Foo> void foo(GenericBase<B> g) { }
+	
+	private <D extends Foo> void foo(GenericDerived<D> g) { }
+	
+	void bar() {
+		GenericDerived<Foo> gd = new GenericDerived<>();
+		foo(gd);
+	}
+}

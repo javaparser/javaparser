@@ -1,0 +1,26 @@
+
+[ Class com.github.javaparser.ast.expr.BinaryExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 64) setLeft(left) ==> void
+  Line 65) setRight(right) ==> void
+  Line 66) setOperator(op) ==> void
+  Line 70) beginLine ==> int
+  Line 70) beginColumn ==> int
+  Line 70) endLine ==> int
+  Line 70) endColumn ==> int
+  Line 71) setLeft(left) ==> void
+  Line 72) setRight(right) ==> void
+  Line 73) setOperator(op) ==> void
+  Line 78) v.visit(this, arg) ==> R
+  Line 83) v.visit(this, arg) ==> void
+  Line 87) left ==> com.github.javaparser.ast.expr.Expression
+  Line 91) op ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 95) right ==> com.github.javaparser.ast.expr.Expression
+  Line 99) this.left = left ==> com.github.javaparser.ast.expr.Expression
+  Line 100) setAsParentNodeOf(this.left) ==> void
+  Line 104) this.op = op ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 108) this.right = right ==> com.github.javaparser.ast.expr.Expression
+  Line 109) setAsParentNodeOf(this.right) ==> void

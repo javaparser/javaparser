@@ -1383,4 +1383,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final VarType n, final Visitable arg) {
+        final VarType n2 = (VarType) arg;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
 }

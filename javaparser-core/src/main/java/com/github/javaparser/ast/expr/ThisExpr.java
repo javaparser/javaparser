@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
@@ -48,6 +49,7 @@ import java.util.function.Consumer;
  */
 public final class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
+    @OptionalProperty
     private Expression classExpr;
 
     public ThisExpr() {
@@ -167,6 +169,7 @@ public final class ThisExpr extends Expression implements Resolvable<ResolvedTyp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThisExpr> toThisExpr() {
         return Optional.of(this);
     }

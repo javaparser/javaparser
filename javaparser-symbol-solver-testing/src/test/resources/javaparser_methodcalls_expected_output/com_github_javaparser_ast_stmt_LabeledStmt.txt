@@ -1,0 +1,7 @@
+  Line 41) setLabel(label) ==> com.github.javaparser.ast.stmt.LabeledStmt.setLabel(java.lang.String)
+  Line 42) setStmt(stmt) ==> com.github.javaparser.ast.stmt.LabeledStmt.setStmt(com.github.javaparser.ast.stmt.Statement)
+  Line 47) setLabel(label) ==> com.github.javaparser.ast.stmt.LabeledStmt.setLabel(java.lang.String)
+  Line 48) setStmt(stmt) ==> com.github.javaparser.ast.stmt.LabeledStmt.setStmt(com.github.javaparser.ast.stmt.Statement)
+  Line 52) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.stmt.LabeledStmt, A)
+  Line 56) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.stmt.LabeledStmt, A)
+  Line 74) setAsParentNodeOf(this.stmt) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

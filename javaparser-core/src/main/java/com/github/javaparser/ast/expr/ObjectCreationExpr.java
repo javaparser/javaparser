@@ -32,8 +32,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -42,8 +40,8 @@ import com.github.javaparser.metamodel.ObjectCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
 
 /**
@@ -58,14 +56,17 @@ import java.util.function.Consumer;
  */
 public final class ObjectCreationExpr extends Expression implements NodeWithTypeArguments<ObjectCreationExpr>, NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>, NodeWithArguments<ObjectCreationExpr>, NodeWithOptionalScope<ObjectCreationExpr> {
 
+    @OptionalProperty
     private Expression scope;
 
     private ClassOrInterfaceType type;
 
+    @OptionalProperty
     private NodeList<Type> typeArguments;
 
     private NodeList<Expression> arguments;
 
+    @OptionalProperty
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
@@ -347,6 +348,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ObjectCreationExpr> toObjectCreationExpr() {
         return Optional.of(this);
     }

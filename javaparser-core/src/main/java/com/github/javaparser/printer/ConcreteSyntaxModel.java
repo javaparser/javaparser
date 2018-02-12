@@ -65,7 +65,7 @@ public class ConcreteSyntaxModel {
     }
 
     private static CsmElement memberAnnotations() {
-        return list(ObservableProperty.ANNOTATIONS, none(), none(), newline());
+        return list(ObservableProperty.ANNOTATIONS, newline(), none(), newline());
     }
 
     private static CsmElement annotations() {
@@ -792,6 +792,8 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(UnknownType.class, none());
 
         concreteSyntaxModelByClass.put(VoidType.class, sequence(comment(), annotations(), token(GeneratedJavaParserConstants.VOID)));
+
+        concreteSyntaxModelByClass.put(VarType.class, sequence(comment(), annotations(), string(GeneratedJavaParserConstants.IDENTIFIER, "var")));
 
         concreteSyntaxModelByClass.put(WildcardType.class, sequence(comment(), annotations(), token(GeneratedJavaParserConstants.HOOK),
                 CsmElement.conditional(ObservableProperty.EXTENDED_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space(), CsmElement.child(EXTENDED_TYPE))),

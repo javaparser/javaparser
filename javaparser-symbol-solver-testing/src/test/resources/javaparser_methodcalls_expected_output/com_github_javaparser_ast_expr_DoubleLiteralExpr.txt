@@ -1,0 +1,2 @@
+  Line 45) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.DoubleLiteralExpr, A)
+  Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.DoubleLiteralExpr, A)

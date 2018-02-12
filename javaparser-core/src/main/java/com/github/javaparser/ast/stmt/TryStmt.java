@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.TryStmtMetaModel;
 import javax.annotation.Generated;
 import java.util.Arrays;
@@ -101,6 +102,7 @@ public final class TryStmt extends Statement {
 
     private NodeList<CatchClause> catchClauses;
 
+    @OptionalProperty
     private BlockStmt finallyBlock;
 
     public TryStmt() {
@@ -312,6 +314,7 @@ public final class TryStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TryStmt> toTryStmt() {
         return Optional.of(this);
     }

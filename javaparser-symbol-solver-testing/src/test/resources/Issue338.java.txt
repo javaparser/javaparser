@@ -1,0 +1,93 @@
+class TypePromotions {
+
+        public void byteParam(byte p1) {
+
+        }
+
+        public void shortParam(short p1) {
+
+        }
+
+        public void intParam(int p1) {
+
+        }
+
+        public void longParam(long p1) {
+
+        }
+
+        public void callingLong() {
+            longParam((byte)1);
+            longParam((short)1);
+            longParam(1);
+            longParam(1L);
+        }
+
+        public void callingInt() {
+            intParam((byte)1);
+            intParam((short)1);
+            intParam(1);
+            intParam(1L); // fails
+        }
+
+        public void callingShort() {
+            shortParam((byte)1);
+            shortParam((short)1);
+            shortParam(1); // fails
+            shortParam(1L); // fails
+        }
+
+        public void callingByte() {
+            byteParam((byte)1);
+            byteParam((short)1); // fails
+            byteParam(1); // fails
+            byteParam(1L); // fails
+        }
+    }
+
+class TypePromotionsWithExtraParam {
+
+        public void byteParam(int p0, byte p1) {
+
+        }
+
+        public void shortParam(int p0, short p1) {
+
+        }
+
+        public void intParam(int p0, int p1) {
+
+        }
+
+        public void longParam(int p0, long p1) {
+
+        }
+
+        public void callingLong() {
+            longParam(6, (byte)1);
+            longParam(6, (short)1);
+            longParam(6, 1);
+            longParam(6, 1L);
+        }
+
+        public void callingInt() {
+            intParam(6, (byte)1);
+            intParam(6, (short)1);
+            intParam(6, 1);
+            intParam(6, 1L); // fails
+        }
+
+        public void callingShort() {
+            shortParam(6, (byte)1);
+            shortParam(6, (short)1);
+            shortParam(6, 1); // fails
+            shortParam(6, 1L); // fails
+        }
+
+        public void callingByte() {
+            byteParam(6, (byte)1);
+            byteParam(6, (short)1); // fails
+            byteParam(6, 1); // fails
+            byteParam(6, 1L); // fails
+        }
+    }

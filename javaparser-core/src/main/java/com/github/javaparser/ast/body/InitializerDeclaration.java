@@ -167,6 +167,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<InitializerDeclaration> toInitializerDeclaration() {
         return Optional.of(this);
     }

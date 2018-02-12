@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.5.7-SNAPSHOT</version>
+        <version>3.5.15-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,7 +51,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.16</version>
                 <configuration>
                     <signature>
                         <!-- Make sure only the API of this JDK is used -->
@@ -73,7 +72,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M1</version>
                 <executions>
                     <execution>
                         <id>enforce-versions</id>
@@ -107,7 +105,6 @@
             <plugin>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>bnd-maven-plugin</artifactId>
-                <version>${bnd-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -116,14 +113,17 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Make sure the bnd-generated manifest is picked up, see MJAR-193 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
+                        <!-- Make sure the bnd-generated manifest is picked up, see MJAR-193 -->
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                        <!-- Set module name -->
+                        <manifestEntries>
+                            <Automatic-Module-Name>com.github.javaparser.core</Automatic-Module-Name>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -140,7 +140,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>add-source</id>

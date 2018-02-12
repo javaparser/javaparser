@@ -1303,4 +1303,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final VarType n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
 }

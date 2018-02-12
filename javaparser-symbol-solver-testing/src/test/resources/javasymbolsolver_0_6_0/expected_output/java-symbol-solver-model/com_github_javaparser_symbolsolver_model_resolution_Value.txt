@@ -1,0 +1,2 @@
+  Line 40) decl.getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()
+  Line 41) decl.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()

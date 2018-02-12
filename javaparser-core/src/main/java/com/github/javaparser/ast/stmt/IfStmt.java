@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 
 /**
@@ -51,6 +52,7 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
 
     private Statement thenStmt;
 
+    @OptionalProperty
     private Statement elseStmt;
 
     public IfStmt() {
@@ -251,6 +253,7 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<IfStmt> toIfStmt() {
         return Optional.of(this);
     }

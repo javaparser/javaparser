@@ -1,0 +1,9 @@
+enum MyEnum {
+    E1, E2;
+    int i;
+    static long j;
+
+    void foo(){
+
+    }
+}

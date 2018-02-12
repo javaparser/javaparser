@@ -1,0 +1,13 @@
+
+[ Class com.github.javaparser.ast.expr.AnnotationExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 35) beginLine ==> int
+  Line 35) beginColumn ==> int
+  Line 35) endLine ==> int
+  Line 35) endColumn ==> int
+  Line 39) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 43) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 44) setAsParentNodeOf(name) ==> void

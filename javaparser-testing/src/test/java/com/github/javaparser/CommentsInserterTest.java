@@ -27,6 +27,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class CommentsInserterTest {
@@ -53,8 +56,29 @@ public class CommentsInserterTest {
 
     @Test
     public void issue624() throws IOException {
-        JavaParser.parseResource(makeFilename("Issue624"));
+        parseResource(makeFilename("Issue624"));
         // Should not fail
+    }
+
+    @Test
+    public void issue200EnumConstantsWithCommentsForceVerticalAlignment() {
+        CompilationUnit cu = parse("public enum X {" + EOL +
+                "    /** const1 javadoc */" + EOL +
+                "    BORDER_CONSTANT," + EOL +
+                "    /** const2 javadoc */" + EOL +
+                "    ANOTHER_CONSTANT" + EOL +
+                "}");
+        assertEqualsNoEol("public enum X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * const1 javadoc\n" +
+                "     */\n" +
+                "    BORDER_CONSTANT,\n" +
+                "    /**\n" +
+                "     * const2 javadoc\n" +
+                "     */\n" +
+                "    ANOTHER_CONSTANT\n" +
+                "}\n", cu.toString());
     }
 
 }

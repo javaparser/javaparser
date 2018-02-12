@@ -2,6 +2,7 @@ package com.github.javaparser.generator.core;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.generator.core.node.*;
+import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
@@ -11,28 +12,37 @@ import java.nio.file.Paths;
 
 /**
  * Generates all generated visitors in the javaparser-core module.
+ * Suggested usage is by running the run_core_generators.sh script.
+ * You may want to run_metamodel_generator.sh before that.
  */
 public class CoreGenerator {
+    private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
+//                                .setStoreTokens(false)
+//                                .setAttributeComments(false)
+//                                .setLexicalPreservationEnabled(true)
+            ;
+
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root)
+        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
 //                .setPrinter(LexicalPreservingPrinter::print)
-                .setParserConfiguration(new ParserConfiguration()
-//                                .setStoreTokens(false)
-//                                .setAttributeComments(false)
-//                                .setLexicalPreservationEnabled(true)
-                );
+                ;
 
-        new CoreGenerator().run(sourceRoot);
+        final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
+        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
+//                .setPrinter(LexicalPreservingPrinter::print)
+                ;
+
+        new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
         sourceRoot.saveAll();
     }
 
-    private void run(SourceRoot sourceRoot) throws Exception {
+    private void run(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot) throws Exception {
         new TypeCastingGenerator(sourceRoot).generate();
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
@@ -58,5 +68,6 @@ public class CoreGenerator {
         new MainConstructorGenerator(sourceRoot).generate();
         new FinalGenerator(sourceRoot).generate();
         new AcceptGenerator(sourceRoot).generate();
+        new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
     }
 }

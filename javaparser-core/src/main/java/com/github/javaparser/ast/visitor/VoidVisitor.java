@@ -312,4 +312,6 @@ public interface VoidVisitor<A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ReceiverParameter n, A arg);
+
+    void visit(VarType n, A arg);
 }
