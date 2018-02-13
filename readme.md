@@ -5,13 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/javaparser/javaparser/badge.svg?branch=master&service=github)](https://coveralls.io/github/javaparser/javaparser?branch=master)
 [![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This project contains a set of libraries implementing a Java 1.0 - Java 9 Parser with AST generation and advanced features
-like:
-
-* comment attribution
-* lexical preservation
-* code generation
-* symbol resolution (through the JavaSymbolSolver module)
+This project contains a set of libraries implementing a Java 1.0 - Java 9 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
@@ -19,7 +13,10 @@ Our main site is at [JavaParser.org](http://javaparser.org)
 
 The project binaries are available in Maven Central. 
 
-We strongly advises users to adopt Maven, Gradle or another build system for their projects.
+We strongly advises users to adopt Maven, Gradle or another build system for their projects. If you are not familiar with them
+we suggest taking a look at the maven quickstart projects 
+([javaparser-maven-sample](https://github.com/javaparser/javaparser-maven-sample), 
+[javasymbolsolver-maven-sample](https://github.com/javaparser/javasymbolsolver-maven-sample)).
 
 Just add the following to your maven configuration or tailor to your own dependency management system.
 
