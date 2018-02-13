@@ -1,10 +1,13 @@
 sudo: false
+
 language: java
-install: mvn install -DskipTests=true
-script: mvn test
+
+script: ./.travis-build.sh
+
 jdk:
   - oraclejdk8
   - oraclejdk9
+
 notifications:
   webhooks:
     urls:
@@ -14,3 +17,19 @@ notifications:
 after_success:
   - mvn test jacoco:report coveralls:report
 # http://lint.travis-ci.org/ validator
+
+jobs:
+  include:
+    - stage: trigger-downstream
+      jdk: oraclejdk8
+      script: |
+        echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+        if [[ ($TRAVIS_BRANCH == master) &&
+              ($TRAVIS_PULL_REQUEST == false) ]] ; then
+          curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+          SLUGOWNER=${TRAVIS_REPO_SLUG%/*}
+          sh trigger-travis.sh ${SLUGOWNER} checker-framework $TRAVIS_ACCESS_TOKEN
+        fi
+
+git:
+  depth: 9

@@ -128,7 +128,8 @@ public enum ObservableProperty {
     THEN_BLOCK(Type.SINGLE_ATTRIBUTE, true),
     USING_DIAMOND_OPERATOR(Type.SINGLE_ATTRIBUTE, true),
     RANGE,
-    COMMENTED_NODE;
+    COMMENTED_NODE,
+    COMPILATION_UNITS;
 
     enum Type {
 

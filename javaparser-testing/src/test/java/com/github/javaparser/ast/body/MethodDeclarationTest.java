@@ -25,6 +25,8 @@ public class MethodDeclarationTest {
         assertEquals("Source.Inner.this", method.getReceiverParameter().get().getNameAsString());
     }
 
+    // Ignored this test as for the Checker Framework purposes receiver parameter should only pass receiver annotations
+    @Ignore
     @Test
     public void explicitReceiverParameters2() {
         MethodDeclaration method = parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();

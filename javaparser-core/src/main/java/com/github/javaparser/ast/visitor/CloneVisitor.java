@@ -50,6 +50,15 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
+    public Visitable visit(StubUnit n, Object arg) {
+        NodeList<CompilationUnit> compilationUnits = new NodeList<>();
+        n.getCompilationUnits().forEach(cu -> compilationUnits.add(cloneNode(cu, arg)));
+        StubUnit su = new StubUnit(compilationUnits);
+        return su;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final PackageDeclaration n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name name = cloneNode(n.getName(), arg);

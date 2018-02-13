@@ -818,6 +818,11 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.MODULE),
                 orphanCommentsEnding()));
 
+        concreteSyntaxModelByClass.put(StubUnit.class, sequence(
+                comment(),
+                list(ObservableProperty.COMPILATION_UNITS, none(), none(), newline()),
+                orphanCommentsEnding()));
+
         concreteSyntaxModelByClass.put(ImportDeclaration.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.IMPORT),
