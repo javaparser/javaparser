@@ -50,8 +50,9 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 
 /**
- * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
+ * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.
+ * <p/>The type is on all of the variable declarators because, thanks to array brackets, each variable can have a different type.
  *
  * @author Julio Vilmar Gesser
  */

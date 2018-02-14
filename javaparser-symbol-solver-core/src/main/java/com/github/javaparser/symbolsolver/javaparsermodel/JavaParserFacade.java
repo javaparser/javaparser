@@ -473,6 +473,9 @@ public class JavaParserFacade {
         } else if (type instanceof UnionType) {
             UnionType unionType = (UnionType) type;
             return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
+        } else if (type instanceof VarType) {
+            final VariableDeclarator variableDeclarator = (VariableDeclarator)type.getParentNode().get();
+            return variableDeclarator.getInitializer().get().calculateResolvedType();
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
