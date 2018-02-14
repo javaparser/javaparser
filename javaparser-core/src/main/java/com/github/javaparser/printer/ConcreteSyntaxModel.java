@@ -273,6 +273,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(GeneratedJavaParserConstants.LBRACE),
                 list(ObservableProperty.VALUES, sequence(comma(), space()), space(), space()),
+                orphanCommentsEnding(),
                 token(RBRACE)));
 
         concreteSyntaxModelByClass.put(AssignExpr.class, sequence(
