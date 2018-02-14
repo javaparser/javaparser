@@ -31,7 +31,7 @@ public class VarTypeTest {
 
         ResolvedType resolvedType = varType.resolve();
 
-        assertEquals(ResolvedPrimitiveType.byName("int"), resolvedType);
+        assertEquals(ResolvedPrimitiveType.INT, resolvedType);
     }
 
     @Test
@@ -42,5 +42,21 @@ public class VarTypeTest {
         ResolvedType resolvedType = varType.resolve();
 
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver), resolvedType);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void failResolveNoInitializer() {
+        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{var abc;}")).getResult().get();
+        VarType varType = ast.findFirst(VarType.class).get();
+
+        varType.resolve();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void failResolveWrongLocation() {
+        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}")).getResult().get();
+        VarType varType = ast.findFirst(VarType.class).get();
+
+        varType.resolve();
     }
 }
