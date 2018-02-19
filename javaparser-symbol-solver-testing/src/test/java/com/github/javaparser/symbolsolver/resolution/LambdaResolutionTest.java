@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void lambdaMapParameter() throws ParseException {
+    public void lambdaMapParameter() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
@@ -48,13 +48,13 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void personsStream() throws ParseException {
+    public void personsStream() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
         Expression expression = returnStmt.getExpression().get();
-        expression = Navigator.findMethodCall(expression, "stream");
+        expression = Navigator.findMethodCall(expression, "stream").get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(expression);
@@ -62,7 +62,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaMap() throws ParseException {
+    public void lambdaMap() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration m1 = Navigator.demandMethod(clazz, "lambdaMap");
@@ -80,7 +80,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaReduce() throws ParseException {
+    public void lambdaReduce() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "reduce");
@@ -93,7 +93,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaBifunc() throws ParseException {
+    public void lambdaBifunc() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bifunc");
@@ -106,7 +106,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaCollectParam() throws ParseException {
+    public void lambdaCollectParam() {
         CompilationUnit cu = parseSample("LambdaCollect");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
@@ -121,7 +121,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaCollect() throws ParseException {
+    public void lambdaCollect() {
         CompilationUnit cu = parseSample("LambdaCollect");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
@@ -134,7 +134,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaBlockExplicitReturn() throws ParseException {
+    public void lambdaBlockExplicitReturn() {
         CompilationUnit cu = parseSample("LambdaMulti");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaSingleReturn");
@@ -147,7 +147,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaBlockMultiLineReturn() throws ParseException {
+    public void lambdaBlockMultiLineReturn() {
         CompilationUnit cu = parseSample("LambdaMulti");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "multiLineReturn");
@@ -160,7 +160,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void typeOfVoidLambda() throws ParseException {
+    public void typeOfVoidLambda() {
         CompilationUnit cu = parseSample("LambdaVoid");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaEmpty");

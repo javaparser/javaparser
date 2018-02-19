@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class Issue232 extends AbstractResolutionTest {
     @Test
-    public void issue232() throws ParseException {
+    public void issue232() {
         CompilationUnit cu = parseSample("Issue232");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "OfDouble");
         TypeSolver typeSolver = new ReflectionTypeSolver();

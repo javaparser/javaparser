@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -15,14 +14,14 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
+
+import static org.junit.Assert.assertEquals;
 
 public class Issue241 extends AbstractResolutionTest{
 
     @Test
-    public void testSolveStaticallyImportedMemberType() throws ParseException {
+    public void testSolveStaticallyImportedMemberType() {
         File src = adaptPath(new File("src/test/resources"));
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
         		
@@ -30,7 +29,7 @@ public class Issue241 extends AbstractResolutionTest{
         
         CompilationUnit cu = parseSample("Issue241");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Main");
-        VariableDeclarator v = Navigator.demandVariableDeclaration(cls, "foo");
+        VariableDeclarator v = Navigator.demandVariableDeclaration(cls, "foo").get();
         
         Type t = v.getType();
         ResolvedType t2 = javaParserFacade.convert(t, t);

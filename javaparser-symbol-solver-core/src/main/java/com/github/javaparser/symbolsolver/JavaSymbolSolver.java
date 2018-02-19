@@ -8,20 +8,16 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.Optional;
 
 /**
  * This implementation of the SymbolResolver wraps the functionalities of the library to make them easily usable
@@ -66,7 +62,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof EnumConstantDeclaration) {
-            ResolvedEnumDeclaration enumDeclaration = Navigator.findAncestor(node, EnumDeclaration.class).get().resolve().asEnum();
+            ResolvedEnumDeclaration enumDeclaration = node.findParent(EnumDeclaration.class).get().resolve().asEnum();
             ResolvedEnumConstantDeclaration resolved = enumDeclaration.getEnumConstants().stream().filter(c -> ((JavaParserEnumConstantDeclaration)c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
@@ -88,7 +84,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof AnnotationMemberDeclaration) {
-            ResolvedAnnotationDeclaration annotationDeclaration = Navigator.findAncestor(node, AnnotationDeclaration.class).get().resolve();
+            ResolvedAnnotationDeclaration annotationDeclaration = node.findParent(AnnotationDeclaration.class).get().resolve();
             ResolvedAnnotationMemberDeclaration resolved = annotationDeclaration.getAnnotationMembers().stream().filter(c -> ((JavaParserAnnotationMemberDeclaration)c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
@@ -153,7 +149,7 @@ public class JavaSymbolSolver implements SymbolResolver {
         if (node instanceof Parameter) {
             if (ResolvedParameterDeclaration.class.equals(resultClass)) {
                 Parameter parameter = (Parameter)node;
-                CallableDeclaration callableDeclaration = Navigator.findAncestor(node, CallableDeclaration.class).get();
+                CallableDeclaration callableDeclaration = node.findParent(CallableDeclaration.class).get();
                 ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration;
                 if (callableDeclaration.isConstructorDeclaration()) {
                     resolvedMethodLikeDeclaration = callableDeclaration.asConstructorDeclaration().resolve();

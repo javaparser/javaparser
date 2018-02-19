@@ -25,7 +25,6 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,17 +39,16 @@ public final class Navigator {
         // prevent instantiation
     }
 
+    /**
+     * @deprecated use Node.getParentNode
+     */
+    @Deprecated
     public static Node getParentNode(Node node) {
-        Node parent = node.getParentNode().orElse(null);
-        return parent;
+        return node.getParentNode().orElse(null);
     }
 
     public static Node requireParentNode(Node node) {
-        Node parent = getParentNode(node);
-        if (parent == null) {
-            throw new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST");
-        }
-        return parent;
+        return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
     }
 
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
@@ -109,7 +107,7 @@ public final class Navigator {
         for (BodyDeclaration<?> bd : cd.getMembers()) {
             if (bd instanceof MethodDeclaration) {
                 MethodDeclaration md = (MethodDeclaration) bd;
-                if (md.getName().getId().equals(name)) {
+                if (md.getNameAsString().equals(name)) {
                     if (found != null) {
                         throw new IllegalStateException("Ambiguous getName");
                     }
@@ -118,7 +116,7 @@ public final class Navigator {
             }
         }
         if (found == null) {
-            throw new IllegalStateException("No method with given name");
+            throw new IllegalStateException("No method called " + name);
         }
         return found;
     }
@@ -137,126 +135,57 @@ public final class Navigator {
         throw new IllegalStateException("No field with given name");
     }
 
-    public static NameExpr findNameExpression(Node node, String name) {
-        if (node instanceof NameExpr) {
-            NameExpr nameExpr = (NameExpr) node;
-            if (nameExpr.getName() != null && nameExpr.getName().getId().equals(name)) {
-                return nameExpr;
-            }
-        }
-        for (Node child : node.getChildNodes()) {
-            NameExpr res = findNameExpression(child, name);
-            if (res != null) {
-                return res;
-            }
-        }
-        return null;
+    public static Optional<NameExpr> findNameExpression(Node node, String name) {
+        return node.findFirst(NameExpr.class, n -> n.getNameAsString().equals(name));
     }
 
-    public static SimpleName findSimpleName(Node node, String name) {
-        if (node instanceof SimpleName) {
-            SimpleName nameExpr = (SimpleName) node;
-            if (nameExpr.getId() != null && nameExpr.getId().equals(name)) {
-                return nameExpr;
-            }
-        }
-        for (Node child : node.getChildNodes()) {
-            SimpleName res = findSimpleName(child, name);
-            if (res != null) {
-                return res;
-            }
-        }
-        return null;
+    public static Optional<SimpleName> findSimpleName(Node node, String name) {
+        return node.findFirst(SimpleName.class, n -> n.asString().equals(name));
     }
 
-    public static MethodCallExpr findMethodCall(Node node, String methodName) {
-        if (node instanceof MethodCallExpr) {
-            MethodCallExpr methodCallExpr = (MethodCallExpr) node;
-            if (methodCallExpr.getName().getId().equals(methodName)) {
-                return methodCallExpr;
-            }
-        }
-        for (Node child : node.getChildNodes()) {
-            MethodCallExpr res = findMethodCall(child, methodName);
-            if (res != null) {
-                return res;
-            }
-        }
-        return null;
+
+    public static Optional<MethodCallExpr> findMethodCall(Node node, String methodName) {
+        return node.findFirst(MethodCallExpr.class, n -> n.getNameAsString().equals(methodName));
     }
 
-    public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
-        if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
-            if (variableDeclarator.getName().getId().equals(name)) {
-                return variableDeclarator;
-            }
-        }
-        for (Node child : node.getChildNodes()) {
-            VariableDeclarator res = demandVariableDeclaration(child, name);
-            if (res != null) {
-                return res;
-            }
-        }
-        return null;
+    public static Optional<VariableDeclarator> demandVariableDeclaration(Node node, String name) {
+        return node.findFirst(VariableDeclarator.class, n -> n.getNameAsString().equals(name));
     }
 
     public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
-        Optional<TypeDeclaration<?>> res = findType(compilationUnit, qualifiedName);
-        if (!res.isPresent()) {
-            throw new IllegalStateException("No type named '" + qualifiedName + "'found");
-        }
-        if (!(res.get() instanceof ClassOrInterfaceDeclaration)) {
-            throw new IllegalStateException("Type is not a class or an interface, it is " + res.get().getClass().getCanonicalName());
-        }
-        ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) res.get();
-        return cd;
+        return findType(compilationUnit, qualifiedName)
+                .map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName())))
+                .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
     }
 
+    // TODO should be demand or requireSwitch
     public static SwitchStmt findSwitch(Node node) {
-        SwitchStmt res = findSwitchHelper(node);
-        if (res == null) {
-            throw new IllegalArgumentException();
-        } else {
-            return res;
-        }
+        return findSwitchHelper(node).orElseThrow(IllegalArgumentException::new);
     }
 
-    /**
-     * @deprecated use Node.findFirst instead
-     */
-    @Deprecated
-    public static <N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
-        N res = findNodeOfGivenClassHelper(node, clazz);
-        if (res == null) {
-            throw new IllegalArgumentException();
-        } else {
-            return res;
-        }
+    public static <N extends Node> N findNodeOfGivenClass(Node node, Class<N> clazz) {
+        return node.findFirst(clazz).orElseThrow(IllegalArgumentException::new);
     }
 
     /**
      * @deprecated use Node.findAll instead
      */
     @Deprecated
-    public static <N> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
-        List<N> res = new LinkedList<>();
-        findAllNodesOfGivenClassHelper(node, clazz, res);
-        return res;
+    public static <N extends Node> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
+        return node.findAll(clazz);
     }
 
+    // TODO should be demand or require...
     public static ReturnStmt findReturnStmt(MethodDeclaration method) {
         return findNodeOfGivenClass(method, ReturnStmt.class);
     }
 
+    /**
+     * @deprecated use Node.findParent instead
+     */
+    @Deprecated
     public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
-        if (!node.getParentNode().isPresent()) {
-            return Optional.empty();
-        } else if (clazz.isInstance(node.getParentNode().get())) {
-            return Optional.of(clazz.cast(node.getParentNode().get()));
-        } else {
-            return findAncestor(node.getParentNode().get(), clazz);
-        }
+        return node.findParent(clazz);
     }
 
     ///
@@ -274,38 +203,17 @@ public final class Navigator {
         return "";
     }
 
-    private static SwitchStmt findSwitchHelper(Node node) {
+    private static Optional<SwitchStmt> findSwitchHelper(Node node) {
+        // TODO can be replaced by findFirst with the correct algorithm.
         if (node instanceof SwitchStmt) {
-            return (SwitchStmt) node;
+            return Optional.of((SwitchStmt) node);
         }
         for (Node child : node.getChildNodes()) {
-            SwitchStmt resChild = findSwitchHelper(child);
-            if (resChild != null) {
+            Optional<SwitchStmt> resChild = findSwitchHelper(child);
+            if (resChild.isPresent()) {
                 return resChild;
             }
         }
-        return null;
-    }
-
-    private static <N> N findNodeOfGivenClassHelper(Node node, Class<N> clazz) {
-        if (clazz.isInstance(node)) {
-            return clazz.cast(node);
-        }
-        for (Node child : node.getChildNodes()) {
-            N resChild = findNodeOfGivenClassHelper(child, clazz);
-            if (resChild != null) {
-                return resChild;
-            }
-        }
-        return null;
-    }
-
-    private static <N> void findAllNodesOfGivenClassHelper(Node node, Class<N> clazz, List<N> collector) {
-        if (clazz.isInstance(node)) {
-            collector.add(clazz.cast(node));
-        }
-        for (Node child : node.getChildNodes()) {
-            findAllNodesOfGivenClassHelper(child, clazz, collector);
-        }
+        return Optional.empty();
     }
 }

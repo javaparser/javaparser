@@ -62,14 +62,14 @@ final class ASTParser implements ASTParserConstants {
                 }
         }
 
-    public int addModifier(int modifiers, int mod, Token token) throws ParseException {
+    public int addModifier(int modifiers, int mod, Token token) {
         if ((ModifierSet.hasModifier(modifiers, mod))) {
             throwParseException(token, "Duplicated modifier");
         }
         return ModifierSet.addModifier(modifiers, mod);
     }
 
-    private void throwParseException(Token token, String message) throws ParseException {
+    private void throwParseException(Token token, String message) {
         StringBuilder buf = new StringBuilder();
         buf.append(message);
         buf.append(": \"");
@@ -83,7 +83,7 @@ final class ASTParser implements ASTParserConstants {
         throw e;
     }
 
-    private Expression generateLambda(Expression ret, Statement lambdaBody) throws ParseException {
+    private Expression generateLambda(Expression ret, Statement lambdaBody) {
             if (ret instanceof EnclosedExpr) {
                 Expression inner = ((EnclosedExpr) ret).getInner();
                 if (inner != null && inner instanceof NameExpr) {
@@ -130,7 +130,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Program structuring syntax follows.
  */
-  final public CompilationUnit CompilationUnit() throws ParseException {
+  final public CompilationUnit CompilationUnit() {
         PackageDeclaration pakage = null;
         List imports = null;
         ImportDeclaration in = null;
@@ -201,7 +201,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public PackageDeclaration PackageDeclaration() throws ParseException {
+  final public PackageDeclaration PackageDeclaration() {
         List annotations = null;
         AnnotationExpr ann;
         NameExpr name;
@@ -228,7 +228,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ImportDeclaration ImportDeclaration() throws ParseException {
+  final public ImportDeclaration ImportDeclaration() {
         NameExpr name;
         boolean isStatic = false;
         boolean isAsterisk = false;
@@ -266,7 +266,7 @@ final class ASTParser implements ASTParserConstants {
  * syntax errors for simple modifier mistakes. It will also enable us to give
  * better error messages.
  */
-  final public Modifier Modifiers() throws ParseException {
+  final public Modifier Modifiers() {
     int beginLine = -1;
     int beginColumn = -1;
     int modifiers = 0;
@@ -341,7 +341,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Declaration syntax follows.
  */
-  final public TypeDeclaration TypeDeclaration() throws ParseException {
+  final public TypeDeclaration TypeDeclaration() {
    Modifier modifier;
    TypeDeclaration ret;
 
@@ -392,7 +392,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier) throws ParseException {
+  final public ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(Modifier modifier) {
    boolean isInterface = false;
    NameExpr name;
    List typePar = null;
@@ -448,7 +448,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ExtendsList(boolean isInterface) throws ParseException {
+  final public List ExtendsList(boolean isInterface) {
    boolean extendsMoreThanOne = false;
    List ret = new LinkedList();
    ClassOrInterfaceType cit;
@@ -490,7 +490,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ImplementsList(boolean isInterface) throws ParseException {
+  final public List ImplementsList(boolean isInterface) {
    List ret = new LinkedList();
    ClassOrInterfaceType cit;
    AnnotationExpr ann;
@@ -531,7 +531,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public EnumDeclaration EnumDeclaration(Modifier modifier) throws ParseException {
+  final public EnumDeclaration EnumDeclaration(Modifier modifier) {
         NameExpr name;
         List impList = null;
         EnumConstantDeclaration entry;
@@ -638,7 +638,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public EnumConstantDeclaration EnumConstantDeclaration() throws ParseException {
+  final public EnumConstantDeclaration EnumConstantDeclaration() {
         List annotations = null;
         AnnotationExpr ann;
         String name;
@@ -684,7 +684,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List TypeParameters() throws ParseException {
+  final public List TypeParameters() {
         List ret = new LinkedList();
         TypeParameter tp;
         List annotations = null;
@@ -738,7 +738,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public TypeParameter TypeParameter() throws ParseException {
+  final public TypeParameter TypeParameter() {
         String name;
         List typeBound = null;
         int line;
@@ -757,7 +757,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List TypeBound() throws ParseException {
+  final public List TypeBound() {
         List ret = new LinkedList();
         ClassOrInterfaceType cit;
         AnnotationExpr ann;
@@ -809,7 +809,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ClassOrInterfaceBody(boolean isInterface) throws ParseException {
+  final public List ClassOrInterfaceBody(boolean isInterface) {
         List ret = new LinkedList();
         BodyDeclaration member;
     jj_consume_token(LBRACE);
@@ -859,7 +859,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface) throws ParseException {
+  final public BodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterface) {
    boolean isNestedInterface = false;
    Modifier modifier;
    Modifier modifier2 = null;
@@ -983,7 +983,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public FieldDeclaration FieldDeclaration(Modifier modifier) throws ParseException {
+  final public FieldDeclaration FieldDeclaration(Modifier modifier) {
         Type type;
         List variables = new LinkedList();
         VariableDeclarator val;
@@ -1013,7 +1013,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public VariableDeclarator VariableDeclarator() throws ParseException {
+  final public VariableDeclarator VariableDeclarator() {
         VariableDeclaratorId id;
         Expression init = null;
     id = VariableDeclaratorId();
@@ -1030,7 +1030,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public VariableDeclaratorId VariableDeclaratorId() throws ParseException {
+  final public VariableDeclaratorId VariableDeclaratorId() {
         String name;
         int arrayCount = 0;
         int line;
@@ -1055,7 +1055,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression VariableInitializer() throws ParseException {
+  final public Expression VariableInitializer() {
         Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
@@ -1100,7 +1100,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ArrayInitializerExpr ArrayInitializer() throws ParseException {
+  final public ArrayInitializerExpr ArrayInitializer() {
         List values = null;
         Expression val;
         int line;
@@ -1168,7 +1168,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public MethodDeclaration MethodDeclaration(Modifier modifier) throws ParseException {
+  final public MethodDeclaration MethodDeclaration(Modifier modifier) {
         List typeParameters = null;
         Type type;
         NameExpr name;
@@ -1232,7 +1232,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List FormalParameters() throws ParseException {
+  final public List FormalParameters() {
         List ret = null;
         Parameter par;
     jj_consume_token(LPAREN);
@@ -1284,7 +1284,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List FormalLambdaParameters() throws ParseException {
+  final public List FormalLambdaParameters() {
   List ret = null;
   Parameter par;
     jj_consume_token(COMMA);
@@ -1308,7 +1308,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List InferredLambdaParameters() throws ParseException {
+  final public List InferredLambdaParameters() {
   List ret = null;
   VariableDeclaratorId id;
     jj_consume_token(COMMA);
@@ -1332,7 +1332,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Parameter FormalParameter() throws ParseException {
+  final public Parameter FormalParameter() {
         Modifier modifier;
         Type type;
         boolean isVarArg = false;
@@ -1356,7 +1356,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ConstructorDeclaration ConstructorDeclaration(Modifier modifier) throws ParseException {
+  final public ConstructorDeclaration ConstructorDeclaration(Modifier modifier) {
         List typeParameters = null;
         NameExpr name;
         List parameters;
@@ -1409,7 +1409,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ExplicitConstructorInvocationStmt ExplicitConstructorInvocation() throws ParseException {
+  final public ExplicitConstructorInvocationStmt ExplicitConstructorInvocation() {
         boolean isThis = false;
         List args;
         Expression expr = null;
@@ -1489,7 +1489,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List Statements() throws ParseException {
+  final public List Statements() {
         List ret = null;
         Statement stmt;
     label_26:
@@ -1559,7 +1559,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public InitializerDeclaration InitializerDeclaration() throws ParseException {
+  final public InitializerDeclaration InitializerDeclaration() {
         BlockStmt block;
         int line = -1;
         int column = 0;
@@ -1582,7 +1582,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Type, name and expression syntax follows.
  */
-  final public Type Type() throws ParseException {
+  final public Type Type() {
         Type ret;
     if (jj_2_11(2)) {
       ret = ReferenceType();
@@ -1608,7 +1608,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ReferenceType ReferenceType() throws ParseException {
+  final public ReferenceType ReferenceType() {
         Type type;
         int arrayCount = 0;
         List annotations = null;
@@ -1685,7 +1685,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ClassOrInterfaceType ClassOrInterfaceType() throws ParseException {
+  final public ClassOrInterfaceType ClassOrInterfaceType() {
         ClassOrInterfaceType ret;
         String name;
         List typeArgs = null;
@@ -1738,7 +1738,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List TypeArguments() throws ParseException {
+  final public List TypeArguments() {
         List ret = new LinkedList();
         Type type;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1777,7 +1777,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Type TypeArgument() throws ParseException {
+  final public Type TypeArgument() {
         Type ret;
         List annotations = null;
         AnnotationExpr ann;
@@ -1818,7 +1818,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public WildcardType Wildcard() throws ParseException {
+  final public WildcardType Wildcard() {
         ReferenceType ext = null;
         ReferenceType sup = null;
         int line;
@@ -1881,7 +1881,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public PrimitiveType PrimitiveType() throws ParseException {
+  final public PrimitiveType PrimitiveType() {
         PrimitiveType ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
@@ -1925,7 +1925,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Type ResultType() throws ParseException {
+  final public Type ResultType() {
         Type ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VOID:
@@ -1952,7 +1952,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public NameExpr Name() throws ParseException {
+  final public NameExpr Name() {
         NameExpr ret;
     jj_consume_token(IDENTIFIER);
                  ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image);
@@ -1971,7 +1971,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ClassOrInterfaceTypeList() throws ParseException {
+  final public List ClassOrInterfaceTypeList() {
         List ret = new LinkedList();
         ClassOrInterfaceType type;
         List annotations= null;
@@ -2022,7 +2022,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public NameExpr SimpleName() throws ParseException {
+  final public NameExpr SimpleName() {
     NameExpr ret;
     jj_consume_token(IDENTIFIER);
                  ret = new NameExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn, token.image);
@@ -2030,7 +2030,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List NameList() throws ParseException {
+  final public List NameList() {
         List ret = new LinkedList();
         NameExpr name;
     name = Name();
@@ -2056,7 +2056,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Expression syntax follows.
  */
-  final public Expression Expression() throws ParseException {
+  final public Expression Expression() {
         Expression ret;
         AssignExpr.Operator op;
         Expression value;
@@ -2146,7 +2146,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public AssignExpr.Operator AssignmentOperator() throws ParseException {
+  final public AssignExpr.Operator AssignmentOperator() {
         AssignExpr.Operator ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSIGN:
@@ -2206,7 +2206,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression ConditionalExpression() throws ParseException {
+  final public Expression ConditionalExpression() {
         Expression ret;
         Expression left;
         Expression right;
@@ -2227,7 +2227,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression ConditionalOrExpression() throws ParseException {
+  final public Expression ConditionalOrExpression() {
         Expression ret;
         Expression right;
     ret = ConditionalAndExpression();
@@ -2249,7 +2249,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression ConditionalAndExpression() throws ParseException {
+  final public Expression ConditionalAndExpression() {
         Expression ret;
         Expression right;
     ret = InclusiveOrExpression();
@@ -2271,7 +2271,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression InclusiveOrExpression() throws ParseException {
+  final public Expression InclusiveOrExpression() {
         Expression ret;
         Expression right;
     ret = ExclusiveOrExpression();
@@ -2293,7 +2293,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression ExclusiveOrExpression() throws ParseException {
+  final public Expression ExclusiveOrExpression() {
         Expression ret;
         Expression right;
     ret = AndExpression();
@@ -2315,7 +2315,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression AndExpression() throws ParseException {
+  final public Expression AndExpression() {
         Expression ret;
         Expression right;
     ret = EqualityExpression();
@@ -2337,7 +2337,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression EqualityExpression() throws ParseException {
+  final public Expression EqualityExpression() {
         Expression ret;
         Expression right;
         BinaryExpr.Operator op;
@@ -2374,7 +2374,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression InstanceOfExpression() throws ParseException {
+  final public Expression InstanceOfExpression() {
         Expression ret;
         Type type;
     ret = RelationalExpression();
@@ -2392,7 +2392,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression RelationalExpression() throws ParseException {
+  final public Expression RelationalExpression() {
         Expression ret;
         Expression right;
         BinaryExpr.Operator op;
@@ -2439,7 +2439,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression ShiftExpression() throws ParseException {
+  final public Expression ShiftExpression() {
         Expression ret;
         Expression right;
         BinaryExpr.Operator op;
@@ -2476,7 +2476,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression AdditiveExpression() throws ParseException {
+  final public Expression AdditiveExpression() {
         Expression ret;
         Expression right;
         BinaryExpr.Operator op;
@@ -2513,7 +2513,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression MultiplicativeExpression() throws ParseException {
+  final public Expression MultiplicativeExpression() {
         Expression ret;
         Expression right;
         BinaryExpr.Operator op;
@@ -2555,7 +2555,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression UnaryExpression() throws ParseException {
+  final public Expression UnaryExpression() {
         Expression ret;
         UnaryExpr.Operator op;
         int line = 0;
@@ -2631,7 +2631,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PreIncrementExpression() throws ParseException {
+  final public Expression PreIncrementExpression() {
         Expression ret;
         int line;
         int column;
@@ -2643,7 +2643,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PreDecrementExpression() throws ParseException {
+  final public Expression PreDecrementExpression() {
         Expression ret;
         int line;
         int column;
@@ -2655,7 +2655,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression UnaryExpressionNotPlusMinus() throws ParseException {
+  final public Expression UnaryExpressionNotPlusMinus() {
         Expression ret;
         UnaryExpr.Operator op;
         int line = 0;
@@ -2721,7 +2721,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PostfixExpression() throws ParseException {
+  final public Expression PostfixExpression() {
         Expression ret;
         UnaryExpr.Operator op;
     ret = PrimaryExpression();
@@ -2748,7 +2748,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression CastExpression() throws ParseException {
+  final public Expression CastExpression() {
         Expression ret;
         Type type;
         int line;
@@ -2801,7 +2801,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PrimaryExpression() throws ParseException {
+  final public Expression PrimaryExpression() {
         Expression ret;
         Expression inner;
     ret = PrimaryPrefix();
@@ -2818,7 +2818,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PrimaryExpressionWithoutSuperSuffix() throws ParseException {
+  final public Expression PrimaryExpressionWithoutSuperSuffix() {
         Expression ret;
         Expression inner;
     ret = PrimaryPrefix();
@@ -2835,7 +2835,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PrimaryPrefix() throws ParseException {
+  final public Expression PrimaryPrefix() {
         Expression ret = null;
         NameExpr name;
         List typeArgs = null;
@@ -3124,7 +3124,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PrimarySuffix(Expression scope) throws ParseException {
+  final public Expression PrimarySuffix(Expression scope) {
         Expression ret;
     if (jj_2_30(2)) {
       ret = PrimarySuffixWithoutSuper(scope);
@@ -3145,7 +3145,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression PrimarySuffixWithoutSuper(Expression scope) throws ParseException {
+  final public Expression PrimarySuffixWithoutSuper(Expression scope) {
         Expression ret;
         List typeArgs = null;
         List args = null;
@@ -3215,7 +3215,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression Literal() throws ParseException {
+  final public Expression Literal() {
         Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
@@ -3254,7 +3254,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression BooleanLiteral() throws ParseException {
+  final public Expression BooleanLiteral() {
         Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRUE:
@@ -3274,13 +3274,13 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression NullLiteral() throws ParseException {
+  final public Expression NullLiteral() {
     jj_consume_token(NULL);
     {if (true) return new NullLiteralExpr(token.beginLine, token.beginColumn, token.endLine, token.endColumn);}
     throw new Error("Missing return statement in function");
   }
 
-  final public List Arguments() throws ParseException {
+  final public List Arguments() {
         List ret = null;
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3323,7 +3323,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ArgumentList() throws ParseException {
+  final public List ArgumentList() {
         List ret = new LinkedList();
         Expression expr;
     expr = Expression();
@@ -3346,7 +3346,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression AllocationExpression(Expression scope) throws ParseException {
+  final public Expression AllocationExpression(Expression scope) {
         Expression ret;
         ArrayCreationExpr arrayExpr;
         Type type;
@@ -3466,7 +3466,7 @@ final class ASTParser implements ASTParserConstants {
  * The third LOOKAHEAD specification below is to parse to PrimarySuffix
  * if there is an expression between the "[...]".
  */
-  final public Object[] ArrayDimsAndInits() throws ParseException {
+  final public Object[] ArrayDimsAndInits() {
         Object[] ret = new Object[3];
         Expression expr;
         List inits = null;
@@ -3558,7 +3558,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Statement syntax follows.
  */
-  final public Statement Statement() throws ParseException {
+  final public Statement Statement() {
         Statement ret;
     if (jj_2_36(2)) {
       ret = LabeledStatement();
@@ -3642,7 +3642,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public AssertStmt AssertStatement() throws ParseException {
+  final public AssertStmt AssertStatement() {
         Expression check;
         Expression msg = null;
         int line;
@@ -3664,7 +3664,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public LabeledStmt LabeledStatement() throws ParseException {
+  final public LabeledStmt LabeledStatement() {
         String label;
         Statement stmt;
         int line;
@@ -3678,7 +3678,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public BlockStmt Block() throws ParseException {
+  final public BlockStmt Block() {
         List stmts;
         int beginLine;
         int beginColumn;
@@ -3693,7 +3693,7 @@ final class ASTParser implements ASTParserConstants {
 /*
  * Classes inside block stametents can only be abstract or final. The semantic must check it.
  */
-  final public Statement BlockStatement() throws ParseException {
+  final public Statement BlockStatement() {
         Statement ret;
         Expression expr;
         ClassOrInterfaceDeclaration typeDecl;
@@ -3759,7 +3759,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public VariableDeclarationExpr VariableDeclarationExpression() throws ParseException {
+  final public VariableDeclarationExpr VariableDeclarationExpression() {
         Modifier modifier;
         Type type;
         List vars = new LinkedList();
@@ -3789,13 +3789,13 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public EmptyStmt EmptyStatement() throws ParseException {
+  final public EmptyStmt EmptyStatement() {
     jj_consume_token(SEMICOLON);
     {if (true) return new EmptyStmt(token.beginLine, token.beginColumn, token.endLine, token.endColumn);}
     throw new Error("Missing return statement in function");
   }
 
-  final public Statement LambdaBody() throws ParseException {
+  final public Statement LambdaBody() {
   Expression expr;
   Statement n = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3842,7 +3842,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ExpressionStmt StatementExpression() throws ParseException {
+  final public ExpressionStmt StatementExpression() {
         Expression expr;
         AssignExpr.Operator op;
         Expression value;
@@ -3984,7 +3984,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public SwitchStmt SwitchStatement() throws ParseException {
+  final public SwitchStmt SwitchStatement() {
         Expression selector;
         SwitchEntryStmt entry;
         List entries = null;
@@ -4015,7 +4015,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public SwitchEntryStmt SwitchEntry() throws ParseException {
+  final public SwitchEntryStmt SwitchEntry() {
         Expression label = null;
         List stmts;
         int line;
@@ -4041,7 +4041,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public IfStmt IfStatement() throws ParseException {
+  final public IfStmt IfStatement() {
         Expression condition;
         Statement thenStmt;
         Statement elseStmt = null;
@@ -4075,7 +4075,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public WhileStmt WhileStatement() throws ParseException {
+  final public WhileStmt WhileStatement() {
         Expression condition;
         Statement body;
         int line;
@@ -4090,7 +4090,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public DoStmt DoStatement() throws ParseException {
+  final public DoStmt DoStatement() {
         Expression condition;
         Statement body;
         int line;
@@ -4107,7 +4107,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Statement ForStatement() throws ParseException {
+  final public Statement ForStatement() {
         String id = null;
         VariableDeclarationExpr varExpr = null;
         Expression expr = null;
@@ -4301,7 +4301,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ForInit() throws ParseException {
+  final public List ForInit() {
         List ret;
         Expression expr;
     if (jj_2_41(2147483647)) {
@@ -4349,7 +4349,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ExpressionList() throws ParseException {
+  final public List ExpressionList() {
         List ret = new LinkedList();
         Expression expr;
     expr = Expression();
@@ -4372,14 +4372,14 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ForUpdate() throws ParseException {
+  final public List ForUpdate() {
         List ret;
     ret = ExpressionList();
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
-  final public BreakStmt BreakStatement() throws ParseException {
+  final public BreakStmt BreakStatement() {
         String id = null;
         int line;
         int column;
@@ -4399,7 +4399,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ContinueStmt ContinueStatement() throws ParseException {
+  final public ContinueStmt ContinueStatement() {
         String id = null;
         int line;
         int column;
@@ -4419,7 +4419,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ReturnStmt ReturnStatement() throws ParseException {
+  final public ReturnStmt ReturnStatement() {
         Expression expr = null;
         int line;
         int column;
@@ -4465,7 +4465,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public ThrowStmt ThrowStatement() throws ParseException {
+  final public ThrowStmt ThrowStatement() {
         Expression expr;
         int line;
         int column;
@@ -4477,7 +4477,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public SynchronizedStmt SynchronizedStatement() throws ParseException {
+  final public SynchronizedStmt SynchronizedStatement() {
         Expression expr;
         BlockStmt block;
         int line;
@@ -4492,7 +4492,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public TryStmt TryStatement() throws ParseException {
+  final public TryStmt TryStatement() {
         List resources = new LinkedList();
         BlockStmt tryBlock;
         BlockStmt finallyBlock = null;
@@ -4566,7 +4566,7 @@ final class ASTParser implements ASTParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List ResourceSpecification() throws ParseException {
+  final public List ResourceSpecification() {
 List vars;
     jj_consume_token(LPAREN);
     vars = Resources();
@@ -4580,7 +4580,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public List Resources() throws ParseException {
+  final public List Resources() {
         List vars = new LinkedList();
         VariableDeclarationExpr var;
     /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
@@ -4604,7 +4604,7 @@ List vars;
 /* We use productions to match >>>, >> and > so that we can keep the
  * type declaration syntax with generics clean
  */
-  final public void RUNSIGNEDSHIFT() throws ParseException {
+  final public void RUNSIGNEDSHIFT() {
     if (getToken(1).kind == GT &&
                     ((GTToken)getToken(1)).realKind == RUNSIGNEDSHIFT) {
 
@@ -4617,7 +4617,7 @@ List vars;
     jj_consume_token(GT);
   }
 
-  final public void RSIGNEDSHIFT() throws ParseException {
+  final public void RSIGNEDSHIFT() {
     if (getToken(1).kind == GT &&
                     ((GTToken)getToken(1)).realKind == RSIGNEDSHIFT) {
 
@@ -4630,7 +4630,7 @@ List vars;
   }
 
 /* Annotation syntax follows. */
-  final public AnnotationExpr Annotation() throws ParseException {
+  final public AnnotationExpr Annotation() {
         AnnotationExpr ret;
     if (jj_2_44(2147483647)) {
       ret = NormalAnnotation();
@@ -4651,7 +4651,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public NormalAnnotationExpr NormalAnnotation() throws ParseException {
+  final public NormalAnnotationExpr NormalAnnotation() {
         NameExpr name;
         List pairs = null;
         int line;
@@ -4673,7 +4673,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public MarkerAnnotationExpr MarkerAnnotation() throws ParseException {
+  final public MarkerAnnotationExpr MarkerAnnotation() {
         NameExpr name;
         int line;
         int column;
@@ -4684,7 +4684,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public SingleMemberAnnotationExpr SingleMemberAnnotation() throws ParseException {
+  final public SingleMemberAnnotationExpr SingleMemberAnnotation() {
         NameExpr name;
         Expression memberVal;
         int line;
@@ -4699,7 +4699,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public List MemberValuePairs() throws ParseException {
+  final public List MemberValuePairs() {
         List ret = new LinkedList();
         MemberValuePair pair;
     pair = MemberValuePair();
@@ -4722,7 +4722,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public MemberValuePair MemberValuePair() throws ParseException {
+  final public MemberValuePair MemberValuePair() {
         String name;
         Expression value;
         int line;
@@ -4735,7 +4735,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression MemberValue() throws ParseException {
+  final public Expression MemberValue() {
         Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AT:
@@ -4783,7 +4783,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression MemberValueArrayInitializer() throws ParseException {
+  final public Expression MemberValueArrayInitializer() {
         List ret = new LinkedList();
         Expression member;
         int line;
@@ -4853,7 +4853,7 @@ List vars;
   }
 
 /* Annotation Types. */
-  final public AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier) throws ParseException {
+  final public AnnotationDeclaration AnnotationTypeDeclaration(Modifier modifier) {
         NameExpr name;
         List members;
         int line = modifier.beginLine;
@@ -4869,7 +4869,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public List AnnotationTypeBody() throws ParseException {
+  final public List AnnotationTypeBody() {
         List ret = null;
         BodyDeclaration member;
     jj_consume_token(LBRACE);
@@ -4915,7 +4915,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public BodyDeclaration AnnotationBodyDeclaration() throws ParseException {
+  final public BodyDeclaration AnnotationBodyDeclaration() {
    Modifier modifier;
    BodyDeclaration ret;
 
@@ -4990,7 +4990,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier) throws ParseException {
+  final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(Modifier modifier) {
         Type type;
         String name;
         Expression defaultVal = null;
@@ -5015,7 +5015,7 @@ List vars;
     throw new Error("Missing return statement in function");
   }
 
-  final public Expression DefaultValue() throws ParseException {
+  final public Expression DefaultValue() {
         Expression ret;
     jj_consume_token(_DEFAULT);
     ret = MemberValue();
@@ -8905,7 +8905,7 @@ List vars;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();

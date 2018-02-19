@@ -1,3 +1,16 @@
+Version 3.5.14
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/77?closed=1)
+* Java 10's `var` can now be parsed and will be turned into a `VarType` node.
+It can not be resolved yet.
+* `NodeList` now has a pretty complete set of `...First` and `...Last` methods.
+Thanks stephenramthun !
+
+Version 3.5.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/76?closed=1)
+* The Javadoc parser has received a lot of attention.
+
 Version 3.5.12
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/75?closed=1)

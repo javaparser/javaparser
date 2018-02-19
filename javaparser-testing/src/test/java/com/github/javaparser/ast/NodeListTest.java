@@ -35,6 +35,8 @@ import java.util.*;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NodeListTest {
 
@@ -132,6 +134,46 @@ public class NodeListTest {
 
         cd.getMembers().remove(cd.getFieldByName("c").get());
         assertEquals(Arrays.asList("'int c;' REMOVAL in list at 2"), changes);
+    }
+
+    @Test
+    public void removeFirstNode() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeFirst();
+        assertEquals(Arrays.asList("'int a;' REMOVAL in list at 0"), changes);
+        assertEquals(cd.getMembers().size(), 4);
+
+        for (int i = 3; i >= 0; i--) {
+            assertTrue(cd.getMembers().removeFirst() != null);
+            assertEquals(cd.getMembers().size(), i);
+        }
+
+        assertEquals(cd.getMembers().size(), 0);
+    }
+
+    @Test
+    public void removeLastNode() {
+        List<String> changes = new LinkedList<>();
+        String code = "class A { int a; int b; int c; int d; int e; }";
+        CompilationUnit cu = JavaParser.parse(code);
+        ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
+        cd.getMembers().register(createObserver(changes));
+
+        cd.getMembers().removeLast();
+        assertEquals(Arrays.asList("'int e;' REMOVAL in list at 4"), changes);
+        assertEquals(cd.getMembers().size(), 4);
+
+        for (int i = 3; i >= 0; i--) {
+            assertTrue(cd.getMembers().removeLast() != null);
+            assertEquals(cd.getMembers().size(), i);
+        }
+
+        assertEquals(cd.getMembers().size(), 0);
     }
 
     @Test

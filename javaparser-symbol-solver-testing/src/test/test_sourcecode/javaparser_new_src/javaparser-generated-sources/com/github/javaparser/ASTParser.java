@@ -197,7 +197,7 @@ final class ASTParser implements ASTParserConstants {
  * Program structuring syntax follows.
  */
   final public 
-CompilationUnit CompilationUnit() throws ParseException {PackageDeclaration pakage = null;
+CompilationUnit CompilationUnit() {PackageDeclaration pakage = null;
         List<ImportDeclaration> imports = null;
         ImportDeclaration in = null;
         List<TypeDeclaration<?>> types = null;
@@ -284,13 +284,13 @@ begin = begin.orIfInvalid(tn.getBegin()); types = add(types, tn);
 return new CompilationUnit(begin.invalid() ? Range.UNKNOWN : range(begin, tokenEnd()), pakage, imports, types);
   }
 
-  final public ImportDeclaration EmptyImportDeclaration() throws ParseException {Position begin;
+  final public ImportDeclaration EmptyImportDeclaration() {Position begin;
     jj_consume_token(SEMICOLON);
 begin = tokenBegin();
 return ImportDeclaration.createEmptyDeclaration(range(begin, tokenEnd()));
   }
 
-  final public PackageDeclaration PackageDeclaration() throws ParseException {List<AnnotationExpr> annotations = null;
+  final public PackageDeclaration PackageDeclaration() {List<AnnotationExpr> annotations = null;
         NameExpr name;
         Position begin;
     annotations = Annotations();
@@ -301,7 +301,7 @@ begin = tokenBegin();
 return new PackageDeclaration(range(begin, tokenEnd()), annotations, name);
   }
 
-  final public ImportDeclaration ImportDeclaration() throws ParseException {NameExpr name;
+  final public ImportDeclaration ImportDeclaration() {NameExpr name;
         boolean isStatic = false;
         boolean isAsterisk = false;
         Position begin;
@@ -339,7 +339,7 @@ return new ImportDeclaration(range(begin, tokenEnd()),name, isStatic, isAsterisk
  * better error messages.
  */
   final public 
-ModifierHolder Modifiers() throws ParseException {Position begin = INVALID;
+ModifierHolder Modifiers() {Position begin = INVALID;
     EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
     List<AnnotationExpr> annotations = null;
     AnnotationExpr ann;
@@ -423,7 +423,7 @@ return new ModifierHolder(begin, modifiers, annotations);
 /*
  * Declaration syntax follows.
  */
-  final public TypeDeclaration TypeDeclaration() throws ParseException {ModifierHolder modifier;
+  final public TypeDeclaration TypeDeclaration() {ModifierHolder modifier;
    TypeDeclaration ret;
 
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -477,7 +477,7 @@ ret = new EmptyTypeDeclaration(tokenRange());
 return ret;
   }
 
-  final public ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier) throws ParseException {boolean isInterface = false;
+  final public ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier) {boolean isInterface = false;
     NameExpr name;
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(null);
     List<ClassOrInterfaceType> extList = null;
@@ -534,7 +534,7 @@ ClassOrInterfaceDeclaration tmp = new ClassOrInterfaceDeclaration(range(begin, t
     return tmp;
   }
 
-  final public List<ClassOrInterfaceType> ExtendsList(boolean isInterface) throws ParseException {boolean extendsMoreThanOne = false;
+  final public List<ClassOrInterfaceType> ExtendsList(boolean isInterface) {boolean extendsMoreThanOne = false;
    List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
     jj_consume_token(EXTENDS);
@@ -560,7 +560,7 @@ if (extendsMoreThanOne && !isInterface)
 return ret;
   }
 
-  final public List<ClassOrInterfaceType> ImplementsList(boolean isInterface) throws ParseException {List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
+  final public List<ClassOrInterfaceType> ImplementsList(boolean isInterface) {List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
     jj_consume_token(IMPLEMENTS);
     cit = AnnotatedClassOrInterfaceType();
@@ -585,7 +585,7 @@ if (isInterface)
 return ret;
   }
 
-  final public EnumDeclaration EnumDeclaration(ModifierHolder modifier) throws ParseException {NameExpr name;
+  final public EnumDeclaration EnumDeclaration(ModifierHolder modifier) {NameExpr name;
         List<ClassOrInterfaceType> impList = null;
         EnumConstantDeclaration entry;
         List<EnumConstantDeclaration> entries = null;
@@ -694,7 +694,7 @@ EnumDeclaration tmp = new EnumDeclaration(range(begin, tokenEnd()), modifier.mod
       return tmp;
   }
 
-  final public EnumConstantDeclaration EnumConstantDeclaration() throws ParseException {List<AnnotationExpr> annotations = null;
+  final public EnumConstantDeclaration EnumConstantDeclaration() {List<AnnotationExpr> annotations = null;
         AnnotationExpr ann;
         String name;
         List<Expression> args = null;
@@ -743,7 +743,7 @@ return new EnumConstantDeclaration(range(begin, tokenEnd()), annotations, name, 
  * If it is empty, there are brackets, but nothing is in them <>.
  * The normal case is that it contains TypeParameters, like <A, B, C>.
  */
-  final public RangedList<TypeParameter> TypeParameters() throws ParseException {RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new LinkedList<TypeParameter>());
+  final public RangedList<TypeParameter> TypeParameters() {RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new LinkedList<TypeParameter>());
         TypeParameter tp;
         List<AnnotationExpr> annotations = null;
     jj_consume_token(LT);
@@ -772,7 +772,7 @@ ret.endAt(tokenEnd());
 return ret;
   }
 
-  final public TypeParameter TypeParameter() throws ParseException {String name;
+  final public TypeParameter TypeParameter() {String name;
         List<ClassOrInterfaceType> typeBound = null;
         Position begin;
     jj_consume_token(IDENTIFIER);
@@ -789,7 +789,7 @@ name = token.image; begin=tokenBegin();
 return new TypeParameter(range(begin, tokenEnd()),name, typeBound);
   }
 
-  final public List<ClassOrInterfaceType> TypeBound() throws ParseException {List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
+  final public List<ClassOrInterfaceType> TypeBound() {List<ClassOrInterfaceType> ret = new LinkedList<ClassOrInterfaceType>();
         ClassOrInterfaceType cit;
     jj_consume_token(EXTENDS);
     cit = AnnotatedClassOrInterfaceType();
@@ -812,7 +812,7 @@ ret.add(cit);
 return ret;
   }
 
-  final public List<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface) throws ParseException {List<BodyDeclaration<?>> ret = new LinkedList<BodyDeclaration<?>>();
+  final public List<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface) {List<BodyDeclaration<?>> ret = new LinkedList<BodyDeclaration<?>>();
         BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_11:
@@ -861,7 +861,7 @@ ret.add(member);
 return ret;
   }
 
-  final public BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface) throws ParseException {ModifierHolder modifier;
+  final public BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface) {ModifierHolder modifier;
    ModifierHolder modifier2 = null;
    EnumSet<Modifier> aux = null;
    BodyDeclaration<?> ret;
@@ -990,7 +990,7 @@ ret = new EmptyMemberDeclaration(tokenRange());
 return ret;
   }
 
-  final public FieldDeclaration FieldDeclaration(ModifierHolder modifier) throws ParseException {Type type;
+  final public FieldDeclaration FieldDeclaration(ModifierHolder modifier) {Type type;
         List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
         VariableDeclarator val;
     // Modifiers are already matched in the caller
@@ -1018,7 +1018,7 @@ Position begin = modifier.begin.orIfInvalid(type.getBegin());
         return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
   }
 
-  final public VariableDeclarator VariableDeclarator() throws ParseException {VariableDeclaratorId id;
+  final public VariableDeclarator VariableDeclarator() {VariableDeclaratorId id;
         Expression init = null;
     id = VariableDeclaratorId();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1034,7 +1034,7 @@ Position begin = modifier.begin.orIfInvalid(type.getBegin());
 return new  VariableDeclarator(range(id.getBegin(), tokenEnd()), id, init);
   }
 
-  final public VariableDeclaratorId VariableDeclaratorId() throws ParseException {String name;
+  final public VariableDeclaratorId VariableDeclaratorId() {String name;
         Position begin;
         ArrayBracketPair arrayBracketPair;
         List<ArrayBracketPair> arrayBracketPairs = null;
@@ -1058,7 +1058,7 @@ arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair);
 return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs);
   }
 
-  final public Expression VariableInitializer() throws ParseException {Expression ret;
+  final public Expression VariableInitializer() {Expression ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case LBRACE:{
       ret = ArrayInitializer();
@@ -1103,7 +1103,7 @@ return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs
 return ret;
   }
 
-  final public ArrayInitializerExpr ArrayInitializer() throws ParseException {List<Expression> values = null;
+  final public ArrayInitializerExpr ArrayInitializer() {List<Expression> values = null;
         Expression val;
         Position begin;
     jj_consume_token(LBRACE);
@@ -1170,7 +1170,7 @@ values = add(values, val);
 return new ArrayInitializerExpr(range(begin, tokenEnd()), values);
   }
 
-  final public MethodDeclaration MethodDeclaration(ModifierHolder modifier) throws ParseException {RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
+  final public MethodDeclaration MethodDeclaration(ModifierHolder modifier) {RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
         Type type;
         NameExpr name;
         List<Parameter> parameters;
@@ -1253,7 +1253,7 @@ Pair<Type, List<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
         return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, parameters, arrayBracketPairs, throws_, block);
   }
 
-  final public ReferenceType ReferenceTypeWithAnnotations() throws ParseException {List<AnnotationExpr> annotations;
+  final public ReferenceType ReferenceTypeWithAnnotations() {List<AnnotationExpr> annotations;
         ReferenceType type;
     annotations = Annotations();
     type = ReferenceType();
@@ -1267,7 +1267,7 @@ if(annotations != null){
         return type;
   }
 
-  final public List<Parameter> FormalParameters() throws ParseException {List<Parameter> ret = null;
+  final public List<Parameter> FormalParameters() {List<Parameter> ret = null;
         Parameter par;
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1319,7 +1319,7 @@ ret = add(ret, par);
 return ret;
   }
 
-  final public List<Parameter> FormalLambdaParameters() throws ParseException {List<Parameter> ret = null;
+  final public List<Parameter> FormalLambdaParameters() {List<Parameter> ret = null;
   Parameter par;
     jj_consume_token(COMMA);
     par = FormalParameter();
@@ -1342,7 +1342,7 @@ ret = add(ret, par);
 return ret;
   }
 
-  final public List<Parameter> InferredLambdaParameters() throws ParseException {List<Parameter> ret = null;
+  final public List<Parameter> InferredLambdaParameters() {List<Parameter> ret = null;
   VariableDeclaratorId id;
     jj_consume_token(COMMA);
     id = VariableDeclaratorId();
@@ -1365,7 +1365,7 @@ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(M
 return ret;
   }
 
-  final public Parameter FormalParameter() throws ParseException {ModifierHolder modifier;
+  final public Parameter FormalParameter() {ModifierHolder modifier;
         Type type;
         boolean isVarArg = false;
         VariableDeclaratorId id;
@@ -1387,7 +1387,7 @@ Position begin = modifier.begin.orIfInvalid(type.getBegin());
         return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
   }
 
-  final public ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier) throws ParseException {RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
+  final public ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier) {RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(null);
         NameExpr name;
         List<Parameter> parameters;
         List<ReferenceType> throws_ = null;
@@ -1453,7 +1453,7 @@ if (exConsInv != null) {
     return tmp;
   }
 
-  final public ExplicitConstructorInvocationStmt ExplicitConstructorInvocation() throws ParseException {boolean isThis = false;
+  final public ExplicitConstructorInvocationStmt ExplicitConstructorInvocation() {boolean isThis = false;
         List<Expression> args;
         Expression expr = null;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
@@ -1530,7 +1530,7 @@ begin = begin.orIfInvalid(tokenBegin());
 return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()),typeArgs.list, isThis, expr, args);
   }
 
-  final public List<Statement> Statements() throws ParseException {List<Statement> ret = null;
+  final public List<Statement> Statements() {List<Statement> ret = null;
         Statement stmt;
     label_21:
     while (true) {
@@ -1599,7 +1599,7 @@ ret = add(ret, stmt);
 return ret;
   }
 
-  final public InitializerDeclaration InitializerDeclaration() throws ParseException {BlockStmt block;
+  final public InitializerDeclaration InitializerDeclaration() {BlockStmt block;
         Position begin = INVALID;
         boolean isStatic = false;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1621,7 +1621,7 @@ return new InitializerDeclaration(range(begin, tokenEnd()), isStatic, block);
  * Type, name and expression syntax follows.
  */
   final public 
-Type Type() throws ParseException {Type ret;
+Type Type() {Type ret;
     if (jj_2_11(2)) {
       ret = ReferenceType();
     } else {
@@ -1646,7 +1646,7 @@ Type Type() throws ParseException {Type ret;
 return ret;
   }
 
-  final public ReferenceType ReferenceType() throws ParseException {Type type;
+  final public ReferenceType ReferenceType() {Type type;
         ArrayBracketPair arrayBracketPair;
         List<ArrayBracketPair> arrayBracketPairs = null;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1693,7 +1693,7 @@ arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair);
 return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs);
   }
 
-  final public ArrayBracketPair ArrayBracketPair() throws ParseException {List<AnnotationExpr> annotations = null;
+  final public ArrayBracketPair ArrayBracketPair() {List<AnnotationExpr> annotations = null;
     Position begin = INVALID;
     annotations = Annotations();
     jj_consume_token(LBRACKET);
@@ -1702,7 +1702,7 @@ begin = begin.orIfInvalid(tokenBegin());
 return new ArrayBracketPair(range(begin, tokenEnd()), annotations);
   }
 
-  final public IntersectionType IntersectionType() throws ParseException {Position begin;
+  final public IntersectionType IntersectionType() {Position begin;
         ReferenceType elementType;
         List<ReferenceType> elements = null;
     elementType = ReferenceType();
@@ -1733,7 +1733,7 @@ elements = add(elements, elementType);
 return new IntersectionType(range(begin, tokenEnd()), elements);
   }
 
-  final public ClassOrInterfaceType AnnotatedClassOrInterfaceType() throws ParseException {List<AnnotationExpr> annotations;
+  final public ClassOrInterfaceType AnnotatedClassOrInterfaceType() {List<AnnotationExpr> annotations;
         ClassOrInterfaceType cit;
     annotations = Annotations();
     cit = ClassOrInterfaceType();
@@ -1745,7 +1745,7 @@ if (cit.getScope()!=null) {
         return cit;
   }
 
-  final public ClassOrInterfaceType ClassOrInterfaceType() throws ParseException {ClassOrInterfaceType ret;
+  final public ClassOrInterfaceType ClassOrInterfaceType() {ClassOrInterfaceType ret;
         String name;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
         Position begin;
@@ -1782,7 +1782,7 @@ ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list
 return ret;
   }
 
-  final public RangedList<Type<?>> TypeArguments() throws ParseException {RangedList<Type<?>> ret = new RangedList<Type<?>>(new LinkedList<Type<?>>());
+  final public RangedList<Type<?>> TypeArguments() {RangedList<Type<?>> ret = new RangedList<Type<?>>(new LinkedList<Type<?>>());
         Type type;
     jj_consume_token(LT);
 ret.beginAt(tokenBegin());
@@ -1826,7 +1826,7 @@ ret.endAt(tokenEnd());
 return ret;
   }
 
-  final public Type TypeArgument() throws ParseException {Type ret;
+  final public Type TypeArgument() {Type ret;
         List<AnnotationExpr> annotations = null;
     annotations = Annotations();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1854,7 +1854,7 @@ return ret;
 ret.setAnnotations(annotations); return ret;
   }
 
-  final public WildcardType Wildcard() throws ParseException {ReferenceType ext = null;
+  final public WildcardType Wildcard() {ReferenceType ext = null;
         ReferenceType sup = null;
         Position begin;
         List<AnnotationExpr> annotations = null;
@@ -1892,7 +1892,7 @@ sup.setAnnotations(annotations);
 return new WildcardType(range(begin, tokenEnd()),ext, sup);
   }
 
-  final public PrimitiveType PrimitiveType() throws ParseException {PrimitiveType ret;
+  final public PrimitiveType PrimitiveType() {PrimitiveType ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BOOLEAN:{
       jj_consume_token(BOOLEAN);
@@ -1942,7 +1942,7 @@ ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double);
 return ret;
   }
 
-  final public Type ResultType() throws ParseException {Type ret;
+  final public Type ResultType() {Type ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VOID:{
       jj_consume_token(VOID);
@@ -1969,7 +1969,7 @@ ret = new VoidType(tokenRange());
 return ret;
   }
 
-  final public NameExpr Name() throws ParseException {NameExpr ret;
+  final public NameExpr Name() {NameExpr ret;
     jj_consume_token(IDENTIFIER);
 ret = new NameExpr(tokenRange(), token.image);
     label_27:
@@ -1986,7 +1986,7 @@ ret = new QualifiedNameExpr(range(ret.getBegin(), pos(token.endLine, token.endCo
 return ret;
   }
 
-  final public NameExpr SimpleName() throws ParseException {NameExpr ret;
+  final public NameExpr SimpleName() {NameExpr ret;
     jj_consume_token(IDENTIFIER);
 ret = new NameExpr(tokenRange(), token.image);
 return ret;
@@ -1996,7 +1996,7 @@ return ret;
  * Expression syntax follows.
  */
   final public 
-Expression Expression() throws ParseException {Expression ret;
+Expression Expression() {Expression ret;
         AssignExpr.Operator op;
         Expression value;
         Statement lambdaBody = null;
@@ -2085,7 +2085,7 @@ ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.end
 return ret;
   }
 
-  final public AssignExpr.Operator AssignmentOperator() throws ParseException {AssignExpr.Operator ret;
+  final public AssignExpr.Operator AssignmentOperator() {AssignExpr.Operator ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ASSIGN:{
       jj_consume_token(ASSIGN);
@@ -2155,7 +2155,7 @@ ret = AssignExpr.Operator.or;
 return ret;
   }
 
-  final public Expression ConditionalExpression() throws ParseException {Expression ret;
+  final public Expression ConditionalExpression() {Expression ret;
         Expression left;
         Expression right;
     ret = ConditionalOrExpression();
@@ -2175,7 +2175,7 @@ ret = new ConditionalExpr(range(ret.getBegin(), pos(token.endLine, token.endColu
 return ret;
   }
 
-  final public Expression ConditionalOrExpression() throws ParseException {Expression ret;
+  final public Expression ConditionalOrExpression() {Expression ret;
         Expression right;
     ret = ConditionalAndExpression();
     label_28:
@@ -2196,7 +2196,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression ConditionalAndExpression() throws ParseException {Expression ret;
+  final public Expression ConditionalAndExpression() {Expression ret;
         Expression right;
     ret = InclusiveOrExpression();
     label_29:
@@ -2217,7 +2217,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression InclusiveOrExpression() throws ParseException {Expression ret;
+  final public Expression InclusiveOrExpression() {Expression ret;
         Expression right;
     ret = ExclusiveOrExpression();
     label_30:
@@ -2238,7 +2238,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression ExclusiveOrExpression() throws ParseException {Expression ret;
+  final public Expression ExclusiveOrExpression() {Expression ret;
         Expression right;
     ret = AndExpression();
     label_31:
@@ -2259,7 +2259,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression AndExpression() throws ParseException {Expression ret;
+  final public Expression AndExpression() {Expression ret;
         Expression right;
     ret = EqualityExpression();
     label_32:
@@ -2280,7 +2280,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression EqualityExpression() throws ParseException {Expression ret;
+  final public Expression EqualityExpression() {Expression ret;
         Expression right;
         BinaryExpr.Operator op;
     ret = InstanceOfExpression();
@@ -2318,7 +2318,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression InstanceOfExpression() throws ParseException {Expression ret;
+  final public Expression InstanceOfExpression() {Expression ret;
         Type type;
     ret = RelationalExpression();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -2335,7 +2335,7 @@ ret = new InstanceOfExpr(range(ret.getBegin(), pos(token.endLine, token.endColum
 return ret;
   }
 
-  final public Expression RelationalExpression() throws ParseException {Expression ret;
+  final public Expression RelationalExpression() {Expression ret;
         Expression right;
         BinaryExpr.Operator op;
     ret = ShiftExpression();
@@ -2385,7 +2385,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression ShiftExpression() throws ParseException {Expression ret;
+  final public Expression ShiftExpression() {Expression ret;
         Expression right;
         BinaryExpr.Operator op;
     ret = AdditiveExpression();
@@ -2421,7 +2421,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression AdditiveExpression() throws ParseException {Expression ret;
+  final public Expression AdditiveExpression() {Expression ret;
         Expression right;
         BinaryExpr.Operator op;
     ret = MultiplicativeExpression();
@@ -2459,7 +2459,7 @@ ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)),
 return ret;
   }
 
-  final public Expression MultiplicativeExpression() throws ParseException {Expression ret;
+  final public Expression MultiplicativeExpression() {Expression ret;
         Expression right;
         BinaryExpr.Operator op;
     ret = UnaryExpression();
@@ -2503,7 +2503,7 @@ ret = new BinaryExpr(range(ret.getBegin(), tokenEnd()), ret, right, op);
 return ret;
   }
 
-  final public Expression UnaryExpression() throws ParseException {Expression ret;
+  final public Expression UnaryExpression() {Expression ret;
         UnaryExpr.Operator op;
         Position begin = INVALID;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -2582,7 +2582,7 @@ if(op == UnaryExpr.Operator.negative) {
 return ret;
   }
 
-  final public Expression PreIncrementExpression() throws ParseException {Expression ret;
+  final public Expression PreIncrementExpression() {Expression ret;
         Position begin = INVALID;
     jj_consume_token(INCR);
 begin=tokenBegin();
@@ -2591,7 +2591,7 @@ ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preIncreme
 return ret;
   }
 
-  final public Expression PreDecrementExpression() throws ParseException {Expression ret;
+  final public Expression PreDecrementExpression() {Expression ret;
         Position begin;
     jj_consume_token(DECR);
 begin=tokenBegin();
@@ -2600,7 +2600,7 @@ ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preDecreme
 return ret;
   }
 
-  final public Expression UnaryExpressionNotPlusMinus() throws ParseException {Expression ret;
+  final public Expression UnaryExpressionNotPlusMinus() {Expression ret;
         UnaryExpr.Operator op;
         Position begin = INVALID;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -2667,7 +2667,7 @@ ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
 return ret;
   }
 
-  final public Expression PostfixExpression() throws ParseException {Expression ret;
+  final public Expression PostfixExpression() {Expression ret;
         UnaryExpr.Operator op;
     ret = PrimaryExpression();
     if (jj_2_23(2)) {
@@ -2694,7 +2694,7 @@ ret = new UnaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), 
 return ret;
   }
 
-  final public Expression CastExpression() throws ParseException {Expression ret;
+  final public Expression CastExpression() {Expression ret;
         ReferenceType referenceType;
         PrimitiveType primitiveType;
         Position begin = INVALID;
@@ -2753,7 +2753,7 @@ if (typesOfMultiCast.size() > 1) {
 return ret;
   }
 
-  final public Expression PrimaryExpression() throws ParseException {Expression ret;
+  final public Expression PrimaryExpression() {Expression ret;
     ret = PrimaryPrefix();
     label_39:
     while (true) {
@@ -2767,7 +2767,7 @@ return ret;
 return ret;
   }
 
-  final public Expression PrimaryExpressionWithoutSuperSuffix() throws ParseException {Expression ret;
+  final public Expression PrimaryExpressionWithoutSuperSuffix() {Expression ret;
     ret = PrimaryPrefix();
     label_40:
     while (true) {
@@ -2781,7 +2781,7 @@ return ret;
 return ret;
   }
 
-  final public Expression PrimaryPrefix() throws ParseException {Expression ret = null;
+  final public Expression PrimaryPrefix() {Expression ret = null;
         NameExpr name;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
         List<Expression> args = null;
@@ -3082,7 +3082,7 @@ if (hasArgs) {
 return ret;
   }
 
-  final public Expression PrimarySuffix(Expression scope) throws ParseException {Expression ret;
+  final public Expression PrimarySuffix(Expression scope) {Expression ret;
     if (jj_2_30(2)) {
       ret = PrimarySuffixWithoutSuper(scope);
     } else {
@@ -3102,7 +3102,7 @@ ret = new SuperExpr(range(scope.getBegin(), tokenEnd()), scope);
 return ret;
   }
 
-  final public Expression PrimarySuffixWithoutSuper(Expression scope) throws ParseException {Expression ret;
+  final public Expression PrimarySuffixWithoutSuper(Expression scope) {Expression ret;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
         List<Expression> args = null;
         boolean hasArgs = false;
@@ -3174,7 +3174,7 @@ ret = new ArrayAccessExpr(range(scope.getBegin(), tokenEnd()), scope, ret);
 return ret;
   }
 
-  final public Expression Literal() throws ParseException {Expression ret;
+  final public Expression Literal() {Expression ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INTEGER_LITERAL:{
       jj_consume_token(INTEGER_LITERAL);
@@ -3218,7 +3218,7 @@ ret = new StringLiteralExpr(tokenRange(), token.image.substring(1, token.image.l
 return ret;
   }
 
-  final public Expression BooleanLiteral() throws ParseException {Expression ret;
+  final public Expression BooleanLiteral() {Expression ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case TRUE:{
       jj_consume_token(TRUE);
@@ -3238,12 +3238,12 @@ ret = new BooleanLiteralExpr(tokenRange(), false);
 return ret;
   }
 
-  final public Expression NullLiteral() throws ParseException {
+  final public Expression NullLiteral() {
     jj_consume_token(NULL);
 return new NullLiteralExpr(tokenRange());
   }
 
-  final public List<Expression> Arguments() throws ParseException {List<Expression> ret = null;
+  final public List<Expression> Arguments() {List<Expression> ret = null;
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BOOLEAN:
@@ -3285,7 +3285,7 @@ return new NullLiteralExpr(tokenRange());
 return ret;
   }
 
-  final public List<Expression> ArgumentList() throws ParseException {List<Expression> ret = new LinkedList<Expression>();
+  final public List<Expression> ArgumentList() {List<Expression> ret = new LinkedList<Expression>();
         Expression expr;
     expr = Expression();
 ret.add(expr);
@@ -3307,7 +3307,7 @@ ret.add(expr);
 return ret;
   }
 
-  final public Expression AllocationExpression(Expression scope) throws ParseException {Expression ret;
+  final public Expression AllocationExpression(Expression scope) {Expression ret;
         Type type;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
         List<BodyDeclaration<?>> anonymousBody = null;
@@ -3380,7 +3380,7 @@ return ret;
  * The third LOOKAHEAD specification below is to parse to PrimarySuffix
  * if there is an expression between the "[...]".
  */
-  final public ArrayCreationExpr ArrayCreation(Position begin, Type type) throws ParseException {Expression expr = null;
+  final public ArrayCreationExpr ArrayCreation(Position begin, Type type) {Expression expr = null;
         ArrayInitializerExpr arrayInitializerExpr = null;
         List<Expression> inits = null;
         List<List<AnnotationExpr>> accum = null;
@@ -3454,7 +3454,7 @@ return juggleArrayCreation(range(begin, tokenEnd()), type, inits, accum, arrayIn
  * Statement syntax follows.
  */
   final public 
-Statement Statement() throws ParseException {Statement ret;
+Statement Statement() {Statement ret;
     if (jj_2_33(2)) {
       ret = LabeledStatement();
     } else {
@@ -3551,7 +3551,7 @@ Statement Statement() throws ParseException {Statement ret;
 return ret;
   }
 
-  final public AssertStmt AssertStatement() throws ParseException {Expression check;
+  final public AssertStmt AssertStatement() {Expression check;
         Expression msg = null;
         Position begin;
     jj_consume_token(ASSERT);
@@ -3571,7 +3571,7 @@ begin=tokenBegin();
 return new AssertStmt(range(begin, tokenEnd()),check, msg);
   }
 
-  final public LabeledStmt LabeledStatement() throws ParseException {String label;
+  final public LabeledStmt LabeledStatement() {String label;
         Statement stmt;
         Position begin;
     jj_consume_token(IDENTIFIER);
@@ -3582,7 +3582,7 @@ label = token.image;
 return new LabeledStmt(range(begin, tokenEnd()),label, stmt);
   }
 
-  final public BlockStmt Block() throws ParseException {List<Statement> stmts;
+  final public BlockStmt Block() {List<Statement> stmts;
         Position begin;
     jj_consume_token(LBRACE);
 begin=tokenBegin();
@@ -3594,7 +3594,7 @@ return new BlockStmt(range(begin, tokenEnd()), stmts);
 /*
  * Classes inside block stametents can only be abstract or final. The semantic must check it.
  */
-  final public Statement BlockStatement() throws ParseException {Statement ret;
+  final public Statement BlockStatement() {Statement ret;
         Expression expr;
         ClassOrInterfaceDeclaration typeDecl;
         ModifierHolder modifier;
@@ -3659,7 +3659,7 @@ ret = new ExpressionStmt(range(expr.getBegin().line, expr.getBegin().column, tok
 return ret;
   }
 
-  final public VariableDeclarationExpr VariableDeclarationExpression() throws ParseException {ModifierHolder modifier;
+  final public VariableDeclarationExpr VariableDeclarationExpression() {ModifierHolder modifier;
         Type type;
         List<VariableDeclarator> variables = new LinkedList<VariableDeclarator>();
         VariableDeclarator var;
@@ -3687,12 +3687,12 @@ Position begin=modifier.begin.orIfInvalid(type.getBegin());
         return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
   }
 
-  final public EmptyStmt EmptyStatement() throws ParseException {
+  final public EmptyStmt EmptyStatement() {
     jj_consume_token(SEMICOLON);
 return new EmptyStmt(tokenRange());
   }
 
-  final public Statement LambdaBody() throws ParseException {Expression expr;
+  final public Statement LambdaBody() {Expression expr;
   Statement n = null;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case BOOLEAN:
@@ -3739,7 +3739,7 @@ n = new ExpressionStmt(range(expr.getBegin(), tokenEnd()), expr);
 return n;
   }
 
-  final public ExpressionStmt StatementExpression() throws ParseException {Expression expr;
+  final public ExpressionStmt StatementExpression() {Expression expr;
         AssignExpr.Operator op;
         Expression value;
         RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
@@ -3877,7 +3877,7 @@ expr = generateLambda(expr, lambdaBody);
 return new ExpressionStmt(range(expr.getBegin(), tokenEnd()), expr);
   }
 
-  final public SwitchStmt SwitchStatement() throws ParseException {Expression selector;
+  final public SwitchStmt SwitchStatement() {Expression selector;
         SwitchEntryStmt entry;
         List<SwitchEntryStmt> entries = null;
         Position begin;
@@ -3906,7 +3906,7 @@ entries = add(entries, entry);
 return new SwitchStmt(range(begin, tokenEnd()), selector, entries);
   }
 
-  final public SwitchEntryStmt SwitchEntry() throws ParseException {Expression label = null;
+  final public SwitchEntryStmt SwitchEntry() {Expression label = null;
         List<Statement> stmts;
         Position begin;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -3931,7 +3931,7 @@ begin=tokenBegin();
 return new SwitchEntryStmt(range(begin, tokenEnd()),label, stmts);
   }
 
-  final public IfStmt IfStatement() throws ParseException {Expression condition;
+  final public IfStmt IfStatement() {Expression condition;
         Statement thenStmt;
         Statement elseStmt = null;
         Position begin;
@@ -3965,7 +3965,7 @@ IfStmt tmp = new IfStmt(range(begin, tokenEnd()),condition, thenStmt, elseStmt);
       return tmp;
   }
 
-  final public WhileStmt WhileStatement() throws ParseException {Expression condition;
+  final public WhileStmt WhileStatement() {Expression condition;
         Statement body;
         Position begin;
     jj_consume_token(WHILE);
@@ -3977,7 +3977,7 @@ begin=tokenBegin();
 return new WhileStmt(range(begin, tokenEnd()),condition, body);
   }
 
-  final public DoStmt DoStatement() throws ParseException {Expression condition;
+  final public DoStmt DoStatement() {Expression condition;
         Statement body;
         Position begin;
     jj_consume_token(DO);
@@ -3991,7 +3991,7 @@ begin=tokenBegin();
 return new DoStmt(range(begin, tokenEnd()),body, condition);
   }
 
-  final public Statement ForStatement() throws ParseException {VariableDeclarationExpr varExpr = null;
+  final public Statement ForStatement() {VariableDeclarationExpr varExpr = null;
         Expression expr = null;
         List<Expression> init = null;
         List<Expression> update = null;
@@ -4185,7 +4185,7 @@ if (varExpr != null) {
         return new ForStmt(range(begin, tokenEnd()),init, expr, update, body);
   }
 
-  final public List<Expression> ForInit() throws ParseException {List<Expression> ret;
+  final public List<Expression> ForInit() {List<Expression> ret;
         Expression expr;
     if (jj_2_38(2147483647)) {
       expr = VariableDeclarationExpression();
@@ -4232,7 +4232,7 @@ ret = new LinkedList<Expression>(); ret.add(expr);
 return ret;
   }
 
-  final public List<Expression> ExpressionList() throws ParseException {List<Expression> ret = new LinkedList<Expression>();
+  final public List<Expression> ExpressionList() {List<Expression> ret = new LinkedList<Expression>();
         Expression expr;
     expr = Expression();
 ret.add(expr);
@@ -4254,12 +4254,12 @@ ret.add(expr);
 return ret;
   }
 
-  final public List<Expression> ForUpdate() throws ParseException {List<Expression> ret;
+  final public List<Expression> ForUpdate() {List<Expression> ret;
     ret = ExpressionList();
 return ret;
   }
 
-  final public BreakStmt BreakStatement() throws ParseException {String id = null;
+  final public BreakStmt BreakStatement() {String id = null;
         Position begin;
     jj_consume_token(BREAK);
 begin=tokenBegin();
@@ -4277,7 +4277,7 @@ id = token.image;
 return new BreakStmt(range(begin, tokenEnd()),id);
   }
 
-  final public ContinueStmt ContinueStatement() throws ParseException {String id = null;
+  final public ContinueStmt ContinueStatement() {String id = null;
         Position begin;
     jj_consume_token(CONTINUE);
 begin=tokenBegin();
@@ -4295,7 +4295,7 @@ id = token.image;
 return new ContinueStmt(range(begin, tokenEnd()),id);
   }
 
-  final public ReturnStmt ReturnStatement() throws ParseException {Expression expr = null;
+  final public ReturnStmt ReturnStatement() {Expression expr = null;
         Position begin;
     jj_consume_token(RETURN);
 begin=tokenBegin();
@@ -4339,7 +4339,7 @@ begin=tokenBegin();
 return new ReturnStmt(range(begin, tokenEnd()),expr);
   }
 
-  final public ThrowStmt ThrowStatement() throws ParseException {Expression expr;
+  final public ThrowStmt ThrowStatement() {Expression expr;
         Position begin;
     jj_consume_token(THROW);
 begin=tokenBegin();
@@ -4348,7 +4348,7 @@ begin=tokenBegin();
 return new ThrowStmt(range(begin, tokenEnd()),expr);
   }
 
-  final public SynchronizedStmt SynchronizedStatement() throws ParseException {Expression expr;
+  final public SynchronizedStmt SynchronizedStatement() {Expression expr;
         BlockStmt block;
         Position begin;
     jj_consume_token(SYNCHRONIZED);
@@ -4360,7 +4360,7 @@ begin=tokenBegin();
 return new SynchronizedStmt(range(begin, tokenEnd()),expr, block);
   }
 
-  final public TryStmt TryStatement() throws ParseException {List<VariableDeclarationExpr> resources = null;
+  final public TryStmt TryStatement() {List<VariableDeclarationExpr> resources = null;
         BlockStmt tryBlock;
         BlockStmt finallyBlock = null;
         List<CatchClause> catchs = null;
@@ -4443,7 +4443,7 @@ if (finallyBlock==null && catchs==null && resources==null) {
     return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
   }
 
-  final public List<VariableDeclarationExpr> ResourceSpecification() throws ParseException {List<VariableDeclarationExpr> variables;
+  final public List<VariableDeclarationExpr> ResourceSpecification() {List<VariableDeclarationExpr> variables;
     jj_consume_token(LPAREN);
     variables = Resources();
     if (jj_2_39(2)) {
@@ -4455,7 +4455,7 @@ if (finallyBlock==null && catchs==null && resources==null) {
 return variables;
   }
 
-  final public List<VariableDeclarationExpr> Resources() throws ParseException {List<VariableDeclarationExpr> variables = new LinkedList<VariableDeclarationExpr>();
+  final public List<VariableDeclarationExpr> Resources() {List<VariableDeclarationExpr> variables = new LinkedList<VariableDeclarationExpr>();
         VariableDeclarationExpr var;
     /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
       var = VariableDeclarationExpression();
@@ -4478,7 +4478,7 @@ return variables;
  * type declaration syntax with generics clean
  */
   final public 
-void RUNSIGNEDSHIFT() throws ParseException {
+void RUNSIGNEDSHIFT() {
     if (getToken(1).kind == GT &&
                     ((GTToken)getToken(1)).realKind == RUNSIGNEDSHIFT) {
 
@@ -4491,7 +4491,7 @@ void RUNSIGNEDSHIFT() throws ParseException {
     jj_consume_token(GT);
   }
 
-  final public void RSIGNEDSHIFT() throws ParseException {
+  final public void RSIGNEDSHIFT() {
     if (getToken(1).kind == GT &&
                     ((GTToken)getToken(1)).realKind == RSIGNEDSHIFT) {
 
@@ -4505,7 +4505,7 @@ void RUNSIGNEDSHIFT() throws ParseException {
 
 /* Annotation syntax follows. */
   final public 
-List<AnnotationExpr> Annotations() throws ParseException {List<AnnotationExpr> annotations = null;
+List<AnnotationExpr> Annotations() {List<AnnotationExpr> annotations = null;
         AnnotationExpr annotation;
     label_49:
     while (true) {
@@ -4524,7 +4524,7 @@ annotations = add(annotations, annotation);
 return annotations;
   }
 
-  final public AnnotationExpr Annotation() throws ParseException {AnnotationExpr ret;
+  final public AnnotationExpr Annotation() {AnnotationExpr ret;
     if (jj_2_41(2147483647)) {
       ret = NormalAnnotation();
     } else if (jj_2_42(2147483647)) {
@@ -4544,7 +4544,7 @@ return annotations;
 return ret;
   }
 
-  final public NormalAnnotationExpr NormalAnnotation() throws ParseException {NameExpr name;
+  final public NormalAnnotationExpr NormalAnnotation() {NameExpr name;
         List<MemberValuePair> pairs = null;
         Position begin;
     jj_consume_token(AT);
@@ -4564,7 +4564,7 @@ begin=tokenBegin();
 return new NormalAnnotationExpr(range(begin, tokenEnd()),name, pairs);
   }
 
-  final public MarkerAnnotationExpr MarkerAnnotation() throws ParseException {NameExpr name;
+  final public MarkerAnnotationExpr MarkerAnnotation() {NameExpr name;
         Position begin;
     jj_consume_token(AT);
 begin=tokenBegin();
@@ -4572,7 +4572,7 @@ begin=tokenBegin();
 return new MarkerAnnotationExpr(range(begin, tokenEnd()),name);
   }
 
-  final public SingleMemberAnnotationExpr SingleMemberAnnotation() throws ParseException {NameExpr name;
+  final public SingleMemberAnnotationExpr SingleMemberAnnotation() {NameExpr name;
         Expression memberVal;
         Position begin;
     jj_consume_token(AT);
@@ -4584,7 +4584,7 @@ begin=tokenBegin();
 return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal);
   }
 
-  final public List<MemberValuePair> MemberValuePairs() throws ParseException {List<MemberValuePair> ret = new LinkedList<MemberValuePair>();
+  final public List<MemberValuePair> MemberValuePairs() {List<MemberValuePair> ret = new LinkedList<MemberValuePair>();
         MemberValuePair pair;
     pair = MemberValuePair();
 ret.add(pair);
@@ -4606,7 +4606,7 @@ ret.add(pair);
 return ret;
   }
 
-  final public MemberValuePair MemberValuePair() throws ParseException {String name;
+  final public MemberValuePair MemberValuePair() {String name;
         Expression value;
         Position begin;
     jj_consume_token(IDENTIFIER);
@@ -4616,7 +4616,7 @@ name = token.image; begin=tokenBegin();
 return new MemberValuePair(range(begin, tokenEnd()),name, value);
   }
 
-  final public Expression MemberValue() throws ParseException {Expression ret;
+  final public Expression MemberValue() {Expression ret;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case AT:{
       ret = Annotation();
@@ -4665,7 +4665,7 @@ return new MemberValuePair(range(begin, tokenEnd()),name, value);
 return ret;
   }
 
-  final public Expression MemberValueArrayInitializer() throws ParseException {List<Expression> ret = new LinkedList<Expression>();
+  final public Expression MemberValueArrayInitializer() {List<Expression> ret = new LinkedList<Expression>();
         Expression member;
         Position begin;
     jj_consume_token(LBRACE);
@@ -4735,7 +4735,7 @@ return new ArrayInitializerExpr(range(begin, tokenEnd()),ret);
 
 /* Annotation Types. */
   final public 
-AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier) throws ParseException {NameExpr name;
+AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier) {NameExpr name;
         List<BodyDeclaration<?>> members;
         Position begin = modifier.begin;
     jj_consume_token(AT);
@@ -4748,7 +4748,7 @@ AnnotationDeclaration tmp = new AnnotationDeclaration(range(begin, tokenEnd()), 
       return tmp;
   }
 
-  final public List<BodyDeclaration<?>> AnnotationTypeBody() throws ParseException {List<BodyDeclaration<?>> ret = null;
+  final public List<BodyDeclaration<?>> AnnotationTypeBody() {List<BodyDeclaration<?>> ret = null;
         BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_52:
@@ -4793,7 +4793,7 @@ ret = add(ret, member);
 return ret;
   }
 
-  final public BodyDeclaration<?> AnnotationBodyDeclaration() throws ParseException {ModifierHolder modifier;
+  final public BodyDeclaration<?> AnnotationBodyDeclaration() {ModifierHolder modifier;
    BodyDeclaration ret;
 
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -4872,7 +4872,7 @@ ret = new EmptyTypeDeclaration(tokenRange());
 return ret;
   }
 
-  final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier) throws ParseException {Type type;
+  final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier) {Type type;
         String name;
         Expression defaultVal = null;
     type = Type();
@@ -4894,7 +4894,7 @@ Position begin = modifier.begin.orIfInvalid(tokenBegin());
     return new AnnotationMemberDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 
-  final public Expression DefaultValue() throws ParseException {Expression ret;
+  final public Expression DefaultValue() {Expression ret;
     jj_consume_token(_DEFAULT);
     ret = MemberValue();
 return ret;
@@ -9059,7 +9059,7 @@ return ret;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();

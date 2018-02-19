@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -40,7 +39,7 @@ import static org.junit.Assert.assertEquals;
 public class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void solveMethodAccessThroughSuper() throws ParseException {
+    public void solveMethodAccessThroughSuper() {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "methodTest");
@@ -52,23 +51,23 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithClassExpressionAsParameter() throws ParseException {
+    public void solveMethodWithClassExpressionAsParameter() {
         CompilationUnit cu = parseSample("ClassExpression");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExpression");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
-        MethodCallExpr expression = Navigator.findMethodCall(method, "noneOf");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "noneOf").get();
 
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
         assertEquals("noneOf", methodUsage.getName());
     }
 
     @Test
-    public void solveMethodInInterfaceParent() throws ParseException {
+    public void solveMethodInInterfaceParent() {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "inheritedInterfaceMethod");
-        MethodCallExpr expression = Navigator.findMethodCall(method, "toString");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "toString").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
@@ -78,7 +77,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToLong() throws ParseException {
+    public void solveMethodWithTypePromotionsToLong() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -112,7 +111,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToInt() throws ParseException {
+    public void solveMethodWithTypePromotionsToInt() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -145,7 +144,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToShort() throws ParseException {
+    public void solveMethodWithTypePromotionsToShort() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -177,7 +176,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToByte() throws ParseException {
+    public void solveMethodWithTypePromotionsToByte() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -208,7 +207,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToLongWithExtraParam() throws ParseException {
+    public void solveMethodWithTypePromotionsToLongWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -242,7 +241,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToIntWithExtraParam() throws ParseException {
+    public void solveMethodWithTypePromotionsToIntWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -275,7 +274,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToShortWithExtraParam() throws ParseException {
+    public void solveMethodWithTypePromotionsToShortWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -307,7 +306,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToByteWithExtraParam() throws ParseException {
+    public void solveMethodWithTypePromotionsToByteWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -338,18 +337,18 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void callOnThisInAnonymousClass() throws ParseException {
+    public void callOnThisInAnonymousClass() {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 
-        MethodCallExpr fooCall = Navigator.findMethodCall(clazz, "foo");
+        MethodCallExpr fooCall = Navigator.findMethodCall(clazz, "foo").get();
 
         SymbolReference<ResolvedMethodDeclaration> reference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(fooCall);
         assertEquals(true, reference.isSolved());
     }
 
     @Test
-    public void thisInAnonymousClass() throws ParseException {
+    public void thisInAnonymousClass() {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 

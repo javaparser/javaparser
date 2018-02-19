@@ -273,6 +273,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(GeneratedJavaParserConstants.LBRACE),
                 list(ObservableProperty.VALUES, sequence(comma(), space()), space(), space()),
+                orphanCommentsEnding(),
                 token(RBRACE)));
 
         concreteSyntaxModelByClass.put(AssignExpr.class, sequence(
@@ -792,6 +793,8 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(UnknownType.class, none());
 
         concreteSyntaxModelByClass.put(VoidType.class, sequence(comment(), annotations(), token(GeneratedJavaParserConstants.VOID)));
+
+        concreteSyntaxModelByClass.put(VarType.class, sequence(comment(), annotations(), string(GeneratedJavaParserConstants.IDENTIFIER, "var")));
 
         concreteSyntaxModelByClass.put(WildcardType.class, sequence(comment(), annotations(), token(GeneratedJavaParserConstants.HOOK),
                 CsmElement.conditional(ObservableProperty.EXTENDED_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space(), CsmElement.child(EXTENDED_TYPE))),

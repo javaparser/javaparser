@@ -36,7 +36,7 @@ public class Issue347 extends AbstractResolutionTest{
     }
 
     @Test
-    public void resolvingReferenceToEnumDeclarationInSameFile() throws FileNotFoundException {
+    public void resolvingReferenceToEnumDeclarationInSameFile() {
         String code = "package foo.bar;\nenum Foo {\n" +
                 "    FOO_A, FOO_B\n" +
                 "}\n" +

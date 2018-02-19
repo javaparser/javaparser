@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 public class FindingAllFields extends AbstractResolutionTest {
 
     @Test
-    public void findAllInheritedFields() throws ParseException {
+    public void findAllInheritedFields() {
         CompilationUnit cu = parseSample("AClassWithFields");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
@@ -45,7 +45,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     }
 
     @Test
-    public void findAllInheritedFieldsAndGenerics() throws ParseException {
+    public void findAllInheritedFieldsAndGenerics() {
         CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);

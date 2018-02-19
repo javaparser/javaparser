@@ -3,12 +3,12 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class DefaultPackageTest {
 
         @Override
         public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-            return new HashSet<ResolvedReferenceTypeDeclaration>();
+            return new HashSet<>();
         }
 
         @Override

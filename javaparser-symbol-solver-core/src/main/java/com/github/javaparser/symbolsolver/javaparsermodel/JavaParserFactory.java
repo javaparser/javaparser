@@ -38,6 +38,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -72,7 +73,7 @@ public class JavaParserFactory {
         } else if (node instanceof TryStmt) {
             return new TryWithResourceContext((TryStmt) node, typeSolver);
         } else if (node instanceof Statement) {
-            return new StatementContext<Statement>((Statement) node, typeSolver);
+            return new StatementContext<>((Statement) node, typeSolver);
         } else if (node instanceof CatchClause) {
             return new CatchClauseContext((CatchClause) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr &&
@@ -85,9 +86,9 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            final Node parentNode = getParentNode(node);
+            final Node parentNode = requireParentNode(node);
             if (parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
-                return getContext(getParentNode(parentNode), typeSolver);
+                return getContext(requireParentNode(parentNode), typeSolver);
             }
             if (parentNode == null) {
                 throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");
@@ -106,15 +107,15 @@ public class JavaParserFactory {
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
                 return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
             } else {
-                return new NoSymbolDeclarator<ExpressionStmt>(expressionStmt, typeSolver);
+                return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
             }
         } else if (node instanceof IfStmt) {
-            return new NoSymbolDeclarator<IfStmt>((IfStmt) node, typeSolver);
+            return new NoSymbolDeclarator<>((IfStmt) node, typeSolver);
         } else if (node instanceof ForeachStmt) {
             ForeachStmt foreachStmt = (ForeachStmt) node;
-            return new VariableSymbolDeclarator((VariableDeclarationExpr) (foreachStmt.getVariable()), typeSolver);
+            return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);
         } else {
-            return new NoSymbolDeclarator<Node>(node, typeSolver);
+            return new NoSymbolDeclarator<>(node, typeSolver);
         }
     }
     

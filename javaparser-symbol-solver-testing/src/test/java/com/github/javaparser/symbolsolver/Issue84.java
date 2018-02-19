@@ -36,9 +36,9 @@ import static org.junit.Assert.assertEquals;
 public class Issue84 extends AbstractResolutionTest {
 
     @Test
-    public void variadicIssue() throws ParseException {
+    public void variadicIssue() {
         CompilationUnit cu = parseSample("Issue84");
-        final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod");
+        final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod").get();
 
         final JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         final ResolvedType type = javaParserFacade.getType(methodCall);

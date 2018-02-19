@@ -32,7 +32,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
@@ -55,7 +55,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
             }
         }
 
-        if (getParentNode(wrappedNode) instanceof NodeWithStatements) {
+        if (requireParentNode(wrappedNode) instanceof NodeWithStatements) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name, typeSolver);

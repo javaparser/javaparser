@@ -47,12 +47,12 @@ import static org.junit.Assert.assertTrue;
  * @author Malte Langkabel
  */
 public class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
-    private MethodCallExpr getMethodCallExpr(String methodName, String callingMethodName) throws ParseException {
+    private MethodCallExpr getMethodCallExpr(String methodName, String callingMethodName) {
         CompilationUnit cu = parseSample("MethodCalls");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, methodName);
-        return Navigator.findMethodCall(method, callingMethodName);
+        return Navigator.findMethodCall(method, callingMethodName).get();
     }
 
     private CombinedTypeSolver createTypeSolver() {
@@ -64,7 +64,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveNestedMethodCallExprContextWithoutScope() throws ParseException {
+    public void solveNestedMethodCallExprContextWithoutScope() {
         MethodCallExpr methodCallExpr = getMethodCallExpr("bar1", "foo");
         CombinedTypeSolver typeSolver = createTypeSolver();
 
@@ -76,16 +76,16 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveGenericMethodCallMustUseProvidedTypeArgs() throws ParseException {
+    public void solveGenericMethodCallMustUseProvidedTypeArgs() {
         assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("genericMethod0");
     }
 
     @Test
-    public void solveStaticGenericMethodCallMustUseProvidedTypeArgs() throws ParseException {
+    public void solveStaticGenericMethodCallMustUseProvidedTypeArgs() {
         assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("staticGenericMethod0");
     }
 
-    private void assertCanSolveGenericMethodCallMustUseProvidedTypeArgs(String callMethodName) throws ParseException {
+    private void assertCanSolveGenericMethodCallMustUseProvidedTypeArgs(String callMethodName) {
         MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", callMethodName);
         CombinedTypeSolver typeSolver = createTypeSolver();
 
@@ -98,16 +98,16 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveGenericMethodCallCanInferFromArguments() throws ParseException {
+    public void solveGenericMethodCallCanInferFromArguments() {
         assertCanSolveGenericMethodCallCanInferFromArguments("genericMethod1");
     }
 
     @Test
-    public void solveStaticGenericMethodCallCanInferFromArguments() throws ParseException {
+    public void solveStaticGenericMethodCallCanInferFromArguments() {
         assertCanSolveGenericMethodCallCanInferFromArguments("staticGenericMethod1");
     }
 
-    private void assertCanSolveGenericMethodCallCanInferFromArguments(String callMethodName) throws ParseException {
+    private void assertCanSolveGenericMethodCallCanInferFromArguments(String callMethodName) {
         MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", callMethodName);
         CombinedTypeSolver typeSolver = createTypeSolver();
 

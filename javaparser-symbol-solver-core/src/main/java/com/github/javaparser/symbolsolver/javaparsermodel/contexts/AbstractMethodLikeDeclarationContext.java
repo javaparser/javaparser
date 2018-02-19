@@ -79,7 +79,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
         
         // Local types
-        List<com.github.javaparser.ast.body.TypeDeclaration> localTypes = wrappedNode.getChildNodesByType(
+        List<com.github.javaparser.ast.body.TypeDeclaration> localTypes = wrappedNode.findAll(
                 com.github.javaparser.ast.body.TypeDeclaration.class);
         for (com.github.javaparser.ast.body.TypeDeclaration<?> localType : localTypes) {
             if (localType.getName().getId().equals(name)) {

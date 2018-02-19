@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -54,7 +53,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveParameterOfLambdaInMethodCallExpr() throws ParseException {
+    public void solveParameterOfLambdaInMethodCallExpr() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
@@ -71,7 +70,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveParameterOfLambdaInFieldDecl() throws ParseException {
+    public void solveParameterOfLambdaInFieldDecl() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
@@ -91,12 +90,12 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveParameterOfLambdaInVarDecl() throws ParseException {
+    public void solveParameterOfLambdaInVarDecl() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testFunctionalVar");
-        VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a");
+        VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
         LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInitializer().get();
 
         File src = adaptPath(new File("src/test/resources"));

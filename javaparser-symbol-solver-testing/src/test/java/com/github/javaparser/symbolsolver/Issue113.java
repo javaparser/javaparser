@@ -35,9 +35,9 @@ public class Issue113 extends AbstractTest {
         CompilationUnit cu = JavaParser.parse(new File(pathToSourceFile));
 
         JavaParserFacade parserFacade = JavaParserFacade.get(typeSolver);
-        MethodDeclaration methodDeclaration = cu.getNodesByType(MethodDeclaration.class).stream()
+        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).stream()
                 .filter(node -> node.getName().getIdentifier().equals("doSomething")).findAny().orElse(null);
-        methodDeclaration.getNodesByType(MethodCallExpr.class).forEach(parserFacade::solve);
+        methodDeclaration.findAll(MethodCallExpr.class).forEach(parserFacade::solve);
     }
 
     @Test

@@ -18,7 +18,7 @@ import org.junit.Test;
 public class Issue251 extends AbstractResolutionTest{
 
     @Test
-    public void testSolveStaticallyImportedMemberType() throws ParseException {
+    public void testSolveStaticallyImportedMemberType() {
         CompilationUnit cu = parseSample("Issue251");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Main");
         TypeSolver typeSolver = new ReflectionTypeSolver();

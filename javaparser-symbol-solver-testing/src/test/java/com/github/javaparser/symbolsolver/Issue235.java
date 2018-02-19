@@ -38,7 +38,7 @@ public class Issue235 extends AbstractResolutionTest{
     }
 
     @Test
-    public void issue235() throws ParseException {
+    public void issue235() {
         CompilationUnit cu = parseSample("Issue235");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Foo");
         TypeSolver typeSolver = new ReflectionTypeSolver();

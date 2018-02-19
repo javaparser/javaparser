@@ -349,4 +349,23 @@ public abstract class Type extends Node implements Resolvable<Object> {
     public Optional<WildcardType> toWildcardType() {
         return Optional.empty();
     }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVarType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public VarType asVarType() {
+        throw new IllegalStateException(f("%s is not an VarType", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<VarType> toVarType() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVarType(Consumer<VarType> action) {
+    }
 }

@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class Issue18 extends AbstractResolutionTest {
 
     @Test
-    public void typeDeclarationSuperClassImplicitlyIncludeObject() throws ParseException {
+    public void typeDeclarationSuperClassImplicitlyIncludeObject() {
         CompilationUnit cu = parseSample("Issue18");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
