@@ -137,7 +137,7 @@ public class TypeHelper {
         if (!referenceType.isReferenceType()) {
             return false;
         }
-        return ResolvedPrimitiveType.ALL.stream().anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
+        return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
     }
 
     private static ResolvedType toUnboxedType(ResolvedReferenceType referenceType) {
@@ -149,7 +149,7 @@ public class TypeHelper {
     }
 
     private static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
-        Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = ResolvedPrimitiveType.ALL.stream().filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName())).findFirst();
+        Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName())).findFirst();
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
         }

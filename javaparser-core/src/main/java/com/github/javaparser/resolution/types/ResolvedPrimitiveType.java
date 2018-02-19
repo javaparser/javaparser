@@ -28,30 +28,17 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public class ResolvedPrimitiveType implements ResolvedType {
+public enum ResolvedPrimitiveType implements ResolvedType {
 
-    ///
-    /// Constants
-    ///
 
-    public static final ResolvedPrimitiveType BYTE = new ResolvedPrimitiveType("byte",
-            Byte.class.getCanonicalName(), Collections.emptyList());
-    public static final ResolvedPrimitiveType SHORT = new ResolvedPrimitiveType("short",
-            Short.class.getCanonicalName(), Collections.singletonList(BYTE));
-    public static final ResolvedPrimitiveType CHAR = new ResolvedPrimitiveType("char",
-            Character.class.getCanonicalName(), Collections.emptyList());
-    public static final ResolvedPrimitiveType INT = new ResolvedPrimitiveType("int",
-            Integer.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, CHAR));
-    public static final ResolvedPrimitiveType LONG = new ResolvedPrimitiveType("long",
-            Long.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, INT, CHAR));
-    public static final ResolvedPrimitiveType BOOLEAN = new ResolvedPrimitiveType("boolean",
-            Boolean.class.getCanonicalName(), Collections.emptyList());
-    public static final ResolvedPrimitiveType FLOAT = new ResolvedPrimitiveType("float",
-            Float.class.getCanonicalName(), Arrays.asList(LONG, INT, SHORT, BYTE, CHAR));
-    public static final ResolvedPrimitiveType DOUBLE = new ResolvedPrimitiveType("double",
-            Double.class.getCanonicalName(), Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
-    public static final List<ResolvedPrimitiveType> ALL = Arrays.asList(
-            INT, BOOLEAN, LONG, CHAR, FLOAT, DOUBLE, SHORT, BYTE);
+    BYTE("byte", Byte.class.getCanonicalName(), Collections.emptyList()),
+    SHORT("short", Short.class.getCanonicalName(), Collections.singletonList(BYTE)),
+    CHAR("char", Character.class.getCanonicalName(), Collections.emptyList()),
+    INT("int", Integer.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, CHAR)),
+    LONG("long", Long.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, INT, CHAR)),
+    BOOLEAN("boolean", Boolean.class.getCanonicalName(), Collections.emptyList()),
+    FLOAT("float", Float.class.getCanonicalName(), Arrays.asList(LONG, INT, SHORT, BYTE, CHAR)),
+    DOUBLE("double", Double.class.getCanonicalName(), Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
 
     ///
     /// Fields
@@ -69,7 +56,7 @@ public class ResolvedPrimitiveType implements ResolvedType {
 
     public static ResolvedType byName(String name) {
         name = name.toLowerCase();
-        for (ResolvedPrimitiveType ptu : ALL) {
+        for (ResolvedPrimitiveType ptu : values()) {
             if (ptu.describe().equals(name)) {
                 return ptu;
             }
