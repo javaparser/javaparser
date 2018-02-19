@@ -473,6 +473,15 @@ public class JavaParserFacade {
         } else if (type instanceof UnionType) {
             UnionType unionType = (UnionType) type;
             return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
+        } else if (type instanceof VarType) {
+            Node parent = type.getParentNode().get();
+            if (!(parent instanceof VariableDeclarator)) {
+                throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
+            }
+            final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
+            return variableDeclarator.getInitializer()
+                    .map(Expression::calculateResolvedType)
+                    .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

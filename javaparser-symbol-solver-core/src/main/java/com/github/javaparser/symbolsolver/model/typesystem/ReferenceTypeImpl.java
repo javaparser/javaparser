@@ -47,7 +47,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
-                tp -> new ResolvedTypeVariable(tp)
+                ResolvedTypeVariable::new
         ).collect(Collectors.toList()), typeSolver);
     }
 
