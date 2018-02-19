@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -47,7 +48,7 @@ import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
 
 public class SymbolSourceRoot {
 
-    private static java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JavaParserFacade.class.getCanonicalName());
+    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
 
     private final Path root;
     private CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
@@ -69,10 +70,9 @@ public class SymbolSourceRoot {
 
     public Optional<TypeSolver> tryToWalk() {
         try {
-            Files.walkFileTree(root, new JavaSymbolSolverWalker());
-            Files.walkFileTree(root, new JarVisitor());
-            return Optional.of(typeSolver);
+            return Optional.of(walk());
         } catch (IOException e) {
+            logger.log(Level.WARNING, "Unable to walk root " + root, e);
             return Optional.empty();
         }
     }
