@@ -42,19 +42,36 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ParserConfiguration {
     public enum LanguageLevel {
+        /** Does no post processing or validation. Only for people wanting the fastest parsing. */
         RAW(null, null),
+        /** Always points to the most popular Java version. */
+        POPULAR(new Java8Validator(), null),
+        /** Always points to the newest Java version supported. */
+        LATEST(new Java11Validator(), new Java11PostProcessor()),
+        /** Java 1.0 */
         JAVA_1_0(new Java1_0Validator(), null),
+        /** Java 1.1 */
         JAVA_1_1(new Java1_1Validator(), null),
+        /** Java 1.2 */
         JAVA_1_2(new Java1_2Validator(), null),
+        /** Java 1.3 */
         JAVA_1_3(new Java1_3Validator(), null),
+        /** Java 1.4 */
         JAVA_1_4(new Java1_4Validator(), null),
+        /** Java 5 */
         JAVA_5(new Java5Validator(), null),
+        /** Java 6 */
         JAVA_6(new Java6Validator(), null),
+        /** Java 7 */
         JAVA_7(new Java7Validator(), null),
+        /** Java 8 */
         JAVA_8(new Java8Validator(), null),
+        /** Java 9 */
         JAVA_9(new Java9Validator(), null),
-        JAVA_10_PREVIEW(null, new Java10PostProcessor()),
-        JAVA_11_PREVIEW(null, new Java11PostProcessor());
+        /** Java 10 (work in progress) */
+        JAVA_10_PREVIEW(new Java10Validator(), new Java10PostProcessor()),
+        /** Java 11 (work in progress) */
+        JAVA_11_PREVIEW(new Java11Validator(), new Java11PostProcessor());
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
