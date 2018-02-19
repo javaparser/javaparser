@@ -81,4 +81,23 @@ public class CommentsInserterTest {
                 "}\n", cu.toString());
     }
 
+    @Test
+    public void issue234LosingCommentsInArrayInitializerExpr() {
+        CompilationUnit cu = parse("@Anno(stuff={" + EOL +
+                "    // Just," + EOL +
+                "    // an," + EOL +
+                "    // example" + EOL +
+                "})" + EOL +
+                "class ABC {" + EOL +
+                "" + EOL +
+                "}");
+
+        assertEqualsNoEol("@Anno(stuff = {// Just,\n" +
+                "// an,\n" +
+                "// example\n" +
+                "})\n" +
+                "class ABC {\n" +
+                "}\n", cu.toString());
+    }
+
 }
