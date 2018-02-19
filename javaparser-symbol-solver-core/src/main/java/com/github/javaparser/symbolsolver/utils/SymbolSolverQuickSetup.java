@@ -48,7 +48,7 @@ import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
 
 /**
  * Utility class to add all jars and roots of java files of the provided path to a TypeSolver instance.
- * It traverses the file directory tree and adds all files ending in either .java or .jar. 
+ * It traverses the file directory tree and adds all files ending in either .java or .jar.
  */
 public class SymbolSolverQuickSetup {
 
