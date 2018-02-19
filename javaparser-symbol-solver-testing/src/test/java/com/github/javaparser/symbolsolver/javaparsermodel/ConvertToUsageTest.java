@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 public class ConvertToUsageTest extends AbstractResolutionTest {
 
-    TypeSolver typeSolver = new ReflectionTypeSolver();
+    private final TypeSolver typeSolver = new ReflectionTypeSolver();
 
     @Test
     public void testConvertTypeToUsage() {
