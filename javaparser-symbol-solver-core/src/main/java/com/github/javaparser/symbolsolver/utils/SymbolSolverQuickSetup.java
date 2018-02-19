@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.utils;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -39,8 +38,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -51,8 +48,6 @@ import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
  * It traverses the file directory tree and adds all files ending in either .java or .jar.
  */
 public class SymbolSolverQuickSetup {
-
-    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
 
     private final Path root;
     private CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
@@ -76,7 +71,7 @@ public class SymbolSolverQuickSetup {
         try {
             return Optional.of(walk());
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Unable to walk root " + root, e);
+            Log.error(e, "Unable to walk root " + root);
             return Optional.empty();
         }
     }
@@ -110,12 +105,12 @@ public class SymbolSolverQuickSetup {
                         if (root.isPresent()) {
                             typeSolver.add(new JavaParserTypeSolver(root.get().toFile()));
                             if (roots.add(root.get())) {
-                                logger.log(Level.FINE, "Added dir " + root.get() + " to the TypeSolver");
+                                Log.trace("Added dir " + root.get() + " to the TypeSolver");
                                 return SKIP_SIBLINGS;
                             }
                         }
                     } catch (ParseProblemException e) {
-                        logger.log(Level.WARNING, "Unable to parse file " + file, e);
+                        Log.error(e, "Unable to parse file " + file);
                     }
                 }
             }
@@ -134,15 +129,11 @@ public class SymbolSolverQuickSetup {
     private class JarVisitor extends SimpleFileVisitor<Path> {
 
         @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
             if (attr.isRegularFile()) {
                 PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**.jar");
                 if (matcher.matches(file)) {
-                    try {
-                        typeSolver.add(new JarTypeSolver(file.toString()));
-                    } catch (IOException e) {
-                        logger.log(Level.WARNING, "IOException for file " + file, e);
-                    }
+                    typeSolver.add(new JarTypeSolver(file.toString()));
                 }
             }
             return CONTINUE;
