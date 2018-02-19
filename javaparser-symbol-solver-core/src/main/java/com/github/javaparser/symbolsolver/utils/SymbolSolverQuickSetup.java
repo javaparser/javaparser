@@ -46,14 +46,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
 
-public class SymbolSourceRoot {
+/**
+ * Utility class to add all jars and roots of java files of the provided path to a TypeSolver instance.
+ * It traverses the file directory tree and adds all files ending in either .java or .jar. 
+ */
+public class SymbolSolverQuickSetup {
 
     private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
 
     private final Path root;
     private CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
 
-    public SymbolSourceRoot(Path root) {
+    public SymbolSolverQuickSetup(Path root) {
         assertNotNull(root);
         if (!Files.isDirectory(root)) {
             throw new IllegalArgumentException("Only directories are allowed as root path!");
@@ -105,9 +109,10 @@ public class SymbolSourceRoot {
                                 .map(CompilationUnit.Storage::getSourceRoot);
                         if (root.isPresent()) {
                             typeSolver.add(new JavaParserTypeSolver(root.get().toFile()));
-                            roots.add(root.get());
-                            logger.log(Level.FINE, "Added dir " + root.get() + " to the TypeSolver");
-                            return SKIP_SIBLINGS;
+                            if (roots.add(root.get())) {
+                                logger.log(Level.FINE, "Added dir " + root.get() + " to the TypeSolver");
+                                return SKIP_SIBLINGS;
+                            }
                         }
                     } catch (ParseProblemException e) {
                         logger.log(Level.WARNING, "Unable to parse file " + file, e);
