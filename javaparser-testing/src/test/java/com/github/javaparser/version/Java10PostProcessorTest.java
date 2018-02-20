@@ -26,22 +26,4 @@ public class Java10PostProcessorTest {
 
         assertEquals(1, allVarTypes.size());
     }
-
-    @Test
-    public void varAllowedInLocalVariableDeclaration() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a = 5;"));
-        assertNoProblems(result);
-    }
-
-    @Test
-    public void varAllowedInForEach() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(var a : as){}"));
-        assertNoProblems(result);
-    }
-
-    @Test
-    public void varAllowedInOldFor() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(var a = 5;a<9;a++){}"));
-        assertNoProblems(result);
-    }
 }

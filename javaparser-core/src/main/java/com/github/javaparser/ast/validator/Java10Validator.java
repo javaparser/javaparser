@@ -1,6 +1,13 @@
 package com.github.javaparser.ast.validator;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.ForeachStmt;
 import com.github.javaparser.ast.type.VarType;
+
+import java.util.Optional;
 
 /**
  * This validator validates according to Java 10 syntax rules.
@@ -8,7 +15,24 @@ import com.github.javaparser.ast.type.VarType;
 public class Java10Validator extends Java9Validator {
 
     protected final Validator varOnlyOnLocalVariableDefinitionAndFor = new SingleNodeTypeValidator<>(VarType.class, (n, reporter) -> {
-        // TODO issue 1407
+        Optional<VariableDeclarator> variableDeclarator = n.findParent(VariableDeclarator.class);
+        if (!variableDeclarator.isPresent()) {
+            reporter.report(n, "\"var\" is not allowed here.");
+            return;
+        }
+        variableDeclarator.ifPresent(vd -> {
+            Optional<Node> container = vd.getParentNode();
+            if (!container.isPresent()) {
+                reporter.report(n, "\"var\" is not allowed here.");
+                return;
+            }
+            container.ifPresent(c -> {
+                boolean positionIsFine = c instanceof ForStmt || c instanceof ForeachStmt || c instanceof VariableDeclarationExpr;
+                if (!positionIsFine) {
+                    reporter.report(n, "\"var\" is not allowed here.");
+                }
+            });
+        });
     });
 
     public Java10Validator() {
