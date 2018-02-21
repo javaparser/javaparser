@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.download;
@@ -48,13 +49,13 @@ public class BulkParseTest {
              then copying the "zip" link to the line below: */ 
             download(new URL("http://hg.openjdk.java.net/jdk9/jdk9/langtools/archive/5ecbed313125.zip"), openJdkZipPath);
         }
-        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
+        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_9));
     }
 
     private void parseJdkSrcZip() throws IOException {
         // This is where Ubuntu stores the contents of package openjdk-8-src
         Path path = Paths.get("/usr/lib/jvm/openjdk-9/src.zip");
-        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
+        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_9));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class BulkParseTest {
         bulkTest(
                 new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), 
                 "javaparser_test_results.txt", 
-                new ParserConfiguration().setValidator(new Java9Validator()));
+                new ParserConfiguration().setLanguageLevel(JAVA_9));
     }
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
