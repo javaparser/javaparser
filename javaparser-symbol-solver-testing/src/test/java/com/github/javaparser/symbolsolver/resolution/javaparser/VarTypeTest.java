@@ -14,14 +14,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10_PREVIEW;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
 import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.assertEquals;
 
 public class VarTypeTest {
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration()
-            .setLanguageLevel(JAVA_10_PREVIEW)
+            .setLanguageLevel(JAVA_10)
             .setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
     @Test

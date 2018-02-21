@@ -10,13 +10,12 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10_PREVIEW;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Java10PostProcessorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_10_PREVIEW));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_10));
 
     @Test
     public void varIsAType() {

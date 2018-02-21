@@ -10,13 +10,13 @@ import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.CLASS_BODY;
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10_PREVIEW;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java10ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_10_PREVIEW));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_10));
 
     @Test
     public void varAllowedInLocalVariableDeclaration() {

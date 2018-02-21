@@ -2,7 +2,6 @@ package com.github.javaparser.manual;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
@@ -47,9 +47,9 @@ public class BulkParseTest {
             Log.info("Downloading JDK langtools");
             /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk9/jdk9/langtools/tags
              then copying the "zip" link to the line below: */ 
-            download(new URL("http://hg.openjdk.java.net/jdk9/jdk9/langtools/archive/5ecbed313125.zip"), openJdkZipPath);
+            download(new URL("http://hg.openjdk.java.net/jdk10/jdk10/langtools/archive/19293ea3999f.zip"), openJdkZipPath);
         }
-        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_9));
+        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_10));
     }
 
     private void parseJdkSrcZip() throws IOException {
