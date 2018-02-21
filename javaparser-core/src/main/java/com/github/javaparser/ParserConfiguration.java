@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -91,7 +92,7 @@ public class ParserConfiguration {
     private boolean lexicalPreservationEnabled = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel;
+    private LanguageLevel languageLevel = CURRENT;
 
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
@@ -126,7 +127,6 @@ public class ParserConfiguration {
                     }
                 })
         ));
-        setLanguageLevel(LanguageLevel.JAVA_8);
     }
 
     public boolean isAttributeComments() {
@@ -200,29 +200,29 @@ public class ParserConfiguration {
     public ParserConfiguration setValidator(Validator validator) {
         // This whole method is a backwards compatability hack.
         if (validator instanceof Java10Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_10_PREVIEW);
+            setLanguageLevel(JAVA_10_PREVIEW);
         } else if (validator instanceof Java9Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_9);
+            setLanguageLevel(JAVA_9);
         } else if (validator instanceof Java8Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_8);
+            setLanguageLevel(JAVA_8);
         } else if (validator instanceof Java7Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_7);
+            setLanguageLevel(JAVA_7);
         } else if (validator instanceof Java6Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_6);
+            setLanguageLevel(JAVA_6);
         } else if (validator instanceof Java5Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_5);
+            setLanguageLevel(JAVA_5);
         } else if (validator instanceof Java1_4Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_1_4);
+            setLanguageLevel(JAVA_1_4);
         } else if (validator instanceof Java1_3Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_1_3);
+            setLanguageLevel(JAVA_1_3);
         } else if (validator instanceof Java1_2Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_1_2);
+            setLanguageLevel(JAVA_1_2);
         } else if (validator instanceof Java1_1Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_1_1);
+            setLanguageLevel(JAVA_1_1);
         } else if (validator instanceof Java1_0Validator) {
-            setLanguageLevel(LanguageLevel.JAVA_1_0);
+            setLanguageLevel(JAVA_1_0);
         } else if (validator instanceof NoProblemsValidator) {
-            setLanguageLevel(LanguageLevel.RAW);
+            setLanguageLevel(RAW);
         }
         return this;
     }
