@@ -44,10 +44,12 @@ public class ParserConfiguration {
     public enum LanguageLevel {
         /** Does no post processing or validation. Only for people wanting the fastest parsing. */
         RAW(null, null),
-        /** Always points to the most popular Java version. */
+        /** The most used Java version. */
         POPULAR(new Java8Validator(), null),
-        /** Always points to the newest Java version supported. */
-        LATEST(new Java11Validator(), new Java11PostProcessor()),
+        /** The latest Java version that is available. */
+        CURRENT(new Java8Validator(), null),
+        /** The newest Java features supported. */
+        BLEEDING_EDGE(new Java11Validator(), new Java11PostProcessor()),
         /** Java 1.0 */
         JAVA_1_0(new Java1_0Validator(), null),
         /** Java 1.1 */
