@@ -3,15 +3,15 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.CLASS_BODY;
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10_PREVIEW;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
@@ -43,6 +43,18 @@ public class Java10ValidatorTest {
     }
 
     @Test
+    public void varNotAllowedInTryWithResources() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(var f = new FileReader(\"\")){ }catch (Exception e){ }"));
+        assertProblems(result, "(line 1,col 5) \"var\" is not allowed here.");
+    }
+
+    @Test
+    public void varNotAllowedInField() {
+        ParseResult<BodyDeclaration<?>> result = javaParser.parse(CLASS_BODY, provider("var a = 20;"));
+        assertProblems(result, "(line 1,col 1) \"var\" is not allowed here.");
+    }
+
+    @Test
     public void varNotAllowedInTypeArguments() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("new X<var>();"));
         assertProblems(result, "(line 1,col 7) \"var\" is not allowed here.");
@@ -52,5 +64,45 @@ public class Java10ValidatorTest {
     public void varNotAllowedInLambdaParameters() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("x((var x) -> null);"));
         assertProblems(result, "(line 1,col 4) \"var\" is not allowed here.");
+    }
+
+    @Test
+    public void emptyInitializerNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a;"));
+        assertProblems(result, "(line 1,col 1) \"var\" needs an initializer.");
+    }
+
+    @Test
+    public void multipleVariablesNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=1, b=2;"));
+        assertProblems(result, "(line 1,col 1) \"var\" only takes a single variable.");
+    }
+
+    @Test
+    public void nullVariablesNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=null;"));
+        assertProblems(result, "(line 1,col 1) \"var\" cannot infer type from just null.");
+    }
+
+    @Test
+    public void arrayDimensionBracketsNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=new String[]{};"));
+        assertProblems(result, "(line 1,col 1) \"var\" cannot infer array types.");
+    }
+
+    // This is pretty hard to impossible to implement correctly with just the AST.
+    @Ignore
+    @Test
+    public void selfReferenceNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=a;"));
+        assertProblems(result, "");
+    }
+
+    // Can be implemented once https://github.com/javaparser/javaparser/issues/1434 is implemented.
+    @Ignore
+    @Test
+    public void polyExpressionAsInitializerNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=new ArrayList<>();"));
+        assertProblems(result, "");
     }
 }

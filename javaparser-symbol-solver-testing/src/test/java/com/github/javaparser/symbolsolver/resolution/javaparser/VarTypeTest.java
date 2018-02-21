@@ -26,7 +26,7 @@ public class VarTypeTest {
 
     @Test
     public void resolveAPrimitive() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{var abc = 1;}")).getResult().get();
+        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = 1;}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
 
         ResolvedType resolvedType = varType.resolve();
@@ -36,7 +36,7 @@ public class VarTypeTest {
 
     @Test
     public void resolveAReferenceType() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{var abc = \"\";}")).getResult().get();
+        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = \"\";}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
 
         ResolvedType resolvedType = varType.resolve();
@@ -46,7 +46,7 @@ public class VarTypeTest {
 
     @Test(expected = IllegalStateException.class)
     public void failResolveNoInitializer() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{var abc;}")).getResult().get();
+        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
 
         varType.resolve();
