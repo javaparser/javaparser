@@ -74,56 +74,56 @@ public class PrimitiveTypeTest {
 
     @Test
     public void testIsArray() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isArray());
         }
     }
 
     @Test
     public void testIsPrimitive() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(true, ptu.isPrimitive());
         }
     }
 
     @Test
     public void testIsNull() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isNull());
         }
     }
 
     @Test
     public void testIsReference() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isReference());
         }
     }
 
     @Test
     public void testIsReferenceType() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isReferenceType());
         }
     }
 
     @Test
     public void testIsVoid() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isVoid());
         }
     }
 
     @Test
     public void testIsTypeVariable() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isTypeVariable());
         }
     }
 
     @Test
     public void testAsReferenceTypeUsage() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             try {
                 ptu.asReferenceType();
                 fail();
@@ -134,7 +134,7 @@ public class PrimitiveTypeTest {
 
     @Test
     public void testAsTypeParameter() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             try {
                 ptu.asTypeParameter();
                 fail();
@@ -145,7 +145,7 @@ public class PrimitiveTypeTest {
 
     @Test
     public void testAsArrayTypeUsage() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             try {
                 ptu.asArrayType();
                 fail();
@@ -318,7 +318,7 @@ public class PrimitiveTypeTest {
 
     @Test
     public void testIsAssignableByAnythingElse() {
-        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.ALL) {
+        for (ResolvedPrimitiveType ptu : ResolvedPrimitiveType.values()) {
             assertEquals(false, ptu.isAssignableBy(OBJECT));
             assertEquals(false, ptu.isAssignableBy(STRING));
             assertEquals(false, ptu.isAssignableBy(NullType.INSTANCE));
