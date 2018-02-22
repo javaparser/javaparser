@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
@@ -28,14 +29,16 @@ import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelat
 import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.SAVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. Files can be
  * parsed and written back one by one or all together. <b>Note that</b> the internal cache used is thread-safe.
  * <ul>
- *     <li>methods called "tryToParse..." will return their result inside a "ParseResult", which supports parse successes and failures.</li>
- *     <li>methods called "parse..." will return "CompilationUnit"s. If a file fails to parse, an exception is thrown.</li>
- *     <li>methods ending in "...Parallelized" will speed up parsing by using multiple threads.</li>
+ * <li>methods called "tryToParse..." will return their result inside a "ParseResult", which supports parse successes and failures.</li>
+ * <li>methods called "parse..." will return "CompilationUnit"s. If a file fails to parse, an exception is thrown.</li>
+ * <li>methods ending in "...Parallelized" will speed up parsing by using multiple threads.</li>
  * </ul>
  */
 public class SourceRoot {
@@ -57,6 +60,7 @@ public class SourceRoot {
     private final Map<Path, ParseResult<CompilationUnit>> cache = new ConcurrentHashMap<>();
     private ParserConfiguration parserConfiguration = new ParserConfiguration();
     private Function<CompilationUnit, String> printer = new PrettyPrinter()::print;
+    private static final Pattern JAVA_IDENTIFIER = Pattern.compile("\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*");
 
     public SourceRoot(Path root) {
         assertNotNull(root);
@@ -143,10 +147,25 @@ public class SourceRoot {
                     Path relative = root.relativize(file.getParent());
                     tryToParse(relative.toString(), file.getFileName().toString());
                 }
-                return FileVisitResult.CONTINUE;
+                return CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return isSensibleDirectoryToEnter(dir) ? CONTINUE : SKIP_SUBTREE;
             }
         });
         return getCache();
+    }
+
+    private static boolean isSensibleDirectoryToEnter(Path dir) throws IOException {
+        final String dirToEnter = dir.getFileName().toString();
+        final boolean directoryIsAValidJavaIdentifier = JAVA_IDENTIFIER.matcher(dirToEnter).matches();
+        if (Files.isHidden(dir) || !directoryIsAValidJavaIdentifier) {
+            Log.trace("Not processing directory \"%s\"", dirToEnter);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -170,7 +189,7 @@ public class SourceRoot {
      *
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
-    public List<ParseResult<CompilationUnit>> tryToParseParallelized(String startPackage) throws IOException {
+    public List<ParseResult<CompilationUnit>> tryToParseParallelized(String startPackage) {
         assertNotNull(startPackage);
         logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
@@ -181,12 +200,12 @@ public class SourceRoot {
                     tryToParse(
                             relative.toString(),
                             file.getFileName().toString(),
-                            new JavaParser(parserConfiguration));
+                            parserConfiguration);
                 } catch (IOException e) {
                     Log.error(e);
                 }
             }
-            return FileVisitResult.CONTINUE;
+            return CONTINUE;
         });
         ForkJoinPool pool = new ForkJoinPool();
         pool.invoke(parse);
@@ -269,7 +288,12 @@ public class SourceRoot {
                         }
                     }
                 }
-                return FileVisitResult.CONTINUE;
+                return CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return isSensibleDirectoryToEnter(dir) ? CONTINUE : SKIP_SUBTREE;
             }
         });
         return this;
@@ -292,8 +316,7 @@ public class SourceRoot {
      *
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
-    public SourceRoot parseParallelized(String startPackage, ParserConfiguration configuration, Callback callback)
-            throws IOException {
+    public SourceRoot parseParallelized(String startPackage, ParserConfiguration configuration, Callback callback) {
         assertNotNull(startPackage);
         assertNotNull(configuration);
         assertNotNull(callback);
@@ -316,7 +339,7 @@ public class SourceRoot {
                     Log.error(e);
                 }
             }
-            return FileVisitResult.CONTINUE;
+            return CONTINUE;
         });
         ForkJoinPool pool = new ForkJoinPool();
         pool.invoke(parse);
@@ -519,20 +542,22 @@ public class SourceRoot {
             try {
                 Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                     @Override
-                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                            throws IOException {
+                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                        if (!SourceRoot.isSensibleDirectoryToEnter(dir)) {
+                            return SKIP_SUBTREE;
+                        }
                         if (!dir.equals(ParallelParse.this.path)) {
                             ParallelParse w = new ParallelParse(dir, callback);
                             w.fork();
                             walks.add(w);
-                            return FileVisitResult.SKIP_SUBTREE;
+                            return SKIP_SUBTREE;
                         } else {
-                            return FileVisitResult.CONTINUE;
+                            return CONTINUE;
                         }
                     }
 
                     @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                         return callback.process(file, attrs);
                     }
                 });
