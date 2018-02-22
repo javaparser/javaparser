@@ -1,4 +1,4 @@
-package com.github.javaparser.version;
+package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -11,7 +11,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_11_PR
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 
-public class Java11PostProcessorTest {
+public class Java11ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_11_PREVIEW));
 
     @Test
