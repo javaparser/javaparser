@@ -64,7 +64,7 @@ public interface NodeWithJavadoc<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N setJavadocComment(String comment) {
-        return setJavadocComment(new JavadocComment(comment));
+        return setJavadocComment(new JavadocComment(" " + comment));
     }
 
     default N setJavadocComment(JavadocComment comment) {
@@ -73,8 +73,11 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     default N setJavadocComment(String indentation, Javadoc javadoc) {
-        JavadocComment comment = javadoc.toComment(indentation);
-        return setJavadocComment(comment);
+        return setJavadocComment(javadoc.toComment(indentation));
+    }
+
+    default N setJavadocComment(Javadoc javadoc) {
+        return setJavadocComment(javadoc.toComment());
     }
 
     default boolean removeJavaDocComment() {

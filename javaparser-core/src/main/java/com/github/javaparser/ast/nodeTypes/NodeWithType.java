@@ -72,4 +72,7 @@ public interface NodeWithType<N extends Node, T extends Type> {
         return setType((T) parseType(typeString));
     }
 
+    default String getTypeAsString() {
+        return getType().asString();
+    }
 }
