@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 import static org.junit.Assert.assertEquals;
 
 public class Java1_0ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java1_0Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_1_0));
 
     @Test
     public void tryWithoutResources() {

@@ -7,11 +7,12 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java1_3ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java1_3Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_1_3));
 
     @Test
     public void noAssert() {
