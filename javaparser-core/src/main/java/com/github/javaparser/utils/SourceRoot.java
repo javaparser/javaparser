@@ -152,7 +152,7 @@ public class SourceRoot {
 
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                return isSensibleDirectoryToEnter(dir)?CONTINUE:SKIP_SUBTREE;
+                return isSensibleDirectoryToEnter(dir) ? CONTINUE : SKIP_SUBTREE;
             }
         });
         return getCache();
@@ -293,7 +293,7 @@ public class SourceRoot {
 
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                return isSensibleDirectoryToEnter(dir)?CONTINUE:SKIP_SUBTREE;
+                return isSensibleDirectoryToEnter(dir) ? CONTINUE : SKIP_SUBTREE;
             }
         });
         return this;
@@ -543,7 +543,7 @@ public class SourceRoot {
                 Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                        if(!SourceRoot.isSensibleDirectoryToEnter(dir)){
+                        if (!SourceRoot.isSensibleDirectoryToEnter(dir)) {
                             return SKIP_SUBTREE;
                         }
                         if (!dir.equals(ParallelParse.this.path)) {
