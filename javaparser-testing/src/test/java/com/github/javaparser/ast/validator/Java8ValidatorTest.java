@@ -9,13 +9,14 @@ import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java8ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java8Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_8));
 
     @Test
     public void localInterface() {
