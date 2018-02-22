@@ -10,6 +10,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java9Validator;
 import org.junit.Test;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.Assert.assertTrue;
@@ -72,7 +73,7 @@ public class TryStmtTest {
     }
 
     private <T> T parse9(String code) {
-        JavaParser parser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
+        JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
         ParseResult<Statement> result = parser.parse(ParseStart.STATEMENT, provider(code));
         assertTrue(result.toString(), result.isSuccessful());
         return (T) result.getResult().get();

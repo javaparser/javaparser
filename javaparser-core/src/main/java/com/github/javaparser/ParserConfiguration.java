@@ -71,8 +71,8 @@ public class ParserConfiguration {
         JAVA_8(new Java8Validator(), null),
         /** Java 9 */
         JAVA_9(new Java9Validator(), null),
-        /** Java 10 (work in progress) */
-        JAVA_10_PREVIEW(new Java10Validator(), new Java10PostProcessor()),
+        /** Java 10 */
+        JAVA_10(new Java10Validator(), new Java10PostProcessor()),
         /** Java 11 (work in progress) */
         JAVA_11_PREVIEW(new Java11Validator(), new Java11PostProcessor());
 
@@ -200,7 +200,7 @@ public class ParserConfiguration {
     public ParserConfiguration setValidator(Validator validator) {
         // This whole method is a backwards compatability hack.
         if (validator instanceof Java10Validator) {
-            setLanguageLevel(JAVA_10_PREVIEW);
+            setLanguageLevel(JAVA_10);
         } else if (validator instanceof Java9Validator) {
             setLanguageLevel(JAVA_9);
         } else if (validator instanceof Java8Validator) {

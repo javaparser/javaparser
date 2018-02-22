@@ -11,20 +11,20 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class ModuleDeclarationTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
 
     private final CompilationUnit parse(String code) {
         return javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code)).getResult().get();

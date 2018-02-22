@@ -11,12 +11,13 @@ import org.junit.Test;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java1_1ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java1_1Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_1_1));
 
     public static final String allModifiers = "public protected private abstract static final transient volatile synchronized native strictfp transitive default ";
 
