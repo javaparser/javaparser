@@ -154,22 +154,22 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     public void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
-        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + EOL +
+        assertTransformedToString("@interface AD { /** Cool this annotation!*/" + EOL +
                 "int foo(); }", it.getParentNode().get());
     }
 
     @Test
     public void removingJavadoc() {
-        AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
+        AnnotationMemberDeclaration it = consider("/** Cool this annotation!*/ int foo();");
         assertTrue(it.getJavadocComment().get().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 
     @Test
     public void replacingJavadoc() {
-        AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
+        AnnotationMemberDeclaration it = consider("/** Cool this annotation!*/ int foo();");
         it.setJavadocComment("Super extra cool this annotation!!!");
-        assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
+        assertTransformedToString("@interface AD { /** Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
     }
 
 }
