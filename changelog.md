@@ -1,3 +1,10 @@
+Version 3.5.15
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/78?closed=1)
+* Java 10 support is complete.
+* BREAKING: Java language level support has changed to make Java 10 support possible.
+[Here's a little article about it](https://matozoid.github.io/2017/04/11/enable-java-9-support.html)
+
 Version 3.5.14
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/77?closed=1)
