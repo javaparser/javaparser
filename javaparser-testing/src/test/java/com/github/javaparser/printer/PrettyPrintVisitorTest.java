@@ -178,7 +178,7 @@ public class PrettyPrintVisitorTest {
     @Test
     public void multilineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment(" line1\n   line2 *\n * line3");
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +
@@ -226,7 +226,7 @@ public class PrettyPrintVisitorTest {
     @Test
     public void singlelineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment(" line1");
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +

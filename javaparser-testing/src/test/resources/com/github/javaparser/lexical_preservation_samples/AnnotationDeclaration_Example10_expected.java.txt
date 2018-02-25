@@ -1,5 +1,5 @@
 // some example
-/**Super extra cool this annotation!!!*/
+/** Super extra cool this annotation!!!*/
 public @interface ClassPreamble {
    String author();
    String date();

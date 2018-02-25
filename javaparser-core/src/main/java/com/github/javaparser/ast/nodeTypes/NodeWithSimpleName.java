@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
@@ -44,5 +45,9 @@ public interface NodeWithSimpleName<N extends Node> {
 
     default String getNameAsString() {
         return getName().getIdentifier();
+    }
+
+    default NameExpr getNameAsExpression() {
+        return new NameExpr(getName());
     }
 }
