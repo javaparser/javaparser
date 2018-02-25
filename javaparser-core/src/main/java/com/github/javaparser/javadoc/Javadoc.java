@@ -52,12 +52,17 @@ public class Javadoc {
         return this;
     }
 
+    /**
+     * For tags like "@return good things" where
+     * tagName is "return",
+     * and the rest is content.
+     */
     public Javadoc addBlockTag(String tagName, String content) {
         return addBlockTag(new JavadocBlockTag(tagName, content));
     }
 
     /**
-     * for tags like "@param abc this is a parameter" where
+     * For tags like "@param abc this is a parameter" where
      * tagName is "param",
      * parameter is "abc"
      * and the rest is content.

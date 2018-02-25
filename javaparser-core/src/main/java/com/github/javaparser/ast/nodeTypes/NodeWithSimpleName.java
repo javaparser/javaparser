@@ -47,5 +47,7 @@ public interface NodeWithSimpleName<N extends Node> {
         return getName().getIdentifier();
     }
 
-    default NameExpr getNameExpr() {return new NameExpr(getName()); }
+    default NameExpr getNameAsExpression() {
+        return new NameExpr(getName());
+    }
 }
