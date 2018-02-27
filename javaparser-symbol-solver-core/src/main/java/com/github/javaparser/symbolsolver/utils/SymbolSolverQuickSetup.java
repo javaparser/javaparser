@@ -40,8 +40,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
+import static java.nio.file.FileVisitResult.*;
 
 /**
  * Utility class to add all jars and roots of java files of the provided path to a TypeSolver instance.
@@ -49,8 +48,13 @@ import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
  */
 public class SymbolSolverQuickSetup {
 
+    public interface DirFilter {
+        boolean filter(Path path);
+    }
+
     private final Path root;
     private CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
+    private DirFilter dirFilter = path -> false;
 
     public SymbolSolverQuickSetup(Path root) {
         assertNotNull(root);
@@ -59,6 +63,11 @@ public class SymbolSolverQuickSetup {
         }
         this.root = root.normalize();
         Log.info("New symbol source root at \"%s\"", this.root);
+    }
+
+    public SymbolSolverQuickSetup(Path root, DirFilter dirFilter) {
+        this(root);
+        this.dirFilter = dirFilter;
     }
 
     public TypeSolver walk() throws IOException {
@@ -119,8 +128,8 @@ public class SymbolSolverQuickSetup {
 
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            if (Files.isHidden(dir) || roots.stream().anyMatch(dir::startsWith)) {
-                return SKIP_SIBLINGS;
+            if (Files.isHidden(dir) || dirFilter.filter(dir) || roots.stream().anyMatch(dir::startsWith)) {
+                return SKIP_SUBTREE;
             }
             return CONTINUE;
         }
