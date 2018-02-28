@@ -6,6 +6,8 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.utils.SourceZip;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -46,7 +48,7 @@ public class BulkParseTest {
         if (Files.notExists(openJdkZipPath)) {
             Log.info("Downloading JDK langtools");
             /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk9/jdk9/langtools/tags
-             then copying the "zip" link to the line below: */ 
+             then copying the "zip" link to the line below: */
             download(new URL("http://hg.openjdk.java.net/jdk10/jdk10/langtools/archive/19293ea3999f.zip"), openJdkZipPath);
         }
         bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_10));
@@ -58,12 +60,34 @@ public class BulkParseTest {
         bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_9));
     }
 
+    @Before
+    public void startLogging() {
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
+    }
+
+    @After
+    public void stopLogging() {
+        Log.setAdapter(new Log.SilentAdapter());
+    }
+
     @Test
     public void parseOwnSourceCode() throws IOException {
-        bulkTest(
-                new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), 
-                "javaparser_test_results.txt", 
-                new ParserConfiguration().setLanguageLevel(JAVA_9));
+        String[] roots = new String[]{
+                "javaparser-core/src/main/java",
+                "javaparser-testing/src/test/java",
+                "javaparser-core-generators/src/main/java",
+                "javaparser-metamodel-generator/src/main/java",
+                "javaparser-symbol-solver-core/src/main/java",
+                "javaparser-symbol-solver-logic/src/main/java",
+                "javaparser-symbol-solver-model/src/main/java",
+                "javaparser-symbol-solver-testing/src/test/java"
+        };
+        for (String root : roots) {
+            bulkTest(
+                    new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..").resolve(root)),
+                    "javaparser_test_results_" + root.replace("-", "_").replace("/", "_") + ".txt",
+                    new ParserConfiguration().setLanguageLevel(JAVA_9));
+        }
     }
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
