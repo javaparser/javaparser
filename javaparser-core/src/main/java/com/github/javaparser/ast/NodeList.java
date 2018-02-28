@@ -198,6 +198,26 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
+     * @return the first node, or empty if the list is empty.
+     */
+    public Optional<N> getFirst() {
+        if(isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(get(0));
+    }
+
+    /**
+     * @return the last node, or empty if the list is empty.
+     */
+    public Optional<N> getLast() {
+        if(isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(get(size()-1));
+    }
+
+    /**
      * Inserts the node after afterThisNode.
      *
      * @throws IllegalArgumentException when afterThisNode is not in this list.

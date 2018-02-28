@@ -31,10 +31,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
@@ -325,5 +322,40 @@ public class NodeListTest {
         list.addAfter(new Name("xxx"), cde);
 
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
+    }
+
+    @Test
+    public void getFirstWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> first = list.getFirst();
+
+        assertEquals("Optional.empty", first.toString());
+    }
+
+    @Test
+    public void getFirstWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> first = list.getFirst();
+
+        assertEquals("Optional[abc]", first.toString());
+    }
+    @Test
+    public void getLastWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> last = list.getLast();
+
+        assertEquals("Optional.empty", last.toString());
+    }
+
+    @Test
+    public void getLastWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> last = list.getLast();
+
+        assertEquals("Optional[cde]", last.toString());
     }
 }
