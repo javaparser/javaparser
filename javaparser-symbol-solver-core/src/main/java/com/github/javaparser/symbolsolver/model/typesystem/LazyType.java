@@ -64,7 +64,7 @@ public class LazyType implements ResolvedType {
 
     @Override
     public boolean isWildcard() {
-        return getType().isArray();
+        return getType().isWildcard();
     }
 
     @Override
