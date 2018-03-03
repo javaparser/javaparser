@@ -70,7 +70,7 @@ public class SourceRoot {
     public SourceRoot(Path root) {
         assertNotNull(root);
         if (!Files.isDirectory(root)) {
-            throw new IllegalArgumentException("Only directories are allowed as root path!");
+            throw new IllegalArgumentException("Only directories are allowed as root path: " + root);
         }
         this.root = root.normalize();
         Log.info("New source root at \"%s\"", this.root);
