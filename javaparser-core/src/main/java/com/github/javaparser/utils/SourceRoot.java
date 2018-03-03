@@ -33,8 +33,9 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 /**
- * A collection of Java source files located in one directory and its subdirectories on the file system. Files can be
- * parsed and written back one by one or all together. <b>Note that</b> the internal cache used is thread-safe.
+ * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory
+ * corresponds to the root of the package structure of the source files within. Files can be parsed and written back one
+ * by one or all together. <b>Note that</b> the internal cache used is thread-safe.
  * <ul>
  * <li>methods called "tryToParse..." will return their result inside a "ParseResult", which supports parse successes and failures.</li>
  * <li>methods called "parse..." will return "CompilationUnit"s. If a file fails to parse, an exception is thrown.</li>
@@ -62,6 +63,10 @@ public class SourceRoot {
     private Function<CompilationUnit, String> printer = new PrettyPrinter()::print;
     private static final Pattern JAVA_IDENTIFIER = Pattern.compile("\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*");
 
+    /**
+     * @param root the root directory of a set of source files. It corresponds to the root of the package structure of the
+     * source files within, like "javaparser/javaparser-core/src/main/java"
+     */
     public SourceRoot(Path root) {
         assertNotNull(root);
         if (!Files.isDirectory(root)) {
@@ -71,6 +76,10 @@ public class SourceRoot {
         Log.info("New source root at \"%s\"", this.root);
     }
 
+    /**
+     * @param root the root directory of a set of source files. It corresponds to the root of the package structure of the
+     * source files within, like "javaparser/javaparser-core/src/main/java"
+     */
     public SourceRoot(Path root, ParserConfiguration parserConfiguration) {
         this(root);
         setParserConfiguration(parserConfiguration);
@@ -160,7 +169,9 @@ public class SourceRoot {
 
     private static boolean isSensibleDirectoryToEnter(Path dir) throws IOException {
         final String dirToEnter = dir.getFileName().toString();
+        // Don't enter directories that cannot be packages.
         final boolean directoryIsAValidJavaIdentifier = JAVA_IDENTIFIER.matcher(dirToEnter).matches();
+        // Don't enter directories that are hidden, assuming that people don't store source files in hidden directories.
         if (Files.isHidden(dir) || !directoryIsAValidJavaIdentifier) {
             Log.trace("Not processing directory \"%s\"", dirToEnter);
             return false;
