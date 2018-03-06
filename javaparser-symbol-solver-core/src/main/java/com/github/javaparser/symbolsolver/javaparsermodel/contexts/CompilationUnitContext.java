@@ -129,6 +129,22 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
+        // Look in current package
+        if (this.wrappedNode.getPackageDeclaration().isPresent()) {
+            String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
+            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            if (ref != null && ref.isSolved()) {
+                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+            }
+        } else {
+            // look for classes in the default package
+            String qName = name;
+            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            if (ref != null && ref.isSolved()) {
+                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+            }
+        }
+
         if (wrappedNode.getImports() != null) {
             int dotPos = name.indexOf('.');
             String prefix = null;
@@ -166,22 +182,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                     }
                 }
-            }
-        }
-
-        // Look in current package
-        if (this.wrappedNode.getPackageDeclaration().isPresent()) {
-            String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
-            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-            if (ref.isSolved()) {
-                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-            }
-        } else {
-            // look for classes in the default package
-            String qName = name;
-            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-            if (ref.isSolved()) {
-                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
             }
         }
 
