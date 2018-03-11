@@ -302,7 +302,7 @@ public class Difference {
         //
         // with [A] being a child and lowercase letters being tokens
         //
-        // We would calculate the Difference between "qwerty" and "qwer" then we know the A is kep, and then we
+        // We would calculate the Difference between "qwerty" and "qwer" then we know the A is kept, and then we
         // would calculate the difference between "uiop" and "uiop"
 
         Map<Node, Integer> childrenInOriginal = findChildrenPositions(original);
