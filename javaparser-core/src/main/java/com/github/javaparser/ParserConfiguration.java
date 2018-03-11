@@ -88,7 +88,7 @@ public class ParserConfiguration {
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
-    private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
+    private boolean ignoreAnnotationsWhenAttributingComments = false;
     private boolean lexicalPreservationEnabled = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
@@ -151,12 +151,27 @@ public class ParserConfiguration {
         return this;
     }
 
+    /**
+     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
+     */
+    @Deprecated
     public boolean isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution() {
-        return doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+        return isIgnoreAnnotationsWhenAttributingComments();
     }
 
+    /**
+     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
+     */
+    @Deprecated
     public ParserConfiguration setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
-        this.doNotConsiderAnnotationsAsNodeStartForCodeAttribution = doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
+        return setIgnoreAnnotationsWhenAttributingComments(doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
+    }
+    public boolean isIgnoreAnnotationsWhenAttributingComments() {
+        return ignoreAnnotationsWhenAttributingComments;
+    }
+
+    public ParserConfiguration setIgnoreAnnotationsWhenAttributingComments(boolean ignoreAnnotationsWhenAttributingComments) {
+        this.ignoreAnnotationsWhenAttributingComments = ignoreAnnotationsWhenAttributingComments;
         return this;
     }
 
