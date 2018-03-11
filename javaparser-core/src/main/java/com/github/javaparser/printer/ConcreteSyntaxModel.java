@@ -814,8 +814,8 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(CompilationUnit.class, sequence(
                 comment(),
                 child(ObservableProperty.PACKAGE_DECLARATION),
-                list(ObservableProperty.IMPORTS, none(), none(), newline()),
-                list(TYPES, newline(), CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
+                list(ObservableProperty.IMPORTS, newline(), none(), sequence(newline(), newline())),
+                list(TYPES, newline(), newline(), none(), newline()),
                 child(ObservableProperty.MODULE),
                 orphanCommentsEnding()));
 
@@ -827,7 +827,6 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.NAME),
                 conditional(ASTERISK, FLAG, sequence(token(GeneratedJavaParserConstants.DOT), token(GeneratedJavaParserConstants.STAR))),
                 semicolon(),
-                newline(),
                 orphanCommentsEnding()
         ));
 

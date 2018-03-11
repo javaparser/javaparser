@@ -68,7 +68,7 @@ public class NameTest {
         assertThat(importDeclaration.getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
 
         assertEquals("import java.@Abc util.List;" + EOL, importDeclaration.toString());
-        assertEquals("import java.@Abc util.List;" + EOL, ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
+        assertEquals("import java.@Abc util.List;" , ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
     @Test
