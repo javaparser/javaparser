@@ -57,8 +57,7 @@ class CommentsInserter {
             return;
 
         /* I should sort all the direct children and the comments, if a comment
-         is the first thing then it
-         a comment to the CompilationUnit */
+         is the first thing then it is a comment to the CompilationUnit */
 
         // FIXME if there is no package it could be also a comment to the following class...
         // so I could use some heuristics in these cases to distinguish the two
@@ -87,13 +86,11 @@ class CommentsInserter {
             insertComments((CompilationUnit) node, commentsToAttribute);
         }
 
-        // the comments can:
-        // 1) Inside one of the child, then it is the child that have to
-        // associate them
-        // 2) If they are not inside a child they could be preceeding nothing, a
-        // comment or a child
-        // if they preceed a child they are assigned to it, otherweise they
-        // remain "orphans"
+        /* the comment can...
+         1) be inside one of the children, then the comment should be associated to this child
+         2) be outside all children. They could be preceding nothing, a comment or a child.
+            If they preceed a child they are assigned to it, otherwise they remain "orphans"
+         */
 
         List<Node> children = node.getChildNodes();
 
@@ -103,7 +100,7 @@ class CommentsInserter {
                     commentsToAttribute.stream()
                             .filter(c -> c.getRange().isPresent())
                             .filter(c -> PositionUtils.nodeContains(child, c,
-                                    configuration.isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution())).collect(Collectors.toList()));
+                                    configuration.isIgnoreAnnotationsWhenAttributingComments())).collect(Collectors.toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
@@ -121,7 +118,7 @@ class CommentsInserter {
 
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
-                configuration.isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution());
+                configuration.isIgnoreAnnotationsWhenAttributingComments());
 
         for (Node thing : childrenAndComments) {
             if (thing instanceof Comment) {
@@ -176,7 +173,7 @@ class CommentsInserter {
         if (!node.getRange().isPresent() || !lineComment.getRange().isPresent()) {
             return false;
         }
-        
+
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().get().line == lineComment.getBegin().get().line
