@@ -25,13 +25,17 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.EnumSet;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -46,7 +50,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Name
 
     @Test
-    public void settingName() throws IOException {
+    public void settingName() {
         MethodDeclaration it = consider("void A(){}");
         it.setName("B");
         assertTransformedToString("void B(){}", it);
@@ -57,21 +61,21 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Modifiers
 
     @Test
-    public void addingModifiers() throws IOException {
+    public void addingModifiers() {
         MethodDeclaration it = consider("void A(){}");
         it.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public void A(){}", it);
     }
 
     @Test
-    public void removingModifiers() throws IOException {
+    public void removingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("void A(){}", it);
     }
 
     @Test
-    public void replacingModifiers() throws IOException {
+    public void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected void A(){}", it);
@@ -80,35 +84,35 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Parameters
 
     @Test
-    public void addingParameters() throws IOException {
+    public void addingParameters() {
         MethodDeclaration it = consider("void foo(){}");
         it.addParameter(PrimitiveType.doubleType(), "d");
         assertTransformedToString("void foo(double d){}", it);
     }
 
     @Test
-    public void removingOnlyParameter() throws IOException {
+    public void removingOnlyParameter() {
         MethodDeclaration it = consider("public void foo(double d){}");
         it.getParameters().remove(0);
         assertTransformedToString("public void foo(){}", it);
     }
 
     @Test
-    public void removingFirstParameterOfMany() throws IOException {
+    public void removingFirstParameterOfMany() {
         MethodDeclaration it = consider("public void foo(double d, float f){}");
         it.getParameters().remove(0);
         assertTransformedToString("public void foo(float f){}", it);
     }
 
     @Test
-    public void removingLastParameterOfMany() throws IOException {
+    public void removingLastParameterOfMany() {
         MethodDeclaration it = consider("public void foo(double d, float f){}");
         it.getParameters().remove(1);
         assertTransformedToString("public void foo(double d){}", it);
     }
 
     @Test
-    public void replacingOnlyParameter() throws IOException {
+    public void replacingOnlyParameter() {
         MethodDeclaration it = consider("public void foo(float f){}");
         it.getParameters().set(0, new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo")));
         assertTransformedToString("public void foo(int[] foo){}", it);
@@ -119,4 +123,26 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Body
 
     // Annotations
+    @Test
+    public void annotationIndentation() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+        cu.getType(0).getMethods().get(0).addSingleMemberAnnotation(
+                "org.junit.Ignore",
+                new StringLiteralExpr("flaky test"));
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  @org.junit.Ignore(\"flaky test\")\n" +
+                "  public void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
 }
