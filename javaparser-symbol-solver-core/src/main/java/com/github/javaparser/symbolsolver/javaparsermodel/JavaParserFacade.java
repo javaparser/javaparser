@@ -557,6 +557,6 @@ public class JavaParserFacade {
         if (clazz.isPrimitive()) {
             return ResolvedPrimitiveType.byName(clazz.getName());
         }
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
     }
 }
