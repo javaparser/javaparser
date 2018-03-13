@@ -41,6 +41,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
@@ -94,7 +96,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "    }\n" +
                 "}";
         MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
-        NameExpr nameE = (NameExpr)methodCallExpr.getScope().get();
+        NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertEquals(true, symbolReference.isSolved());
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
@@ -159,5 +161,17 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         Type jpType = catchClause.getParameter().getType();
         ResolvedType jssType = jpType.resolve();
         assertEquals(true, jssType instanceof ResolvedUnionType);
+    }
+
+    @Test
+    public void classToResolvedTypeViaReflection() {
+        Class<?> clazz = this.getClass();
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        JavaParserFacade facade = JavaParserFacade.get(reflectionTypeSolver);
+        ResolvedType resolvedType = facade.classToResolvedType(clazz);
+
+        assertNotNull(resolvedType);
+        assertTrue(resolvedType.isReferenceType());
+        assertEquals(clazz.getCanonicalName(), resolvedType.asReferenceType().getQualifiedName());
     }
 }
