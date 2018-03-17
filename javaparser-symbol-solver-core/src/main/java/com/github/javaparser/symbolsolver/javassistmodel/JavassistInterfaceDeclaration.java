@@ -182,19 +182,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        try {
-            for (Object annotationRaw : ctClass.getAnnotations()) {
-                if (annotationRaw.getClass().getCanonicalName().equals(canonicalName)) {
-                    return true;
-                }
-                if (Arrays.stream(annotationRaw.getClass().getInterfaces()).anyMatch(it -> it.getCanonicalName().equals(canonicalName))) {
-                    return true;
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
+        return ctClass.hasAnnotation(canonicalName);
     }
 
     @Override

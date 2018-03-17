@@ -75,7 +75,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return ctClass.hasAnnotation(canonicalName);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedReferenceType> getAncestors() {
-        List<ResolvedReferenceType> ancestors = new LinkedList<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         if (getSuperClass() != null) {
             ancestors.add(getSuperClass());
         }
