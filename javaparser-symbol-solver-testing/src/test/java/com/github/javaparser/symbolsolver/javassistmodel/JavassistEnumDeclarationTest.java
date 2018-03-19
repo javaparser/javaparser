@@ -28,15 +28,21 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavassistEnumDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
 
+    private TypeSolver anotherTypeSolver;
+
     @Before
     public void setup() throws IOException {
         String pathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
+
+        String anotherPathToJar = adaptPath("src/test/resources/test-artifact-1.0.0.jar");
+        anotherTypeSolver = new CombinedTypeSolver(new JarTypeSolver(anotherPathToJar), new ReflectionTypeSolver());
     }
 
     ///
@@ -113,6 +119,18 @@ public class JavassistEnumDeclarationTest extends AbstractTest {
     public void testGetQualifiedName() {
         ResolvedEnumDeclaration modifier = (ResolvedEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
         assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());
+    }
+
+    @Test
+    public void testHasDirectlyAnnotation(){
+        ResolvedEnumDeclaration compilationUnit = (ResolvedEnumDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestEnum");
+        assertTrue(compilationUnit.hasDirectlyAnnotation("com.github.javaparser.test.TestAnnotation"));
+    }
+
+    @Test
+    public void testHasAnnotation(){
+        ResolvedEnumDeclaration compilationUnit = (ResolvedEnumDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestParentEnum");
+        assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     ///
