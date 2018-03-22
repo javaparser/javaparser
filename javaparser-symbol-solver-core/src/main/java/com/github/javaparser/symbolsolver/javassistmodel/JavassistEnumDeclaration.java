@@ -89,7 +89,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     @Override
     public List<ResolvedReferenceType> getAncestors() {
         // Direct ancestors of an enum are java.lang.Enum and interfaces
-        List<ResolvedReferenceType> ancestors = new LinkedList<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         try {
             CtClass superClass = ctClass.getSuperclass();
@@ -150,7 +150,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return ctClass.hasAnnotation(canonicalName);
     }
 
     @Override

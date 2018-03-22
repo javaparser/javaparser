@@ -30,12 +30,15 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavassistClassDeclarationTest extends AbstractTest {
 
     private TypeSolver typeSolver;
 
     private TypeSolver newTypeSolver;
+
+    private TypeSolver anotherTypeSolver;
 
     @Before
     public void setup() throws IOException {
@@ -44,6 +47,9 @@ public class JavassistClassDeclarationTest extends AbstractTest {
 
         String newPathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
         newTypeSolver = new CombinedTypeSolver(new JarTypeSolver(newPathToJar), new ReflectionTypeSolver());
+
+        String anotherPathToJar = adaptPath("src/test/resources/test-artifact-1.0.0.jar");
+        anotherTypeSolver = new CombinedTypeSolver(new JarTypeSolver(anotherPathToJar), new ReflectionTypeSolver());
     }
 
     ///
@@ -120,6 +126,18 @@ public class JavassistClassDeclarationTest extends AbstractTest {
     public void testGetQualifiedName() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals("com.github.javaparser.ast.CompilationUnit", compilationUnit.getQualifiedName());
+    }
+
+    @Test
+    public void testHasDirectlyAnnotation() {
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestClass");
+        assertTrue(compilationUnit.hasDirectlyAnnotation("com.github.javaparser.test.TestAnnotation"));
+    }
+
+    @Test
+    public void testHasAnnotation(){
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildClass");
+        assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     ///
