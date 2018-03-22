@@ -6,7 +6,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-testing</artifactId>
+    <artifactId>javaparser-core-testing</artifactId>
     <description>The test suite for javaparser-core</description>
 
     <licenses>

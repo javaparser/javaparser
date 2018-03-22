@@ -8,6 +8,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="javaparser-core" />
         <module name="javaparser-core-generators" />
+        <module name="javaparser-core-metamodel-generator" />
+        <module name="javaparser-core-testing" />
         <module name="javaparser-metamodel-generator" />
         <module name="javaparser-symbol-solver-core" />
         <module name="javaparser-symbol-solver-logic" />
@@ -19,6 +21,8 @@
     <bytecodeTargetLevel>
       <module name="javaparser-core" target="1.8" />
       <module name="javaparser-core-generators" target="1.8" />
+      <module name="javaparser-core-metamodel-generator" target="1.8" />
+      <module name="javaparser-core-testing" target="1.8" />
       <module name="javaparser-metamodel-generator" target="1.8" />
       <module name="javaparser-parent" target="1.8" />
       <module name="javaparser-symbol-solver-core" target="1.8" />
