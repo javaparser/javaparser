@@ -9,10 +9,10 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # Remember current directory
-pushd javaparser-metamodel-generator
+pushd javaparser-core-metamodel-generator
 
 # Generate code
-mvn clean package -P run-metamodel-generator -DskipTests
+mvn clean package -P run-generators -DskipTests
 
 # Go back to previous directory
 popd

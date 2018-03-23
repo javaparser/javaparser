@@ -74,9 +74,9 @@ public class BulkParseTest {
     public void parseOwnSourceCode() throws IOException {
         String[] roots = new String[]{
                 "javaparser-core/src/main/java",
-                "javaparser-testing/src/test/java",
+                "javaparser-core-testing/src/test/java",
                 "javaparser-core-generators/src/main/java",
-                "javaparser-metamodel-generator/src/main/java",
+                "javaparser-core-metamodel-generator/src/main/java",
                 "javaparser-symbol-solver-core/src/main/java",
                 "javaparser-symbol-solver-logic/src/main/java",
                 "javaparser-symbol-solver-model/src/main/java",
@@ -120,7 +120,7 @@ public class BulkParseTest {
     private void writeResults(TreeMap<Path, List<Problem>> results, String testResultsFileName) throws IOException {
         Log.info("Writing results...");
 
-        Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
+        Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
 

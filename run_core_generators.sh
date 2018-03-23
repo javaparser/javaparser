@@ -7,7 +7,7 @@
 pushd javaparser-core-generators
 
 # Generate code
-mvn clean package -P run-core-generators -DskipTests
+mvn clean package -P run-generators -DskipTests
 
 # Go back to previous directory
 popd

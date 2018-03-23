@@ -20,7 +20,7 @@
 
     <profiles>
         <profile>
-            <id>run-core-generators</id>
+            <id>run-generators</id>
             <build>
                 <plugins>
                     <plugin>
