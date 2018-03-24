@@ -22,12 +22,14 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.EnumSet;
+
+import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * Transforming EnumDeclaration and verifying the LexicalPreservation works as expected.
@@ -42,7 +44,7 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
     // Name
 
     @Test
-    public void settingName() throws IOException {
+    public void settingName() {
         EnumDeclaration cid = consider("enum A { E1, E2 }");
         cid.setName("B");
         assertTransformedToString("enum B { E1, E2 }", cid);
@@ -53,24 +55,36 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
     // Modifiers
 
     @Test
-    public void addingModifiers() throws IOException {
+    public void addingModifiers() {
         EnumDeclaration ed = consider("enum A { E1, E2 }");
         ed.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public enum A { E1, E2 }", ed);
     }
 
     @Test
-    public void removingModifiers() throws IOException {
+    public void removingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
         ed.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("enum A { E1, E2 }", ed);
     }
 
     @Test
-    public void replacingModifiers() throws IOException {
+    public void replacingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
         ed.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected enum A { E1, E2 }", ed);
+    }
+
+    @Test
+    public void addingConstants() {
+        EnumDeclaration ed = consider("enum A {" + EOL +
+                " E1" + EOL +
+                "}");
+        ed.getEntries().addLast(new EnumConstantDeclaration("E2"));
+        assertTransformedToString("enum A {" + EOL +
+                " E1," + EOL +
+                " E2" + EOL +
+                "}", ed);
     }
 
     // members
