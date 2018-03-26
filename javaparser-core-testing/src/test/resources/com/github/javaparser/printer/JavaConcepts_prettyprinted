@@ -114,12 +114,14 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     public enum Teste {
 
-        asc, def
+        asc,
+        def
     }
 
     public enum Sexo {
 
-        m, @Deprecated
+        m,
+        @Deprecated
         f;
 
         public enum Sexo_ implements Serializable, Cloneable {
@@ -139,7 +141,8 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
             void mm() {
             }
         }
-        , f(2) {
+        ,
+        f(2) {
 
             void mm() {
             }

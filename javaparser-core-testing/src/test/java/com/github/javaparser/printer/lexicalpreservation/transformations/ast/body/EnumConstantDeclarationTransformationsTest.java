@@ -41,7 +41,7 @@ public class EnumConstantDeclarationTransformationsTest extends AbstractLexicalP
     // Name
 
     @Test
-    public void settingName() throws IOException {
+    public void settingName() {
         EnumConstantDeclaration ecd = consider("A");
         ecd.setName("B");
         assertTransformedToString("B", ecd);
