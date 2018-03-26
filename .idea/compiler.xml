@@ -10,12 +10,10 @@
         <module name="javaparser-core-generators" />
         <module name="javaparser-core-metamodel-generator" />
         <module name="javaparser-core-testing" />
-        <module name="javaparser-metamodel-generator" />
         <module name="javaparser-symbol-solver-core" />
         <module name="javaparser-symbol-solver-logic" />
         <module name="javaparser-symbol-solver-model" />
         <module name="javaparser-symbol-solver-testing" />
-        <module name="javaparser-testing" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

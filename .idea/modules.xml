@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/javaparser-core/javaparser-core.iml" filepath="$PROJECT_DIR$/javaparser-core/javaparser-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaparser-core-generators/javaparser-core-generators.iml" filepath="$PROJECT_DIR$/javaparser-core-generators/javaparser-core-generators.iml" />
-      <module fileurl="file://$PROJECT_DIR$/javaparser-core-metamodel-generator/javaparser-metamodel-generator.iml" filepath="$PROJECT_DIR$/javaparser-core-metamodel-generator/javaparser-metamodel-generator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/javaparser-core-testing/javaparser-testing.iml" filepath="$PROJECT_DIR$/javaparser-core-testing/javaparser-testing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-core-metamodel-generator/javaparser-core-metamodel-generator.iml" filepath="$PROJECT_DIR$/javaparser-core-metamodel-generator/javaparser-core-metamodel-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-core-testing/javaparser-core-testing.iml" filepath="$PROJECT_DIR$/javaparser-core-testing/javaparser-core-testing.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaparser-parent.iml" filepath="$PROJECT_DIR$/javaparser-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-core/javaparser-symbol-solver-core.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-core/javaparser-symbol-solver-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-logic/javaparser-symbol-solver-logic.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-logic/javaparser-symbol-solver-logic.iml" />
