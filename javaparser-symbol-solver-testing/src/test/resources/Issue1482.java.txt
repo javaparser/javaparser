@@ -1,0 +1,13 @@
+public class MultiCatchMethodCallExpr {
+	public void test() {
+		try {
+			methodWithExceptions();
+		} catch (ArrayIndexOutOfBoundsException | ClassCastException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	private void methodWithExceptions() throws ArrayIndexOutOfBoundsException, ClassCastException {
+		// do something
+	}
+}

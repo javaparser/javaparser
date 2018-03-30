@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -406,6 +407,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         } else if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
             return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, typeSolver, invokationContext);
+        } else if (type instanceof ResolvedUnionType) {
+            Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
+            if (commonAncestor.isPresent()) {
+                return solveMethodAsUsage(commonAncestor.get(), name, argumentsTypes, typeSolver, invokationContext);
+            } else {
+                throw new UnsupportedOperationException("no common ancestor available for " + type.describe());
+            }
         } else {
             throw new UnsupportedOperationException("type usage: " + type.getClass().getCanonicalName());
         }
