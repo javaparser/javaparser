@@ -21,10 +21,7 @@
 
 package com.github.javaparser.resolution.types;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +37,18 @@ public class ResolvedUnionType implements ResolvedType {
             throw new IllegalArgumentException("An union type should have at least two elements. This has " + elements.size());
         }
         this.elements = new LinkedList<>(elements);
+    }
+
+    public Optional<ResolvedReferenceType> getCommonAncestor() {
+        Optional<List<ResolvedReferenceType>> reduce = elements.stream()
+                .map(ResolvedType::asReferenceType)
+                .map(ResolvedReferenceType::getAllAncestors)
+                .reduce((a, b) -> {
+                    ArrayList<ResolvedReferenceType> common = new ArrayList<>(a);
+                    common.retainAll(b);
+                    return common;
+                });
+        return reduce.orElse(new ArrayList<>()).stream().findFirst();
     }
 
     @Override
