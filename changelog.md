@@ -1,3 +1,8 @@
+Version 3.5.20
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/83?closed=1)
+* Thanks to @daanschipper for the PR :-)
+
 Version 3.5.19
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/82?closed=1)
