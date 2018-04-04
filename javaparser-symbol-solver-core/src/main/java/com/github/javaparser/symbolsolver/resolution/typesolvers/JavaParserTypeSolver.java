@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -29,12 +30,11 @@ import com.google.common.cache.CacheBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+
+import static com.github.javaparser.Providers.provider;
 
 /**
  * @author Federico Tomassetti
@@ -80,7 +80,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
                 Optional<CompilationUnit> cu;
                 try {
-                    cu = Optional.of(JavaParser.parse(srcFile));
+                    cu = new JavaParser().parse(ParseStart.COMPILATION_UNIT, provider(srcFile)).getResult();
                 } catch (FileNotFoundException e) {
                     cu = Optional.empty();
                 } catch (RuntimeException e) {
