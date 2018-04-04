@@ -9,9 +9,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
 
-public class JSCollectionStrategyTest {
+public class JPCollectionStrategyTest {
 
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(JSCollectionStrategyTest.class).resolve("").getParent();
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(JPCollectionStrategyTest.class).resolve("").getParent();
     private final ProjectRoot projectRoot = new CollectionContext(new JPCollectionStrategy()).collect(root);
 
     @Test
