@@ -12,10 +12,10 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 
-public class JSSCollectionStrategyTest {
+public class SymbolSolverCollectionStrategyTest {
 
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(JSSCollectionStrategyTest.class).resolve("").getParent();
-    private final ProjectRoot projectRoot = new CollectionContext(new JSSCollectionStrategy()).collect(root);
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(SymbolSolverCollectionStrategyTest.class).resolve("").getParent();
+    private final ProjectRoot projectRoot = new CollectionContext(new SymbolSolverCollectionStrategy()).collect(root);
 
     @Test
     public void resolveExpressions() throws IOException {

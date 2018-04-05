@@ -7,6 +7,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.CollectionStrategy;
+import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
 
 import java.io.IOException;
@@ -20,16 +21,16 @@ import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
  * Strategy which collects all SourceRoots and initialises the TypeSolver and returns the SourceRoots configured
  * with the TypeSolver in a ProjectRoot object.
  */
-public class JSSCollectionStrategy implements CollectionStrategy {
+public class SymbolSolverCollectionStrategy implements CollectionStrategy {
 
     private final ParserConfiguration parserConfiguration;
     private final CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
 
-    public JSSCollectionStrategy() {
+    public SymbolSolverCollectionStrategy() {
         this(new ParserConfiguration());
     }
 
-    public JSSCollectionStrategy(ParserConfiguration parserConfiguration) {
+    public SymbolSolverCollectionStrategy(ParserConfiguration parserConfiguration) {
         this.parserConfiguration = parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
@@ -73,7 +74,7 @@ public class JSSCollectionStrategy implements CollectionStrategy {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error(e, "Unable to walk %s", path);
         }
         return projectRoot;
     }

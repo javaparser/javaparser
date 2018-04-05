@@ -11,15 +11,15 @@ import static java.nio.file.FileVisitResult.*;
 /**
  * Strategy which collects all SourceRoots and returns them in a ProjectRoot object.
  */
-public class JPCollectionStrategy implements CollectionStrategy {
+public class ParserCollectionStrategy implements CollectionStrategy {
 
     private final ParserConfiguration parserConfiguration;
 
-    public JPCollectionStrategy() {
+    public ParserCollectionStrategy() {
         this(new ParserConfiguration());
     }
 
-    public JPCollectionStrategy(ParserConfiguration parserConfiguration) {
+    public ParserCollectionStrategy(ParserConfiguration parserConfiguration) {
         this.parserConfiguration = parserConfiguration;
     }
 
@@ -60,7 +60,7 @@ public class JPCollectionStrategy implements CollectionStrategy {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error(e, "Unable to walk %s", path);
         }
         return projectRoot;
     }

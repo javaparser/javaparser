@@ -3,7 +3,6 @@ package com.github.javaparser.utils;
 import com.github.javaparser.ParserConfiguration;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A collection of SourceRoots. Provide the path to the root of the project, and
+ * A collection of SourceRoots. The ProjectRoot can be provided and populated with a CollectionContext together with
+ * a CollectionStrategy.
  */
 public class ProjectRoot {
 

@@ -9,10 +9,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
 
-public class JPCollectionStrategyTest {
+public class ParserCollectionStrategyTest {
 
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(JPCollectionStrategyTest.class).resolve("").getParent();
-    private final ProjectRoot projectRoot = new CollectionContext(new JPCollectionStrategy()).collect(root);
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(ParserCollectionStrategyTest.class).resolve("").getParent();
+    private final ProjectRoot projectRoot = new CollectionContext(new ParserCollectionStrategy()).collect(root);
 
     @Test
     public void getSourceRoots() {
