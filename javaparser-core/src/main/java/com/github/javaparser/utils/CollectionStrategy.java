@@ -11,7 +11,7 @@ import java.nio.file.PathMatcher;
 import java.util.Optional;
 
 /**
- * Strategy to collect files with for ProjectRoot
+ * Defines a strategy to collect files for the ProjectRoot.
  */
 public interface CollectionStrategy {
 

@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A collection of SourceRoots. The ProjectRoot can be provided and populated with a CollectionContext together with
- * a CollectionStrategy.
+ * Find and to compile all files in a project folder, which results in a collection of SourceRoots.
+ * To populate the ProjectRoot, set the CollectionStrategy in the CollectionContext to collect the required files.
  */
 public class ProjectRoot {
 

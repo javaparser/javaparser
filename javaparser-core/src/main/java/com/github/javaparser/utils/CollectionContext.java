@@ -2,6 +2,9 @@ package com.github.javaparser.utils;
 
 import java.nio.file.Path;
 
+/**
+ * Set the strategy to be applied for collecting files for the ProjectRoot.
+ */
 public class CollectionContext {
 
     private CollectionStrategy strategy;
