@@ -24,6 +24,7 @@ import javassist.CtClass;
 import javassist.NotFoundException;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,14 @@ public class JarTypeSolver implements TypeSolver {
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
     private ClassPool classPool = new ClassPool(false);
+
+    public JarTypeSolver(Path pathToJar) throws IOException {
+        this(pathToJar.toFile());
+    }
+
+    public JarTypeSolver(File pathToJar) throws IOException {
+        this(pathToJar.getCanonicalPath());
+    }
 
     public JarTypeSolver(String pathToJar) throws IOException {
         addPathToJar(pathToJar);

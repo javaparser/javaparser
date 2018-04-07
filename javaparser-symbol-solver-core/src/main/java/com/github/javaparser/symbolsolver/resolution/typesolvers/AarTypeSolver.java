@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -29,12 +30,17 @@ import java.util.zip.ZipEntry;
 public class AarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
-    private File aarFile;
     private JarTypeSolver delegate;
 
-    public AarTypeSolver(File aarFile) throws IOException {
-        this.aarFile = aarFile;
+    public AarTypeSolver(String aarFile) throws IOException {
+        this(new File(aarFile));
+    }
 
+    public AarTypeSolver(Path aarFile) throws IOException {
+        this(aarFile.toFile());
+    }
+
+    public AarTypeSolver(File aarFile) throws IOException {
         JarFile jarFile = new JarFile(aarFile);
         ZipEntry classesJarEntry = jarFile.getEntry("classes.jar");
         if (classesJarEntry == null) {
