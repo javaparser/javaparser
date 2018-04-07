@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-class DefaultConstructorDeclaration implements ResolvedConstructorDeclaration {
+public class DefaultConstructorDeclaration implements ResolvedConstructorDeclaration {
 
     private ResolvedClassDeclaration classDeclaration;
 

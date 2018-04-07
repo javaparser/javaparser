@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +29,7 @@ public class Issue128 extends AbstractResolutionTest {
 
     @Before
     public void setup() throws IOException {
-        File srcDir = adaptPath(new File("src/test/resources/issue128"));
+        Path srcDir = adaptPath("src/test/resources/issue128");
         typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(srcDir));
     }
 

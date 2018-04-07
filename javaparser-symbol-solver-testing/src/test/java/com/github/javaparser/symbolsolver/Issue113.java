@@ -14,9 +14,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,14 +24,14 @@ public class Issue113 extends AbstractTest {
     private TypeSolver typeSolver;
 
     @Before
-    public void setup() throws IOException {
-        typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(adaptPath(new File("src/test/resources/issue113"))));
+    public void setup() {
+        typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(adaptPath("src/test/resources/issue113")));
     }
 
     @Test
-    public void issue113providedCodeDoesNotCrash() throws FileNotFoundException {
-        String pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = JavaParser.parse(new File(pathToSourceFile));
+    public void issue113providedCodeDoesNotCrash() throws IOException {
+        Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
         JavaParserFacade parserFacade = JavaParserFacade.get(typeSolver);
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).stream()
@@ -41,9 +40,9 @@ public class Issue113 extends AbstractTest {
     }
 
     @Test
-    public void issue113superClassIsResolvedCorrectly() throws FileNotFoundException {
-        String pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = JavaParser.parse(new File(pathToSourceFile));
+    public void issue113superClassIsResolvedCorrectly() throws IOException {
+        Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
         JavaParserClassDeclaration jssExtendedWidget = new JavaParserClassDeclaration(cu.getClassByName("Widget").get(), typeSolver);
         ResolvedReferenceType superClass = jssExtendedWidget.getSuperClass();
