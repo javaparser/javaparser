@@ -30,6 +30,7 @@ import org.junit.experimental.categories.Category;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
@@ -38,29 +39,29 @@ import static org.junit.Assert.assertTrue;
 @Category(SlowTest.class)
 public class AnalyseJavaParserTest extends AbstractTest {
 
-    private static final File src = adaptPath(new File("src/test/test_sourcecode/javaparser_src/proper_source"));
+    private static final Path src = adaptPath("src/test/test_sourcecode/javaparser_src/proper_source");
 
     private SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_src/generated"))));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/test_sourcecode/javaparser_src/generated")));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
         return sourceFileInfoExtractor;
     }
 
-    static String readFile(File file)
+    static String readFile(Path file)
             throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+        byte[] encoded = Files.readAllBytes(file);
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
     private static final boolean DEBUG = true;
 
     private void parse(String fileName) throws IOException, ParseException {
-        File sourceFile = new File(src.getAbsolutePath() + "/" + fileName + ".java");
+        Path sourceFile = src.resolve( fileName + ".java");
         SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
         OutputStream outErrStream = new ByteArrayOutputStream();
         PrintStream outErr = new PrintStream(outErrStream);
@@ -71,7 +72,7 @@ public class AnalyseJavaParserTest extends AbstractTest {
         String output = outErrStream.toString();
 
         String path = "src/test/resources/javaparser_expected_output/" + fileName.replaceAll("/", "_") + ".txt";
-        File dstFile = adaptPath(new File(path));
+        Path dstFile = adaptPath(path);
 
         if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);

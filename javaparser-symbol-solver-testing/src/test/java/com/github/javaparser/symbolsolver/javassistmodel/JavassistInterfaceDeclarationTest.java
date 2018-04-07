@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,10 +38,10 @@ public class JavassistInterfaceDeclarationTest extends AbstractTest {
 
     @Before
     public void setup() throws IOException {
-        String pathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
 
-        String anotherPathToJar = adaptPath("src/test/resources/test-artifact-1.0.0.jar");
+        Path anotherPathToJar = adaptPath("src/test/resources/test-artifact-1.0.0.jar");
         anotherTypeSolver = new CombinedTypeSolver(new JarTypeSolver(anotherPathToJar), new ReflectionTypeSolver());
     }
 

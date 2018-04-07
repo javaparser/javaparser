@@ -14,9 +14,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class Issue257 extends AbstractTest {
 
@@ -24,20 +23,19 @@ public class Issue257 extends AbstractTest {
 
     @Before
     public void setup() throws IOException {
-        String pathToJar = adaptPath("src/test/resources/issue257/issue257.jar");
-        File jar = new File(pathToJar);
-        typeSolver = new CombinedTypeSolver(new JarTypeSolver(jar.getAbsolutePath()), new ReflectionTypeSolver());
+        Path pathToJar = adaptPath("src/test/resources/issue257/issue257.jar");
+        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
     }
 
     @Test
-    public void verifyBCanBeSolved() throws FileNotFoundException {
+    public void verifyBCanBeSolved() {
         typeSolver.solveType("net.testbug.B");
     }
 
     @Test
-    public void issue257() throws FileNotFoundException {
-        String pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
-        CompilationUnit cu = JavaParser.parse(new File(pathToSourceFile));
+    public void issue257() throws IOException {
+        Path pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
         Statement statement = cu.getClassByName("A").get().getMethodsByName("run").get(0).getBody().get().getStatement(0);
         ExpressionStmt expressionStmt = (ExpressionStmt)statement;
         Expression expression = expressionStmt.getExpression();
