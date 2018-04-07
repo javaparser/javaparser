@@ -109,9 +109,9 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
 //        if (!dstFile.exists()) {
             // If we need to update the file uncomment these lines
-            try(PrintWriter writer = new PrintWriter(dstFile.toFile(), "UTF-8")) {
-                writer.print(output);
-            }
+//            try(PrintWriter writer = new PrintWriter(dstFile.toFile(), "UTF-8")) {
+//                writer.print(output);
+//            }
 //        }
 
         String expected = readFile(dstFile);
