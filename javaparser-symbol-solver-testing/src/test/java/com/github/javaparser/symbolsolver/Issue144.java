@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -17,8 +16,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,8 +26,8 @@ public class Issue144 extends AbstractResolutionTest {
     private TypeSolver typeSolver;
 
     @Before
-    public void setup() throws IOException {
-        File srcDir = adaptPath(new File("src/test/resources/issue144"));
+    public void setup() {
+        Path srcDir = adaptPath("src/test/resources/issue144");
         typeSolver = new JavaParserTypeSolver(srcDir);
     }
 

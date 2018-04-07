@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 
-    private static final File src = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core"));
+    private static final Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
 
     private static TypeSolver TYPESOLVER = typeSolver();
 
@@ -48,12 +49,12 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources"))));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources")));
         return combinedTypeSolver;
     }
 
     private CompilationUnit parse(String fileName) throws IOException {
-        File sourceFile = new File(src.getAbsolutePath() + "/" + fileName + ".java");
+        Path sourceFile = src.resolve(fileName + ".java");
         return JavaParser.parse(sourceFile);
     }
 
