@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * We analyze a more recent version of JavaParser, after the project moved to Java 8.
@@ -55,7 +54,7 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
 
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
 
-    static String readFile(Path file)
+    private static String readFile(Path file)
             throws IOException {
         byte[] encoded = Files.readAllBytes(file);
         return new String(encoded, StandardCharsets.UTF_8);
@@ -79,10 +78,9 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
 
         if (isJava9()) {
             Path path9 = adaptPath(expectedOutput.getPath() + "/" + fileName.replaceAll("/", "_") + "_J9.txt");
-            Path dstFile9 = path9;
-            if (Files.exists(dstFile9)) {
+            if (Files.exists(path9)) {
                 path = path9;
-                dstFile = dstFile9;
+                dstFile = path9;
             }
         }
 
@@ -90,15 +88,15 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
             System.err.println(output);
         }
 
-        assertTrue("No failures expected when analyzing " + path, 0 == sourceFileInfoExtractor.getKo());
-        assertTrue("No UnsupportedOperationException expected when analyzing " + path, 0 == sourceFileInfoExtractor.getUnsupported());
+        assertEquals("No failures expected when analyzing " + path, 0, sourceFileInfoExtractor.getKo());
+        assertEquals("No UnsupportedOperationException expected when analyzing " + path, 0, sourceFileInfoExtractor.getUnsupported());
 
-        if (!Files.exists(dstFile)) {
+//        if (!Files.exists(dstFile)) {
             // If we need to update the file uncomment these lines
-            PrintWriter writer = new PrintWriter(dstFile.toAbsolutePath().toFile(), "UTF-8");
+        try(PrintWriter writer = new PrintWriter(dstFile.toFile(), "UTF-8")) {
             writer.print(output);
-            writer.close();
         }
+//        }
 
         String expected = readFile(dstFile);
 

@@ -7,6 +7,7 @@
   Line 126) n2.getOrphanComments() ==> com.github.javaparser.ast.Node.getOrphanComments()
   Line 135) nodes1.size() ==> java.util.List.size()
   Line 135) nodes2.size() ==> java.util.List.size()
+  Line 80) setAsParentNodeOf(this.expr) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
   Line 138) nodes1.size() ==> java.util.List.size()
   Line 139) nodeEquals(nodes1.get(i), nodes2.get(i)) ==> com.github.javaparser.ast.visitor.EqualsVisitor.nodeEquals(T, T)
   Line 139) nodes1.get(i) ==> java.util.List.get(int)

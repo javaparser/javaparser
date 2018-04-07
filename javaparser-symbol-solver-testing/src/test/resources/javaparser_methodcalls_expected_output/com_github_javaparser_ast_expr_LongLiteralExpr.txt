@@ -1,7 +1,4 @@
+  Line 62) setAsParentNodeOf(this.expr) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 159) ensureNotNull(variables) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 172) setAsParentNodeOf(this.variables) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)
   Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.LongLiteralExpr, A)
-  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.LongLiteralExpr, A)
-  Line 58) value.length() ==> java.lang.String.length()
-  Line 59) //
-value.startsWith(UNSIGNED_MIN_VALUE) ==> java.lang.String.startsWith(java.lang.String)
-  Line 60) value.charAt(19) ==> java.lang.String.charAt(int)
-  Line 60) value.charAt(19) ==> java.lang.String.charAt(int)

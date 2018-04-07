@@ -1,0 +1,3 @@
+  Line 48) Optional.<S>empty() ==> java.util.Optional.empty()
+  Line 60) isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 63) correspondingDeclaration.get() ==> java.util.Optional.get()

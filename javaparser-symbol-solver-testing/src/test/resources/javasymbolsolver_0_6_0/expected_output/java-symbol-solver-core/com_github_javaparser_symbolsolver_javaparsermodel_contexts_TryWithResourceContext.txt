@@ -15,6 +15,7 @@
   Line 65) v.getName().getIdentifier().equals(name) ==> java.lang.String.equals(java.lang.Object)
   Line 65) v.getName().getIdentifier() ==> com.github.javaparser.ast.expr.SimpleName.getIdentifier()
   Line 65) v.getName() ==> com.github.javaparser.ast.body.VariableDeclarator.getName()
+  Line 364) refMethod.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 66) SymbolReference.solved(JavaParserSymbolDeclaration.localVar(v, typeSolver)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 66) JavaParserSymbolDeclaration.localVar(v, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.localVar(com.github.javaparser.ast.body.VariableDeclarator, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 71) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)

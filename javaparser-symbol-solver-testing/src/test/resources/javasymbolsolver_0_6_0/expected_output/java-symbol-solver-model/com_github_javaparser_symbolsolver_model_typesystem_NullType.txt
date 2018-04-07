@@ -1,0 +1,8 @@
+  Line 113) getPackageName().length() ==> java.lang.String.length()
+  Line 113) getPackageName() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration.getPackageName()
+  Line 113) className.length() ==> java.lang.String.length()
+  Line 95) other.asPrimitive().getBoxTypeQName() ==> com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.getBoxTypeQName()
+  Line 95) other.asPrimitive() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asPrimitive()
+  Line 96) type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration) ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.canBeAssignedTo(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration)
+  Line 96) type.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 113) expectedType.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()

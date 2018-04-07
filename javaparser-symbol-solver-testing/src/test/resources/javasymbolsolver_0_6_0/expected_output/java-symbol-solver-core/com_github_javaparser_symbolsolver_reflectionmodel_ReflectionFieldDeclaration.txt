@@ -4,6 +4,8 @@
   Line 61) field.getName() ==> java.lang.reflect.Field.getName()
   Line 66) Modifier.isStatic(field.getModifiers()) ==> java.lang.reflect.Modifier.isStatic(int)
   Line 66) field.getModifiers() ==> java.lang.reflect.Field.getModifiers()
+  Line 605) ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean)
+  Line 254) Collectors.toSet() ==> java.util.stream.Collectors.toSet()
   Line 76) ReflectionFactory.typeDeclarationFor(field.getDeclaringClass(), typeSolver) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory.typeDeclarationFor(java.lang.Class<?>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 76) field.getDeclaringClass() ==> java.lang.reflect.Field.getDeclaringClass()
   Line 95) ReflectionFactory.modifiersToAccessLevel(field.getModifiers()) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory.modifiersToAccessLevel(int)

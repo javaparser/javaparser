@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -24,7 +23,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -33,10 +31,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * We analyze JavaParser version 0.6.0.
@@ -72,9 +68,8 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
 
-    static String readFile(File file)
-            throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+    private static String readFile(Path file) throws IOException {
+        byte[] encoded = Files.readAllBytes(file);
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
@@ -94,15 +89,14 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         sourceFileInfoExtractor.solveMethodCalls(sourceFile);
         String output = outErrStream.toString();
 
-        String path = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
-        File dstFile = new File(path);
+        Path path = adaptPath(expectedOutput).resolve(projectName).resolve(fileName.replaceAll("/", "_") + ".txt");
+        Path dstFile = path;
 
         if (isJava9()) {
-            String path9 = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + "_J9.txt";
-            File dstFile9 = new File(path9);
-            if (dstFile9.exists()) {
+            Path path9 = adaptPath(expectedOutput).resolve(projectName).resolve(fileName.replaceAll("/", "_") + "_J9.txt");
+            if (Files.exists(path9)) {
                 path = path9;
-                dstFile = dstFile9;
+                dstFile = path9;
             }
         }
 
@@ -110,15 +104,15 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
             System.err.println(output);
         }
 
-        assertTrue("No failures expected when analyzing " + path, 0 == sourceFileInfoExtractor.getKo());
-        assertTrue("No UnsupportedOperationException expected when analyzing " + path, 0 == sourceFileInfoExtractor.getUnsupported());
+        assertEquals("No failures expected when analyzing " + path, 0, sourceFileInfoExtractor.getKo());
+        assertEquals("No UnsupportedOperationException expected when analyzing " + path, 0, sourceFileInfoExtractor.getUnsupported());
 
-        if (!dstFile.exists()) {
+//        if (!dstFile.exists()) {
             // If we need to update the file uncomment these lines
-//            PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
-//            writer.print(output);
-//            writer.close();
-        }
+            try(PrintWriter writer = new PrintWriter(dstFile.toFile(), "UTF-8")) {
+                writer.print(output);
+            }
+//        }
 
         String expected = readFile(dstFile);
 

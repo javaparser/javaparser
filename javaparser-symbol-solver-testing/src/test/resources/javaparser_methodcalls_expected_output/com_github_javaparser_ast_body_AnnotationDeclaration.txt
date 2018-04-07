@@ -1,2 +1,1 @@
-  Line 58) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.body.AnnotationDeclaration, A)
-  Line 63) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.body.AnnotationDeclaration, A)
+  Line 37) System.getProperty("line.separator") ==> java.lang.System.getProperty(java.lang.String)
