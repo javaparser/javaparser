@@ -3,10 +3,7 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -114,6 +111,16 @@ public class JavaSymbolSolver implements SymbolResolver {
                 }
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
+            }
+        }
+        if (node instanceof ObjectCreationExpr) {
+            SymbolReference<ResolvedConstructorDeclaration> result = JavaParserFacade.get(typeSolver).solve((ObjectCreationExpr) node);
+            if (result.isSolved()) {
+                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+            } else {
+                throw new UnsolvedSymbolException("We are unable to find the constructor declaration corresponding to " + node);
             }
         }
         if (node instanceof NameExpr) {
