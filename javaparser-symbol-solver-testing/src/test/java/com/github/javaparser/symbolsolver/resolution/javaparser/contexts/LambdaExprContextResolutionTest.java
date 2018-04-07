@@ -34,7 +34,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -77,7 +78,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "functional");
         LambdaExpr lambdaExpr = (LambdaExpr) field.getInitializer().get();
 
-        File src = new File("src/test/resources");
+        Path src = Paths.get("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(src)));
@@ -98,7 +99,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
         LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInitializer().get();
 
-        File src = adaptPath(new File("src/test/resources"));
+        Path src = adaptPath("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));

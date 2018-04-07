@@ -20,8 +20,10 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
+import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.assertEquals;
 
 public class JavaParserAPIIntegrationTest extends AbstractTest {
@@ -32,11 +34,11 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Before
     public void setup() {
-        File src = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core"));
+        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
         combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(src));
-        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources"))));
+        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources")));
         typeSolver = combinedTypeSolverNewCode;
 
         TypeSolver ts = new ReflectionTypeSolver();
@@ -47,7 +49,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void annotationDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+        Path f = adaptPath("src/test/resources/Annotations.java.txt");
         CompilationUnit cu = parseWithSymbolResolution(f);
         AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(0);
         assertEquals("MyAnnotation", declaration.getNameAsString());
@@ -56,10 +58,10 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void annotationMemberDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+        Path f = adaptPath("src/test/resources/Annotations.java.txt");
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, provider(f)).getResult().get();
         AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
         assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
         AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
@@ -68,7 +70,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void classDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration declaration = (ClassOrInterfaceDeclaration)cu.getType(0);
         declaration.resolve();
@@ -76,7 +78,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void interfaceDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/resources/MethodTypeParams.java.txt"));
+        Path f = adaptPath("src/test/resources/MethodTypeParams.java.txt");
         CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration declaration = (ClassOrInterfaceDeclaration)cu.getType(1);
         assertEquals("VoidVisitor", declaration.getNameAsString());
@@ -84,15 +86,15 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         declaration.resolve();
     }
 
-    private CompilationUnit parseWithSymbolResolution(File f) throws IOException {
+    private CompilationUnit parseWithSymbolResolution(Path f) throws IOException {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        return new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        return new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, provider(f)).getResult().get();
     }
 
     @Test
     public void constructorDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
         ConstructorDeclaration constructorDeclaration = classOrInterfaceDeclaration.getDefaultConstructor().get();
@@ -100,7 +102,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     }
     @Test
     public void enumDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         EnumDeclaration declaration = (EnumDeclaration) cu.getType(0);
         assertEquals("AccessSpecifier", declaration.getNameAsString());
@@ -109,7 +111,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void enumConstantDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
         assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
@@ -120,7 +122,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void fieldDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
         assertEquals("CompilationUnit", classDeclaration.getNameAsString());
@@ -132,7 +134,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void methodDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java");
         CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
         assertEquals("CompilationUnit", classDeclaration.getNameAsString());
@@ -144,10 +146,10 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 
     @Test
     public void parameterDeclarationResolve() throws IOException {
-        File f = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        Path f = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java");
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, provider(f)).getResult().get();
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
         assertEquals("CompilationUnit", classDeclaration.getNameAsString());
         MethodDeclaration methodDeclaration = classDeclaration.getMethodsByName("setComments").get(0);

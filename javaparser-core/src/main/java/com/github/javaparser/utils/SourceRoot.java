@@ -232,7 +232,7 @@ public class SourceRoot {
      * file parsed, so if you don't need saveAll(), or you don't ask SourceRoot to parse files multiple times (where the
      * cache is useful) you might want to use the parse method with a callback.
      */
-    public List<ParseResult<CompilationUnit>> tryToParseParallelized() throws IOException {
+    public List<ParseResult<CompilationUnit>> tryToParseParallelized() {
         return tryToParseParallelized("");
     }
 

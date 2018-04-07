@@ -15,6 +15,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +23,7 @@ public class Issue241 extends AbstractResolutionTest{
 
     @Test
     public void testSolveStaticallyImportedMemberType() {
-        File src = adaptPath(new File("src/test/resources"));
+        Path src = adaptPath("src/test/resources");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
         		
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
