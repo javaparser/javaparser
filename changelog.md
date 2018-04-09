@@ -1,3 +1,9 @@
+Version 3.6.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/84?closed=1)
+* @daanschipper added `ProjectRoot` which is used for analysing and storing project structure.
+* Upgraded version from 3.5.20 to 3.6.0 because people got tired of seeing 3.5.
+
 Version 3.5.20
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/83?closed=1)
