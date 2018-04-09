@@ -21,10 +21,12 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -35,11 +37,13 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Federico Tomassetti
@@ -85,9 +89,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         AbstractJavaParserContext<?> that = (AbstractJavaParserContext<?>) o;
 
-        if (wrappedNode != null ? !wrappedNode.equals(that.wrappedNode) : that.wrappedNode != null) return false;
-
-        return true;
+        return wrappedNode != null ? wrappedNode.equals(that.wrappedNode) : that.wrappedNode == null;
     }
 
     @Override
@@ -153,7 +155,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
             // consider static methods
             if (scope instanceof NameExpr) {
-                NameExpr scopeAsName = (NameExpr) scope;
+                NameExpr scopeAsName = scope.asNameExpr();
                 SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
@@ -183,6 +185,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return result;
             } else if (typeOfScope.isConstraint()) {
                 return singletonList(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration());
+            } else if (typeOfScope.isUnionType()) {
+                return typeOfScope.asUnionType().getCommonAncestor()
+                        .map(ResolvedReferenceType::getTypeDeclaration)
+                        .map(Collections::singletonList)
+                        .orElseThrow(() -> new UnsolvedSymbolException("No common ancestor available for UnionType"
+                                + typeOfScope.describe()));
             }
             return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
         }
