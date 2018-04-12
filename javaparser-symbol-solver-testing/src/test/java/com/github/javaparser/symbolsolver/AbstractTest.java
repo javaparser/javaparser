@@ -16,25 +16,29 @@
 
 package com.github.javaparser.symbolsolver;
 
+import com.github.javaparser.utils.CodeGenerationUtils;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public abstract class AbstractTest {
 
-    protected static File adaptPath(File path) {
-        if (path.exists()) {
-            return path;
+    protected static Path adaptPath(Path path) {
+        if (Files.exists(path)) {
+            return path.toAbsolutePath();
+        }
+        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractTest.class).resolve("javaparser-symbol-solver-testing").resolve(path);
+        if (Files.exists(underSymbolSolver)) {
+            return underSymbolSolver;
         } else {
-            File underJavaParserCore = new File("javaparser-symbol-solver-testing/" + path.getPath());
-            if (underJavaParserCore.exists()) {
-                return underJavaParserCore;
-            } else {
-                throw new IllegalArgumentException("I cannot adapt the path " + path.getAbsolutePath());
-            }
+            throw new IllegalArgumentException("I cannot adapt the path " + path);
         }
     }
 
-    protected static String adaptPath(String path) {
-        return adaptPath(new File(path)).getPath();
+    protected static Path adaptPath(String path) {
+        return adaptPath(Paths.get(path));
     }
 
     protected boolean isJava9() {

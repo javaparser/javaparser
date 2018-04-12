@@ -39,10 +39,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
@@ -178,10 +178,11 @@ public class SourceFileInfoExtractor {
         node.getChildNodes().forEach(c -> collectAllNodes(c, nodes));
     }
 
-    public void solve(File file) throws IOException, ParseException {
+    public void solve(Path path) throws IOException {
+        File file = path.toFile();
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
-                solve(f);
+                solve(f.toPath());
             }
         } else {
             if (file.getName().endsWith(".java")) {
@@ -195,10 +196,11 @@ public class SourceFileInfoExtractor {
         }
     }
 
-    public void solveMethodCalls(File file) throws IOException, ParseException {
+    public void solveMethodCalls(Path path) throws IOException {
+        File file = path.toFile();
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
-                solveMethodCalls(f);
+                solveMethodCalls(f.toPath());
             }
         } else {
             if (file.getName().endsWith(".java")) {

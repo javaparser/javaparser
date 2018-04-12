@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -28,13 +29,13 @@ import com.google.common.cache.CacheBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+
+import static com.github.javaparser.Providers.provider;
 
 /**
  * @author Federico Tomassetti
@@ -48,6 +49,14 @@ public class JavaParserTypeSolver implements TypeSolver {
     private Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
     private Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
     private Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
+
+    public JavaParserTypeSolver(Path srcDir) {
+        this(srcDir.toFile());
+    }
+
+    public JavaParserTypeSolver(String srcDir) {
+        this(new File(srcDir));
+    }
 
     public JavaParserTypeSolver(File srcDir) {
         if (!srcDir.exists() || !srcDir.isDirectory()) {
@@ -80,7 +89,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
                 Optional<CompilationUnit> cu;
                 try {
-                    cu = Optional.of(JavaParser.parse(srcFile));
+                    cu = new JavaParser().parse(ParseStart.COMPILATION_UNIT, provider(srcFile)).getResult();
                 } catch (FileNotFoundException e) {
                     cu = Optional.empty();
                 } catch (RuntimeException e) {
@@ -101,10 +110,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                 if (files != null) {
                     for (File file : files) {
                         if (file.getName().toLowerCase().endsWith(".java")) {
-                            Optional<CompilationUnit> unit = parse(file);
-                            if (unit.isPresent()) {
-                                units.add(unit.get());
-                            }
+                            parse(file).ifPresent(units::add);
                         }
                     }
                 }
