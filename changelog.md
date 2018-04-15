@@ -1,3 +1,8 @@
+Version 3.6.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/85?closed=1)
+* BREAKING: `SymbolSolverQuickSetup` has been removed in favor of `ProjectRoot` and `SymbolSolverCollectionStrategy`.
+
 Version 3.6.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/84?closed=1)
