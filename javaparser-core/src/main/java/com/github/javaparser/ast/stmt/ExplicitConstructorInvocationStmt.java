@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
@@ -51,7 +52,7 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.expr.SuperExpr
  * @see com.github.javaparser.ast.expr.ThisExpr
  */
-public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
+public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt>, NodeWithArguments<ExplicitConstructorInvocationStmt> {
 
     @OptionalProperty
     private NodeList<Type> typeArguments;
@@ -104,20 +105,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
         return arguments;
-    }
-
-    public Expression getArgument(int i) {
-        return getArguments().get(i);
-    }
-
-    public ExplicitConstructorInvocationStmt setArgument(int i, Expression argument) {
-        getArguments().set(i, argument);
-        return this;
-    }
-
-    public ExplicitConstructorInvocationStmt addArgument(Expression argument) {
-        getArguments().add(argument);
-        return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
