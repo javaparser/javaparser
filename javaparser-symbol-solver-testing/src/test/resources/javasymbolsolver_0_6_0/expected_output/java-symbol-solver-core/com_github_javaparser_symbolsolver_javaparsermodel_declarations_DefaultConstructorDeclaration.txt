@@ -1,2 +1,5 @@
+  Line 77) String.format("%s is not a ParameterDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 84) String.format("%s is not a TypeDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 91) String.format("%s is not a MethodDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 45) getSuperClass() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getSuperClass()
   Line 52) classDeclaration.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
-  Line 62) Collections.emptyList() ==> java.util.Collections.emptyList()

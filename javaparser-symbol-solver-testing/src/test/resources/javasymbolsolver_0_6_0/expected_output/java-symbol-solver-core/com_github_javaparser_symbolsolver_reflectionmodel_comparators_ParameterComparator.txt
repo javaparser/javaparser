@@ -1,6 +1,3 @@
+  Line 62) FunctionalInterfaceLogic.getFunctionalMethod(this) ==> com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic.getFunctionalMethod(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration)
   Line 13) o1.getName().compareTo(o2.getName()) ==> java.lang.String.compareTo(java.lang.String)
-  Line 13) o1.getName() ==> java.lang.reflect.Parameter.getName()
-  Line 13) o2.getName() ==> java.lang.reflect.Parameter.getName()
-  Line 15) new ClassComparator().compare(o1.getType(), o2.getType()) ==> com.github.javaparser.symbolsolver.reflectionmodel.comparators.ClassComparator.compare(java.lang.Class<?>, java.lang.Class<?>)
-  Line 15) o1.getType() ==> java.lang.reflect.Parameter.getType()
-  Line 15) o2.getType() ==> java.lang.reflect.Parameter.getType()
+  Line 42) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)

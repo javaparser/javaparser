@@ -1,1 +1,2 @@
+  Line 76) setAsParentNodeOf(this.check) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
   Line 78) isLineComment() ==> com.github.javaparser.ast.comments.Comment.isLineComment()
