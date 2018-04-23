@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -24,7 +23,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -45,9 +43,9 @@ import static org.junit.Assert.assertTrue;
 public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static final Path root = adaptPath("src/test/test_sourcecode/javasymbolsolver_0_6_0");
-    private static final Path src = adaptPath(root.resolve("src"));
-    private static final Path lib = adaptPath(root.resolve("lib"));
-    private static final Path expectedOutput = adaptPath("src/test/resources/javasymbolsolver_0_6_0/expected_output");
+    private static final Path src = root.resolve("src");
+    private static final Path lib = root.resolve("lib");
+    private static final Path expectedOutput = root.resolve("expected_output");
 
     private static SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
