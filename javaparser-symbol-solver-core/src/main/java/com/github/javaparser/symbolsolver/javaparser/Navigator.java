@@ -121,6 +121,33 @@ public final class Navigator {
         return found;
     }
 
+    /**
+     * Returns the {@code (i+1)}'th constructor of the given type declaration, in textual order. The constructor that
+     * appears first has the index 0, the second one the index 1, and so on.
+     *
+     * @param td    The type declaration to search in. Note that only classes and enums have constructors.
+     * @param index The index of the desired constructor.
+     * @return The desired ConstructorDeclaration if it was found, and {@code null} otherwise.
+     */
+    public static ConstructorDeclaration demandConstructor(TypeDeclaration<?> td, int index) {
+        ConstructorDeclaration found = null;
+        int i = 0;
+        for (BodyDeclaration<?> bd : td.getMembers()) {
+            if (bd instanceof ConstructorDeclaration) {
+                ConstructorDeclaration cd = (ConstructorDeclaration) bd;
+                if (i == index) {
+                    found = cd;
+                    break;
+                }
+                i++;
+            }
+        }
+        if (found == null) {
+            throw new IllegalStateException("No constructor with index " + index);
+        }
+        return found;
+    }
+
     public static VariableDeclarator demandField(ClassOrInterfaceDeclaration cd, String name) {
         for (BodyDeclaration<?> bd : cd.getMembers()) {
             if (bd instanceof FieldDeclaration) {
