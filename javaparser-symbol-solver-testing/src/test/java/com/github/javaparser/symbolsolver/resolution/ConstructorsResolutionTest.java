@@ -19,7 +19,6 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 	@Test
 	public void solveNormalConstructor() {
-
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testNormalConstructor");
@@ -39,7 +38,6 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 	@Test
 	public void solveInnerClassConstructor() {
-
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructor");
