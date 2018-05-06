@@ -16,16 +16,18 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -37,7 +39,6 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
@@ -841,4 +842,18 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
     // Set<TypeDeclaration> internalTypes()
 
     // Optional<TypeDeclaration> containerType()
+
+    @Test
+    public void issue1528() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        CompilationUnit compilationUnit = JavaParser.parse("public interface Foo extends Comparable { }");
+        ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
+        ResolvedInterfaceDeclaration interfaceDeclaration = javaParserFacade.getTypeDeclaration(foo).asInterface();
+
+        ResolvedReferenceType extendedInterface = interfaceDeclaration.getAllInterfacesExtended().get(0);
+
+        assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
+    }
 }

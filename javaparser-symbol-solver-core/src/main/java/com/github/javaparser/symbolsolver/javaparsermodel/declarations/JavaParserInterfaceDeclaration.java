@@ -121,10 +121,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ResolvedReferenceType> getInterfacesExtended() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
-        if (wrappedNode.getImplementedTypes() != null) {
-            for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
-                interfaces.add(new ReferenceTypeImpl(solveType(t.getName().getId(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
-            }
+        for (ClassOrInterfaceType t : wrappedNode.getExtendedTypes()) {
+            interfaces.add(new ReferenceTypeImpl(solveType(t.getName().getId(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
         }
         return interfaces;
     }
