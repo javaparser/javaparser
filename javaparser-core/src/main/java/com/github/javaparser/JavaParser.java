@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
@@ -508,7 +509,6 @@ public final class JavaParser {
         return simplifiedParse(PARAMETER, provider(parameter));
     }
 
-
     /**
      * Parses a package declaration and returns it as a PackageDeclaration.
      *
@@ -518,5 +518,16 @@ public final class JavaParser {
      */
     public static PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
         return simplifiedParse(PACKAGE_DECLARATION, provider(packageDeclaration));
+    }
+
+    /**
+     * Parses a package declaration and returns it as a PackageDeclaration.
+     *
+     * @param typeDeclaration a declaration like "class X {}"
+     * @return the AST for the type declaration
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static TypeDeclaration<?> parseTypeDeclaration(String typeDeclaration) {
+        return simplifiedParse(TYPE_DECLARATION, provider(typeDeclaration));
     }
 }
