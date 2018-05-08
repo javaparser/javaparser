@@ -23,7 +23,9 @@ package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 
 public class NodeWithAnnotationsBuildersTest {
     private CompilationUnit cu = new CompilationUnit();
-    private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass"); ;
+    private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass");
 
     @interface hey {
 
@@ -58,6 +60,13 @@ public class NodeWithAnnotationsBuildersTest {
     @Test
     public void testAddSingleMemberAnnotation() {
         testClass.addSingleMemberAnnotation("test", "value");
+        assertEquals(1, testClass.getAnnotations().size());
+        assertEquals("value", testClass.getAnnotation(0).asSingleMemberAnnotationExpr().getMemberValue().toString());
+    }
+
+    @Test
+    public void testAddSingleMemberAnnotation2() {
+        testClass.addSingleMemberAnnotation(hey.class, new NameExpr(new SimpleName("value")));
         assertEquals(1, testClass.getAnnotations().size());
         assertEquals("value", testClass.getAnnotation(0).asSingleMemberAnnotationExpr().getMemberValue().toString());
     }
