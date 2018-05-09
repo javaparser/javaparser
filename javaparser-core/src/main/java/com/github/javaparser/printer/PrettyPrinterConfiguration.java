@@ -37,19 +37,23 @@ public class PrettyPrinterConfiguration {
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
-    private String indent = "    ";
+    private int indent = 4;
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
     public String getIndent() {
-        return indent;
+        StringBuilder indentString = new StringBuilder();
+        for(int i=0; i<indent; i++){
+            indentString.append(" ");
+        }
+        return indentString.toString();
     }
 
     /**
-     * Set the string to use for indenting. For example: "\t", "    ", "".
+     * Set the size of the indent in spaces.
      */
-    public PrettyPrinterConfiguration setIndent(String indent) {
+    public PrettyPrinterConfiguration setIndent(int indent) {
         this.indent = assertNotNull(indent);
         return this;
     }
