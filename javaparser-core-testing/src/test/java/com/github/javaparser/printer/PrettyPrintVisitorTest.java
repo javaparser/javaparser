@@ -239,6 +239,22 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
+    public void javadocAlwaysGetsASpaceBetweenTheAsteriskAndTheRestOfTheLine() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     * line2\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
     public void singlelineCommentGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
