@@ -1447,7 +1447,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             //noinspection unchecked
             NodeList<ImportDeclaration> modifiableList = new NodeList<>(n);
             modifiableList.sort(
-                    comparingInt((ImportDeclaration left) -> left.isStatic() ? 0 : 1)
+                    comparingInt((ImportDeclaration i) -> i.isStatic() ? 0 : 1)
                             .thenComparing(NodeWithName::getNameAsString));
             for (Object node : modifiableList) {
                 ((Node) node).accept(this, arg);

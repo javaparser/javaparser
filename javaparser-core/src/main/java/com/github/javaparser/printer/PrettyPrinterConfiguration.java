@@ -21,6 +21,8 @@
 
 package com.github.javaparser.printer;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.function.Function;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -31,30 +33,49 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class PrettyPrinterConfiguration {
     public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
-    
+
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
-    private int indent = 4;
+    private int indentSize = 4;
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
+    /**
+     * Set the string to use for indenting. For example: "\t", "    ", "".
+     * @deprecated use setIndentSize
+     */
+    @Deprecated
+    public PrettyPrinterConfiguration setIndent(String indent) {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @return the string that will be used to indent.
+     */
     public String getIndent() {
         StringBuilder indentString = new StringBuilder();
-        for(int i=0; i<indent; i++){
-            indentString.append(" ");
+        for (int i = 0; i < indentSize; i++) {
+            indentString.append(' ');
         }
         return indentString.toString();
+    }
+
+    public int getIndentSize() {
+        return indentSize;
     }
 
     /**
      * Set the size of the indent in spaces.
      */
-    public PrettyPrinterConfiguration setIndent(int indent) {
-        this.indent = assertNotNull(indent);
+    public PrettyPrinterConfiguration setIndentSize(int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("Indent must be >= 0");
+        }
+        this.indentSize = size;
         return this;
     }
 
