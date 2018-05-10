@@ -87,12 +87,12 @@ public class CloneVisitorTest {
         while (typeItr.hasNext()) {
             typeDeclaration = typeItr.next();
             if (typeDeclaration.getMembers() == null) {
-                assertEquals(typeDeclaration.getComment().get().getContent(), " javadoc");
+                assertEquals("javadoc", typeDeclaration.getComment().get().getContent());
             } else {
                 Iterator<BodyDeclaration<?>> bodyItr = typeDeclaration.getMembers().iterator();
                 while (bodyItr.hasNext()) {
                     BodyDeclaration<?> bodyDeclaration = bodyItr.next();
-                    assertEquals(bodyDeclaration.getComment().get().getContent(), " javadoc");
+                    assertEquals("javadoc", bodyDeclaration.getComment().get().getContent());
                 }
             }
         }
