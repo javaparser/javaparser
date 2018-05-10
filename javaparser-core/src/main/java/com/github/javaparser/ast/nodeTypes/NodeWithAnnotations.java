@@ -70,7 +70,7 @@ public interface NodeWithAnnotations<N extends Node> {
     default N addAnnotation(String name) {
         NormalAnnotationExpr annotation = new NormalAnnotationExpr(
                 parseName(name), new NodeList<>());
-        getAnnotations().add(annotation);
+        addAnnotation(annotation);
         return (N) this;
     }
 
@@ -84,7 +84,7 @@ public interface NodeWithAnnotations<N extends Node> {
     default NormalAnnotationExpr addAndGetAnnotation(String name) {
         NormalAnnotationExpr annotation = new NormalAnnotationExpr(
                 parseName(name), new NodeList<>());
-        getAnnotations().add(annotation);
+        addAnnotation(annotation);
         return annotation;
     }
 
@@ -120,7 +120,7 @@ public interface NodeWithAnnotations<N extends Node> {
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
                 parseName(name));
-        getAnnotations().add(markerAnnotationExpr);
+        addAnnotation(markerAnnotationExpr);
         return (N) this;
     }
 
@@ -146,8 +146,19 @@ public interface NodeWithAnnotations<N extends Node> {
     default N addSingleMemberAnnotation(String name, Expression expression) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
                 parseName(name), expression);
-        getAnnotations().add(singleMemberAnnotationExpr);
-        return (N) this;
+        return addAnnotation(singleMemberAnnotationExpr);
+    }
+
+    /**
+     * Annotates this with a single member annotation
+     *
+     * @param clazz the class of the annotation
+     * @param expression the part between ()
+     * @return this
+     */
+    default N addSingleMemberAnnotation(Class<? extends Annotation> clazz, Expression expression) {
+        tryAddImportToParentCompilationUnit(clazz);
+        return addSingleMemberAnnotation(clazz.getSimpleName(), expression);
     }
 
     /**
