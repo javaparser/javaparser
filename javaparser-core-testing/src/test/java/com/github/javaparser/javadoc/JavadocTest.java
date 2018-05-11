@@ -22,11 +22,15 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
+import com.github.javaparser.javadoc.description.JavadocSnippet;
 import org.junit.Test;
+
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
@@ -134,5 +138,15 @@ public class JavadocTest {
 
         assertEquals(inlineTag, description.getElements().remove(0));
         assertEquals(0, description.getElements().size());
+    }
+
+    @Test
+    public void issue1533() {
+        CompilationUnit compilationUnit = JavaParser.parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
+        List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
+        assertEquals(3, elements.size());
+        assertEquals(new JavadocSnippet("hallo "), elements.get(0));
+        assertEquals(new JavadocInlineTag("link", JavadocInlineTag.Type.LINK, " Foo"), elements.get(1));
+        assertEquals(new JavadocSnippet(" welt"), elements.get(2));
     }
 }

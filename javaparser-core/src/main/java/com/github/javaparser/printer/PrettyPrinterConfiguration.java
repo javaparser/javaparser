@@ -21,6 +21,8 @@
 
 package com.github.javaparser.printer;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.function.Function;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -31,26 +33,52 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class PrettyPrinterConfiguration {
     public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
-    
+
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
-    private String indent = "    ";
+    private int indentSize = 4;
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
-    public String getIndent() {
-        return indent;
+    /**
+     * Set the string to use for indenting. For example: "\t", "    ", "".
+     *
+     * @deprecated use setIndentSize. Tabs are no longer supported.
+     */
+    @Deprecated
+    public PrettyPrinterConfiguration setIndent(String indent) {
+        System.err.println("PrettyPrinterConfiguration.setIndent is deprecated, please review the changes.");
+        indentSize = indent.length();
+        return this;
     }
 
     /**
-     * Set the string to use for indenting. For example: "\t", "    ", "".
+     * @return the string that will be used to indent.
      */
-    public PrettyPrinterConfiguration setIndent(String indent) {
-        this.indent = assertNotNull(indent);
+    public String getIndent() {
+        StringBuilder indentString = new StringBuilder();
+        for (int i = 0; i < indentSize; i++) {
+            indentString.append(' ');
+        }
+        return indentString.toString();
+    }
+
+    public int getIndentSize() {
+        return indentSize;
+    }
+
+    /**
+     * Set the size of the indent in spaces.
+     */
+    public PrettyPrinterConfiguration setIndentSize(int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("Indent must be >= 0");
+        }
+        this.indentSize = size;
         return this;
     }
 

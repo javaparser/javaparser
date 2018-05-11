@@ -31,6 +31,6 @@ public class JavadocInlineTagTest {
     public void javadocInlineTagShouldPersistCustomTagNames() {
         String tag = JavadocInlineTag.fromText("{@foo something}").toText();
 
-        assertEquals(tag, "@foo something");
+        assertEquals(tag, "{@foo something}");
     }
 }

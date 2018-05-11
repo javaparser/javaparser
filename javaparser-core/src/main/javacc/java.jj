@@ -611,8 +611,8 @@ CompilationUnit CompilationUnit():
 	NodeList<ImportDeclaration> imports = emptyList();
 	ImportDeclaration in = null;
 	NodeList<TypeDeclaration<?>> types = emptyList();
-   ModifierHolder modifier;
-	TypeDeclaration tn = null;
+    ModifierHolder modifier;
+	TypeDeclaration<?> tn = null;
 	ModuleDeclaration module = null;
 }
 {
@@ -2793,3 +2793,18 @@ Parameter ParameterParseStart():
 PackageDeclaration PackageDeclarationParseStart():
 { PackageDeclaration ret; }
 { ret = PackageDeclaration() <EOF> { return ret; } }
+
+TypeDeclaration<?> TypeDeclarationParseStart():
+{
+	TypeDeclaration<?> ret;
+	ModifierHolder modifier;
+}
+{
+	modifier = Modifiers()
+	(ret = ClassOrInterfaceDeclaration(modifier)
+	|ret = EnumDeclaration(modifier)
+	|ret = AnnotationTypeDeclaration(modifier)
+	)
+	<EOF>
+	{return ret;}
+}

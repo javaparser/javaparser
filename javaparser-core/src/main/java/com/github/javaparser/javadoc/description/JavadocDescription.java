@@ -41,10 +41,10 @@ public class JavadocDescription {
         Pair<Integer, Integer> nextInlineTagPos;
         while ((nextInlineTagPos = indexOfNextInlineTag(text, index)) != null) {
             if (nextInlineTagPos.a != index) {
-                instance.addElement(new JavadocSnippet(text.substring(index, nextInlineTagPos.a + 1)));
+                instance.addElement(new JavadocSnippet(text.substring(index, nextInlineTagPos.a)));
             }
             instance.addElement(JavadocInlineTag.fromText(text.substring(nextInlineTagPos.a, nextInlineTagPos.b + 1)));
-            index = nextInlineTagPos.b;
+            index = nextInlineTagPos.b + 1;
         }
         if (index < text.length()) {
             instance.addElement(new JavadocSnippet(text.substring(index)));
