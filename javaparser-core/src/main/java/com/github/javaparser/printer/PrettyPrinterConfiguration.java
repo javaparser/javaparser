@@ -46,11 +46,14 @@ public class PrettyPrinterConfiguration {
 
     /**
      * Set the string to use for indenting. For example: "\t", "    ", "".
-     * @deprecated use setIndentSize
+     *
+     * @deprecated use setIndentSize. Tabs are no longer supported.
      */
     @Deprecated
     public PrettyPrinterConfiguration setIndent(String indent) {
-        throw new NotImplementedException();
+        System.err.println("PrettyPrinterConfiguration.setIndent is deprecated, please review the changes.");
+        indentSize = indent.length();
+        return this;
     }
 
     /**
