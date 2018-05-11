@@ -29,7 +29,10 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
@@ -220,6 +223,58 @@ public class PrettyPrinterTest {
                 "             })\n" +
                 "             .bam();\n" +
                 "    }\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void indentWithTabsAsFarAsPossible() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bees(a, b, c); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t\t .baz(() -> {\n" +
+                "\t\t\t\t\t  boo().baa()\n" +
+                "\t\t\t\t\t\t   .bees(a,\n" +
+                "\t\t\t\t\t\t\t\t b,\n" +
+                "\t\t\t\t\t\t\t\t c);\n" +
+                "\t\t\t\t  })\n" +
+                "\t\t\t .bam();\n" +
+                "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void indentWithTabsAlignWithSpaces() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS_WITH_SPACE_ALIGN)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t          \tboo().baa()\n" +
+                "\t\t          \t     .bee(a,\n" +
+                "\t\t          \t          b,\n" +
+                "\t\t          \t          c);\n" +
+                "\t\t          })\n" +
+                "\t\t     .bam();\n" +
+                "\t}\n" +
                 "}\n", printed);
     }
 }
