@@ -22,8 +22,10 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.type.ArrayType;
@@ -124,7 +126,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     // Annotations
     @Test
-    public void annotationIndentation() {
+    public void addingToExistingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Test" + EOL +
@@ -132,6 +134,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "  }" + EOL +
                         "}" + EOL
         );
+
         cu.getType(0).getMethods().get(0).addSingleMemberAnnotation(
                 "org.junit.Ignore",
                 new StringLiteralExpr("flaky test"));
@@ -145,4 +148,54 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                 "}\n", result);
     }
 
+    @Test
+    public void addingAnnotationsNoModifiers() {
+        considerCode(
+                "class X {" + EOL +
+                        "  void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).addMarkerAnnotation("Test");
+        cu.getType(0).getMethods().get(0).addMarkerAnnotation("Override");
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  @Override\n" +
+                "  void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
+    @Test
+    public void replacingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setAnnotations(new NodeList<>(new MarkerAnnotationExpr("Test")));
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  @Test\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
+    }
+
+    @Test
+    public void addingAnnotationsShort() {
+        MethodDeclaration it = consider("void testMethod(){}");
+        it.addMarkerAnnotation("Override");
+        assertTransformedToString(
+                "@Override" + EOL +
+                "void testMethod(){}", it);
+    }
 }
