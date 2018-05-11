@@ -1,15 +1,14 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.TokenTypes;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -697,6 +696,7 @@ public class Difference {
 
                     // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
                     Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
+
                     for (int ni=0;ni<elementsFromNextOrder.getElements().size();ni++) {
                         boolean found = false;
                         CsmElement ne = elementsFromNextOrder.getElements().get(ni);
@@ -712,10 +712,8 @@ public class Difference {
 
                     // We now find out which Node Text elements corresponds to the elements in the original CSM
                     final int startNodeTextIndex = nodeTextIndex;
-                    final Set<Integer> usedIndexes = new HashSet<>();
-                    List<Integer> nodeTextIndexOfPreviousElements = elementsFromPreviousOrder.getElements().stream()
-                            .map(it -> findIndexOfCorrespondingNodeTextElement(it, nodeText, startNodeTextIndex, usedIndexes, node))
-                            .collect(Collectors.toList());
+                    List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, startNodeTextIndex, node);
+
                     Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                     for (int i=0;i<nodeTextIndexOfPreviousElements.size();i++) {
                         int value = nodeTextIndexOfPreviousElements.get(i);
@@ -795,34 +793,99 @@ public class Difference {
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
     }
 
-    private int findIndexOfCorrespondingNodeTextElement(CsmElement csmElement, NodeText nodeText, int startIndex, Set<Integer> usedIndexes, Node node) {
-        for (int i=startIndex;i<nodeText.getElements().size();i++){
-            if (!usedIndexes.contains(i)) {
-                TextElement textElement = nodeText.getTextElement(i);
-                if (csmElement instanceof CsmToken) {
-                    CsmToken csmToken = (CsmToken)csmElement;
-                    if (textElement instanceof TokenTextElement) {
-                        TokenTextElement tokenTextElement = (TokenTextElement)textElement;
-                        if (tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node))) {
-                            usedIndexes.add(i);
-                            return i;
+    private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
+        List<Integer> correspondingIndices = new ArrayList<>();
+        for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
+
+            int previousCsmElementIndex = csmElementListIterator.previousIndex();
+            CsmElement csmElement = csmElementListIterator.next();
+            int nextCsmElementIndex = csmElementListIterator.nextIndex();
+
+            Map<MatchClassification, Integer> potentialMatches = new EnumMap(MatchClassification.class);
+            for (int i = startIndex; i<nodeText.getElements().size(); i++){
+                if (!correspondingIndices.contains(i)) {
+                    TextElement textElement = nodeText.getTextElement(i);
+
+                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node);
+
+                    if (isCorresponding) {
+                        boolean hasSamePreviousElement = false;
+                        if (i > 0 && previousCsmElementIndex > -1) {
+                            TextElement previousTextElement = nodeText.getTextElement(i - 1);
+
+                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex), node);
+                        }
+
+                        boolean hasSameNextElement = false;
+                        if (i < nodeText.getElements().size() - 1 && nextCsmElementIndex < elements.size()) {
+                            TextElement nextTextElement = nodeText.getTextElement(i + 1);
+
+                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex), node);
+                        }
+
+                        if (hasSamePreviousElement && hasSameNextElement) {
+                            potentialMatches.putIfAbsent(MatchClassification.ALL, i);
+                        } else if (hasSamePreviousElement) {
+                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_ONLY, i);
+                        } else if (hasSameNextElement) {
+                            potentialMatches.putIfAbsent(MatchClassification.NEXT_ONLY, i);
+                        } else {
+                            potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
                     }
-                } else if (csmElement instanceof CsmChild) {
-                    CsmChild csmChild = (CsmChild)csmElement;
-                    if (textElement instanceof ChildTextElement) {
-                        ChildTextElement childTextElement = (ChildTextElement)textElement;
-                        if (childTextElement.getChild() == csmChild.getChild()) {
-                            usedIndexes.add(i);
-                            return i;
-                        }
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
                 }
             }
+
+            // Prioritize the matches from best to worst
+            Optional<MatchClassification> bestMatchKey = potentialMatches.keySet().stream()
+                    .sorted(Comparator.comparing(MatchClassification::getPriority))
+                    .findFirst();
+
+            if (bestMatchKey.isPresent()) {
+                correspondingIndices.add(potentialMatches.get(bestMatchKey.get()));
+            }
         }
-        return -1;
+
+        return correspondingIndices;
+    }
+
+    private enum MatchClassification {
+        ALL(1), PREVIOUS_ONLY(2), NEXT_ONLY(3), SAME_ONLY(4);
+
+        private final int priority;
+        MatchClassification(int priority) {
+            this.priority = priority;
+        }
+
+        int getPriority() {
+            return priority;
+        }
+    }
+
+    private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
+        boolean isMatch = false;
+
+        if (csmElement instanceof CsmToken) {
+            CsmToken csmToken = (CsmToken)csmElement;
+            if (textElement instanceof TokenTextElement) {
+                TokenTextElement tokenTextElement = (TokenTextElement)textElement;
+                if (tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node))) {
+                    isMatch = true;
+                }
+            }
+        } else if (csmElement instanceof CsmChild) {
+            CsmChild csmChild = (CsmChild)csmElement;
+            if (textElement instanceof ChildTextElement) {
+                ChildTextElement childTextElement = (ChildTextElement)textElement;
+                if (childTextElement.getChild() == csmChild.getChild()) {
+                    isMatch = true;
+                }
+            }
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+        return isMatch;
     }
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
