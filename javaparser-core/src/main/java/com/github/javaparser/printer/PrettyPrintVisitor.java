@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -30,6 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.*;
@@ -42,9 +42,8 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
+import static com.github.javaparser.utils.Utils.*;
+import static java.util.Comparator.comparingInt;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -54,33 +53,14 @@ import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
     protected final PrettyPrinterConfiguration configuration;
     protected final SourcePrinter printer;
-    private Deque<Position> methodChainPositions = new LinkedList<>();
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
         printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
-        pushMethodChainPosition(printer.getCursor()); // initialize a default position for methodChainPositions, it is expected by method #resetMethodChainPosition()
     }
 
     public String getSource() {
         return printer.getSource();
-    }
-
-    public void resetMethodChainPosition(Position position) {
-        this.methodChainPositions.pop();
-        this.methodChainPositions.push(position);
-    }
-
-    public void pushMethodChainPosition(Position position) {
-        this.methodChainPositions.push(position);
-    }
-
-    public Position peekMethodChainPosition() {
-        return this.methodChainPositions.peek();
-    }
-
-    public Position popMethodChainPosition() {
-        return this.methodChainPositions.pop();
     }
 
     private void printModifiers(final EnumSet<Modifier> modifiers) {
@@ -152,7 +132,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     private void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
-        Position cursorRef = printer.getCursor();
+        if (configuration.isColumnAlignParameters()) {
+            printer.indentTo(printer.getCursor().column);
+        }
         if (!isNullOrEmpty(args)) {
             for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
@@ -160,7 +142,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 if (i.hasNext()) {
                     printer.print(",");
                     if (configuration.isColumnAlignParameters()) {
-                        printer.wrapToColumn(cursorRef.column);
+                        printer.println();
                     } else {
                         printer.print(" ");
                     }
@@ -168,6 +150,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             }
         }
         printer.print(")");
+        if (configuration.isColumnAlignParameters()) {
+            printer.unindent();
+        }
     }
 
     private void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
@@ -732,22 +717,23 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MethodCallExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        if (n.getScope().isPresent()) {
-            n.getScope().get().accept(this, arg);
+        n.getScope().ifPresent(scope -> {
+            scope.accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
-                if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr) n.getScope().get()).getScope().isPresent())) {
-                    resetMethodChainPosition(printer.getCursor());
+                if (!(scope instanceof MethodCallExpr) || !((MethodCallExpr) scope).getScope().isPresent()) {
+                    printer.unindent();
+                    printer.indentToCursor();
                 } else {
-                    printer.wrapToColumn(peekMethodChainPosition().column);
+                    printer.println();
                 }
             }
             printer.print(".");
-        }
+        });
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
-        pushMethodChainPosition(printer.getCursor());
+        printer.duplicateIndent();
         printArguments(n.getArguments(), arg);
-        popMethodChainPosition();
+        printer.unindent();
     }
 
     @Override
@@ -1464,13 +1450,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isOrderImports() && n.size() > 0 && n.get(0) instanceof ImportDeclaration) {
             //noinspection unchecked
             NodeList<ImportDeclaration> modifiableList = new NodeList<>(n);
-            modifiableList.sort((left, right) -> {
-                int sort = Integer.compare(left.isStatic() ? 0 : 1, right.isStatic() ? 0 : 1);
-                if (sort == 0) {
-                    sort = left.getNameAsString().compareTo(right.getNameAsString());
-                }
-                return sort;
-            });
+            modifiableList.sort(
+                    comparingInt((ImportDeclaration i) -> i.isStatic() ? 0 : 1)
+                            .thenComparing(NodeWithName::getNameAsString));
             for (Object node : modifiableList) {
                 ((Node) node).accept(this, arg);
             }
