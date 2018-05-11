@@ -863,14 +863,12 @@ public class Difference {
     }
 
     private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
-        boolean isMatch = false;
-
         if (csmElement instanceof CsmToken) {
             CsmToken csmToken = (CsmToken)csmElement;
             if (textElement instanceof TokenTextElement) {
                 TokenTextElement tokenTextElement = (TokenTextElement)textElement;
                 if (tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node))) {
-                    isMatch = true;
+                    return  true;
                 }
             }
         } else if (csmElement instanceof CsmChild) {
@@ -878,14 +876,14 @@ public class Difference {
             if (textElement instanceof ChildTextElement) {
                 ChildTextElement childTextElement = (ChildTextElement)textElement;
                 if (childTextElement.getChild() == csmChild.getChild()) {
-                    isMatch = true;
+                    return true;
                 }
             }
         } else {
             throw new UnsupportedOperationException();
         }
 
-        return isMatch;
+        return false;
     }
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
