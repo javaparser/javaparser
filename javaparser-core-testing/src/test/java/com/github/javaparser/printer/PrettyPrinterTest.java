@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -28,7 +29,10 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
@@ -98,7 +102,6 @@ public class PrettyPrinterTest {
     @Test
     public void prettyColumnAlignParameters_enabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
-                .setIndent("\t")
                 .setColumnAlignParameters(true);
 
         final String EOL = config.getEndOfLineCharacter();
@@ -106,13 +109,13 @@ public class PrettyPrinterTest {
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
         String expected = "class Example {" + EOL +
                 "" + EOL +
-                "\tvoid foo(Object arg0, Object arg1) {" + EOL +
-                "\t\tmyMethod(1," + EOL +
-                "\t\t         2," + EOL +
-                "\t\t         3," + EOL +
-                "\t\t         5," + EOL +
-                "\t\t         Object.class);" + EOL +
-                "\t}" + EOL +
+                "    void foo(Object arg0, Object arg1) {" + EOL +
+                "        myMethod(1," + EOL +
+                "                 2," + EOL +
+                "                 3," + EOL +
+                "                 5," + EOL +
+                "                 Object.class);" + EOL +
+                "    }" + EOL +
                 "}" + EOL +
                 "";
 
@@ -139,7 +142,6 @@ public class PrettyPrinterTest {
     @Test
     public void prettyAlignMethodCallChains_enabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
-                .setIndent("\t")
                 .setColumnAlignFirstMethodChain(true);
 
         final String EOL = config.getEndOfLineCharacter();
@@ -147,13 +149,13 @@ public class PrettyPrinterTest {
         String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
         String expected = "class Example {" + EOL +
                 "" + EOL +
-                "\tvoid foo() {" + EOL +
-                "\t\tIntStream.range(0, 10)" + EOL +
-                "\t\t         .filter(x -> x % 2 == 0)" + EOL +
-                "\t\t         .map(x -> x * IntStream.of(1, 3, 5, 1)" + EOL +
-                "\t\t                                .sum())" + EOL +
-                "\t\t         .forEach(System.out::println);" + EOL +
-                "\t}" + EOL +
+                "    void foo() {" + EOL +
+                "        IntStream.range(0, 10)" + EOL +
+                "                 .filter(x -> x % 2 == 0)" + EOL +
+                "                 .map(x -> x * IntStream.of(1, 3, 5, 1)" + EOL +
+                "                                        .sum())" + EOL +
+                "                 .forEach(System.out::println);" + EOL +
+                "    }" + EOL +
                 "}" + EOL +
                 "";
 
@@ -202,5 +204,77 @@ public class PrettyPrinterTest {
         fieldDeclaration.getVariable(1).setType(PrimitiveType.doubleType());
 
         assertEquals("double a, b;", fieldDeclaration.toString());
+    }
+
+    @Test
+    public void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "    void bar() {\n" +
+                "        foo().bar()\n" +
+                "             .baz(() -> {\n" +
+                "                 boo().baa()\n" +
+                "                      .bee();\n" +
+                "             })\n" +
+                "             .bam();\n" +
+                "    }\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void indentWithTabsAsFarAsPossible() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bees(a, b, c); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t\t .baz(() -> {\n" +
+                "\t\t\t\t\t  boo().baa()\n" +
+                "\t\t\t\t\t\t   .bees(a,\n" +
+                "\t\t\t\t\t\t\t\t b,\n" +
+                "\t\t\t\t\t\t\t\t c);\n" +
+                "\t\t\t\t  })\n" +
+                "\t\t\t .bam();\n" +
+                "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void indentWithTabsAlignWithSpaces() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS_WITH_SPACE_ALIGN)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t          \tboo().baa()\n" +
+                "\t\t          \t     .bee(a,\n" +
+                "\t\t          \t          b,\n" +
+                "\t\t          \t          c);\n" +
+                "\t\t          })\n" +
+                "\t\t     .bam();\n" +
+                "\t}\n" +
+                "}\n", printed);
     }
 }
