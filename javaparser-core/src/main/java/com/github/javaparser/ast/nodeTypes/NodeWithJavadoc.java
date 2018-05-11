@@ -64,7 +64,7 @@ public interface NodeWithJavadoc<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N setJavadocComment(String comment) {
-        return setJavadocComment(new JavadocComment(" " + comment));
+        return setJavadocComment(new JavadocComment(comment));
     }
 
     default N setJavadocComment(JavadocComment comment) {
