@@ -329,7 +329,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                         printer.println(" *");
                         prependEmptyLine = false;
                     }
-                    printer.println(" *" + line);
+                    // Always have at least one space between * and the rest.
+                    if (line.startsWith(" ")) {
+                        line = line.substring(1);
+                    }
+                    printer.println(" * " + line);
                 }
             }
             printer.println(" */");
