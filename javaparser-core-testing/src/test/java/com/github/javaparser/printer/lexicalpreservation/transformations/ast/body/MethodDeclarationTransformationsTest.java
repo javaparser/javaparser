@@ -77,10 +77,64 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
+    public void removingModifiersWithExistingAnnotationsShort() {
+        MethodDeclaration it = consider("@Override public void A(){}");
+        it.setModifiers(EnumSet.noneOf(Modifier.class));
+        assertTransformedToString("@Override void A(){}", it);
+    }
+
+    @Test
+    public void removingModifiersWithExistingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setModifiers(EnumSet.noneOf(Modifier.class));
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
+    @Test
     public void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected void A(){}", it);
+    }
+
+    @Test
+    public void replacingModifiersWithExistingAnnotationsShort() {
+        MethodDeclaration it = consider("@Override public void A(){}");
+        it.setModifiers(EnumSet.of(Modifier.PROTECTED));
+        assertTransformedToString("@Override protected void A(){}", it);
+    }
+
+    @Test
+    public void replacingModifiersWithExistingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setModifiers(EnumSet.of(Modifier.PROTECTED));
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  protected void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
     }
 
     // Parameters
