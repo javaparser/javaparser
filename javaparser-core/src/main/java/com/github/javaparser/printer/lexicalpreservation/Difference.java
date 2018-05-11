@@ -826,9 +826,9 @@ public class Difference {
                         if (hasSamePreviousElement && hasSameNextElement) {
                             potentialMatches.putIfAbsent(MatchClassification.ALL, i);
                         } else if (hasSamePreviousElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_ONLY, i);
+                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_AND_SAME, i);
                         } else if (hasSameNextElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.NEXT_ONLY, i);
+                            potentialMatches.putIfAbsent(MatchClassification.NEXT_AND_SAME, i);
                         } else {
                             potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
@@ -843,6 +843,8 @@ public class Difference {
 
             if (bestMatchKey.isPresent()) {
                 correspondingIndices.add(potentialMatches.get(bestMatchKey.get()));
+            } else {
+                correspondingIndices.add(-1);
             }
         }
 
@@ -850,7 +852,7 @@ public class Difference {
     }
 
     private enum MatchClassification {
-        ALL(1), PREVIOUS_ONLY(2), NEXT_ONLY(3), SAME_ONLY(4);
+        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4);
 
         private final int priority;
         MatchClassification(int priority) {
