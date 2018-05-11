@@ -56,7 +56,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
-        printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
+        printer = new SourcePrinter(configuration);
     }
 
     public String getSource() {
@@ -133,7 +133,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     private void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
         if (configuration.isColumnAlignParameters()) {
-            printer.indentTo(printer.getCursor().column);
+            printer.indentWithAlignTo(printer.getCursor().column);
         }
         if (!isNullOrEmpty(args)) {
             for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
@@ -721,8 +721,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             scope.accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
                 if (!(scope instanceof MethodCallExpr) || !((MethodCallExpr) scope).getScope().isPresent()) {
-                    printer.unindent();
-                    printer.indentToCursor();
+                    printer.reindentWithAlignToCursor();
                 } else {
                     printer.println();
                 }

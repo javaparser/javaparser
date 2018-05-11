@@ -22,6 +22,7 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.Position;
+import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
 import com.github.javaparser.utils.Utils;
 
 import java.util.Deque;
@@ -32,15 +33,23 @@ import static com.github.javaparser.Position.*;
 public class SourcePrinter {
     private final String endOfLineCharacter;
     private final String indentation;
+    private final int tabWidth;
+    private final IndentType indentType;
 
     private final Deque<String> indents = new LinkedList<>();
     private final StringBuilder buf = new StringBuilder();
     private Position cursor = new Position(1, 0);
     private boolean indented = false;
 
-    SourcePrinter(final String indentation, final String endOfLineCharacter) {
-        this.indentation = indentation;
-        this.endOfLineCharacter = endOfLineCharacter;
+    SourcePrinter() {
+        this(new PrettyPrinterConfiguration());
+    }
+
+    SourcePrinter(final PrettyPrinterConfiguration configuration) {
+        indentation = configuration.getIndent();
+        endOfLineCharacter = configuration.getEndOfLineCharacter();
+        tabWidth = configuration.getTabWidth();
+        indentType = configuration.getIndentType();
         indents.push("");
     }
 
@@ -50,15 +59,32 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        indents.push(currentIndent + indentation);
+        switch (indentType) {
+            case SPACES:
+            case TABS_WITH_SPACE_ALIGN:
+                indents.push(currentIndent + indentation);
+                break;
+
+            case TABS:
+                indents.push(indentation + currentIndent);
+                break;
+
+            default:
+                throw new AssertionError("Unhandled indent type");
+        }
         return this;
     }
 
     /**
-     * Add spaces to the current indentation until it is reaches "column" and push it on the indentation stack.
+     * Add to the current indentation until it is reaches "column" and push it on the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter indentTo(int column) {
+    public SourcePrinter indentWithAlignTo(int column) {
+        indents.push(calculateIndentWithAlignTo(column));
+        return this;
+    }
+
+    private String calculateIndentWithAlignTo(int column) {
         if (indents.isEmpty()) {
             throw new IllegalStateException("Indent/unindent calls are not well-balanced.");
         }
@@ -68,11 +94,41 @@ public class SourcePrinter {
         }
 
         StringBuilder newIndent = new StringBuilder(lastIndent);
-        while (newIndent.length() < column) {
-            newIndent.append(' ');
+        switch (indentType) {
+            case SPACES:
+            case TABS_WITH_SPACE_ALIGN:
+                while (newIndent.length() < column) {
+                    newIndent.append(' ');
+                }
+                break;
+
+            case TABS:
+                int logicalIndentLength = newIndent.length();
+                while ((logicalIndentLength + tabWidth) <= column) {
+                    newIndent.insert(0, '\t');
+                    logicalIndentLength += tabWidth;
+                }
+                while (logicalIndentLength < column) {
+                    newIndent.append(' ');
+                    logicalIndentLength++;
+                }
+                StringBuilder fullTab = new StringBuilder();
+                for(int i=0; i<tabWidth; i++){
+                    fullTab.append(' ');
+                }
+                String fullTabString = fullTab.toString();
+                if ((newIndent.length() >= tabWidth)
+                        && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
+                    int i = newIndent.indexOf(fullTabString);
+                    newIndent.replace(i, i + tabWidth, "\t");
+                }
+                break;
+
+            default:
+                throw new AssertionError("Unhandled indent type");
         }
-        indents.push(newIndent.toString());
-        return this;
+
+        return newIndent.toString();
     }
 
     /**
@@ -182,11 +238,13 @@ public class SourcePrinter {
     }
 
     /**
-     * Set the indent of the next line to the column the cursor is currently in.
+     * Set the top-most indent to the column the cursor is currently in.
      * Does not actually output anything.
      */
-    public void indentToCursor() {
-        indentTo(cursor.column);
+    public void reindentWithAlignToCursor() {
+        String newIndent = calculateIndentWithAlignTo(cursor.column);
+        indents.pop();
+        indents.push(newIndent);
     }
 
     /**
