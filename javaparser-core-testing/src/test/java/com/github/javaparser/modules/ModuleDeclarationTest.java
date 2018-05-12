@@ -14,11 +14,14 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
+import javax.annotation.Generated;
+
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -177,5 +180,25 @@ public class ModuleDeclarationTest {
                         "    provides X.Y with Z1.Z2, Z3.Z4;" + EOL +
                         "}" + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
 
+    }
+
+    @Test
+    public void fluentInterface() {
+        ModuleDeclaration moduleDeclaration = new CompilationUnit()
+                .addModule("org.javacord.api")
+                .addSingleMemberAnnotation(Generated.class, "generator")
+                .addSingleMemberAnnotation(SuppressWarnings.class, "\"module\"")
+                .addDirective("requires transitive java.desktop;")
+                .addDirective("exports org.javacord.api.entity.channel;")
+                .addDirective("exports org.javacord.api.entity.channel.internal to org.javacord.core;")
+                .addDirective("uses org.javacord.api.util.internal.DelegateFactoryDelegate;");
+
+        assertEqualsNoEol("@Generated(generator) @SuppressWarnings(\"module\") \n" +
+                "module org.javacord.api {\n" +
+                "    requires transitive java.desktop;\n" +
+                "    exports org.javacord.api.entity.channel;\n" +
+                "    exports org.javacord.api.entity.channel.internal to org.javacord.core;\n" +
+                "    uses org.javacord.api.util.internal.DelegateFactoryDelegate;\n" +
+                "}\n", moduleDeclaration.toString());
     }
 }
