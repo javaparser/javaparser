@@ -114,7 +114,7 @@ public class JavadocParserTest {
                 "     * Add a field to this and automatically add the import of the type if needed" + EOL +
                 "     *" + EOL +
                 "     * @param typeClass the type of the field" + EOL +
-                "     * @param name the name of the field" + EOL +
+                "     *       @param name the name of the field" + EOL +
                 "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}" + EOL +
                 "     * @return the {@link FieldDeclaration} created" + EOL +
                 "     ";
