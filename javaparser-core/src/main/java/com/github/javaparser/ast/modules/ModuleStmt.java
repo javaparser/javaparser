@@ -11,6 +11,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 
+/**
+ * A module directive.
+ * These directives are erroneously called "statement", that will be fixed in a future release.
+ */
 public abstract class ModuleStmt extends Node {
 
     @AllFieldsConstructor

@@ -39,13 +39,13 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class JavaParserTest {
 
@@ -54,7 +54,7 @@ public class JavaParserTest {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertEquals(true, memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
 
@@ -63,7 +63,7 @@ public class JavaParserTest {
         String code = "@interface AD { String[] foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertEquals(true, memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
     }
 
@@ -74,11 +74,11 @@ public class JavaParserTest {
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();
-        assertEquals(true, range.isPresent());
+        assertTrue(range.isPresent());
         assertEquals(new Range(new Position(1, 8), new Position(1, 12)), range.get());
 
         range = expression.getLevels().get(1).getRange();
-        assertEquals(true, range.isPresent());
+        assertTrue(range.isPresent());
         assertEquals(new Range(new Position(1, 13), new Position(1, 17)), range.get());
     }
 
@@ -89,11 +89,11 @@ public class JavaParserTest {
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();
-        assertEquals(true, range.isPresent());
+        assertTrue(range.isPresent());
         assertEquals(new Range(new Position(1, 8), new Position(1, 9)), range.get());
 
         range = expression.getLevels().get(1).getRange();
-        assertEquals(true, range.isPresent());
+        assertTrue(range.isPresent());
         assertEquals(new Range(new Position(1, 10), new Position(1, 11)), range.get());
     }
 
@@ -197,7 +197,7 @@ public class JavaParserTest {
     public void testNotStoringTokens() {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
-        assertEquals(false, result.getTokens().isPresent());
+        assertFalse(result.getTokens().isPresent());
     }
 
     @Test(expected = ParseProblemException.class)
@@ -226,12 +226,12 @@ public class JavaParserTest {
     public void parsingInitializedAndUnitializedVarsInForStmt() {
         ForStmt forStmt = JavaParser.parseStatement("for(int a,b=0;;){}").asForStmt();
         assertEquals(1, forStmt.getInitialization().size());
-        assertEquals(true, forStmt.getInitialization().get(0).isVariableDeclarationExpr());
+        assertTrue(forStmt.getInitialization().get(0).isVariableDeclarationExpr());
         assertEquals(2, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().size());
         assertEquals("a", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getNameAsString());
         assertEquals("b", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getNameAsString());
-        assertEquals(false, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
-        assertEquals(true, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
+        assertFalse(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
+        assertTrue(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
     }
 
     @Test
@@ -239,11 +239,22 @@ public class JavaParserTest {
         // See issue 1281
         ForStmt forStmt = JavaParser.parseStatement("for(int i, j = array2.length - 1;;){}").asForStmt();
         assertEquals(1, forStmt.getInitialization().size());
-        assertEquals(true, forStmt.getInitialization().get(0).isVariableDeclarationExpr());
+        assertTrue(forStmt.getInitialization().get(0).isVariableDeclarationExpr());
         assertEquals(2, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().size());
         assertEquals("i", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getNameAsString());
         assertEquals("j", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getNameAsString());
-        assertEquals(false, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
-        assertEquals(true, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
+        assertFalse(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
+        assertTrue(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
+    }
+
+    @Test
+    public void parseModuleDeclaration() {
+        JavaParser.getStaticConfiguration().setLanguageLevel(JAVA_9);
+        JavaParser.parseModuleDeclaration("module X {}");
+    }
+
+    @Test
+    public void parseModuleDirective() {
+        JavaParser.parseModuleDirective("opens C;");
     }
 }

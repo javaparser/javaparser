@@ -20,6 +20,9 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+/**
+ * A provides directive in module-info.java. <code>provides X.Y with Z1.Z2, Z3.Z4;</code>
+ */
 public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
     private Type type;

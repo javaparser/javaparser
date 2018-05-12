@@ -17,6 +17,9 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+/**
+ * A uses directive in module-info.java. <code>uses V.W;</code>
+ */
 public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
     private Type type;

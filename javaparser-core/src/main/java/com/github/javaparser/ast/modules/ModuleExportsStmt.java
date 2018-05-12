@@ -19,6 +19,9 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+/**
+ * An exports directive in module-info.java. <code>exports R.S to T1.U1, T2.U2;</code>
+ */
 public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
 
     private Name name;
