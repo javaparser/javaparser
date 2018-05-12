@@ -36,6 +36,7 @@ import static com.github.javaparser.utils.Utils.nextWord;
 
 /**
  * The class responsible for parsing the content of JavadocComments and producing JavadocDocuments.
+ * <a href="https://docs.oracle.com/javase/1.5.0/docs/tooldocs/windows/javadoc.html">The Javadoc specification.</a>
  */
 class JavadocParser {
 
