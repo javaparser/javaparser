@@ -4,6 +4,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -21,7 +22,7 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
     private Type type;
 
     public ModuleUsesStmt() {
-        this(null);
+        this(null, new ClassOrInterfaceType());
     }
 
     @AllFieldsConstructor
