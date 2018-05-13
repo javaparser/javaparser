@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -275,6 +276,127 @@ public class PrettyPrinterTest {
                 "\t\t          })\n" +
                 "\t\t     .bam();\n" +
                 "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void printAnnotationsAtPrettyPlaces() {
+
+        JavaParser.getStaticConfiguration().setLanguageLevel(JAVA_9);
+        CompilationUnit cu = JavaParser.parse("@Documented\n" +
+                "@Repeatable\n" +
+                "package com.github.javaparser;\n" +
+                "\n" +
+                "import java.lang.annotation.Documented;\n" +
+                "import java.lang.annotation.Repeatable;\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "@interface Annotation {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    String value();\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "class Class<@Documented @Repeatable T> {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    byte b;\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    Class(@Documented @Repeatable int i) {\n" +
+                "        @Documented\n" +
+                "        @Repeatable\n" +
+                "        short s;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    void method(@Documented @Repeatable Class this) {\n" +
+                "        for (@Deprecated int i : arr4[0]) {\n" +
+                "            x--;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    void method(@Documented @Repeatable Class this, int i) {\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "enum Foo {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    BAR\n" +
+                "}\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "module foo.bar {\n" +
+                "}\n");
+
+        String printed = new PrettyPrinter().print(cu);
+
+        assertEqualsNoEol("@Documented\n" +
+                "@Repeatable\n" +
+                "package com.github.javaparser;\n" +
+                "\n" +
+                "import java.lang.annotation.Documented;\n" +
+                "import java.lang.annotation.Repeatable;\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "@interface Annotation {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    String value();\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "class Class<@Documented @Repeatable T> {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    byte b;\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    Class(@Documented @Repeatable int i) {\n" +
+                "        @Documented\n" +
+                "        @Repeatable\n" +
+                "        short s;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    void method(@Documented @Repeatable Class this) {\n" +
+                "        for (@Deprecated int i : arr4[0]) {\n" +
+                "            x--;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    void method(@Documented @Repeatable Class this, int i) {\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "enum Foo {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    BAR\n" +
+                "}\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "module foo.bar {\n" +
                 "}\n", printed);
     }
 }
