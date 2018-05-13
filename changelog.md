@@ -1,3 +1,8 @@
+Version 3.6.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/89?closed=1)
+* Be aware of annotations or indents looking slightly different when output!
+
 Version 3.6.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/88?closed=1)

@@ -28,14 +28,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.6.4</version>
+    <version>3.6.5</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-symbol-solver-core:3.6.4'
+compile 'com.github.javaparser:javaparser-symbol-solver-core:3.6.5'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. 
@@ -50,14 +50,14 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.6.4</version>
+    <version>3.6.5</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.6.4'
+compile 'com.github.javaparser:javaparser-core:3.6.5'
 ```
 
 ## How To Compile Sources
