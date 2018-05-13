@@ -14,8 +14,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
-import javax.annotation.Generated;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
@@ -24,12 +22,12 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ModuleDeclarationTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
 
-    private final CompilationUnit parse(String code) {
+    private CompilationUnit parse(String code) {
         return javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code)).getResult().get();
     }
 
@@ -70,7 +68,7 @@ public class ModuleDeclarationTest {
 
         ModuleDeclaration module = cu.getModule().get();
         assertEquals("M.N", module.getNameAsString());
-        assertEquals(false, module.isOpen());
+        assertFalse(module.isOpen());
         assertThat(module.getAnnotations()).containsExactly(
                 new SingleMemberAnnotationExpr(new Name("Foo"), new IntegerLiteralExpr("1")),
                 new SingleMemberAnnotationExpr(new Name("Foo"), new IntegerLiteralExpr("2")),
@@ -105,7 +103,7 @@ public class ModuleDeclarationTest {
 
         ModuleDeclaration module = cu.getModule().get();
         assertEquals("M.N", module.getNameAsString());
-        assertEquals(true, module.isOpen());
+        assertTrue(module.isOpen());
     }
 
     @Test
@@ -185,20 +183,35 @@ public class ModuleDeclarationTest {
     @Test
     public void fluentInterface() {
         ModuleDeclaration moduleDeclaration = new CompilationUnit()
-                .addModule("org.javacord.api")
-                .addSingleMemberAnnotation(Generated.class, "generator")
+                .addModule("com.laamella.base")
                 .addSingleMemberAnnotation(SuppressWarnings.class, "\"module\"")
                 .addDirective("requires transitive java.desktop;")
-                .addDirective("exports org.javacord.api.entity.channel;")
-                .addDirective("exports org.javacord.api.entity.channel.internal to org.javacord.core;")
-                .addDirective("uses org.javacord.api.util.internal.DelegateFactoryDelegate;");
+                .addDirective("exports com.laamella.base.entity.channel;")
+                .addDirective("exports com.laamella.base.entity.channel.internal to com.laamella.core;")
+                .addDirective("uses com.laamella.base.util.internal.FactoryDelegate;");
 
-        assertEqualsNoEol("@Generated(generator) @SuppressWarnings(\"module\") \n" +
-                "module org.javacord.api {\n" +
+        moduleDeclaration.getModuleStmts()
+                .addLast(new ModuleExportsStmt()
+                        .setName("foo.bar")
+                        .addModuleName("other.foo")
+                        .addModuleName("other.bar")
+                );
+
+        moduleDeclaration
+                .addDirective(new ModuleExportsStmt()
+                        .setName("foo.bar.x")
+                        .addModuleName("other.foo")
+                        .addModuleName("other.bar")
+                );
+
+        assertEqualsNoEol("@SuppressWarnings(\"module\") \n" +
+                "module com.laamella.base {\n" +
                 "    requires transitive java.desktop;\n" +
-                "    exports org.javacord.api.entity.channel;\n" +
-                "    exports org.javacord.api.entity.channel.internal to org.javacord.core;\n" +
-                "    uses org.javacord.api.util.internal.DelegateFactoryDelegate;\n" +
+                "    exports com.laamella.base.entity.channel;\n" +
+                "    exports com.laamella.base.entity.channel.internal to com.laamella.core;\n" +
+                "    uses com.laamella.base.util.internal.FactoryDelegate;\n" +
+                "    exports foo.bar to other.foo, other.bar;\n" +
+                "    exports foo.bar.x to other.foo, other.bar;\n" +
                 "}\n", moduleDeclaration.toString());
     }
 }

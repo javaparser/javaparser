@@ -32,6 +32,8 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -48,6 +50,16 @@ import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.*;
 
 public class JavaParserTest {
+
+    @Before
+    public void setToLatestJava() {
+        JavaParser.getStaticConfiguration().setLanguageLevel(BLEEDING_EDGE);
+    }
+
+    @After
+    public void resetJavaLevel() {
+        JavaParser.getStaticConfiguration().setLanguageLevel(CURRENT);
+    }
 
     @Test
     public void rangeOfAnnotationMemberDeclarationIsCorrect() {
@@ -249,7 +261,6 @@ public class JavaParserTest {
 
     @Test
     public void parseModuleDeclaration() {
-        JavaParser.getStaticConfiguration().setLanguageLevel(JAVA_9);
         JavaParser.parseModuleDeclaration("module X {}");
     }
 

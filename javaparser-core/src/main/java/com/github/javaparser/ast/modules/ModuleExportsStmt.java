@@ -11,8 +11,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleExportsStmtMetaModel;
-import java.util.Arrays;
-import java.util.List;
+
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
@@ -163,5 +163,10 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleExportsStmt> toModuleExportsStmt() {
         return Optional.of(this);
+    }
+
+    public ModuleExportsStmt addModuleName(String name) {
+        moduleNames.add(parseName(name));
+        return this;
     }
 }

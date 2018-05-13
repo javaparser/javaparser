@@ -204,10 +204,14 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
     }
 
     /**
-     * Add a directive to the module, like "
+     * Add a directive to the module, like "exports R.S to T1.U1, T2.U2;"
      */
     public ModuleDeclaration addDirective(String directive) {
-        getModuleStmts().add(JavaParser.parseModuleDirective(directive));
+        return addDirective(JavaParser.parseModuleDirective(directive));
+    }
+
+    public ModuleDeclaration addDirective(ModuleStmt directive) {
+        getModuleStmts().add(directive);
         return this;
     }
 }
