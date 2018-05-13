@@ -22,6 +22,9 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -31,7 +34,9 @@ import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -282,8 +287,8 @@ public class PrettyPrinterTest {
     @Test
     public void printAnnotationsAtPrettyPlaces() {
 
-        JavaParser.getStaticConfiguration().setLanguageLevel(JAVA_9);
-        CompilationUnit cu = JavaParser.parse("@Documented\n" +
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
+        ParseResult<CompilationUnit> parseResult = javaParser.parse(COMPILATION_UNIT, provider("@Documented\n" +
                 "@Repeatable\n" +
                 "package com.github.javaparser;\n" +
                 "\n" +
@@ -338,8 +343,11 @@ public class PrettyPrinterTest {
                 "@Documented\n" +
                 "@Repeatable\n" +
                 "module foo.bar {\n" +
-                "}\n");
-
+                "}\n"));
+        if (!parseResult.isSuccessful()) {
+            throw new ParseProblemException(parseResult.getProblems());
+        }
+        CompilationUnit cu = parseResult.getResult().orElseThrow(AssertionError::new);
         String printed = new PrettyPrinter().print(cu);
 
         assertEqualsNoEol("@Documented\n" +
