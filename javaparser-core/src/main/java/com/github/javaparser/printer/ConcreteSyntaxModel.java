@@ -119,7 +119,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceDeclaration.class, sequence(
                 comment(),
-                list(ObservableProperty.ANNOTATIONS, newline(), none(), newline()),
+                memberAnnotations(),
                 modifiers(),
                 conditional(ObservableProperty.INTERFACE, FLAG, token(GeneratedJavaParserConstants.INTERFACE), token(GeneratedJavaParserConstants.CLASS)),
                 space(),
@@ -831,7 +831,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(PackageDeclaration.class, sequence(
                 comment(),
-                list(ObservableProperty.ANNOTATIONS),
+                memberAnnotations(),
                 token(GeneratedJavaParserConstants.PACKAGE),
                 space(),
                 child(ObservableProperty.NAME),
@@ -845,7 +845,7 @@ public class ConcreteSyntaxModel {
         ///
 
         concreteSyntaxModelByClass.put(ModuleDeclaration.class, sequence(
-                annotations(),
+                memberAnnotations(),
                 conditional(ObservableProperty.OPEN, FLAG, sequence(token(GeneratedJavaParserConstants.OPEN), space())),
                 token(GeneratedJavaParserConstants.MODULE),
                 space(),
