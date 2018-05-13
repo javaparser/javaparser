@@ -166,8 +166,8 @@ Given the class:
 class A {
     public void a() {
         try {
-        } catch (IndexOutOfBoundException | IOException e) { 
-        } 
+        } catch (IndexOutOfBoundException | IOException e) {
+        }
     }
 }
 When the class is parsed by the Java parser
@@ -455,7 +455,8 @@ public class Abc<@C A, @C X extends @C String & @C Serializable> {
 
     @C
     public Abc(@C int p, List<@C ? extends Object> aa) {
-        @C int b;
+        @C
+        int b;
     }
 
     @C

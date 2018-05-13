@@ -366,7 +366,8 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
     }
 
     private <Y> void x(Map<? extends X, ? super T> x) {
-        @Deprecated Comparator c = new Comparator() {
+        @Deprecated
+        Comparator c = new Comparator() {
 
             public int compare(Object o1, Object o2) {
                 try {

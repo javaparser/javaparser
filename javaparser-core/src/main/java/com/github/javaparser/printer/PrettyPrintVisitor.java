@@ -220,7 +220,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final PackageDeclaration n, final Void arg) {
         printComment(n.getComment(), arg);
-        printAnnotations(n.getAnnotations(), false, arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
         printer.print("package ");
         n.getName().accept(this, arg);
         printer.println(";");
@@ -347,10 +347,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getScope().get().accept(this, arg);
             printer.print(".");
         }
-        for (AnnotationExpr ae : n.getAnnotations()) {
-            ae.accept(this, arg);
-            printer.print(" ");
-        }
+        printAnnotations(n.getAnnotations(), false, arg);
 
         n.getName().accept(this, arg);
 
@@ -364,10 +361,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final TypeParameter n, final Void arg) {
         printComment(n.getComment(), arg);
-        for (AnnotationExpr ann : n.getAnnotations()) {
-            ann.accept(this, arg);
-            printer.print(" ");
-        }
+        printAnnotations(n.getAnnotations(), false, arg);
         n.getName().accept(this, arg);
         if (!isNullOrEmpty(n.getTypeBound())) {
             printer.print(" extends ");
@@ -834,7 +828,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("(");
         n.getReceiverParameter().ifPresent(rp -> {
             rp.accept(this, arg);
-            printer.print(", ");
+            if (!isNullOrEmpty(n.getParameters())) {
+                printer.print(", ");
+            }
         });
         if (!isNullOrEmpty(n.getParameters())) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
@@ -911,7 +907,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclarationExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        printAnnotations(n.getAnnotations(), false, arg);
+        if (n.getParentNode().map(ExpressionStmt.class::isInstance).orElse(false)) {
+            printMemberAnnotations(n.getAnnotations(), arg);
+        } else {
+            printAnnotations(n.getAnnotations(), false, arg);
+        }
         printModifiers(n.getModifiers());
 
         if (!n.getVariables().isEmpty()) {
@@ -1481,8 +1481,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleDeclaration n, Void arg) {
-        printAnnotations(n.getAnnotations(), false, arg);
-        printer.println();
+        printMemberAnnotations(n.getAnnotations(), arg);
         if (n.isOpen()) {
             printer.print("open ");
         }

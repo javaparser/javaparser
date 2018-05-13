@@ -127,7 +127,9 @@ public class ModuleDeclarationTest {
                         "}");
 
         assertEquals(
-                "@Foo(1) @Foo(2) @Bar " + EOL +
+                "@Foo(1)" + EOL +
+                        "@Foo(2)" + EOL +
+                        "@Bar" + EOL +
                         "module M.N {" + EOL +
                         "    requires A.B;" + EOL +
                         "    requires transitive C.D;" + EOL +
