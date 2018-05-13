@@ -834,7 +834,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("(");
         n.getReceiverParameter().ifPresent(rp -> {
             rp.accept(this, arg);
-            printer.print(", ");
+            if (!isNullOrEmpty(n.getParameters())) {
+                printer.print(", ");
+            }
         });
         if (!isNullOrEmpty(n.getParameters())) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
