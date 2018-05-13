@@ -1,9 +1,6 @@
 package com.github.javaparser.modules;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -28,7 +25,11 @@ public class ModuleDeclarationTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
 
     private CompilationUnit parse(String code) {
-        return javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code)).getResult().get();
+        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code));
+        if(!result.isSuccessful()){
+            System.err.println(result);
+        }
+        return result.getResult().get();
     }
 
     @Test
@@ -206,7 +207,7 @@ public class ModuleDeclarationTest {
                         .addModuleName("other.bar")
                 );
 
-        assertEqualsNoEol("@SuppressWarnings(\"module\") \n" +
+        assertEqualsNoEol("@SuppressWarnings(\"module\")\n" +
                 "module com.laamella.base {\n" +
                 "    requires transitive java.desktop;\n" +
                 "    exports com.laamella.base.entity.channel;\n" +
