@@ -51,6 +51,12 @@ public final class Navigator {
         return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
     }
 
+    /**
+     * Looks among the type declared in the Compilation Unit for one having the specified name.
+     * The name can be qualified with respect to the compilation unit. For example, if the compilation
+     * unit is in package a.b; and it contains two top level classes named C and D, with class E being defined inside D
+     * then the qualifiedName that can be resolved are "C", "D", and "D.E".
+     */
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();
@@ -66,6 +72,11 @@ public final class Navigator {
         return type;
     }
 
+    /**
+     * Looks among the type declared in the TypeDeclaration for one having the specified name.
+     * The name can be qualified with respect to the TypeDeclaration. For example, if the class declarationd defines class D
+     * and class D contains an internal class named E then the qualifiedName that can be resolved are "D", and "D.E".
+     */
     public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
 
