@@ -61,7 +61,6 @@ import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -566,6 +565,13 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setStorage(Path path) {
         this.storage = new Storage(this, path);
         return this;
+    }
+
+    /**
+     * Add a module declaration to this compilation unit.
+     */
+    public ModuleDeclaration addModule(String name) {
+        return new ModuleDeclaration(parseName(name), false);
     }
 
     /**

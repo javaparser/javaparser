@@ -19,6 +19,9 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+/**
+ * An opens directive in module-info.java. <code>opens R.S to T1.U1, T2.U2;</code>
+ */
 public final class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOpensStmt> {
 
     private Name name;

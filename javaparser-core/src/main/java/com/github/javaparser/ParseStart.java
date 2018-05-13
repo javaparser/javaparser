@@ -28,6 +28,8 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.modules.ModuleStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -62,6 +64,8 @@ public interface ParseStart<R> {
     ParseStart<Parameter> PARAMETER = GeneratedJavaParser::ParameterParseStart;
     ParseStart<PackageDeclaration> PACKAGE_DECLARATION = GeneratedJavaParser::PackageDeclarationParseStart;
     ParseStart<TypeDeclaration<?>> TYPE_DECLARATION = GeneratedJavaParser::TypeDeclarationParseStart;
+    ParseStart<ModuleDeclaration> MODULE_DECLARATION = GeneratedJavaParser::ModuleDeclarationParseStart;
+    ParseStart<ModuleStmt> MODULE_DIRECTIVE = GeneratedJavaParser::ModuleDirectiveParseStart;
 
     R parse(GeneratedJavaParser parser) throws ParseException;
 }
