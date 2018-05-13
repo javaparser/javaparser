@@ -184,8 +184,8 @@ public class PrettyPrintVisitorTest {
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
-                "     *   line2 *\n" +
-                "     * line3\n" +
+                "     *    line2 *\n" +
+                "     *  line3\n" +
                 "     */\n" +
                 "    void abc() {\n" +
                 "    }\n" +
@@ -248,6 +248,25 @@ public class PrettyPrintVisitorTest {
                 "    /**\n" +
                 "     * line1\n" +
                 "     * line2\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void javadocAlwaysGetsAnAdditionalSpaceOrNeverGetsIt() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\n" +
+                "line2\n" +
+                "    3");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     * line2\n" +
+                "     *     3\n" +
                 "     */\n" +
                 "    void abc() {\n" +
                 "    }\n" +

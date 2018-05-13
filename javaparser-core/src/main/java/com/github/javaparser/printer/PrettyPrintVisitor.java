@@ -313,6 +313,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             String[] lines = commentContent.split("\\R");
             boolean skippingLeadingEmptyLines = true;
             boolean prependEmptyLine = false;
+            boolean prependSpace = Arrays.stream(lines).anyMatch(line -> !line.isEmpty() && !line.startsWith(" "));
             for (String line : lines) {
                 final String trimmedLine = line.trim();
                 if (trimmedLine.startsWith("*")) {
@@ -329,11 +330,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                         printer.println(" *");
                         prependEmptyLine = false;
                     }
-                    // Always have at least one space between * and the rest.
-                    if (line.startsWith(" ")) {
-                        line = line.substring(1);
+                    printer.print(" *");
+                    if (prependSpace) {
+                        printer.print(" ");
                     }
-                    printer.println(" * " + line);
+                    printer.println(line);
                 }
             }
             printer.println(" */");
