@@ -17,13 +17,14 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.utils.Log;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -35,20 +36,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import static com.github.javaparser.Providers.provider;
-
 /**
+ * Defines a directory containig source code that should be used for solving symbols.
+ * The directory must correspond to the root package of the files within.
+ *
  * @author Federico Tomassetti
  */
 public class JavaParserTypeSolver implements TypeSolver {
 
-    private File srcDir;
+    private final File srcDir;
 
     private TypeSolver parent;
 
-    private Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
-    private Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
-    private Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
 
     public JavaParserTypeSolver(Path srcDir) {
         this(srcDir.toFile());
@@ -87,15 +89,14 @@ public class JavaParserTypeSolver implements TypeSolver {
     private Optional<CompilationUnit> parse(File srcFile) {
         try {
             return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
-                Optional<CompilationUnit> cu;
                 try {
-                    cu = new JavaParser().parse(ParseStart.COMPILATION_UNIT, provider(srcFile)).getResult();
+                    return Optional.of(JavaParser.parse(srcFile));
                 } catch (FileNotFoundException e) {
-                    cu = Optional.empty();
-                } catch (RuntimeException e) {
+                    Log.trace("File not found while type solving: " + srcFile.getAbsolutePath());
+                    return Optional.empty();
+                } catch (ParseProblemException e) {
                     throw new RuntimeException("Issue while parsing " + srcFile.getAbsolutePath(), e);
                 }
-                return cu;
             });
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
