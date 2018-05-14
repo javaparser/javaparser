@@ -16,14 +16,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.utils.Log;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.Providers.provider;
 
 /**
@@ -106,9 +106,6 @@ public class JavaParserTypeSolver implements TypeSolver {
                             .map(cu -> cu.setStorage(srcFile.toPath()));
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("Issue while parsing while type solving: " + srcFile.getAbsolutePath(), e);
-                } catch (ParseProblemException e) {
-                    Log.trace("Issue while parsing while type solving: " + srcFile.getAbsolutePath(), e);
-                    return Optional.of((CompilationUnit) e.getResult().getResult().get());
                 }
             });
         } catch (ExecutionException e) {

@@ -35,16 +35,14 @@ public class ParseProblemException extends RuntimeException {
      * The problems that were encountered during parsing
      */
     private final List<Problem> problems;
-    private final ParseResult<?> result;
 
-    public ParseProblemException(ParseResult<?> result) {
-        super(createMessage(assertNotNull(result.getProblems())));
-        this.problems = result.getProblems();
-        this.result = result;
+    public ParseProblemException(List<Problem> problems) {
+        super(createMessage(assertNotNull(problems)));
+        this.problems = problems;
     }
 
     public ParseProblemException(Throwable throwable) {
-        this(new ParseResult<>(null, singletonList(new Problem(throwable.getMessage(), null, throwable)), null, null));
+        this(singletonList(new Problem(throwable.getMessage(), null, throwable)));
     }
 
     private static String createMessage(List<Problem> problems) {
@@ -57,9 +55,5 @@ public class ParseProblemException extends RuntimeException {
 
     public List<Problem> getProblems() {
         return problems;
-    }
-
-    public ParseResult<?> getResult() {
-        return result;
     }
 }

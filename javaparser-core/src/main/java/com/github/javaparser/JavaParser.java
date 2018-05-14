@@ -329,7 +329,7 @@ public final class JavaParser {
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
-        throw new ParseProblemException(result);
+        throw new ParseProblemException(result.getProblems());
     }
 
     /**
