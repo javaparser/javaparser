@@ -29,7 +29,9 @@ import com.google.common.cache.CacheBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,29 +49,41 @@ import static com.github.javaparser.Providers.provider;
  */
 public class JavaParserTypeSolver implements TypeSolver {
 
-    private final File srcDir;
+    private final Path srcDir;
     private final JavaParser javaParser;
 
     private TypeSolver parent;
 
-    private final Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
-    private final Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<Path, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<Path, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
     private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
 
-    public JavaParserTypeSolver(Path srcDir) {
-        this(srcDir.toFile());
+    public JavaParserTypeSolver(File srcDir) {
+        this(srcDir.toPath());
     }
 
     public JavaParserTypeSolver(String srcDir) {
         this(new File(srcDir));
     }
 
-    public JavaParserTypeSolver(File srcDir) {
-        if (!srcDir.exists() || !srcDir.isDirectory()) {
-            throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
+    public JavaParserTypeSolver(File srcDir, ParserConfiguration parserConfiguration) {
+        this(srcDir.toPath(), parserConfiguration);
+    }
+
+    public JavaParserTypeSolver(String srcDir, ParserConfiguration parserConfiguration) {
+        this(new File(srcDir), parserConfiguration);
+    }
+
+    public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration) {
+        if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
+            throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir);
         }
         this.srcDir = srcDir;
-        javaParser = new JavaParser(
+        javaParser = new JavaParser(parserConfiguration);
+    }
+
+    public JavaParserTypeSolver(Path srcDir) {
+        this(srcDir,
                 new ParserConfiguration()
                         .setLanguageLevel(BLEEDING_EDGE)
                         .setAttributeComments(false)
@@ -94,18 +108,18 @@ public class JavaParserTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    private Optional<CompilationUnit> parse(File srcFile) {
+    private Optional<CompilationUnit> parse(Path srcFile) {
         try {
-            return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
+            return parsedFiles.get(srcFile.toAbsolutePath(), () -> {
                 try {
-                    if (!srcFile.exists()) {
+                    if (!Files.exists(srcFile)) {
                         return Optional.empty();
                     }
                     return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
                             .getResult()
-                            .map(cu -> cu.setStorage(srcFile.toPath()));
+                            .map(cu -> cu.setStorage(srcFile));
                 } catch (FileNotFoundException e) {
-                    throw new RuntimeException("Issue while parsing while type solving: " + srcFile.getAbsolutePath(), e);
+                    throw new RuntimeException("Issue while parsing while type solving: " + srcFile.toAbsolutePath(), e);
                 }
             });
         } catch (ExecutionException e) {
@@ -113,23 +127,24 @@ public class JavaParserTypeSolver implements TypeSolver {
         }
     }
 
-    private List<CompilationUnit> parseDirectory(File srcDirectory) {
+    private List<CompilationUnit> parseDirectory(Path srcDirectory) {
         try {
-            return parsedDirectories.get(srcDirectory.getAbsolutePath(), () -> {
+            return parsedDirectories.get(srcDirectory.toAbsolutePath(), () -> {
                 List<CompilationUnit> units = new ArrayList<>();
-                File[] files = srcDirectory.listFiles();
-                if (files != null) {
-                    for (File file : files) {
-                        if (file.getName().toLowerCase().endsWith(".java")) {
-                            parse(file).ifPresent(units::add);
-                        }
-                    }
+                if(Files.exists(srcDirectory)) {
+                    Files.newDirectoryStream(srcDirectory)
+                            .forEach(file -> {
+                                if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
+                                    parse(file).ifPresent(units::add);
+                                }
+                            });
                 }
                 return units;
             });
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -153,7 +168,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         String[] nameElements = name.split("\\.");
 
         for (int i = nameElements.length; i > 0; i--) {
-            StringBuilder filePath = new StringBuilder(srcDir.getAbsolutePath());
+            StringBuilder filePath = new StringBuilder(srcDir.toAbsolutePath().toString());
             for (int j = 0; j < i; j++) {
                 filePath.append("/")
                         .append(nameElements[j]);
@@ -168,7 +183,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                 typeName.append(nameElements[j]);
             }
 
-            File srcFile = new File(filePath.toString());
+            Path srcFile = Paths.get(filePath.toString());
             {
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
@@ -180,7 +195,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
 
             {
-                List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParentFile());
+                List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
