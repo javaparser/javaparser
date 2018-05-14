@@ -568,10 +568,14 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Add a module declaration to this compilation unit.
+     * Create (or overwrite) a module declaration in this compilation unit with name "name".
+     *
+     * @return the module
      */
-    public ModuleDeclaration addModule(String name) {
-        return new ModuleDeclaration(parseName(name), false);
+    public ModuleDeclaration setModule(String name) {
+        final ModuleDeclaration module = new ModuleDeclaration(parseName(name), false);
+        setModule(module);
+        return module;
     }
 
     /**
