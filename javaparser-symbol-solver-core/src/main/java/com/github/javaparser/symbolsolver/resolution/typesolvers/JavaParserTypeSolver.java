@@ -16,8 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -36,6 +35,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.Providers.provider;
+
 /**
  * Defines a directory containig source code that should be used for solving symbols.
  * The directory must correspond to the root package of the files within.
@@ -45,6 +48,7 @@ import java.util.concurrent.ExecutionException;
 public class JavaParserTypeSolver implements TypeSolver {
 
     private final File srcDir;
+    private final JavaParser javaParser;
 
     private TypeSolver parent;
 
@@ -65,6 +69,11 @@ public class JavaParserTypeSolver implements TypeSolver {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
         }
         this.srcDir = srcDir;
+        javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLanguageLevel(BLEEDING_EDGE)
+                        .setAttributeComments(false)
+                        .setStoreTokens(false));
     }
 
     @Override
@@ -85,17 +94,21 @@ public class JavaParserTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-
     private Optional<CompilationUnit> parse(File srcFile) {
         try {
             return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
                 try {
-                    return Optional.of(JavaParser.parse(srcFile));
+                    if (!srcFile.exists()) {
+                        return Optional.empty();
+                    }
+                    return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
+                            .getResult()
+                            .map(cu -> cu.setStorage(srcFile.toPath()));
                 } catch (FileNotFoundException e) {
-                    Log.trace("File not found while type solving: " + srcFile.getAbsolutePath());
-                    return Optional.empty();
+                    throw new RuntimeException("Issue while parsing while type solving: " + srcFile.getAbsolutePath(), e);
                 } catch (ParseProblemException e) {
-                    throw new RuntimeException("Issue while parsing " + srcFile.getAbsolutePath(), e);
+                    Log.trace("Issue while parsing while type solving: " + srcFile.getAbsolutePath(), e);
+                    return Optional.of((CompilationUnit) e.getResult().getResult().get());
                 }
             });
         } catch (ExecutionException e) {
@@ -143,25 +156,26 @@ public class JavaParserTypeSolver implements TypeSolver {
         String[] nameElements = name.split("\\.");
 
         for (int i = nameElements.length; i > 0; i--) {
-            String filePath = srcDir.getAbsolutePath();
+            StringBuilder filePath = new StringBuilder(srcDir.getAbsolutePath());
             for (int j = 0; j < i; j++) {
-                filePath += "/" + nameElements[j];
+                filePath.append("/")
+                        .append(nameElements[j]);
             }
-            filePath += ".java";
+            filePath.append(".java");
 
-            String typeName = "";
+            StringBuilder typeName = new StringBuilder();
             for (int j = i - 1; j < nameElements.length; j++) {
                 if (j != i - 1) {
-                    typeName += ".";
+                    typeName.append(".");
                 }
-                typeName += nameElements[j];
+                typeName.append(nameElements[j]);
             }
 
-            File srcFile = new File(filePath);
+            File srcFile = new File(filePath.toString());
             {
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit.get(), typeName);
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit.get(), typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
                         return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
@@ -171,7 +185,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             {
                 List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParentFile());
                 for (CompilationUnit compilationUnit : compilationUnits) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName);
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
                         return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }

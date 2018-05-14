@@ -253,7 +253,7 @@ public class SourceRoot {
             if (result.isSuccessful()) {
                 return result.getResult().get();
             }
-            throw new ParseProblemException(result.getProblems());
+            throw new ParseProblemException(result);
         } catch (IOException e) {
             throw new ParseProblemException(e);
         }
