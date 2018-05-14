@@ -2824,3 +2824,13 @@ ModuleDeclaration ModuleDeclarationParseStart():
 ModuleStmt ModuleDirectiveParseStart():
 { ModuleStmt ret; }
 { ret = ModuleStmt() <EOF> { return ret; } }
+
+TypeParameter TypeParameterParseStart():
+{
+	TypeParameter ret;
+	NodeList<AnnotationExpr> annotations;
+}
+{
+   annotations = Annotations() ret = TypeParameter(annotations) <EOF>
+   { return ret; }
+}

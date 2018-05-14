@@ -36,6 +36,7 @@ import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
@@ -523,7 +524,7 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a package declaration and returns it as a PackageDeclaration.
+     * Parses a type declaration and returns it as a TypeDeclaration.
      *
      * @param typeDeclaration a declaration like "class X {}"
      * @return the AST for the type declaration
@@ -556,4 +557,17 @@ public final class JavaParser {
     public static ModuleStmt parseModuleDirective(String moduleDirective) {
         return simplifiedParse(MODULE_DIRECTIVE, provider(moduleDirective));
     }
+
+
+    /**
+     * Parses a type parameter and returns it as a TypeParameter
+     *
+     * @param typeParameter a parameter like "T extends Serializable"
+     * @return the AST for the type parameter
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static TypeParameter parseTypeParameter(String typeParameter) {
+        return simplifiedParse(TYPE_PARAMETER, provider(typeParameter));
+    }
+
 }

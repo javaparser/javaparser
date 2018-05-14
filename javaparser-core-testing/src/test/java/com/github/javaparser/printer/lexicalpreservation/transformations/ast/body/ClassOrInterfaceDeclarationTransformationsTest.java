@@ -50,7 +50,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // Name
 
     @Test
-    public void settingName() throws IOException {
+    public void settingName() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.setName("B");
         assertTransformedToString("class B {}", cid);
@@ -59,14 +59,14 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // isInterface
 
     @Test
-    public void classToInterface() throws IOException {
+    public void classToInterface() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.setInterface(true);
         assertTransformedToString("interface A {}", cid);
     }
 
     @Test
-    public void interfaceToClass() throws IOException {
+    public void interfaceToClass() {
         ClassOrInterfaceDeclaration cid = consider("interface A {}");
         cid.setInterface(false);
         assertTransformedToString("class A {}", cid);
@@ -75,44 +75,44 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // typeParameters
 
     @Test
-    public void addingTypeParameterWhenThereAreNone() throws IOException {
+    public void addingTypeParameterWhenThereAreNone() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
-        cid.addTypeParameter(new TypeParameter("T", new NodeList<>()));
+        cid.addTypeParameter("T");
         assertTransformedToString("class A<T> {}", cid);
     }
 
     @Test
-    public void addingTypeParameterAsFirstWhenThereAreSome() throws IOException {
+    public void addingTypeParameterAsFirstWhenThereAreSome() {
         ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
         cid.getTypeParameters().addFirst(new TypeParameter("T", new NodeList<>()));
         assertTransformedToString("class A<T, U> {}", cid);
     }
 
     @Test
-    public void addingTypeParameterAsLastWhenThereAreSome() throws IOException {
+    public void addingTypeParameterAsLastWhenThereAreSome() {
         ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
-        cid.addTypeParameter(new TypeParameter("T", new NodeList<>()));
+        cid.addTypeParameter("T");
         assertTransformedToString("class A<U, T> {}", cid);
     }
 
     // extendedTypes
 
     @Test
-    public void addingExtendedTypes() throws IOException {
+    public void addingExtendedTypes() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addExtendedType("Foo");
         assertTransformedToString("class A extends Foo {}", cid);
     }
 
     @Test
-    public void removingExtendedTypes() throws IOException {
+    public void removingExtendedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
         cid.getExtendedTypes().remove(0);
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
-    public void replacingExtendedTypes() throws IOException {
+    public void replacingExtendedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
         cid.getExtendedTypes().set(0, parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A extends Bar {}", cid);
@@ -121,21 +121,21 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // implementedTypes
 
     @Test
-    public void addingImplementedTypes() throws IOException {
+    public void addingImplementedTypes() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addImplementedType("Foo");
         assertTransformedToString("class A implements Foo {}", cid);
     }
 
     @Test
-    public void removingImplementedTypes() throws IOException {
+    public void removingImplementedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
         cid.getImplementedTypes().remove(0);
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
-    public void replacingImplementedTypes() throws IOException {
+    public void replacingImplementedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
         cid.getImplementedTypes().set(0, parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A implements Bar {}", cid);
@@ -144,21 +144,21 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // Modifiers
 
     @Test
-    public void addingModifiers() throws IOException {
+    public void addingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
-    public void removingModifiers() throws IOException {
+    public void removingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("public class A {}");
         cid.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("class A {}", cid);
     }
 
     @Test
-    public void replacingModifiers() throws IOException {
+    public void replacingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("public class A {}");
         cid.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected class A {}", cid);
@@ -167,21 +167,21 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     // members
 
     @Test
-    public void addingField() throws IOException {
+    public void addingField() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addField("int", "foo");
         assertTransformedToString("class A {" + EOL + "    int foo;" + EOL + "}", cid);
     }
 
     @Test
-    public void removingField() throws IOException {
+    public void removingField() {
         ClassOrInterfaceDeclaration cid = consider("public class A { int foo; }");
         cid.getMembers().remove(0);
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
-    public void replacingFieldWithAnotherField() throws IOException {
+    public void replacingFieldWithAnotherField() {
         ClassOrInterfaceDeclaration cid = consider("public class A {float f;}");
         cid.getMembers().set(0, new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "bar")));
         assertTransformedToString("public class A {int bar;}", cid);
