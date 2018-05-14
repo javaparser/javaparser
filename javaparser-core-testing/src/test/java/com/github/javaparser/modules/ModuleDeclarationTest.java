@@ -188,7 +188,7 @@ public class ModuleDeclarationTest {
     @Test
     public void fluentInterface() {
         ModuleDeclaration moduleDeclaration = new CompilationUnit()
-                .addModule("com.laamella.base")
+                .setModule("com.laamella.base")
                 .addSingleMemberAnnotation(SuppressWarnings.class, "\"module\"")
                 .addDirective("requires transitive java.desktop;")
                 .addDirective("exports com.laamella.base.entity.channel;")
