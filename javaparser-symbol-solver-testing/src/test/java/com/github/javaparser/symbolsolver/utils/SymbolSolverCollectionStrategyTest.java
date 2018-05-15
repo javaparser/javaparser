@@ -19,6 +19,7 @@ public class SymbolSolverCollectionStrategyTest {
 
     @Test
     public void resolveExpressions() throws IOException {
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         Optional<SourceRoot> sourceRoot = projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java"));
         assertTrue(sourceRoot.isPresent());
         int unresolved = 0;
