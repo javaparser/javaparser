@@ -714,7 +714,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getScope().ifPresent(scope -> {
             scope.accept(this, arg);
-            if (configuration.isColumnAlignFirstMethodChain()) {
+            // pick the kind of expressions where vertically aligning method calls is okay.
+            boolean mayAlignColumns = n.findParent(Statement.class)
+                    .map(p -> p.isReturnStmt() || p.isExpressionStmt())
+                    .orElse(false);
+            if (mayAlignColumns && configuration.isColumnAlignFirstMethodChain()) {
                 if (!(scope instanceof MethodCallExpr) || !((MethodCallExpr) scope).getScope().isPresent()) {
                     printer.reindentWithAlignToCursor();
                 } else {
