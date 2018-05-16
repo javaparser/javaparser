@@ -85,8 +85,7 @@ public class JavaParserTypeSolver implements TypeSolver {
     public JavaParserTypeSolver(Path srcDir) {
         this(srcDir,
                 new ParserConfiguration()
-                        .setLanguageLevel(BLEEDING_EDGE)
-                        .setAttributeComments(false));
+                        .setLanguageLevel(BLEEDING_EDGE));
     }
 
     @Override
