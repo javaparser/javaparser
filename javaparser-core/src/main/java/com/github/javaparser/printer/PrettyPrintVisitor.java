@@ -715,10 +715,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getScope().ifPresent(scope -> {
             scope.accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
-                if (!(scope instanceof MethodCallExpr) || !((MethodCallExpr) scope).getScope().isPresent()) {
-                    printer.reindentWithAlignToCursor();
-                } else {
-                    printer.println();
+                // pick the kind of expressions where vertically aligning method calls is okay.
+                if (n.findParent(Statement.class).map(p -> p.isReturnStmt()
+                        || p.isThrowStmt()
+                        || p.isAssertStmt()
+                        || p.isExpressionStmt()).orElse(false)) {
+                    if (scope instanceof MethodCallExpr && ((MethodCallExpr) scope).getScope().isPresent()) {
+                        /* We're a method call on the result of a method call that is not stand alone, like:
+                           we're x() in a.b().x(), or in a=b().c[15].d.e().x().
+                           That means that the "else" has been executed by one of the methods in the scope chain, so that the alignment
+                           is set to the "." of that method.
+                           That means we will align to that "." when we start a new line: */
+                        printer.println();
+                    } else {
+                        /* We're the first method call on the result of a method call in the chain, like:
+                           we're x() in a().x(). That means we get to dictate the indent of following method
+                           calls in this chain by setting the cursor to where we are now: just before the "."
+                           that start this method call. */
+                        printer.reindentWithAlignToCursor();
+                    }
                 }
             }
             printer.print(".");

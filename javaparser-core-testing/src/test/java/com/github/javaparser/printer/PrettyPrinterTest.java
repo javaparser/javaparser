@@ -29,6 +29,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
@@ -230,6 +231,45 @@ public class PrettyPrinterTest {
                 "             .bam();\n" +
                 "    }\n" +
                 "}\n", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInIf() {
+        Statement cu = JavaParser.parseStatement("if (x.y().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("if (x.y().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInFor() {
+        Statement cu = JavaParser.parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("for (int x = 1; x.y().z(); x.z().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInWhile() {
+        Statement cu = JavaParser.parseStatement("while(x.y().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("while (x.y().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
     }
 
     @Test
