@@ -275,17 +275,17 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
                 0,
                 assignStatement);
         int index = 0;
-        assertEquals(Difference.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), diff.getElements().get(index++));
-        assertEquals(Difference.DifferenceElement.kept(CsmElement.newline()), diff.getElements().get(index++));
-        assertEquals(Difference.DifferenceElement.added(CsmElement.indent()), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.newline()), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.indent()), diff.getElements().get(index++));
         assertTrue(isAddedChild(diff.getElements().get(index++), ExpressionStmt.class));
-        assertEquals(Difference.DifferenceElement.added(CsmElement.newline()), diff.getElements().get(index++));
-        assertEquals(Difference.DifferenceElement.added(CsmElement.unindent()), diff.getElements().get(index++));
-        assertEquals(Difference.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.newline()), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.unindent()), diff.getElements().get(index++));
+        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), diff.getElements().get(index++));
         assertEquals(index, diff.getElements().size());
     }
 
-    private boolean isAddedChild(Difference.DifferenceElement element, Class<? extends Node> childClass) {
+    private boolean isAddedChild(DifferenceElementCalculator.DifferenceElement element, Class<? extends Node> childClass) {
         return element.isAdded() && isChild(element.getElement(), childClass);
     }
 
