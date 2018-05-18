@@ -52,7 +52,7 @@ public class Difference {
     private static class Added implements DifferenceElement {
         final CsmElement element;
 
-        public Added(CsmElement element) {
+        Added(CsmElement element) {
             this.element = element;
         }
 
@@ -86,11 +86,11 @@ public class Difference {
             return true;
         }
 
-        public boolean isIndent() { return element instanceof CsmIndent; }
+        boolean isIndent() { return element instanceof CsmIndent; }
 
-        public boolean isUnindent() { return element instanceof CsmUnindent; }
+        boolean isUnindent() { return element instanceof CsmUnindent; }
 
-        public TextElement toTextElement() {
+        TextElement toTextElement() {
             if (element instanceof CsmChild) {
                 return new ChildTextElement(((CsmChild) element).getChild());
             } else if (element instanceof CsmToken) {
@@ -109,7 +109,7 @@ public class Difference {
         final CsmMix previousOrder;
         final CsmMix element;
 
-        public Reshuffled(CsmMix previousOrder, CsmMix element) {
+        Reshuffled(CsmMix previousOrder, CsmMix element) {
             this.previousOrder = previousOrder;
             this.element = element;
         }
@@ -151,7 +151,7 @@ public class Difference {
     private static class Kept implements DifferenceElement {
         final CsmElement element;
 
-        public Kept(CsmElement element) {
+        Kept(CsmElement element) {
             this.element = element;
         }
 
@@ -180,7 +180,7 @@ public class Difference {
             return element;
         }
 
-        public int getTokenType() {
+        int getTokenType() {
             if (isToken()) {
                 CsmToken csmToken = (CsmToken) element;
                 return csmToken.getTokenType();
@@ -194,15 +194,15 @@ public class Difference {
             return false;
         }
 
-        public boolean isIndent() { return element instanceof CsmIndent; }
+        boolean isIndent() { return element instanceof CsmIndent; }
 
-        public boolean isUnindent() { return element instanceof CsmUnindent; }
+        boolean isUnindent() { return element instanceof CsmUnindent; }
 
-        public boolean isToken() { return element instanceof CsmToken; }
+        boolean isToken() { return element instanceof CsmToken; }
 
-        public boolean isChild() { return element instanceof CsmChild; }
+        boolean isChild() { return element instanceof CsmChild; }
 
-        public boolean isPrimitiveType() {
+        boolean isPrimitiveType() {
             if (isChild()) {
                 CsmChild csmChild = (CsmChild) element;
                 return csmChild.getChild() instanceof PrimitiveType;
@@ -211,7 +211,7 @@ public class Difference {
             return false;
         }
 
-        public boolean isWhiteSpace() {
+        boolean isWhiteSpace() {
             if(isToken()) {
                 CsmToken csmToken = (CsmToken) element;
                 return csmToken.isWhiteSpace();
@@ -220,7 +220,7 @@ public class Difference {
             return false;
         }
 
-        public boolean isWhiteSpaceOrComment() {
+        boolean isWhiteSpaceOrComment() {
             if (isToken()) {
                 CsmToken csmToken = (CsmToken) element;
                 return TokenTypes.isWhitespaceOrComment(csmToken.getTokenType());
@@ -233,7 +233,7 @@ public class Difference {
     private static class Removed implements DifferenceElement {
         final CsmElement element;
 
-        public Removed(CsmElement element) {
+        Removed(CsmElement element) {
             this.element = element;
         }
 
@@ -262,7 +262,7 @@ public class Difference {
             return element;
         }
 
-        public Node getChild() {
+        Node getChild() {
             if (isChild()) {
                 CsmChild csmChild = (CsmChild) element;
                 return csmChild.getChild();
@@ -271,7 +271,7 @@ public class Difference {
             throw new IllegalStateException("Removed is not a " + CsmChild.class.getSimpleName());
         }
 
-        public int getTokenType() {
+        int getTokenType() {
             if (isToken()) {
                 CsmToken csmToken = (CsmToken) element;
                 return csmToken.getTokenType();
@@ -285,11 +285,11 @@ public class Difference {
             return false;
         }
 
-        public boolean isToken() { return element instanceof CsmToken; }
+        boolean isToken() { return element instanceof CsmToken; }
 
-        public boolean isChild() { return element instanceof CsmChild; }
+        boolean isChild() { return element instanceof CsmChild; }
 
-        public boolean isPrimitiveType() {
+        boolean isPrimitiveType() {
             if (isChild()) {
                 CsmChild csmChild = (CsmChild) element;
                 return csmChild.getChild() instanceof PrimitiveType;
@@ -298,7 +298,7 @@ public class Difference {
             return false;
         }
 
-        public boolean isWhiteSpace() {
+        boolean isWhiteSpace() {
             if(isToken()) {
                 CsmToken csmToken = (CsmToken) element;
                 return csmToken.isWhiteSpace();
@@ -909,7 +909,7 @@ public class Difference {
             CsmElement csmElement = csmElementListIterator.next();
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
 
-            Map<MatchClassification, Integer> potentialMatches = new EnumMap(MatchClassification.class);
+            Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
             for (int i = startIndex; i<nodeText.getElements().size(); i++){
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
@@ -946,8 +946,7 @@ public class Difference {
 
             // Prioritize the matches from best to worst
             Optional<MatchClassification> bestMatchKey = potentialMatches.keySet().stream()
-                    .sorted(Comparator.comparing(MatchClassification::getPriority))
-                    .findFirst();
+                    .min(Comparator.comparing(MatchClassification::getPriority));
 
             if (bestMatchKey.isPresent()) {
                 correspondingIndices.add(potentialMatches.get(bestMatchKey.get()));
@@ -977,17 +976,13 @@ public class Difference {
             CsmToken csmToken = (CsmToken)csmElement;
             if (textElement instanceof TokenTextElement) {
                 TokenTextElement tokenTextElement = (TokenTextElement)textElement;
-                if (tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node))) {
-                    return  true;
-                }
+                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node));
             }
         } else if (csmElement instanceof CsmChild) {
             CsmChild csmChild = (CsmChild)csmElement;
             if (textElement instanceof ChildTextElement) {
                 ChildTextElement childTextElement = (ChildTextElement)textElement;
-                if (childTextElement.getChild() == csmChild.getChild()) {
-                    return true;
-                }
+                return childTextElement.getChild() == csmChild.getChild();
             }
         } else {
             throw new UnsupportedOperationException();
@@ -1042,7 +1037,7 @@ public class Difference {
         return "Difference{" + elements + '}';
     }
 
-    public List<DifferenceElement> getElements() {
+    List<DifferenceElement> getElements() {
         return elements;
     }
 
