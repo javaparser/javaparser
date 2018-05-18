@@ -538,13 +538,13 @@ public class Difference {
         boolean addedIndentation = false;
         List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
 
-        List<TextElement> givenElements = nodeText.getElements();
-        int givenIndex = 0;
+        List<TextElement> originalElements = nodeText.getElements();
+        int originalIndex = 0;
 
         List<DifferenceElement> diffElements = this.elements;
         int diffIndex = 0;
         do {
-            if (diffIndex < diffElements.size() && givenIndex >= givenElements.size()) {
+            if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
                 DifferenceElement diffElement = diffElements.get(diffIndex);
                 if (diffElement instanceof Kept) {
                     Kept kept = (Kept) diffElement;
@@ -558,19 +558,19 @@ public class Difference {
                 } else if (diffElement instanceof Added) {
                     Added addedElement = (Added) diffElement;
 
-                    nodeText.addElement(givenIndex, addedElement.toTextElement());
-                    givenIndex++;
+                    nodeText.addElement(originalIndex, addedElement.toTextElement());
+                    originalIndex++;
                     diffIndex++;
                 } else {
                     throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
                 }
-            } else if (diffIndex >= diffElements.size() && givenIndex < givenElements.size()) {
-                TextElement givenElement = givenElements.get(givenIndex);
-                if (givenElement.isWhiteSpaceOrComment()) {
-                    givenIndex++;
+            } else if (diffIndex >= diffElements.size() && originalIndex < originalElements.size()) {
+                TextElement originalElement = originalElements.get(originalIndex);
+                if (originalElement.isWhiteSpaceOrComment()) {
+                    originalIndex++;
                 } else {
                     throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
-                            + this + " " + givenElement);
+                            + this + " " + originalElement);
                 }
             } else {
                 DifferenceElement diffElement = diffElements.get(diffIndex);
@@ -596,21 +596,21 @@ public class Difference {
                     }
                     TextElement textElement = addedElement.toTextElement();
                     boolean used = false;
-                    if (givenIndex > 0 && givenElements.get(givenIndex - 1).isNewline()) {
-                        for (TextElement e : processIndentation(indentation, givenElements.subList(0, givenIndex - 1))) {
-                            nodeText.addElement(givenIndex++, e);
+                    if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
+                        for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
+                            nodeText.addElement(originalIndex++, e);
                         }
-                    } else if (isAfterLBrace(nodeText, givenIndex) && !isAReplacement(diffIndex)) {
+                    } else if (isAfterLBrace(nodeText, originalIndex) && !isAReplacement(diffIndex)) {
                         if (textElement.isNewline()) {
                             used = true;
                         }
-                        nodeText.addElement(givenIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
+                        nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
                         // This remove the space in "{ }" when adding a new line
-                        while (givenElements.get(givenIndex).isSpaceOrTab()) {
-                            givenElements.remove(givenIndex);
+                        while (originalElements.get(originalIndex).isSpaceOrTab()) {
+                            originalElements.remove(originalIndex);
                         }
-                        for (TextElement e : processIndentation(indentation, givenElements.subList(0, givenIndex - 1))) {
-                            nodeText.addElement(givenIndex++, e);
+                        for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
+                            nodeText.addElement(originalIndex++, e);
                         }
                         // Indentation is painful...
                         // Sometimes we want to force indentation: this is the case when indentation was expected but
@@ -619,54 +619,54 @@ public class Difference {
                         // inserted by us in this transformation we do not want to insert it again
                         if (!addedIndentation) {
                             for (TextElement e : indentationBlock()) {
-                                nodeText.addElement(givenIndex++, e);
+                                nodeText.addElement(originalIndex++, e);
                             }
                         }
                     }
                     if (!used) {
-                        nodeText.addElement(givenIndex, textElement);
-                        givenIndex++;
+                        nodeText.addElement(originalIndex, textElement);
+                        originalIndex++;
                     }
                     if (textElement.isNewline()) {
                         boolean followedByUnindent = (diffIndex + 1) < diffElements.size()
                                 && diffElements.get(diffIndex + 1).isAdded()
                                 && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
-                        givenIndex = adjustIndentation(indentation, nodeText, givenIndex, followedByUnindent/* && !addedIndentation*/);
+                        originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent/* && !addedIndentation*/);
                     }
                     diffIndex++;
                 } else {
-                    TextElement givenElement = givenElements.get(givenIndex);
-                    boolean givenElementIsChild = givenElement instanceof ChildTextElement;
-                    boolean givenElementIsToken = givenElement instanceof TokenTextElement;
+                    TextElement originalElement = originalElements.get(originalIndex);
+                    boolean originalElementIsChild = originalElement instanceof ChildTextElement;
+                    boolean originalElementIsToken = originalElement instanceof TokenTextElement;
 
                     if (diffElement instanceof Kept) {
                         Kept kept = (Kept)diffElement;
-                        if (givenElement.isComment()) {
-                            givenIndex++;
-                        } else if (kept.isChild() && givenElementIsChild) {
+                        if (originalElement.isComment()) {
+                            originalIndex++;
+                        } else if (kept.isChild() && originalElementIsChild) {
                             diffIndex++;
-                            givenIndex++;
-                        } else if (kept.isChild() && givenElementIsToken) {
-                            if (givenElement.isWhiteSpaceOrComment()) {
-                                givenIndex++;
+                            originalIndex++;
+                        } else if (kept.isChild() && originalElementIsToken) {
+                            if (originalElement.isWhiteSpaceOrComment()) {
+                                originalIndex++;
                             } else {
                                 if (kept.isPrimitiveType()) {
-                                    givenIndex++;
+                                    originalIndex++;
                                     diffIndex++;
                                 } else {
-                                    throw new UnsupportedOperationException("kept " + kept.element + " vs " + givenElement);
+                                    throw new UnsupportedOperationException("kept " + kept.element + " vs " + originalElement);
                                 }
                             }
-                        } else if (kept.isToken() && givenElementIsToken) {
+                        } else if (kept.isToken() && originalElementIsToken) {
                             CsmToken csmToken = (CsmToken) kept.element;
-                            TokenTextElement nodeTextToken = (TokenTextElement) givenElement;
+                            TokenTextElement nodeTextToken = (TokenTextElement) originalElement;
                             if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
-                                givenIndex++;
+                                originalIndex++;
                                 diffIndex++;
                             } else if (kept.isWhiteSpaceOrComment()) {
                                 diffIndex++;
                             } else if (nodeTextToken.isWhiteSpaceOrComment()) {
-                                givenIndex++;
+                                originalIndex++;
                             } else {
                                 throw new UnsupportedOperationException("Csm token " + csmToken + " NodeText TOKEN " + nodeTextToken);
                             }
@@ -678,66 +678,66 @@ public class Difference {
                         } else if (kept.isUnindent()) {
                             // Nothing to do, beside considering indentation
                             diffIndex++;
-                            for (int i = 0; i < STANDARD_INDENTATION_SIZE && givenIndex >= 1 && nodeText.getTextElement(givenIndex - 1).isSpaceOrTab(); i++) {
-                                nodeText.removeElement(--givenIndex);
+                            for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
+                                nodeText.removeElement(--originalIndex);
                             }
                         } else {
-                            throw new UnsupportedOperationException("kept " + kept.element + " vs " + givenElement);
+                            throw new UnsupportedOperationException("kept " + kept.element + " vs " + originalElement);
                         }
                     } else if (diffElement instanceof Removed) {
                         Removed removed = (Removed)diffElement;
-                        if (removed.isChild() && givenElementIsChild) {
-                            ChildTextElement actualChild = (ChildTextElement)givenElement;
+                        if (removed.isChild() && originalElementIsChild) {
+                            ChildTextElement actualChild = (ChildTextElement)originalElement;
                             if (actualChild.isComment()) {
                                 CsmChild csmChild = (CsmChild)removed.element;
                                 // We expected to remove a proper node but we found a comment in between.
                                 // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
                                 Comment comment = (Comment)actualChild.getChild();
                                 if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(csmChild.getChild())) {
-                                    nodeText.removeElement(givenIndex);
+                                    nodeText.removeElement(originalIndex);
                                 } else {
-                                    givenIndex++;
+                                    originalIndex++;
                                 }
                             } else {
-                                nodeText.removeElement(givenIndex);
-                                if (givenIndex < givenElements.size() && givenElements.get(givenIndex).isNewline()) {
-                                    givenIndex = considerCleaningTheLine(nodeText, givenIndex);
+                                nodeText.removeElement(originalIndex);
+                                if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
+                                    originalIndex = considerCleaningTheLine(nodeText, originalIndex);
                                 } else {
                                     if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
-                                        givenIndex = considerEnforcingIndentation(nodeText, givenIndex);
+                                        originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
                                     }
                                     // If in front we have one space and before also we had space let's drop one space
-                                    if (givenElements.size() > givenIndex && givenIndex > 0) {
-                                        if (givenElements.get(givenIndex).isWhiteSpace()
-                                                && givenElements.get(givenIndex - 1).isWhiteSpace()) {
+                                    if (originalElements.size() > originalIndex && originalIndex > 0) {
+                                        if (originalElements.get(originalIndex).isWhiteSpace()
+                                                && originalElements.get(originalIndex - 1).isWhiteSpace()) {
                                             // However we do not want to do that when we are about to adding or removing elements
                                             if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
-                                                givenElements.remove(givenIndex--);
+                                                originalElements.remove(originalIndex--);
                                             }
                                         }
                                     }
                                 }
                                 diffIndex++;
                             }
-                        } else if (removed.isToken() && givenElementIsToken
-                                && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)givenElement).getTokenKind()) {
-                            nodeText.removeElement(givenIndex);
+                        } else if (removed.isToken() && originalElementIsToken
+                                && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)originalElement).getTokenKind()) {
+                            nodeText.removeElement(originalIndex);
                             diffIndex++;
-                        } else if (givenElementIsToken && givenElement.isWhiteSpaceOrComment()) {
-                            givenIndex++;
+                        } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
+                            originalIndex++;
                         } else if (removed.isPrimitiveType()) {
-                            if (isPrimitiveType(givenElement)) {
-                                nodeText.removeElement(givenIndex);
+                            if (isPrimitiveType(originalElement)) {
+                                nodeText.removeElement(originalIndex);
                                 diffIndex++;
                             } else {
-                                throw new UnsupportedOperationException("removed " + removed.element + " vs " + givenElement);
+                                throw new UnsupportedOperationException("removed " + removed.element + " vs " + originalElement);
                             }
                         } else if (removed.isWhiteSpace()) {
                             diffIndex++;
-                        } else if (givenElement.isWhiteSpace()) {
-                            givenIndex++;
+                        } else if (originalElement.isWhiteSpace()) {
+                            originalIndex++;
                         } else {
-                            throw new UnsupportedOperationException("removed " + removed.element + " vs " + givenElement);
+                            throw new UnsupportedOperationException("removed " + removed.element + " vs " + originalElement);
                         }
                     } else if (diffElement instanceof Reshuffled) {
 
@@ -763,7 +763,7 @@ public class Difference {
                         }
 
                         // We now find out which Node Text elements corresponds to the elements in the original CSM
-                        List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, givenIndex, node);
+                        List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
 
                         Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                         for (int i=0;i<nodeTextIndexOfPreviousElements.size();i++) {
@@ -810,7 +810,7 @@ public class Difference {
                         this.getElements().remove(diffIndex);
                         int diffElIterator = diffIndex;
                         if (lastNodeTextIndex != -1) {
-                            for (int ntIndex = givenIndex; ntIndex<=lastNodeTextIndex; ntIndex++) {
+                            for (int ntIndex = originalIndex; ntIndex<=lastNodeTextIndex; ntIndex++) {
 
                                 if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
                                     int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
@@ -838,11 +838,11 @@ public class Difference {
                             diffElements.add(diffElIterator++, new Added(elementToAdd));
                         }
                     } else {
-                        throw new UnsupportedOperationException("" + diffElement + " vs " + givenElement);
+                        throw new UnsupportedOperationException("" + diffElement + " vs " + originalElement);
                     }
                 }
             }
-        } while (diffIndex < diffElements.size() || givenIndex < givenElements.size());
+        } while (diffIndex < diffElements.size() || originalIndex < originalElements.size());
     }
 
     private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
