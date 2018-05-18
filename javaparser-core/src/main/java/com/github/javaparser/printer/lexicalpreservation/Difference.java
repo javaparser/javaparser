@@ -180,6 +180,15 @@ public class Difference {
             return element;
         }
 
+        public int getTokenType() {
+            if (isToken()) {
+                CsmToken csmToken = (CsmToken) element;
+                return csmToken.getTokenType();
+            }
+
+            throw new IllegalStateException("Kept is not a " + CsmToken.class.getSimpleName());
+        }
+
         @Override
         public boolean isAdded() {
             return false;
@@ -197,6 +206,15 @@ public class Difference {
             if (isChild()) {
                 CsmChild csmChild = (CsmChild) element;
                 return csmChild.getChild() instanceof PrimitiveType;
+            }
+
+            return false;
+        }
+
+        public boolean isWhiteSpace() {
+            if(isToken()) {
+                CsmToken csmToken = (CsmToken) element;
+                return csmToken.isWhiteSpace();
             }
 
             return false;
@@ -242,6 +260,24 @@ public class Difference {
         @Override
         public CsmElement getElement() {
             return element;
+        }
+
+        public Node getChild() {
+            if (isChild()) {
+                CsmChild csmChild = (CsmChild) element;
+                return csmChild.getChild();
+            }
+
+            throw new IllegalStateException("Removed is not a " + CsmChild.class.getSimpleName());
+        }
+
+        public int getTokenType() {
+            if (isToken()) {
+                CsmToken csmToken = (CsmToken) element;
+                return csmToken.getTokenType();
+            }
+
+            throw new IllegalStateException("Removed is not a " + CsmToken.class.getSimpleName());
         }
 
         @Override
@@ -541,7 +577,7 @@ public class Difference {
         List<TextElement> originalElements = nodeText.getElements();
         int originalIndex = 0;
 
-        List<DifferenceElement> diffElements = this.elements;
+        List<DifferenceElement> diffElements = getElements();
         int diffIndex = 0;
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
@@ -566,6 +602,7 @@ public class Difference {
                 }
             } else if (diffIndex >= diffElements.size() && originalIndex < originalElements.size()) {
                 TextElement originalElement = originalElements.get(originalIndex);
+
                 if (originalElement.isWhiteSpaceOrComment()) {
                     originalIndex++;
                 } else {
@@ -594,14 +631,15 @@ public class Difference {
                         diffIndex++;
                         continue;
                     }
-                    TextElement textElement = addedElement.toTextElement();
+
+                    TextElement addedTextElement = addedElement.toTextElement();
                     boolean used = false;
                     if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
                         for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
                             nodeText.addElement(originalIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, originalIndex) && !isAReplacement(diffIndex)) {
-                        if (textElement.isNewline()) {
+                        if (addedTextElement.isNewline()) {
                             used = true;
                         }
                         nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
@@ -623,16 +661,17 @@ public class Difference {
                             }
                         }
                     }
+
                     if (!used) {
-                        nodeText.addElement(originalIndex, textElement);
+                        nodeText.addElement(originalIndex, addedTextElement);
                         originalIndex++;
                     }
-                    if (textElement.isNewline()) {
-                        boolean followedByUnindent = (diffIndex + 1) < diffElements.size()
-                                && diffElements.get(diffIndex + 1).isAdded()
-                                && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+
+                    if (addedTextElement.isNewline()) {
+                        boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
                         originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent/* && !addedIndentation*/);
                     }
+
                     diffIndex++;
                 } else {
                     TextElement originalElement = originalElements.get(originalIndex);
@@ -641,6 +680,7 @@ public class Difference {
 
                     if (diffElement instanceof Kept) {
                         Kept kept = (Kept)diffElement;
+
                         if (originalElement.isComment()) {
                             originalIndex++;
                         } else if (kept.isChild() && originalElementIsChild) {
@@ -658,22 +698,21 @@ public class Difference {
                                 }
                             }
                         } else if (kept.isToken() && originalElementIsToken) {
-                            CsmToken csmToken = (CsmToken) kept.element;
-                            TokenTextElement nodeTextToken = (TokenTextElement) originalElement;
-                            if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
+                            TokenTextElement originalTextToken = (TokenTextElement) originalElement;
+
+                            if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                                 originalIndex++;
                                 diffIndex++;
                             } else if (kept.isWhiteSpaceOrComment()) {
                                 diffIndex++;
-                            } else if (nodeTextToken.isWhiteSpaceOrComment()) {
+                            } else if (originalTextToken.isWhiteSpaceOrComment()) {
                                 originalIndex++;
                             } else {
-                                throw new UnsupportedOperationException("Csm token " + csmToken + " NodeText TOKEN " + nodeTextToken);
+                                throw new UnsupportedOperationException("Csm token " + kept.element + " NodeText TOKEN " + originalTextToken);
                             }
-                        } else if (kept.isToken() && ((CsmToken) kept.element).isWhiteSpace()) {
+                        } else if (kept.isWhiteSpace()) {
                             diffIndex++;
                         } else if (kept.isIndent()) {
-                            // Nothing to do
                             diffIndex++;
                         } else if (kept.isUnindent()) {
                             // Nothing to do, beside considering indentation
@@ -686,14 +725,14 @@ public class Difference {
                         }
                     } else if (diffElement instanceof Removed) {
                         Removed removed = (Removed)diffElement;
+
                         if (removed.isChild() && originalElementIsChild) {
-                            ChildTextElement actualChild = (ChildTextElement)originalElement;
-                            if (actualChild.isComment()) {
-                                CsmChild csmChild = (CsmChild)removed.element;
+                            ChildTextElement originalElementChild = (ChildTextElement)originalElement;
+                            if (originalElementChild.isComment()) {
                                 // We expected to remove a proper node but we found a comment in between.
                                 // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
-                                Comment comment = (Comment)actualChild.getChild();
-                                if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(csmChild.getChild())) {
+                                Comment comment = (Comment)originalElementChild.getChild();
+                                if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
                                     nodeText.removeElement(originalIndex);
                                 } else {
                                     originalIndex++;
@@ -720,7 +759,7 @@ public class Difference {
                                 diffIndex++;
                             }
                         } else if (removed.isToken() && originalElementIsToken
-                                && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)originalElement).getTokenKind()) {
+                                && (removed.getTokenType() == ((TokenTextElement)originalElement).getTokenKind())) {
                             nodeText.removeElement(originalIndex);
                             diffIndex++;
                         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
@@ -740,27 +779,13 @@ public class Difference {
                             throw new UnsupportedOperationException("removed " + removed.element + " vs " + originalElement);
                         }
                     } else if (diffElement instanceof Reshuffled) {
-
                         // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
                         Reshuffled reshuffled = (Reshuffled)diffElement;
                         CsmMix elementsFromPreviousOrder = reshuffled.previousOrder;
                         CsmMix elementsFromNextOrder = reshuffled.element;
 
                         // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
-                        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-
-                        for (int ni=0;ni<elementsFromNextOrder.getElements().size();ni++) {
-                            boolean found = false;
-                            CsmElement ne = elementsFromNextOrder.getElements().get(ni);
-                            for (int pi=0;pi<elementsFromPreviousOrder.getElements().size() && !found;pi++) {
-                                CsmElement pe = elementsFromPreviousOrder.getElements().get(pi);
-                                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
-                                        && matching(ne, pe)) {
-                                    found = true;
-                                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
-                                }
-                            }
-                        }
+                        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
 
                         // We now find out which Node Text elements corresponds to the elements in the original CSM
                         List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
@@ -776,25 +801,27 @@ public class Difference {
 
                         // Elements to be added at the end
                         List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
+                        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
+
                         Map<Integer, List<CsmElement>> elementsToAddBeforeGivenOriginalCSMElement = new HashMap<>();
-                        for (int ni=0;ni<elementsFromNextOrder.getElements().size();ni++) {
+                        for (int ni = 0; ni< nextOrderElements.size(); ni++) {
                             // If it has a mapping, then it is kept
                             if (!correspondanceBetweenNextOrderAndPreviousOrder.containsKey(ni)) {
                                 // Ok, it is something new. Where to put it? Let's see what is the first following
                                 // element that has a mapping
                                 int originalCsmIndex = -1;
-                                for (int nj=ni + 1;nj<elementsFromNextOrder.getElements().size() && originalCsmIndex==-1;nj++) {
+                                for (int nj = ni + 1; nj< nextOrderElements.size() && originalCsmIndex==-1; nj++) {
                                     if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
                                         originalCsmIndex = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
                                         if (!elementsToAddBeforeGivenOriginalCSMElement.containsKey(originalCsmIndex)){
                                             elementsToAddBeforeGivenOriginalCSMElement.put(originalCsmIndex, new LinkedList<>());
                                         }
-                                        elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(elementsFromNextOrder.getElements().get(ni));
+                                        elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(nextOrderElements.get(ni));
                                     }
                                 }
                                 // it does not preceed anything, so it goes at the end
                                 if (originalCsmIndex == -1) {
-                                    elementsToBeAddedAtTheEnd.add(elementsFromNextOrder.getElements().get(ni));
+                                    elementsToBeAddedAtTheEnd.add(nextOrderElements.get(ni));
                                 }
                             }
                         }
@@ -807,7 +834,8 @@ public class Difference {
                         // * if OCE is marked to be present also in the "after" CSM we add a kept element,
                         //   otherwise we add a removed element
 
-                        this.getElements().remove(diffIndex);
+                        diffElements.remove(diffIndex);
+
                         int diffElIterator = diffIndex;
                         if (lastNodeTextIndex != -1) {
                             for (int ntIndex = originalIndex; ntIndex<=lastNodeTextIndex; ntIndex++) {
@@ -843,6 +871,34 @@ public class Difference {
                 }
             }
         } while (diffIndex < diffElements.size() || originalIndex < originalElements.size());
+    }
+
+    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
+        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
+
+        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
+        for (int ni = 0; ni< nextOrderElements.size(); ni++) {
+            boolean found = false;
+            CsmElement ne = nextOrderElements.get(ni);
+
+            List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
+            for (int pi = 0; pi< previousOrderElements.size() && !found; pi++) {
+                CsmElement pe = previousOrderElements.get(pi);
+                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
+                        && matching(ne, pe)) {
+                    found = true;
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
+                }
+            }
+        }
+
+        return correspondanceBetweenNextOrderAndPreviousOrder;
+    }
+
+    private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
+        return (diffIndex + 1) < diffElements.size()
+                && diffElements.get(diffIndex + 1).isAdded()
+                && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
     }
 
     private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
