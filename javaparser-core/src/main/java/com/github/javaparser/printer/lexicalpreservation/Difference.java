@@ -21,12 +21,12 @@ public class Difference {
 
     private static final int STANDARD_INDENTATION_SIZE = 4;
 
-    private final List<DifferenceElementCalculator.DifferenceElement> elements;
+    private final List<DifferenceElementCalculator.DifferenceElement> diffElements;
     private final NodeText nodeText;
     private final Node node;
 
-    Difference(List<DifferenceElementCalculator.DifferenceElement> elements, NodeText nodeText, Node node) {
-        this.elements = elements;
+    Difference(List<DifferenceElementCalculator.DifferenceElement> diffElements, NodeText nodeText, Node node) {
+        this.diffElements = diffElements;
         this.nodeText = nodeText;
         this.node = node;
     }
@@ -107,16 +107,15 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-        if (this.nodeText == null) {
+        if (nodeText == null) {
             throw new NullPointerException();
         }
         boolean addedIndentation = false;
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(this.node);
+        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
 
         List<TextElement> originalElements = nodeText.getElements();
         int originalIndex = 0;
 
-        List<DifferenceElementCalculator.DifferenceElement> diffElements = getElements();
         int diffIndex = 0;
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
@@ -281,7 +280,7 @@ public class Difference {
                                 if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
                                     originalIndex = considerCleaningTheLine(nodeText, originalIndex);
                                 } else {
-                                    if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof DifferenceElementCalculator.Added)) {
+                                    if (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof DifferenceElementCalculator.Added)) {
                                         originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
                                     }
                                     // If in front we have one space and before also we had space let's drop one space
@@ -548,7 +547,7 @@ public class Difference {
     }
 
     private boolean isAReplacement(int diffIndex) {
-        return (diffIndex > 0) && getElements().get(diffIndex) instanceof DifferenceElementCalculator.Added && getElements().get(diffIndex - 1) instanceof DifferenceElementCalculator.Removed;
+        return (diffIndex > 0) && diffElements.get(diffIndex) instanceof DifferenceElementCalculator.Added && diffElements.get(diffIndex - 1) instanceof DifferenceElementCalculator.Removed;
     }
 
     private boolean isPrimitiveType(TextElement textElement) {
@@ -568,10 +567,6 @@ public class Difference {
     }
     @Override
     public String toString() {
-        return "Difference{" + elements + '}';
-    }
-
-    List<DifferenceElementCalculator.DifferenceElement> getElements() {
-        return elements;
+        return "Difference{" + diffElements + '}';
     }
 }
