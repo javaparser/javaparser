@@ -25,10 +25,21 @@ public class Difference {
     private final NodeText nodeText;
     private final Node node;
 
+    private final List<TextElement> originalElements;
+
+    private int originalIndex = 0;
+    private int diffIndex = 0;
+
     Difference(List<DifferenceElementCalculator.DifferenceElement> diffElements, NodeText nodeText, Node node) {
+        if (nodeText == null) {
+            throw new NullPointerException("nodeText can not be null");
+        }
+
         this.diffElements = diffElements;
         this.nodeText = nodeText;
         this.node = node;
+
+        this.originalElements = nodeText.getElements();
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
@@ -107,16 +118,9 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-        if (nodeText == null) {
-            throw new NullPointerException();
-        }
         boolean addedIndentation = false;
         List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
 
-        List<TextElement> originalElements = nodeText.getElements();
-        int originalIndex = 0;
-
-        int diffIndex = 0;
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
                 DifferenceElementCalculator.DifferenceElement diffElement = diffElements.get(diffIndex);
