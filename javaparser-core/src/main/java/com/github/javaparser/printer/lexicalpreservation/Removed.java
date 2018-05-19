@@ -1,15 +1,14 @@
-package com.github.javaparser.printer.lexicalpreservation.difference;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator;
 
 public class Removed implements DifferenceElement {
-    final CsmElement element;
+    private final CsmElement element;
 
-    public Removed(CsmElement element) {
+    Removed(CsmElement element) {
         this.element = element;
     }
 

@@ -11,7 +11,6 @@ import com.github.javaparser.printer.Printable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
-import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 
 import java.util.*;
 

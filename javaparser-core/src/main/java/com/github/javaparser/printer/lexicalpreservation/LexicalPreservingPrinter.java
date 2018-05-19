@@ -38,7 +38,6 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
 

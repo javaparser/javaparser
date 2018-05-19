@@ -2,11 +2,10 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
-import com.github.javaparser.printer.lexicalpreservation.difference.*;
 
 import java.util.*;
 
-public class DifferenceElementCalculator {
+class DifferenceElementCalculator {
     static boolean matching(CsmElement a, CsmElement b) {
         if (a instanceof LexicalDifferenceCalculator.CsmChild) {
             if (b instanceof LexicalDifferenceCalculator.CsmChild) {
@@ -191,7 +190,7 @@ public class DifferenceElementCalculator {
         return elements;
     }
 
-    static long cost(List<DifferenceElement> elements) {
+    private static long cost(List<DifferenceElement> elements) {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
     }
 

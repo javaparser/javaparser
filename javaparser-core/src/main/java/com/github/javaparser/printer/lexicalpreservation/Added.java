@@ -1,18 +1,14 @@
-package com.github.javaparser.printer.lexicalpreservation.difference;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
-import com.github.javaparser.printer.lexicalpreservation.ChildTextElement;
-import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator;
-import com.github.javaparser.printer.lexicalpreservation.TextElement;
-import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 
 public class Added implements DifferenceElement {
-    final CsmElement element;
+    private final CsmElement element;
 
-    public Added(CsmElement element) {
+    Added(CsmElement element) {
         this.element = element;
     }
 

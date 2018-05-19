@@ -6,7 +6,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import com.github.javaparser.printer.lexicalpreservation.difference.*;
 
 import java.util.*;
 

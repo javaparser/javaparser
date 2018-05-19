@@ -1,4 +1,4 @@
-package com.github.javaparser.printer.lexicalpreservation.difference;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 
@@ -10,7 +10,7 @@ public class Reshuffled implements DifferenceElement {
     private final CsmMix previousOrder;
     private final CsmMix nextOrder;
 
-    public Reshuffled(CsmMix previousOrder, CsmMix nextOrder) {
+    Reshuffled(CsmMix previousOrder, CsmMix nextOrder) {
         this.previousOrder = previousOrder;
         this.nextOrder = nextOrder;
     }

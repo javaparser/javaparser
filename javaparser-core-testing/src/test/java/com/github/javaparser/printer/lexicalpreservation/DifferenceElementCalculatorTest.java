@@ -18,7 +18,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.util.List;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
-import static com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement.*;
+import static com.github.javaparser.printer.lexicalpreservation.DifferenceElement.*;
 import static org.junit.Assert.assertEquals;
 
 public class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {

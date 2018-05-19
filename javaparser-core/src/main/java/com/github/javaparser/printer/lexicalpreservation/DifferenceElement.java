@@ -1,7 +1,6 @@
-package com.github.javaparser.printer.lexicalpreservation.difference;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.lexicalpreservation.DifferenceElementCalculator;
 
 public interface DifferenceElement {
     static DifferenceElement added(CsmElement element) {
@@ -19,7 +18,7 @@ public interface DifferenceElement {
     /**
      * Return the CsmElement considered in this DifferenceElement.
      */
-    public CsmElement getElement();
+    CsmElement getElement();
 
-    public boolean isAdded();
+    boolean isAdded();
 }
