@@ -38,6 +38,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
 
@@ -197,7 +198,7 @@ public class LexicalPreservingPrinter {
         @Override
         public void concreteListChange(NodeList changedList, AstObserver.ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            List<DifferenceElementCalculator.DifferenceElement> differenceElements;
+            List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
             } else if (type == AstObserver.ListChangeType.ADDITION) {
@@ -213,7 +214,7 @@ public class LexicalPreservingPrinter {
         @Override
         public void concreteListReplacement(NodeList changedList, int index, Node oldValue, Node newValue) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            List<DifferenceElementCalculator.DifferenceElement> differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
+            List<DifferenceElement> differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
 
             Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
             difference.apply();

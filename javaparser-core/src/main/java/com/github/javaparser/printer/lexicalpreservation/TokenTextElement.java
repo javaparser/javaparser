@@ -25,14 +25,14 @@ import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 
-class TokenTextElement extends TextElement {
+public class TokenTextElement extends TextElement {
     private final JavaToken token;
 
     TokenTextElement(JavaToken token) {
         this.token = token;
     }
 
-    TokenTextElement(int tokenKind, String text) {
+    public TokenTextElement(int tokenKind, String text) {
         this(new JavaToken(tokenKind, text));
     }
 

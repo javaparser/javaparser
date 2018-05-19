@@ -11,10 +11,11 @@ import com.github.javaparser.printer.Printable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
+import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 
 import java.util.*;
 
-class LexicalDifferenceCalculator {
+public class LexicalDifferenceCalculator {
 
     /**
      * The ConcreteSyntaxModel represents the general format. This model is a calculated version of the ConcreteSyntaxModel,
@@ -49,7 +50,7 @@ class LexicalDifferenceCalculator {
         }
     }
 
-    static class CsmChild implements CsmElement {
+    public static class CsmChild implements CsmElement {
         private final Node child;
 
         public Node getChild() {
@@ -86,7 +87,7 @@ class LexicalDifferenceCalculator {
         }
     }
 
-    List<DifferenceElementCalculator.DifferenceElement> calculateListRemovalDifference(ObservableProperty observableProperty, NodeList nodeList, int index) {
+    List<DifferenceElement> calculateListRemovalDifference(ObservableProperty observableProperty, NodeList nodeList, int index) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -94,7 +95,7 @@ class LexicalDifferenceCalculator {
         return DifferenceElementCalculator.calculate(original, after);
     }
 
-    List<DifferenceElementCalculator.DifferenceElement> calculateListAdditionDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node nodeAdded) {
+    List<DifferenceElement> calculateListAdditionDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node nodeAdded) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -102,7 +103,7 @@ class LexicalDifferenceCalculator {
         return DifferenceElementCalculator.calculate(original, after);
     }
 
-    List<DifferenceElementCalculator.DifferenceElement> calculateListReplacementDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node newValue) {
+    List<DifferenceElement> calculateListReplacementDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node newValue) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -117,7 +118,7 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(observedNode.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
-        List<DifferenceElementCalculator.DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
         Difference difference = new Difference(differenceElements, nodeText, observedNode);
         difference.apply();
     }

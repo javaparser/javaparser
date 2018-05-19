@@ -17,6 +17,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.lexicalpreservation.difference.DifferenceElement;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -270,23 +271,23 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
                         new NameExpr("aField"),
                         AssignExpr.Operator.ASSIGN
                 ));
-        List<DifferenceElementCalculator.DifferenceElement> differenceElements = ldc.calculateListAdditionDifference(
+        List<DifferenceElement> differenceElements = ldc.calculateListAdditionDifference(
                 ObservableProperty.STATEMENTS,
                 setter.getBody().get().getStatements(),
                 0,
                 assignStatement);
         int index = 0;
-        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(index++));
-        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.newline()), differenceElements.get(index++));
-        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.indent()), differenceElements.get(index++));
+        assertEquals(DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(index++));
+        assertEquals(DifferenceElement.kept(CsmElement.newline()), differenceElements.get(index++));
+        assertEquals(DifferenceElement.added(CsmElement.indent()), differenceElements.get(index++));
         assertTrue(isAddedChild(differenceElements.get(index++), ExpressionStmt.class));
-        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.newline()), differenceElements.get(index++));
-        assertEquals(DifferenceElementCalculator.DifferenceElement.added(CsmElement.unindent()), differenceElements.get(index++));
-        assertEquals(DifferenceElementCalculator.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(index++));
+        assertEquals(DifferenceElement.added(CsmElement.newline()), differenceElements.get(index++));
+        assertEquals(DifferenceElement.added(CsmElement.unindent()), differenceElements.get(index++));
+        assertEquals(DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(index++));
         assertEquals(index, differenceElements.size());
     }
 
-    private boolean isAddedChild(DifferenceElementCalculator.DifferenceElement element, Class<? extends Node> childClass) {
+    private boolean isAddedChild(DifferenceElement element, Class<? extends Node> childClass) {
         return element.isAdded() && isChild(element.getElement(), childClass);
     }
 

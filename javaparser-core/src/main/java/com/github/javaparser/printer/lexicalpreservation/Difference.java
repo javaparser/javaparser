@@ -6,6 +6,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+import com.github.javaparser.printer.lexicalpreservation.difference.*;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class Difference {
 
     private static final int STANDARD_INDENTATION_SIZE = 4;
 
-    private final List<DifferenceElementCalculator.DifferenceElement> diffElements;
+    private final List<DifferenceElement> diffElements;
     private final NodeText nodeText;
     private final Node node;
 
@@ -30,7 +31,7 @@ public class Difference {
     private int originalIndex = 0;
     private int diffIndex = 0;
 
-    Difference(List<DifferenceElementCalculator.DifferenceElement> diffElements, NodeText nodeText, Node node) {
+    Difference(List<DifferenceElement> diffElements, NodeText nodeText, Node node) {
         if (nodeText == null) {
             throw new NullPointerException("nodeText can not be null");
         }
@@ -123,9 +124,9 @@ public class Difference {
 
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
-                DifferenceElementCalculator.DifferenceElement diffElement = diffElements.get(diffIndex);
-                if (diffElement instanceof DifferenceElementCalculator.Kept) {
-                    DifferenceElementCalculator.Kept kept = (DifferenceElementCalculator.Kept) diffElement;
+                DifferenceElement diffElement = diffElements.get(diffIndex);
+                if (diffElement instanceof Kept) {
+                    Kept kept = (Kept) diffElement;
 
                     if (kept.isWhiteSpaceOrComment()) {
                         diffIndex++;
@@ -133,8 +134,8 @@ public class Difference {
                         throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
                                 + nodeText + ". Difference: " + this);
                     }
-                } else if (diffElement instanceof DifferenceElementCalculator.Added) {
-                    DifferenceElementCalculator.Added addedElement = (DifferenceElementCalculator.Added) diffElement;
+                } else if (diffElement instanceof Added) {
+                    Added addedElement = (Added) diffElement;
 
                     nodeText.addElement(originalIndex, addedElement.toTextElement());
                     originalIndex++;
@@ -152,10 +153,10 @@ public class Difference {
                             + this + " " + originalElement);
                 }
             } else {
-                DifferenceElementCalculator.DifferenceElement diffElement = diffElements.get(diffIndex);
+                DifferenceElement diffElement = diffElements.get(diffIndex);
 
-                if (diffElement instanceof DifferenceElementCalculator.Added) {
-                    DifferenceElementCalculator.Added addedElement = (DifferenceElementCalculator.Added) diffElement;
+                if (diffElement instanceof Added) {
+                    Added addedElement = (Added) diffElement;
 
                     if (addedElement.isIndent()) {
                         for (int i=0;i<STANDARD_INDENTATION_SIZE;i++){
@@ -220,8 +221,8 @@ public class Difference {
                     boolean originalElementIsChild = originalElement instanceof ChildTextElement;
                     boolean originalElementIsToken = originalElement instanceof TokenTextElement;
 
-                    if (diffElement instanceof DifferenceElementCalculator.Kept) {
-                        DifferenceElementCalculator.Kept kept = (DifferenceElementCalculator.Kept)diffElement;
+                    if (diffElement instanceof Kept) {
+                        Kept kept = (Kept)diffElement;
 
                         if (originalElement.isComment()) {
                             originalIndex++;
@@ -236,7 +237,7 @@ public class Difference {
                                     originalIndex++;
                                     diffIndex++;
                                 } else {
-                                    throw new UnsupportedOperationException("kept " + kept.element + " vs " + originalElement);
+                                    throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
                                 }
                             }
                         } else if (kept.isToken() && originalElementIsToken) {
@@ -250,7 +251,7 @@ public class Difference {
                             } else if (originalTextToken.isWhiteSpaceOrComment()) {
                                 originalIndex++;
                             } else {
-                                throw new UnsupportedOperationException("Csm token " + kept.element + " NodeText TOKEN " + originalTextToken);
+                                throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
                             }
                         } else if (kept.isWhiteSpace()) {
                             diffIndex++;
@@ -263,10 +264,10 @@ public class Difference {
                                 nodeText.removeElement(--originalIndex);
                             }
                         } else {
-                            throw new UnsupportedOperationException("kept " + kept.element + " vs " + originalElement);
+                            throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
                         }
-                    } else if (diffElement instanceof DifferenceElementCalculator.Removed) {
-                        DifferenceElementCalculator.Removed removed = (DifferenceElementCalculator.Removed)diffElement;
+                    } else if (diffElement instanceof Removed) {
+                        Removed removed = (Removed)diffElement;
 
                         if (removed.isChild() && originalElementIsChild) {
                             ChildTextElement originalElementChild = (ChildTextElement)originalElement;
@@ -284,7 +285,7 @@ public class Difference {
                                 if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
                                     originalIndex = considerCleaningTheLine(nodeText, originalIndex);
                                 } else {
-                                    if (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof DifferenceElementCalculator.Added)) {
+                                    if (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added)) {
                                         originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
                                     }
                                     // If in front we have one space and before also we had space let's drop one space
@@ -292,7 +293,7 @@ public class Difference {
                                         if (originalElements.get(originalIndex).isWhiteSpace()
                                                 && originalElements.get(originalIndex - 1).isWhiteSpace()) {
                                             // However we do not want to do that when we are about to adding or removing elements
-                                            if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof DifferenceElementCalculator.Kept)) {
+                                            if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
                                                 originalElements.remove(originalIndex--);
                                             }
                                         }
@@ -311,20 +312,20 @@ public class Difference {
                                 nodeText.removeElement(originalIndex);
                                 diffIndex++;
                             } else {
-                                throw new UnsupportedOperationException("removed " + removed.element + " vs " + originalElement);
+                                throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
                             }
                         } else if (removed.isWhiteSpace()) {
                             diffIndex++;
                         } else if (originalElement.isWhiteSpace()) {
                             originalIndex++;
                         } else {
-                            throw new UnsupportedOperationException("removed " + removed.element + " vs " + originalElement);
+                            throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
                         }
-                    } else if (diffElement instanceof DifferenceElementCalculator.Reshuffled) {
+                    } else if (diffElement instanceof Reshuffled) {
                         // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
-                        DifferenceElementCalculator.Reshuffled reshuffled = (DifferenceElementCalculator.Reshuffled)diffElement;
-                        CsmMix elementsFromPreviousOrder = reshuffled.previousOrder;
-                        CsmMix elementsFromNextOrder = reshuffled.element;
+                        Reshuffled reshuffled = (Reshuffled)diffElement;
+                        CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
+                        CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
 
                         // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
                         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
@@ -386,16 +387,16 @@ public class Difference {
                                     int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
                                     if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
                                         for (CsmElement elementToAdd : elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
-                                            diffElements.add(diffElIterator++, new DifferenceElementCalculator.Added(elementToAdd));
+                                            diffElements.add(diffElIterator++, new Added(elementToAdd));
                                         }
                                     }
 
                                     CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
                                     boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
                                     if (toBeKept) {
-                                        diffElements.add(diffElIterator++, new DifferenceElementCalculator.Kept(originalCSMElement));
+                                        diffElements.add(diffElIterator++, new Kept(originalCSMElement));
                                     } else {
-                                        diffElements.add(diffElIterator++, new DifferenceElementCalculator.Removed(originalCSMElement));
+                                        diffElements.add(diffElIterator++, new Removed(originalCSMElement));
                                     }
                                 }
                                 // else we have a simple node text element, without associated csm element, just keep ignore it
@@ -405,7 +406,7 @@ public class Difference {
                         // Finally we look for the remaining new elements that were not yet added and
                         // add all of them
                         for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
-                            diffElements.add(diffElIterator++, new DifferenceElementCalculator.Added(elementToAdd));
+                            diffElements.add(diffElIterator++, new Added(elementToAdd));
                         }
                     } else {
                         throw new UnsupportedOperationException("" + diffElement + " vs " + originalElement);
@@ -437,7 +438,7 @@ public class Difference {
         return correspondanceBetweenNextOrderAndPreviousOrder;
     }
 
-    private boolean isFollowedByUnindent(List<DifferenceElementCalculator.DifferenceElement> diffElements, int diffIndex) {
+    private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
         return (diffIndex + 1) < diffElements.size()
                 && diffElements.get(diffIndex + 1).isAdded()
                 && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
@@ -551,7 +552,7 @@ public class Difference {
     }
 
     private boolean isAReplacement(int diffIndex) {
-        return (diffIndex > 0) && diffElements.get(diffIndex) instanceof DifferenceElementCalculator.Added && diffElements.get(diffIndex - 1) instanceof DifferenceElementCalculator.Removed;
+        return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
     }
 
     private boolean isPrimitiveType(TextElement textElement) {
