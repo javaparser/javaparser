@@ -22,25 +22,28 @@ public class Difference {
 
     private static final int STANDARD_INDENTATION_SIZE = 4;
 
-    private final List<DifferenceElement> diffElements;
     private final NodeText nodeText;
     private final Node node;
 
+    private final List<DifferenceElement> diffElements;
     private final List<TextElement> originalElements;
-
     private int originalIndex = 0;
     private int diffIndex = 0;
+
+    private final List<TokenTextElement> indentation;
+    private boolean addedIndentation = false;
 
     Difference(List<DifferenceElement> diffElements, NodeText nodeText, Node node) {
         if (nodeText == null) {
             throw new NullPointerException("nodeText can not be null");
         }
 
-        this.diffElements = diffElements;
         this.nodeText = nodeText;
         this.node = node;
-
+        this.diffElements = diffElements;
         this.originalElements = nodeText.getElements();
+
+        this.indentation = LexicalPreservingPrinter.findIndentation(node);
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
@@ -119,9 +122,6 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-        boolean addedIndentation = false;
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
-
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
                 DifferenceElement diffElement = diffElements.get(diffIndex);
@@ -167,7 +167,7 @@ public class Difference {
                         continue;
                     }
                     if (addedElement.isUnindent()) {
-                        for (int i=0;i<STANDARD_INDENTATION_SIZE && !indentation.isEmpty();i++){
+                        for (int i = 0; i<STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++){
                             indentation.remove(indentation.size() - 1);
                         }
                         addedIndentation = false;
