@@ -86,7 +86,7 @@ class LexicalDifferenceCalculator {
         }
     }
 
-    Difference calculateListRemovalDifference(ObservableProperty observableProperty, NodeList nodeList, int index) {
+    List<DifferenceElementCalculator.DifferenceElement> calculateListRemovalDifference(ObservableProperty observableProperty, NodeList nodeList, int index) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -94,7 +94,7 @@ class LexicalDifferenceCalculator {
         return DifferenceElementCalculator.calculate(original, after);
     }
 
-    Difference calculateListAdditionDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node nodeAdded) {
+    List<DifferenceElementCalculator.DifferenceElement> calculateListAdditionDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node nodeAdded) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -102,7 +102,7 @@ class LexicalDifferenceCalculator {
         return DifferenceElementCalculator.calculate(original, after);
     }
 
-    Difference calculateListReplacementDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node newValue) {
+    List<DifferenceElementCalculator.DifferenceElement> calculateListReplacementDifference(ObservableProperty observableProperty, NodeList nodeList, int index, Node newValue) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
@@ -117,8 +117,9 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(observedNode.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
-        Difference difference = DifferenceElementCalculator.calculate(original, after);
-        difference.apply(nodeText, observedNode);
+        List<DifferenceElementCalculator.DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+        Difference difference = new Difference(differenceElements, nodeText, observedNode);
+        difference.apply();
     }
 
     // Visible for testing

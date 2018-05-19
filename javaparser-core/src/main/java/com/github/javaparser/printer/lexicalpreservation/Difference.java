@@ -22,9 +22,13 @@ public class Difference {
     private static final int STANDARD_INDENTATION_SIZE = 4;
 
     private final List<DifferenceElementCalculator.DifferenceElement> elements;
+    private final NodeText nodeText;
+    private final Node node;
 
-    Difference(List<DifferenceElementCalculator.DifferenceElement> elements) {
+    Difference(List<DifferenceElementCalculator.DifferenceElement> elements, NodeText nodeText, Node node) {
         this.elements = elements;
+        this.nodeText = nodeText;
+        this.node = node;
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
@@ -79,7 +83,7 @@ public class Difference {
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
         boolean hasOnlyWsBefore = true;
-        for (int i=nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
+        for (int i = nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
             if (nodeText.getElements().get(i).isNewline()) {
                 break;
             }
@@ -88,7 +92,7 @@ public class Difference {
             }
         }
         if (hasOnlyWsBefore) {
-            for (int i=nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
+            for (int i = nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
                 if (nodeText.getElements().get(i).isNewline()) {
                     break;
                 }
@@ -102,12 +106,12 @@ public class Difference {
      * Node that we have calculate the Difference we can apply to a concrete NodeText, modifying it according
      * to the difference (adding and removing the elements provided).
      */
-    void apply(NodeText nodeText, Node node) {
-        if (nodeText == null) {
+    void apply() {
+        if (this.nodeText == null) {
             throw new NullPointerException();
         }
         boolean addedIndentation = false;
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(this.node);
 
         List<TextElement> originalElements = nodeText.getElements();
         int originalIndex = 0;
@@ -445,7 +449,7 @@ public class Difference {
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
 
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = startIndex; i<nodeText.getElements().size(); i++){
+            for (int i = startIndex; i< nodeText.getElements().size(); i++){
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
 
@@ -534,7 +538,7 @@ public class Difference {
             indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
-            if ((nodeTextIndex<nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+            if ((nodeTextIndex< nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                 nodeTextIndex++;
             } else {
                 nodeText.getElements().add(nodeTextIndex++, e);
@@ -562,11 +566,6 @@ public class Difference {
             return false;
         }
     }
-
-    long cost() {
-        return elements.stream().filter(e -> !(e instanceof DifferenceElementCalculator.Kept)).count();
-    }
-
     @Override
     public String toString() {
         return "Difference{" + elements + '}';
@@ -574,13 +573,5 @@ public class Difference {
 
     List<DifferenceElementCalculator.DifferenceElement> getElements() {
         return elements;
-    }
-
-    /**
-     * Remove from the difference all the elements related to indentation.
-     * This is mainly intended for test purposes.
-     */
-    void removeIndentationElements() {
-        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 }

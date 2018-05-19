@@ -197,22 +197,26 @@ public class LexicalPreservingPrinter {
         @Override
         public void concreteListChange(NodeList changedList, AstObserver.ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            final Difference difference;
+            List<DifferenceElementCalculator.DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
-                difference = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
             } else if (type == AstObserver.ListChangeType.ADDITION) {
-                difference = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
                 throw new UnsupportedOperationException();
             }
-            difference.apply(nodeText, changedList.getParentNodeForChildren());
+
+            Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
+            difference.apply();
         }
 
         @Override
         public void concreteListReplacement(NodeList changedList, int index, Node oldValue, Node newValue) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            Difference difference = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
-            difference.apply(nodeText, changedList.getParentNodeForChildren());
+            List<DifferenceElementCalculator.DifferenceElement> differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
+
+            Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
+            difference.apply();
         }
     }
 

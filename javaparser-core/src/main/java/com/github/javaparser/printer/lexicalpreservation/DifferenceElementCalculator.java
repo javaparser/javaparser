@@ -89,7 +89,7 @@ public class DifferenceElementCalculator {
      * Calculate the Difference between two CalculatedSyntaxModel elements, determining which elements were kept,
      * which were added and which were removed.
      */
-    static Difference calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+    static List<DifferenceElement> calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         // For performance reasons we use the positions of matching children
         // to guide the calculation of the difference
         //
@@ -119,7 +119,7 @@ public class DifferenceElementCalculator {
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
             int posOfNextChildInAfter    = childrenInAfter.get(child);
             if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
-                elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)).getElements());
+                elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)));
             }
             elements.add(new Kept(new LexicalDifferenceCalculator.CsmChild(child)));
             originalIndex = posOfNextChildInOriginal + 1;
@@ -127,12 +127,12 @@ public class DifferenceElementCalculator {
         }
 
         if (originalIndex < original.elements.size() || afterIndex < after.elements.size()) {
-            elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())).getElements());
+            elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())));
         }
-        return new Difference(elements);
+        return elements;
     }
 
-    private static Difference calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+    private static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         List<DifferenceElement> elements = new LinkedList<>();
 
         int originalIndex = 0;
@@ -172,13 +172,13 @@ public class DifferenceElementCalculator {
                     afterIndex++;
                 } else {
                     // We can try to remove the element or add it and look which one leads to the lower difference
-                    Difference adding = calculate(original.from(originalIndex), after.from(afterIndex + 1));
-                    Difference removing = null;
-                    if (adding.cost() > 0) {
-                        removing = calculate(original.from(originalIndex + 1), after.from(afterIndex));
+                    List<DifferenceElement> addingElements = calculate(original.from(originalIndex), after.from(afterIndex + 1));
+                    List<DifferenceElement> removingElements = null;
+                    if (cost(addingElements) > 0) {
+                        removingElements = calculate(original.from(originalIndex + 1), after.from(afterIndex));
                     }
 
-                    if (removing == null || removing.cost() > adding.cost()) {
+                    if (removingElements == null || cost(removingElements) > cost(addingElements)) {
                         elements.add(new Added(nextAfter));
                         afterIndex++;
                     } else {
@@ -189,7 +189,7 @@ public class DifferenceElementCalculator {
             }
         } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
 
-        return new Difference(elements);
+        return elements;
     }
 
     interface DifferenceElement {
@@ -470,5 +470,18 @@ public class DifferenceElementCalculator {
 
             return false;
         }
+    }
+
+    static long cost(List<DifferenceElement> elements) {
+        return elements.stream().filter(e -> !(e instanceof DifferenceElementCalculator.Kept)).count();
+    }
+
+
+    /**
+     * Remove from the difference all the elements related to indentation.
+     * This is mainly intended for test purposes.
+     */
+    static void removeIndentationElements(List<DifferenceElement> elements) {
+        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 }
