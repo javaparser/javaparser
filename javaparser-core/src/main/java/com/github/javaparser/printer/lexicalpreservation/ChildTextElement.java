@@ -27,10 +27,10 @@ import com.github.javaparser.ast.comments.Comment;
 /**
  * Represent the position of a child node in the NodeText of its parent.
  */
-public class ChildTextElement extends TextElement {
+class ChildTextElement extends TextElement {
     private final Node child;
 
-    public ChildTextElement(Node child) {
+    ChildTextElement(Node child) {
         this.child = child;
     }
 

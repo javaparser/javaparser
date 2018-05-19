@@ -197,7 +197,7 @@ public class LexicalPreservingPrinter {
         @Override
         public void concreteListChange(NodeList changedList, AstObserver.ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            List<DifferenceElement> differenceElements;
+            final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
             } else if (type == AstObserver.ListChangeType.ADDITION) {

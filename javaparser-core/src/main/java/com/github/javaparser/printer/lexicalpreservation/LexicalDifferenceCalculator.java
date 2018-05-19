@@ -14,7 +14,7 @@ import com.github.javaparser.printer.lexicalpreservation.changes.*;
 
 import java.util.*;
 
-public class LexicalDifferenceCalculator {
+class LexicalDifferenceCalculator {
 
     /**
      * The ConcreteSyntaxModel represents the general format. This model is a calculated version of the ConcreteSyntaxModel,
@@ -49,7 +49,7 @@ public class LexicalDifferenceCalculator {
         }
     }
 
-    public static class CsmChild implements CsmElement {
+    static class CsmChild implements CsmElement {
         private final Node child;
 
         public Node getChild() {
