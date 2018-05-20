@@ -1,3 +1,8 @@
+Version 3.6.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/90?closed=1)
+* You can now configure the parser inside JavaParserTypeSolver.
+
 Version 3.6.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/89?closed=1)
