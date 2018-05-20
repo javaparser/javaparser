@@ -41,4 +41,7 @@ out
 .idea/**/gradle.xml
 .idea/**/libraries
 
+# Sonarlint:
+.idea/sonarlint
+
 *.iws
