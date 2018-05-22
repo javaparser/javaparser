@@ -216,20 +216,42 @@ public class PrettyPrinterTest {
     @Test
     public void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(); }).bam(); } }");
-        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
                 .print(cu);
 
         assertEqualsNoEol("class Foo {\n" +
                 "\n" +
-                "    void bar() {\n" +
-                "        foo().bar()\n" +
-                "             .baz(() -> {\n" +
-                "                 boo().baa()\n" +
-                "                      .bee();\n" +
-                "             })\n" +
-                "             .bam();\n" +
-                "    }\n" +
+                "\tvoid bar() {\n" +
+                "\t\ta.b.c.d.e;\n" +
+                "\t\ta.b.c()\n" +
+                "\t\t   .d()\n" +
+                "\t\t   .e();\n" +
+                "\t\ta.b.c().d\n" +
+                "\t\t   .e();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(boo().baa().bee())\n" +
+                "\t\t     .bam();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(boo().baa().bee()).bam;\n" +
+                "\t\tfoo().bar(Long.foo().b.bar(),\n" +
+                "\t\t          bam)\n" +
+                "\t\t     .baz();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(foo,\n" +
+                "\t\t          () -> {\n" +
+                "\t\t          \tboo().baa()\n" +
+                "\t\t          \t     .bee();\n" +
+                "\t\t          })\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee();\n" +
+                "\t\t     })\n" +
+                "\t\t     .bam(() -> {\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee();\n" +
+                "\t\t     });\n" +
+                "\t}\n" +
                 "}\n", printed);
     }
 
@@ -275,7 +297,7 @@ public class PrettyPrinterTest {
     @Test
     public void indentWithTabsAsFarAsPossible() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bees(a, b, c); }).bam(); } }");
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
@@ -288,11 +310,11 @@ public class PrettyPrinterTest {
                 "\tvoid bar() {\n" +
                 "\t\tfoo().bar()\n" +
                 "\t\t\t .baz(() -> {\n" +
-                "\t\t\t\t\t  boo().baa()\n" +
-                "\t\t\t\t\t\t   .bees(a,\n" +
-                "\t\t\t\t\t\t\t\t b,\n" +
-                "\t\t\t\t\t\t\t\t c);\n" +
-                "\t\t\t\t  })\n" +
+                "\t\t\t\t boo().baa()\n" +
+                "\t\t\t\t\t  .bee(a,\n" +
+                "\t\t\t\t\t\t   b,\n" +
+                "\t\t\t\t\t\t   c);\n" +
+                "\t\t\t })\n" +
                 "\t\t\t .bam();\n" +
                 "\t}\n" +
                 "}\n", printed);
@@ -301,7 +323,7 @@ public class PrettyPrinterTest {
     @Test
     public void indentWithTabsAlignWithSpaces() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
@@ -314,11 +336,14 @@ public class PrettyPrinterTest {
                 "\tvoid bar() {\n" +
                 "\t\tfoo().bar()\n" +
                 "\t\t     .baz(() -> {\n" +
-                "\t\t          \tboo().baa()\n" +
-                "\t\t          \t     .bee(a,\n" +
-                "\t\t          \t          b,\n" +
-                "\t\t          \t          c);\n" +
-                "\t\t          })\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee(a,\n" +
+                "\t\t     \t          b,\n" +
+                "\t\t     \t          c);\n" +
+                "\t\t     })\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t     \treturn boo().baa();\n" +
+                "\t\t     })\n" +
                 "\t\t     .bam();\n" +
                 "\t}\n" +
                 "}\n", printed);
