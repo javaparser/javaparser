@@ -38,6 +38,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -252,6 +254,10 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
         action.accept(this);
+    }
+
+    public ResolvedValueDeclaration resolveAccessedValue() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
     @Override
