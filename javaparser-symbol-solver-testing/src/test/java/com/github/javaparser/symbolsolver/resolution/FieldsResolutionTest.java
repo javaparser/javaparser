@@ -16,8 +16,12 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
@@ -26,8 +30,10 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -44,7 +50,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     public void accessClassFieldThroughThis() {
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getLabel2");
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
@@ -56,7 +62,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     public void accessClassFieldThroughThisWithCompetingSymbolInParentContext() {
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(clazz, "setLabel");
         ExpressionStmt expressionStmt = (ExpressionStmt) method.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) expressionStmt.getExpression();
@@ -74,7 +80,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     public void accessEnumFieldThroughThis() {
         CompilationUnit cu = parseSample("AccessEnumMemberThroughThis");
-        com.github.javaparser.ast.body.EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
+        EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel");
         SimpleName expression = Navigator.findSimpleName(method, "label").get();
 
@@ -86,7 +92,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     public void accessEnumMethodThroughThis() {
         CompilationUnit cu = parseSample("AccessEnumMemberThroughThis");
-        com.github.javaparser.ast.body.EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
+        EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel2");
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
@@ -96,14 +102,59 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void accessFieldThroughSuper() {
+    public void accessClassFieldThroughSuper() {
         CompilationUnit cu = parseSample("AccessThroughSuper");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "fieldTest");
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
+    }
+
+    @Test
+    public void resolveClassFieldThroughThis() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getLabel2");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolveAccessedValue();
+
+        // get expected field declaration
+        VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "label");
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveClassFieldThroughSuper() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("AccessThroughSuper");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "fieldTest");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolveAccessedValue();
+
+        // get expected field declaration
+        clazz = Navigator.demandClass(cu, "AccessThroughSuper.SuperClass");
+        VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "field");
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 }
