@@ -27,6 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -39,7 +40,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
 
@@ -49,7 +53,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr>, NodeWithArguments<MethodCallExpr>, NodeWithSimpleName<MethodCallExpr>, NodeWithOptionalScope<MethodCallExpr> {
+public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr>, NodeWithArguments<MethodCallExpr>, NodeWithSimpleName<MethodCallExpr>, NodeWithOptionalScope<MethodCallExpr>, Resolvable<ResolvedMethodDeclaration> {
 
     @OptionalProperty
     private Expression scope;
@@ -289,7 +293,21 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         action.accept(this);
     }
 
-    public ResolvedMethodDeclaration resolveInvokedMethod() {
+    /**
+     * Attempts to resolve the declaration corresponding to the invoked method. If successful, a
+     * {@link ResolvedMethodDeclaration} representing the declaration of the constructor invoked by this
+     * {@code MethodCallExpr} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedMethodDeclaration} representing the declaration of the invoked method.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the method call expression could not be
+     *                                 resolved.
+     * @see NameExpr#resolve()
+     * @see FieldAccessExpr#resolve()
+     * @see ObjectCreationExpr#resolve()
+     * @see ExplicitConstructorInvocationStmt#resolve()
+     */
+    @Override
+    public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
 

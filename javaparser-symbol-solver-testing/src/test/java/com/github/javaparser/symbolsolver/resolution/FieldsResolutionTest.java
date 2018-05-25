@@ -126,7 +126,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
         // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolveAccessedValue();
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
 
         // get expected field declaration
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "label");
@@ -148,7 +148,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
         // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolveAccessedValue();
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
 
         // get expected field declaration
         clazz = Navigator.demandClass(cu, "AccessThroughSuper.SuperClass");

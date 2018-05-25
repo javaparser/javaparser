@@ -23,18 +23,25 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
+
 import java.util.function.Consumer;
 import java.util.Optional;
 
@@ -152,6 +159,18 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
         action.accept(this);
     }
 
+    /**
+     * Attempts to resolve the declaration corresponding to the accessed name. If successful, a
+     * {@link ResolvedValueDeclaration} representing the declaration of the value accessed by this {@code NameExpr} is
+     * returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed value.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the name expression could not be resolved.
+     * @see FieldAccessExpr#resolve()
+     * @see MethodCallExpr#resolve()
+     * @see ObjectCreationExpr#resolve()
+     * @see ExplicitConstructorInvocationStmt#resolve()
+     */
     @Override
     public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);

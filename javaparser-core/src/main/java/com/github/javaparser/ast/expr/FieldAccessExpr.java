@@ -26,6 +26,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -43,6 +44,7 @@ import javax.annotation.Generated;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
@@ -54,7 +56,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr>, Resolvable<ResolvedValueDeclaration> {
 
     private Expression scope;
 
@@ -270,10 +272,13 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
      * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed value.
      * @throws UnsolvedSymbolException if the declaration corresponding to the field access expression could not be
      *                                 resolved.
-     * @see MethodCallExpr#resolveInvokedMethod()
-     * @see ObjectCreationExpr#resolveInvokedConstructor()
+     * @see NameExpr#resolve()
+     * @see MethodCallExpr#resolve()
+     * @see ObjectCreationExpr#resolve()
+     * @see ExplicitConstructorInvocationStmt#resolve()
      */
-    public ResolvedValueDeclaration resolveAccessedValue() {
+    @Override
+    public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
