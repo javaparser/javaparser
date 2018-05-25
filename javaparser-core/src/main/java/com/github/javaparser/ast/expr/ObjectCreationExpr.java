@@ -365,6 +365,14 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 
+    /**
+     * @deprecated Call {@link #resolve()} instead.
+     */
+    @Deprecated
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return resolve();
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ObjectCreationExpr> toObjectCreationExpr() {

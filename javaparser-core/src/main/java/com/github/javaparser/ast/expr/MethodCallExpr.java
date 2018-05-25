@@ -311,6 +311,14 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
 
+    /**
+     * @deprecated Call {@link #resolve()} instead.
+     */
+    @Deprecated
+    public ResolvedMethodDeclaration resolveInvokedMethod() {
+        return resolve();
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodCallExpr> toMethodCallExpr() {
