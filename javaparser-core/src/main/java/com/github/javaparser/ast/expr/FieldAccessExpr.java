@@ -29,15 +29,21 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
 import java.util.function.Consumer;
@@ -256,6 +262,17 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         action.accept(this);
     }
 
+    /**
+     * Attempts to resolve the declaration corresponding to the accessed field. If successful, a
+     * {@link ResolvedValueDeclaration} representing the declaration of the value accessed by this
+     * {@code FieldAccessExpr} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed value.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the field access expression could not be
+     *                                 resolved.
+     * @see MethodCallExpr#resolveInvokedMethod()
+     * @see ObjectCreationExpr#resolveInvokedConstructor()
+     */
     public ResolvedValueDeclaration resolveAccessedValue() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
