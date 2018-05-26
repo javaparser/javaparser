@@ -37,6 +37,8 @@ public class SourcePrinter {
     private final IndentType indentType;
 
     private final Deque<String> indents = new LinkedList<>();
+    private final Deque<String> reindentedIndents = new LinkedList<>();
+    private String lastPrintedIndent = "";
     private final StringBuilder buf = new StringBuilder();
     private Position cursor = new Position(1, 0);
     private boolean indented = false;
@@ -85,15 +87,11 @@ public class SourcePrinter {
     }
 
     private String calculateIndentWithAlignTo(int column) {
-        if (indents.isEmpty()) {
-            throw new IllegalStateException("Indent/unindent calls are not well-balanced.");
-        }
-        final String lastIndent = indents.peek();
-        if(column< lastIndent.length()){
+        if (column < lastPrintedIndent.length()){
             throw new IllegalStateException("Attempt to indent less than the previous indent.");
         }
 
-        StringBuilder newIndent = new StringBuilder(lastIndent);
+        StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
         switch (indentType) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
@@ -165,7 +163,8 @@ public class SourcePrinter {
      */
     public SourcePrinter print(final String arg) {
         if (!indented) {
-            append(indents.peek());
+            lastPrintedIndent = indents.peek();
+            append(lastPrintedIndent);
             indented = true;
         }
         append(arg);
@@ -238,13 +237,25 @@ public class SourcePrinter {
     }
 
     /**
-     * Set the top-most indent to the column the cursor is currently in.
-     * Does not actually output anything.
+     * Set the top-most indent to the column the cursor is currently in, can be undone with
+     * {@link #reindentToPreviousLevel()}. Does not actually output anything.
      */
     public void reindentWithAlignToCursor() {
         String newIndent = calculateIndentWithAlignTo(cursor.column);
-        indents.pop();
+        reindentedIndents.push(indents.pop());
         indents.push(newIndent);
+    }
+
+    /**
+     * Set the top-most indent to the column the cursor was before the last {@link #reindentWithAlignToCursor()} call.
+     * Does not actually output anything.
+     */
+    public void reindentToPreviousLevel() {
+        if (reindentedIndents.isEmpty()) {
+            throw new IllegalStateException("Reindent calls are not well-balanced.");
+        }
+        indents.pop();
+        indents.push(reindentedIndents.pop());
     }
 
     /**

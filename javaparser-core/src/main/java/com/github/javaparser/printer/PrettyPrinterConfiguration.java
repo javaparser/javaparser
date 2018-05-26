@@ -89,7 +89,7 @@ public class PrettyPrinterConfiguration {
     /**
      * Set the string to use for indenting. For example: "\t", "    ", "".
      *
-     * @deprecated use {@link #setIndentSize(int)} and {@link #setIndentType(IndentType)}.
+     * @deprecated use {@link #setIndentSize(int)}, {@link #setIndentType(IndentType)} and {@link #setTabWidth(int)}.
      */
     @Deprecated
     public PrettyPrinterConfiguration setIndent(String indent) {
