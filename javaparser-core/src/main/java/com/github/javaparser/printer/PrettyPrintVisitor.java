@@ -30,6 +30,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.*;
@@ -38,6 +39,7 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
@@ -132,27 +134,28 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     private void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
-        if (configuration.isColumnAlignParameters()) {
-            printer.indentWithAlignTo(printer.getCursor().column);
-        }
         if (!isNullOrEmpty(args)) {
+            boolean columnAlignParameters = (args.size() > 1) && configuration.isColumnAlignParameters();
+            if (columnAlignParameters) {
+                printer.indentWithAlignTo(printer.getCursor().column);
+            }
             for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
                     printer.print(",");
-                    if (configuration.isColumnAlignParameters()) {
+                    if (columnAlignParameters) {
                         printer.println();
                     } else {
                         printer.print(" ");
                     }
                 }
             }
+            if (columnAlignParameters) {
+                printer.unindent();
+            }
         }
         printer.print(")");
-        if (configuration.isColumnAlignParameters()) {
-            printer.unindent();
-        }
     }
 
     private void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
@@ -712,37 +715,104 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MethodCallExpr n, final Void arg) {
         printComment(n.getComment(), arg);
+
+        // determine whether we do reindenting for aligmnent at all
+        // - is it enabled?
+        // - are we in a statement where we want the alignment?
+        // - are we not directly in the argument list of a method call expression?
+        AtomicBoolean columnAlignFirstMethodChain = new AtomicBoolean();
+        if (configuration.isColumnAlignFirstMethodChain()) {
+            // pick the kind of expressions where vertically aligning method calls is okay.
+            if (n.findParent(Statement.class).map(p -> p.isReturnStmt()
+                    || p.isThrowStmt()
+                    || p.isAssertStmt()
+                    || p.isExpressionStmt()).orElse(false)) {
+                // search for first parent that does not have its child as scope
+                Node c = n;
+                Optional<Node> p = c.getParentNode();
+                while (p.isPresent() && p.filter(NodeWithTraversableScope.class::isInstance)
+                        .map(NodeWithTraversableScope.class::cast)
+                        .flatMap(NodeWithTraversableScope::traverseScope)
+                        .map(c::equals)
+                        .orElse(false)) {
+                    c = p.get();
+                    p = c.getParentNode();
+                }
+
+                // check if the parent is a method call and thus we are in an argument list
+                columnAlignFirstMethodChain.set(!p.filter(MethodCallExpr.class::isInstance).isPresent());
+            }
+        }
+
+        // we are at the last method call of a call chain
+        // this means we do not start reindenting for alignment or we undo it
+        AtomicBoolean lastMethodInCallChain = new AtomicBoolean(true);
+        if (columnAlignFirstMethodChain.get()) {
+            Node node = n;
+            while (node.getParentNode()
+                    .filter(NodeWithTraversableScope.class::isInstance)
+                    .map(NodeWithTraversableScope.class::cast)
+                    .flatMap(NodeWithTraversableScope::traverseScope)
+                    .map(node::equals)
+                    .orElse(false)) {
+                node = node.getParentNode().orElseThrow(AssertionError::new);
+                if (node instanceof MethodCallExpr) {
+                    lastMethodInCallChain.set(false);
+                    break;
+                }
+            }
+        }
+
+        // search whether there is a method call with scope in the scope already
+        // this means that we probably started reindenting for alignment there
+        AtomicBoolean methodCallWithScopeInScope = new AtomicBoolean();
+        if (columnAlignFirstMethodChain.get()) {
+            Optional<Expression> s = n.getScope();
+            while (s.filter(NodeWithTraversableScope.class::isInstance).isPresent()) {
+                Optional<Expression> parentScope = s.map(NodeWithTraversableScope.class::cast)
+                        .flatMap(NodeWithTraversableScope::traverseScope);
+                if (s.filter(MethodCallExpr.class::isInstance).isPresent() && parentScope.isPresent()) {
+                    methodCallWithScopeInScope.set(true);
+                    break;
+                }
+                s = parentScope;
+            }
+        }
+
+        // we have a scope
+        // this means we are not the first method in the chain
         n.getScope().ifPresent(scope -> {
             scope.accept(this, arg);
-            if (configuration.isColumnAlignFirstMethodChain()) {
-                // pick the kind of expressions where vertically aligning method calls is okay.
-                if (n.findParent(Statement.class).map(p -> p.isReturnStmt()
-                        || p.isThrowStmt()
-                        || p.isAssertStmt()
-                        || p.isExpressionStmt()).orElse(false)) {
-                    if (scope instanceof MethodCallExpr && ((MethodCallExpr) scope).getScope().isPresent()) {
-                        /* We're a method call on the result of a method call that is not stand alone, like:
-                           we're x() in a.b().x(), or in a=b().c[15].d.e().x().
-                           That means that the "else" has been executed by one of the methods in the scope chain, so that the alignment
-                           is set to the "." of that method.
-                           That means we will align to that "." when we start a new line: */
-                        printer.println();
-                    } else {
-                        /* We're the first method call on the result of a method call in the chain, like:
-                           we're x() in a().x(). That means we get to dictate the indent of following method
-                           calls in this chain by setting the cursor to where we are now: just before the "."
-                           that start this method call. */
-                        printer.reindentWithAlignToCursor();
-                    }
+            if (columnAlignFirstMethodChain.get()) {
+                if (methodCallWithScopeInScope.get()) {
+                    /* We're a method call on the result of something (method call, property access, ...) that is not stand alone,
+                       and not the first one with scope, like:
+                       we're x() in a.b().x(), or in a=b().c[15].d.e().x().
+                       That means that the "else" has been executed by one of the methods in the scope chain, so that the alignment
+                       is set to the "." of that method.
+                       That means we will align to that "." when we start a new line: */
+                    printer.println();
+                } else if (!lastMethodInCallChain.get()) {
+                    /* We're the first method call on the result of something in the chain (method call, property access, ...),
+                       but we are not at the same time the last method call in that chain, like:
+                       we're x() in a().x().y(), or in Long.x().y.z(). That means we get to dictate the indent of following method
+                       calls in this chain by setting the cursor to where we are now: just before the "."
+                       that start this method call. */
+                    printer.reindentWithAlignToCursor();
                 }
             }
             printer.print(".");
         });
+
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
         printer.duplicateIndent();
         printArguments(n.getArguments(), arg);
         printer.unindent();
+        if (columnAlignFirstMethodChain.get() && methodCallWithScopeInScope.get() && lastMethodInCallChain.get()) {
+            // undo the aligning after the arguments of the last method call are printed
+            printer.reindentToPreviousLevel();
+        }
     }
 
     @Override
