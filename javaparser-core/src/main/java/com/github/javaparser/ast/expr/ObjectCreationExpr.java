@@ -28,6 +28,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,7 +42,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -54,7 +58,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression implements NodeWithTypeArguments<ObjectCreationExpr>, NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>, NodeWithArguments<ObjectCreationExpr>, NodeWithOptionalScope<ObjectCreationExpr> {
+public final class ObjectCreationExpr extends Expression implements NodeWithTypeArguments<ObjectCreationExpr>, NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>, NodeWithArguments<ObjectCreationExpr>, NodeWithOptionalScope<ObjectCreationExpr>, Resolvable<ResolvedConstructorDeclaration> {
 
     @OptionalProperty
     private Expression scope;
@@ -343,8 +347,30 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         action.accept(this);
     }
 
-    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+    /**
+     * Attempts to resolve the declaration corresponding to the invoked constructor. If successful, a
+     * {@link ResolvedConstructorDeclaration} representing the declaration of the constructor invoked by this
+     * {@code ObjectCreationExpr} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedConstructorDeclaration} representing the declaration of the invoked constructor.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the object creation expression could not be
+     *                                 resolved.
+     * @see NameExpr#resolve()
+     * @see FieldAccessExpr#resolve()
+     * @see MethodCallExpr#resolve()
+     * @see ExplicitConstructorInvocationStmt#resolve()
+     */
+    @Override
+    public ResolvedConstructorDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
+    }
+
+    /**
+     * @deprecated Call {@link #resolve()} instead.
+     */
+    @Deprecated
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return resolve();
     }
 
     @Override

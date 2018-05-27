@@ -100,6 +100,10 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         return wrappedNode;
     }
 
+    public VariableDeclarator getVariableDeclarator() {
+        return variableDeclarator;
+    }
+
     @Override
     public String toString() {
         return "JPField{" + getName() + "}";

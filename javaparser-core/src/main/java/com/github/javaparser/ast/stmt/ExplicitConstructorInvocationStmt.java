@@ -22,25 +22,34 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -52,7 +61,7 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.expr.SuperExpr
  * @see com.github.javaparser.ast.expr.ThisExpr
  */
-public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt>, NodeWithArguments<ExplicitConstructorInvocationStmt> {
+public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt>, NodeWithArguments<ExplicitConstructorInvocationStmt>, Resolvable<ResolvedConstructorDeclaration> {
 
     @OptionalProperty
     private NodeList<Type> typeArguments;
@@ -274,8 +283,29 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         action.accept(this);
     }
 
-    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+    /**
+     * Attempts to resolve the declaration corresponding to the invoked constructor. If successful, a
+     * {@link ResolvedConstructorDeclaration} representing the declaration of the constructor invoked by this
+     * {@code ExplicitConstructorInvocationStmt} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedConstructorDeclaration} representing the declaration of the invoked constructor.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the explicit constructor invocation statement
+     *                                 could not be resolved.
+     * @see NameExpr#resolve()
+     * @see FieldAccessExpr#resolve()
+     * @see MethodCallExpr#resolve()
+     * @see ObjectCreationExpr#resolve()
+     */
+    public ResolvedConstructorDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
+    }
+
+    /**
+     * @deprecated Call {@link #resolve()} instead.
+     */
+    @Deprecated
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return resolve();
     }
 
     @Override
