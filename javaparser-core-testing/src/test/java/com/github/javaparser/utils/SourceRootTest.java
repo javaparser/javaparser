@@ -34,6 +34,17 @@ public class SourceRootTest {
         assertTrue(parseResults.stream().noneMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source.root")));
     }
 
+    @Test
+    public void saveInCallback() throws IOException {
+        sourceRoot.parse("", sourceRoot.getParserConfiguration(), (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
+    }
+
+    @Test
+    public void saveInCallbackParallelized() {
+        sourceRoot.parseParallelized("", sourceRoot.getParserConfiguration(), ((localPath, absolutePath, result) ->
+                SourceRoot.Callback.Result.SAVE));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void fileAsRootIsNotAllowed() {
         Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");

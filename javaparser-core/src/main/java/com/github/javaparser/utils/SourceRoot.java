@@ -295,7 +295,8 @@ public class SourceRoot {
                     result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
                     if (callback.process(localPath, absolutePath, result) == SAVE) {
                         if (result.getResult().isPresent()) {
-                            save(result.getResult().get(), path);
+                            CompilationUnit compilationUnit = result.getResult().get();
+                            save(compilationUnit, absolutePath);
                         }
                     }
                 }
@@ -343,7 +344,7 @@ public class SourceRoot {
                     result.getResult().ifPresent(cu -> cu.setStorage(file));
                     if (callback.process(localPath, file, result) == SAVE) {
                         if (result.getResult().isPresent()) {
-                            save(result.getResult().get(), path);
+                            save(result.getResult().get(), file);
                         }
                     }
                 } catch (IOException e) {
