@@ -47,11 +47,11 @@ public final class BinaryExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        OR("||"),
-        AND("&&"),
-        BINARY_OR("|"),
-        BINARY_AND("&"),
-        XOR("^"),
+        SC_OR("||"),
+        SC_AND("&&"),
+        BIT_OR("|"),
+        BIT_AND("&"),
+        BIT_XOR("^"),
         EQUALS("=="),
         NOT_EQUALS("!="),
         LESS("<"),
@@ -79,11 +79,11 @@ public final class BinaryExpr extends Expression {
 
         public Optional<AssignExpr.Operator> toAssignOperator() {
             switch(this) {
-                case BINARY_OR:
+                case BIT_OR:
                     return Optional.of(AssignExpr.Operator.BINARY_OR);
-                case BINARY_AND:
+                case BIT_AND:
                     return Optional.of(AssignExpr.Operator.BINARY_AND);
-                case XOR:
+                case BIT_XOR:
                     return Optional.of(AssignExpr.Operator.XOR);
                 case LEFT_SHIFT:
                     return Optional.of(AssignExpr.Operator.LEFT_SHIFT);

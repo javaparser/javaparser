@@ -123,16 +123,16 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case GREATER_EQUALS:
             case EQUALS:
             case NOT_EQUALS:
-            case OR:
-            case AND:
+            case SC_OR:
+            case SC_AND:
                 return ResolvedPrimitiveType.BOOLEAN;
-            case BINARY_AND:
-            case BINARY_OR:
+            case BIT_AND:
+            case BIT_OR:
             case SIGNED_RIGHT_SHIFT:
             case UNSIGNED_RIGHT_SHIFT:
             case LEFT_SHIFT:
             case REMAINDER:
-            case XOR:
+            case BIT_XOR:
                 return node.getLeft().accept(this, solveLambdas);
             default:
                 throw new UnsupportedOperationException("Operator " + node.getOperator().name());

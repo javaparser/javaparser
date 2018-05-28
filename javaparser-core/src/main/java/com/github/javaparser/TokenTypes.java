@@ -203,7 +203,7 @@ public class TokenTypes {
             case SLASH:
             case BIT_AND:
             case BIT_OR:
-            case XOR:
+            case BIT_XOR:
             case REM:
             case LSHIFT:
             case PLUSASSIGN:
