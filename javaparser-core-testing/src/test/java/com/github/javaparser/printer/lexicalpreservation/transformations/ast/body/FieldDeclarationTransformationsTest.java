@@ -21,16 +21,17 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import java.util.EnumSet;
+
+import org.junit.Test;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.EnumSet;
 
 /**
- * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
+ * Transforming FieldDeclaration and verifying the LexicalPreservation works as
+ * expected.
  */
 public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
@@ -73,4 +74,14 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
         it.getVariable(1).setType("Xyz");
         assertTransformedToString("Xyz a, b;", it);
     }
+
+    // @Test
+    // public void changingTypeArgument() {
+    // FieldDeclaration it = consider("List<A> a;");
+    // VariableDeclarator variable = it.getVariable(0);
+    // ClassOrInterfaceType type = (ClassOrInterfaceType) variable.getType();
+    // NodeList<Type> nodeList = type.getTypeArguments().get();
+    // nodeList.set(0, JavaParser.parseType("String"));
+    // assertTransformedToString("List<String> a;", it);
+    // }
 }

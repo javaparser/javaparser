@@ -83,11 +83,11 @@ public final class AssignExpr extends Expression {
                 case DIVIDE:
                     return Optional.of(BinaryExpr.Operator.DIVIDE);
                 case BINARY_AND:
-                    return Optional.of(BinaryExpr.Operator.BINARY_AND);
+                    return Optional.of(BinaryExpr.Operator.BIT_AND);
                 case BINARY_OR:
-                    return Optional.of(BinaryExpr.Operator.BINARY_OR);
+                    return Optional.of(BinaryExpr.Operator.BIT_OR);
                 case XOR:
-                    return Optional.of(BinaryExpr.Operator.XOR);
+                    return Optional.of(BinaryExpr.Operator.BIT_XOR);
                 case REMAINDER:
                     return Optional.of(BinaryExpr.Operator.REMAINDER);
                 case LEFT_SHIFT:
