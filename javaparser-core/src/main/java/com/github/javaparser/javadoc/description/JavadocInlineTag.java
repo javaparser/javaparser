@@ -86,6 +86,18 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
         this.content = content;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getName() {
+        return tagName;
+    }
+
     @Override
     public String toText() {
         return "{@" + tagName + this.content +"}";
