@@ -127,7 +127,7 @@ public class Difference {
                 if (diffElement instanceof Kept) {
                     Kept kept = (Kept) diffElement;
 
-                    if (kept.isWhiteSpaceOrComment()) {
+                    if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
                         diffIndex++;
                     } else {
                         throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
