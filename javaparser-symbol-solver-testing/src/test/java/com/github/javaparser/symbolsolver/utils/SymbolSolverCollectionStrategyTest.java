@@ -1,29 +1,30 @@
 package com.github.javaparser.symbolsolver.utils;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.utils.*;
+import com.github.javaparser.utils.CodeGenerationUtils;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.ProjectRoot;
+import com.github.javaparser.utils.SourceRoot;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 
 public class SymbolSolverCollectionStrategyTest {
 
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(SymbolSolverCollectionStrategyTest.class).resolve("").getParent();
-    private final ProjectRoot projectRoot = new CollectionContext(new SymbolSolverCollectionStrategy()).collect(root);
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(JavaParser.class);
+    private final ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(root);
 
     @Test
     public void resolveExpressions() throws IOException {
-        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
-        Optional<SourceRoot> sourceRoot = projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java"));
-        assertTrue(sourceRoot.isPresent());
+        SourceRoot sourceRoot = projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
         int unresolved = 0;
-        for (ParseResult<CompilationUnit> parseResult : sourceRoot.get().tryToParse()) {
+        for (ParseResult<CompilationUnit> parseResult : sourceRoot.tryToParse()) {
             CompilationUnit compilationUnit = parseResult.getResult().get();
             for (MethodDeclaration expr : compilationUnit.findAll(MethodDeclaration.class)) {
                 try {

@@ -25,6 +25,9 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 /**
+ * Will let the symbol solver look inside an Android aar file while solving types.
+ * (It will look inside the contained classes.jar)
+ *
  * @author Federico Tomassetti
  */
 public class AarTypeSolver implements TypeSolver {
