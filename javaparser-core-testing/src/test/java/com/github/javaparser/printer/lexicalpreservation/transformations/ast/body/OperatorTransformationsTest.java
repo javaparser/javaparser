@@ -25,19 +25,34 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 
 /**
  * Transforming BinaryExpr and verifying the LexicalPreservation works as expected.
  */
-public class BinaryOperatorTransformationsTest extends AbstractLexicalPreservingTest {
+public class OperatorTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
-    public void instanceToStatic() throws IOException {
+    public void binaryExpressionOperator() throws IOException {
         considerExpression("a && b");
         expression.asBinaryExpr().setRight(new NameExpr("c"));
         assertTransformedToString("a && c", expression);
+    }
+    
+    @Test
+    public void unaryExpressionOperator() throws IOException {
+        considerExpression("!a");
+        expression.asUnaryExpr().setExpression(new NameExpr("b"));
+        assertTransformedToString("!b", expression);
+    }
+    
+    @Test
+    public void assignExpressionOperator() throws IOException {
+        considerExpression("a <<= 1");
+        expression.asAssignExpr().setValue(new IntegerLiteralExpr(2));
+        assertTransformedToString("a <<= 2", expression);
     }
 
 }

@@ -235,7 +235,7 @@ class LexicalDifferenceCalculator {
             if (value instanceof Printable) {
                 text = ((Printable) value).asString();
             }
-            elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString()), text));
+            elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString(), text), text));
         } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {
             elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
                     "\"" + ((StringLiteralExpr) node).getValue() + "\""));
