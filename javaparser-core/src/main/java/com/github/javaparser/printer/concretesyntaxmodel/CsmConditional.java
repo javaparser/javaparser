@@ -45,6 +45,10 @@ public class CsmConditional implements CsmElement {
         }
         return properties.get(0);
     }
+    
+    public List<ObservableProperty> getProperties() {
+        return properties;
+    }
 
     public CsmElement getThenElement() {
         return thenElement;
