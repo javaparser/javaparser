@@ -83,7 +83,7 @@ public final class CodeGenerationUtils {
      * Converts a package name like "com.laamella.parser" to a path like "com/laamella/parser"
      */
     public static String packageToPath(String pkg) {
-        return pkg.replace(".", File.separator);
+        return pkg.replace('.', File.separatorChar);
     }
 
     /**
