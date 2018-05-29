@@ -43,7 +43,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_E
 import static com.github.javaparser.Providers.provider;
 
 /**
- * Defines a directory containig source code that should be used for solving symbols.
+ * Defines a directory containing source code that should be used for solving symbols.
  * The directory must correspond to the root package of the files within.
  *
  * @author Federico Tomassetti

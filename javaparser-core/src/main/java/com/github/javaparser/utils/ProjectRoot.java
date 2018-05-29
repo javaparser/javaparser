@@ -10,37 +10,62 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Find and to compile all files in a project folder, which results in a collection of SourceRoots.
- * To populate the ProjectRoot, set the CollectionStrategy in the CollectionContext to collect the required files.
+ * The structure of a Java project directory.
+ * It was originally created specifically to quickly configure the symbol solver.
+ * You can use it as a general container for project information.
+ * <p/>A project has a root directory, and it has zero or more directories that contain source code.
+ * <p/>To create a ProjectRoot use a CollectionStrategy, or instantiate ProjectRoot yourself.
  */
 public class ProjectRoot {
 
-    private final Path projectRoot;
-    private final Map<Path, SourceRoot> cache = new ConcurrentHashMap<>();
-    private ParserConfiguration parserConfiguration = new ParserConfiguration();
+    private final Path root;
+    private final Map<Path, SourceRoot> sourceRoots = new ConcurrentHashMap<>();
+    private final List<Path> jarFiles = new ArrayList<>();
+    private final ParserConfiguration parserConfiguration;
 
     public ProjectRoot(Path projectRoot) {
-        this.projectRoot = projectRoot;
+        this(projectRoot, new ParserConfiguration());
     }
 
     public ProjectRoot(Path projectRoot, ParserConfiguration parserConfiguration) {
-        this.projectRoot = projectRoot;
+        this.root = projectRoot;
         this.parserConfiguration = parserConfiguration;
     }
 
     public Optional<SourceRoot> getSourceRoot(Path sourceRoot) {
-        return Optional.ofNullable(cache.get(sourceRoot));
+        return Optional.ofNullable(sourceRoots.get(sourceRoot));
     }
 
     public List<SourceRoot> getSourceRoots() {
-        return new ArrayList<>(cache.values());
+        return new ArrayList<>(sourceRoots.values());
     }
 
     public void addSourceRoot(Path path) {
-        cache.put(path, new SourceRoot(path).setParserConfiguration(parserConfiguration));
+        addSourceRoot(new SourceRoot(path, parserConfiguration));
     }
 
+    public void addSourceRoot(SourceRoot sourceRoot) {
+        sourceRoot.setParserConfiguration(parserConfiguration);
+        sourceRoots.put(sourceRoot.getRoot(), sourceRoot);
+    }
+
+    /**
+     * @deprecated use getRoot()
+     */
+    @Deprecated
     public Path getProjectRoot() {
-        return projectRoot;
+        return root;
+    }
+
+    public Path getRoot() {
+        return root;
+    }
+
+    public void addJarFile(Path jarFile) {
+        jarFiles.add(jarFile);
+    }
+
+    public List<Path> getJarFiles() {
+        return jarFiles;
     }
 }
