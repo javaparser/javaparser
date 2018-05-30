@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
-import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
+import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.SAVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -260,6 +259,40 @@ public class SourceRoot {
     }
 
     /**
+     * Parses the provided .java file and passes it to the callback. In comparison to the other parse methods, this is much more memory efficient, but saveAll() won't work.
+     */
+    public SourceRoot parse(Path absolutePath, ParserConfiguration configuration, Callback callback) throws IOException {
+        Path localPath = root.relativize(absolutePath);
+        Log.trace("Parsing %s", localPath);
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath));
+        result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
+        if (callback.process(localPath, absolutePath, result) == SAVE) {
+            if (result.getResult().isPresent()) {
+                CompilationUnit compilationUnit = result.getResult().get();
+                save(compilationUnit, absolutePath);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Locates the .java file with the provided package and file name, parses it and passes it to the
+     * callback. In comparison to the other parse methods, this is much more memory efficient, but saveAll() won't work.
+     *
+     * @param startPackage The package containing the file
+     * @param filename The name of the file
+     */
+    public SourceRoot parse(String startPackage, String filename, ParserConfiguration configuration, Callback
+            callback) throws IOException {
+        assertNotNull(startPackage);
+        assertNotNull(filename);
+        assertNotNull(configuration);
+        assertNotNull(callback);
+        parse(fileInPackageAbsolutePath(root, startPackage, filename), configuration, callback);
+        return this;
+    }
+
+    /**
      * Tries to parse all .java files in a package recursively and passes them one by one to the callback. In comparison
      * to the other parse methods, this is much more memory efficient, but saveAll() won't work.
      *
@@ -288,17 +321,7 @@ public class SourceRoot {
             @Override
             public FileVisitResult visitFile(Path absolutePath, BasicFileAttributes attrs) throws IOException {
                 if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
-                    Path localPath = root.relativize(absolutePath);
-                    Log.trace("Parsing %s", localPath);
-                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
-                            provider(absolutePath));
-                    result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
-                    if (callback.process(localPath, absolutePath, result) == SAVE) {
-                        if (result.getResult().isPresent()) {
-                            CompilationUnit compilationUnit = result.getResult().get();
-                            save(compilationUnit, absolutePath);
-                        }
-                    }
+                    parse(absolutePath, configuration, callback);
                 }
                 return CONTINUE;
             }
@@ -334,19 +357,10 @@ public class SourceRoot {
         assertNotNull(callback);
         logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        ParallelParse parse = new ParallelParse(path, (file, attrs) -> {
-            if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                Path localPath = root.relativize(file);
-                Log.trace("Parsing %s", localPath);
+        ParallelParse parse = new ParallelParse(path, (absolutePath, attrs) -> {
+            if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
                 try {
-                    ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                            .parse(COMPILATION_UNIT, provider(file));
-                    result.getResult().ifPresent(cu -> cu.setStorage(file));
-                    if (callback.process(localPath, file, result) == SAVE) {
-                        if (result.getResult().isPresent()) {
-                            save(result.getResult().get(), file);
-                        }
-                    }
+                    parse(absolutePath, configuration, callback);
                 } catch (IOException e) {
                     Log.error(e);
                 }
