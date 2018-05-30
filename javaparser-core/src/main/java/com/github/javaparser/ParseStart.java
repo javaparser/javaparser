@@ -44,7 +44,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  * COMPILATION_UNIT indicates a complete Java file,
  * and CLASS_BODY would indicate the part of a class that is within { and }.
  *
- * @see JavaParser#parse(ParseStart, Provider)
+ * @see JavaParser#parse(ParseStart, AutoCloseableProvider)
  */
 @FunctionalInterface
 public interface ParseStart<R> {

@@ -38,7 +38,7 @@ public class CommentsInserterTest {
     }
 
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
-        Provider p = Providers.resourceProvider(
+        AutoCloseableProvider p = Providers.resourceProvider(
                 makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }

@@ -38,15 +38,15 @@ public final class Providers {
     private Providers() {
     }
 
-    public static Provider provider(Reader reader) {
-        return new StreamProvider(assertNotNull(reader));
+    public static AutoCloseableProvider provider(Reader reader) {
+        return new AutoCloseableStreamProvider(assertNotNull(reader));
     }
 
-    public static Provider provider(InputStream input, Charset encoding) {
+    public static AutoCloseableProvider provider(InputStream input, Charset encoding) {
         assertNotNull(input);
         assertNotNull(encoding);
         try {
-            return new StreamProvider(input, encoding.name());
+            return new AutoCloseableStreamProvider(input, encoding.name());
         } catch (IOException e) {
             // The only one that is thrown is UnsupportedCharacterEncodingException,
             // and that's a fundamental problem, so runtime exception.
@@ -54,28 +54,28 @@ public final class Providers {
         }
     }
 
-    public static Provider provider(InputStream input) {
+    public static AutoCloseableProvider provider(InputStream input) {
         return provider(input, UTF8);
     }
 
-    public static Provider provider(File file, Charset encoding) throws FileNotFoundException {
+    public static AutoCloseableProvider provider(File file, Charset encoding) throws FileNotFoundException {
         return provider(new FileInputStream(assertNotNull(file)), assertNotNull(encoding));
     }
 
-    public static Provider provider(File file) throws FileNotFoundException {
+    public static AutoCloseableProvider provider(File file) throws FileNotFoundException {
         return provider(assertNotNull(file), UTF8);
     }
 
-    public static Provider provider(Path path, Charset encoding) throws IOException {
+    public static AutoCloseableProvider provider(Path path, Charset encoding) throws IOException {
         return provider(Files.newInputStream(assertNotNull(path)), assertNotNull(encoding));
     }
 
-    public static Provider provider(Path path) throws IOException {
+    public static AutoCloseableProvider provider(Path path) throws IOException {
         return provider(assertNotNull(path), UTF8);
     }
 
-    public static Provider provider(String source) {
-        return new StringProvider(assertNotNull(source));
+    public static AutoCloseableProvider provider(String source) {
+        return new AutoCloseableStringProvider(assertNotNull(source));
     }
 
 
@@ -83,7 +83,7 @@ public final class Providers {
      * Provide a Provider from the resource found in class loader with the provided encoding.<br/> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) throws IOException {
+    public static AutoCloseableProvider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) throws IOException {
         InputStream resourceAsStream = classLoader.getResourceAsStream(pathToResource);
         if (resourceAsStream == null) {
             throw new IOException("Cannot find " + pathToResource);
@@ -95,8 +95,8 @@ public final class Providers {
      * Provide a Provider from the resource found in the current class loader with the provided encoding.<br/> As
      * resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(String pathToResource, Charset encoding) throws IOException {
-        ClassLoader classLoader = Provider.class.getClassLoader();
+    public static AutoCloseableProvider resourceProvider(String pathToResource, Charset encoding) throws IOException {
+        ClassLoader classLoader = AutoCloseableProvider.class.getClassLoader();
         return resourceProvider(classLoader, pathToResource, encoding);
     }
 
@@ -104,7 +104,7 @@ public final class Providers {
      * Provide a Provider from the resource found in the current class loader with UTF-8 encoding.<br/> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(String pathToResource) throws IOException {
+    public static AutoCloseableProvider resourceProvider(String pathToResource) throws IOException {
         return resourceProvider(pathToResource, UTF8);
     }
 
