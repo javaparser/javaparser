@@ -142,7 +142,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParser javaParser = new JavaParser(parserConfiguration);
-        return javaParser.parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+        return javaParser.parse(ParseStart.COMPILATION_UNIT, new AutoCloseableStringProvider(code)).getResult().get();
     }
 
     @Test

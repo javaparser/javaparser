@@ -81,7 +81,7 @@ public class LexicalPreservingPrinter {
      * @deprecated use setup(Node) and the static methods on this class.
      */
     public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart,
-                                                                                        Provider provider) {
+                                                                                        AutoCloseableProvider provider) {
         ParseResult<N> parseResult = new JavaParser().parse(parseStart, provider);
         if (!parseResult.isSuccessful()) {
             throw new RuntimeException("Parsing failed, unable to setup the lexical preservation printer: "

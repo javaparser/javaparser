@@ -101,7 +101,7 @@ public final class JavaParser {
         return this.configuration;
     }
 
-    private GeneratedJavaParser getParserForProvider(Provider provider) {
+    private GeneratedJavaParser getParserForProvider(AutoCloseableProvider provider) {
         if (astParser == null) {
             astParser = new GeneratedJavaParser(provider);
         } else {
@@ -122,11 +122,11 @@ public final class JavaParser {
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, AutoCloseableProvider provider) {
         assertNotNull(start);
         assertNotNull(provider);
         final GeneratedJavaParser parser = getParserForProvider(provider);
-        try {
+        try (AutoCloseableProvider ignored = provider) {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
@@ -141,12 +141,6 @@ public final class JavaParser {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
             parser.problems.add(new Problem(message, null, e));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
-        } finally {
-            try {
-                provider.close();
-            } catch (IOException e) {
-                // Since we're done parsing and have our result, we don't care about any errors.
-            }
         }
     }
 
@@ -325,7 +319,7 @@ public final class JavaParser {
         return simplifiedParse(STATEMENT, provider(statement));
     }
 
-    private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
+    private static <T extends Node> T simplifiedParse(ParseStart<T> context, AutoCloseableProvider provider) {
         ParseResult<T> result = new JavaParser(staticConfiguration).parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();

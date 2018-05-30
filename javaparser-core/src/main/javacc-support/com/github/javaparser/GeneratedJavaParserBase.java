@@ -42,7 +42,7 @@ abstract class GeneratedJavaParserBase {
     boolean storeTokens;
 
     /* Resets the parser for reuse, gaining a little performance */
-    void reset(Provider provider) {
+    void reset(AutoCloseableProvider provider) {
         ReInit(provider);
         problems = new ArrayList<>();
         getTokenSource().reset();
