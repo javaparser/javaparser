@@ -257,9 +257,6 @@ public class SourceRoot {
     }
 
     private FileVisitResult callback(Path absolutePath, ParserConfiguration configuration, Callback callback) throws IOException {
-        if (!Files.exists(absolutePath)) {
-            return TERMINATE;
-        }
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", localPath);
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath));
