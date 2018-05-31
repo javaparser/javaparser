@@ -10,21 +10,24 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Find and to compile all files in a project folder, which results in a collection of SourceRoots.
- * To populate the ProjectRoot, set the CollectionStrategy in the CollectionContext to collect the required files.
+ * The structure of a Java project directory.
+ * It was originally created specifically to quickly configure the symbol solver.
+ * You can use it as a general container for project information.
+ * <p/>A project has a root directory, and it has zero or more directories that contain source code.
+ * <p/>To create a ProjectRoot use a CollectionStrategy, or instantiate ProjectRoot yourself.
  */
 public class ProjectRoot {
 
-    private final Path projectRoot;
+    private final Path root;
     private final Map<Path, SourceRoot> cache = new ConcurrentHashMap<>();
-    private ParserConfiguration parserConfiguration = new ParserConfiguration();
+    private final ParserConfiguration parserConfiguration;
 
-    public ProjectRoot(Path projectRoot) {
-        this.projectRoot = projectRoot;
+    public ProjectRoot(Path root) {
+        this(root, new ParserConfiguration());
     }
 
-    public ProjectRoot(Path projectRoot, ParserConfiguration parserConfiguration) {
-        this.projectRoot = projectRoot;
+    public ProjectRoot(Path root, ParserConfiguration parserConfiguration) {
+        this.root = root;
         this.parserConfiguration = parserConfiguration;
     }
 
@@ -40,7 +43,15 @@ public class ProjectRoot {
         cache.put(path, new SourceRoot(path).setParserConfiguration(parserConfiguration));
     }
 
+    /**
+     * @deprecated use getRoot()
+     */
+    @Deprecated
     public Path getProjectRoot() {
-        return projectRoot;
+        return root;
+    }
+
+    public Path getRoot() {
+        return root;
     }
 }

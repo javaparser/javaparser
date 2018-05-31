@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A container for type solvers. All solving is done by the contained type solvers.
+ * This helps you when an API asks for a single type solver, but you need several.
+ *
  * @author Federico Tomassetti
  */
 public class CombinedTypeSolver implements TypeSolver {
