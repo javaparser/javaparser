@@ -25,7 +25,7 @@ import java.util.Optional;
 
 /**
  * Uses reflection to resolve types.
- * All classes on the classpath used to run your application will be found.
+ * Classes on the classpath used to run your application will be found.
  * No source code is available for the resolved types.
  *
  * @author Federico Tomassetti
@@ -33,6 +33,8 @@ import java.util.Optional;
 public class ReflectionTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
+
+    private final boolean jreOnly;
 
     /**
      * @param jreOnly if true, will only resolve types from the java or javax packages.
@@ -43,11 +45,13 @@ public class ReflectionTypeSolver implements TypeSolver {
         this.jreOnly = jreOnly;
     }
 
+    /**
+     * Resolves classes from the JRE that is currently running.
+     * (It calls the other constructor with "true".)
+     */
     public ReflectionTypeSolver() {
         this(true);
     }
-
-    private boolean jreOnly;
 
     @Override
     public TypeSolver getParent() {
