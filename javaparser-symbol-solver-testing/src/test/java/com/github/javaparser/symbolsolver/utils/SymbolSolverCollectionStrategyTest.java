@@ -1,10 +1,8 @@
 package com.github.javaparser.symbolsolver.utils;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
@@ -14,16 +12,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
 import static org.junit.Assert.assertTrue;
 
 public class SymbolSolverCollectionStrategyTest {
 
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(JavaParser.class);
+    private final Path root = classLoaderRoot(SymbolSolverCollectionStrategyTest.class).resolve("../../../javaparser-core").normalize();
     private final ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(root);
 
     @Test
     public void resolveExpressions() throws IOException {
-        System.out.println(projectRoot);
         SourceRoot sourceRoot = projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
         AtomicInteger unresolved = new AtomicInteger();
         for (ParseResult<CompilationUnit> parseResult : sourceRoot.tryToParse()) {
