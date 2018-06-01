@@ -121,6 +121,8 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
+        extractReshuffledDiffElements(diffElements);
+
         do {
             if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
                 DifferenceElement diffElement = diffElements.get(diffIndex);
@@ -165,8 +167,6 @@ public class Difference {
                         applyKeptDiffElement((Kept) diffElement, originalElement, originalElementIsChild, originalElementIsToken);
                     } else if (diffElement instanceof Removed) {
                         applyRemovedDiffElement((Removed) diffElement, originalElement, originalElementIsChild, originalElementIsToken);
-                    } else if (diffElement instanceof Reshuffled) {
-                        applyReshuffledDiffElement((Reshuffled) diffElement);
                     } else {
                         throw new UnsupportedOperationException("" + diffElement + " vs " + originalElement);
                     }
@@ -175,91 +175,99 @@ public class Difference {
         } while (diffIndex < diffElements.size() || originalIndex < originalElements.size());
     }
 
-    private void applyReshuffledDiffElement(Reshuffled reshuffled) {
-        // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
-        CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
-        CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
+    private void extractReshuffledDiffElements(List<DifferenceElement> diffElements) {
+        for (int index = 0; index < diffElements.size(); index++) {
+            DifferenceElement diffElement = diffElements.get(index);
+            if (diffElement instanceof Reshuffled) {
+                Reshuffled reshuffled = (Reshuffled) diffElement;
 
-        // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
-        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
+                // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
+                CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
+                CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
 
-        // We now find out which Node Text elements corresponds to the elements in the original CSM
-        List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
+                // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
+                Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
 
-        Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
-        for (int i=0;i<nodeTextIndexOfPreviousElements.size();i++) {
-            int value = nodeTextIndexOfPreviousElements.get(i);
-            if (value != -1) {
-                nodeTextIndexToPreviousCSMIndex.put(value, i);
-            }
-        }
-        int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
+                // We now find out which Node Text elements corresponds to the elements in the original CSM
+                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
 
-        // Elements to be added at the end
-        List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
-        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
-
-        Map<Integer, List<CsmElement>> elementsToAddBeforeGivenOriginalCSMElement = new HashMap<>();
-        for (int ni = 0; ni< nextOrderElements.size(); ni++) {
-            // If it has a mapping, then it is kept
-            if (!correspondanceBetweenNextOrderAndPreviousOrder.containsKey(ni)) {
-                // Ok, it is something new. Where to put it? Let's see what is the first following
-                // element that has a mapping
-                int originalCsmIndex = -1;
-                for (int nj = ni + 1; nj< nextOrderElements.size() && originalCsmIndex==-1; nj++) {
-                    if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
-                        originalCsmIndex = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
-                        if (!elementsToAddBeforeGivenOriginalCSMElement.containsKey(originalCsmIndex)){
-                            elementsToAddBeforeGivenOriginalCSMElement.put(originalCsmIndex, new LinkedList<>());
-                        }
-                        elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(nextOrderElements.get(ni));
+                Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
+                for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
+                    int value = nodeTextIndexOfPreviousElements.get(i);
+                    if (value != -1) {
+                        nodeTextIndexToPreviousCSMIndex.put(value, i);
                     }
                 }
-                // it does not preceed anything, so it goes at the end
-                if (originalCsmIndex == -1) {
-                    elementsToBeAddedAtTheEnd.add(nextOrderElements.get(ni));
-                }
-            }
-        }
+                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
 
-        // We go over the original node text elements, in the order they appear in the NodeText.
-        // Considering an original node text element (ONE)
-        // * we verify if it corresponds to a CSM element. If it does not we just move on, otherwise
-        //   we find the correspond OCE (Original CSM Element)
-        // * we first add new elements that are marked to be added before OCE
-        // * if OCE is marked to be present also in the "after" CSM we add a kept element,
-        //   otherwise we add a removed element
+                // Elements to be added at the end
+                List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
+                List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
 
-        diffElements.remove(diffIndex);
-
-        int diffElIterator = diffIndex;
-        if (lastNodeTextIndex != -1) {
-            for (int ntIndex = originalIndex; ntIndex<=lastNodeTextIndex; ntIndex++) {
-
-                if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
-                    int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
-                    if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
-                        for (CsmElement elementToAdd : elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
-                            diffElements.add(diffElIterator++, new Added(elementToAdd));
+                Map<Integer, List<CsmElement>> elementsToAddBeforeGivenOriginalCSMElement = new HashMap<>();
+                for (int ni = 0; ni < nextOrderElements.size(); ni++) {
+                    // If it has a mapping, then it is kept
+                    if (!correspondanceBetweenNextOrderAndPreviousOrder.containsKey(ni)) {
+                        // Ok, it is something new. Where to put it? Let's see what is the first following
+                        // element that has a mapping
+                        int originalCsmIndex = -1;
+                        for (int nj = ni + 1; nj < nextOrderElements.size() && originalCsmIndex == -1; nj++) {
+                            if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
+                                originalCsmIndex = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
+                                if (!elementsToAddBeforeGivenOriginalCSMElement.containsKey(originalCsmIndex)) {
+                                    elementsToAddBeforeGivenOriginalCSMElement.put(originalCsmIndex, new LinkedList<>());
+                                }
+                                elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(nextOrderElements.get(ni));
+                            }
+                        }
+                        // it does not preceed anything, so it goes at the end
+                        if (originalCsmIndex == -1) {
+                            elementsToBeAddedAtTheEnd.add(nextOrderElements.get(ni));
                         }
                     }
+                }
 
-                    CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
-                    boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
-                    if (toBeKept) {
-                        diffElements.add(diffElIterator++, new Kept(originalCSMElement));
-                    } else {
-                        diffElements.add(diffElIterator++, new Removed(originalCSMElement));
+                // We go over the original node text elements, in the order they appear in the NodeText.
+                // Considering an original node text element (ONE)
+                // * we verify if it corresponds to a CSM element. If it does not we just move on, otherwise
+                //   we find the correspond OCE (Original CSM Element)
+                // * we first add new elements that are marked to be added before OCE
+                // * if OCE is marked to be present also in the "after" CSM we add a kept element,
+                //   otherwise we add a removed element
+
+                // Remove the whole Reshuffled element
+                diffElements.remove(index);
+
+                int diffElIterator = index;
+                if (lastNodeTextIndex != -1) {
+                    for (int ntIndex = originalIndex; ntIndex <= lastNodeTextIndex; ntIndex++) {
+
+                        if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
+                            int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
+                            if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
+                                for (CsmElement elementToAdd : elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
+                                    diffElements.add(diffElIterator++, new Added(elementToAdd));
+                                }
+                            }
+
+                            CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
+                            boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
+                            if (toBeKept) {
+                                diffElements.add(diffElIterator++, new Kept(originalCSMElement));
+                            } else {
+                                diffElements.add(diffElIterator++, new Removed(originalCSMElement));
+                            }
+                        }
+                        // else we have a simple node text element, without associated csm element, just keep ignore it
                     }
                 }
-                // else we have a simple node text element, without associated csm element, just keep ignore it
-            }
-        }
 
-        // Finally we look for the remaining new elements that were not yet added and
-        // add all of them
-        for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
-            diffElements.add(diffElIterator++, new Added(elementToAdd));
+                // Finally we look for the remaining new elements that were not yet added and
+                // add all of them
+                for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
+                    diffElements.add(diffElIterator++, new Added(elementToAdd));
+                }
+            }
         }
     }
 
