@@ -23,6 +23,7 @@ public class SymbolSolverCollectionStrategyTest {
 
     @Test
     public void resolveExpressions() throws IOException {
+        System.out.println(projectRoot);
         SourceRoot sourceRoot = projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
         AtomicInteger unresolved = new AtomicInteger();
         for (ParseResult<CompilationUnit> parseResult : sourceRoot.tryToParse()) {

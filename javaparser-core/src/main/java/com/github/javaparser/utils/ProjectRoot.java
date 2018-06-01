@@ -54,4 +54,9 @@ public class ProjectRoot {
     public Path getRoot() {
         return root;
     }
+
+    @Override
+    public String toString() {
+        return "ProjectRoot at " + root + " with " + cache.values().toString();
+    }
 }
