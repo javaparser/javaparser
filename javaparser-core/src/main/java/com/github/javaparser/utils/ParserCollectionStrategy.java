@@ -9,7 +9,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import static java.nio.file.FileVisitResult.*;
 
 /**
- * Strategy which collects all SourceRoots and returns them in a ProjectRoot object.
+ * A brute force {@link CollectionStrategy} for discovering a project structure.
+ * It will search through the given project root path for Java files,
+ * look at their package declarations, and figure out the root directories for those files.
+ * No project definition files like pom.xml or build.gradle are used.
+ * This strategy is crude, but can work for many cases.
+ * Note that any build artifacts will also be detected: jar files in target directories and so on.
  */
 public class ParserCollectionStrategy implements CollectionStrategy {
 

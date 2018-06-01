@@ -11,7 +11,8 @@ import java.nio.file.PathMatcher;
 import java.util.Optional;
 
 /**
- * Defines a strategy to collect files for the ProjectRoot.
+ * A strategy for discovering the structure of a project.
+ * Implementations could read a pom.xml, a Gradle build file, a makefile...
  */
 public interface CollectionStrategy {
 

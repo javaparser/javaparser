@@ -24,21 +24,34 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import java.util.Optional;
 
 /**
+ * Uses reflection to resolve types.
+ * Classes on the classpath used to run your application will be found.
+ * No source code is available for the resolved types.
+ *
  * @author Federico Tomassetti
  */
 public class ReflectionTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
 
+    private final boolean jreOnly;
+
+    /**
+     * @param jreOnly if true, will only resolve types from the java or javax packages.
+     * This is an easy way to say "I need a JRE to solve classes, and the one that is currently running is fine."
+     * If false, will resolve any kind of type.
+     */
     public ReflectionTypeSolver(boolean jreOnly) {
         this.jreOnly = jreOnly;
     }
 
+    /**
+     * Resolves classes from the JRE that is currently running.
+     * (It calls the other constructor with "true".)
+     */
     public ReflectionTypeSolver() {
         this(true);
     }
-
-    private boolean jreOnly;
 
     @Override
     public TypeSolver getParent() {
