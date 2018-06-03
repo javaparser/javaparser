@@ -1,3 +1,10 @@
+Version 3.6.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/92?closed=1)
+* Intellij Idea project files were deleted from the repository,
+so if you have a clone of the JP source, your local files will be deleted as well.
+Save anything you want to keep.
+
 Version 3.6.7
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/91?closed=1)
