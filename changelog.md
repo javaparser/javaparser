@@ -1,3 +1,17 @@
+Version 3.6.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/91?closed=1)
+
+Version 3.6.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/90?closed=1)
+* You can now configure the parser inside JavaParserTypeSolver.
+
+Version 3.6.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/89?closed=1)
+* Be aware of annotations or indents looking slightly different when output!
+
 Version 3.6.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/88?closed=1)

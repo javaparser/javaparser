@@ -124,7 +124,7 @@ public class ArrayTypeTest {
         VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
         variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.intType())));
-        assertEquals("@C int[][] a;", variableDeclarationStatement.toString());
+        assertEquals("@C" + EOL + "int[][] a;", variableDeclarationStatement.toString());
     }
 
     @Test
@@ -176,7 +176,7 @@ public class ArrayTypeTest {
         Type innerType = outerType.getComponentType();
         assertThat(innerType).isEqualTo(expr.getElementType());
     }
-    
+
     @Test
     public void ellipsisCanHaveAnnotationsToo() {
         Parameter p = parseParameter("int[]@X...a[]");

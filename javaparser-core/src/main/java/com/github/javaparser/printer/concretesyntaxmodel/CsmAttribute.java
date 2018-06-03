@@ -47,12 +47,13 @@ public class CsmAttribute implements CsmElement {
     /**
      * Obtain the token type corresponding to the specific value of the attribute.
      * For example, to the attribute "Operator" different token could correspond like PLUS or MINUS.
+     * @param tokenText Operator's token text
      */
-    public int getTokenType(Node node, String text) {
+    public int getTokenType(Node node, String text, String tokenText) {
         switch (property) {
             case IDENTIFIER:
                 return GeneratedJavaParserConstants.IDENTIFIER;
-            case TYPE:
+            case TYPE: {
                 String expectedImage = "\"" + text.toLowerCase() + "\"";
                 for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
                     if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
@@ -60,12 +61,16 @@ public class CsmAttribute implements CsmElement {
                     }
                 }
                 throw new RuntimeException("Attribute 'type' does not corresponding to any expected value. Text: " + text);
-            case OPERATOR:
-                try {
-                    return (Integer)(GeneratedJavaParserConstants.class.getDeclaredField(text).get(null));
-                } catch (IllegalAccessException|NoSuchFieldException e) {
-                    throw new RuntimeException("Attribute 'operator' does not corresponding to any expected value. Text: " + text, e);
+            }
+            case OPERATOR: {
+                String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
+                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
+                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                        return i;
+                    }
                 }
+                throw new RuntimeException("Attribute 'operator' does not corresponding to any expected value. Text: " + tokenText);
+            }
             case VALUE:
                 if (node instanceof IntegerLiteralExpr) {
                     return GeneratedJavaParserConstants.INTEGER_LITERAL;

@@ -2808,3 +2808,29 @@ TypeDeclaration<?> TypeDeclarationParseStart():
 	<EOF>
 	{return ret;}
 }
+
+ModuleDeclaration ModuleDeclarationParseStart():
+{
+	ModuleDeclaration ret;
+ 	ModifierHolder modifiers;
+}
+{
+	modifiers = Modifiers()
+	ret = ModuleDeclaration(modifiers)
+	<EOF>
+	{ return ret; }
+}
+
+ModuleStmt ModuleDirectiveParseStart():
+{ ModuleStmt ret; }
+{ ret = ModuleStmt() <EOF> { return ret; } }
+
+TypeParameter TypeParameterParseStart():
+{
+	TypeParameter ret;
+	NodeList<AnnotationExpr> annotations;
+}
+{
+   annotations = Annotations() ret = TypeParameter(annotations) <EOF>
+   { return ret; }
+}

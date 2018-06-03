@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotEquals;
 public class ParserCollectionStrategyTest {
 
     private final Path root = CodeGenerationUtils.mavenModuleRoot(ParserCollectionStrategyTest.class).resolve("").getParent();
-    private final ProjectRoot projectRoot = new CollectionContext(new ParserCollectionStrategy()).collect(root);
+    private final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
 
     @Test
     public void getSourceRoots() {

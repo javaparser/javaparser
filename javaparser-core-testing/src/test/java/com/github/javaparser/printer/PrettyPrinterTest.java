@@ -22,14 +22,24 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
@@ -206,20 +216,260 @@ public class PrettyPrinterTest {
     @Test
     public void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(); }).bam(); } }");
-        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
                 .print(cu);
 
         assertEqualsNoEol("class Foo {\n" +
                 "\n" +
-                "    void bar() {\n" +
-                "        foo().bar()\n" +
-                "             .baz(() -> {\n" +
-                "                 boo().baa()\n" +
-                "                      .bee();\n" +
-                "             })\n" +
-                "             .bam();\n" +
+                "\tvoid bar() {\n" +
+                "\t\ta.b.c.d.e;\n" +
+                "\t\ta.b.c()\n" +
+                "\t\t   .d()\n" +
+                "\t\t   .e();\n" +
+                "\t\ta.b.c().d\n" +
+                "\t\t   .e();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(boo().baa().bee())\n" +
+                "\t\t     .bam();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(boo().baa().bee()).bam;\n" +
+                "\t\tfoo().bar(Long.foo().b.bar(),\n" +
+                "\t\t          bam)\n" +
+                "\t\t     .baz();\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(foo,\n" +
+                "\t\t          () -> {\n" +
+                "\t\t          \tboo().baa()\n" +
+                "\t\t          \t     .bee();\n" +
+                "\t\t          })\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee();\n" +
+                "\t\t     })\n" +
+                "\t\t     .bam(() -> {\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee();\n" +
+                "\t\t     });\n" +
+                "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInIf() {
+        Statement cu = JavaParser.parseStatement("if (x.y().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("if (x.y().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInFor() {
+        Statement cu = JavaParser.parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("for (int x = 1; x.y().z(); x.z().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
+    }
+
+    @Test
+    public void noChainsIndentsInWhile() {
+        Statement cu = JavaParser.parseStatement("while(x.y().z()) { boo().baa().bee(); }");
+
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
+                .print(cu);
+
+        assertEqualsNoEol("while (x.y().z()) {\n" +
+                "    boo().baa()\n" +
+                "         .bee();\n" +
+                "}", printed);
+    }
+
+    @Test
+    public void indentWithTabsAsFarAsPossible() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t\t .baz(() -> {\n" +
+                "\t\t\t\t boo().baa()\n" +
+                "\t\t\t\t\t  .bee(a,\n" +
+                "\t\t\t\t\t\t   b,\n" +
+                "\t\t\t\t\t\t   c);\n" +
+                "\t\t\t })\n" +
+                "\t\t\t .bam();\n" +
+                "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void indentWithTabsAlignWithSpaces() {
+
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
+                .setColumnAlignFirstMethodChain(true)
+                .setColumnAlignParameters(true)
+                .setIndentType(TABS_WITH_SPACE_ALIGN)
+                .setIndentSize(1))
+                .print(cu);
+
+        assertEqualsNoEol("class Foo {\n" +
+                "\n" +
+                "\tvoid bar() {\n" +
+                "\t\tfoo().bar()\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t     \tboo().baa()\n" +
+                "\t\t     \t     .bee(a,\n" +
+                "\t\t     \t          b,\n" +
+                "\t\t     \t          c);\n" +
+                "\t\t     })\n" +
+                "\t\t     .baz(() -> {\n" +
+                "\t\t     \treturn boo().baa();\n" +
+                "\t\t     })\n" +
+                "\t\t     .bam();\n" +
+                "\t}\n" +
+                "}\n", printed);
+    }
+
+    @Test
+    public void printAnnotationsAtPrettyPlaces() {
+
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
+        ParseResult<CompilationUnit> parseResult = javaParser.parse(COMPILATION_UNIT, provider("@Documented\n" +
+                "@Repeatable\n" +
+                "package com.github.javaparser;\n" +
+                "\n" +
+                "import java.lang.annotation.Documented;\n" +
+                "import java.lang.annotation.Repeatable;\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "@interface Annotation {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    String value();\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "class Class<@Documented @Repeatable T> {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    byte b;\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    Class(@Documented @Repeatable int i) {\n" +
+                "        @Documented\n" +
+                "        @Repeatable\n" +
+                "        short s;\n" +
                 "    }\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    void method(@Documented @Repeatable Class this) {\n" +
+                "        for (@Deprecated int i : arr4[0]) {\n" +
+                "            x--;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    void method(@Documented @Repeatable Class this, int i) {\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "enum Foo {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    BAR\n" +
+                "}\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "module foo.bar {\n" +
+                "}\n"));
+        if (!parseResult.isSuccessful()) {
+            throw new ParseProblemException(parseResult.getProblems());
+        }
+        CompilationUnit cu = parseResult.getResult().orElseThrow(AssertionError::new);
+        String printed = new PrettyPrinter().print(cu);
+
+        assertEqualsNoEol("@Documented\n" +
+                "@Repeatable\n" +
+                "package com.github.javaparser;\n" +
+                "\n" +
+                "import java.lang.annotation.Documented;\n" +
+                "import java.lang.annotation.Repeatable;\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "@interface Annotation {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    String value();\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "class Class<@Documented @Repeatable T> {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    byte b;\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    Class(@Documented @Repeatable int i) {\n" +
+                "        @Documented\n" +
+                "        @Repeatable\n" +
+                "        short s;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    void method(@Documented @Repeatable Class this) {\n" +
+                "        for (@Deprecated int i : arr4[0]) {\n" +
+                "            x--;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    void method(@Documented @Repeatable Class this, int i) {\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "enum Foo {\n" +
+                "\n" +
+                "    @Documented\n" +
+                "    @Repeatable\n" +
+                "    BAR\n" +
+                "}\n" +
+                "@Documented\n" +
+                "@Repeatable\n" +
+                "module foo.bar {\n" +
                 "}\n", printed);
     }
 }

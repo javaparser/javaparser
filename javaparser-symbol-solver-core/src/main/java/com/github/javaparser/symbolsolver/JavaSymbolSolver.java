@@ -17,11 +17,13 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
- * This implementation of the SymbolResolver wraps the functionalities of the library to make them easily usable
+ * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
  * from JavaParser nodes.
- *
+ * <p>
  * An instance of this class should be created once and then injected in all the CompilationUnit for which we
- * want to enable symbol resolution. To do so the method inject can be used.
+ * want to enable symbol resolution. To do so the method inject can be used, or you can use
+ * {@link com.github.javaparser.ParserConfiguration#setSymbolResolver(SymbolResolver)} and the parser will do the
+ * injection for you.
  *
  * @author Federico Tomassetti
  */
@@ -44,7 +46,7 @@ public class JavaSymbolSolver implements SymbolResolver {
     @Override
     public <T> T resolveDeclaration(Node node, Class<T> resultClass) {
         if (node instanceof MethodDeclaration) {
-            return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration)node, typeSolver));
+            return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration) node, typeSolver));
         }
         if (node instanceof ClassOrInterfaceDeclaration) {
             ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
@@ -60,16 +62,16 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof EnumConstantDeclaration) {
             ResolvedEnumDeclaration enumDeclaration = node.findParent(EnumDeclaration.class).get().resolve().asEnum();
-            ResolvedEnumConstantDeclaration resolved = enumDeclaration.getEnumConstants().stream().filter(c -> ((JavaParserEnumConstantDeclaration)c).getWrappedNode() == node).findFirst().get();
+            ResolvedEnumConstantDeclaration resolved = enumDeclaration.getEnumConstants().stream().filter(c -> ((JavaParserEnumConstantDeclaration) c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
         }
         if (node instanceof ConstructorDeclaration) {
-            ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration)node;
-            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)node.getParentNode().get();
+            ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration) node;
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) node.getParentNode().get();
             ResolvedClassDeclaration resolvedClass = resolveDeclaration(classOrInterfaceDeclaration, ResolvedClassDeclaration.class).asClass();
-            ResolvedConstructorDeclaration resolved =  resolvedClass.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration)c).getWrappedNode() == constructorDeclaration).findFirst().get();
+            ResolvedConstructorDeclaration resolved = resolvedClass.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
@@ -82,13 +84,13 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof AnnotationMemberDeclaration) {
             ResolvedAnnotationDeclaration annotationDeclaration = node.findParent(AnnotationDeclaration.class).get().resolve();
-            ResolvedAnnotationMemberDeclaration resolved = annotationDeclaration.getAnnotationMembers().stream().filter(c -> ((JavaParserAnnotationMemberDeclaration)c).getWrappedNode() == node).findFirst().get();
+            ResolvedAnnotationMemberDeclaration resolved = annotationDeclaration.getAnnotationMembers().stream().filter(c -> ((JavaParserAnnotationMemberDeclaration) c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
         }
         if (node instanceof FieldDeclaration) {
-            FieldDeclaration fieldDeclaration = (FieldDeclaration)node;
+            FieldDeclaration fieldDeclaration = (FieldDeclaration) node;
             if (fieldDeclaration.getVariables().size() != 1) {
                 throw new RuntimeException("Cannot resolve a Field Declaration including multiple variable declarators. Resolve the single variable declarators");
             }
@@ -98,13 +100,13 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof VariableDeclarator) {
-            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator)node, typeSolver);
+            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
         }
         if (node instanceof MethodCallExpr) {
-            SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodCallExpr)node);
+            SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodCallExpr) node);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -125,6 +127,16 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof NameExpr) {
             SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((NameExpr) node);
+            if (result.isSolved()) {
+                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+            } else {
+                throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
+            }
+        }
+        if (node instanceof FieldAccessExpr) {
+            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((FieldAccessExpr) node);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -155,7 +167,7 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof Parameter) {
             if (ResolvedParameterDeclaration.class.equals(resultClass)) {
-                Parameter parameter = (Parameter)node;
+                Parameter parameter = (Parameter) node;
                 CallableDeclaration callableDeclaration = node.findParent(CallableDeclaration.class).get();
                 ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration;
                 if (callableDeclaration.isConstructorDeclaration()) {
@@ -163,7 +175,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                 } else {
                     resolvedMethodLikeDeclaration = callableDeclaration.asMethodDeclaration().resolve();
                 }
-                for (int i=0;i<resolvedMethodLikeDeclaration.getNumberOfParams();i++) {
+                for (int i = 0; i < resolvedMethodLikeDeclaration.getNumberOfParams(); i++) {
                     if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
                         return resultClass.cast(resolvedMethodLikeDeclaration.getParam(i));
                     }

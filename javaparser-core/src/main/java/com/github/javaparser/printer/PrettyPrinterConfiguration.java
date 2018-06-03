@@ -25,13 +25,53 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.function.Function;
 
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.SPACES;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
 import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.assertNonNegative;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertPositive;
 
 /**
  * Configuration options for the {@link PrettyPrinter}.
  */
 public class PrettyPrinterConfiguration {
+    public enum IndentType {
+        /**
+         * Indent with spaces.
+         */
+        SPACES,
+
+        /**
+         * Indent with tabs as far as possible.
+         * For proper aligning, the tab width is necessary and by default 4.
+         */
+        TABS,
+
+        /**
+         * Indent with tabs but align with spaces when wrapping and aligning
+         * method call chains and method call parameters.
+         *
+         * <p/><i>Example result:</i>
+         * <pre>
+         * class Foo {
+         *
+         * \tvoid bar() {
+         * \t\tfoo().bar()
+         * \t\t......baz(() -> {
+         * \t\t..........\tboo().baa()
+         * \t\t..........\t......bee(a,
+         * \t\t..........\t..........b,
+         * \t\t..........\t..........c);
+         * \t\t..........})
+         * \t\t......bam();
+         * \t}
+         * }
+         * </pre>
+         */
+        TABS_WITH_SPACE_ALIGN
+    }
+
     public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
 
     private boolean orderImports = false;
@@ -39,6 +79,8 @@ public class PrettyPrinterConfiguration {
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
+    private IndentType indentType = SPACES;
+    private int tabWidth = 4;
     private int indentSize = 4;
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
@@ -47,12 +89,20 @@ public class PrettyPrinterConfiguration {
     /**
      * Set the string to use for indenting. For example: "\t", "    ", "".
      *
-     * @deprecated use setIndentSize. Tabs are no longer supported.
+     * @deprecated use {@link #setIndentSize(int)}, {@link #setIndentType(IndentType)} and {@link #setTabWidth(int)}.
      */
     @Deprecated
     public PrettyPrinterConfiguration setIndent(String indent) {
         System.err.println("PrettyPrinterConfiguration.setIndent is deprecated, please review the changes.");
-        indentSize = indent.length();
+        if (indent.matches(" *")) {
+            indentSize = indent.length();
+            indentType = SPACES;
+        } else if (indent.matches("\\t+")) {
+            indentSize = indent.length();
+            indentType = TABS;
+        } else {
+            throw new NotImplementedException();
+        }
         return this;
     }
 
@@ -61,8 +111,22 @@ public class PrettyPrinterConfiguration {
      */
     public String getIndent() {
         StringBuilder indentString = new StringBuilder();
+        char indentChar;
+        switch (indentType) {
+            case SPACES:
+                indentChar = ' ';
+                break;
+
+            case TABS:
+            case TABS_WITH_SPACE_ALIGN:
+                indentChar = '\t';
+                break;
+
+            default:
+                throw new AssertionError("Unhandled indent type");
+        }
         for (int i = 0; i < indentSize; i++) {
-            indentString.append(' ');
+            indentString.append(indentChar);
         }
         return indentString.toString();
     }
@@ -72,13 +136,40 @@ public class PrettyPrinterConfiguration {
     }
 
     /**
-     * Set the size of the indent in spaces.
+     * Set the size of the indent in characters.
      */
-    public PrettyPrinterConfiguration setIndentSize(int size) {
-        if (size < 0) {
-            throw new IllegalArgumentException("Indent must be >= 0");
-        }
-        this.indentSize = size;
+    public PrettyPrinterConfiguration setIndentSize(int indentSize) {
+        this.indentSize = assertNonNegative(indentSize);
+        return this;
+    }
+
+    /**
+     * Get the type of indent to produce.
+     */
+    public IndentType getIndentType() {
+        return indentType;
+    }
+
+    /**
+     * Set the type of indent to produce.
+     */
+    public PrettyPrinterConfiguration setIndentType(IndentType indentType) {
+        this.indentType = assertNotNull(indentType);
+        return this;
+    }
+
+    /**
+     * Get the tab width for pretty aligning.
+     */
+    public int getTabWidth() {
+        return tabWidth;
+    }
+
+    /**
+     * Set the tab width for pretty aligning.
+     */
+    public PrettyPrinterConfiguration setTabWidth(int tabWidth) {
+        this.tabWidth = assertPositive(tabWidth);
         return this;
     }
 

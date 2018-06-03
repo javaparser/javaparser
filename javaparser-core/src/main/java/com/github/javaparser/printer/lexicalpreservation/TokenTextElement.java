@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
-import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 
 class TokenTextElement extends TextElement {
@@ -50,7 +49,7 @@ class TokenTextElement extends TextElement {
         return token.getText();
     }
 
-    public int getTokenKind() {
+    int getTokenKind() {
         return token.getKind();
     }
 

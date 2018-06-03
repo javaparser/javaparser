@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.modules;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -13,10 +14,14 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
+
 import java.util.Arrays;
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
 
 /**
@@ -196,5 +201,17 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    /**
+     * Add a directive to the module, like "exports R.S to T1.U1, T2.U2;"
+     */
+    public ModuleDeclaration addDirective(String directive) {
+        return addDirective(JavaParser.parseModuleDirective(directive));
+    }
+
+    public ModuleDeclaration addDirective(ModuleStmt directive) {
+        getModuleStmts().add(directive);
+        return this;
     }
 }

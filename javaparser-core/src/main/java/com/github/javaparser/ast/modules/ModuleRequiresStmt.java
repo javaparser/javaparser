@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.Optional;
 
 /**
- * A require statement in module-info.java. <code>require a.b.C;</code>
+ * A require directive in module-info.java. <code>require a.b.C;</code>
  */
 public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
 

@@ -64,6 +64,20 @@ public class Utils {
         return string;
     }
 
+    public static <T extends Number> T assertNonNegative(T number) {
+        if (number.longValue() < 0) {
+            throw new AssertionError("A number was unexpectedly negative.");
+        }
+        return number;
+    }
+
+    public static <T extends Number> T assertPositive(T number) {
+        if (number.longValue() <= 0) {
+            throw new AssertionError("A number was unexpectedly non-positive.");
+        }
+        return number;
+    }
+
     /**
      * @return string with ASCII characters 10 and 13 replaced by the text "\n" and "\r".
      */
