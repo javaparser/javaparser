@@ -122,38 +122,13 @@ public class Difference {
      */
     void apply() {
         extractReshuffledDiffElements(diffElements);
+        Map<Removed, RemovedGroup> removedGroups = combineRemovedElementsToRemovedGroups();
 
         do {
-            if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
-                DifferenceElement diffElement = diffElements.get(diffIndex);
-                if (diffElement instanceof Kept) {
-                    Kept kept = (Kept) diffElement;
+            boolean isLeftOverDiffElement = applyLeftOverDiffElements();
+            boolean isLeftOverOriginalElement = applyLeftOverOriginalElements();
 
-                    if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
-                        diffIndex++;
-                    } else {
-                        throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
-                                + nodeText + ". Difference: " + this);
-                    }
-                } else if (diffElement instanceof Added) {
-                    Added addedElement = (Added) diffElement;
-
-                    nodeText.addElement(originalIndex, addedElement.toTextElement());
-                    originalIndex++;
-                    diffIndex++;
-                } else {
-                    throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
-                }
-            } else if (diffIndex >= diffElements.size() && originalIndex < originalElements.size()) {
-                TextElement originalElement = originalElements.get(originalIndex);
-
-                if (originalElement.isWhiteSpaceOrComment()) {
-                    originalIndex++;
-                } else {
-                    throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
-                            + this + " " + originalElement);
-                }
-            } else {
+            if (!isLeftOverDiffElement && !isLeftOverOriginalElement){
                 DifferenceElement diffElement = diffElements.get(diffIndex);
 
                 if (diffElement instanceof Added) {
@@ -166,13 +141,60 @@ public class Difference {
                     if (diffElement instanceof Kept) {
                         applyKeptDiffElement((Kept) diffElement, originalElement, originalElementIsChild, originalElementIsToken);
                     } else if (diffElement instanceof Removed) {
-                        applyRemovedDiffElement((Removed) diffElement, originalElement, originalElementIsChild, originalElementIsToken);
+                        Removed removed = (Removed) diffElement;
+                        applyRemovedDiffElement(removedGroups.get(removed), removed, originalElement, originalElementIsChild, originalElementIsToken);
                     } else {
                         throw new UnsupportedOperationException("" + diffElement + " vs " + originalElement);
                     }
                 }
             }
         } while (diffIndex < diffElements.size() || originalIndex < originalElements.size());
+    }
+
+    private boolean applyLeftOverOriginalElements() {
+        boolean isLeftOverElement = false;
+        if (diffIndex >= diffElements.size() && originalIndex < originalElements.size()) {
+            TextElement originalElement = originalElements.get(originalIndex);
+
+            if (originalElement.isWhiteSpaceOrComment()) {
+                originalIndex++;
+            } else {
+                throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
+                        + this + " " + originalElement);
+            }
+
+            isLeftOverElement = true;
+        }
+        return isLeftOverElement;
+    }
+
+    private boolean applyLeftOverDiffElements() {
+        boolean isLeftOverElement = false;
+        if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
+            DifferenceElement diffElement = diffElements.get(diffIndex);
+            if (diffElement instanceof Kept) {
+                Kept kept = (Kept) diffElement;
+
+                if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
+                    diffIndex++;
+                } else {
+                    throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
+                            + nodeText + ". Difference: " + this);
+                }
+            } else if (diffElement instanceof Added) {
+                Added addedElement = (Added) diffElement;
+
+                nodeText.addElement(originalIndex, addedElement.toTextElement());
+                originalIndex++;
+                diffIndex++;
+            } else {
+                throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
+            }
+
+            isLeftOverElement = true;
+        }
+
+        return isLeftOverElement;
     }
 
     private void extractReshuffledDiffElements(List<DifferenceElement> diffElements) {
@@ -271,13 +293,51 @@ public class Difference {
         }
     }
 
-    private void applyRemovedDiffElement(Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
+    /**
+     * Maps all Removed elements to their corresponding RemovedGroup
+     *
+     * @return Map with all Removed elements as keys to their corresponding RemovedGroup
+     */
+    private Map<Removed, RemovedGroup> combineRemovedElementsToRemovedGroups() {
+        Map<Integer, List<Removed>> removedElementsMap = new HashMap<>();
+
+        Integer firstElement = null;
+        for (int i = 0; i < diffElements.size(); i++) {
+            DifferenceElement diffElement = diffElements.get(i);
+            if (diffElement instanceof Removed) {
+                if (firstElement == null) {
+                    firstElement = Integer.valueOf(i);
+                }
+
+                removedElementsMap.computeIfAbsent(firstElement, key -> new ArrayList<>())
+                        .add((Removed) diffElement);
+            } else {
+                firstElement = null;
+            }
+        }
+
+        List<RemovedGroup> removedGroups = new ArrayList<>();
+        for (Map.Entry<Integer, List<Removed>> entry : removedElementsMap.entrySet()) {
+            removedGroups.add(RemovedGroup.of(entry.getKey(), entry.getValue()));
+        }
+
+        Map<Removed, RemovedGroup> map = new HashMap<>();
+        for (RemovedGroup removedGroup : removedGroups){
+            for (Removed index : removedGroup) {
+                map.put(index, removedGroup);
+            }
+        }
+
+        return map;
+    }
+
+    private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (removed.isChild() && originalElementIsChild) {
-            ChildTextElement originalElementChild = (ChildTextElement)originalElement;
+            ChildTextElement originalElementChild = (ChildTextElement) originalElement;
             if (originalElementChild.isComment()) {
                 // We expected to remove a proper node but we found a comment in between.
                 // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
-                Comment comment = (Comment)originalElementChild.getChild();
+                Comment comment = (Comment) originalElementChild.getChild();
                 if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
                     nodeText.removeElement(originalIndex);
                 } else {
@@ -285,27 +345,26 @@ public class Difference {
                 }
             } else {
                 nodeText.removeElement(originalIndex);
-                if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
-                    originalIndex = considerCleaningTheLine(nodeText, originalIndex);
-                } else {
-                    if (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added)) {
-                        originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
-                    }
-                    // If in front we have one space and before also we had space let's drop one space
-                    if (originalElements.size() > originalIndex && originalIndex > 0) {
-                        if (originalElements.get(originalIndex).isWhiteSpace()
-                                && originalElements.get(originalIndex - 1).isWhiteSpace()) {
-                            // However we do not want to do that when we are about to adding or removing elements
-                            if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
-                                originalElements.remove(originalIndex--);
-                            }
+
+                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added))
+                        && !removedGroup.isACompleteLine()) {
+                    originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
+                }
+                // If in front we have one space and before also we had space let's drop one space
+                if (originalElements.size() > originalIndex && originalIndex > 0) {
+                    if (originalElements.get(originalIndex).isWhiteSpace()
+                            && originalElements.get(originalIndex - 1).isWhiteSpace()) {
+                        // However we do not want to do that when we are about to adding or removing elements
+                        if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
+                            originalElements.remove(originalIndex--);
                         }
                     }
                 }
+
                 diffIndex++;
             }
         } else if (removed.isToken() && originalElementIsToken
-                && (removed.getTokenType() == ((TokenTextElement)originalElement).getTokenKind())) {
+                && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind())) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
@@ -323,6 +382,19 @@ public class Difference {
             originalIndex++;
         } else {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
+        }
+
+        if (removedGroup.isACompleteLine() && removedGroup.getLastElement() == removed) {
+            Integer lastElementIndex = removedGroup.getLastElementIndex();
+            Optional<Integer> indentation = removedGroup.getIndentation();
+
+            if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
+                originalIndex = considerCleaningTheLine(nodeText, originalIndex);
+            } else if (!isReplaced(lastElementIndex) && indentation.isPresent()) {
+                for (int i = 0; i < indentation.get(); i++) {
+                    nodeText.removeElement(originalIndex);
+                }
+            }
         }
     }
 
@@ -569,6 +641,10 @@ public class Difference {
 
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
+    }
+
+    private boolean isReplaced(int diffIndex) {
+        return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }
 
     private boolean isPrimitiveType(TextElement textElement) {
