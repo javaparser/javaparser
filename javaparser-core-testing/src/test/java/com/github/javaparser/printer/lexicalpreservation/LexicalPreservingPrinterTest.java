@@ -295,7 +295,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printASimpleClassRemovingAField() {
-        String code = "class /*a comment*/ A {\t\t" + EOL + " int f;" + EOL + EOL + EOL + "         void foo(int p  ) { return  'z'  \t; }}";
+        String code = "class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                "         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();

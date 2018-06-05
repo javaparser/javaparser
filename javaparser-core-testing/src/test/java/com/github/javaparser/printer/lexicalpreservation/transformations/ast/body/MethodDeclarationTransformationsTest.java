@@ -252,4 +252,24 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                 "@Override" + EOL +
                 "void testMethod(){}", it);
     }
+
+    @Test
+    public void removingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
+    }
 }
