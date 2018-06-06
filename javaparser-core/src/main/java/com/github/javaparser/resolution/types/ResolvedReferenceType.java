@@ -22,6 +22,7 @@
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
@@ -217,6 +218,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public abstract List<ResolvedReferenceType> getAllAncestors();
 
+    public abstract List<ResolvedReferenceType> getDirectAncestors();
+
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isInterface())
@@ -358,6 +361,17 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public abstract ResolvedType toRawType();
+
+    public List<ResolvedMethodDeclaration> getAllMethods() {
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>();
+        allMethods.addAll(this.getDeclaredMethods().stream().map(m -> m.getDeclaration()).collect(Collectors.toList()));
+
+        System.out.println("Ancestors of " + this + ": " + getDirectAncestors());
+
+        getDirectAncestors().forEach(a ->
+                allMethods.addAll(a.getAllMethods()));
+        return allMethods;
+    }
 
     //
     // Protected methods

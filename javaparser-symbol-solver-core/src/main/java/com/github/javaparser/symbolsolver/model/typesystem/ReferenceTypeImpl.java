@@ -204,6 +204,25 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return ancestors;
     }
 
+    public List<ResolvedReferenceType> getDirectAncestors() {
+        // We need to go through the inheritance line and propagate the type parametes
+
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
+
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
+
+        // Avoid repetitions of Object
+        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        if (!this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+            ResolvedReferenceType objectRef = create(objectType);
+            ancestors.add(objectRef);
+        }
+        return ancestors;
+    }
+
     public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
         return create(typeDeclaration, typeParametersMap);
     }
