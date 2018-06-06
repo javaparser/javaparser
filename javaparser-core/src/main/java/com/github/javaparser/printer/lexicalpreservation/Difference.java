@@ -388,7 +388,9 @@ public class Difference {
             return;
         }
 
-        if (removedGroup.isACompleteLine() && removedGroup.getLastElement() == removed && !removedGroup.isProcessed()) {
+        if (!removedGroup.isProcessed()
+                && removedGroup.getLastElement() == removed
+                && removedGroup.isACompleteLine()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
             Optional<Integer> indentation = removedGroup.getIndentation();
 
@@ -397,7 +399,7 @@ public class Difference {
                     if (originalElements.get(originalIndex).isSpaceOrTab()) {
                         // If the current element is a space, remove it
                         nodeText.removeElement(originalIndex);
-                    } else if (originalIndex >= 1) {
+                    } else if (originalIndex >= 1 && originalElements.get(originalIndex - 1).isSpaceOrTab()) {
                         // If the current element is not a space itself we remove the space in front of it
                         nodeText.removeElement(originalIndex - 1);
                         originalIndex--;

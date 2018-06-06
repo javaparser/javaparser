@@ -6,7 +6,9 @@ import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -148,10 +150,12 @@ class RemovedGroup implements Iterable<Removed> {
                 return hasOnlyWhitespaceInFront(previousToken.get());
             } else if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
                 return true;
+            } else {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private boolean hasOnlyWhitespaceBehind(JavaToken token) {
@@ -162,10 +166,12 @@ class RemovedGroup implements Iterable<Removed> {
                 return hasOnlyWhitespaceInFront(nextToken.get());
             } else if (TokenTypes.isEndOfLineToken(nextToken.get().getKind())) {
                 return true;
+            } else {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -195,10 +201,14 @@ class RemovedGroup implements Iterable<Removed> {
                         previousToken = previousToken.get().getPreviousToken();
                     }
 
-                    if (previousToken.isPresent() && TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
-                        return Optional.of(Integer.valueOf(indentation));
+                    if (previousToken.isPresent()) {
+                        if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
+                            return Optional.of(Integer.valueOf(indentation));
+                        } else {
+                            return Optional.empty();
+                        }
                     } else {
-                        return Optional.empty();
+                        return Optional.of(Integer.valueOf(indentation));
                     }
                 }
             }
@@ -221,6 +231,7 @@ class RemovedGroup implements Iterable<Removed> {
             public Removed next() {
                 return removedList.get(currentIndex++);
             }
+
         };
     }
 }
