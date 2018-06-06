@@ -379,20 +379,28 @@ public class Difference {
         cleanTheLineOfLeftOverSpace(removedGroup, removed);
     }
 
+    /**
+     * Cleans the line of left over space if there is unnecessary indentation and the element will not be replaced
+     */
     private void cleanTheLineOfLeftOverSpace(RemovedGroup removedGroup, Removed removed) {
+        if (originalIndex >= originalElements.size()) {
+            // if all elements were already processed there is nothing to do
+            return;
+        }
+
         if (removedGroup.isACompleteLine() && removedGroup.getLastElement() == removed && !removedGroup.isProcessed()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
             Optional<Integer> indentation = removedGroup.getIndentation();
 
-            if (indentation.isPresent()) {
-                if (originalIndex < originalElements.size() && !originalElements.get(originalIndex).isSpaceOrTab()) {
-                    for (int i = 0; i < indentation.get() && originalIndex >= 1; i++) {
+            if (indentation.isPresent() && !isReplaced(lastElementIndex)) {
+                for (int i = 0; i < indentation.get(); i++) {
+                    if (originalElements.get(originalIndex).isSpaceOrTab()) {
+                        // If the current element is a space, remove it
+                        nodeText.removeElement(originalIndex);
+                    } else if (originalIndex >= 1) {
+                        // If the current element is not a space itself we remove the space in front of it
                         nodeText.removeElement(originalIndex - 1);
                         originalIndex--;
-                    }
-                } else if (!isReplaced(lastElementIndex)) {
-                    for (int i = 0; i < indentation.get(); i++) {
-                        nodeText.removeElement(originalIndex);
                     }
                 }
             }
