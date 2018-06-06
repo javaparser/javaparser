@@ -73,14 +73,6 @@ public class Difference {
         return res;
     }
 
-    private int considerCleaningTheLine(NodeText nodeText, int nodeTextIndex) {
-        while (nodeTextIndex >=1 && nodeText.getElements().get(nodeTextIndex - 1).isSpaceOrTab()) {
-            nodeText.removeElement(nodeTextIndex - 1);
-            nodeTextIndex--;
-        }
-        return nodeTextIndex;
-    }
-
     private boolean isAfterLBrace(NodeText nodeText, int nodeTextIndex) {
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(LBRACE)) {
             return true;
@@ -384,17 +376,29 @@ public class Difference {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
         }
 
-        if (removedGroup.isACompleteLine() && removedGroup.getLastElement() == removed) {
+        cleanTheLineOfLeftOverSpace(removedGroup, removed);
+    }
+
+    private void cleanTheLineOfLeftOverSpace(RemovedGroup removedGroup, Removed removed) {
+        if (removedGroup.isACompleteLine() && removedGroup.getLastElement() == removed && !removedGroup.isProcessed()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
             Optional<Integer> indentation = removedGroup.getIndentation();
 
-            if (originalIndex < originalElements.size() && originalElements.get(originalIndex).isNewline()) {
-                originalIndex = considerCleaningTheLine(nodeText, originalIndex);
-            } else if (!isReplaced(lastElementIndex) && indentation.isPresent()) {
-                for (int i = 0; i < indentation.get(); i++) {
-                    nodeText.removeElement(originalIndex);
+            if (indentation.isPresent()) {
+                if (originalIndex < originalElements.size() && !originalElements.get(originalIndex).isSpaceOrTab()) {
+                    for (int i = 0; i < indentation.get() && originalIndex >= 1; i++) {
+                        nodeText.removeElement(originalIndex - 1);
+                        originalIndex--;
+                    }
+                } else if (!isReplaced(lastElementIndex)) {
+                    for (int i = 0; i < indentation.get(); i++) {
+                        nodeText.removeElement(originalIndex);
+                    }
                 }
             }
+
+            // Mark RemovedGroup as processed
+            removedGroup.processed();
         }
     }
 

@@ -308,6 +308,21 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
+    public void printASimpleClassRemovingAMethod() {
+        String code = "class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                "         void foo(int p  ) { return  'z'  \t; }" + EOL +
+                " int g;}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
+        c.getMembers().remove(1);
+        assertEquals("class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                " int g;}", LexicalPreservingPrinter.print(c));
+    }
+
+    @Test
     public void printASimpleMethodAddingAParameterToAMethodWithZeroParameters() {
         String code = "class A { void foo() {} }";
         considerCode(code);

@@ -15,6 +15,8 @@ class RemovedGroup implements Iterable<Removed> {
     private final Integer firstElementIndex;
     private final List<Removed> removedList;
 
+    private boolean isProcessed = false;
+
     private RemovedGroup(Integer firstElementIndex, List<Removed> removedList) {
         if (firstElementIndex == null) {
             throw new IllegalArgumentException("firstElementIndex should not be null");
@@ -37,6 +39,22 @@ class RemovedGroup implements Iterable<Removed> {
      */
     public static RemovedGroup of(Integer firstElementIndex, List<Removed> removedList) {
         return new RemovedGroup(firstElementIndex, removedList);
+    }
+
+    /**
+     * Marks the RemovedGroup as processed which indicates that it should not be processed again
+     */
+    void processed() {
+        isProcessed = true;
+    }
+
+    /**
+     * Returns whether the RemovedGroup was already processed and should not be processed again
+     *
+     * @return wheter the RemovedGroup was already processed
+     */
+    boolean isProcessed() {
+        return isProcessed;
     }
 
     private List<Integer> getIndicesBeingRemoved() {
