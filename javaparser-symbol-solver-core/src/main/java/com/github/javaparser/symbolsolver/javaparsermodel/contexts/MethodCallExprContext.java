@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -112,7 +113,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return solveMethodAsUsage(typeOfScope, name, argumentsTypes, typeSolver, this);
         } else {
             Context parentContext = getParent();
-            while (parentContext instanceof MethodCallExprContext) {
+            while (parentContext instanceof MethodCallExprContext || parentContext instanceof ObjectCreationContext) {
                 parentContext = parentContext.getParent();
             }
             return parentContext.solveMethodAsUsage(name, argumentsTypes, typeSolver);
