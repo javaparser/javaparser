@@ -9,6 +9,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -100,71 +101,41 @@ class RemovedGroup implements Iterable<Removed> {
      * @return true if the RemovedGroup equates to a complete line
      */
     boolean isACompleteLine() {
-        Removed firstElement = getFirstElement();
+        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction)
+                && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
+    }
 
-        boolean hasOnlyWhitespaceInFront = false;
-        if (firstElement.isChild()) {
-            LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) firstElement.getElement();
+    private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenInFrontFunction = begin -> hasOnlyWhiteSpaceForTokenFunction(begin, token -> token.getPreviousToken());
+    private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenBehindFunction = end -> hasOnlyWhiteSpaceForTokenFunction(end, token -> token.getNextToken());
+    private final Function<TokenRange, Boolean> hasOnlyWhitespaceInFrontFunction = tokenRange -> hasOnlyWhitespaceJavaTokenInFrontFunction.apply(tokenRange.getBegin());
+    private final Function<TokenRange, Boolean> hasOnlyWhitespaceBehindFunction = tokenRange -> hasOnlyWhitespaceJavaTokenBehindFunction.apply(tokenRange.getEnd());
+
+    private boolean hasOnlyWhitespace(Removed startElement, Function<TokenRange, Boolean> hasOnlyWhitespaceFunction) {
+        boolean hasOnlyWhitespace = false;
+        if (startElement.isChild()) {
+            LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) startElement.getElement();
             Node child = csmChild.getChild();
 
             Optional<TokenRange> tokenRange = child.getTokenRange();
             if (tokenRange.isPresent()) {
-                JavaToken begin = tokenRange.get().getBegin();
-
-                hasOnlyWhitespaceInFront = hasOnlyWhitespaceInFront(begin);
+                hasOnlyWhitespace = hasOnlyWhitespaceFunction.apply(tokenRange.get());
             }
-        } else if (firstElement.isToken()) {
-            CsmToken token = (CsmToken) firstElement.getElement();
+        } else if (startElement.isToken()) {
+            CsmToken token = (CsmToken) startElement.getElement();
             if (TokenTypes.isEndOfLineToken(token.getTokenType())) {
-                hasOnlyWhitespaceInFront = true;
+                hasOnlyWhitespace = true;
             }
         }
-
-        Removed lastElement = getLastElement();
-        boolean hasOnlyWhitespaceBehind = false;
-        if (lastElement.isChild()) {
-            LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) lastElement.getElement();
-            Node child = csmChild.getChild();
-
-            Optional<TokenRange> tokenRange = child.getTokenRange();
-            if (tokenRange.isPresent()) {
-                JavaToken end = tokenRange.get().getEnd();
-
-                hasOnlyWhitespaceBehind = hasOnlyWhitespaceBehind(end);
-            }
-        } else if (lastElement.isToken()) {
-            CsmToken token = (CsmToken) lastElement.getElement();
-            if (TokenTypes.isEndOfLineToken(token.getTokenType())) {
-                hasOnlyWhitespaceBehind = true;
-            }
-        }
-
-        return hasOnlyWhitespaceInFront && hasOnlyWhitespaceBehind;
+        return hasOnlyWhitespace;
     }
 
-    private boolean hasOnlyWhitespaceInFront(JavaToken token) {
-        Optional<JavaToken> previousToken = token.getPreviousToken();
+    private boolean hasOnlyWhiteSpaceForTokenFunction(JavaToken token, Function<JavaToken, Optional<JavaToken>> tokenFunction) {
+        Optional<JavaToken> tokenResult = tokenFunction.apply(token);
 
-        if (previousToken.isPresent()) {
-            if (TokenTypes.isSpaceOrTab(previousToken.get().getKind())){
-                return hasOnlyWhitespaceInFront(previousToken.get());
-            } else if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean hasOnlyWhitespaceBehind(JavaToken token) {
-        Optional<JavaToken> nextToken = token.getNextToken();
-
-        if (nextToken.isPresent()) {
-            if (TokenTypes.isSpaceOrTab(nextToken.get().getKind())) {
-                return hasOnlyWhitespaceInFront(nextToken.get());
-            } else if (TokenTypes.isEndOfLineToken(nextToken.get().getKind())) {
+        if (tokenResult.isPresent()) {
+            if (TokenTypes.isSpaceOrTab(tokenResult.get().getKind())) {
+                return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
+            } else if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
                 return true;
             } else {
                 return false;
@@ -192,7 +163,7 @@ class RemovedGroup implements Iterable<Removed> {
             if (tokenRange.isPresent()) {
                 JavaToken begin = tokenRange.get().getBegin();
 
-                if (hasOnlyWhitespaceInFront(begin)) {
+                if (hasOnlyWhitespaceJavaTokenInFrontFunction.apply(begin)) {
                     Optional<JavaToken> previousToken = begin.getPreviousToken();
 
                     while(previousToken.isPresent() && (TokenTypes.isSpaceOrTab(previousToken.get().getKind()))) {
