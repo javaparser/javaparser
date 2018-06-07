@@ -99,7 +99,7 @@ public class PrettyPrinterConfiguration {
             indentSize = indent.length();
             indentType = TABS;
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("This type of indentation is not yet supported: '" + indent + "'");
         }
         return this;
     }
