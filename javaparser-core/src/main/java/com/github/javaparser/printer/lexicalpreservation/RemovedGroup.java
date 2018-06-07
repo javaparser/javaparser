@@ -97,6 +97,13 @@ class RemovedGroup implements Iterable<Removed> {
     /**
      * Returns true if the RemovedGroup equates to a complete line
      * This is the case if there are only spaces and tabs left on the line besides the Removed elements.
+     * <br/>
+     * Example:
+     * <pre>
+     * "  [Removed] [EOL]" -> this would be a complete line, regardless of spaces or tabs before or after the [Removed] element
+     * "  [Removed] void [EOL]" -> this would not be a complete line because of the "void"
+     * "  public [Removed] [EOL]" -> this would not be a complete line because of the "public"
+     * </pre>
      *
      * @return true if the RemovedGroup equates to a complete line
      */

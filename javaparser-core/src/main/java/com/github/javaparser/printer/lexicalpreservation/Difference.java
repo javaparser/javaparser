@@ -286,27 +286,20 @@ public class Difference {
     }
 
     /**
-     * Maps all Removed elements to their corresponding RemovedGroup
+     * Maps all Removed elements as keys to their corresponding RemovedGroup.
+     * A RemovedGroup contains all consecutive Removed elements.
+     * <br/>
+     * Example:
+     * <pre>
+     * Elements: Kept|Removed1|Removed2|Kept|Removed3|Added|Removed4
+     * Groups:        <----Group1---->       Group2         Group3
+     * Keys:          Removed1+Removed2      Removed3       Removed4
+     * </pre>
      *
      * @return Map with all Removed elements as keys to their corresponding RemovedGroup
      */
     private Map<Removed, RemovedGroup> combineRemovedElementsToRemovedGroups() {
-        Map<Integer, List<Removed>> removedElementsMap = new HashMap<>();
-
-        Integer firstElement = null;
-        for (int i = 0; i < diffElements.size(); i++) {
-            DifferenceElement diffElement = diffElements.get(i);
-            if (diffElement instanceof Removed) {
-                if (firstElement == null) {
-                    firstElement = Integer.valueOf(i);
-                }
-
-                removedElementsMap.computeIfAbsent(firstElement, key -> new ArrayList<>())
-                        .add((Removed) diffElement);
-            } else {
-                firstElement = null;
-            }
-        }
+        Map<Integer, List<Removed>> removedElementsMap = groupConsecutiveRemovedElements();
 
         List<RemovedGroup> removedGroups = new ArrayList<>();
         for (Map.Entry<Integer, List<Removed>> entry : removedElementsMap.entrySet()) {
@@ -321,6 +314,26 @@ public class Difference {
         }
 
         return map;
+    }
+
+    private Map<Integer, List<Removed>> groupConsecutiveRemovedElements() {
+        Map<Integer, List<Removed>> removedElementsMap = new HashMap<>();
+
+        Integer firstElement = null;
+        for (int i = 0; i < diffElements.size(); i++) {
+            DifferenceElement diffElement = diffElements.get(i);
+            if (diffElement instanceof Removed) {
+                if (firstElement == null) {
+                    firstElement = i;
+                }
+
+                removedElementsMap.computeIfAbsent(firstElement, key -> new ArrayList<>())
+                        .add((Removed) diffElement);
+            } else {
+                firstElement = null;
+            }
+        }
+        return removedElementsMap;
     }
 
     private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
