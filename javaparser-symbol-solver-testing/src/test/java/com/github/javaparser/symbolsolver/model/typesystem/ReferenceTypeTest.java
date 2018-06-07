@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -29,8 +30,12 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.Serializable;
+import java.nio.Buffer;
+import java.nio.CharBuffer;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -595,6 +600,61 @@ public class ReferenceTypeTest {
 
         ResolvedType streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
         assertEquals("java.util.stream.Stream<java.lang.String>", streamReplaced.describe());
+    }
+
+    @Test
+    public void testDirectAncestorsOfObject() {
+        assertEquals(0, object.getDirectAncestors().size());
+    }
+
+    @Test
+    public void testDirectAncestorsOfInterface() {
+        ResolvedReferenceType iterableOfString = new ReferenceTypeImpl(
+                new ReflectionInterfaceDeclaration(Iterable.class, typeSolver),
+                ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
+        assertEquals(1, iterableOfString.getDirectAncestors().size());
+        ResolvedReferenceType ancestor = iterableOfString.getDirectAncestors().get(0);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        assertEquals(true, ancestor.getTypeParametersMap().isEmpty());
+    }
+
+    @Test
+    public void testDirectAncestorsOfInterfaceExtendingInterface() {
+        assertEquals(2, collectionOfString.getDirectAncestors().size());
+        ResolvedReferenceType ancestor1 = collectionOfString.getDirectAncestors().get(0);
+        assertEquals("java.lang.Iterable", ancestor1.getQualifiedName());
+        assertEquals(1, ancestor1.getTypeParametersMap().size());
+        assertEquals("T", ancestor1.getTypeParametersMap().get(0).a.getName());
+        assertEquals("java.lang.String", ancestor1.getTypeParametersMap().get(0).b.describe());
+        ResolvedReferenceType ancestor2 = collectionOfString.getDirectAncestors().get(1);
+        assertEquals("java.lang.Object", ancestor2.getQualifiedName());
+        assertEquals(true, ancestor2.getTypeParametersMap().isEmpty());
+    }
+
+    @Test
+    public void testDirectAncestorsOfClassWithoutSuperClassOrInterfaces() {
+        ResolvedReferenceType buffer = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = buffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        assertEquals(new HashSet<>(Arrays.asList("java.lang.Object")), ancestors);
+    }
+
+    @Test
+    public void testDirectAncestorsOfClassWithSuperClass() {
+        ResolvedReferenceType charbuffer = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = charbuffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        assertEquals(new HashSet<>(Arrays.asList("java.lang.CharSequence", "java.lang.Appendable",
+                "java.nio.Buffer", "java.lang.Readable", "java.lang.Comparable<java.nio.CharBuffer>")), ancestors);
+    }
+
+    @Test
+    public void testDirectAncestorsOfClassWithInterfaces() {
+        Set<String> ancestors = string.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        assertEquals(new HashSet<>(Arrays.asList("java.lang.CharSequence",
+                "java.lang.Object",
+                "java.lang.Comparable<java.lang.String>",
+                "java.io.Serializable")), ancestors);
     }
 
 }
