@@ -13,7 +13,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-class RemovedGroup implements Iterable<Removed> {
+/**
+ * This class represents a group of {@link Removed} elements.
+ * The {@link Removed} elements are ideally consecutive for the methods in this class to work correctly.
+ *
+ * This class consists of methods that calculate information to better handle the difference application for the
+ * containing {@link Removed} elements.
+ *
+ * @see Iterable
+ *
+ * @author ThLeu
+ */
+final class RemovedGroup implements Iterable<Removed> {
 
     private final Integer firstElementIndex;
     private final List<Removed> removedList;
@@ -39,6 +50,7 @@ class RemovedGroup implements Iterable<Removed> {
      * @param firstElementIndex the difference index at which the RemovedGroup starts
      * @param removedList list of the consecutive Removed elements
      * @return a RemovedGroup object
+     * @throws IllegalArgumentException if the firstElementIndex is null or the removedList is empty or null
      */
     public static RemovedGroup of(Integer firstElementIndex, List<Removed> removedList) {
         return new RemovedGroup(firstElementIndex, removedList);
@@ -47,7 +59,7 @@ class RemovedGroup implements Iterable<Removed> {
     /**
      * Marks the RemovedGroup as processed which indicates that it should not be processed again
      */
-    void processed() {
+    final void processed() {
         isProcessed = true;
     }
 
@@ -56,7 +68,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return wheter the RemovedGroup was already processed
      */
-    boolean isProcessed() {
+    final boolean isProcessed() {
         return isProcessed;
     }
 
@@ -71,7 +83,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return the last difference incex of this RemovedGroup
      */
-    Integer getLastElementIndex() {
+    final Integer getLastElementIndex() {
         List<Integer> indicesBeingRemoved = getIndicesBeingRemoved();
         return indicesBeingRemoved.get(indicesBeingRemoved.size() - 1);
     }
@@ -81,7 +93,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return the first element of this RemovedGroup
      */
-    Removed getFirstElement() {
+    final Removed getFirstElement() {
         return removedList.get(0);
     }
 
@@ -90,7 +102,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return the last element of this RemovedGroup
      */
-    Removed getLastElement() {
+    final Removed getLastElement() {
         return removedList.get(removedList.size() - 1);
     }
 
@@ -107,7 +119,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return true if the RemovedGroup equates to a complete line
      */
-    boolean isACompleteLine() {
+    final boolean isACompleteLine() {
         return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction)
                 && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
     }
@@ -158,7 +170,7 @@ class RemovedGroup implements Iterable<Removed> {
      *
      * @return the indentation in front of this RemovedGroup or Optional.empty()
      */
-    Optional<Integer> getIndentation() {
+    final Optional<Integer> getIndentation() {
         Removed firstElement = getFirstElement();
 
         int indentation = 0;
@@ -196,7 +208,7 @@ class RemovedGroup implements Iterable<Removed> {
     }
 
     @Override
-    public Iterator<Removed> iterator() {
+    public final Iterator<Removed> iterator() {
         return new Iterator<Removed>() {
             private int currentIndex = 0;
 
