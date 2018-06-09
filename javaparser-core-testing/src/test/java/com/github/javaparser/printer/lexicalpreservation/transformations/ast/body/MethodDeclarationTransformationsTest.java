@@ -32,6 +32,7 @@ import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.EnumSet;
@@ -251,5 +252,46 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         assertTransformedToString(
                 "@Override" + EOL +
                 "void testMethod(){}", it);
+    }
+
+    @Test
+    public void removingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
+    }
+
+    @Ignore
+    @Test
+    public void removingAnnotationsWithSpaces() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override " + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
     }
 }
