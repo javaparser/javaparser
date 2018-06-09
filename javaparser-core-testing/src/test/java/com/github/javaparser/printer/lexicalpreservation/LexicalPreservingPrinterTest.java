@@ -295,7 +295,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printASimpleClassRemovingAField() {
-        String code = "class /*a comment*/ A {\t\t" + EOL + " int f;" + EOL + EOL + EOL + "         void foo(int p  ) { return  'z'  \t; }}";
+        String code = "class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                "         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
@@ -303,6 +305,21 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("class /*a comment*/ A {\t\t" + EOL +
                 EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
+    }
+
+    @Test
+    public void printASimpleClassRemovingAMethod() {
+        String code = "class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                "         void foo(int p  ) { return  'z'  \t; }" + EOL +
+                " int g;}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
+        c.getMembers().remove(1);
+        assertEquals("class /*a comment*/ A {\t\t" + EOL +
+                " int f;" + EOL + EOL + EOL +
+                " int g;}", LexicalPreservingPrinter.print(c));
     }
 
     @Test

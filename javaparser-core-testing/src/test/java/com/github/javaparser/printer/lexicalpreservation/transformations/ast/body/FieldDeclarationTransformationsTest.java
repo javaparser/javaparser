@@ -29,6 +29,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import static com.github.javaparser.utils.Utils.EOL;
+
 /**
  * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
  */
@@ -72,5 +74,24 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
         assertTransformedToString(" a, b;", it);
         it.getVariable(1).setType("Xyz");
         assertTransformedToString("Xyz a, b;", it);
+    }
+
+    // Annotations
+    @Test
+    public void removingAnnotations() {
+        FieldDeclaration it = consider( EOL +
+                "@Annotation" + EOL +
+                "public int A;");
+        it.getAnnotationByName("Annotation").get().remove();
+        assertTransformedToString("public int A;", it);
+    }
+
+    @Test
+    public void removingAnnotationsWithSpaces() {
+        FieldDeclaration it = consider( EOL +
+                "  @Annotation " + EOL +
+                "public int A;");
+        it.getAnnotationByName("Annotation").get().remove();
+        assertTransformedToString("public int A;", it);
     }
 }
