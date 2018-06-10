@@ -21,8 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.function.Function;
 
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.SPACES;
@@ -101,7 +99,7 @@ public class PrettyPrinterConfiguration {
             indentSize = indent.length();
             indentType = TABS;
         } else {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("This type of indentation is not yet supported: '" + indent + "'");
         }
         return this;
     }
