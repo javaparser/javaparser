@@ -1,7 +1,7 @@
 sudo: false
 language: java
 install: mvn install -DskipTests=true
-script: mvn test
+script: mvn test -P AlsoSlowTests
 jdk:
   - oraclejdk8
   - oraclejdk9
