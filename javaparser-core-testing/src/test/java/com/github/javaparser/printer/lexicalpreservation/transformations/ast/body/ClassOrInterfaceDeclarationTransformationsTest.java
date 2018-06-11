@@ -188,6 +188,23 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     }
 
     // Annotations
+    @Test
+    public void removingAnnotations() {
+        ClassOrInterfaceDeclaration cid = consider(
+                "@Value" + EOL +
+                "public class A {}");
+        cid.getAnnotationByName("Value").get().remove();
+        assertTransformedToString("public class A {}", cid);
+    }
+
+    @Test
+    public void removingAnnotationsWithSpaces() {
+        ClassOrInterfaceDeclaration cid = consider(
+                  "   @Value " + EOL +
+                        "public class A {}");
+        cid.getAnnotationByName("Value").get().remove();
+        assertTransformedToString("public class A {}", cid);
+    }
 
     // Javadoc
 

@@ -22,6 +22,7 @@
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
@@ -217,6 +218,13 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public abstract List<ResolvedReferenceType> getAllAncestors();
 
+    /**
+     * Return direct ancestors, that means the superclasses and interfaces implemented directly.
+     * This list should include Object if the class has no other superclass or the interface is not extending another interface.
+     * There is an exception for Object itself.
+     */
+    public abstract List<ResolvedReferenceType> getDirectAncestors();
+
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isInterface())
@@ -358,6 +366,22 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public abstract ResolvedType toRawType();
+
+    /**
+     * Get a list of all the methods available on this type. This list includes methods declared in this type and
+     * methods inherited. This list includes methods of all sort of visibility. However it does not include methods
+     * that have been overwritten.
+     */
+    public List<ResolvedMethodDeclaration> getAllMethods() {
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>();
+        allMethods.addAll(this.getDeclaredMethods().stream().map(m -> m.getDeclaration()).collect(Collectors.toList()));
+
+        System.out.println("Ancestors of " + this + ": " + getDirectAncestors());
+
+        getDirectAncestors().forEach(a ->
+                allMethods.addAll(a.getAllMethods()));
+        return allMethods;
+    }
 
     //
     // Protected methods
