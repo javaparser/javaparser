@@ -21,12 +21,10 @@
 
 package com.github.javaparser.ast.comments;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
@@ -35,7 +33,6 @@ import org.junit.Test;
 import java.util.EnumSet;
 
 import static com.github.javaparser.JavaParser.parse;
-import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -43,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CommentTest {
 
-    private static final PrettyPrinterConfiguration prettyPrintConfig = new PrettyPrinterConfiguration().setIndentSize(2);
+    private static final PrettyPrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new PrettyPrinterConfiguration().setIndentSize(2);
 
     @Test
     public void removeOrphanComment() {
@@ -118,7 +115,7 @@ public class CommentTest {
                 "  public void anotherMethod() {" + EOL +
                 "  }" + EOL +
                 "}" +
-                EOL, cu.toString(prettyPrintConfig));
+                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
@@ -157,7 +154,7 @@ public class CommentTest {
                 "  public void anotherMethod() {" + EOL +
                 "  }" + EOL +
                 "}" +
-                EOL, cu.toString(prettyPrintConfig));
+                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
@@ -196,6 +193,6 @@ public class CommentTest {
                 "  public void anotherMethod() {" + EOL +
                 "  }" + EOL +
                 "}" +
-                EOL, cu.toString(prettyPrintConfig));
+                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 }
