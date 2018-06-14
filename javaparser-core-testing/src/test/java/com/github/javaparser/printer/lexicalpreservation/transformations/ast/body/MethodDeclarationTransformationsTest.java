@@ -93,18 +93,18 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         methodDeclaration.removeComment();
 
         // Assert
-        assertTransformedToString("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu);
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
     }
 
     @Ignore("Indentation not correct yet")
@@ -134,21 +134,21 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         methodDeclaration.setJavadocComment("", javadoc);
 
         // Assert
-        assertTransformedToString("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Change Javadoc" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu);
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Change Javadoc\n" +
+                "   */\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
     }
 
     // Comments
@@ -179,18 +179,18 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         methodDeclaration.removeComment();
 
         // Assert
-        assertTransformedToString("public class MyClass {" + EOL +
-                EOL +
-                "  /*" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu);
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /*\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
     }
 
     // Modifiers

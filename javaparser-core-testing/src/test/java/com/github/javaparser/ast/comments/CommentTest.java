@@ -33,6 +33,7 @@ import org.junit.Test;
 import java.util.EnumSet;
 
 import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -91,8 +92,7 @@ public class CommentTest {
                 "   */" + EOL +
                 "  public void anotherMethod() {" + EOL +
                 "  }" + EOL +
-                "}" +
-                EOL);
+                "}" + EOL);
 
         MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
 
@@ -101,21 +101,20 @@ public class CommentTest {
         methodDeclaration.setJavadocComment("", javadoc);
 
         // Assert
-        assertEquals("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Change Javadoc" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Change Javadoc\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
@@ -143,18 +142,17 @@ public class CommentTest {
         methodDeclaration.removeComment();
 
         // Assert
-        assertEquals("public class MyClass {" + EOL +
-                EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
@@ -182,17 +180,16 @@ public class CommentTest {
         methodDeclaration.removeJavaDocComment();
 
         // Assert
-        assertEquals("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" +
-                EOL, cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 }
