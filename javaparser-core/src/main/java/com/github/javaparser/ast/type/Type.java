@@ -45,7 +45,7 @@ import java.util.Optional;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node implements Resolvable<Object> {
+public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     private NodeList<AnnotationExpr> annotations;
 
