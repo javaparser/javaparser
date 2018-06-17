@@ -30,7 +30,10 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.JavaParser.parseType;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class NodeWithMembersBuildersTest {
@@ -129,5 +132,88 @@ public class NodeWithMembersBuildersTest {
 
         assertTrue(fields.contains(firstField));
         assertTrue(fields.contains(secondField));
+    }
+
+    @Test
+    public void testAddPrivateFieldWithType(){
+        CompilationUnit compilationUnit = new CompilationUnit();
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
+        classOrInterfaceDeclaration.addPrivateField(parseType("java.lang.String"), "name");
+
+        assertNotNull(classOrInterfaceDeclaration.getFields());
+        assertEquals(1, classOrInterfaceDeclaration.getFields().size());
+
+        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(Modifier.PRIVATE, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
+    }
+
+    @Test
+    public void testAddPublicFieldWithType(){
+        CompilationUnit compilationUnit = new CompilationUnit();
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
+        classOrInterfaceDeclaration.addPublicField(parseType("java.lang.String"), "name");
+
+        assertNotNull(classOrInterfaceDeclaration.getFields());
+        assertEquals(1, classOrInterfaceDeclaration.getFields().size());
+
+        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
+    }
+
+    @Test
+    public void testAddProtectedFieldWithType(){
+        CompilationUnit compilationUnit = new CompilationUnit();
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
+        classOrInterfaceDeclaration.addProtectedField(parseType("java.lang.String"), "name");
+
+        assertNotNull(classOrInterfaceDeclaration.getFields());
+        assertEquals(1, classOrInterfaceDeclaration.getFields().size());
+
+        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(Modifier.PROTECTED, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
+    }
+
+    @Test
+    public void testClassWithInitializersWithString(){
+        CompilationUnit compilationUnit = new CompilationUnit();
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
+        classOrInterfaceDeclaration.addFieldWithInitializer(
+                "java.lang.String",
+                "name",
+                parseExpression("John"),
+                Modifier.PUBLIC);
+        assertNotNull(classOrInterfaceDeclaration.getFields());
+        assertEquals(1, classOrInterfaceDeclaration.getFields().size());
+
+        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
+        assertEquals("John",fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
+    }
+
+    @Test
+    public void testClassWithInitializersWithClass(){
+        CompilationUnit compilationUnit = new CompilationUnit();
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
+        classOrInterfaceDeclaration.addFieldWithInitializer(
+                List.class,
+                "skills",
+                parseExpression("new ArrayList()"),
+                Modifier.PUBLIC);
+        assertNotNull(classOrInterfaceDeclaration.getFields());
+        assertEquals(1, classOrInterfaceDeclaration.getFields().size());
+
+        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals("List",fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals("skills",fieldDeclaration.getVariables().get(0).getName().toString());
+        assertEquals("new ArrayList()",fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
     }
 }
