@@ -156,13 +156,10 @@ public class LexicalPreservingPrinter {
                     nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                 } else if (newValue == null) {
                     if (oldValue instanceof JavadocComment) {
-                        JavadocComment javadocComment = (JavadocComment) oldValue;
-                        List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
-                                && ((TokenTextElement) e).getText().equals("/**" + javadocComment.getContent() + "*/")).map(e -> (TokenTextElement) e).collect(Collectors.toList());
-                        if (matchingTokens.size() != 1) {
-                            throw new IllegalStateException();
-                        }
-                        int index = nodeText.findElement(matchingTokens.get(0));
+                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((JavadocComment) oldValue, nodeText);
+
+                        TokenTextElement matchingElement = matchingTokens.get(0);
+                        int index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
                         nodeText.removeElement(index);
                         if (nodeText.getElements().get(index).isNewline()) {
                             nodeText.removeElement(index);
@@ -172,14 +169,11 @@ public class LexicalPreservingPrinter {
                     }
                 } else {
                     if (oldValue instanceof JavadocComment) {
-                        JavadocComment oldJavadocComment = (JavadocComment) oldValue;
-                        List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
-                                && ((TokenTextElement) e).getText().equals("/**" + oldJavadocComment.getContent() + "*/")).map(e -> (TokenTextElement) e).collect(Collectors.toList());
-                        if (matchingTokens.size() != 1) {
-                            throw new IllegalStateException();
-                        }
+                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((JavadocComment) oldValue, nodeText);
+
                         JavadocComment newJavadocComment = (JavadocComment) newValue;
-                        nodeText.replace(matchingTokens.get(0), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
+                        TokenTextElement matchingElement = matchingTokens.get(0);
+                        nodeText.replace(matchingElement.and(matchingElement.matchByRange()), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -192,6 +186,35 @@ public class LexicalPreservingPrinter {
             }
 
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
+        }
+
+        private List<TokenTextElement> getMatchingTokenTextElements(JavadocComment oldValue, NodeText nodeText) {
+            JavadocComment javadocComment = oldValue;
+            List<TokenTextElement> matchingTokens = nodeText.getElements().stream()
+                    .filter(e -> e.isToken(JAVADOC_COMMENT))
+                    .map(e -> (TokenTextElement) e)
+                    .filter(t -> t.getText().equals("/**" + javadocComment.getContent() + "*/"))
+                    .collect(Collectors.toList());
+
+            if (matchingTokens.size() > 1) {
+                // Duplicate comments found, refine the result
+                matchingTokens = matchingTokens.stream()
+                        .filter(t -> isEqualRange(t.getToken().getRange(), javadocComment.getRange()))
+                        .collect(Collectors.toList());
+            }
+
+            if (matchingTokens.size() != 1) {
+                throw new IllegalStateException("The matching JavadocComment to be removed / replaced could not be found");
+            }
+            return matchingTokens;
+        }
+
+        private boolean isEqualRange(Optional<Range> range1, Optional<Range> range2) {
+            if (range1.isPresent() && range2.isPresent()) {
+                return range1.get().equals(range2.get());
+            }
+
+            return false;
         }
 
         @Override
