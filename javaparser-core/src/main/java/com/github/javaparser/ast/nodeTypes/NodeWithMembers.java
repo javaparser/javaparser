@@ -116,6 +116,33 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
+     * Add a field to this and automatically add the import of the type if needed
+     *
+     * @param typeClass the type of the field
+     * @param name the name of the field
+     * @param initializer the initializer of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier... modifiers) {
+        tryAddImportToParentCompilationUnit(typeClass);
+        return addFieldWithInitializer(typeClass.getSimpleName(), name, initializer, modifiers);
+    }
+
+    /**
+     * Add a field to this.
+     *
+     * @param type the type of the field
+     * @param name the name of the field
+     * @param initializer the initializer of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier... modifiers) {
+        return addFieldWithInitializer(parseType(type), name, initializer, modifiers);
+    }
+
+    /**
      * Add a field to this.
      *
      * @param type the type of the field
@@ -154,6 +181,17 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
+     * Add a private field to this.
+     *
+     * @param type the type of the field
+     * @param name the name of the field
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addPrivateField(Type type, String name) {
+        return addField(type, name, Modifier.PRIVATE);
+    }
+
+    /**
      * Add a public field to this.
      *
      * @param typeClass the type of the field
@@ -177,6 +215,17 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
+     * Add a public field to this.
+     *
+     * @param type the type of the field
+     * @param name the name of the field
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addPublicField(Type type, String name) {
+        return addField(type, name, Modifier.PUBLIC);
+    }
+
+    /**
      * Add a protected field to this.
      *
      * @param typeClass the type of the field
@@ -196,6 +245,17 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(String type, String name) {
+        return addField(type, name, Modifier.PROTECTED);
+    }
+
+    /**
+     * Add a protected field to this.
+     *
+     * @param type the type of the field
+     * @param name the name of the field
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addProtectedField(Type type, String name) {
         return addField(type, name, Modifier.PROTECTED);
     }
 

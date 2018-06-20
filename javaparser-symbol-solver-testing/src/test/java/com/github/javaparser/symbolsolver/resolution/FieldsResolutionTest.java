@@ -22,10 +22,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -153,6 +150,50 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         // get expected field declaration
         clazz = Navigator.demandClass(cu, "AccessThroughSuper.SuperClass");
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "field");
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveClassFieldOfClassExtendingUnknownClass1() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExtendingUnknownClass");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getFoo");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        NameExpr expression = returnStmt.getExpression().get().asNameExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+
+        // get expected field declaration
+        VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "foo");
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveClassFieldOfClassExtendingUnknownClass2() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExtendingUnknownClass");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getFoo2");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+
+        // get expected field declaration
+        VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "foo");
 
         // check that the expected field declaration equals the resolved field declaration
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
