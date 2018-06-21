@@ -1,0 +1,20 @@
+import java.io.FileNotFoundException;
+
+public class X {
+
+    public static void main(String[] args) {
+        Logging logging = new Logging();
+        try {
+            throw new FileNotFoundException("error");
+        } catch(FileNotFoundException | RuntimeException e) {
+            logging.info("test", e);
+        }
+    }
+
+    private static class Logging {
+
+        public void info(Object arg0, Throwable e) {
+            // do something
+        }
+    }
+}
