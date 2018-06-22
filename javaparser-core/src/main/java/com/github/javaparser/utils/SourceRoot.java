@@ -615,4 +615,9 @@ public class SourceRoot {
             FileVisitResult process(Path file, BasicFileAttributes attrs);
         }
     }
+
+    @Override
+    public String toString() {
+        return "SourceRoot at " + root;
+    }
 }

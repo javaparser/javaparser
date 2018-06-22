@@ -30,7 +30,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -201,6 +200,28 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
         ResolvedReferenceType objectRef = create(objectType);
         ancestors.add(objectRef);
+        return ancestors;
+    }
+
+    public List<ResolvedReferenceType> getDirectAncestors() {
+        // We need to go through the inheritance line and propagate the type parametes
+
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
+
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
+
+        // Avoid repetitions of Object
+        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
+                && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
+                !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName()));
+        if (!isClassWithSuperClassOrObject) {
+            ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+            ResolvedReferenceType objectRef = create(objectType);
+            ancestors.add(objectRef);
+        }
         return ancestors;
     }
 

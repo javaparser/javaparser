@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -30,14 +31,20 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.EnumSet;
 
+import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -59,6 +66,132 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     // JavaDoc
+
+    @Ignore("Indentation not correct yet")
+    @Test
+    public void removingDuplicateJavaDocComment() {
+        // Arrange
+        considerCode("public class MyClass {" + EOL +
+                EOL +
+                "  /**" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void oneMethod() {" + EOL +
+                "  }" + EOL +
+                EOL +
+                "  /**" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void anotherMethod() {" + EOL +
+                "  }" + EOL +
+                "}" +
+                EOL);
+
+        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+
+        // Act
+        methodDeclaration.removeComment();
+
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
+    @Ignore("Indentation not correct yet")
+    @Test
+    public void replacingDuplicateJavaDocComment() {
+        // Arrange
+        considerCode("public class MyClass {" + EOL +
+                EOL +
+                "  /**" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void oneMethod() {" + EOL +
+                "  }" + EOL +
+                EOL +
+                "  /**" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void anotherMethod() {" + EOL +
+                "  }" + EOL +
+                "}" +
+                EOL);
+
+        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+
+        // Act
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
+        methodDeclaration.setJavadocComment("", javadoc);
+
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  /**\n" +
+                "   * Change Javadoc\n" +
+                "   */\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
+    // Comments
+
+    @Ignore("Comments not supported yet")
+    @Test
+    public void removingDuplicateComment() {
+        // Arrange
+        considerCode("public class MyClass {" + EOL +
+                EOL +
+                "  /*" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void oneMethod() {" + EOL +
+                "  }" + EOL +
+                EOL +
+                "  /*" + EOL +
+                "   * Comment A" + EOL +
+                "   */" + EOL +
+                "  public void anotherMethod() {" + EOL +
+                "  }" + EOL +
+                "}" +
+                EOL);
+
+        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+
+        // Act
+        methodDeclaration.removeComment();
+
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("public class MyClass {\n" +
+                "\n" +
+                "  /*\n" +
+                "   * Comment A\n" +
+                "   */\n" +
+                "  public void oneMethod() {\n" +
+                "  }\n" +
+                "\n" +
+                "  public void anotherMethod() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
 
     // Modifiers
 
@@ -251,5 +384,46 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         assertTransformedToString(
                 "@Override" + EOL +
                 "void testMethod(){}", it);
+    }
+
+    @Test
+    public void removingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
+    }
+
+    @Ignore
+    @Test
+    public void removingAnnotationsWithSpaces() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Override " + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
     }
 }

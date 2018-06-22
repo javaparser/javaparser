@@ -109,7 +109,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
      *
      * @return this, the {@link NormalAnnotationExpr}
      */
-    public NormalAnnotationExpr addPair(String key, NameExpr value) {
+    public NormalAnnotationExpr addPair(String key, Expression value) {
         MemberValuePair memberValuePair = new MemberValuePair(key, value);
         getPairs().add(memberValuePair);
         return this;

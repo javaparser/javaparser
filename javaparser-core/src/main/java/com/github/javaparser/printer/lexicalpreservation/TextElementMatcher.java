@@ -21,8 +21,22 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.Range;
+
+import java.util.Optional;
+
 public interface TextElementMatcher {
 
     boolean match(TextElement textElement);
 
+    /**
+     * This allows the combination of different TextElementMatcher instances.<br/>
+     * If combined, all of the TextElementMatchers have to return true.
+     *
+     * @param textElementMatcher TextElementMatcher to combine with this one
+     * @return A new and combined TextElementMatcher of this and textElementMatcher
+     */
+    default TextElementMatcher and(TextElementMatcher textElementMatcher) {
+        return textElement -> this.match(textElement) && textElementMatcher.match(textElement);
+    }
 }

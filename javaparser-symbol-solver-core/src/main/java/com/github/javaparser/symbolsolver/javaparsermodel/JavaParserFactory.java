@@ -97,7 +97,9 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = requireParentNode(node);
-            if (parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
+            if (parentNode instanceof ObjectCreationExpr
+                    && (node == ((ObjectCreationExpr) parentNode).getType()
+                        || ((ObjectCreationExpr) parentNode).getArguments().contains(node))) {
                 return getContext(requireParentNode(parentNode), typeSolver);
             }
             if (parentNode == null) {

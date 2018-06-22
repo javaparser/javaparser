@@ -18,7 +18,7 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 /**
- * Strategy which collects all SourceRoots and initialises the TypeSolver and returns the SourceRoots configured
+ * {@link CollectionStrategy} which collects all SourceRoots and initialises the TypeSolver and returns the SourceRoots configured
  * with the TypeSolver in a ProjectRoot object.
  */
 public class SymbolSolverCollectionStrategy implements CollectionStrategy {

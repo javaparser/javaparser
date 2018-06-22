@@ -32,6 +32,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
+ * Will let the symbol solver look inside a jar file while solving types.
+ *
  * @author Federico Tomassetti
  */
 public class JarTypeSolver implements TypeSolver {
@@ -73,15 +75,10 @@ public class JarTypeSolver implements TypeSolver {
 
         byte[] buffer = new byte[8 * 1024];
 
-        try {
-            OutputStream output = new FileOutputStream(tempFile);
-            try {
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    output.write(buffer, 0, bytesRead);
-                }
-            } finally {
-                output.close();
+        try (OutputStream output = new FileOutputStream(tempFile)) {
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
             }
         } finally {
             inputStream.close();
@@ -101,13 +98,13 @@ public class JarTypeSolver implements TypeSolver {
             throw new RuntimeException(e);
         }
         JarFile jarFile = new JarFile(pathToJar);
-        JarEntry entry = null;
+        JarEntry entry;
         Enumeration<JarEntry> e = jarFile.entries();
         while (e.hasMoreElements()) {
             entry = e.nextElement();
             if (entry != null && !entry.isDirectory() && entry.getName().endsWith(".class")) {
                 String name = entryPathToClassName(entry.getName());
-                classpathElements.put(name, new ClasspathElement(jarFile, entry, name));
+                classpathElements.put(name, new ClasspathElement(jarFile, entry));
             }
         }
     }
@@ -159,12 +156,10 @@ public class JarTypeSolver implements TypeSolver {
     private class ClasspathElement {
         private JarFile jarFile;
         private JarEntry entry;
-        private String path;
 
-        ClasspathElement(JarFile jarFile, JarEntry entry, String path) {
+        ClasspathElement(JarFile jarFile, JarEntry entry) {
             this.jarFile = jarFile;
             this.entry = entry;
-            this.path = path;
         }
 
         CtClass toCtClass() throws IOException {
