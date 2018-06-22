@@ -28,17 +28,37 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     private java.lang.reflect.Type genericType;
     private TypeSolver typeSolver;
     private boolean variadic;
+    private String name;
 
-    public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver, boolean variadic) {
+    /**
+     *
+     * @param type
+     * @param genericType
+     * @param typeSolver
+     * @param variadic
+     * @param name can potentially be null
+     */
+    public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver,
+                                          boolean variadic, String name) {
         this.type = type;
         this.genericType = genericType;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
+        this.name = name;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        if (hasName()) {
+            return this.name;
+        } else {
+            throw new IllegalStateException("Name of parameters obtained through reflection can be not present");
+        }
+    }
+
+    @Override
+    public boolean hasName() {
+        return name != null;
     }
 
     @Override
