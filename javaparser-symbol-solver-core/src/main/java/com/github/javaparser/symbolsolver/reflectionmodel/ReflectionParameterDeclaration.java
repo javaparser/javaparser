@@ -47,13 +47,13 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
         this.name = name;
     }
 
+    /**
+     *
+     * @return the name, which can be potentially null
+     */
     @Override
     public String getName() {
-        if (hasName()) {
-            return this.name;
-        } else {
-            throw new IllegalStateException("Name of parameters obtained through reflection can be not present");
-        }
+        return name;
     }
 
     @Override
