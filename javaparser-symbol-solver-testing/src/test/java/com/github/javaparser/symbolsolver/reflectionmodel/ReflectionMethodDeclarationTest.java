@@ -43,7 +43,6 @@ public class ReflectionMethodDeclarationTest {
 
         assertEquals("arg0", equals.getParam(0).getName());
         assertEquals("arg0", containsAll.getParam(0).getName());
-        assertEquals("arg1", containsAll.getParam(1).getName());
         assertEquals("arg0", subList.getParam(0).getName());
         assertEquals("arg1", subList.getParam(1).getName());
     }
