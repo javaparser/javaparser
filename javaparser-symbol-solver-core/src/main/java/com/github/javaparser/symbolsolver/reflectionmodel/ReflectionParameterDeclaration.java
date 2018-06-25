@@ -20,6 +20,8 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Objects;
+
 /**
  * @author Federico Tomassetti
  */
@@ -65,6 +67,7 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     public String toString() {
         return "ReflectionParameterDeclaration{" +
                 "type=" + type +
+                ", name=" + name +
                 '}';
     }
 
@@ -91,5 +94,22 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     @Override
     public ResolvedType getType() {
         return ReflectionFactory.typeUsageFor(genericType, typeSolver);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReflectionParameterDeclaration that = (ReflectionParameterDeclaration) o;
+        return variadic == that.variadic &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(genericType, that.genericType) &&
+                Objects.equals(typeSolver, that.typeSolver) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, genericType, typeSolver, variadic, name);
     }
 }
