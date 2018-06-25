@@ -173,7 +173,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
                 .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
-        if (isJava9()) {
+        if (isJavaVersionAbove9()) {
             assertEquals(69, methods.size());
         } else {
             assertEquals(67, methods.size());
@@ -182,7 +182,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
         assertEquals(false, methods.get(0).isAbstract());
         assertEquals(1, methods.get(0).getNumberOfParams());
         assertEquals("int", methods.get(0).getParam(0).getType().describe());
-        if (isJava9()) {
+        if (isJavaVersionAbove9()) {
             assertEquals("compareTo", methods.get(6).getName());
             assertEquals(false, methods.get(6).isAbstract());
             assertEquals(1, methods.get(6).getNumberOfParams());
