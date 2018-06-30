@@ -36,7 +36,7 @@ public interface ResolvedDeclaration {
     }
 
     /**
-     * Should return the name or throw a RuntimeException if the name is not available.
+     * Should return the name or return null if the name is not available.
      */
     String getName();
 
