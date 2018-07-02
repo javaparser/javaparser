@@ -22,7 +22,7 @@ public interface Provider {
      * Reads characters into an array
      * @param buffer  Destination buffer
      * @param offset   Offset at which to start storing characters
-     * @param length   The maximum possible number of characters to read
+     * @param len      The maximum possible number of characters to read
      * @return The number of characters read, or -1 if all read
      * @exception  IOException
      */

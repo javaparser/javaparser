@@ -67,8 +67,6 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
 
     /**
      * Get the ReferenceTypeDeclaration enclosing this declaration.
-     *
-     * @return
      */
     Optional<ResolvedReferenceTypeDeclaration> containerType();
 
