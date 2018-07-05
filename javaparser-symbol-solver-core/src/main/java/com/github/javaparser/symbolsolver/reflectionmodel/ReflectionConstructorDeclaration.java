@@ -62,7 +62,9 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
         if (constructor.isVarArgs()) {
             variadic = i == (constructor.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i], constructor.getGenericParameterTypes()[i], typeSolver, variadic);
+        return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i],
+                constructor.getGenericParameterTypes()[i], typeSolver, variadic,
+                constructor.getParameters()[i].getName());
     }
 
     @Override
