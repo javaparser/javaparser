@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/javaparser/javaparser/badge.svg?branch=master&service=github)](https://coveralls.io/github/javaparser/javaparser?branch=master)
 [![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This project contains a set of libraries implementing a Java 1.0 - Java 9 Parser with advanced analysis functionalities.
+This project contains a set of libraries implementing a Java 1.0 - Java 10 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
