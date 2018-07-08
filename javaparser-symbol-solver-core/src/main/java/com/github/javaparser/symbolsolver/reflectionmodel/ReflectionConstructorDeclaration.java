@@ -69,7 +69,7 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
 
     @Override
     public String getName() {
-        return constructor.getName();
+        return constructor.getDeclaringClass().getSimpleName();
     }
 
     @Override
