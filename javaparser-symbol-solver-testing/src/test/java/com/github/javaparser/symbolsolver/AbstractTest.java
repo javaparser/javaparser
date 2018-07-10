@@ -49,9 +49,9 @@ public abstract class AbstractTest {
         return System.getProperty("java.version").startsWith("10.");
     }
 
-    protected boolean isJavaVersionAbove9() {
+    protected boolean isJavaVersion9OrAbove() {
         String jdkVersion = System.getProperty("java.version");
-        return Integer.parseInt(jdkVersion.substring(0,jdkVersion.indexOf('.'))) >= 9;
+        return Integer.parseInt(jdkVersion.substring(0, jdkVersion.indexOf('.'))) >= 9;
     }
 
     protected boolean isJava8() {
