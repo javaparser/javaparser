@@ -26,8 +26,10 @@ import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -404,6 +406,14 @@ public class LexicalPreservingPrinter {
         }
         if (node instanceof JavadocComment) {
             nodeText.addToken(JAVADOC_COMMENT, "/**" + ((JavadocComment) node).getContent() + "*/");
+            return;
+        }
+        if (node instanceof BlockComment) {
+            nodeText.addToken(MULTI_LINE_COMMENT, "/*" + ((BlockComment) node).getContent() + "*/");
+            return;
+        }
+        if (node instanceof LineComment) {
+            nodeText.addToken(SINGLE_LINE_COMMENT, "//" + ((LineComment) node).getContent());
             return;
         }
 

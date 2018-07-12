@@ -1072,4 +1072,36 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new CallModifierVisitor(), null);
     }
+
+    @Test
+    public void addedBlockCommentsPrinted() {
+        String code = "public class Foo { }";
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+
+        cu.getClassByName("Foo").get()
+                .addMethod("mymethod")
+                .setBlockComment("block");
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "    /*block*/" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    public void addedLineCommentsPrinted() {
+        String code = "public class Foo { }";
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+
+        cu.getClassByName("Foo").get()
+                .addMethod("mymethod")
+                .setLineComment("line");
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "    //line" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));
+    }
 }
