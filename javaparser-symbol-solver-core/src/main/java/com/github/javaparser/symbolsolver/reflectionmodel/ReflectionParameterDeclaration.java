@@ -20,6 +20,8 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Objects;
+
 /**
  * @author Federico Tomassetti
  */
@@ -28,23 +30,44 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     private java.lang.reflect.Type genericType;
     private TypeSolver typeSolver;
     private boolean variadic;
+    private String name;
 
-    public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver, boolean variadic) {
+    /**
+     *
+     * @param type
+     * @param genericType
+     * @param typeSolver
+     * @param variadic
+     * @param name can potentially be null
+     */
+    public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver,
+                                          boolean variadic, String name) {
         this.type = type;
         this.genericType = genericType;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
+        this.name = name;
+    }
+
+    /**
+     *
+     * @return the name, which can be potentially null
+     */
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public String getName() {
-        throw new UnsupportedOperationException();
+    public boolean hasName() {
+        return name != null;
     }
 
     @Override
     public String toString() {
         return "ReflectionParameterDeclaration{" +
                 "type=" + type +
+                ", name=" + name +
                 '}';
     }
 
@@ -71,5 +94,22 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     @Override
     public ResolvedType getType() {
         return ReflectionFactory.typeUsageFor(genericType, typeSolver);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReflectionParameterDeclaration that = (ReflectionParameterDeclaration) o;
+        return variadic == that.variadic &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(genericType, that.genericType) &&
+                Objects.equals(typeSolver, that.typeSolver) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, genericType, typeSolver, variadic, name);
     }
 }

@@ -33,6 +33,13 @@ public interface ResolvedParameterDeclaration extends ResolvedValueDeclaration {
         return true;
     }
 
+    /**
+     * Necessary because parameters obtained through reflection could not have a name.
+     */
+    default boolean hasName() {
+        return true;
+    }
+
     @Override
     default ResolvedParameterDeclaration asParameter() {
         return this;

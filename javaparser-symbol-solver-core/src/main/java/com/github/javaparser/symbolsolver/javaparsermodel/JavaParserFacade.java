@@ -264,8 +264,47 @@ public class JavaParserFacade {
         return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId(), typeSolver);
     }
 
+    /**
+     * Get the type associated with the node.
+     *
+     * This method was originally intended to get the type of a value: any value has a type.
+     *
+     * For example:
+     * <code>
+     * int foo(int a) {
+     *         return a; // when getType is invoked on "a" it returns the type "int"
+     *     }
+     * </code>
+     *
+     * Now, users started using also of names of types itself, which do not have a type.
+     *
+     * For example:
+     * <code>
+     * class A {
+     *     int foo(int a) {
+     *         return A.someStaticField; // when getType is invoked on "A", which represents a class, it returns
+     *                                   // the type "A" itself while it used to throw UnsolvedSymbolException
+     *     }
+     * </code>
+     *
+     * To accomodate this usage and avoid confusion this method return
+     * the type itself when used on the name of type.
+     */
     public ResolvedType getType(Node node) {
-        return getType(node, true);
+        try {
+            return getType(node, true);
+        } catch (UnsolvedSymbolException e) {
+            if (node instanceof NameExpr) {
+                NameExpr nameExpr = (NameExpr)node;
+                SymbolReference<ResolvedTypeDeclaration> typeDeclaration = JavaParserFactory.getContext(node, typeSolver)
+                        .solveType(nameExpr.getNameAsString(), typeSolver);
+                if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
+                    ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
+                    return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration, typeSolver);
+                }
+            }
+            throw e;
+        }
     }
 
     public ResolvedType getType(Node node, boolean solveLambdas) {

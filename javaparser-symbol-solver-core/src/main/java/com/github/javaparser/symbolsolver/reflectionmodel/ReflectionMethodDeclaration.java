@@ -104,7 +104,8 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i], typeSolver, variadic);
+        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i],
+                typeSolver, variadic, method.getParameters()[i].getName());
     }
 
     @Override
