@@ -77,6 +77,14 @@ public class ReflectionTypeSolver implements TypeSolver {
 
                 Class<?> clazz = classLoader.loadClass(name);
                 return SymbolReference.solved(ReflectionFactory.typeDeclarationFor(clazz, getRoot()));
+            } catch (NoClassDefFoundError e) {
+                // We can safely ignore this one because it is triggered when there are package names which are almost the
+                // same as class name, with the exclusion of the case.
+                // For example:
+                // java.lang.NoClassDefFoundError: com/github/javaparser/printer/ConcreteSyntaxModel
+                // (wrong name: com/github/javaparser/printer/concretesyntaxmodel)
+                // note that this exception seems to be thrown only on certain platform (mac yes, linux no)
+                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
             } catch (ClassNotFoundException e) {
                 // it could be an inner class
                 int lastDot = name.lastIndexOf('.');
