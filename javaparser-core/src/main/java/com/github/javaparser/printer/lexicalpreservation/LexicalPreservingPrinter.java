@@ -37,9 +37,7 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
 
@@ -420,6 +418,9 @@ public class LexicalPreservingPrinter {
         interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }
 
+    /**
+     * TODO: Process CsmIndent and CsmUnindent before reaching this point
+     */
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
 
@@ -442,6 +443,20 @@ public class LexicalPreservingPrinter {
             } else if (element instanceof CsmMix) {
                 CsmMix csmMix = (CsmMix) element;
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
+
+            // Indentation should probably be dealt with before because an indentation has effects also on the
+            // following lines
+
+            } else if (element instanceof CsmIndent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                    nodeText.addToken(SPACE, " ");
+                }
+            } else if (element instanceof CsmUnindent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                    if (nodeText.endWithSpace()) {
+                        nodeText.removeLastElement();
+                    }
+                }
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
             }
