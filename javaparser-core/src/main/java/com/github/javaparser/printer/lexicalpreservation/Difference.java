@@ -19,7 +19,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    private static final int STANDARD_INDENTATION_SIZE = 4;
+    public static final int STANDARD_INDENTATION_SIZE = 4;
 
     private final NodeText nodeText;
     private final Node node;
