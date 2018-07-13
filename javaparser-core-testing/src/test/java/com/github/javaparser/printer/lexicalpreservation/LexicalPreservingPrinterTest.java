@@ -1115,7 +1115,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();
         type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
 
-        assertEquals("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
+        assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
     }
 
 }
