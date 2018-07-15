@@ -1,6 +1,6 @@
 package foo.bar.differentpackage;
 
-import foo.bar.AnInterface;
+import foo.bar.BinaryExpr;
 
 class AClass {
     static Object field1 = BinaryExpr.Operator.OR;
