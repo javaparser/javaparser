@@ -184,6 +184,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                 typeName.append(nameElements[j]);
             }
 
+            // As an optimization we first try to look in the canonical position where we expect to find the file
             Path srcFile = Paths.get(filePath.toString());
             {
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
@@ -195,8 +196,9 @@ public class JavaParserTypeSolver implements TypeSolver {
                 }
             }
 
+            // If this is not possible we parse all files
             {
-                List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
+                List<CompilationUnit> compilationUnits = parseDirectory(srcDir);
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
