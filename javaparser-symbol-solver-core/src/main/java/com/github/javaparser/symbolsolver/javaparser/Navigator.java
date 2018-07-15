@@ -27,6 +27,7 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class can be used to easily retrieve nodes from a JavaParser AST.

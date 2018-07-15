@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
@@ -226,9 +228,15 @@ public class JavaParserTypeSolver implements TypeSolver {
             {
                 List<CompilationUnit> compilationUnits = parseDirectoryRecursively(srcDir);
                 for (CompilationUnit compilationUnit : compilationUnits) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
-                    if (astTypeDeclaration.isPresent()) {
-                        return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                    if (compilationUnit.getPackageDeclaration().isPresent()) {
+                        String packageName = compilationUnit.getPackageDeclaration().get().getNameAsString();
+                        if (name.startsWith(packageName)) {
+                            String remainingName = name.substring(packageName.length() + 1);
+                            Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, remainingName);
+                            if (astTypeDeclaration.isPresent()) {
+                                return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                            }
+                        }
                     }
                 }
             }
