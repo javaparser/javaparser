@@ -287,4 +287,18 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     public Optional<FieldAccessExpr> toFieldAccessExpr() {
         return Optional.of(this);
     }
+
+    /**
+     * Indicate if this FieldAccessExpr is an element directly contained in a larger FieldAccessExpr.
+     */
+    public boolean isInternal() {
+        return this.getParentNode().isPresent() && this.getParentNode().get() instanceof FieldAccessExpr;
+    }
+
+    /**
+     * Indicate if this FieldAccessExpr is top level, i.e., it is not directly contained in a larger FieldAccessExpr.
+     */
+    public boolean isTopLevel() {
+        return !isInternal();
+    }
 }
