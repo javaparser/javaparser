@@ -61,8 +61,8 @@ public class InternalClassInInterfaceTest {
 
         assertTrue(fae.isPresent());
 
-        assertEquals("", fae.get().resolve().getType().describe());
-        assertEquals("", fae.get().resolve().getName());
+        assertEquals("foo.bar.AnInterface.ListChangeType", fae.get().resolve().getType().describe());
+        assertEquals("ADDITION", fae.get().resolve().getName());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class InternalClassInInterfaceTest {
 
         assertTrue(fae.isPresent());
 
-        assertEquals("", fae.get().resolve().getType().describe());
-        assertEquals("", fae.get().resolve().getName());
+        assertEquals("foo.bar.AnInterface.ListChangeType", fae.get().resolve().getType().describe());
+        assertEquals("ADDITION", fae.get().resolve().getName());
     }
 }
