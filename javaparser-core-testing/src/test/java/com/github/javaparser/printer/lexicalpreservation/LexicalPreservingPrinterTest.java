@@ -10,8 +10,10 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -1104,4 +1106,16 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
+
+    @Test
+    public void issue1321() {
+        CompilationUnit compilationUnit = JavaParser.parse("class X { X() {} private void testme() {} }");
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();
+        type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
+
+        assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
+    }
+
 }
