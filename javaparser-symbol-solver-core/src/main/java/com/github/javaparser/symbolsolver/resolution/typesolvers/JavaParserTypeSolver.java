@@ -213,30 +213,13 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
 
             // If this is not possible we parse all files
-            // First we try just in the same package, for classes defined in a file not named as the class itself
-            // later we move to top directories until we get the root
+            // We try just in the same package, for classes defined in a file not named as the class itself
             {
                 List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
                         return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
-                    }
-                }
-            }
-
-            {
-                List<CompilationUnit> compilationUnits = parseDirectoryRecursively(srcDir);
-                for (CompilationUnit compilationUnit : compilationUnits) {
-                    if (compilationUnit.getPackageDeclaration().isPresent()) {
-                        String packageName = compilationUnit.getPackageDeclaration().get().getNameAsString();
-                        if (name.startsWith(packageName)) {
-                            String remainingName = name.substring(packageName.length() + 1);
-                            Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, remainingName);
-                            if (astTypeDeclaration.isPresent()) {
-                                return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
-                            }
-                        }
                     }
                 }
             }

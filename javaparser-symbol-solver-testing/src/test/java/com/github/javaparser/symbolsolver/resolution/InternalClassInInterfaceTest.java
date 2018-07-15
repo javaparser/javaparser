@@ -26,7 +26,8 @@ public class InternalClassInInterfaceTest {
     @Test
     public void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedSamePackage() throws FileNotFoundException {
         File src = new File("src/test/resources/internalClassInInterface");
-        File aClass = new File(src.getPath() + File.separator + "AClass.java");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+                + File.separator + "AClass.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
         localCts.add(new ReflectionTypeSolver());
@@ -47,7 +48,8 @@ public class InternalClassInInterfaceTest {
     @Test
     public void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedSamePackage() throws FileNotFoundException {
         File src = new File("src/test/resources/internalClassInInterface");
-        File aClass = new File(src.getPath() + File.separator + "AClass.java");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+                + File.separator + "AClass.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
         localCts.add(new ReflectionTypeSolver());
@@ -68,7 +70,8 @@ public class InternalClassInInterfaceTest {
     @Test
     public void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedDifferentPackage() throws FileNotFoundException {
         File src = new File("src/test/resources/internalClassInInterface");
-        File aClass = new File(src.getPath() + File.separator + "AClass2.java");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+                + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
         localCts.add(new ReflectionTypeSolver());
@@ -89,7 +92,8 @@ public class InternalClassInInterfaceTest {
     @Test
     public void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedDifferentPackage() throws FileNotFoundException {
         File src = new File("src/test/resources/internalClassInInterface");
-        File aClass = new File(src.getPath() + File.separator + "AClass2.java");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+                + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
         localCts.add(new ReflectionTypeSolver());
