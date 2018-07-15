@@ -126,7 +126,19 @@ public class JavaParserTypeSolver implements TypeSolver {
         }
     }
 
+    /**
+     * Note that this parse only files directly contained in this directory.
+     * It does not traverse recursively all children directory.
+     */
     private List<CompilationUnit> parseDirectory(Path srcDirectory) {
+        return parseDirectory(srcDirectory, false);
+    }
+
+    private List<CompilationUnit> parseDirectoryRecursively(Path srcDirectory) {
+        return parseDirectory(srcDirectory, true);
+    }
+
+    private List<CompilationUnit> parseDirectory(Path srcDirectory, boolean recursively) {
         try {
             return parsedDirectories.get(srcDirectory.toAbsolutePath(), () -> {
                 List<CompilationUnit> units = new ArrayList<>();
@@ -136,6 +148,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                                 .forEach(file -> {
                                     if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
                                         parse(file).ifPresent(units::add);
+                                    } else if (recursively && file.toFile().isDirectory()) {
+                                        units.addAll(parseDirectoryRecursively(file));
                                     }
                                 });
                     }
@@ -197,8 +211,20 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
 
             // If this is not possible we parse all files
+            // First we try just in the same package, for classes defined in a file not named as the class itself
+            // later we move to top directories until we get the root
             {
-                List<CompilationUnit> compilationUnits = parseDirectory(srcDir);
+                List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
+                for (CompilationUnit compilationUnit : compilationUnits) {
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
+                    if (astTypeDeclaration.isPresent()) {
+                        return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                    }
+                }
+            }
+
+            {
+                List<CompilationUnit> compilationUnits = parseDirectoryRecursively(srcDir);
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
