@@ -25,6 +25,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -197,5 +198,29 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected field declaration equals the resolved field declaration
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveEnumFieldAccess() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("EnumFieldAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+
+        assertEquals(resolvedValueDeclaration.isField(), true);
+
+
+
+        ResolvedFieldDeclaration resolvedFieldDeclaration = (ResolvedFieldDeclaration) resolvedValueDeclaration;
+        assertEquals(resolvedFieldDeclaration.isStatic(), true);
+
     }
 }
