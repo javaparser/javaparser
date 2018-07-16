@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
@@ -126,7 +128,19 @@ public class JavaParserTypeSolver implements TypeSolver {
         }
     }
 
+    /**
+     * Note that this parse only files directly contained in this directory.
+     * It does not traverse recursively all children directory.
+     */
     private List<CompilationUnit> parseDirectory(Path srcDirectory) {
+        return parseDirectory(srcDirectory, false);
+    }
+
+    private List<CompilationUnit> parseDirectoryRecursively(Path srcDirectory) {
+        return parseDirectory(srcDirectory, true);
+    }
+
+    private List<CompilationUnit> parseDirectory(Path srcDirectory, boolean recursively) {
         try {
             return parsedDirectories.get(srcDirectory.toAbsolutePath(), () -> {
                 List<CompilationUnit> units = new ArrayList<>();
@@ -136,6 +150,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                                 .forEach(file -> {
                                     if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
                                         parse(file).ifPresent(units::add);
+                                    } else if (recursively && file.toFile().isDirectory()) {
+                                        units.addAll(parseDirectoryRecursively(file));
                                     }
                                 });
                     }
@@ -184,6 +200,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                 typeName.append(nameElements[j]);
             }
 
+            // As an optimization we first try to look in the canonical position where we expect to find the file
             Path srcFile = Paths.get(filePath.toString());
             {
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
@@ -195,6 +212,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                 }
             }
 
+            // If this is not possible we parse all files
+            // We try just in the same package, for classes defined in a file not named as the class itself
             {
                 List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
                 for (CompilationUnit compilationUnit : compilationUnits) {
