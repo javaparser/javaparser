@@ -28,26 +28,48 @@ package com.github.javaparser.resolution;
  */
 public class UnsolvedSymbolException extends RuntimeException {
 
-    private String context;
+    /**
+     * The name of the symbol that could not be resolved.
+     */
     private String name;
 
-    public UnsolvedSymbolException(String name, String context) {
-        super("Unsolved symbol in " + context + " : " + name);
-        this.context = context;
-        this.name = name;
-    }
+    /**
+     * Additional information that provides more details on the context that a symbol could not be resolved in, or
+     * {@code null} if there is no contextual information, or if the contextual information is unknown.
+     */
+    private String context;
+
+    /**
+     * The throwable that caused this {@code UnsolvedSymbolException} to get thrown, or {@code null} if this
+     * {@code UnsolvedSymbolException} was not caused by another throwable, or if the causative throwable is unknown.
+     */
+    private Throwable cause;
 
     public UnsolvedSymbolException(String name) {
-        super("Unsolved symbol : " + name);
-        this.context = "unknown";
+        this(name, null, null);
+    }
+
+    public UnsolvedSymbolException(String name, String context) {
+        this(name, context, null);
+    }
+
+    public UnsolvedSymbolException(String name, Throwable cause) {
+        this(name, null, cause);
+    }
+
+    public UnsolvedSymbolException(String name, String context, Throwable cause) {
+        super("Unsolved symbol" + (context != null ? " in " + context : "") + " : " + name, cause);
         this.name = name;
+        this.context = context;
+        this.cause = cause;
     }
 
     @Override
     public String toString() {
         return "UnsolvedSymbolException{" +
-                "context='" + context + '\'' +
-                ", name='" + name + '\''+
-                '}';
+               "context='" + context + "'" +
+               ", name='" + name + "'" +
+               ", cause='" + cause + "'" +
+               "}";
     }
 }

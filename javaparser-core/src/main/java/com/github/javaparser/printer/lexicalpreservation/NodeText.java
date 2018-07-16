@@ -21,6 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.Token;
 import com.github.javaparser.ast.Node;
 
 import java.util.LinkedList;
@@ -213,5 +215,24 @@ class NodeText {
     @Override
     public String toString() {
         return "NodeText{" + elements + '}';
+    }
+
+    public boolean endWithSpace() {
+        if (elements.isEmpty()) {
+            return false;
+        }
+        TextElement lastElement = elements.get(elements.size() - 1);
+        if (lastElement instanceof TokenTextElement) {
+            return ((TokenTextElement)lastElement).getTokenKind() == GeneratedJavaParserConstants.SPACE;
+        } else {
+            return false;
+        }
+    }
+
+    public void removeLastElement() {
+        if (elements.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        elements.remove(elements.size() - 1);
     }
 }

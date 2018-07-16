@@ -68,19 +68,33 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Look into extended classes and implemented interfaces
-        for (ResolvedReferenceType ancestor : this.typeDeclaration.getAncestors()) {
-        	try {
-	            for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
-	                if (internalTypeDeclaration.getName().equals(name)) {
-	                    return SymbolReference.solved(internalTypeDeclaration);
-	                }
-	            }
-        	} catch (UnsupportedOperationException e) {
-	            // just continue using the next ancestor
+        ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
+        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name, typeSolver));
+    }
+
+    /**
+     * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
+     * to {@param name}.
+     * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
+     */
+    private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {
+        for (ResolvedReferenceType ancestor : declaration.getAncestors()) {
+            try {
+                for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                    if (internalTypeDeclaration.getName().equals(name)) {
+                        return internalTypeDeclaration;
+                    }
+                }
+                // check recursively the ancestors of this ancestor
+                ResolvedTypeDeclaration ancestorDeclaration = checkAncestorsForType(name, ancestor.getTypeDeclaration());
+                if (ancestorDeclaration != null) {
+                    return ancestorDeclaration;
+                }
+            } catch (UnsupportedOperationException e) {
+                // just continue using the next ancestor
             }
         }
-
-        return context.getParent().solveType(name, typeSolver);
+        return null;
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {

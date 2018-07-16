@@ -26,8 +26,10 @@ import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -35,9 +37,7 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
 
@@ -406,10 +406,21 @@ public class LexicalPreservingPrinter {
             nodeText.addToken(JAVADOC_COMMENT, "/**" + ((JavadocComment) node).getContent() + "*/");
             return;
         }
+        if (node instanceof BlockComment) {
+            nodeText.addToken(MULTI_LINE_COMMENT, "/*" + ((BlockComment) node).getContent() + "*/");
+            return;
+        }
+        if (node instanceof LineComment) {
+            nodeText.addToken(SINGLE_LINE_COMMENT, "//" + ((LineComment) node).getContent());
+            return;
+        }
 
         interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }
 
+    /**
+     * TODO: Process CsmIndent and CsmUnindent before reaching this point
+     */
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
 
@@ -432,6 +443,20 @@ public class LexicalPreservingPrinter {
             } else if (element instanceof CsmMix) {
                 CsmMix csmMix = (CsmMix) element;
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
+
+            // Indentation should probably be dealt with before because an indentation has effects also on the
+            // following lines
+
+            } else if (element instanceof CsmIndent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                    nodeText.addToken(SPACE, " ");
+                }
+            } else if (element instanceof CsmUnindent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                    if (nodeText.endWithSpace()) {
+                        nodeText.removeLastElement();
+                    }
+                }
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
             }

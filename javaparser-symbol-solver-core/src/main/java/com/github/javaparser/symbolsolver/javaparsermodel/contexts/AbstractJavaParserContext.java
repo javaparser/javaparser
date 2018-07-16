@@ -166,7 +166,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
-                throw new RuntimeException("Issue calculating the type of the scope of " + this, e);
+                // If the scope corresponds to a type we should treat it differently
+                if (scope instanceof FieldAccessExpr) {
+                    FieldAccessExpr scopeName = (FieldAccessExpr)scope;
+                    if (this.solveType(scopeName.toString(), typeSolver).isSolved()) {
+                        return Collections.emptyList();
+                    }
+                }
+                throw new UnsolvedSymbolException(scope.toString(), wrappedNode.toString(), e);
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
