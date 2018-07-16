@@ -41,6 +41,8 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import java.util.Optional;
 
 /**
@@ -243,4 +245,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.of(this);
     }
+
+    public abstract ResolvedReferenceTypeDeclaration resolve();
+
 }
