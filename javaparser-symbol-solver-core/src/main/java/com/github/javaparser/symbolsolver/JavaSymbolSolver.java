@@ -9,6 +9,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -28,6 +29,25 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  * @author Federico Tomassetti
  */
 public class JavaSymbolSolver implements SymbolResolver {
+
+    private static class ArrayLengthValueDeclaration implements ResolvedValueDeclaration {
+
+        private static final ArrayLengthValueDeclaration INSTANCE = new ArrayLengthValueDeclaration();
+
+        private ArrayLengthValueDeclaration() {
+
+        }
+
+        @Override
+        public String getName() {
+            return "length";
+        }
+
+        @Override
+        public ResolvedType getType() {
+            return ResolvedPrimitiveType.INT;
+        }
+    }
 
     private TypeSolver typeSolver;
 
@@ -142,6 +162,14 @@ public class JavaSymbolSolver implements SymbolResolver {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
+                if (((FieldAccessExpr) node).getName().getId().equals("length")) {
+                    ResolvedType scopeType = ((FieldAccessExpr) node).getScope().calculateResolvedType();
+                    if (scopeType.isArray()) {
+                        if (resultClass.isInstance(ArrayLengthValueDeclaration.INSTANCE)) {
+                            return resultClass.cast(ArrayLengthValueDeclaration.INSTANCE);
+                        }
+                    }
+                }
                 throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
             }
         }
