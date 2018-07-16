@@ -29,7 +29,7 @@ public class Issue1668 {
     }
 
     @Test
-    public void test() {
+    public void testResolveArrayDeclaration() {
         String code = String.join(System.lineSeparator(),
                 "public class X {",
                 "   public static void main(String[] args) {",
@@ -44,18 +44,11 @@ public class Issue1668 {
         assertTrue(parseResult.getResult().isPresent());
 
         CompilationUnit compilationUnit = parseResult.getResult().get();
-        Optional<VariableDeclarator> stringArray = compilationUnit.findFirst(VariableDeclarator.class, variableDeclarator ->
-                variableDeclarator.getNameAsString()
-                        .equals("stringArray"));
-        assertTrue(stringArray.isPresent());
-        VariableDeclarator variableDeclarator = stringArray.get();
-        variableDeclarator.getParentNode().ifPresent(parent -> {
-            if (parent instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) parent;
-                ResolvedType resolvedType = variableDeclarationExpr.calculateResolvedType();
-                assertEquals("java.lang.String[]", resolvedType.describe());
-            }
-        });
+        VariableDeclarator variableDeclarator = compilationUnit.findFirst(VariableDeclarator.class, v ->
+                v.getNameAsString().equals("stringArray")).get();
+        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarator.getParentNode().get();
+        ResolvedType resolvedType = variableDeclarationExpr.calculateResolvedType();
+        assertEquals("java.lang.String[]", resolvedType.describe());
         ResolvedFieldDeclaration resolve = variableDeclarator.resolve();
         assertEquals("java.lang.String[]", resolve.declaringType().getQualifiedName());
     }
