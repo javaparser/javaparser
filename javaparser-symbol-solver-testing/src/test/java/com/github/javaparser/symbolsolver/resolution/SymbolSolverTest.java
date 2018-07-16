@@ -42,7 +42,6 @@ public class SymbolSolverTest extends AbstractTest {
 
     @Before
     public void setup() {
-
         Path srcNewCode = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
         combinedTypeSolverNewCode.add(new ReflectionTypeSolver());

@@ -58,7 +58,7 @@ public class UnsolvedSymbolException extends RuntimeException {
     }
 
     public UnsolvedSymbolException(String name, String context, Throwable cause) {
-        super("Unsolved symbol" + (context != null ? " in " + context : "") + " : " + name);
+        super("Unsolved symbol" + (context != null ? " in " + context : "") + " : " + name, cause);
         this.name = name;
         this.context = context;
         this.cause = cause;
