@@ -78,7 +78,7 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         Path path = expectedOutput.resolve(fileName.replaceAll("/", "_") + ".txt");
         Path dstFile = path;
 
-        if (isJava9()) {
+        if (isJavaVersion9OrAbove()) {
             Path path9 = expectedOutput.resolve(fileName.replaceAll("/", "_") + "_J9.txt");
             Path dstFile9 = path9;
             if (Files.exists(dstFile9)) {

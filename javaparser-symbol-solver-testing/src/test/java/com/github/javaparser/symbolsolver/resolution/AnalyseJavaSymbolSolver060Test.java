@@ -95,7 +95,7 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         String path = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = new File(path);
 
-        if (isJava9()) {
+        if (isJavaVersion9OrAbove()) {
             String path9 = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + "_J9.txt";
             File dstFile9 = new File(path9);
             if (dstFile9.exists()) {
