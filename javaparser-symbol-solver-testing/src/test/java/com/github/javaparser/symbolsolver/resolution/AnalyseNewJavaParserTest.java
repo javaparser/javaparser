@@ -242,11 +242,15 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void parseAstCompilationUnit() throws IOException {
+        parse("com/github/javaparser/ast/CompilationUnit");
+    }
+
+    @Test
     public void parseAstRest() throws IOException {
         parse("com/github/javaparser/ast/AccessSpecifier");
         parse("com/github/javaparser/ast/ArrayBracketPair");
         parse("com/github/javaparser/ast/ArrayCreationLevel");
-        parse("com/github/javaparser/ast/CompilationUnit");
         parse("com/github/javaparser/ast/Example");
         parse("com/github/javaparser/ast/ImportDeclaration");
         parse("com/github/javaparser/ast/Node");
