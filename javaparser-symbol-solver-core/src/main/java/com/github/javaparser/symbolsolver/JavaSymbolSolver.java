@@ -126,6 +126,11 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodCallExpr) {
+
+            // JLS TODO:
+            // Follow 15.12. Method Invocation Expressions
+            // https://docs.oracle.com/javase/specs/jls/se10/html/jls-15.html#jls-15.12
+
             SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodCallExpr) node);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
