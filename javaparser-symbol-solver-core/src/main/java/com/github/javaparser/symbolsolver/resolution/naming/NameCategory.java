@@ -19,7 +19,7 @@ public enum NameCategory {
 
     private boolean needDisambiguation;
 
-    private NameCategory(boolean needDisambiguation) {
+    NameCategory(boolean needDisambiguation) {
         this.needDisambiguation = needDisambiguation;
     }
 
@@ -33,14 +33,6 @@ public enum NameCategory {
         } else {
             return true;
         }
-    }
-
-    /**
-     * A name that is initially classified by its context as an AmbiguousName or as a PackageOrTypeName is then
-     * reclassified to be a PackageName, TypeName, or ExpressionName.
-     */
-    public static NameCategory disambiguation(NameCategory nameCategory) {
-        throw new UnsupportedOperationException();
     }
 
 }
