@@ -123,4 +123,5 @@ public final class SimpleName extends Node implements NodeWithIdentifier<SimpleN
             return false;
         return super.replace(node, replacementNode);
     }
+
 }

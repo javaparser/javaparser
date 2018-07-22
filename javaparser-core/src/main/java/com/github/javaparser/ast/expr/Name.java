@@ -238,4 +238,17 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
         }
         return super.replace(node, replacementNode);
     }
+
+    public boolean isTopLevel() {
+        return !isInternal();
+    }
+
+    public boolean isInternal() {
+        if (this.getParentNode().isPresent() && this.getParentNode().get() instanceof Name) {
+            Name parent = (Name)this.getParentNode().get();
+            return parent.getQualifier().isPresent() && parent.getQualifier().get() == this;
+        } else {
+            return false;
+        }
+    }
 }
