@@ -9,13 +9,23 @@ package com.github.javaparser.symbolsolver.resolution.naming;
  * See JLS 6.5 (https://docs.oracle.com/javase/specs/jls/se10/html/jls-6.html#jls-6.5)
  */
 public enum NameCategory {
-    MODULE_NAME,
-    PACKAGE_NAME,
-    TYPE_NAME,
-    EXPRESSION_NAME,
-    METHOD_NAME,
-    PACKAGE_OR_TYPE_NAME,
-    AMBIGUOUS_NAME;
+    MODULE_NAME(false),
+    PACKAGE_NAME(false),
+    TYPE_NAME(false),
+    EXPRESSION_NAME(false),
+    METHOD_NAME(false),
+    PACKAGE_OR_TYPE_NAME(true),
+    AMBIGUOUS_NAME(true);
+
+    private boolean needDisambiguation;
+
+    private NameCategory(boolean needDisambiguation) {
+        this.needDisambiguation = needDisambiguation;
+    }
+
+    public boolean isNeedingDisambiguation() {
+        return needDisambiguation;
+    }
 
     public boolean isNameAcceptable(String name) {
         if (this == TYPE_NAME && name.equals("var")) {
@@ -24,4 +34,13 @@ public enum NameCategory {
             return true;
         }
     }
+
+    /**
+     * A name that is initially classified by its context as an AmbiguousName or as a PackageOrTypeName is then
+     * reclassified to be a PackageName, TypeName, or ExpressionName.
+     */
+    public static NameCategory disambiguation(NameCategory nameCategory) {
+        throw new UnsupportedOperationException();
+    }
+
 }
