@@ -315,6 +315,19 @@ public class NameLogic {
         return false;
     }
 
+    public static String nameAsString(Node name) {
+        if (!isAName(name)) {
+            throw new IllegalArgumentException("A name was expected");
+        }
+        if (name instanceof Name) {
+            return ((Name)name).asString();
+        } else if (name instanceof SimpleName) {
+            return ((SimpleName)name).getIdentifier();
+        } else {
+            throw new UnsupportedOperationException("Unknown type of name found: " + name);
+        }
+    }
+
     private interface PredicateOnParentAndChild<P extends Node, C extends Node> {
         boolean isSatisfied(P parent, C child);
     }
