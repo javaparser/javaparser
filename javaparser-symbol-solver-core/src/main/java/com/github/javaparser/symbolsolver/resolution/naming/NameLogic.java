@@ -207,6 +207,11 @@ public class NameLogic {
             return true;
         }
         // 2. To the left of the "." in a qualified PackageName
+        if (whenParentIs(Name.class, name, (p, c) -> p.getQualifier().isPresent()
+                && p.getQualifier().get() == name
+                && isSyntacticallyAPackageName(p))) {
+            return true;
+        }
         return false;
     }
 

@@ -87,5 +87,12 @@ public class NameLogicTest extends AbstractResolutionTest {
                 "    opens com.example.bar;\n" +
                 "}", "com.example.bar", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
+
+    @Test
+    public void packageNameInPackageName() {
+        assertNameInCodeIsSyntactically("module foo {\n" +
+                "    opens com.example.bar;\n" +
+                "}", "com.example", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
+    }
     
 }
