@@ -14,7 +14,7 @@ import com.github.javaparser.ast.type.TypeParameter;
 public class NameLogic {
 
     public static boolean isAName(Node node) {
-        return node instanceof SimpleName || node instanceof Name;
+        return node instanceof SimpleName || node instanceof Name || node instanceof ClassOrInterfaceType;
     }
 
     public static NameRole classifyRole(Node name) {
@@ -217,7 +217,8 @@ public class NameLogic {
 
     private static boolean isSyntacticallyATypeName(Node name) {
 
-        if (whenParentIs(ClassOrInterfaceType.class, name)) {
+        if (name instanceof ClassOrInterfaceType
+                || whenParentIs(ClassOrInterfaceType.class, name)) {
             return true;
         }
 
@@ -335,9 +336,12 @@ public class NameLogic {
         if (name instanceof Name) {
             return ((Name)name).asString();
         } else if (name instanceof SimpleName) {
-            return ((SimpleName)name).getIdentifier();
+            return ((SimpleName) name).getIdentifier();
+        } else if (name instanceof ClassOrInterfaceType) {
+            return ((ClassOrInterfaceType) name).asString();
         } else {
-            throw new UnsupportedOperationException("Unknown type of name found: " + name);
+            throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
+                    + name.getClass().getCanonicalName() + ")");
         }
     }
 

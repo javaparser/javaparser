@@ -94,5 +94,49 @@ public class NameLogicTest extends AbstractResolutionTest {
                 "    opens com.example.bar;\n" +
                 "}", "com.example", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
+
+    @Test
+    public void usesTypeName() {
+        assertNameInCodeIsSyntactically("module modi.mod {\n" +
+                "    uses modi.api;\n" +
+                "}", "modi.api", NameCategory.TYPE_NAME, ParseStart.MODULE_DECLARATION);
+    }
+
+    @Test
+    public void providesTypeName() {
+        assertNameInCodeIsSyntactically("module foo {\n" +
+                "    provides com.modi.api.query.Query with ModuleQuery;\n" +
+                "}", "com.modi.api.query.Query", NameCategory.TYPE_NAME, ParseStart.MODULE_DECLARATION);
+    }
+
+    @Test
+    public void singleTypeImportTypeName() {
+        assertNameInCodeIsSyntactically("import a.b.c;", "a.b.c",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void singleStaticTypeImportTypeName() {
+        assertNameInCodeIsSyntactically("import static a.B.c;", "a.B",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void singleStaticImportOnDemandTypeName() {
+        assertNameInCodeIsSyntactically("import static a.B.*;", "a.B",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void constructorDeclarationTypeName() {
+        assertNameInCodeIsSyntactically("A() { }", "A",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void annotationTypeName() {
+        assertNameInCodeIsSyntactically("@Anno class A {} ", "Anno",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
     
 }
