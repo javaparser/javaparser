@@ -179,17 +179,20 @@ public class NameLogic {
         // A name is syntactically classified as a ModuleName in these contexts:
         //
         // 1. In a requires directive in a module declaration (§7.7.1)
-        //
-        // 2. To the right of to in an exports or opens directive in a module declaration (§7.7.2)
+
         if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == name)) {
             return true;
         }
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == name)) {
+
+        // 2. To the right of to in an exports or opens directive in a module declaration (§7.7.2)
+
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(name))) {
             return true;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == name)) {
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(name))) {
             return true;
         }
+
         return false;
     }
 
@@ -197,7 +200,12 @@ public class NameLogic {
         // A name is syntactically classified as a PackageName in these contexts:
         //
         // 1. To the right of exports or opens in a module declaration
-        //
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == name)) {
+            return true;
+        }
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == name)) {
+            return true;
+        }
         // 2. To the left of the "." in a qualified PackageName
         return false;
     }

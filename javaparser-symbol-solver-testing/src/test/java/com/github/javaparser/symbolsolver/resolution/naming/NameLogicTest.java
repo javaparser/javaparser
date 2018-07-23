@@ -29,7 +29,6 @@ public class NameLogicTest extends AbstractResolutionTest {
         }
         assertTrue(parseResult.isSuccessful());
         Node root = parseResult.getResult().get();
-        List<Node> allNode = root.findAll(Node.class);
         List<Node> allNames = root.findAll(Node.class).stream()
                 .filter(NameLogic::isAName)
                 .collect(Collectors.toList());
@@ -62,16 +61,31 @@ public class NameLogicTest extends AbstractResolutionTest {
 
     @Test
     public void exportsModuleName() {
-        assertNameInCodeIsSyntactically("module common.widget{\n" +
-                "  exports com.logicbig;\n" +
-                "}", "com.logicbig", NameCategory.MODULE_NAME, ParseStart.MODULE_DECLARATION);
+        assertNameInCodeIsSyntactically("module my.module{\n" +
+                "  exports my.packag to other.module, another.module;\n" +
+                "}", "other.module", NameCategory.MODULE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
     public void opensModuleName() {
+        assertNameInCodeIsSyntactically("module client.modul{\n" +
+                "    opens some.client.packag to framework.modul;\n" +
+                "    requires framework.modul2;\n" +
+                "}", "framework.modul", NameCategory.MODULE_NAME, ParseStart.MODULE_DECLARATION);
+    }
+
+    @Test
+    public void exportsPackageName() {
+        assertNameInCodeIsSyntactically("module common.widget{\n" +
+                "  exports com.logicbig;\n" +
+                "}", "com.logicbig", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
+    }
+
+    @Test
+    public void opensPackageName() {
         assertNameInCodeIsSyntactically("module foo {\n" +
                 "    opens com.example.bar;\n" +
-                "}", "com.example.bar", NameCategory.MODULE_NAME, ParseStart.MODULE_DECLARATION);
+                "}", "com.example.bar", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
     
 }
