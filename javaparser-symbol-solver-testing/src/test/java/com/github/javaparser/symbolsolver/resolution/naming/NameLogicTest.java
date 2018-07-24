@@ -337,5 +337,11 @@ public class NameLogicTest extends AbstractResolutionTest {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
+
+    @Test
+    public void methodInvocationMethodName() {
+        assertNameInCodeIsSyntactically("class Bar {  Bar() { myMethod(); } } ", "myMethod",
+                NameCategory.METHOD_NAME, ParseStart.COMPILATION_UNIT);
+    }
     
 }

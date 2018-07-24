@@ -174,6 +174,11 @@ public class NameLogic {
         // A name is syntactically classified as a MethodName in this context:
         //
         // 1. Before the "(" in a method invocation expression (§15.12)
+
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c)) {
+            return true;
+        }
+
         return false;
     }
 
