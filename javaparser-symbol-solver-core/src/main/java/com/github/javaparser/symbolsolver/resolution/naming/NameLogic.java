@@ -8,6 +8,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleExportsStmt;
 import com.github.javaparser.ast.modules.ModuleOpensStmt;
 import com.github.javaparser.ast.modules.ModuleRequiresStmt;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 
@@ -347,16 +349,69 @@ public class NameLogic {
         // A name is syntactically classified as an ExpressionName in these contexts:
         //
         // 1. As the qualifying expression in a qualified superclass constructor invocation (§8.8.7.1)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(ExplicitConstructorInvocationStmt.class, nameExpr, (ne, c2) ->
+                        ne.getExpression().isPresent() && ne.getExpression().get() == c2)
+        )) {
+            return true;
+        }
+
         // 2. As the qualifying expression in a qualified class instance creation expression (§15.9)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(ObjectCreationExpr.class, nameExpr, (ne, c2) ->
+                        ne.getScope().isPresent() && ne.getScope().get() == c2)
+        )) {
+            return true;
+        }
+
         // 3. As the array reference expression in an array access expression (§15.10.3)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(ArrayAccessExpr.class, nameExpr, (ne, c2) ->
+                        ne.getName() == c2)
+        )) {
+            return true;
+        }
+
         // 4. As a PostfixExpression (§15.14)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(UnaryExpr.class, nameExpr, (ne, c2) ->
+                        ne.getExpression() == c2 && ne.isPostfix())
+        )) {
+            return true;
+        }
+
         // 5. As the left-hand operand of an assignment operator (§15.26)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(AssignExpr.class, nameExpr, (ne, c2) ->
+                        ne.getTarget() == c2)
+        )) {
+            return true;
+        }
+
         // 6. As a VariableAccess in a try-with-resources statement (§14.20.3)
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(TryStmt.class, nameExpr, (ne, c2) ->
+                        ne.getResources().contains(c2))
+        )) {
+            return true;
+        }
+        if (whenParentIs(NameExpr.class, name, (p1 /*NameExpr*/, c1 /*SimpleName*/) ->
+                p1.getName() == c1 && whenParentIs(VariableDeclarator.class, p1, (p2, c2) ->
+                        p2.getInitializer().isPresent() && p2.getInitializer().get() == c2 && whenParentIs(VariableDeclarationExpr.class, p2, (p3, c3) ->
+                                p3.getVariables().contains(c3) && whenParentIs(TryStmt.class, p3, (p4, c4) ->
+                                        p4.getResources().contains(c4)
+                                )
+                        ))
+        )) {
+            return true;
+        }
+
         return false;
     }
 
