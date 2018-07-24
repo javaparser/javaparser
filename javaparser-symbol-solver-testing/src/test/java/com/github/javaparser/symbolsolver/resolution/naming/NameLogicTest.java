@@ -202,7 +202,7 @@ public class NameLogicTest extends AbstractResolutionTest {
 
     @Test
     public void annotationMemberTypeTypeName() {
-        assertNameInCodeIsSyntactically("@interface { bar.MyClass myMember(); }", "bar.MyClass",
+        assertNameInCodeIsSyntactically("@interface MyAnno { bar.MyClass myMember(); }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
@@ -256,7 +256,43 @@ public class NameLogicTest extends AbstractResolutionTest {
 
     @Test
     public void explicitParameterTypeInMethodCallTypeName() {
-        assertNameInCodeIsSyntactically("void myMethod() { new Call().myMethod<Foo>(); }", "Foo",
+        assertNameInCodeIsSyntactically("void myMethod() { new Call().<Foo>myMethod(); }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void instantiationCallTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { new Foo(); }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void instantiationCallOfAnonymousTypeTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { new Foo() { void method() { } } ; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void arrayCreationExpressionTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { new Foo[0]; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void castTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { Object o = (Foo)someField; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void instanceOfTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { if (myValue instanceof Foo) { }; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void methodReferenceTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
     
