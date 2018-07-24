@@ -5,6 +5,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import org.junit.Test;
 
@@ -201,8 +203,14 @@ public class NameLogicTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void annotationMemberTypeTypeName() {
+    public void qualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeIsSyntactically("@interface MyAnno { bar.MyClass myMember(); }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void unqualifiedAnnotationMemberTypeTypeName() {
+        assertNameInCodeIsSyntactically("@interface MyAnno { MyClass myMember(); }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
@@ -213,20 +221,45 @@ public class NameLogicTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void throwClauseConstructorTypeName() {
+    public void qualifiedThrowClauseConstructorTypeName() {
         assertNameInCodeIsSyntactically("class Foo { Foo() throws bar.MyClass {} }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void fieldTypeTypeName() {
+    public void unualifiedThrowClauseConstructorTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { Foo() throws MyClass {} }", "MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void qualifiedFieldTypeTypeName() {
         assertNameInCodeIsSyntactically("class Foo { bar.MyClass myField; }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void formalParameterOfMethodTypeName() {
+    public void fieldTypeTypeNameSecondAttempt() {
+        assertNameInCodeIsSyntactically("public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {\n" +
+                        "private TypeSolver typeSolver; }", "TypeSolver",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void unqualifiedFieldTypeTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { MyClass myField; }", "MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void qualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeIsSyntactically("class Foo { void myMethod(bar.MyClass param) {} }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void unqualifiedFormalParameterOfMethodTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { void myMethod(MyClass param) {} }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
@@ -355,5 +388,46 @@ public class NameLogicTest extends AbstractResolutionTest {
         assertNameInCodeIsSyntactically("import a.B.*;", "a.B",
                 NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
+
+    @Test
+    public void leftOfExpressionNameAmbiguousName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b.c",
+                NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
+        assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b",
+                NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
+        assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a",
+                NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void leftOfMethodCallAmbiguousName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.aMethod(); } } ", "a.b.c",
+                NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void defaultValueTypeName() {
+        assertNameInCodeIsSyntactically("@RequestForEnhancement(\n" +
+                        "    id       = 2868724,\n" +
+                        "    synopsis = \"Provide time-travel functionality\",\n" +
+                        "    engineer = \"Mr. Peabody\",\n" +
+                        "    date     = anExpression" +
+                        ")\n" +
+                        "public static void travelThroughTime(Date destination) {  }",
+                "anExpression", NameCategory.AMBIGUOUS_NAME, ParseStart.CLASS_BODY);
+    }
+
+    // TODO unclear reading the JLS
+//    @Test
+//    public void methodReferenceAmbiguousName() {
+//        assertNameInCodeIsSyntactically("void myMethod() { Object o = a.b.c.Foo::myMethod; }", "a.b.c.Foo",
+//                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+//        assertNameInCodeIsSyntactically("void myMethod() { Object o = a.b.c.Foo::myMethod; }", "a.b.c",
+//                NameCategory.AMBIGUOUS_NAME, ParseStart.CLASS_BODY);
+//        assertNameInCodeIsSyntactically("void myMethod() { Object o = a.b.c.Foo::myMethod; }", "a.b",
+//                NameCategory.AMBIGUOUS_NAME, ParseStart.CLASS_BODY);
+//        assertNameInCodeIsSyntactically("void myMethod() { Object o = a.b.c.Foo::myMethod; }", "a",
+//                NameCategory.AMBIGUOUS_NAME, ParseStart.CLASS_BODY);
+//    }
     
 }

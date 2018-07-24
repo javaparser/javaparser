@@ -14,7 +14,13 @@ import com.github.javaparser.ast.type.TypeParameter;
 public class NameLogic {
 
     public static boolean isAName(Node node) {
-        return node instanceof SimpleName || node instanceof Name || node instanceof ClassOrInterfaceType;
+        if (node instanceof FieldAccessExpr) {
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            return isAName(fieldAccessExpr.getScope());
+        } else {
+            return node instanceof SimpleName || node instanceof Name
+                    || node instanceof ClassOrInterfaceType || node instanceof NameExpr;
+        }
     }
 
     public static NameRole classifyRole(Node name) {
@@ -116,10 +122,18 @@ public class NameLogic {
      * Most users do not want to call directly this method but call classifyReference instead.
      */
     public static NameCategory syntacticClassificationAccordingToContext(Node name) {
+
+        if (name.getParentNode().isPresent()) {
+            Node parent = name.getParentNode().get();
+            if (isAName(parent) && nameAsString(name).equals(nameAsString(parent))) {
+                return syntacticClassificationAccordingToContext(parent);
+            }
+        }
+
         if (isSyntacticallyATypeName(name)) {
             return NameCategory.TYPE_NAME;
         }
-        if (isSyntacticallyAExpressionName(name)) {
+        if (isSyntacticallyAnExpressionName(name)) {
             return NameCategory.EXPRESSION_NAME;
         }
         if (isSyntacticallyAMethodName(name)) {
@@ -138,23 +152,51 @@ public class NameLogic {
             return NameCategory.PACKAGE_NAME;
         }
 
+        if (name instanceof NameExpr) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+        if (name instanceof FieldAccessExpr) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+        if (name instanceof ClassOrInterfaceType) {
+            return NameCategory.TYPE_NAME;
+        }
+        if (name.getParentNode().isPresent() && name.getParentNode().get() instanceof ClassOrInterfaceType) {
+            return NameCategory.TYPE_NAME;
+        }
+        if (name.getParentNode().isPresent() && name.getParentNode().get() instanceof FieldAccessExpr) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+
         throw new UnsupportedOperationException("Unable to classify category of name contained in "
-                + name.getParentNode().get().getClass().getSimpleName());
+                + name.getParentNode().get().getClass().getSimpleName() + ". See " + name + " at " + name.getRange());
     }
 
     private static boolean isSyntacticallyAAmbiguousName(Node name) {
         // A name is syntactically classified as an AmbiguousName in these contexts:
         //
         // 1. To the left of the "." in a qualified ExpressionName
-        //
+
+        if (whenParentIs(FieldAccessExpr.class, name, (p, c) -> p.getScope() == c)) {
+            return true;
+        }
+
         // 2. To the left of the rightmost . that occurs before the "(" in a method invocation expression
-        //
+
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getScope().isPresent() && p.getScope().get() == c)) {
+            return true;
+        }
+
         // 3. To the left of the "." in a qualified AmbiguousName
         //
         // 4. In the default value clause of an annotation type element declaration (§9.6.2)
         //
         // 5. To the right of an "=" in an an element-value pair (§9.7.1)
-        //
+
+        if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getValue() == c)) {
+            return true;
+        }
+
         // 6. To the left of :: in a method reference expression (§15.13)
         return false;
     }
@@ -274,6 +316,10 @@ public class NameLogic {
         )) {
             return true;
         }
+        if (whenParentIs(ImportDeclaration.class, name, (importDecl, c2) ->
+                        importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)) {
+            return true;
+        }
 
         // 4. To the left of the . in a static-import-on-demand declaration (§7.5.4)
 
@@ -308,6 +354,10 @@ public class NameLogic {
         )) {
             return true;
         }
+        if (whenParentIs(ThisExpr.class, name, (ne, c2) ->
+                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
+            return true;
+        }
 
         // 9. To the left of .super in a qualified superclass field access expression (§15.11.2)
 
@@ -315,6 +365,10 @@ public class NameLogic {
                 nameExpr.getName() == c && whenParentIs(SuperExpr.class, nameExpr, (ne, c2) ->
                         ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
         )) {
+            return true;
+        }
+        if (whenParentIs(SuperExpr.class, name, (ne, c2) ->
+                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
             return true;
         }
 
@@ -458,7 +512,7 @@ public class NameLogic {
         return false;
     }
 
-    private static boolean isSyntacticallyAExpressionName(Node name) {
+    private static boolean isSyntacticallyAnExpressionName(Node name) {
         // A name is syntactically classified as an ExpressionName in these contexts:
         //
         // 1. As the qualifying expression in a qualified superclass constructor invocation (§8.8.7.1)
@@ -467,6 +521,10 @@ public class NameLogic {
                 nameExpr.getName() == c && whenParentIs(ExplicitConstructorInvocationStmt.class, nameExpr, (ne, c2) ->
                         ne.getExpression().isPresent() && ne.getExpression().get() == c2)
         )) {
+            return true;
+        }
+        if (whenParentIs(ExplicitConstructorInvocationStmt.class, name, (ne, c2) ->
+                        ne.getExpression().isPresent() && ne.getExpression().get() == c2)) {
             return true;
         }
 
@@ -478,6 +536,10 @@ public class NameLogic {
         )) {
             return true;
         }
+        if (whenParentIs(ObjectCreationExpr.class, name, (ne, c2) ->
+                        ne.getScope().isPresent() && ne.getScope().get() == c2)) {
+            return true;
+        }
 
         // 3. As the array reference expression in an array access expression (§15.10.3)
 
@@ -485,6 +547,10 @@ public class NameLogic {
                 nameExpr.getName() == c && whenParentIs(ArrayAccessExpr.class, nameExpr, (ne, c2) ->
                         ne.getName() == c2)
         )) {
+            return true;
+        }
+        if (whenParentIs(ArrayAccessExpr.class, name, (ne, c2) ->
+                        ne.getName() == c2)) {
             return true;
         }
 
@@ -496,6 +562,10 @@ public class NameLogic {
         )) {
             return true;
         }
+        if (whenParentIs(UnaryExpr.class, name, (ne, c2) ->
+                        ne.getExpression() == c2 && ne.isPostfix())) {
+            return  true;
+        }
 
         // 5. As the left-hand operand of an assignment operator (§15.26)
 
@@ -503,6 +573,10 @@ public class NameLogic {
                 nameExpr.getName() == c && whenParentIs(AssignExpr.class, nameExpr, (ne, c2) ->
                         ne.getTarget() == c2)
         )) {
+            return true;
+        }
+        if (whenParentIs(AssignExpr.class, name, (ne, c2) ->
+                        ne.getTarget() == c2)) {
             return true;
         }
 
@@ -524,6 +598,18 @@ public class NameLogic {
         )) {
             return true;
         }
+        if (whenParentIs(TryStmt.class, name, (ne, c2) ->
+                        ne.getResources().contains(c2))) {
+            return true;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p2, c2) ->
+                        p2.getInitializer().isPresent() && p2.getInitializer().get() == c2 && whenParentIs(VariableDeclarationExpr.class, p2, (p3, c3) ->
+                                p3.getVariables().contains(c3) && whenParentIs(TryStmt.class, p3, (p4, c4) ->
+                                        p4.getResources().contains(c4)
+                                )
+                        ))) {
+            return true;
+        }
 
         return false;
     }
@@ -538,6 +624,15 @@ public class NameLogic {
             return ((SimpleName) name).getIdentifier();
         } else if (name instanceof ClassOrInterfaceType) {
             return ((ClassOrInterfaceType) name).asString();
+        } else if (name instanceof FieldAccessExpr) {
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) name;
+            if (isAName(fieldAccessExpr.getScope())) {
+                return nameAsString(fieldAccessExpr.getScope()) + "." + nameAsString(fieldAccessExpr.getName());
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else if (name instanceof NameExpr) {
+            return ((NameExpr)name).getNameAsString();
         } else {
             throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
                     + name.getClass().getCanonicalName() + ")");
