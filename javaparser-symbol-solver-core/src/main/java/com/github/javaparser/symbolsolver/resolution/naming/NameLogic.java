@@ -230,16 +230,33 @@ public class NameLogic {
         //
         // 2. In a single-type-import declaration (§7.5.1)
 
-        if (whenParentIs(ImportDeclaration.class, name, (p, c) -> p.getName() == name)) {
+        if (whenParentIs(ImportDeclaration.class, name, (p, c) ->
+                !p.isStatic() && !p.isAsterisk() && p.getName() == name)) {
             return true;
         }
 
         // 3. To the left of the . in a single-static-import declaration (§7.5.3)
-        //
+
+        if (whenParentIs(Name.class, name, (largerName, c) ->
+           whenParentIs(ImportDeclaration.class, largerName, (importDecl, c2) ->
+                   importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)
+        )) {
+            return true;
+        }
+
         // 4. To the left of the . in a static-import-on-demand declaration (§7.5.4)
-        //
+
+        if (whenParentIs(ImportDeclaration.class, name, (p, c) ->
+                p.isStatic() && p.isAsterisk() && p.getName() == name)) {
+            return true;
+        }
+
         // 5. To the left of the ( in a constructor declaration (§8.8)
-        //
+
+        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == name)) {
+            return true;
+        }
+
         // 6. After the @ sign in an annotation (§9.7)
 
         if (whenParentIs(AnnotationExpr.class, name, (p, c) -> p.getName() == name)) {
