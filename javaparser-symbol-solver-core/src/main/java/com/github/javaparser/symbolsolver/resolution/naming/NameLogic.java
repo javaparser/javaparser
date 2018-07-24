@@ -266,9 +266,23 @@ public class NameLogic {
         // 7. To the left of .class in a class literal (§15.8.2)
         //
         // 8. To the left of .this in a qualified this expression (§15.8.4)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(ThisExpr.class, nameExpr, (ne, c2) ->
+                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
+        )) {
+            return true;
+        }
+
         // 9. To the left of .super in a qualified superclass field access expression (§15.11.2)
-        //
+
+        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
+                nameExpr.getName() == c && whenParentIs(SuperExpr.class, nameExpr, (ne, c2) ->
+                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
+        )) {
+            return true;
+        }
+
         // 10. To the left of .Identifier or .super.Identifier in a qualified method invocation expression (§15.12)
         //
         // 11. To the left of .super:: in a method reference expression (§15.13)

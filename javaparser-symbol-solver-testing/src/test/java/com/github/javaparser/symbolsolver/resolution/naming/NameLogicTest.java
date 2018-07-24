@@ -35,11 +35,24 @@ public class NameLogicTest extends AbstractResolutionTest {
         List<Node> matchingNames = allNames.stream()
                 .filter(n -> NameLogic.nameAsString(n).equals(name))
                 .collect(Collectors.toList());
+        // In case of one name being contained in other as is, we remove it
+        for (int i=0;i<matchingNames.size();i++) {
+            Node container = matchingNames.get(i);
+            for (int j=i+1;j<matchingNames.size();j++) {
+                Node contained = matchingNames.get(j);
+                if (contained.getParentNode().isPresent() && contained.getParentNode().get() == container
+                    && NameLogic.nameAsString(contained).equals(NameLogic.nameAsString(container))) {
+                    matchingNames.remove(j);
+                    j--;
+                }
+            }
+        }
+
         if (matchingNames.size() == 0) {
             throw new IllegalArgumentException("Not found. Names found: " + String.join(", ",
                     allNames.stream().map(NameLogic::nameAsString).collect(Collectors.toList())));
         } else if (matchingNames.size() > 1) {
-            throw new IllegalArgumentException("Ambiguous");
+            throw new IllegalArgumentException("Ambiguous: there are several matching.");
         } else {
             return matchingNames.get(0);
         }
@@ -137,6 +150,36 @@ public class NameLogicTest extends AbstractResolutionTest {
     public void annotationTypeName() {
         assertNameInCodeIsSyntactically("@Anno class A {} ", "Anno",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void classLiteralTypeName() {
+        assertNameInCodeIsSyntactically("Class<?> c = String.class;", "String",
+                NameCategory.TYPE_NAME, ParseStart.STATEMENT);
+    }
+
+    @Test
+    public void thisExprTypeName() {
+        assertNameInCodeIsSyntactically("Object o = String.this;", "String",
+                NameCategory.TYPE_NAME, ParseStart.STATEMENT);
+    }
+
+    @Test
+    public void qualifiedSuperFieldAccessTypeName() {
+        assertNameInCodeIsSyntactically("Object o = MyClass.super.myField;", "MyClass",
+                NameCategory.TYPE_NAME, ParseStart.STATEMENT);
+    }
+
+    @Test
+    public void qualifiedSuperCallTypeName() {
+        assertNameInCodeIsSyntactically("Object o = MyClass.super.myCall();", "MyClass",
+                NameCategory.TYPE_NAME, ParseStart.STATEMENT);
+    }
+
+    @Test
+    public void qualifiedSuperMethodReferenceTypeName() {
+        assertNameInCodeIsSyntactically("Object o = MyClass.super::myMethod;", "MyClass",
+                NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
     
 }
