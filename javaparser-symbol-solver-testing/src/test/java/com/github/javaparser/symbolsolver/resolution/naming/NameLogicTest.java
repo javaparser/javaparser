@@ -181,5 +181,83 @@ public class NameLogicTest extends AbstractResolutionTest {
         assertNameInCodeIsSyntactically("Object o = MyClass.super::myMethod;", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
+
+    @Test
+    public void extendsClauseTypeName() {
+        assertNameInCodeIsSyntactically("class Foo extends bar.MyClass { }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void implementsClauseTypeName() {
+        assertNameInCodeIsSyntactically("class Foo implements bar.MyClass { }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void returnTypeTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { bar.MyClass myMethod() {} }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void annotationMemberTypeTypeName() {
+        assertNameInCodeIsSyntactically("@interface { bar.MyClass myMember(); }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void throwClauseMethodTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { void myMethod() throws bar.MyClass {} }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void throwClauseConstructorTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { Foo() throws bar.MyClass {} }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void fieldTypeTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { bar.MyClass myField; }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void formalParameterOfMethodTypeName() {
+        assertNameInCodeIsSyntactically("class Foo { void myMethod(bar.MyClass param) {} }", "bar.MyClass",
+                NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void receiverParameterOfMethodTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod(Foo this) {}", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void variableDeclarationTypeTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { Foo myVar; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void exceptionParameterTypeTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { try { } catch(Foo e) { } }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void explicitParameterTypeInConstructorCallTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { new Call<Foo>(); }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void explicitParameterTypeInMethodCallTypeName() {
+        assertNameInCodeIsSyntactically("void myMethod() { new Call().myMethod<Foo>(); }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
     
 }
