@@ -295,5 +295,47 @@ public class NameLogicTest extends AbstractResolutionTest {
         assertNameInCodeIsSyntactically("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
+
+    @Test
+    public void qualifiedConstructorSuperClassInvocationExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression.super(); } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void qualifiedClassInstanceCreationExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression.new MyClass(); } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void arrayReferenceExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression[0]; } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void postfixExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression++; } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void leftHandAssignmentExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression = 2; } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void variableAccessInTryWithResourceExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar { Bar() { try (anExpression) { }; } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void variableAccessInTryWithResourceWothTypeExpressionName() {
+        assertNameInCodeIsSyntactically("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "anExpression",
+                NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
+    }
     
 }
