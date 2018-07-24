@@ -5,9 +5,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.ModuleExportsStmt;
-import com.github.javaparser.ast.modules.ModuleOpensStmt;
-import com.github.javaparser.ast.modules.ModuleRequiresStmt;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -165,8 +163,20 @@ public class NameLogic {
         // A name is syntactically classified as a PackageOrTypeName in these contexts:
         //
         // 1. To the left of the "." in a qualified TypeName
-        //
+
+        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) ->
+                p.getScope().isPresent() && p.getScope().get() == c && isSyntacticallyATypeName(p)
+        )) {
+            return true;
+        }
+
         // 2. In a type-import-on-demand declaration (§7.5.2)
+
+        if (whenParentIs(ImportDeclaration.class, name, (p, c) ->
+                !p.isStatic() && p.isAsterisk() && p.getName() == name)) {
+            return true;
+        }
+
         return false;
     }
 
@@ -224,17 +234,31 @@ public class NameLogic {
 
     private static boolean isSyntacticallyATypeName(Node name) {
 
-        if (name instanceof ClassOrInterfaceType
-                || whenParentIs(ClassOrInterfaceType.class, name)) {
-            return true;
-        }
+//        if (name instanceof ClassOrInterfaceType
+//                && whenParentIs(ClassOrInterfaceType.class, name, (p, c) ->
+//                p.getScope().isPresent() && p.getScope().get() == c && whenParentIs(ObjectCreationExpr.class, )
+//            )) {
+//
+//        }
+//
+//        if (name instanceof ClassOrInterfaceType
+//                || whenParentIs(ClassOrInterfaceType.class, name)) {
+//            return true;
+//        }
 
         // A name is syntactically classified as a TypeName in these contexts:
         //
         // The first eleven non-generic contexts (§6.1):
         //
         // 1. In a uses or provides directive in a module declaration (§7.7.1)
-        //
+
+        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getType() == c)) {
+            return true;
+        }
+        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getType() == c)) {
+            return true;
+        }
+
         // 2. In a single-type-import declaration (§7.5.1)
 
         if (whenParentIs(ImportDeclaration.class, name, (p, c) ->
@@ -271,7 +295,11 @@ public class NameLogic {
         }
 
         // 7. To the left of .class in a class literal (§15.8.2)
-        //
+
+        if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
+            return true;
+        }
+
         // 8. To the left of .this in a qualified this expression (§15.8.4)
 
         if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
@@ -300,41 +328,121 @@ public class NameLogic {
         // type argument of a parameterized type) in the 16 contexts where types are used (§4.11):
         //
         // 1. In an extends or implements clause of a class declaration (§8.1.4, §8.1.5, §8.5, §9.5)
-        //
         // 2. In an extends clause of an interface declaration (§9.1.3)
-        //
+
+        if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) ->
+                p.getExtendedTypes().contains(c) || p.getImplementedTypes().contains(c))) {
+            return true;
+        }
+
         // 3. The return type of a method (§8.4, §9.4) (including the type of an element of an annotation type (§9.6.1))
-        //
+
+        if (whenParentIs(MethodDeclaration.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+        if (whenParentIs(AnnotationMemberDeclaration.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 4. In the throws clause of a method or constructor (§8.4.6, §8.8.5, §9.4)
-        //
+
+        if (whenParentIs(MethodDeclaration.class, name, (p, c) ->
+                p.getThrownExceptions().contains(c))) {
+            return true;
+        }
+        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) ->
+                p.getThrownExceptions().contains(c))) {
+            return true;
+        }
+
         // 5. In an extends clause of a type parameter declaration of a generic class, interface, method, or
         //    constructor (§8.1.2, §9.1.2, §8.4.4, §8.8.4)
         //
         // 6. The type in a field declaration of a class or interface (§8.3, §9.3)
-        //
+
+        if (whenParentIs(VariableDeclarator.class, name, (p1, c1) ->
+                p1.getType() == c1 && whenParentIs(FieldDeclaration.class, p1, (p2, c2) ->
+                p2.getVariables().contains(c2)))) {
+            return true;
+        }
+
         // 7. The type in a formal parameter declaration of a method, constructor, or lambda expression
         //    (§8.4.1, §8.8.1, §9.4, §15.27.1)
-        //
+
+        if (whenParentIs(Parameter.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 8. The type of the receiver parameter of a method (§8.4.1)
-        //
+
+        if (whenParentIs(ReceiverParameter.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 9. The type in a local variable declaration (§14.4, §14.14.1, §14.14.2, §14.20.3)
-        //
+
+        if (whenParentIs(VariableDeclarator.class, name, (p1, c1) ->
+                p1.getType() == c1 && whenParentIs(VariableDeclarationExpr.class, p1, (p2, c2) ->
+                        p2.getVariables().contains(c2)))) {
+            return true;
+        }
+
         // 10. A type in an exception parameter declaration (§14.20)
         //
         // 11. In an explicit type argument list to an explicit constructor invocation statement or class instance
         //     creation expression or method invocation expression (§8.8.7.1, §15.9, §15.12)
-        //
+
+        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) ->
+                p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c))) {
+            return true;
+        }
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) ->
+                p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c))) {
+            return true;
+        }
+
         // 12. In an unqualified class instance creation expression, either as the class type to be instantiated (§15.9)
         //     or as the direct superclass or direct superinterface of an anonymous class to be instantiated (§15.9.5)
-        //
+
+        if (whenParentIs(ObjectCreationExpr.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 13. The element type in an array creation expression (§15.10.1)
-        //
+
+        if (whenParentIs(ArrayCreationExpr.class, name, (p, c) ->
+                p.getElementType() == c)) {
+            return true;
+        }
+
         // 14. The type in the cast operator of a cast expression (§15.16)
-        //
+
+        if (whenParentIs(CastExpr.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 15. The type that follows the instanceof relational operator (§15.20.2)
-        //
+
+        if (whenParentIs(InstanceOfExpr.class, name, (p, c) ->
+                p.getType() == c)) {
+            return true;
+        }
+
         // 16. In a method reference expression (§15.13), as the reference type to search for a member method or as the class type or array type to construct.
-        //
+
+        if (whenParentIs(TypeExpr.class, name, (p1, c1) ->
+                p1.getType() == c1 && whenParentIs(MethodReferenceExpr.class, p1, (p2, c2) ->
+                        p2.getScope() == c2)
+        )) {
+            return true;
+        }
+
         // The extraction of a TypeName from the identifiers of a ReferenceType in the 16 contexts above is intended to
         // apply recursively to all sub-terms of the ReferenceType, such as its element type and any type arguments.
         //

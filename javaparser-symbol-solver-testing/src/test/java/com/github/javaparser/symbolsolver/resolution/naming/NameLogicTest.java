@@ -343,5 +343,17 @@ public class NameLogicTest extends AbstractResolutionTest {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { myMethod(); } } ", "myMethod",
                 NameCategory.METHOD_NAME, ParseStart.COMPILATION_UNIT);
     }
+
+    @Test
+    public void leftOfQualifiedTypeNamePackageOrTypeName() {
+        assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
+                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void typeImportOnDemandPackageOrTypeName() {
+        assertNameInCodeIsSyntactically("import a.B.*;", "a.B",
+                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+    }
     
 }
