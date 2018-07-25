@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
@@ -26,6 +27,7 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Context is very similar to scope.
@@ -97,7 +99,42 @@ public interface Context {
         }
     }
 
+    /**
+     * The local variables that are declared and made visible to a given child.
+     * 
+     * @param child
+     * @return
+     */
+    List<VariableDeclarator> localVariablesDeclaredForChild(Node child);
+
+    /**
+     * The local variables that are visible in a certain scope are defined in JLS 6.3. Scope of a Declaration.
+     *
+     * 1. The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
+     * appears, starting with its own initializer and including any further declarators to the right in the local
+     * variable declaration statement.
+     *
+     * 2. The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all
+     * of the following:
+     * 2.1 Its own initializer
+     * 2.2 Any further declarators to the right in the ForInit part of the for statement
+     * 2.3 The Expression and ForUpdate parts of the for statement
+     * 2.4 The contained Statement
+     *
+     * 3. The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
+     * the contained Statement.
+     * 4. The scope of a parameter of an exception handler that is declared in a catch clause of a try statement
+     * (§14.20) is the entire block associated with the catch.
+     *
+     * 5. The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
+     * from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
+     * associated with the try-with-resources statement.
+     */
     default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
+        // Normally we see all the variables declared in the parent, however there are some exceptions
+        //
+        // In the case of a statement we see all the variables declared before
+        //if (localVariablesDeclared)
         // TODO SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
         // TODO getSymbolDeclarationsRecursively
         throw new UnsupportedOperationException();

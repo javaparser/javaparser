@@ -32,5 +32,4 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                 new ReflectionTypeSolver());
     }
 
-    
 }
