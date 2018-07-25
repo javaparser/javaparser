@@ -11,7 +11,23 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 
+/**
+ * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
+ * in Chapter 6 of the JLS. This code could be moved to an interface or base class in a successive version of
+ * JavaParser.
+ */
 public class NameLogic {
+
+    public static boolean isSimpleName(Node node) {
+        return !isQualifiedName(node);
+    }
+
+    public static boolean isQualifiedName(Node node) {
+        if (!isAName(node)) {
+            throw new IllegalArgumentException();
+        }
+        return nameAsString(node).contains(".");
+    }
 
     public static boolean isAName(Node node) {
         if (node instanceof FieldAccessExpr) {
