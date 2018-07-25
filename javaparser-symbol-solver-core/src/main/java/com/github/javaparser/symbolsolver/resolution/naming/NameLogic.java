@@ -157,13 +157,13 @@ public class NameLogic {
 //        if (context.solveSymbolAsValue(name, typeSolver).isPresent()) {
 //            return NameCategory.EXPRESSION_NAME;
 //        }
-        if (context.localVariableDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+        if (context.localVariableDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
-        if (context.parameterDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+        if (context.parameterDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
-        if (context.fieldDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+        if (context.fieldDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
 

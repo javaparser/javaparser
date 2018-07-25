@@ -21,13 +21,14 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Context is very similar to scope.
@@ -101,11 +102,20 @@ public interface Context {
 
     /**
      * The local variables that are declared and made visible to a given child.
-     * 
+     *
      * @param child
      * @return
      */
-    List<VariableDeclarator> localVariablesDeclaredForChild(Node child);
+    default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+        // TODO fixme
+        return Collections.emptyList();
+    }
+
+    default List<VariableDeclarator> localVariablesDeclared() {
+        // TODO fixme
+        return Collections.emptyList();
+    }
 
     /**
      * The local variables that are visible in a certain scope are defined in JLS 6.3. Scope of a Declaration.
@@ -137,14 +147,29 @@ public interface Context {
         //if (localVariablesDeclared)
         // TODO SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
         // TODO getSymbolDeclarationsRecursively
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<VariableDeclarator> localRes = getParent().localVariablesExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().localVariableDeclarationInScope(name);
     }
 
     default Optional<VariableDeclarator> parameterDeclarationInScope(String name) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        // TODO Fixme
+        return Optional.empty();
     }
 
     default Optional<VariableDeclarator> fieldDeclarationInScope(String name) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        // TODO Fixme
+        return Optional.empty();
     }
 }
