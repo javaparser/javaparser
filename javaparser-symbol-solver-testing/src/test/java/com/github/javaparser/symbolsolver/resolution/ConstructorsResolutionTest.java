@@ -55,4 +55,41 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 		assertEquals(expectedConstructor, actualConstructor);
 	}
 
+	@Test
+	public void solveInnerClassConstructorWithNewScope() {
+		CompilationUnit cu = parseSample("ConstructorCalls");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructorWithNewScope");
+		ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+				                                        .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+		SymbolReference<ResolvedConstructorDeclaration> ref =
+				JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+		ConstructorDeclaration actualConstructor =
+				((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+
+		ClassOrInterfaceDeclaration innerClazz = Navigator.demandClass(cu, "OtherClass.InnerClass");
+		ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
+
+		assertEquals(expectedConstructor, actualConstructor);
+	}
+
+	@Test
+	public void solveInnerInnerClassConstructor() {
+		CompilationUnit cu = parseSample("ConstructorCalls");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerInnerClassConstructor");
+		ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+				                                        .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+		SymbolReference<ResolvedConstructorDeclaration> ref =
+				JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+		ConstructorDeclaration actualConstructor =
+				((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+
+		ClassOrInterfaceDeclaration innerClazz = Navigator.demandClass(cu, "OtherClass.InnerClass.InnerInnerClass");
+		ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
+
+		assertEquals(expectedConstructor, actualConstructor);
+	}
 }

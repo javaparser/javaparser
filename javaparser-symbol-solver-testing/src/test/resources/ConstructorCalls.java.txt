@@ -8,6 +8,14 @@ class ConstructorCalls {
         OtherClass oc = new OtherClass();
         oc.new InnerClass();
     }
+
+    void testInnerClassConstructorWithNewScope() {
+        new OtherClass().new InnerClass();
+    }
+
+    void testInnerInnerClassConstructor() {
+        new OtherClass().new InnerClass().new InnerInnerClass();
+    }
 }
 
 class OtherClass {
@@ -17,5 +25,10 @@ class OtherClass {
     class InnerClass {
 
         InnerClass() {}
+
+        class InnerInnerClass {
+
+            InnerInnerClass() {}
+        }
     }
 }
