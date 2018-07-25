@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -10,6 +11,10 @@ import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
  * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
@@ -94,10 +99,13 @@ public class NameLogic {
         if (whenParentIs(EnumConstantDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
+        if (whenParentIs(FieldAccessExpr.class, name, (p, c) -> p.getName() == c || p.getScope() == c)) {
+            return NameRole.REFERENCE;
+        }
         throw new UnsupportedOperationException("Unable to classify role of name contained in "+ name.getParentNode().get().getClass().getSimpleName());
     }
 
-    public static NameCategory classifyReference(Node name) {
+    public static NameCategory classifyReference(Node name, TypeSolver typeSolver) {
         if (!name.getParentNode().isPresent()) {
             throw new IllegalArgumentException("We cannot understand the category of a name if it has no parent");
         }
@@ -114,7 +122,7 @@ public class NameLogic {
         // Second, a name that is initially classified by its context as an AmbiguousName or as a PackageOrTypeName is
         // then reclassified to be a PackageName, TypeName, or ExpressionName.
         if (first.isNeedingDisambiguation()) {
-            NameCategory second = reclassificationOfContextuallyAmbiguousNames(name, first);
+            NameCategory second = reclassificationOfContextuallyAmbiguousNames(name, first, typeSolver);
             assert !second.isNeedingDisambiguation();
             return second;
         } else {
@@ -125,10 +133,56 @@ public class NameLogic {
     /**
      * JLS 6.5.2. Reclassification of Contextually Ambiguous Names
      */
-    private static NameCategory reclassificationOfContextuallyAmbiguousNames(Node name, NameCategory ambiguousCategory) {
+    private static NameCategory reclassificationOfContextuallyAmbiguousNames(Node name, NameCategory ambiguousCategory,
+                                                                             TypeSolver typeSolver) {
         if (!ambiguousCategory.isNeedingDisambiguation()) {
             throw new IllegalArgumentException("The Name Category is not ambiguous: " + ambiguousCategory);
         }
+        if (ambiguousCategory == NameCategory.AMBIGUOUS_NAME && isSimpleName(name)) {
+            return reclassificationOfContextuallyAmbiguousSimpleAmbiguousName(name, typeSolver);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private static NameCategory reclassificationOfContextuallyAmbiguousSimpleAmbiguousName(Node nameNode,
+                                                                                           TypeSolver typeSolver) {
+        // If the AmbiguousName is a simple name, consisting of a single Identifier:
+        //
+        // * If the Identifier appears within the scope (§6.3) of a local variable declaration (§14.4) or parameter
+        //   declaration (§8.4.1, §8.8.1, §14.20) or field declaration (§8.3) with that name, then the AmbiguousName is
+        //   reclassified as an ExpressionName.
+
+        String name = nameAsString(nameNode);
+        Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+//        if (context.solveSymbolAsValue(name, typeSolver).isPresent()) {
+//            return NameCategory.EXPRESSION_NAME;
+//        }
+        if (context.localVariableDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+        if (context.parameterDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+        if (context.fieldDeclarationInScope(nameAsString(nameNode)).isPresent()) {
+            return NameCategory.EXPRESSION_NAME;
+        }
+
+        // * Otherwise, if a field of that name is declared in the compilation unit (§7.3) containing the Identifier by
+        //   a single-static-import declaration (§7.5.3), or by a static-import-on-demand declaration (§7.5.4) then the
+        //   AmbiguousName is reclassified as an ExpressionName.
+        //
+        // * Otherwise, if the Identifier is a valid TypeIdentifier and appears within the scope (§6.3) of a top level
+        //   class (§8 (Classes)) or interface type declaration (§9 (Interfaces)), a local class declaration (§14.3) or
+        //   member type declaration (§8.5, §9.5) with that name, then the AmbiguousName is reclassified as a TypeName.
+        //
+        // * Otherwise, if the Identifier is a valid TypeIdentifier and a type of that name is declared in the
+        //   compilation unit (§7.3) containing the Identifier, either by a single-type-import declaration (§7.5.1), or
+        //   by a type-import-on-demand declaration (§7.5.2), or by a single-static-import declaration (§7.5.3), or by
+        //   a static-import-on-demand declaration (§7.5.4), then the AmbiguousName is reclassified as a TypeName.
+        //
+        // Otherwise, the AmbiguousName is reclassified as a PackageName. A later step determines whether or not a
+        // package of that name actually exists.
+
         throw new UnsupportedOperationException();
     }
 

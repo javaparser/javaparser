@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -94,5 +95,19 @@ public interface Context {
         } else {
             return Optional.empty();
         }
+    }
+
+    default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
+        // TODO SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
+        // TODO getSymbolDeclarationsRecursively
+        throw new UnsupportedOperationException();
+    }
+
+    default Optional<VariableDeclarator> parameterDeclarationInScope(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    default Optional<VariableDeclarator> fieldDeclarationInScope(String name) {
+        throw new UnsupportedOperationException();
     }
 }

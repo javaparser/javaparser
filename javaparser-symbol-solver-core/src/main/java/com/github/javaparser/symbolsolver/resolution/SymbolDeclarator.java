@@ -18,13 +18,27 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
+import javax.swing.text.html.Option;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
  */
 public interface SymbolDeclarator {
 
+//    Optional<SymbolDeclarator> parent();
     List<ResolvedValueDeclaration> getSymbolDeclarations();
 
+//    default List<ResolvedValueDeclaration> getSymbolDeclarationsRecursively() {
+//        if (parent().isPresent()) {
+//            List<ResolvedValueDeclaration> all = new LinkedList<>();
+//            all.addAll(parent().get().getSymbolDeclarationsRecursively());
+//            all.addAll(getSymbolDeclarations());
+//            return all;
+//        } else {
+//            return getSymbolDeclarations();
+//        }
+//    }
 }
