@@ -32,4 +32,52 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                 new ReflectionTypeSolver());
     }
 
+    @Test
+    public void ambiguousNameToLocalVarInAnnidatedBlocks() {
+        assertNameInCodeIsDisambiguited("class A { void foo() {{\n" +
+                        "SomeClass a; {{a.aField;}}}" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
+    @Test
+    public void ambiguousNameToLocalVarFromOldFor() {
+        assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
+                        "for (SomeClass a=null;true;){ a.aField; }" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
+    @Test
+    public void ambiguousNameToLocalVarFromNewFor() {
+        assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
+                        "for (SomeClass a : null){ a.aField; }" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
+    @Test
+    public void ambiguousNameToLocalVarFromTryWithResource() {
+        assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
+                        "try (SomeClass a = null){ a.aField; }" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
+    @Test
+    public void ambiguousNameToMethodParameter() {
+        assertNameInCodeIsDisambiguited("class A { void foo(SomeClass a) {\n" +
+                        "a.aField;" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
+    @Test
+    public void ambiguousNameToCatchParameter() {
+        assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
+                        "try { } catch (SomeClass a) { a.aField; }" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new ReflectionTypeSolver());
+    }
+
 }
