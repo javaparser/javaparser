@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -29,6 +30,8 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,5 +87,19 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+    }
+
+    @Override
+    public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        if (child == wrappedNode.getTryBlock()) {
+            List<VariableDeclarator> res = new LinkedList<>();
+            for (Expression expr : wrappedNode.getResources()) {
+                if (expr instanceof VariableDeclarationExpr) {
+                    res.addAll(((VariableDeclarationExpr)expr).getVariables());
+                }
+            }
+            return res;
+        }
+        return Collections.emptyList();
     }
 }

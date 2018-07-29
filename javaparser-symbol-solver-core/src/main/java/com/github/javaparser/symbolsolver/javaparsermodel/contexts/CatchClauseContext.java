@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -59,6 +60,14 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Parameter> parametersExposedToChild(Node child) {
+        if (child == getWrappedNode().getBody()) {
+            return Collections.singletonList(getWrappedNode().getParameter());
+        }
         return Collections.emptyList();
     }
 }

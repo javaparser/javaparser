@@ -204,28 +204,28 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         return getParent().solveType(name, typeSolver);
     }
 
-    @Override
-    public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
-        // TODO fixme
-        //return Collections.emptyList();
-        if (wrappedNode instanceof BlockStmt) {
-            NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) wrappedNode;
-            int position = -1;
-            for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
-                if (nodeWithStmt.getStatements().get(i).equals(child)) {
-                    position = i;
-                }
-            }
-            if (position == -1) {
-                throw new RuntimeException("I cannot find the child " + child + " in " + wrappedNode);
-            }
-            List<VariableDeclarator> variableDeclarators = new LinkedList<>();
-            for (int i = position - 1; i >= 0; i--) {
-                variableDeclarators.addAll(JavaParserFactory.getContext(nodeWithStmt.getStatements().get(i), typeSolver).localVariablesDeclared());
-            }
-            return variableDeclarators;
-        } else {
-            return Collections.emptyList();
-        }
-    }
+//    @Override
+//    public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+//        // TODO fixme
+//        //return Collections.emptyList();
+//        if (wrappedNode instanceof BlockStmt) {
+//            NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) wrappedNode;
+//            int position = -1;
+//            for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
+//                if (nodeWithStmt.getStatements().get(i).equals(child)) {
+//                    position = i;
+//                }
+//            }
+//            if (position == -1) {
+//                throw new RuntimeException("I cannot find the child " + child + " in " + wrappedNode);
+//            }
+//            List<VariableDeclarator> variableDeclarators = new LinkedList<>();
+//            for (int i = position - 1; i >= 0; i--) {
+//                variableDeclarators.addAll(JavaParserFactory.getContext(nodeWithStmt.getStatements().get(i), typeSolver).localVariablesDeclared());
+//            }
+//            return variableDeclarators;
+//        } else {
+//            return Collections.emptyList();
+//        }
+//    }
 }

@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
@@ -26,6 +27,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
@@ -57,5 +59,13 @@ public class ForechStatementContext extends AbstractJavaParserContext<ForeachStm
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+    }
+
+    @Override
+    public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        if (child == wrappedNode.getBody()) {
+            return wrappedNode.getVariable().getVariables();
+        }
+        return Collections.emptyList();
     }
 }

@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.core.resolution;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
@@ -112,10 +113,12 @@ public interface Context {
         return Collections.emptyList();
     }
 
-    default List<VariableDeclarator> localVariablesDeclared() {
+    default List<Parameter> parametersExposedToChild(Node child) {
+        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
         // TODO fixme
         return Collections.emptyList();
     }
+
 
     /**
      * The local variables that are visible in a certain scope are defined in JLS 6.3. Scope of a Declaration.
@@ -161,10 +164,17 @@ public interface Context {
         return getParent().localVariableDeclarationInScope(name);
     }
 
-    default Optional<VariableDeclarator> parameterDeclarationInScope(String name) {
-        //throw new UnsupportedOperationException();
-        // TODO Fixme
-        return Optional.empty();
+    default Optional<Parameter> parameterDeclarationInScope(String name) {
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<Parameter> localRes = getParent().parametersExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().parameterDeclarationInScope(name);
     }
 
     default Optional<VariableDeclarator> fieldDeclarationInScope(String name) {
