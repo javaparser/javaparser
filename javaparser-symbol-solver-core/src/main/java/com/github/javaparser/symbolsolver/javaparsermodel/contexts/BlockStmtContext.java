@@ -27,12 +27,12 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return getParent().solveSymbol(name, typeSolver);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
-        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        return getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
     }
 
     @Override
