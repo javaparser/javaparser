@@ -117,7 +117,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
                 if (property == ObservableProperty.TYPE) {
                     VariableDeclarator vd = VariableDeclarator.this;
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
-                        NodeWithVariables nodeWithVariables = (NodeWithVariables) vd.getParentNode().get();
+                        NodeWithVariables<?> nodeWithVariables = (NodeWithVariables<?>) vd.getParentNode().get();
                         // We calculate the value the property will assume after the change will be completed
                         Optional<Type> currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
                         List<Type> types = new LinkedList<>();
