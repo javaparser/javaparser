@@ -35,10 +35,7 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
-import javassist.bytecode.SyntheticAttribute;
+import javassist.bytecode.*;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -302,7 +299,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
             return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
         } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+            SymbolReference<ResolvedReferenceTypeDeclaration> reference = typeSolver.tryToSolveType(ctClass.getClassFile().getSuperclass());
+            if (reference.isSolved()) {
+                return new ReferenceTypeImpl(reference.getCorrespondingDeclaration(), typeSolver);
+            } else {
+                throw new RuntimeException(e);
+            }
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
