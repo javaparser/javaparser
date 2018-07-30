@@ -35,7 +35,10 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.*;
+import javassist.bytecode.AccessFlag;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -46,8 +49,6 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class JavassistClassDeclaration extends AbstractClassDeclaration {
-
-
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -92,9 +93,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         JavassistClassDeclaration that = (JavassistClassDeclaration) o;
 
-        if (!ctClass.equals(that.ctClass)) return false;
-
-        return true;
+        return ctClass.equals(that.ctClass);
     }
 
     @Override
@@ -184,7 +183,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge =  (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
             if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
@@ -199,7 +198,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                 }
             }
         } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+            candidates.addAll(solveSuperClass().getAllMethods());
         }
 
         try {
@@ -257,7 +256,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-      return javassistTypeDeclarationAdapter.getDeclaredFields();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
@@ -299,15 +298,22 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
             return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
         } catch (NotFoundException e) {
-            SymbolReference<ResolvedReferenceTypeDeclaration> reference = typeSolver.tryToSolveType(ctClass.getClassFile().getSuperclass());
-            if (reference.isSolved()) {
-                return new ReferenceTypeImpl(reference.getCorrespondingDeclaration(), typeSolver);
-            } else {
-                throw new RuntimeException(e);
-            }
+            return solveSuperClass();
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Solve the fqn of the super class with the {@link #typeSolver}.
+     */
+    private ReferenceTypeImpl solveSuperClass() {
+        String superclass = ctClass.getClassFile().getSuperclass();
+        SymbolReference<ResolvedReferenceTypeDeclaration> reference = typeSolver.tryToSolveType(superclass);
+        if (reference.isSolved()) {
+            return new ReferenceTypeImpl(reference.getCorrespondingDeclaration(), typeSolver);
+        }
+        throw new RuntimeException("Unable to find " + superclass);
     }
 
     @Override
@@ -324,9 +330,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                         .map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType())
                         .collect(Collectors.toList());
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (BadBytecode e) {
+        } catch (NotFoundException | BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -353,7 +357,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-      return javassistTypeDeclarationAdapter.getConstructors();
+        return javassistTypeDeclarationAdapter.getConstructors();
     }
 
     @Override
