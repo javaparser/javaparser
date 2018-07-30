@@ -108,17 +108,16 @@ public interface Context {
      * @return
      */
     default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
-        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-        // TODO fixme
         return Collections.emptyList();
     }
 
     default List<Parameter> parametersExposedToChild(Node child) {
-        //throw new UnsupportedOperationException(this.getClass().getCanonicalName());
-        // TODO fixme
         return Collections.emptyList();
     }
 
+    default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
 
     /**
      * The local variables that are visible in a certain scope are defined in JLS 6.3. Scope of a Declaration.
@@ -177,9 +176,16 @@ public interface Context {
         return getParent().parameterDeclarationInScope(name);
     }
 
-    default Optional<VariableDeclarator> fieldDeclarationInScope(String name) {
-        //throw new UnsupportedOperationException();
-        // TODO Fixme
-        return Optional.empty();
+    default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<ResolvedFieldDeclaration> localRes = getParent().fieldsExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getName().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().fieldDeclarationInScope(name);
     }
 }

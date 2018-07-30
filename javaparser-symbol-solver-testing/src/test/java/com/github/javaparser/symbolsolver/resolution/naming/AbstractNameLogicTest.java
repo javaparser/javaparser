@@ -2,9 +2,12 @@ package com.github.javaparser.symbolsolver.resolution.naming;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
@@ -12,16 +15,24 @@ import static org.junit.Assert.assertTrue;
 public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
 
     protected Node getNameInCodeTollerant(String code, String name, ParseStart parseStart) {
-        return getNameInCode(code, name, parseStart, true);
+        return getNameInCode(code, name, parseStart, true, Optional.empty());
+    }
+
+    protected Node getNameInCodeTollerant(String code, String name, ParseStart parseStart, TypeSolver typeSolver) {
+        return getNameInCode(code, name, parseStart, true, Optional.of(typeSolver));
     }
 
     protected Node getNameInCode(String code, String name, ParseStart parseStart) {
-        return getNameInCode(code, name, parseStart, false);
+        return getNameInCode(code, name, parseStart, false, Optional.empty());
     }
 
-    private Node getNameInCode(String code, String name, ParseStart parseStart, boolean tollerant) {
+    private Node getNameInCode(String code, String name, ParseStart parseStart, boolean tollerant,
+                               Optional<TypeSolver> typeSolver) {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
+        if (typeSolver.isPresent()) {
+            parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver.get()));
+        }
         ParseResult<? extends Node> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
         if (!parseResult.isSuccessful()) {
             parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));

@@ -631,7 +631,7 @@ public class MethodResolutionLogic {
         if (typeDeclaration instanceof JavassistClassDeclaration) {
           return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
-          if (typeDeclaration instanceof JavassistEnumDeclaration) {
+        if (typeDeclaration instanceof JavassistEnumDeclaration) {
             return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
