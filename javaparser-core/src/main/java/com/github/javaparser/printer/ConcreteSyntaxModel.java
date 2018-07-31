@@ -887,8 +887,8 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(ModuleProvidesStmt.class, sequence(
                 token(GeneratedJavaParserConstants.PROVIDES),
                 space(),
-                child(ObservableProperty.TYPE),
-                list(ObservableProperty.WITH_TYPES,
+                child(ObservableProperty.NAME),
+                list(ObservableProperty.WITH,
                         sequence(comma(), space()),
                         sequence(space(), token(GeneratedJavaParserConstants.WITH), space()),
                         none()),
@@ -908,7 +908,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(ModuleUsesStmt.class, sequence(
                 token(GeneratedJavaParserConstants.USES),
                 space(),
-                child(ObservableProperty.TYPE),
+                child(ObservableProperty.NAME),
                 semicolon(),
                 newline()
         ));

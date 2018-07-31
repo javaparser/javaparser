@@ -1597,15 +1597,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(ModuleProvidesStmt n, Void arg) {
         printer.print("provides ");
-        n.getType().accept(this, arg);
-        printPrePostFixRequiredList(n.getWithTypes(), arg, " with ", ", ", "");
+        n.getName().accept(this, arg);
+        printPrePostFixRequiredList(n.getWith(), arg, " with ", ", ", "");
         printer.println(";");
     }
 
     @Override
     public void visit(ModuleUsesStmt n, Void arg) {
         printer.print("uses ");
-        n.getType().accept(this, arg);
+        n.getName().accept(this, arg);
         printer.println(";");
     }
 

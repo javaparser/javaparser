@@ -88,13 +88,13 @@ public class ModuleDeclarationTest {
         assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
         ModuleUsesStmt moduleUsesStmt = module.getModuleStmts().get(8).asModuleUsesStmt();
-        assertThat(moduleUsesStmt.getType().toString()).isEqualTo("V.W");
+        assertThat(moduleUsesStmt.getNameAsString()).isEqualTo("V.W");
 
         ModuleProvidesStmt moduleProvidesStmt = module.getModuleStmts().get(9).asModuleProvidesStmt();
-        assertThat(moduleProvidesStmt.getType().toString()).isEqualTo("X.Y");
-        assertThat(moduleProvidesStmt.getWithTypes()).containsExactly(
-                new ClassOrInterfaceType(parseClassOrInterfaceType("Z1"), "Z2"),
-                new ClassOrInterfaceType(parseClassOrInterfaceType("Z3"), "Z4"));
+        assertThat(moduleProvidesStmt.getNameAsString()).isEqualTo("X.Y");
+        assertThat(moduleProvidesStmt.getWith()).containsExactly(
+                parseName("Z1.Z2"),
+                parseName("Z3.Z4"));
 
     }
 
