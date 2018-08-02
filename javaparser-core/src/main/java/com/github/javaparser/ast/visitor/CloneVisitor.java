@@ -1019,10 +1019,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final ModuleProvidesStmt n, final Object arg) {
-        Type type = cloneNode(n.getType(), arg);
-        NodeList<Type> withTypes = cloneList(n.getWithTypes(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        NodeList<Name> with = cloneList(n.getWith(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleProvidesStmt r = new ModuleProvidesStmt(n.getTokenRange().orElse(null), type, withTypes);
+        ModuleProvidesStmt r = new ModuleProvidesStmt(n.getTokenRange().orElse(null), name, with);
         r.setComment(comment);
         return r;
     }
@@ -1030,9 +1030,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final ModuleUsesStmt n, final Object arg) {
-        Type type = cloneNode(n.getType(), arg);
+        Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleUsesStmt r = new ModuleUsesStmt(n.getTokenRange().orElse(null), type);
+        ModuleUsesStmt r = new ModuleUsesStmt(n.getTokenRange().orElse(null), name);
         r.setComment(comment);
         return r;
     }

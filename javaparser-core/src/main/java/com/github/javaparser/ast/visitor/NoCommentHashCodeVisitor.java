@@ -476,13 +476,13 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentHashCodeVisitorGenerator")
     public Integer visit(final ModuleProvidesStmt n, final Void arg) {
-        return (n.getType().accept(this, arg)) * 31 + (n.getWithTypes().accept(this, arg));
+        return (n.getName().accept(this, arg)) * 31 + (n.getWith().accept(this, arg));
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentHashCodeVisitorGenerator")
     public Integer visit(final ModuleUsesStmt n, final Void arg) {
-        return (n.getType().accept(this, arg));
+        return (n.getName().accept(this, arg));
     }
 
     @Override

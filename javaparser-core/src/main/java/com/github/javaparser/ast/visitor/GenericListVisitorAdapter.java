@@ -1948,12 +1948,12 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getType().accept(this, arg);
+            tmp = n.getName().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
         {
-            tmp = n.getWithTypes().accept(this, arg);
+            tmp = n.getWith().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1989,7 +1989,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getType().accept(this, arg);
+            tmp = n.getName().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -484,13 +484,13 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(final ModuleProvidesStmt n, final Void arg) {
-        return (n.getType().accept(this, arg)) * 31 + (n.getWithTypes().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getName().accept(this, arg)) * 31 + (n.getWith().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(final ModuleUsesStmt n, final Void arg) {
-        return (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
