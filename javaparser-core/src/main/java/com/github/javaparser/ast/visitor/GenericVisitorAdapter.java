@@ -1941,12 +1941,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final ModuleProvidesStmt n, final A arg) {
         R result;
         {
-            result = n.getType().accept(this, arg);
+            result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
         }
         {
-            result = n.getWithTypes().accept(this, arg);
+            result = n.getWith().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1963,7 +1963,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final ModuleUsesStmt n, final A arg) {
         R result;
         {
-            result = n.getType().accept(this, arg);
+            result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
         }
