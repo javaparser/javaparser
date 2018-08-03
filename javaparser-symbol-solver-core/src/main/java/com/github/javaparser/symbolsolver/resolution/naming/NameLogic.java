@@ -120,6 +120,12 @@ public class NameLogic {
         if (whenParentIs(FieldAccessExpr.class, name, (p, c) -> p.getName() == c || p.getScope() == c)) {
             return NameRole.REFERENCE;
         }
+        if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
+            return classifyRole(name.getParentNode().get());
+        }
         throw new UnsupportedOperationException("Unable to classify role of name contained in "+ name.getParentNode().get().getClass().getSimpleName());
     }
 
@@ -409,9 +415,7 @@ public class NameLogic {
         //
         // 1. To the left of the "." in a qualified TypeName
 
-        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> {
-            return p.getScope().isPresent() && p.getScope().get() == c && (isSyntacticallyATypeName(p) || isSyntacticallyAPackageOrTypeName(p));
-        })) {
+        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.getScope().isPresent() && p.getScope().get() == c && (isSyntacticallyATypeName(p) || isSyntacticallyAPackageOrTypeName(p)))) {
             return true;
         }
 

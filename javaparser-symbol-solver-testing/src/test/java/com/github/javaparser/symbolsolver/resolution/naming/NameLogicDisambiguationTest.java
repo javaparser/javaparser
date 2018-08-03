@@ -314,11 +314,13 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
 
     @Test
     public void packageOrTypeNameSimpleNameNotMatchingType() {
-        throw new UnsupportedOperationException();
-    }
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
 
-    // assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
-    //                                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+        assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",
+                "myQualified", NameCategory.PACKAGE_OR_TYPE_NAME, NameCategory.PACKAGE_NAME,
+                ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
 
     // 6.5.4.2. Qualified PackageOrTypeNames
     //
@@ -328,7 +330,15 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
 
     @Test
     public void packageOrTypeNameQualifiedNameMatchingType() {
-        throw new UnsupportedOperationException();
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedMyQualified = mock(ResolvedReferenceTypeDeclaration.class);
+        when(mockedMyQualified.asReferenceType()).thenReturn(mockedMyQualified);
+        typeSolver.addDeclaration("myQualified.path", mockedMyQualified);
+
+        assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",
+                "myQualified.path", NameCategory.PACKAGE_OR_TYPE_NAME, NameCategory.TYPE_NAME,
+                ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
     }
 
     // Otherwise, it is reclassified as a PackageName. The meaning of the qualified PackageOrTypeName is the meaning
@@ -336,6 +346,11 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
 
     @Test
     public void packageOrTypeNameQualifiedNameNotMatchingType() {
-        throw new UnsupportedOperationException();
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+
+        assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",
+                "myQualified.path", NameCategory.PACKAGE_OR_TYPE_NAME, NameCategory.PACKAGE_NAME,
+                ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
     }
 }
