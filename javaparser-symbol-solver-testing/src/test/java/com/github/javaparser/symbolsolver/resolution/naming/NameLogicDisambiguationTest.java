@@ -276,4 +276,21 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                         "} }", "a.b.C.d", NameCategory.AMBIGUOUS_NAME, NameCategory.COMPILATION_ERROR, ParseStart.COMPILATION_UNIT,
                 new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
     }
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsExpressionName() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        MethodUsage mockedMethodD = mock(MethodUsage.class);
+        when(mockedC.asReferenceType()).thenReturn(mockedC);
+        when(mockedMethodD.getName()).thenReturn("d");
+        when(mockedC.getAllFields()).thenReturn(Collections.emptyList());
+        when(mockedC.getAllMethods()).thenReturn(new HashSet<>(Arrays.asList(mockedMethodD)));
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d.e.f;" + "\n" +
+                        "} }", "a.b.C.d.e", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
 }

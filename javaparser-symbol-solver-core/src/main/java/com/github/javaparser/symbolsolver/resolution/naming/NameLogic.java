@@ -234,7 +234,7 @@ public class NameLogic {
         //   actually exists.
 
         if (leftNameCategory == NameCategory.EXPRESSION_NAME) {
-
+            return NameCategory.EXPRESSION_NAME;
         }
 
         throw new UnsupportedOperationException();
