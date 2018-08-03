@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver.resolution.naming;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -14,9 +15,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -166,4 +165,115 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                 new CombinedTypeSolver(new ReflectionTypeSolver()));
     }
 
+    // If the AmbiguousName is a qualified name, consisting of a name, a ".", and an Identifier, then the name to the
+    // left of the "." is first reclassified, for it is itself an AmbiguousName. There is then a choice:
+    //
+    // If the name to the left of the "." is reclassified as a PackageName, then:
+    //
+    // If the Identifier is a valid TypeIdentifier, and there is a package whose name is the name to the left of the
+    // ".", and that package contains a declaration of a type whose name is the same as the Identifier, then this
+    // AmbiguousName is reclassified as a TypeName.
+    //
+    // Otherwise, this AmbiguousName is reclassified as a PackageName. A later step determines whether or not a package
+    // of that name actually exists.
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsPackageNameLeadingToType() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d;" + "\n" +
+                        "} }", "a.b.C", NameCategory.AMBIGUOUS_NAME, NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsPackageNameNotLeadingToType() {
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d;" + "\n" +
+                        "} }", "a.b.C", NameCategory.AMBIGUOUS_NAME, NameCategory.PACKAGE_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver()));
+    }
+
+    // If the AmbiguousName is a qualified name, consisting of a name, a ".", and an Identifier, then the name to the
+    // left of the "." is first reclassified, for it is itself an AmbiguousName. There is then a choice:
+    //
+    // If the name to the left of the "." is reclassified as a PackageName, then:
+    //
+    // If the Identifier is a valid TypeIdentifier, and there is a package whose name is the name to the left of the
+    // ".", and that package contains a declaration of a type whose name is the same as the Identifier, then this
+    // AmbiguousName is reclassified as a TypeName.
+    //
+    // Otherwise, this AmbiguousName is reclassified as a PackageName. A later step determines whether or not a package
+    // of that name actually exists.
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToField() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        ResolvedFieldDeclaration mockedFieldC = mock(ResolvedFieldDeclaration.class);
+        when(mockedC.asReferenceType()).thenReturn(mockedC);
+        when(mockedC.getAllMethods()).thenReturn(Collections.emptySet());
+        when(mockedFieldC.isStatic()).thenReturn(true);
+        when(mockedFieldC.getName()).thenReturn("d");
+        when(mockedC.getAllFields()).thenReturn(Arrays.asList(mockedFieldC));
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d.e;" + "\n" +
+                        "} }", "a.b.C.d", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToMethod() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        MethodUsage mockedMethodD = mock(MethodUsage.class);
+        when(mockedC.asReferenceType()).thenReturn(mockedC);
+        when(mockedMethodD.getName()).thenReturn("d");
+        when(mockedC.getAllFields()).thenReturn(Collections.emptyList());
+        when(mockedC.getAllMethods()).thenReturn(new HashSet<>(Arrays.asList(mockedMethodD)));
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d.e;" + "\n" +
+                        "} }", "a.b.C.d", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToInternalType() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+
+        ResolvedReferenceTypeDeclaration mockedD = mock(ResolvedReferenceTypeDeclaration.class);
+
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        when(mockedC.asReferenceType()).thenReturn(mockedC);
+        when(mockedC.getInternalType("d")).thenReturn(mockedD);
+        when(mockedC.hasInternalType("d")).thenReturn(true);
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d.e;" + "\n" +
+                        "} }", "a.b.C.d", NameCategory.AMBIGUOUS_NAME, NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    @Test
+    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToCompilationError() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        when(mockedC.asReferenceType()).thenReturn(mockedC);
+        when(mockedC.getAllFields()).thenReturn(Arrays.asList());
+        when(mockedC.getAllMethods()).thenReturn(Collections.emptySet());
+        typeSolver.addDeclaration("a.b.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.b.C.d.e;" + "\n" +
+                        "} }", "a.b.C.d", NameCategory.AMBIGUOUS_NAME, NameCategory.COMPILATION_ERROR, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
 }

@@ -11,9 +11,14 @@ import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
@@ -42,6 +47,22 @@ public class NameLogic {
             return node instanceof SimpleName || node instanceof Name
                     || node instanceof ClassOrInterfaceType || node instanceof NameExpr;
         }
+    }
+
+    public static Node getQualifier(Node node) {
+        if (node instanceof FieldAccessExpr) {
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            return fieldAccessExpr.getScope();
+        }
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    public static Node getRightMostName(Node node) {
+        if (node instanceof FieldAccessExpr) {
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            return fieldAccessExpr.getName();
+        }
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     public static NameRole classifyRole(Node name) {
@@ -141,6 +162,81 @@ public class NameLogic {
         if (ambiguousCategory == NameCategory.AMBIGUOUS_NAME && isSimpleName(name)) {
             return reclassificationOfContextuallyAmbiguousSimpleAmbiguousName(name, typeSolver);
         }
+        if (ambiguousCategory == NameCategory.AMBIGUOUS_NAME && isQualifiedName(name)) {
+            return reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(name, typeSolver);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private static NameCategory reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(Node nameNode,
+                                                                                           TypeSolver typeSolver) {
+        // If the AmbiguousName is a qualified name, consisting of a name, a ".", and an Identifier, then the name to
+        // the left of the "." is first reclassified, for it is itself an AmbiguousName. There is then a choice:
+
+        Node leftName = NameLogic.getQualifier(nameNode);
+        String rightName = NameLogic.nameAsString(NameLogic.getRightMostName(nameNode));
+        NameCategory leftNameCategory = classifyReference(leftName, typeSolver);
+
+        // * If the name to the left of the "." is reclassified as a PackageName, then:
+        //
+        //      * If the Identifier is a valid TypeIdentifier, and there is a package whose name is the name to the left
+        //        of the ".", and that package contains a declaration of a type whose name is the same as the Identifier,
+        //        then this AmbiguousName is reclassified as a TypeName.
+        //
+        //      * Otherwise, this AmbiguousName is reclassified as a PackageName. A later step determines whether or not
+        //        a package of that name actually exists.
+
+        if (leftNameCategory == NameCategory.PACKAGE_NAME) {
+            if (typeSolver.hasType(nameAsString(nameNode))) {
+                return NameCategory.TYPE_NAME;
+            } else {
+                return NameCategory.PACKAGE_NAME;
+            }
+        }
+
+        // * If the name to the left of the "." is reclassified as a TypeName, then:
+        //
+        //      * If the Identifier is the name of a method or field of the type denoted by TypeName, then this
+        //        AmbiguousName is reclassified as an ExpressionName.
+        //
+        //      * Otherwise, if the Identifier is a valid TypeIdentifier and is the name of a member type of the type
+        //        denoted by TypeName, then this AmbiguousName is reclassified as a TypeName.
+        //
+        //      * Otherwise, a compile-time error occurs.
+
+        if (leftNameCategory == NameCategory.TYPE_NAME) {
+            SymbolReference<ResolvedTypeDeclaration> scopeTypeRef = JavaParserFactory.getContext(leftName, typeSolver)
+                    .solveType(NameLogic.nameAsString(leftName), typeSolver);
+            if (scopeTypeRef.isSolved()) {
+                ResolvedTypeDeclaration scopeType = scopeTypeRef.getCorrespondingDeclaration();
+                if (scopeType instanceof ResolvedReferenceTypeDeclaration) {
+                    ResolvedReferenceTypeDeclaration scopeRefType = scopeType.asReferenceType();
+                    if (scopeRefType.getAllMethods().stream().anyMatch(m -> m.getName().equals(rightName))) {
+                        return NameCategory.EXPRESSION_NAME;
+                    }
+                    if (scopeRefType.getAllFields().stream().anyMatch(f -> f.isStatic() && f.getName().equals(rightName))) {
+                        return NameCategory.EXPRESSION_NAME;
+                    }
+                    if (scopeRefType.hasInternalType(rightName)) {
+                        return NameCategory.TYPE_NAME;
+                    }
+                    return NameCategory.COMPILATION_ERROR;
+                } else {
+                    throw new UnsupportedOperationException();
+                }
+            } else {
+                throw new UnsolvedSymbolException("Unable to solve context type: " + NameLogic.nameAsString(leftName));
+            }
+        }
+
+        // * If the name to the left of the "." is reclassified as an ExpressionName, then this AmbiguousName is
+        //   reclassified as an ExpressionName. A later step determines whether or not a member with the name Identifier
+        //   actually exists.
+
+        if (leftNameCategory == NameCategory.EXPRESSION_NAME) {
+
+        }
+
         throw new UnsupportedOperationException();
     }
 

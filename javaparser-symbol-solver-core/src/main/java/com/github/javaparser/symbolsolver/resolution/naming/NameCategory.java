@@ -15,7 +15,8 @@ public enum NameCategory {
     EXPRESSION_NAME(false),
     METHOD_NAME(false),
     PACKAGE_OR_TYPE_NAME(true),
-    AMBIGUOUS_NAME(true);
+    AMBIGUOUS_NAME(true),
+    COMPILATION_ERROR(false);
 
     private boolean needDisambiguation;
 
@@ -33,6 +34,10 @@ public enum NameCategory {
         } else {
             return true;
         }
+    }
+
+    public boolean isValid() {
+        return this != COMPILATION_ERROR;
     }
 
 }
