@@ -1,25 +1,22 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
-import com.github.javaparser.*;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
 
-import java.lang.reflect.Proxy;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
@@ -292,5 +289,53 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                         "a.b.C.d.e.f;" + "\n" +
                         "} }", "a.b.C.d.e", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
                 new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    // 6.5.4.1. Simple PackageOrTypeNames
+    //
+    // If the PackageOrTypeName, Q, is a valid TypeIdentifier and occurs in the scope of a type named Q, then the
+    // PackageOrTypeName is reclassified as a TypeName.
+
+    @Test
+    public void packageOrTypeNameSimpleNameMatchingType() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedMyQualified = mock(ResolvedReferenceTypeDeclaration.class);
+        when(mockedMyQualified.asReferenceType()).thenReturn(mockedMyQualified);
+        typeSolver.addDeclaration("foo.myQualified", mockedMyQualified);
+
+        assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",
+                "myQualified", NameCategory.PACKAGE_OR_TYPE_NAME, NameCategory.TYPE_NAME,
+                ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    // Otherwise, the PackageOrTypeName is reclassified as a PackageName. The meaning of the PackageOrTypeName is
+    // the meaning of the reclassified name.
+
+    @Test
+    public void packageOrTypeNameSimpleNameNotMatchingType() {
+        throw new UnsupportedOperationException();
+    }
+
+    // assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
+    //                                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+
+    // 6.5.4.2. Qualified PackageOrTypeNames
+    //
+    // Given a qualified PackageOrTypeName of the form Q.Id, if Id is a valid TypeIdentifier and the type or package
+    // denoted by Q has a member type named Id, then the qualified PackageOrTypeName name is reclassified as a
+    // TypeName.
+
+    @Test
+    public void packageOrTypeNameQualifiedNameMatchingType() {
+        throw new UnsupportedOperationException();
+    }
+
+    // Otherwise, it is reclassified as a PackageName. The meaning of the qualified PackageOrTypeName is the meaning
+    // of the reclassified name.
+
+    @Test
+    public void packageOrTypeNameQualifiedNameNotMatchingType() {
+        throw new UnsupportedOperationException();
     }
 }

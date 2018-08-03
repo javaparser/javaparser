@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -14,9 +13,7 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -165,6 +162,46 @@ public class NameLogic {
         if (ambiguousCategory == NameCategory.AMBIGUOUS_NAME && isQualifiedName(name)) {
             return reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(name, typeSolver);
         }
+        if (ambiguousCategory == NameCategory.PACKAGE_OR_TYPE_NAME) {
+            return reclassificationOfContextuallyAmbiguosPackageOrTypeName(name, typeSolver);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private static NameCategory reclassificationOfContextuallyAmbiguosPackageOrTypeName(Node name, TypeSolver typeSolver) {
+        // 6.5.4.1. Simple PackageOrTypeNames
+        //
+        // If the PackageOrTypeName, Q, is a valid TypeIdentifier and occurs in the scope of a type named Q, then the
+        // PackageOrTypeName is reclassified as a TypeName.
+        //
+        // Otherwise, the PackageOrTypeName is reclassified as a PackageName. The meaning of the PackageOrTypeName is
+        // the meaning of the reclassified name.
+
+        if (isSimpleName(name)) {
+            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name), typeSolver).isSolved()) {
+                return NameCategory.TYPE_NAME;
+            } else {
+                return NameCategory.PACKAGE_NAME;
+            }
+        }
+
+        // 6.5.4.2. Qualified PackageOrTypeNames
+        //
+        // Given a qualified PackageOrTypeName of the form Q.Id, if Id is a valid TypeIdentifier and the type or package
+        // denoted by Q has a member type named Id, then the qualified PackageOrTypeName name is reclassified as a
+        // TypeName.
+        //
+        // Otherwise, it is reclassified as a PackageName. The meaning of the qualified PackageOrTypeName is the meaning
+        // of the reclassified name.
+
+        if (isQualifiedName(name)) {
+            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name), typeSolver).isSolved()) {
+                return NameCategory.TYPE_NAME;
+            } else {
+                return NameCategory.PACKAGE_NAME;
+            }
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -372,9 +409,9 @@ public class NameLogic {
         //
         // 1. To the left of the "." in a qualified TypeName
 
-        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) ->
-                p.getScope().isPresent() && p.getScope().get() == c && isSyntacticallyATypeName(p)
-        )) {
+        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> {
+            return p.getScope().isPresent() && p.getScope().get() == c && (isSyntacticallyATypeName(p) || isSyntacticallyAPackageOrTypeName(p));
+        })) {
             return true;
         }
 

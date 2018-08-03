@@ -345,6 +345,10 @@ public class NameLogicTest extends AbstractNameLogicTest {
     public void leftOfQualifiedTypeNamePackageOrTypeName() {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
                 NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+        assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path",
+                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
+        assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified",
+                NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
