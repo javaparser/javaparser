@@ -158,4 +158,12 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                 new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
     }
 
+    @Test
+    public void ambiguousNameDefaultToPackageName() {
+        assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
+                        "a.aField;" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.PACKAGE_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver()));
+    }
+
 }

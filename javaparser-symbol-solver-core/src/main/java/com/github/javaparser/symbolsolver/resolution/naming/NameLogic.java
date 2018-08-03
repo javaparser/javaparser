@@ -183,7 +183,7 @@ public class NameLogic {
         // Otherwise, the AmbiguousName is reclassified as a PackageName. A later step determines whether or not a
         // package of that name actually exists.
 
-        throw new UnsupportedOperationException();
+        return NameCategory.PACKAGE_NAME;
     }
 
     /**
