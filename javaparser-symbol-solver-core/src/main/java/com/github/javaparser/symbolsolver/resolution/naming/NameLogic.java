@@ -364,10 +364,10 @@ public class NameLogic {
         //
         // 1. In a uses or provides directive in a module declaration (§7.7.1)
 
-        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getType() == c)) {
+        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
             return true;
         }
-        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getType() == c)) {
+        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
             return true;
         }
 

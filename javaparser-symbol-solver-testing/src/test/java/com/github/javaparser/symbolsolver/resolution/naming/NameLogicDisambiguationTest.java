@@ -114,4 +114,8 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
                 new CombinedTypeSolver(new ReflectionTypeSolver()));
     }
 
+    // Otherwise, if a field of that name is declared in the compilation unit (§7.3) containing the Identifier by a
+    // single-static-import declaration (§7.5.3), or by a static-import-on-demand declaration (§7.5.4) then the
+    // AmbiguousName is reclassified as an ExpressionName.
+
 }
