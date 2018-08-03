@@ -2,18 +2,26 @@ package com.github.javaparser.symbolsolver.resolution.naming;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
 
@@ -117,5 +125,37 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // Otherwise, if a field of that name is declared in the compilation unit (§7.3) containing the Identifier by a
     // single-static-import declaration (§7.5.3), or by a static-import-on-demand declaration (§7.5.4) then the
     // AmbiguousName is reclassified as an ExpressionName.
+
+    @Test
+    public void ambiguousNameToSingleStaticImportDeclaration() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        ResolvedFieldDeclaration mockedFieldA = mock(ResolvedFieldDeclaration.class);
+        when(mockedFieldA.isStatic()).thenReturn(true);
+        when(mockedFieldA.getName()).thenReturn("a");
+        when(mockedC.getAllFields()).thenReturn(Arrays.asList(mockedFieldA));
+        typeSolver.addDeclaration("foo.bar.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("import static foo.bar.C.a; class B {  void foo() {\n" +
+                        "a.aField;" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
+
+    @Test
+    public void ambiguousNameToStaticImportOnDemandDeclaration() {
+        MemoryTypeSolver typeSolver = new MemoryTypeSolver();
+        ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
+        ResolvedFieldDeclaration mockedFieldA = mock(ResolvedFieldDeclaration.class);
+        when(mockedFieldA.isStatic()).thenReturn(true);
+        when(mockedFieldA.getName()).thenReturn("a");
+        when(mockedC.getAllFields()).thenReturn(Arrays.asList(mockedFieldA));
+        typeSolver.addDeclaration("foo.bar.C", mockedC);
+
+        assertNameInCodeIsDisambiguited("import static foo.bar.C.*; class B {  void foo() {\n" +
+                        "a.aField;" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver));
+    }
 
 }
