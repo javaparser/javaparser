@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import org.junit.Test;
 
@@ -112,6 +113,22 @@ public class NameLogicTest extends AbstractNameLogicTest {
                 .getScope().asFieldAccessExpr()
                 .getScope().asFieldAccessExpr()
                 .getScope())); // a
+    }
+
+    @Test
+    public void nameAsStringModuleName() {
+        ModuleDeclaration md = parse("module com.mydeveloperplanet.jpmshello {\n" +
+                "    requires java.base;\n" +
+                "    requires java.xml;\n" +
+                "    requires com.mydeveloperplanet.jpmshi;\n" +
+                "}\n", ParseStart.MODULE_DECLARATION);
+        assertEquals("com.mydeveloperplanet.jpmshello", NameLogic.nameAsString(md.getName()));
+    }
+
+    @Test
+    public void nameAsStringClassName() {
+        CompilationUnit cu = parse("class Foo extends bar.MyClass { }", ParseStart.COMPILATION_UNIT);
+        assertEquals("Foo", NameLogic.nameAsString(cu.getType(0).getName()));
     }
 
     @Test
