@@ -14,12 +14,23 @@ import org.junit.Test;
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.DECLARATION;
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.REFERENCE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NameLogicTest extends AbstractNameLogicTest {
 
     private void assertNameInCodeHasRole(String code, String name, NameRole nameRole, ParseStart parseStart) {
         Node nameNode = getNameInCode(code, name, parseStart);
         assertEquals(nameRole, NameLogic.classifyRole(nameNode));
+    }
+
+    private void assertIsSimpleName(String code, String name, ParseStart parseStart) {
+        Node nameNode = getNameInCode(code, name, parseStart);
+        assertTrue(NameLogic.isSimpleName(nameNode));
+    }
+
+    private void assertIsQualifiedName(String code, String name, ParseStart parseStart) {
+        Node nameNode = getNameInCode(code, name, parseStart);
+        assertTrue(NameLogic.isQualifiedName(nameNode));
     }
 
     @Test
@@ -101,6 +112,21 @@ public class NameLogicTest extends AbstractNameLogicTest {
                 .getScope().asFieldAccessExpr()
                 .getScope().asFieldAccessExpr()
                 .getScope())); // a
+    }
+
+    @Test
+    public void qualifiedModuleName() {
+        assertIsQualifiedName("module com.mydeveloperplanet.jpmshello {\n" +
+                "    requires java.base;\n" +
+                "    requires java.xml;\n" +
+                "    requires com.mydeveloperplanet.jpmshi;\n" +
+                "}\n", "com.mydeveloperplanet.jpmshello", ParseStart.MODULE_DECLARATION);
+    }
+
+    @Test
+    public void simpleNameUnqualifiedAnnotationMemberTypeTypeName() {
+        assertIsSimpleName("@interface MyAnno { MyClass myMember(); }", "MyClass",
+                ParseStart.COMPILATION_UNIT);
     }
 
     @Test
