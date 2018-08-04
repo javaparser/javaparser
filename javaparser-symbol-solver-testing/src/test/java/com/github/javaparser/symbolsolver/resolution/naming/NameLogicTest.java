@@ -101,7 +101,16 @@ public class NameLogicTest extends AbstractNameLogicTest {
                 .getScope().asFieldAccessExpr()
                 .getScope().asFieldAccessExpr()
                 .getScope())); // a
-    }    
+    }
+
+    @Test
+    public void classifyRoleModuleName() {
+        assertNameInCodeHasRole("module com.mydeveloperplanet.jpmshello {\n" +
+                "    requires java.base;\n" +
+                "    requires java.xml;\n" +
+                "    requires com.mydeveloperplanet.jpmshi;\n" +
+                "}\n", "com.mydeveloperplanet.jpmshello", DECLARATION, ParseStart.MODULE_DECLARATION);
+    }
 
     @Test
     public void classifyRoleRequiresModuleName() {
@@ -193,6 +202,12 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
+    public void classifyRoleClassName() {
+        assertNameInCodeHasRole("@Anno class A {} ", "A",
+                DECLARATION, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
     public void classifyRoleClassLiteralTypeName() {
         assertNameInCodeHasRole("Class<?> c = String.class;", "String",
                 REFERENCE, ParseStart.STATEMENT);
@@ -247,6 +262,12 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
+    public void classifyRoleAnnotationName() {
+        assertNameInCodeHasRole("@interface MyAnno { bar.MyClass myMember(); }", "MyAnno",
+                DECLARATION, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
     public void classifyRoleUnqualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeHasRole("@interface MyAnno { MyClass myMember(); }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
@@ -290,6 +311,12 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
+    public void classifyRoleFieldName() {
+        assertNameInCodeHasRole("class Foo { MyClass myField; }", "myField",
+                DECLARATION, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
     public void classifyRoleQualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeHasRole("class Foo { void myMethod(bar.MyClass param) {} }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
@@ -299,6 +326,12 @@ public class NameLogicTest extends AbstractNameLogicTest {
     public void classifyRoleUnqualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeHasRole("class Foo { void myMethod(MyClass param) {} }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void classifyRoleMethodName() {
+        assertNameInCodeHasRole("class Foo { void myMethod(MyClass param) {} }", "myMethod",
+                DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
@@ -317,6 +350,12 @@ public class NameLogicTest extends AbstractNameLogicTest {
     public void classifyRoleExceptionParameterTypeTypeName() {
         assertNameInCodeHasRole("void myMethod() { try { } catch(Foo e) { } }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
+    }
+
+    @Test
+    public void classifyRoleExceptionParameterName() {
+        assertNameInCodeHasRole("void myMethod() { try { } catch(Foo e) { } }", "e",
+                DECLARATION, ParseStart.CLASS_BODY);
     }
 
     @Test
@@ -404,9 +443,15 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleVariableAccessInTryWithResourceWothTypeExpressionName() {
+    public void classifyRoleVariableAccessInTryWithResourceWithTypeExpressionName() {
         assertNameInCodeHasRole("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
+    }
+
+    @Test
+    public void classifyTryWithResourceName() {
+        assertNameInCodeHasRole("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "o",
+                DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test

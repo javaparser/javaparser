@@ -5,9 +5,11 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 
 /**
  * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
@@ -121,6 +123,33 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ReturnStmt.class, name, (p, c) -> p.getExpression().isPresent() && p.getExpression().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
