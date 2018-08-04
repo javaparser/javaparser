@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.DECLARATION;
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.REFERENCE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class NameLogicTest extends AbstractNameLogicTest {
 

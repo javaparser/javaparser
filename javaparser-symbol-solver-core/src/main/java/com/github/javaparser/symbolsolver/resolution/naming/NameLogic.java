@@ -11,7 +11,6 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 
 /**
  * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
