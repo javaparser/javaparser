@@ -503,5 +503,17 @@ public class NameLogicTest extends AbstractNameLogicTest {
                         "public static void travelThroughTime(Date destination) {  }",
                 "anExpression", REFERENCE, ParseStart.CLASS_BODY);
     }
+
+    @Test
+    public void classifyRoleDefaultValueDeclaration() {
+        assertNameInCodeHasRole("@RequestForEnhancement(\n" +
+                        "    id       = 2868724,\n" +
+                        "    synopsis = \"Provide time-travel functionality\",\n" +
+                        "    engineer = \"Mr. Peabody\",\n" +
+                        "    date     = anExpression" +
+                        ")\n" +
+                        "public static void travelThroughTime(Date destination) {  }",
+                "date", DECLARATION, ParseStart.CLASS_BODY);
+    }
     
 }

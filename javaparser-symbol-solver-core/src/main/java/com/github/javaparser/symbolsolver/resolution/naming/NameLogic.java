@@ -6,7 +6,9 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -83,6 +85,10 @@ public class NameLogic {
         if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
+        if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getExtendedTypes().contains(c)
+                || p.getImplementedTypes().contains(c))) {
+            return NameRole.REFERENCE;
+        }
         if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
@@ -95,17 +101,37 @@ public class NameLogic {
         if (whenParentIs(FieldAccessExpr.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
+        if (whenParentIs(AnnotationDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(AnnotationMemberDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(AnnotationMemberDeclaration.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
         if (whenParentIs(MethodDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
+        }
+        if (whenParentIs(MethodDeclaration.class, name, (p, c) -> p.getType() == c || p.getThrownExceptions().contains(c))) {
+            return NameRole.REFERENCE;
         }
         if (whenParentIs(Parameter.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
-        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(Parameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c)) {
-            return NameRole.DECLARATION;
+        if (whenParentIs(ReceiverParameter.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c ||
+                (p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c)) ||
+                (p.getScope().isPresent() && p.getScope().get() == c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c || p.getThrownExceptions().contains(c))) {
+            return NameRole.REFERENCE;
         }
         if (whenParentIs(TypeParameter.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
@@ -123,9 +149,6 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ReturnStmt.class, name, (p, c) -> p.getExpression().isPresent() && p.getExpression().get() == c)) {
-            return NameRole.REFERENCE;
-        }
-        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ModuleDeclaration.class, name, (p, c) -> p.getName() == c)) {
@@ -150,6 +173,69 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ArrayCreationExpr.class, name, (p, c) -> p.getElementType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(CastExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(InstanceOfExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(TypeExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ArrayAccessExpr.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(UnaryExpr.class, name, (p, c) -> p.getExpression() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(AssignExpr.class, name, (p, c) -> p.getTarget() == c || p.getValue() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(TryStmt.class, name, (p, c) -> p.getResources().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getInitializer().isPresent() && p.getInitializer().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getValue() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(ExplicitConstructorInvocationStmt.class, name, (p, c) ->
+                (p.getExpression().isPresent() && p.getExpression().get() == c) ||
+                (p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c)))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c ||
+                (p.getScope().isPresent() && p.getScope().get() == c))) {
             return NameRole.REFERENCE;
         }
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
