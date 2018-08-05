@@ -730,15 +730,15 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ModuleProvidesStmt n, final A arg) {
-        n.getType().accept(this, arg);
-        n.getWithTypes().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getWith().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ModuleUsesStmt n, final A arg) {
-        n.getType().accept(this, arg);
+        n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
