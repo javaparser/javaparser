@@ -23,28 +23,20 @@ import static org.junit.Assert.assertEquals;
 
 public class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
-    private String exampleOfSwitch(ResolvedPrimitiveType rpt) {
-        switch (rpt) {
-            case INT:
-                return "I";
-            case BYTE:
-                return "B";
-            case DOUBLE:
-                return "D";
-            default:
-                return "U";
-        }
+    @Test
+    public void byNameValidOptions() {
+        assertEquals(ResolvedPrimitiveType.BOOLEAN, ResolvedPrimitiveType.byName("boolean"));
+        assertEquals(ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.byName("char"));
+        assertEquals(ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.byName("byte"));
+        assertEquals(ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.byName("short"));
+        assertEquals(ResolvedPrimitiveType.INT, ResolvedPrimitiveType.byName("int"));
+        assertEquals(ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.byName("long"));
+        assertEquals(ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.byName("float"));
+        assertEquals(ResolvedPrimitiveType.DOUBLE, ResolvedPrimitiveType.byName("double"));
     }
 
-    @Test
-    public void tryTheSwitchStatement() {
-        assertEquals("U", exampleOfSwitch(ResolvedPrimitiveType.BOOLEAN));
-        assertEquals("U", exampleOfSwitch(ResolvedPrimitiveType.CHAR));
-        assertEquals("B", exampleOfSwitch(ResolvedPrimitiveType.BYTE));
-        assertEquals("U", exampleOfSwitch(ResolvedPrimitiveType.SHORT));
-        assertEquals("I", exampleOfSwitch(ResolvedPrimitiveType.INT));
-        assertEquals("U", exampleOfSwitch(ResolvedPrimitiveType.LONG));
-        assertEquals("U", exampleOfSwitch(ResolvedPrimitiveType.FLOAT));
-        assertEquals("D", exampleOfSwitch(ResolvedPrimitiveType.DOUBLE));
+    @Test(expected = IllegalArgumentException.class)
+    public void byNameInValidOptions() {
+        ResolvedPrimitiveType.byName("unexisting");
     }
 }
