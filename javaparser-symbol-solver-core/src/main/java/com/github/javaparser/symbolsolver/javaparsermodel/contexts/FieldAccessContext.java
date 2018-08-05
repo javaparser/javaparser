@@ -19,11 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -37,7 +33,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
@@ -91,9 +86,15 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         }
     }
 
-    public SymbolReference<ResolvedFieldDeclaration> solveField(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedValueDeclaration> solveField(String name, TypeSolver typeSolver) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(Optional.of(wrappedNode.getScope()), typeSolver);
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
+            if (rrtd.isEnum()) {
+                Optional<ResolvedEnumConstantDeclaration> enumConstant = rrtd.asEnum().getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst();
+                if (enumConstant.isPresent()) {
+                    return SymbolReference.solved(enumConstant.get());
+                }
+            }
             try {
                 return SymbolReference.solved(rrtd.getField(wrappedNode.getName().getId()));
             } catch (Throwable t) {

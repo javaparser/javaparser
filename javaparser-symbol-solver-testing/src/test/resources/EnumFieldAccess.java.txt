@@ -1,0 +1,9 @@
+class EnumFieldAccess {
+    public enum MyEnum {
+        SOME, ARBITRARY, VALUES
+    }
+
+    public MyEnum accessField() {
+        return MyEnum.SOME;
+    }
+}
