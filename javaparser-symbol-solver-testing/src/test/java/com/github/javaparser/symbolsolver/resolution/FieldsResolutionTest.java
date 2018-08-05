@@ -200,27 +200,4 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
-    @Test
-    public void resolveEnumFieldAccess() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
-        // parse compilation unit and get field access expression
-        CompilationUnit cu = parseSample("EnumFieldAccess");
-        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
-        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
-
-        // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
-
-        assertEquals(resolvedValueDeclaration.isField(), true);
-
-
-
-        ResolvedFieldDeclaration resolvedFieldDeclaration = (ResolvedFieldDeclaration) resolvedValueDeclaration;
-        assertEquals(resolvedFieldDeclaration.isStatic(), true);
-
-    }
 }

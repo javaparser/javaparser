@@ -260,7 +260,7 @@ public class JavaParserFacade {
         }
     }
 
-    public SymbolReference<ResolvedFieldDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
+    public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
         return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId(), typeSolver);
     }
 

@@ -16,14 +16,20 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -56,6 +62,31 @@ public class EnumResolutionTest extends AbstractResolutionTest {
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
         assertEquals("MyClass.Primitive", ref.describe());
+    }
+
+    // Related to issue 1699
+    @Test
+    public void resolveEnumConstantAccess() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("EnumFieldAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+
+        assertEquals(resolvedValueDeclaration.isField(), false);
+        assertEquals(resolvedValueDeclaration.isEnumConstant(), true);
+
+        ResolvedEnumConstantDeclaration resolvedEnumConstantDeclaration = resolvedValueDeclaration.asEnumConstant();
+        assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
+        assertEquals(true, resolvedEnumConstantDeclaration.isEnumConstant());
+        assertEquals(true, resolvedEnumConstantDeclaration.hasName());
     }
 
 }
