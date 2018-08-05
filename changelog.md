@@ -1,24 +1,30 @@
-Version 3.6.14
+Version 3.6.16
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/99?closed=1)
+
+Version 3.6.15
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/98?closed=1)
 
-Version 3.6.13
+Version 3.6.14
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/97?closed=1)
+
+Version 3.6.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/96?closed=1)
 * JavaParserFacade.getType now can also handle NameExpr referring to types 
 while before they were not supported.
 See [issue #1491](https://github.com/javaparser/javaparser/issues/1491#issuecomment-403277963)
 
 Version 3.6.12
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/96?closed=1)
-
-Version 3.6.11
-------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/95?closed=1)
 
-Version 3.6.10
+Version 3.6.10 & Version 3.6.11
 ------------------
+* A mixup during the release put all the issues in the same milestone:
+
 [issues resolved](https://github.com/javaparser/javaparser/milestone/94?closed=1)
 
 Version 3.6.9

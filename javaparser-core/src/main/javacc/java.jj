@@ -2684,9 +2684,6 @@ ModuleStmt ModuleStmt():
     Name name;
     Name tmpName;
     NodeList<Name> names=emptyList();
-    Type type;
-    Type tmpType;
-    NodeList<Type> types=emptyList();
     JavaToken begin;
     ModuleStmt stmt=new ModuleRequiresStmt();
     JavaToken transitiveExceptionalToken;
@@ -2703,9 +2700,9 @@ ModuleStmt ModuleStmt():
     |
         <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, token()), name, names);}
     |
-        <USES> { begin=token();} type=Type(emptyList()) ";" {stmt=new ModuleUsesStmt(range(begin, token()), type);}
+        <USES> { begin=token();} name=Name() ";" {stmt=new ModuleUsesStmt(range(begin, token()), name);}
     |
-        <PROVIDES> { begin=token();} type=Type(emptyList()) <WITH> tmpType=Type(emptyList()) {types.add(tmpType);} ("," tmpType=Type(emptyList()) {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), type, types);}
+        <PROVIDES> { begin=token();} name=Name() <WITH> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name() {names.add(tmpName);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), name, names);}
     )
     { return stmt; }
 }
