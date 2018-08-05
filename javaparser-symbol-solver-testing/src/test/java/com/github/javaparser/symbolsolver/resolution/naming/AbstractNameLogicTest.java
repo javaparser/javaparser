@@ -26,19 +26,28 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
         return getNameInCode(code, name, parseStart, false, Optional.empty());
     }
 
-    private Node getNameInCode(String code, String name, ParseStart parseStart, boolean tollerant,
-                               Optional<TypeSolver> typeSolver) {
+    protected <N extends Node> N parse(String code, ParseStart<N> parseStart) {
+        return parse(code, parseStart, Optional.empty());
+    }
+
+    protected <N extends Node> N parse(String code, ParseStart<N> parseStart, Optional<TypeSolver> typeSolver) {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
         if (typeSolver.isPresent()) {
             parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver.get()));
         }
-        ParseResult<? extends Node> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
+        ParseResult<N> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
         if (!parseResult.isSuccessful()) {
             parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));
         }
         assertTrue(parseResult.isSuccessful());
-        Node root = parseResult.getResult().get();
+        N root = parseResult.getResult().get();
+        return root;
+    }
+
+    private Node getNameInCode(String code, String name, ParseStart parseStart, boolean tollerant,
+                               Optional<TypeSolver> typeSolver) {
+        Node root = parse(code, parseStart, typeSolver);
         List<Node> allNames = root.findAll(Node.class).stream()
                 .filter(NameLogic::isAName)
                 .collect(Collectors.toList());

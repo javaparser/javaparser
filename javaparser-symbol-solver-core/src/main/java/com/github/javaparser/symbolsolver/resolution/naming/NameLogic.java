@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -17,6 +18,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 
 /**
  * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
@@ -25,10 +27,20 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  */
 public class NameLogic {
 
+    /**
+     * Is the given node a non-qualified name?
+     *
+     * @throws IllegalArgumentException if the node is not a name
+     */
     public static boolean isSimpleName(Node node) {
         return !isQualifiedName(node);
     }
 
+    /**
+     * Is the given node a qualified name?
+     *
+     * @throws IllegalArgumentException if the node is not a name
+     */
     public static boolean isQualifiedName(Node node) {
         if (!isAName(node)) {
             throw new IllegalArgumentException();
@@ -36,6 +48,12 @@ public class NameLogic {
         return nameAsString(node).contains(".");
     }
 
+    /**
+     * Does the Node represent a Name?
+     *
+     * Note that while most specific AST classes either always represent names or never represent names
+     * there are exceptions as the FieldAccessExpr
+     */
     public static boolean isAName(Node node) {
         if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
@@ -62,6 +80,12 @@ public class NameLogic {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
+    /**
+     * What is the Role of the given name? Does it represent a Declaration or a Reference?
+     *
+     * This classification is purely syntactical, i.e., it does not require symbol resolution. For this reason in the
+     * future this could be moved to the core module of JavaParser.
+     */
     public static NameRole classifyRole(Node name) {
         if (!isAName(name)) {
             throw new IllegalArgumentException("The given node is not a name");
@@ -83,6 +107,10 @@ public class NameLogic {
         }
         if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
+        }
+        if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getExtendedTypes().contains(c)
+                || p.getImplementedTypes().contains(c))) {
+            return NameRole.REFERENCE;
         }
         if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
@@ -106,7 +134,39 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(AnnotationDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
+        }
+        if (whenParentIs(AnnotationMemberDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(AnnotationMemberDeclaration.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MethodDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(MethodDeclaration.class, name, (p, c) -> p.getType() == c || p.getThrownExceptions().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(Parameter.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(Parameter.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ReceiverParameter.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c ||
+                (p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c)) ||
+                (p.getScope().isPresent() && p.getScope().get() == c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c || p.getThrownExceptions().contains(c))) {
+            return NameRole.REFERENCE;
         }
         if (whenParentIs(TypeParameter.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
@@ -121,6 +181,96 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ReturnStmt.class, name, (p, c) -> p.getExpression().isPresent() && p.getExpression().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleDeclaration.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ArrayCreationExpr.class, name, (p, c) -> p.getElementType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(CastExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(InstanceOfExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(TypeExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ArrayAccessExpr.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(UnaryExpr.class, name, (p, c) -> p.getExpression() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(AssignExpr.class, name, (p, c) -> p.getTarget() == c || p.getValue() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(TryStmt.class, name, (p, c) -> p.getResources().contains(c))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getInitializer().isPresent() && p.getInitializer().get() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getValue() == c)) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(ExplicitConstructorInvocationStmt.class, name, (p, c) ->
+                (p.getExpression().isPresent() && p.getExpression().get() == c) ||
+                        (p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c)))) {
+            return NameRole.REFERENCE;
+        }
+        if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c ||
+                (p.getScope().isPresent() && p.getScope().get() == c))) {
             return NameRole.REFERENCE;
         }
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
@@ -293,9 +443,6 @@ public class NameLogic {
 
         String name = nameAsString(nameNode);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
-//        if (context.solveSymbolAsValue(name, typeSolver).isPresent()) {
-//            return NameCategory.EXPRESSION_NAME;
-//        }
         if (context.localVariableDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
@@ -482,19 +629,6 @@ public class NameLogic {
     }
 
     private static boolean isSyntacticallyATypeName(Node name) {
-
-//        if (name instanceof ClassOrInterfaceType
-//                && whenParentIs(ClassOrInterfaceType.class, name, (p, c) ->
-//                p.getScope().isPresent() && p.getScope().get() == c && whenParentIs(ObjectCreationExpr.class, )
-//            )) {
-//
-//        }
-//
-//        if (name instanceof ClassOrInterfaceType
-//                || whenParentIs(ClassOrInterfaceType.class, name)) {
-//            return true;
-//        }
-
         // A name is syntactically classified as a TypeName in these contexts:
         //
         // The first eleven non-generic contexts (§6.1):
@@ -821,6 +955,9 @@ public class NameLogic {
         return false;
     }
 
+    /**
+     * Return the string representation of the name
+     */
     public static String nameAsString(Node name) {
         if (!isAName(name)) {
             throw new IllegalArgumentException("A name was expected");
@@ -850,8 +987,7 @@ public class NameLogic {
         boolean isSatisfied(P parent, C child);
     }
 
-    private static <P extends Node, C extends Node> boolean whenParentIs(Class<P> parentClass,
-                                                                         C child) {
+    private static <P extends Node, C extends Node> boolean whenParentIs(Class<P> parentClass, C child) {
         return whenParentIs(parentClass, child, (p, c) -> true);
     }
 
@@ -860,11 +996,7 @@ public class NameLogic {
                                                                          PredicateOnParentAndChild<P, C> predicate) {
         if (child.getParentNode().isPresent()) {
             Node parent = child.getParentNode().get();
-            if (parentClass.isInstance(parent)) {
-                return predicate.isSatisfied(parentClass.cast(parent), child);
-            } else {
-                return false;
-            }
+            return parentClass.isInstance(parent) && predicate.isSatisfied(parentClass.cast(parent), child);
         } else {
             return false;
         }
