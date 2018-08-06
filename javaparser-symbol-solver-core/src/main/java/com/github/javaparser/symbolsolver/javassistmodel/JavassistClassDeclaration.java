@@ -189,27 +189,20 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             }
         }
 
-        try {
-            CtClass superClass = ctClass.getSuperclass();
-            if (superClass != null) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
-            }
-        } catch (NotFoundException e) {
-            candidates.addAll(solveSuperClass().getAllMethods());
+        // add the method declaration of the superclass to the candidates, if present
+        SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInFQN
+                (getSuperclassFQN(), name, argumentsTypes, staticOnly, typeSolver);
+        if (superClassMethodRef.isSolved()) {
+            candidates.add(superClassMethodRef.getCorrespondingDeclaration());
         }
 
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
+        // add the method declaration of the interfaces to the candidates, if present
+        for (String interfaceFQN : getInterfaceFQNs()) {
+            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInFQN
+                    (interfaceFQN, name, argumentsTypes, staticOnly, typeSolver);
+            if (interfaceMethodRef.isSolved()) {
+                candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
         }
 
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
@@ -297,23 +290,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
             return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
-        } catch (NotFoundException e) {
-            return solveSuperClass();
-        } catch (BadBytecode e) {
+        } catch (NotFoundException | BadBytecode e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Solve the fqn of the super class with the {@link #typeSolver}.
-     */
-    private ReferenceTypeImpl solveSuperClass() {
-        String superclass = ctClass.getClassFile().getSuperclass();
-        SymbolReference<ResolvedReferenceTypeDeclaration> reference = typeSolver.tryToSolveType(superclass);
-        if (reference.isSolved()) {
-            return new ReferenceTypeImpl(reference.getCorrespondingDeclaration(), typeSolver);
-        }
-        throw new RuntimeException("Unable to find " + superclass);
     }
 
     @Override
