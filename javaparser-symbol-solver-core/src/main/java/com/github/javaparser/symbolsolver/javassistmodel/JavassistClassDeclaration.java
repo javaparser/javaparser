@@ -294,7 +294,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                 return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
             }
             if (ctClass.getGenericSignature() == null) {
-                return new ReferenceTypeImpl(typeSolver.solveType(ctClass.getClassFile().getSuperclass()), typeSolver);
+                return new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())), typeSolver);
             }
 
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
@@ -309,7 +309,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         try {
             if (ctClass.getGenericSignature() == null) {
                 return Arrays.stream(ctClass.getClassFile().getInterfaces())
-                        .map(i -> typeSolver.solveType(i))
+                        .map(i -> typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(i)))
                         .map(i -> new ReferenceTypeImpl(i, typeSolver))
                         .collect(Collectors.toList());
             } else {
