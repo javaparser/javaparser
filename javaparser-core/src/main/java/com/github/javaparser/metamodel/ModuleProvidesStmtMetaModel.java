@@ -8,7 +8,7 @@ public class ModuleProvidesStmtMetaModel extends ModuleStmtMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.modules.ModuleProvidesStmt.class, "ModuleProvidesStmt", "com.github.javaparser.ast.modules", false, false);
     }
 
-    public PropertyMetaModel typePropertyMetaModel;
+    public PropertyMetaModel namePropertyMetaModel;
 
-    public PropertyMetaModel withTypesPropertyMetaModel;
+    public PropertyMetaModel withPropertyMetaModel;
 }

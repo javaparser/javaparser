@@ -25,6 +25,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -198,4 +199,5 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         // check that the expected field declaration equals the resolved field declaration
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
+
 }

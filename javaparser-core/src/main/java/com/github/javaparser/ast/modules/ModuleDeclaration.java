@@ -14,14 +14,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import javax.annotation.Generated;
-
 import com.github.javaparser.TokenRange;
 
 /**
