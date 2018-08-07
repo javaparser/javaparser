@@ -21,7 +21,10 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
@@ -335,25 +338,15 @@ public class MethodResolutionLogic {
         return true;
     }
 
+    /**
+     * Filters out duplicate {@param methods} by their signature.
+     */
     private static List<ResolvedMethodDeclaration> getMethodsWithoutDuplicates(List<ResolvedMethodDeclaration> methods) {
-        Set<ResolvedMethodDeclaration> s = new TreeSet<>((m1, m2) -> {
-            if (m1 instanceof JavaParserMethodDeclaration && m2 instanceof JavaParserMethodDeclaration &&
-                    ((JavaParserMethodDeclaration) m1).getWrappedNode().equals(((JavaParserMethodDeclaration) m2).getWrappedNode())) {
-                return 0;
-            }
-            return 1;
-        });
-        s.addAll(methods);
-        List<ResolvedMethodDeclaration> res = new ArrayList<>();
-        Set<String> usedSignatures = new HashSet<>();
+        HashMap<String, ResolvedMethodDeclaration> res = new HashMap<>(methods.size());
         for (ResolvedMethodDeclaration md : methods) {
-            String signature = md.getQualifiedSignature();
-            if (!usedSignatures.contains(signature)) {
-                usedSignatures.add(signature);
-                res.add(md);
-            }
+            res.putIfAbsent(md.getQualifiedSignature(), md);
         }
-        return res;
+        return new ArrayList<>(res.values());
     }
 
     /**
@@ -406,9 +399,9 @@ public class MethodResolutionLogic {
             boolean possibleAmbiguity = false;
             for (int i = 1; i < applicableMethods.size(); i++) {
                 other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other, argumentsTypes, typeSolver)) {
+                if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
                     possibleAmbiguity = false;
-                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes, typeSolver)) {
+                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
                     possibleAmbiguity = false;
                     winningCandidate = other;
                 } else {
@@ -443,7 +436,7 @@ public class MethodResolutionLogic {
     }
 
     private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
-                                          List<ResolvedType> argumentTypes, TypeSolver typeSolver) {
+                                          List<ResolvedType> argumentTypes) {
         boolean oneMoreSpecificFound = false;
         if (methodA.getNumberOfParams() < methodB.getNumberOfParams()) {
             return true;
@@ -492,7 +485,7 @@ public class MethodResolutionLogic {
         return oneMoreSpecificFound;
     }
 
-    private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB, TypeSolver typeSolver) {
+    private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB) {
         boolean oneMoreSpecificFound = false;
         for (int i = 0; i < methodA.getNoParams(); i++) {
             ResolvedType tdA = methodA.getParamType(i);
@@ -525,9 +518,9 @@ public class MethodResolutionLogic {
             MethodUsage winningCandidate = applicableMethods.get(0);
             for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodUsage other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+                if (isMoreSpecific(winningCandidate, other)) {
                     // nothing to do
-                } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                } else if (isMoreSpecific(other, winningCandidate)) {
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
