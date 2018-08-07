@@ -190,19 +190,16 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         // add the method declaration of the superclass to the candidates, if present
-        String superclassFQN = getSuperclassFQN();
-        if (superclassFQN != null) {
-            SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInFQN
-                    (superclassFQN, name, argumentsTypes, staticOnly, typeSolver);
-            if (superClassMethodRef.isSolved()) {
-                candidates.add(superClassMethodRef.getCorrespondingDeclaration());
-            }
+        SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic
+                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+        if (superClassMethodRef.isSolved()) {
+            candidates.add(superClassMethodRef.getCorrespondingDeclaration());
         }
 
         // add the method declaration of the interfaces to the candidates, if present
-        for (String interfaceFQN : getInterfaceFQNs()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInFQN
-                    (interfaceFQN, name, argumentsTypes, staticOnly, typeSolver);
+        for (ResolvedReferenceType interfaceRef : getInterfaces()) {
+            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
+                    staticOnly, typeSolver);
             if (interfaceMethodRef.isSolved()) {
                 candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
             }
