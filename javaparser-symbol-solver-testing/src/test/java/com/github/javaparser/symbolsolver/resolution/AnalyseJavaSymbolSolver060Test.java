@@ -224,8 +224,12 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    public void parseCoreJavassistmodel() throws IOException {
+    public void parseCoreJavassistmodelJavassistClassDeclaration() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration");
+    }
+
+    @Test
+    public void parseCoreJavassistmodel() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistEnumDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistFactory");
