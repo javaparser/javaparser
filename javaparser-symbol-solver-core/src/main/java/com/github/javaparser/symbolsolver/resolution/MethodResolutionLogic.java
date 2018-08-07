@@ -342,11 +342,16 @@ public class MethodResolutionLogic {
      * Filters out duplicate {@param methods} by their signature.
      */
     private static List<ResolvedMethodDeclaration> getMethodsWithoutDuplicates(List<ResolvedMethodDeclaration> methods) {
-        HashMap<String, ResolvedMethodDeclaration> res = new HashMap<>(methods.size());
+        List<ResolvedMethodDeclaration> res = new ArrayList<>();
+        Set<String> usedSignatures = new HashSet<>();
         for (ResolvedMethodDeclaration md : methods) {
-            res.putIfAbsent(md.getQualifiedSignature(), md);
+            String signature = md.getQualifiedSignature();
+            if (!usedSignatures.contains(signature)) {
+                usedSignatures.add(signature);
+                res.add(md);
+            }
         }
-        return new ArrayList<>(res.values());
+        return res;
     }
 
     /**
