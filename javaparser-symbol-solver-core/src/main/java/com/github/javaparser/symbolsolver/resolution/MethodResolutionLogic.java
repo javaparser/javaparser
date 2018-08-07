@@ -637,16 +637,6 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
-    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInFQN(String fqn, String name,
-                                                                             List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
-        SymbolReference<ResolvedReferenceTypeDeclaration> typeRef = typeSolver.tryToSolveType(fqn);
-        if (typeRef.isSolved()) {
-            return solveMethodInType(typeRef.getCorrespondingDeclaration(), name, argumentsTypes,
-                    staticOnly, typeSolver);
-        }
-        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
-    }
-
     private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
 
 
