@@ -281,16 +281,16 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     @Override
     public ResolvedReferenceType getSuperClass() {
         try {
-            if (ctClass.getSuperclass() == null) {
+            if (ctClass.getClassFile().getSuperclass() == null) {
                 return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
             }
             if (ctClass.getGenericSignature() == null) {
-                return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClass.getSuperclass(), typeSolver), typeSolver);
+                return new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())), typeSolver);
             }
 
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
             return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
-        } catch (NotFoundException | BadBytecode e) {
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -299,8 +299,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     public List<ResolvedReferenceType> getInterfaces() {
         try {
             if (ctClass.getGenericSignature() == null) {
-                return Arrays.stream(ctClass.getInterfaces())
-                        .map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
+                return Arrays.stream(ctClass.getClassFile().getInterfaces())
+                        .map(i -> typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(i)))
                         .map(i -> new ReferenceTypeImpl(i, typeSolver))
                         .collect(Collectors.toList());
             } else {
@@ -309,7 +309,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
                         .map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType())
                         .collect(Collectors.toList());
             }
-        } catch (NotFoundException | BadBytecode e) {
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
