@@ -18,23 +18,9 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -43,8 +29,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.resolution.types.ResolvedPrimitiveType.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ExprResolutionTest extends AbstractResolutionTest {
 
@@ -80,7 +66,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -97,7 +83,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -114,7 +100,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -131,7 +117,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -148,7 +134,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -165,7 +151,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -182,7 +168,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -199,7 +185,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -216,7 +202,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -233,7 +219,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -250,7 +236,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -267,7 +253,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(FLOAT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -284,7 +270,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -301,7 +287,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(DOUBLE, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1589
@@ -318,7 +304,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.INT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(INT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     @Test
@@ -334,7 +320,7 @@ public class ExprResolutionTest extends AbstractResolutionTest {
 
         List<BinaryExpr> bExprs = compilationUnit.findAll(BinaryExpr.class);
         assertEquals(1, bExprs.size());
-        assertEquals(ResolvedPrimitiveType.INT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
+        assertEquals(INT, JavaParserFacade.get(ts).getType(bExprs.get(0)));
     }
 
     // Related to issue 1731
