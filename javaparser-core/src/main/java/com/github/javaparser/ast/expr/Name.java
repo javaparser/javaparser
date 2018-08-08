@@ -239,10 +239,16 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
         return super.replace(node, replacementNode);
     }
 
+    /**
+     * A top level name is a name that is not contained in a larger Name instance.
+     */
     public boolean isTopLevel() {
         return !isInternal();
     }
 
+    /**
+     * An internal name is a name that constitutes a part of a larger Name instance.
+     */
     public boolean isInternal() {
         if (this.getParentNode().isPresent() && this.getParentNode().get() instanceof Name) {
             Name parent = (Name)this.getParentNode().get();
