@@ -69,12 +69,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public List<ResolvedReferenceType> getInterfacesExtended() {
-        try {
-            return Arrays.stream(ctClass.getInterfaces()).map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
-                    .map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.toList());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return Arrays.stream(ctClass.getClassFile().getInterfaces()).map(i -> typeSolver.solveType(i))
+                .map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.toList());
     }
 
     @Override
