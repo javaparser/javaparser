@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -33,14 +34,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-import java.util.Arrays;
-import java.util.List;
+import com.github.javaparser.metamodel.OptionalProperty;
+
+import javax.annotation.Generated;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.metamodel.OptionalProperty;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -250,11 +250,11 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
      * An internal name is a name that constitutes a part of a larger Name instance.
      */
     public boolean isInternal() {
-        if (this.getParentNode().isPresent() && this.getParentNode().get() instanceof Name) {
-            Name parent = (Name)this.getParentNode().get();
-            return parent.getQualifier().isPresent() && parent.getQualifier().get() == this;
-        } else {
-            return false;
-        }
+        return getParentNode()
+                .filter(parent -> parent instanceof Name)
+                .map(parent -> (Name) parent)
+                .flatMap(Name::getQualifier)
+                .map(parentNameQualifier -> parentNameQualifier == this)
+                .orElse(false);
     }
 }
