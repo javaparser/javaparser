@@ -123,4 +123,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         return boxTypeQName;
     }
 
+    public boolean isNumeric() {
+        return this != BOOLEAN;
+    }
 }
