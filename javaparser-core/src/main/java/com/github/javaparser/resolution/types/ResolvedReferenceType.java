@@ -21,7 +21,9 @@
 
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -331,6 +333,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public abstract Set<MethodUsage> getDeclaredMethods();
 
+    public abstract Set<ResolvedFieldDeclaration> getDeclaredFields();
+
     public boolean isRawType() {
         if (!typeDeclaration.getTypeParameters().isEmpty()) {
             if (typeParametersMap().isEmpty()) {
@@ -372,10 +376,22 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
         List<ResolvedMethodDeclaration> allMethods = new LinkedList<>();
-        allMethods.addAll(this.getDeclaredMethods().stream().map(MethodUsage::getDeclaration).collect(Collectors.toList()));
+        allMethods.addAll(this.getDeclaredMethods().stream().map(MethodUsage::getDeclaration)
+                .collect(Collectors.toList()));
         getDirectAncestors().forEach(a ->
                 allMethods.addAll(a.getAllMethods()));
         return allMethods;
+    }
+
+    public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
+        List<ResolvedFieldDeclaration> res = new LinkedList<>();
+
+        res.addAll(this.getDeclaredFields());
+
+        getDirectAncestors().forEach(a ->
+                res.addAll(a.getAllFieldsVisibleToInheritors()));
+
+        return res;
     }
 
     //
