@@ -21,7 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -34,6 +33,8 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.AccessSpecifier.PRIVATE;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -333,6 +334,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public abstract Set<MethodUsage> getDeclaredMethods();
 
+    /**
+     * Fields declared on this type.
+     */
     public abstract Set<ResolvedFieldDeclaration> getDeclaredFields();
 
     public boolean isRawType() {
@@ -383,10 +387,16 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         return allMethods;
     }
 
+    /**
+     * Fields which are visible to inheritors. They include all inherited fields which are visible to this
+     * type plus all declared fields which are not private.
+     */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
         List<ResolvedFieldDeclaration> res = new LinkedList<>();
 
-        res.addAll(this.getDeclaredFields());
+        res.addAll(this.getDeclaredFields().stream()
+                .filter(f -> f.accessSpecifier() != PRIVATE)
+                .collect(Collectors.toList()));
 
         getDirectAncestors().forEach(a ->
                 res.addAll(a.getAllFieldsVisibleToInheritors()));

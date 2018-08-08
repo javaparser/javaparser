@@ -16,11 +16,16 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StringProvider;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -655,4 +660,55 @@ public class ReferenceTypeTest {
                 "java.io.Serializable")), ancestors);
     }
 
+    @Test
+    public void testDeclaredFields() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        String code = "class A { private int i; char c; public long l; } class B extends A { private float f; boolean b; };";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+
+        CompilationUnit cu = new JavaParser(parserConfiguration)
+                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        ClassOrInterfaceDeclaration classB = cu.getClassByName("B").get();
+
+        ResolvedReferenceType rtA = new ReferenceTypeImpl(classA.resolve(), typeSolver);
+        ResolvedReferenceType rtB = new ReferenceTypeImpl(classB.resolve(), typeSolver);
+
+        assertEquals(3, rtA.getDeclaredFields().size());
+        assertTrue(rtA.getDeclaredFields().stream().anyMatch(f -> f.getName().equals("i")));
+        assertTrue(rtA.getDeclaredFields().stream().anyMatch(f -> f.getName().equals("c")));
+        assertTrue(rtA.getDeclaredFields().stream().anyMatch(f -> f.getName().equals("l")));
+
+        assertEquals(2, rtB.getDeclaredFields().size());
+        assertTrue(rtB.getDeclaredFields().stream().anyMatch(f -> f.getName().equals("f")));
+        assertTrue(rtB.getDeclaredFields().stream().anyMatch(f -> f.getName().equals("b")));
+    }
+
+    @Test
+    public void testGetAllFieldsVisibleToInheritors() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        String code = "class A { private int i; char c; public long l; } class B extends A { private float f; boolean b; };";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+
+        CompilationUnit cu = new JavaParser(parserConfiguration)
+                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        ClassOrInterfaceDeclaration classB = cu.getClassByName("B").get();
+
+        ResolvedReferenceType rtA = new ReferenceTypeImpl(classA.resolve(), typeSolver);
+        ResolvedReferenceType rtB = new ReferenceTypeImpl(classB.resolve(), typeSolver);
+
+        assertEquals(2, rtA.getAllFieldsVisibleToInheritors().size());
+        assertTrue(rtA.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("c")));
+        assertTrue(rtA.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("l")));
+
+        assertEquals(3, rtB.getAllFieldsVisibleToInheritors().size());
+        assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("c")));
+        assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("l")));
+        assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("b")));
+    }
 }
