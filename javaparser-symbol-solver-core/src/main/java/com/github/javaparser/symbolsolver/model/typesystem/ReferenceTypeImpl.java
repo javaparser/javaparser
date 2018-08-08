@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -229,4 +230,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return create(typeDeclaration, typeParametersMap);
     }
 
+    @Override
+    public Set<ResolvedFieldDeclaration> getDeclaredFields() {
+        Set<ResolvedFieldDeclaration> res = new HashSet<>();
+        res.addAll(getTypeDeclaration().getDeclaredFields());
+        return res;
+    }
 }
