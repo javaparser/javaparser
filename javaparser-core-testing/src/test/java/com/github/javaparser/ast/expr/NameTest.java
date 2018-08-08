@@ -33,6 +33,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class NameTest {
+
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
         Name name = parseName("a.b.c");
