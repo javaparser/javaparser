@@ -252,9 +252,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     public boolean isInternal() {
         return getParentNode()
                 .filter(parent -> parent instanceof Name)
-                .map(parent -> (Name) parent)
-                .flatMap(Name::getQualifier)
-                .map(parentNameQualifier -> parentNameQualifier == this)
-                .orElse(false);
+                .isPresent();
     }
 }
