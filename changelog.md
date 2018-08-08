@@ -1,7 +1,7 @@
 Version 3.6.16
 ------------------
 * BREAKING: some parts of the module syntax used `Type` where they should have used `Name`.
-This is now fixed, but your code may need to be adapted.
+This is now fixed, but your code may need to be adapted if you are parsing modules.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/99?closed=1)
 
