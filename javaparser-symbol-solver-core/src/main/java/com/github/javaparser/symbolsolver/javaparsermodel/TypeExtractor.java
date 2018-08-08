@@ -116,7 +116,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case MINUS:
             case DIVIDE:
             case MULTIPLY:
-                return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas);
+                return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas, node.getOperator());
             case LESS_EQUALS:
             case LESS:
             case GREATER:

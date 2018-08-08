@@ -48,7 +48,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     private String boxTypeQName;
     private List<ResolvedPrimitiveType> promotionTypes;
 
-    private ResolvedPrimitiveType(String name, String boxTypeQName, List<ResolvedPrimitiveType> promotionTypes) {
+    ResolvedPrimitiveType(String name, String boxTypeQName, List<ResolvedPrimitiveType> promotionTypes) {
         this.name = name;
         this.boxTypeQName = boxTypeQName;
         this.promotionTypes = promotionTypes;
@@ -114,10 +114,8 @@ public enum ResolvedPrimitiveType implements ResolvedType {
                 }
             }
             return false;
-        } else if (other.isConstraint()){
-            return this.isAssignableBy(other.asConstraintType().getBound());
         } else {
-            return false;
+            return other.isConstraint() && this.isAssignableBy(other.asConstraintType().getBound());
         }
     }
 
@@ -125,4 +123,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         return boxTypeQName;
     }
 
+    public boolean isNumeric() {
+        return this != BOOLEAN;
+    }
 }

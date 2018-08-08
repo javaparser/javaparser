@@ -260,7 +260,7 @@ public class JavaParserFacade {
         }
     }
 
-    public SymbolReference<ResolvedFieldDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
+    public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
         return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId(), typeSolver);
     }
 
@@ -397,9 +397,60 @@ public class JavaParserFacade {
         }
     }
 
-    protected ResolvedType getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas) {
+    protected ResolvedType getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas, BinaryExpr.Operator operator) {
         ResolvedType leftType = getTypeConcrete(left, solveLambdas);
         ResolvedType rightType = getTypeConcrete(right, solveLambdas);
+
+        // JLS 15.18.1. String Concatenation Operator +
+        // If only one operand expression is of type String, then string conversion (§5.1.11) is performed on the other
+        // operand to produce a string at run time.
+        //
+        // The result of string concatenation is a reference to a String object that is the concatenation of the two
+        // operand strings. The characters of the left-hand operand precede the characters of the right-hand operand in
+        // the newly created string.
+
+        if (operator == BinaryExpr.Operator.PLUS) {
+            boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
+                    .getQualifiedName().equals(String.class.getCanonicalName());
+            boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
+                    .getQualifiedName().equals(String.class.getCanonicalName());
+            if (isLeftString || isRightString) {
+                return isLeftString ? leftType : rightType;
+            }
+        }
+
+        // JLS 5.6.2. Binary Numeric Promotion
+        //
+        // Widening primitive conversion (§5.1.2) is applied to convert either or both operands as specified by the
+        // following rules:
+        //
+        // * If either operand is of type double, the other is converted to double.
+        // * Otherwise, if either operand is of type float, the other is converted to float.
+        // * Otherwise, if either operand is of type long, the other is converted to long.
+        // * Otherwise, both operands are converted to type int.
+
+        boolean isLeftNumeric = leftType.isPrimitive() && leftType.asPrimitive().isNumeric();
+        boolean isRightNumeric = rightType.isPrimitive() && rightType.asPrimitive().isNumeric();
+
+        if (isLeftNumeric && isRightNumeric) {
+            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)
+                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)) {
+                return ResolvedPrimitiveType.DOUBLE;
+            }
+
+            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)
+                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)) {
+                return ResolvedPrimitiveType.FLOAT;
+            }
+
+            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.LONG)
+                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.LONG)) {
+                return ResolvedPrimitiveType.LONG;
+            }
+
+            return ResolvedPrimitiveType.INT;
+        }
+
         if (rightType.isAssignableBy(leftType)) {
             return rightType;
         }
