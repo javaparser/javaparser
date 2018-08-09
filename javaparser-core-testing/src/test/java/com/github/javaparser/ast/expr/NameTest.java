@@ -33,6 +33,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class NameTest {
+
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
         Name name = parseName("a.b.c");
@@ -80,4 +81,37 @@ public class NameTest {
         assertEquals("package @Abc p1.p2;" + EOL + EOL, cu.toString());
         assertEquals("package @Abc p1.p2;" + EOL + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
+
+    @Test
+    public void isInternalNegative() {
+        Name name = parseName("a.b.c");
+        assertEquals(false, name.isInternal());
+    }
+
+    @Test
+    public void isInternalPositive() {
+        Name name = parseName("a.b.c");
+        assertEquals(true, name
+                .getQualifier().get().isInternal());
+        assertEquals(true, name
+                .getQualifier().get()
+                .getQualifier().get().isInternal());
+    }
+
+    @Test
+    public void isTopLevelNegative() {
+        Name name = parseName("a.b.c");
+        assertEquals(false, name
+                .getQualifier().get().isTopLevel());
+        assertEquals(false, name
+                .getQualifier().get()
+                .getQualifier().get().isTopLevel());
+    }
+
+    @Test
+    public void isTopLevelPositive() {
+        Name name = parseName("a.b.c");
+        assertEquals(true, name.isTopLevel());
+    }
+
 }

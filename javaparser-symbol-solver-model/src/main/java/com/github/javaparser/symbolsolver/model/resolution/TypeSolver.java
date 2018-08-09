@@ -67,4 +67,7 @@ public interface TypeSolver {
         }
     }
 
+    default boolean hasType(String name) {
+        return tryToSolveType(name).isSolved();
+    }
 }
