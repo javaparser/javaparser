@@ -6,4 +6,8 @@ class ArrayAccess {
 		return array[0].trim();
 	}
 
+	private String localaccess() {
+	    String[] foo = new String[2];
+   		return foo[0];
+   	}
 }

@@ -20,19 +20,24 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
 import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Array brackets [] being used to get a value from an array.
@@ -40,7 +45,7 @@ import java.util.Optional;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ArrayAccessExpr extends Expression {
+public final class ArrayAccessExpr extends Expression implements Resolvable<ResolvedValueDeclaration> {
 
     private Expression name;
 
@@ -167,6 +172,22 @@ public final class ArrayAccessExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
         action.accept(this);
+    }
+
+    /**
+     * Attempts to resolve the declaration corresponding to the accessed array. If successful, a
+     * {@link ResolvedValueDeclaration} representing the declaration of the array accessed by this
+     * {@code ArrayAccessExpr} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     *
+     * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed array.
+     * @throws UnsolvedSymbolException if the declaration corresponding to the array access expression could not be
+     *                                 resolved.
+     * @see NameExpr#resolve()
+     * @see FieldAccessExpr#resolve()
+     */
+    @Override
+    public ResolvedValueDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
     @Override

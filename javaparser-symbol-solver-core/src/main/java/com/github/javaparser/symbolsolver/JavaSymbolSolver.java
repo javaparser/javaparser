@@ -155,6 +155,16 @@ public class JavaSymbolSolver implements SymbolResolver {
                 throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
             }
         }
+        if (node instanceof ArrayAccessExpr) {
+            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve(((ArrayAccessExpr) node).getName());
+            if (result.isSolved()) {
+                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+            } else {
+                throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
+            }
+        }
         if (node instanceof FieldAccessExpr) {
             SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((FieldAccessExpr) node);
             if (result.isSolved()) {
