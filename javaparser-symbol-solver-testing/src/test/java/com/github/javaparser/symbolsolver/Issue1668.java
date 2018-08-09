@@ -5,6 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -49,7 +50,7 @@ public class Issue1668 {
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarator.getParentNode().get();
         ResolvedType resolvedType = variableDeclarationExpr.calculateResolvedType();
         assertEquals("java.lang.String[]", resolvedType.describe());
-        ResolvedFieldDeclaration resolve = variableDeclarator.resolve();
-        assertEquals("java.lang.String[]", resolve.declaringType().getQualifiedName());
+        ResolvedValueDeclaration resolve = variableDeclarator.resolve();
+        assertEquals("java.lang.String[]", resolve.getType().describe());
     }
 }
