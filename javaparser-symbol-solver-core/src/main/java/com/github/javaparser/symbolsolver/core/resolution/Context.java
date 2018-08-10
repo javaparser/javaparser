@@ -70,53 +70,22 @@ public interface Context {
         }
     }
 
-    /* Constructor resolution */
-
     /**
-     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
-     */
-    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
-    }
-
-    /* Methods resolution */
-
-    /**
-     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
-     */
-    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
-
-    /**
-     * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
-     * resolved type variables.
-     */
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, typeSolver);
-        if (methodSolved.isSolved()) {
-            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-            MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, argumentsTypes);//methodDeclaration.resolveTypeVariables(this, argumentsTypes);
-            return Optional.of(methodUsage);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * The local variables that are declared and made visible to a given child.
+     * The local variables that are declared in this immediate context and made visible to a given child.
      */
     default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
-     * The parameters that are declared and made visible to a given child.
+     * The parameters that are declared in this immediate context and made visible to a given child.
      */
     default List<Parameter> parametersExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
-     * The fields that are declared and made visible to a given child.
+     * The fields that are declared and in this immediate context made visible to a given child.
      */
     default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
         return Collections.emptyList();
@@ -185,4 +154,36 @@ public interface Context {
 
         return getParent().fieldDeclarationInScope(name);
     }
+
+    /* Constructor resolution */
+
+    /**
+     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
+     */
+    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+        throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
+    }
+
+    /* Methods resolution */
+
+    /**
+     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
+     */
+    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
+
+    /**
+     * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
+     * resolved type variables.
+     */
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, typeSolver);
+        if (methodSolved.isSolved()) {
+            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+            MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, argumentsTypes);//methodDeclaration.resolveTypeVariables(this, argumentsTypes);
+            return Optional.of(methodUsage);
+        } else {
+            return Optional.empty();
+        }
+    }
+
 }
