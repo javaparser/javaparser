@@ -103,24 +103,29 @@ public interface Context {
 
     /**
      * The local variables that are declared and made visible to a given child.
-     *
-     * @param child
-     * @return
      */
     default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
+    /**
+     * The parameters that are declared and made visible to a given child.
+     */
     default List<Parameter> parametersExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
+    /**
+     * The fields that are declared and made visible to a given child.
+     */
     default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
-     * The local variables that are visible in a certain scope are defined in JLS 6.3. Scope of a Declaration.
+     * Aim to resolve the given name by looking for a variable matching it.
+     *
+     * To do it consider local variables that are visible in a certain scope as defined in JLS 6.3. Scope of a Declaration.
      *
      * 1. The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
      * appears, starting with its own initializer and including any further declarators to the right in the local
@@ -143,14 +148,6 @@ public interface Context {
      * associated with the try-with-resources statement.
      */
     default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
-        // Normally we see all the variables declared in the parent, however there are some exceptions
-        //
-        // In the case of a statement we see all the variables declared before
-        //if (localVariablesDeclared)
-        // TODO SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
-        // TODO getSymbolDeclarationsRecursively
-        //throw new UnsupportedOperationException();
-
         if (getParent() == null) {
             return Optional.empty();
         }

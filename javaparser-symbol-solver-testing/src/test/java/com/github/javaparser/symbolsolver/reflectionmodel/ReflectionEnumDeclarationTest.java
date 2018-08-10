@@ -21,6 +21,8 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 
 public class ReflectionEnumDeclarationTest extends AbstractTest {
@@ -101,6 +103,12 @@ public class ReflectionEnumDeclarationTest extends AbstractTest {
     public void testGetQualifiedName() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
         assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());
+    }
+
+    @Test
+    public void testInternalTypesEmpty() {
+        ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        assertEquals(Collections.emptySet(), modifier.internalTypes());
     }
 
 }
