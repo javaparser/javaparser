@@ -54,7 +54,7 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
     @Override
     public ResolvedType getType() {
         if (type == null) {
-            return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctField.getDeclaringClass(), typeSolver),
+            type = new ReferenceTypeImpl(new JavassistEnumDeclaration(ctField.getDeclaringClass(), typeSolver),
                     typeSolver);
         }
         return type;
