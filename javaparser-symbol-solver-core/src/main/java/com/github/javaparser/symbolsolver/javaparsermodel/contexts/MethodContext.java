@@ -16,8 +16,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Federico Tomassetti
@@ -32,4 +37,12 @@ public class MethodContext extends AbstractMethodLikeDeclarationContext<MethodDe
         super(wrappedNode, typeSolver);
     }
 
+
+    @Override
+    public List<Parameter> parametersExposedToChild(Node child) {
+        if (wrappedNode.getBody().isPresent() && child == wrappedNode.getBody().get()) {
+            return wrappedNode.getParameters();
+        }
+        return Collections.emptyList();
+    }
 }

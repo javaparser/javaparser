@@ -16,15 +16,16 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
@@ -32,11 +33,15 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.naming.NameCategory;
+import com.github.javaparser.symbolsolver.resolution.naming.NameLogic;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
 
@@ -45,8 +50,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -471,6 +479,35 @@ public class ContextTest extends AbstractTest {
         assertEquals("overloaded", ref.getName());
         assertEquals(1, ref.getNoParams());
         assertEquals("java.lang.Object", ref.getParamTypes().get(0).describe());
+    }
+
+    private <PS extends Node> PS parse(String code, ParseStart<PS> parseStart) {
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
+        ParseResult<PS> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
+        if (!parseResult.isSuccessful()) {
+            parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));
+        }
+        assertTrue(parseResult.isSuccessful());
+        PS root = parseResult.getResult().get();
+        return root;
+    }
+
+    @Test
+    public void localVariableDeclarationInScope() {
+        String name = "a";
+        CompilationUnit cu = parse("class A { void foo() {\n" +
+                "SomeClass a; a.aField;" + "\n" +
+                "} }", ParseStart.COMPILATION_UNIT);
+
+        // The block statement expose to the 2nd statement the local var
+        BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
+        Context context1 = JavaParserFactory.getContext(blockStmt, typeSolver);
+        assertEquals(1, context1.localVariablesExposedToChild(blockStmt.getStatement(1)).size());
+
+        Node nameNode = cu.findAll(NameExpr.class).get(0);
+        Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+        assertEquals(true, context.localVariableDeclarationInScope(name).isPresent());
     }
 
 }
