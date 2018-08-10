@@ -153,12 +153,16 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
+    public void parseCoreJavaparsermodelTypeExtractor() throws IOException {
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
+    }
+
+    @Test
     public void parseCoreJavaparsermodel() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFacade");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFactory");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/LambdaArgumentTypePlaceholder");
-        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/UnsolvedSymbolException");
     }
 

@@ -34,7 +34,7 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
         if (ctField == null) {
             throw new IllegalArgumentException();
         }
-        if ((ctField.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) != 0) {
+        if ((ctField.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) == 0) {
             throw new IllegalArgumentException("Trying to instantiate a JavassistEnumConstantDeclaration with something which is not an enum field: " + ctField.toString());
         }
         this.ctField = ctField;
