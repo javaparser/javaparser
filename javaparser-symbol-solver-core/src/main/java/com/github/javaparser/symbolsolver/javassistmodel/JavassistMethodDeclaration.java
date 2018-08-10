@@ -91,6 +91,8 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
     public ResolvedReferenceTypeDeclaration declaringType() {
         if (ctMethod.getDeclaringClass().isInterface()) {
             return new JavassistInterfaceDeclaration(ctMethod.getDeclaringClass(), typeSolver);
+        } else if (ctMethod.getDeclaringClass().isEnum()) {
+            return new JavassistEnumDeclaration(ctMethod.getDeclaringClass(), typeSolver);
         } else {
             return new JavassistClassDeclaration(ctMethod.getDeclaringClass(), typeSolver);
         }
