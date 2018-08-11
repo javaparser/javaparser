@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -511,24 +510,38 @@ public class ContextTest extends AbstractTest {
     // entire body of the method, constructor, or lambda expression.
 
     private void assertNoParamsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
-        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 0);
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 0, "the element is exposed and it should not");
     }
 
-    private void assertOneExposedToChildInContextNamed(Node parent, Node child, String paramName) {
-        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 1);
+    private void assertOneParamExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 1, "the element is not exposed as expected");
     }
 
     private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
-                                                                  int expectedNumber) {
-        assertEquals(expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
+                                                                  int expectedNumber, String message) {
+        assertEquals(message, expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
                 .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+    }
+
+    private void assertNoVarsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfVarsExposedToChildInContextNamed(parent, child, paramName, 0, "the element is exposed and it should not");
+    }
+
+    private void assertOneVarExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfVarsExposedToChildInContextNamed(parent, child, paramName, 1, "the element is not exposed as expected");
+    }
+
+    private void assertNumberOfVarsExposedToChildInContextNamed(Node parent, Node child, String paramName,
+                                                                  int expectedNumber, String message) {
+        assertEquals(message, expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
+                .localVariablesExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
     }
 
     @Test
     public void parametersExposedToChildForMethod() {
         MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
                 ParseStart.CLASS_BODY).asMethodDeclaration();
-        assertOneExposedToChildInContextNamed(method, method.getBody().get(), "myParam");
+        assertOneParamExposedToChildInContextNamed(method, method.getBody().get(), "myParam");
         assertNoParamsExposedToChildInContextNamed(method, method.getType(), "myParam");
         assertNoParamsExposedToChildInContextNamed(method, method.getParameter(0), "myParam");
     }
@@ -537,7 +550,7 @@ public class ContextTest extends AbstractTest {
     public void parametersExposedToChildForConstructor() {
         ConstructorDeclaration constructor = parse("Foo(int myParam) { aCall(); }",
                 ParseStart.CLASS_BODY).asConstructorDeclaration();
-        assertOneExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
+        assertOneParamExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
         assertNoParamsExposedToChildInContextNamed(constructor, constructor.getParameter(0), "myParam");
     }
 
@@ -546,7 +559,7 @@ public class ContextTest extends AbstractTest {
         LambdaExpr lambda = (LambdaExpr)parse("Object myLambda = (myParam) -> myParam * 2;",
                 ParseStart.STATEMENT).asExpressionStmt().getExpression().asVariableDeclarationExpr()
                 .getVariables().get(0).getInitializer().get();
-        assertOneExposedToChildInContextNamed(lambda, lambda.getBody(), "myParam");
+        assertOneParamExposedToChildInContextNamed(lambda, lambda.getBody(), "myParam");
         assertNoParamsExposedToChildInContextNamed(lambda, lambda.getParameter(0), "myParam");
     }
 
@@ -558,18 +571,18 @@ public class ContextTest extends AbstractTest {
     public void localVariablesExposedToChildWithinABlock() {
         BlockStmt blockStmt = parse("{ preStatement(); int a = 1, b = 2; otherStatement(); }",
                 ParseStart.STATEMENT).asBlockStmt();
-        assertNoParamsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "a");
-        assertNoParamsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "b");
-        assertOneExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "a");
-        assertOneExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "b");
+        assertNoVarsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "a");
+        assertNoVarsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "b");
+        assertOneVarExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "a");
+        assertOneVarExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "b");
 
         VariableDeclarationExpr varDecl = blockStmt.getStatement(1).asExpressionStmt().getExpression()
                 .asVariableDeclarationExpr();
-        assertOneExposedToChildInContextNamed(varDecl.getVariables().get(0),
+        assertOneVarExposedToChildInContextNamed(varDecl.getVariables().get(0),
                 varDecl.getVariables().get(0).getInitializer().get(), "a");
-        assertOneExposedToChildInContextNamed(varDecl,
+        assertOneVarExposedToChildInContextNamed(varDecl,
                 varDecl.getVariables().get(1), "a");
-        assertNoParamsExposedToChildInContextNamed(varDecl,
+        assertNoVarsExposedToChildInContextNamed(varDecl,
                 varDecl.getVariables().get(0), "b");
     }
 
@@ -583,19 +596,19 @@ public class ContextTest extends AbstractTest {
     public void localVariablesExposedToChildWithinForStmt() {
         ForStmt forStmt = parse("for (int i=0, j=1;i<10;i++) { body(); }",
                 ParseStart.STATEMENT).asForStmt();
-        assertOneExposedToChildInContextNamed(forStmt.getInitialization().get(0).asVariableDeclarationExpr(),
+        assertOneVarExposedToChildInContextNamed(forStmt.getInitialization().get(0).asVariableDeclarationExpr(),
                 forStmt.getInitialization().get(1).asVariableDeclarationExpr().getVariable(0).getInitializer().get(),
                 "i");
-        assertOneExposedToChildInContextNamed(forStmt,
+        assertOneVarExposedToChildInContextNamed(forStmt,
                 forStmt.getInitialization().get(1),
                 "i");
-        assertOneExposedToChildInContextNamed(forStmt,
+        assertOneVarExposedToChildInContextNamed(forStmt,
                 forStmt.getCompare().get(),
                 "i");
-        assertOneExposedToChildInContextNamed(forStmt,
+        assertOneVarExposedToChildInContextNamed(forStmt,
                 forStmt.getUpdate().get(0),
                 "i");
-        assertOneExposedToChildInContextNamed(forStmt,
+        assertOneVarExposedToChildInContextNamed(forStmt,
                 forStmt.getBody(),
                 "i");
     }
@@ -607,9 +620,9 @@ public class ContextTest extends AbstractTest {
     public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
         ForeachStmt foreachStmt = parse("for (int i: myList) { body(); }",
                 ParseStart.STATEMENT).asForeachStmt();
-        assertOneExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
-        assertNoParamsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
-        assertNoParamsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");
+        assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
+        assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
+        assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");
     }
 
     // The scope of a parameter of an exception handler that is declared in a catch clause of a try statement (§14.20)
@@ -619,7 +632,7 @@ public class ContextTest extends AbstractTest {
     public void parametersExposedToChildWithinTryStatement() {
         CatchClause catchClause = parse("try {  } catch(Exception e) { body(); }",
                 ParseStart.STATEMENT).asTryStmt().getCatchClauses().get(0);
-        assertOneExposedToChildInContextNamed(catchClause, catchClause.getBody(), "e");
+        assertOneParamExposedToChildInContextNamed(catchClause, catchClause.getBody(), "e");
         assertNoParamsExposedToChildInContextNamed(catchClause, catchClause.getParameter(), "e");
     }
 
@@ -631,9 +644,9 @@ public class ContextTest extends AbstractTest {
     public void parametersExposedToChildWithinTryWithResourcesStatement() {
         TryStmt stmt = parse("try (Object res1 = foo(); Object res2 = foo()) { body(); }",
                 ParseStart.STATEMENT).asTryStmt();
-        assertOneExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
+        assertOneParamExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
         assertNoParamsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
-        assertOneExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+        assertOneParamExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
     }
 
 }
