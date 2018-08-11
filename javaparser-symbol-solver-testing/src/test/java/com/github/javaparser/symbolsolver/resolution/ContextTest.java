@@ -24,9 +24,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -604,12 +602,38 @@ public class ContextTest extends AbstractTest {
 
     // The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
     // the contained Statement.
-    //
+
+    @Test
+    public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
+        ForeachStmt foreachStmt = parse("for (int i: myList) { body(); }",
+                ParseStart.STATEMENT).asForeachStmt();
+        assertOneExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
+        assertNoParamsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
+        assertNoParamsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");
+    }
+
     // The scope of a parameter of an exception handler that is declared in a catch clause of a try statement (§14.20)
     // is the entire block associated with the catch.
-    //
+
+    @Test
+    public void parametersExposedToChildWithinTryStatement() {
+        CatchClause catchClause = parse("try {  } catch(Exception e) { body(); }",
+                ParseStart.STATEMENT).asTryStmt().getCatchClauses().get(0);
+        assertOneExposedToChildInContextNamed(catchClause, catchClause.getBody(), "e");
+        assertNoParamsExposedToChildInContextNamed(catchClause, catchClause.getParameter(), "e");
+    }
+
     // The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
     // from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
     // associated with the try-with-resources statement.
+
+    @Test
+    public void parametersExposedToChildWithinTryWithResourcesStatement() {
+        TryStmt stmt = parse("try (Object res1 = foo(); Object res2 = foo()) { body(); }",
+                ParseStart.STATEMENT).asTryStmt();
+        assertOneExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
+        assertNoParamsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
+        assertOneExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+    }
 
 }
