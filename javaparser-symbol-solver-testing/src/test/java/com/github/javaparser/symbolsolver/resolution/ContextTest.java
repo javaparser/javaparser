@@ -26,6 +26,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -579,7 +580,28 @@ public class ContextTest extends AbstractTest {
     // * Any further declarators to the right in the ForInit part of the for statement
     // * The Expression and ForUpdate parts of the for statement
     // * The contained Statement
-    //
+
+    @Test
+    public void localVariablesExposedToChildWithinForStmt() {
+        ForStmt forStmt = parse("for (int i=0, j=1;i<10;i++) { body(); }",
+                ParseStart.STATEMENT).asForStmt();
+        assertOneExposedToChildInContextNamed(forStmt.getInitialization().get(0).asVariableDeclarationExpr(),
+                forStmt.getInitialization().get(1).asVariableDeclarationExpr().getVariable(0).getInitializer().get(),
+                "i");
+        assertOneExposedToChildInContextNamed(forStmt,
+                forStmt.getInitialization().get(1),
+                "i");
+        assertOneExposedToChildInContextNamed(forStmt,
+                forStmt.getCompare().get(),
+                "i");
+        assertOneExposedToChildInContextNamed(forStmt,
+                forStmt.getUpdate().get(0),
+                "i");
+        assertOneExposedToChildInContextNamed(forStmt,
+                forStmt.getBody(),
+                "i");
+    }
+
     // The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
     // the contained Statement.
     //
