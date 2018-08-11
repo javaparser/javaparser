@@ -72,6 +72,7 @@ public interface Context {
 
     /**
      * The local variables that are declared in this immediate context and made visible to a given child.
+     * This list could include values which are shadowed.
      */
     default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         return Collections.emptyList();
@@ -79,6 +80,7 @@ public interface Context {
 
     /**
      * The parameters that are declared in this immediate context and made visible to a given child.
+     * This list could include values which are shadowed.
      */
     default List<Parameter> parametersExposedToChild(Node child) {
         return Collections.emptyList();
@@ -86,6 +88,7 @@ public interface Context {
 
     /**
      * The fields that are declared and in this immediate context made visible to a given child.
+     * This list could include values which are shadowed.
      */
     default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
         return Collections.emptyList();

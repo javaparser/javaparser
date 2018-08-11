@@ -19,12 +19,11 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.resolution.MethodUsage;
@@ -504,5 +503,72 @@ public class ContextTest extends AbstractTest {
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
         assertEquals(true, context.localVariableDeclarationInScope(name).isPresent());
     }
+
+    //
+    // Testing JLS 6.3 Scope of a Declaration
+    //
+
+    // The scope of a formal parameter of a method (§8.4.1), constructor (§8.8.1), or lambda expression (§15.27) is the
+    // entire body of the method, constructor, or lambda expression.
+
+    private void assertNoParamsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 0);
+    }
+
+    private void assertOneExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 1);
+    }
+
+    private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
+                                                                  int expectedNumber) {
+        assertEquals(expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
+                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+    }
+
+    @Test
+    public void parametersExposedToChildForMethod() {
+        MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
+                ParseStart.CLASS_BODY).asMethodDeclaration();
+        assertOneExposedToChildInContextNamed(method, method.getBody().get(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(method, method.getType(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(method, method.getParameter(0), "myParam");
+    }
+
+    @Test
+    public void parametersExposedToChildForConstructor() {
+        ConstructorDeclaration constructor = parse("Foo(int myParam) { aCall(); }",
+                ParseStart.CLASS_BODY).asConstructorDeclaration();
+        assertOneExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(constructor, constructor.getParameter(0), "myParam");
+    }
+
+    @Test
+    public void parametersExposedToChildForLambda() {
+        LambdaExpr lambda = (LambdaExpr)parse("Object myLambda = (myParam) -> myParam * 2;",
+                ParseStart.STATEMENT).asExpressionStmt().getExpression().asVariableDeclarationExpr()
+                .getVariables().get(0).getInitializer().get();
+        assertOneExposedToChildInContextNamed(lambda, lambda.getBody(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(lambda, lambda.getParameter(0), "myParam");
+    }
+
+    // The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
+    // appears, starting with its own initializer and including any further declarators to the right in the local
+    // variable declaration statement.
+    //
+    // The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all of the following:
+    // * Its own initializer
+    // * Any further declarators to the right in the ForInit part of the for statement
+    // * The Expression and ForUpdate parts of the for statement
+    // * The contained Statement
+    //
+    // The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
+    // the contained Statement.
+    //
+    // The scope of a parameter of an exception handler that is declared in a catch clause of a try statement (§14.20)
+    // is the entire block associated with the catch.
+    //
+    // The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
+    // from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
+    // associated with the try-with-resources statement.
 
 }
