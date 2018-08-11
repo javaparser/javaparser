@@ -554,7 +554,26 @@ public class ContextTest extends AbstractTest {
     // The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
     // appears, starting with its own initializer and including any further declarators to the right in the local
     // variable declaration statement.
-    //
+
+    @Test
+    public void localVariablesExposedToChildWithinABlock() {
+        BlockStmt blockStmt = parse("{ preStatement(); int a = 1, b = 2; otherStatement(); }",
+                ParseStart.STATEMENT).asBlockStmt();
+        assertNoParamsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "a");
+        assertNoParamsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "b");
+        assertOneExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "a");
+        assertOneExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "b");
+
+        VariableDeclarationExpr varDecl = blockStmt.getStatement(1).asExpressionStmt().getExpression()
+                .asVariableDeclarationExpr();
+        assertOneExposedToChildInContextNamed(varDecl.getVariables().get(0),
+                varDecl.getVariables().get(0).getInitializer().get(), "a");
+        assertOneExposedToChildInContextNamed(varDecl,
+                varDecl.getVariables().get(1), "a");
+        assertNoParamsExposedToChildInContextNamed(varDecl,
+                varDecl.getVariables().get(0), "b");
+    }
+
     // The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all of the following:
     // * Its own initializer
     // * Any further declarators to the right in the ForInit part of the for statement
