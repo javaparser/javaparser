@@ -22,6 +22,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
@@ -44,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -533,8 +535,9 @@ public class ContextTest extends AbstractTest {
 
     private void assertNumberOfVarsExposedToChildInContextNamed(Node parent, Node child, String paramName,
                                                                   int expectedNumber, String message) {
-        assertEquals(message, expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
-                .localVariablesExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+        List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .localVariablesExposedToChild(child);
+        assertEquals(message, expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count());
     }
 
     @Test
@@ -578,12 +581,14 @@ public class ContextTest extends AbstractTest {
 
         VariableDeclarationExpr varDecl = blockStmt.getStatement(1).asExpressionStmt().getExpression()
                 .asVariableDeclarationExpr();
-        assertOneVarExposedToChildInContextNamed(varDecl.getVariables().get(0),
-                varDecl.getVariables().get(0).getInitializer().get(), "a");
+        VariableDeclarator varA = varDecl.getVariables().get(0);
+        VariableDeclarator varB = varDecl.getVariables().get(1);
+        assertOneVarExposedToChildInContextNamed(varA,
+                varA.getInitializer().get(), "a");
         assertOneVarExposedToChildInContextNamed(varDecl,
-                varDecl.getVariables().get(1), "a");
+                varB, "a");
         assertNoVarsExposedToChildInContextNamed(varDecl,
-                varDecl.getVariables().get(0), "b");
+                varA, "b");
     }
 
     // The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all of the following:

@@ -58,7 +58,9 @@ public interface Context {
 
     /* Symbol resolution */
 
-    SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return getParent().solveSymbol(name, typeSolver);
+    }
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name, typeSolver);
@@ -163,7 +165,8 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes,
+                                                                             TypeSolver typeSolver) {
         throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
     }
 
@@ -172,7 +175,10 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                   boolean staticOnly, TypeSolver typeSolver) {
+        return getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+    }
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
