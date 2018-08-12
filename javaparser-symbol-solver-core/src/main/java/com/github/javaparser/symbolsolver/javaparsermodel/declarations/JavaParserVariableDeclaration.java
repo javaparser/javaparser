@@ -16,51 +16,34 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
+public class JavaParserVariableDeclaration implements ResolvedValueDeclaration {
 
     private VariableDeclarator variableDeclarator;
-    private com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
+    private VariableDeclarationExpr wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserFieldDeclaration(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
+    public JavaParserVariableDeclaration(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
         }
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(requireParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
+        if (!(requireParentNode(variableDeclarator) instanceof VariableDeclarationExpr)) {
             throw new IllegalStateException(requireParentNode(variableDeclarator).getClass().getCanonicalName());
         }
-        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) requireParentNode(variableDeclarator);
-    }
-
-    /**
-     * @deprecated Use JavaParserEnumConstantDeclaration instead.
-     */
-    @Deprecated
-    public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
+        this.wrappedNode = (VariableDeclarationExpr) requireParentNode(variableDeclarator);
     }
 
     @Override
@@ -74,12 +57,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
     }
 
     @Override
-    public boolean isStatic() {
-        return wrappedNode.getModifiers().contains(Modifier.STATIC);
-    }
-
-    @Override
-    public boolean isField() {
+    public boolean isVariable() {
         return true;
     }
 
@@ -88,7 +66,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
      *
      * @return A visitable JavaParser node wrapped by this object.
      */
-    public com.github.javaparser.ast.body.FieldDeclaration getWrappedNode() {
+    public VariableDeclarationExpr getWrappedNode() {
         return wrappedNode;
     }
 
@@ -98,20 +76,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public String toString() {
-        return "JavaParserFieldDeclaration{" + getName() + "}";
+        return "JavaParserVariableDeclaration{" + getName() + "}";
     }
 
-    @Override
-    public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
-    }
-
-    @Override
-    public ResolvedTypeDeclaration declaringType() {
-        Optional<TypeDeclaration> typeDeclaration = wrappedNode.findParent(TypeDeclaration.class);
-        if (typeDeclaration.isPresent()) {
-            return JavaParserFacade.get(typeSolver).getTypeDeclaration(typeDeclaration.get());
-        }
-        throw new IllegalStateException();
-    }
 }

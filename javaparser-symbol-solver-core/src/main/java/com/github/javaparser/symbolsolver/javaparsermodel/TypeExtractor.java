@@ -169,7 +169,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     private ResolvedType solveDotExpressionType(ResolvedReferenceTypeDeclaration parentType, FieldAccessExpr node) {
         // Fields and internal type declarations cannot have the same name.
         // Thus, these checks will always be mutually exclusive.
-        if (parentType.hasField(node.getName().getId())) {
+        if (parentType.isEnum() && parentType.asEnum().hasEnumConstant(node.getName().getId())) {
+            return parentType.asEnum().getEnumConstant(node.getName().getId()).getType();
+        } else if (parentType.hasField(node.getName().getId())) {
             return parentType.getField(node.getName().getId()).getType();
         } else if (parentType.hasInternalType(node.getName().getId())) {
             return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()), typeSolver);
