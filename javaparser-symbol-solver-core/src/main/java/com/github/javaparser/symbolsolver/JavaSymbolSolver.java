@@ -120,7 +120,14 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof VariableDeclarator) {
-            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
+            ResolvedValueDeclaration resolved;
+            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldDeclaration) {
+                resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
+            } else if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof VariableDeclarationExpr) {
+                resolved = new JavaParserVariableDeclaration((VariableDeclarator) node, typeSolver);
+            } else {
+                throw new UnsupportedOperationException("Parent of VariableDeclarator is: " + node.getParentNode());
+            }
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }

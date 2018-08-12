@@ -83,6 +83,10 @@ public class JavaParserFactory {
             return new StatementContext<>((Statement) node, typeSolver);
         } else if (node instanceof CatchClause) {
             return new CatchClauseContext((CatchClause) node, typeSolver);
+        } else if (node instanceof VariableDeclarator) {
+            return new VariableDeclaratorContext((VariableDeclarator) node, typeSolver);
+        } else if (node instanceof VariableDeclarationExpr) {
+            return new VariableDeclarationExprContext((VariableDeclarationExpr) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr &&
             ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);

@@ -47,6 +47,13 @@ public interface ResolvedDeclaration {
         return false;
     }
 
+    /**
+     * Does this declaration represents a variable?
+     */
+    default boolean isVariable() {
+        return false;
+    }
+
     default boolean isEnumConstant() {
         return false;
     }

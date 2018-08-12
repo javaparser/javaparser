@@ -105,11 +105,7 @@ class ReflectionClassAdapter {
             }
         }
         ReferenceTypeImpl superclass = getSuperClass();
-        if (superclass == null) {
-            return false;
-        } else {
-            return superclass.getTypeDeclaration().hasField(name);
-        }
+        return superclass != null && superclass.getTypeDeclaration().hasField(name);
     }
 
     public List<ResolvedFieldDeclaration> getAllFields() {

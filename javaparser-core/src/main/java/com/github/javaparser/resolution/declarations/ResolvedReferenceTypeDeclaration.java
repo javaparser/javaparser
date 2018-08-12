@@ -160,7 +160,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all the fields declared in this type.
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
+                .equals(getQualifiedName())).collect(Collectors.toList());
     }
 
     ///

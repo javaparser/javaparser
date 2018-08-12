@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
@@ -160,6 +161,14 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+    }
+
+    @Override
+    public List<Parameter> parametersExposedToChild(Node child) {
+        if (child == wrappedNode.getBody()) {
+            return wrappedNode.getParameters();
+        }
+        return Collections.emptyList();
     }
 
     ///
