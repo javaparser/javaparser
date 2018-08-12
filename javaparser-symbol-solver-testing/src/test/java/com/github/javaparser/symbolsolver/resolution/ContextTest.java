@@ -601,11 +601,9 @@ public class ContextTest extends AbstractTest {
     public void localVariablesExposedToChildWithinForStmt() {
         ForStmt forStmt = parse("for (int i=0, j=1;i<10;i++) { body(); }",
                 ParseStart.STATEMENT).asForStmt();
-        assertOneVarExposedToChildInContextNamed(forStmt.getInitialization().get(0).asVariableDeclarationExpr(),
-                forStmt.getInitialization().get(1).asVariableDeclarationExpr().getVariable(0).getInitializer().get(),
-                "i");
-        assertOneVarExposedToChildInContextNamed(forStmt,
-                forStmt.getInitialization().get(1),
+        VariableDeclarationExpr initializations = forStmt.getInitialization().get(0).asVariableDeclarationExpr();
+        assertOneVarExposedToChildInContextNamed(initializations,
+                initializations.getVariable(1),
                 "i");
         assertOneVarExposedToChildInContextNamed(forStmt,
                 forStmt.getCompare().get(),
