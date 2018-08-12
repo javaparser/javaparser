@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.metamodel.JavaParserMetaModel.getNodeMetaModel;
+import static com.github.javaparser.serialization.JavaParserJsonSerializer.SERIALIZED_CLASS_KEY;
 
 /**
  * Deserializes the JSON file that was built by {@link JavaParserJsonSerializer}.
@@ -32,12 +33,12 @@ public class JavaParserJsonDeserializer {
 
     private Node deserializeObject(JsonObject nodeJson) {
         try {
-            String serializedNodeType = nodeJson.getString("!");
+            String serializedNodeType = nodeJson.getString(SERIALIZED_CLASS_KEY);
             BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
                     .orElseThrow(() -> new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
             Map<String, Object> parameters = new HashMap<>();
             for (String name : nodeJson.keySet()) {
-                if (name.equals("!")) {
+                if (name.equals(SERIALIZED_CLASS_KEY)) {
                     continue;
                 }
 

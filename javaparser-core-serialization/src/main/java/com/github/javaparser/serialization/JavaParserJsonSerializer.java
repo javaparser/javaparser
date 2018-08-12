@@ -16,6 +16,8 @@ import static java.util.Objects.requireNonNull;
  * Serializes an AST or a partial AST to JSON.
  */
 public class JavaParserJsonSerializer {
+    public static final String SERIALIZED_CLASS_KEY = "!";
+
     public void serialize(Node node, JsonGenerator generator) {
         requireNonNull(node);
         Log.info("Serializing Node to JSON.");
@@ -31,7 +33,7 @@ public class JavaParserJsonSerializer {
         } else {
             generator.writeStartObject(nodeName);
         }
-        generator.write("!", node.getClass().getName());
+        generator.write(SERIALIZED_CLASS_KEY, node.getClass().getName());
         for (PropertyMetaModel propertyMetaModel : nodeMetaModel.getAllPropertyMetaModels()) {
             String name = propertyMetaModel.getName();
             Object value = propertyMetaModel.getValue(node);
