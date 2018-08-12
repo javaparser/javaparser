@@ -1,10 +1,13 @@
 package com.github.javaparser.metamodel;
 
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 import static com.github.javaparser.utils.Utils.decapitalize;
 
@@ -176,5 +179,38 @@ public abstract class BaseNodeMetaModel {
      */
     public String getMetaModelFieldName() {
         return decapitalize(getClass().getSimpleName());
+    }
+
+    /**
+     * Creates a new node of this type.
+     *
+     * @param parameters a map of propertyName -> value.
+     * This should at least contain a pair for every required property for this node.
+     */
+    public Node construct(Map<String, Object> parameters) {
+        for (Constructor<?> constructor : getType().getConstructors()) {
+            if (constructor.getAnnotation(AllFieldsConstructor.class) != null) {
+                try {
+                    Object[] paramArray = new Object[constructor.getParameterCount()];
+                    int i = 0;
+                    for (PropertyMetaModel constructorParameter : getConstructorParameters()) {
+                        paramArray[i] = parameters.get(constructorParameter.getName());
+                        if (paramArray[i] == null && constructorParameter.isRequired()) {
+                            if (constructorParameter.isNodeList()) {
+                                paramArray[i] = new NodeList<>();
+                            } else if (constructorParameter.isEnumSet()) {
+                                paramArray[i] = EnumSet.noneOf(Modifier.class);
+                            }
+                            // We could have more defaults here.
+                        }
+                        i++;
+                    }
+                    return (Node) constructor.newInstance(paramArray);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        throw new IllegalStateException();
     }
 }
