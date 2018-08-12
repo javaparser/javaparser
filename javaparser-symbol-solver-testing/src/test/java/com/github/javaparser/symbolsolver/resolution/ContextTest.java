@@ -644,12 +644,12 @@ public class ContextTest extends AbstractTest {
     // associated with the try-with-resources statement.
 
     @Test
-    public void parametersExposedToChildWithinTryWithResourcesStatement() {
+    public void localVariablesExposedToChildWithinTryWithResourcesStatement() {
         TryStmt stmt = parse("try (Object res1 = foo(); Object res2 = foo()) { body(); }",
                 ParseStart.STATEMENT).asTryStmt();
-        assertOneParamExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
-        assertNoParamsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
-        assertOneParamExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+        assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
+        assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
+        assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
     }
 
 }

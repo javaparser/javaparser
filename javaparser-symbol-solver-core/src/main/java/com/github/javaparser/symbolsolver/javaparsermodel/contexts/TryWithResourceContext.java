@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
@@ -91,6 +92,14 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        for (int i=0;i<wrappedNode.getResources().size();i++) {
+            if (child == wrappedNode.getResources().get(i)) {
+                return wrappedNode.getResources().subList(0, i).stream()
+                        .map(e -> e instanceof VariableDeclarationExpr ? ((VariableDeclarationExpr) e).getVariables() : Collections.<VariableDeclarator>emptyList())
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+            }
+        }
         if (child == wrappedNode.getTryBlock()) {
             List<VariableDeclarator> res = new LinkedList<>();
             for (Expression expr : wrappedNode.getResources()) {
