@@ -174,7 +174,7 @@ class JavassistUtils {
         }
     }
 
-    private static String internalNameToCanonicalName(String typeName) {
+    static String internalNameToCanonicalName(String typeName) {
         return typeName.replaceAll("\\$", ".");
     }
 

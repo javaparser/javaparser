@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;

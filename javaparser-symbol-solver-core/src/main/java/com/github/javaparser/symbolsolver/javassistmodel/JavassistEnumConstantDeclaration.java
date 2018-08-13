@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtField;
 import javassist.bytecode.AccessFlag;
 
@@ -29,13 +30,16 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
 
     private CtField ctField;
     private TypeSolver typeSolver;
+    private ResolvedType type;
 
     public JavassistEnumConstantDeclaration(CtField ctField, TypeSolver typeSolver) {
         if (ctField == null) {
             throw new IllegalArgumentException();
         }
-        if ((ctField.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) != 0) {
-            throw new IllegalArgumentException("Trying to instantiate a JavassistEnumConstantDeclaration with something which is not an enum field: " + ctField.toString());
+        if ((ctField.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) == 0) {
+            throw new IllegalArgumentException(
+                    "Trying to instantiate a JavassistEnumConstantDeclaration with something which is not an enum field: "
+                            + ctField.toString());
         }
         this.ctField = ctField;
         this.typeSolver = typeSolver;
@@ -49,6 +53,10 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
 
     @Override
     public ResolvedType getType() {
-        throw new UnsupportedOperationException();
+        if (type == null) {
+            type = new ReferenceTypeImpl(new JavassistEnumDeclaration(ctField.getDeclaringClass(), typeSolver),
+                    typeSolver);
+        }
+        return type;
     }
 }

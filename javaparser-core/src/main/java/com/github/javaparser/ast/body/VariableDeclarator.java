@@ -48,6 +48,7 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
 /**
  * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "int x = 14"  and "int y = 3"  are
@@ -56,7 +57,7 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator>, Resolvable<ResolvedFieldDeclaration> {
+public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator>, Resolvable<ResolvedValueDeclaration> {
 
     private SimpleName name;
 
@@ -117,7 +118,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
                 if (property == ObservableProperty.TYPE) {
                     VariableDeclarator vd = VariableDeclarator.this;
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
-                        NodeWithVariables nodeWithVariables = (NodeWithVariables) vd.getParentNode().get();
+                        NodeWithVariables<?> nodeWithVariables = (NodeWithVariables<?>) vd.getParentNode().get();
                         // We calculate the value the property will assume after the change will be completed
                         Optional<Type> currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
                         List<Type> types = new LinkedList<>();
@@ -275,7 +276,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
-    public ResolvedFieldDeclaration resolve() {
-        return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
+    public ResolvedValueDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 }

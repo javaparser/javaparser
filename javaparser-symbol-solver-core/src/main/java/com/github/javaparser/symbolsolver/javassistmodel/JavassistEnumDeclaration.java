@@ -27,6 +27,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
@@ -91,26 +92,14 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         // Direct ancestors of an enum are java.lang.Enum and interfaces
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
-        try {
-            CtClass superClass = ctClass.getSuperclass();
+        String superClassName = ctClass.getClassFile().getSuperclass();
 
-            if (superClass != null) {
-                ResolvedType superClassTypeUsage = JavassistFactory.typeUsageFor(superClass, typeSolver);
+        if (superClassName != null) {
+            ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(superClassName), typeSolver));
+        }
 
-                if (superClassTypeUsage.isReferenceType()) {
-                    ancestors.add(superClassTypeUsage.asReferenceType());
-                }
-            }
-
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                ResolvedType interfazeTypeUsage = JavassistFactory.typeUsageFor(interfaze, typeSolver);
-
-                if (interfazeTypeUsage.isReferenceType()) {
-                    ancestors.add(interfazeTypeUsage.asReferenceType());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException("Ancestor not found for " + ctClass.getName() + ".", e);
+        for (String interfazeName : ctClass.getClassFile().getInterfaces()) {
+            ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(interfazeName), typeSolver));
         }
 
         return ancestors;

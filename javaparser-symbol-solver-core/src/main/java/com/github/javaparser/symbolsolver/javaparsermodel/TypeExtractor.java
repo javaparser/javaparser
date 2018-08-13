@@ -116,7 +116,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case MINUS:
             case DIVIDE:
             case MULTIPLY:
-                return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas);
+                return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas, node.getOperator());
             case LESS_EQUALS:
             case LESS:
             case GREATER:
@@ -169,7 +169,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     private ResolvedType solveDotExpressionType(ResolvedReferenceTypeDeclaration parentType, FieldAccessExpr node) {
         // Fields and internal type declarations cannot have the same name.
         // Thus, these checks will always be mutually exclusive.
-        if (parentType.hasField(node.getName().getId())) {
+        if (parentType.isEnum() && parentType.asEnum().hasEnumConstant(node.getName().getId())) {
+            return parentType.asEnum().getEnumConstant(node.getName().getId()).getType();
+        } else if (parentType.hasField(node.getName().getId())) {
             return parentType.getField(node.getName().getId()).getType();
         } else if (parentType.hasInternalType(node.getName().getId())) {
             return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()), typeSolver);
