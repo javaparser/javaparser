@@ -23,6 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
+import javafx.scene.Parent;
 
 import java.util.Optional;
 
@@ -51,15 +52,28 @@ public interface HasParentNode<T> extends Observable {
 
     /**
      * Get the ancestor of the node having the given type, or null if no ancestor of the given type is found.
+     *
+     * @deprecated use findParent
      */
+    @Deprecated
     default <N> Optional<N> getAncestorOfType(Class<N> classType) {
-        Node parent = getParentNode().orElse(null);
-        while (parent != null) {
-            if (classType.isAssignableFrom(parent.getClass())) {
-                return Optional.of(classType.cast(parent));
+        return findParent(classType);
+    }
+
+    /**
+     * Walks the parents of this node, returning the first node of type "type" or empty() if none is found.
+     * Also works for other types, like the With... interfaces.
+     */
+    default <N> Optional<N> findParent(Class<N> type) {
+        Optional<Node> possibleParent = getParentNode();
+        while (possibleParent.isPresent()) {
+            Node parent = possibleParent.get();
+            if (type.isAssignableFrom(parent.getClass())) {
+                return Optional.of(type.cast(parent));
             }
-            parent = parent.getParentNode().orElse(null);
+            possibleParent = parent.getParentNode();
         }
         return Optional.empty();
     }
+
 }

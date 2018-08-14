@@ -310,7 +310,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
             }
             // Attempt to resolve locally in Compilation unit
-            Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
+            Optional<CompilationUnit> cu = node.findParent(CompilationUnit.class);
             if (cu.isPresent()) {
                 Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
                 if (classByName.isPresent()) {

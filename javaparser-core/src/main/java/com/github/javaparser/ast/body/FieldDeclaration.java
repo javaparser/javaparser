@@ -177,8 +177,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
-        Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
+        Optional<ClassOrInterfaceDeclaration> parentClass = findParent(ClassOrInterfaceDeclaration.class);
+        Optional<EnumDeclaration> parentEnum = findParent(EnumDeclaration.class);
         if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
@@ -204,8 +204,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
-        Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
+        Optional<ClassOrInterfaceDeclaration> parentClass = findParent(ClassOrInterfaceDeclaration.class);
+        Optional<EnumDeclaration> parentEnum = findParent(EnumDeclaration.class);
         if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);

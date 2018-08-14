@@ -495,7 +495,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        n.getAncestorOfType(NodeWithVariables.class).ifPresent(ancestor -> {
+        n.findParent(NodeWithVariables.class).ifPresent(ancestor -> {
             ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
                 final Type type = n.getType();
