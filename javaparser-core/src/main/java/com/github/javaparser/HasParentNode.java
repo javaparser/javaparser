@@ -23,7 +23,6 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
-import javafx.scene.Parent;
 
 import java.util.Optional;
 
