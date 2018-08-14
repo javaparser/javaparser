@@ -17,8 +17,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.Collections;
@@ -27,20 +27,18 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public class ConstructorContext extends AbstractMethodLikeDeclarationContext<ConstructorDeclaration> {
+public class VariableDeclarationExprContext extends AbstractJavaParserContext<VariableDeclarationExpr> {
 
-    ///
-    /// Constructors
-    ///
-
-    public ConstructorContext(ConstructorDeclaration wrappedNode, TypeSolver typeSolver) {
+    public VariableDeclarationExprContext(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
     @Override
-    public List<Parameter> parametersExposedToChild(Node child) {
-        if (child == wrappedNode.getBody()) {
-            return wrappedNode.getParameters();
+    public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        for (int i=0;i<wrappedNode.getVariables().size();i++) {
+            if (child == wrappedNode.getVariable(i)) {
+                return wrappedNode.getVariables().subList(0, i);
+            }
         }
         return Collections.emptyList();
     }
