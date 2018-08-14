@@ -60,6 +60,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         this.addAll(n);
     }
 
+    @SafeVarargs
     public NodeList(N... n) {
         this.addAll(Arrays.asList(n));
     }

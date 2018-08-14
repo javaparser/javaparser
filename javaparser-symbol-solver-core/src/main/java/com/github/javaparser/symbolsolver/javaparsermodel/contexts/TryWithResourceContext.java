@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -92,17 +93,19 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
-        for (int i=0;i<wrappedNode.getResources().size();i++) {
-            if (child == wrappedNode.getResources().get(i)) {
-                return wrappedNode.getResources().subList(0, i).stream()
-                        .map(e -> e instanceof VariableDeclarationExpr ? ((VariableDeclarationExpr) e).getVariables() : Collections.<VariableDeclarator>emptyList())
+        NodeList<Expression> resources = wrappedNode.getResources();
+        for (int i=0;i<resources.size();i++) {
+            if (child == resources.get(i)) {
+                return resources.subList(0, i).stream()
+                        .map(e -> e instanceof VariableDeclarationExpr ? ((VariableDeclarationExpr) e).getVariables()
+                                : Collections.<VariableDeclarator>emptyList())
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
             }
         }
         if (child == wrappedNode.getTryBlock()) {
             List<VariableDeclarator> res = new LinkedList<>();
-            for (Expression expr : wrappedNode.getResources()) {
+            for (Expression expr : resources) {
                 if (expr instanceof VariableDeclarationExpr) {
                     res.addAll(((VariableDeclarationExpr)expr).getVariables());
                 }
