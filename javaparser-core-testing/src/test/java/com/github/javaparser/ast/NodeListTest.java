@@ -69,7 +69,7 @@ public class NodeListTest {
     }
 
     private FieldDeclaration createIntField(String name) {
-        return new FieldDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), name);
+        return new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), name);
     }
 
     @Test

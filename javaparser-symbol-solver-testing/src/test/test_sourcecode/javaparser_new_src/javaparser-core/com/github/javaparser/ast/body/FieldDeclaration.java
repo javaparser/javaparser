@@ -55,7 +55,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         NodeWithModifiers<FieldDeclaration>,
         NodeWithVariables<FieldDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private NodeList<Modifier> modifiers = new NodeList<>();
 
     private Type elementType;
 
@@ -66,7 +66,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public FieldDeclaration() {
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
+    public FieldDeclaration(NodeList<Modifier> modifiers, Type elementType, VariableDeclarator variable) {
         setModifiers(modifiers);
         setElementType(elementType);
         List<VariableDeclarator> aux = new ArrayList<>();
@@ -74,13 +74,13 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setVariables(aux);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
+    public FieldDeclaration(NodeList<Modifier> modifiers, Type elementType, List<VariableDeclarator> variables) {
         setModifiers(modifiers);
         setElementType(elementType);
         setVariables(variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
+    public FieldDeclaration(NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType, List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                             List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
@@ -89,7 +89,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
+    public FieldDeclaration(Range range, NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, Type elementType,
                             List<VariableDeclarator> variables, List<ArrayBracketPair> arrayBracketPairsAfterElementType) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -109,7 +109,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
+    public static FieldDeclaration create(NodeList<Modifier> modifiers, Type type,
                                                           VariableDeclarator variable) {
         List<VariableDeclarator> variables = new ArrayList<>();
         variables.add(variable);
@@ -127,7 +127,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      *            field name
      * @return instance of {@link FieldDeclaration}
      */
-    public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
+    public static FieldDeclaration create(NodeList<Modifier> modifiers, Type type, String name) {
         VariableDeclaratorId id = new VariableDeclaratorId(name);
         VariableDeclarator variable = new VariableDeclarator(id);
         return create(modifiers, type, variable);
@@ -150,7 +150,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      * @return modifiers
      */
     @Override
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -161,7 +161,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public FieldDeclaration setModifiers(NodeList<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }

@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -32,8 +31,10 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.github.javaparser.ast.Modifier.Keyword.DEFAULT;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static java.util.Comparator.*;
+import static org.junit.Assert.*;
 
 public class ReflectionClassDeclarationTest extends AbstractTest {
     
@@ -170,8 +171,8 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
-                .sorted((a, b) -> a.getName().compareTo(b.getName()))
+                .filter(m -> m.accessSpecifier() != PRIVATE && m.accessSpecifier() != DEFAULT)
+                .sorted(comparing(ResolvedDeclaration::getName))
                 .collect(Collectors.toList());
         if (isJavaVersion9OrAbove()) {
             assertEquals(69, methods.size());
@@ -179,17 +180,17 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
             assertEquals(67, methods.size());
         }
         assertEquals("charAt", methods.get(0).getName());
-        assertEquals(false, methods.get(0).isAbstract());
+        assertFalse(methods.get(0).isAbstract());
         assertEquals(1, methods.get(0).getNumberOfParams());
         assertEquals("int", methods.get(0).getParam(0).getType().describe());
         if (isJavaVersion9OrAbove()) {
             assertEquals("compareTo", methods.get(6).getName());
-            assertEquals(false, methods.get(6).isAbstract());
+            assertFalse(methods.get(6).isAbstract());
             assertEquals(1, methods.get(6).getNumberOfParams());
             assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
         } else {
             assertEquals("concat", methods.get(6).getName());
-            assertEquals(false, methods.get(6).isAbstract());
+            assertFalse(methods.get(6).isAbstract());
             assertEquals(1, methods.get(6).getNumberOfParams());
             assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
         }
@@ -587,7 +588,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
 
         ResolvedReferenceType ancestor;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
-        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
+        ancestors.sort(comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.get(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
@@ -640,7 +641,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
 
         ResolvedReferenceType ancestor;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
+        ancestors.sort(comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.HasParentNode", ancestor.getQualifiedName());

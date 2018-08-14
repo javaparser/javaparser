@@ -28,18 +28,6 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
  */
 class Helper {
 
-    public static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
-        if (modifiers.contains(Modifier.PRIVATE)) {
-            return AccessSpecifier.PRIVATE;
-        } else if (modifiers.contains(Modifier.PROTECTED)) {
-            return AccessSpecifier.PROTECTED;
-        } else if (modifiers.contains(Modifier.PUBLIC)) {
-            return AccessSpecifier.PUBLIC;
-        } else {
-            return AccessSpecifier.DEFAULT;
-        }
-    }
-
     static String containerName(Node container) {
         String packageName = getPackageName(container);
         String className = getClassName("", container);

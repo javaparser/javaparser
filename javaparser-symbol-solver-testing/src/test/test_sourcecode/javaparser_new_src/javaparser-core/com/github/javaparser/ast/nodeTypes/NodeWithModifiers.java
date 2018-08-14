@@ -16,14 +16,14 @@ public interface NodeWithModifiers<T> {
      * @see Modifier
      * @return modifiers
      */
-    EnumSet<Modifier> getModifiers();
+    NodeList<Modifier> getModifiers();
 
-    T setModifiers(EnumSet<Modifier> modifiers);
+    T setModifiers(NodeList<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
     default T addModifier(Modifier... modifiers) {
         getModifiers().addAll(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+                .collect(Collectors.toCollection(() -> new NodeList<>())));
         return (T) this;
     }
 

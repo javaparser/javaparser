@@ -279,7 +279,7 @@ public final class CompilationUnit extends Node {
     public ClassOrInterfaceDeclaration addClass(String name, Modifier... modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
                 Arrays.stream(modifiers)
-                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                        .collect(Collectors.toCollection(() -> new NodeList<>())),
                 false, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
@@ -306,7 +306,7 @@ public final class CompilationUnit extends Node {
     public ClassOrInterfaceDeclaration addInterface(String name, Modifier... modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
                 Arrays.stream(modifiers)
-                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
+                        .collect(Collectors.toCollection(() -> new NodeList<>())),
                 true, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
@@ -332,7 +332,7 @@ public final class CompilationUnit extends Node {
      */
     public EnumDeclaration addEnum(String name, Modifier... modifiers) {
         EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+                .collect(Collectors.toCollection(() -> new NodeList<>())), name);
         getTypes().add(enumDeclaration);
         enumDeclaration.setParentNode(this);
         return enumDeclaration;
@@ -357,7 +357,7 @@ public final class CompilationUnit extends Node {
      */
     public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
         AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+                .collect(Collectors.toCollection(() -> new NodeList<>())), name);
         getTypes().add(annotationDeclaration);
         annotationDeclaration.setParentNode(this);
         return annotationDeclaration;

@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -61,8 +61,8 @@ public class DefaultConstructorDeclaration implements ResolvedConstructorDeclara
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AccessSpecifier.PUBLIC;
+    public Modifier.Keyword accessSpecifier() {
+        return Modifier.Keyword.PUBLIC;
     }
 
     @Override

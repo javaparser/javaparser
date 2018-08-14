@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -48,7 +47,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         NodeWithParameters<ConstructorDeclaration>, NodeWithThrowable<ConstructorDeclaration>,
         NodeWithBlockStmt<ConstructorDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private NodeList<Modifier> modifiers = new NodeList<>();
 
     private List<TypeParameter> typeParameters;
 
@@ -63,12 +62,12 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration() {
     }
 
-    public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
+    public ConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
         setModifiers(modifiers);
         setName(name);
     }
 
-    public ConstructorDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations,
+    public ConstructorDeclaration(NodeList<Modifier> modifiers, List<AnnotationExpr> annotations,
                                   List<TypeParameter> typeParameters,
                                   String name, List<Parameter> parameters, List<ReferenceType> throws_,
                                   BlockStmt block) {
@@ -81,7 +80,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         setBody(block);
     }
 
-    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
+    public ConstructorDeclaration(Range range, NodeList<Modifier> modifiers,
                                   List<AnnotationExpr> annotations, List<TypeParameter> typeParameters, String name,
                                   List<Parameter> parameters, List<ReferenceType> throws_, BlockStmt block) {
         super(range, annotations);
@@ -110,7 +109,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
      * @return modifiers
      */
     @Override
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -141,7 +140,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public ConstructorDeclaration setModifiers(NodeList<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }

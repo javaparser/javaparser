@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -118,7 +118,7 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public Modifier.Keyword accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctConstructor.getModifiers());
     }
 

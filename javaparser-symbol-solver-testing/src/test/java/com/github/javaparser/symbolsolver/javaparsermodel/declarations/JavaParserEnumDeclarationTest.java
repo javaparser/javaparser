@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -34,14 +33,15 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class JavaParserEnumDeclarationTest extends AbstractTest {
 
@@ -380,14 +380,14 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
         fieldDeclaration = constructorDeclaration.getField("modifiers");
         assertEquals("modifiers", fieldDeclaration.getName());
         assertEquals("java.util.EnumSet", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
-        assertEquals(false, fieldDeclaration.isStatic());
+        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
+        assertFalse(fieldDeclaration.isStatic());
 
         // inherited field
         fieldDeclaration = constructorDeclaration.getField("annotations");
         assertEquals("annotations", fieldDeclaration.getName());
         assertEquals("java.util.List", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
+        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
     }
 
     @Test(expected = UnsolvedSymbolException.class)

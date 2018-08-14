@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
@@ -39,7 +40,7 @@ public class NodeWithParametersBuildersTest {
 
     @Test
     public void testAddParameter() {
-        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
+        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         addMethod.addParameter(int.class, "yay");
         Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
         assertEquals(1, cu.getImports().size());
@@ -52,14 +53,14 @@ public class NodeWithParametersBuildersTest {
 
     @Test
     public void testGetParamByName() {
-        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
+        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
         assertEquals(addAndGetParameter, addMethod.getParameterByName("yay").get());
     }
 
     @Test
     public void testGetParamByType() {
-        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
+        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
         assertEquals(addAndGetParameter, addMethod.getParameterByType("int").get());
         assertEquals(addAndGetParameter, addMethod.getParameterByType(int.class).get());

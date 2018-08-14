@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -33,8 +34,6 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.AccessSpecifier.PRIVATE;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -395,7 +394,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         List<ResolvedFieldDeclaration> res = new LinkedList<>();
 
         res.addAll(this.getDeclaredFields().stream()
-                .filter(f -> f.accessSpecifier() != PRIVATE)
+                .filter(f -> f.accessSpecifier() != Modifier.Keyword.PRIVATE)
                 .collect(Collectors.toList()));
 
         getDirectAncestors().forEach(a ->

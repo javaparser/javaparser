@@ -60,7 +60,7 @@ import java.util.Optional;
  */
 public final class VariableDeclarationExpr extends Expression implements NodeWithFinalModifier<VariableDeclarationExpr>, NodeWithAnnotations<VariableDeclarationExpr>, NodeWithVariables<VariableDeclarationExpr> {
 
-    private EnumSet<Modifier> modifiers;
+    private NodeList<Modifier> modifiers;
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -68,35 +68,35 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     private NodeList<VariableDeclarator> variables;
 
     public VariableDeclarationExpr() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>());
+        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     public VariableDeclarationExpr(final Type type, String variableName) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
+        this(null, new NodeList<>(), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
     }
 
     public VariableDeclarationExpr(VariableDeclarator var) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), nodeList(var));
+        this(null, new NodeList<>(), new NodeList<>(), nodeList(var));
     }
 
     public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
-        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
+        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> new NodeList<>())), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
     }
 
     public VariableDeclarationExpr(VariableDeclarator var, Modifier... modifiers) {
-        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), new NodeList<>(), nodeList(var));
+        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> new NodeList<>())), new NodeList<>(), nodeList(var));
     }
 
     public VariableDeclarationExpr(final NodeList<VariableDeclarator> variables) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), variables);
+        this(null, new NodeList<>(), new NodeList<>(), variables);
     }
 
-    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(final NodeList<Modifier> modifiers, final NodeList<VariableDeclarator> variables) {
         this(null, modifiers, new NodeList<>(), variables);
     }
 
     @AllFieldsConstructor
-    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<VariableDeclarator> variables) {
         this(null, modifiers, annotations, variables);
     }
 
@@ -104,7 +104,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public VariableDeclarationExpr(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -136,7 +136,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -160,13 +160,16 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
+    public VariableDeclarationExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (VariableDeclarationExpr) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -192,6 +195,12 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
@@ -224,6 +233,12 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }

@@ -21,7 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -118,14 +118,14 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Has this type a field with the given name?
      */
     default boolean hasField(String name) {
-        return this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
+        return this.getAllFields().stream().anyMatch(f -> f.getName().equals(name));
     }
 
     /**
      * Either a declared field or inherited field which is not private.
      */
     default boolean hasVisibleField(String name) {
-        return getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst().isPresent();
+        return getVisibleFields().stream().anyMatch(f -> f.getName().equals(name));
     }
 
     /**
@@ -138,7 +138,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
+                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != Modifier.Keyword.PRIVATE)
                 .collect(Collectors.toList());
     }
 

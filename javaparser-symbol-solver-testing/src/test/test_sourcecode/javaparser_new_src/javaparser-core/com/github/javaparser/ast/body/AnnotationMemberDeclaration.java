@@ -44,7 +44,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         implements NodeWithJavaDoc<AnnotationMemberDeclaration>, NodeWithName<AnnotationMemberDeclaration>,
         NodeWithType<AnnotationMemberDeclaration>, NodeWithModifiers<AnnotationMemberDeclaration> {
 
-    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private NodeList<Modifier> modifiers = new NodeList<>();
 
     private Type type;
 
@@ -55,14 +55,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public AnnotationMemberDeclaration() {
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, Type type, String name, Expression defaultValue) {
         setModifiers(modifiers);
         setType(type);
         setName(name);
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type, String name,
+    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, Type type, String name,
                                        Expression defaultValue) {
         super(annotations);
         setModifiers(modifiers);
@@ -71,7 +71,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setDefaultValue(defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
+    public AnnotationMemberDeclaration(Range range, NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, Type type,
                                        String name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -101,7 +101,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return modifiers
      */
     @Override
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -122,7 +122,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public AnnotationMemberDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public AnnotationMemberDeclaration setModifiers(NodeList<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }

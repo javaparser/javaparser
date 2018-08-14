@@ -47,11 +47,11 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     public EnumDeclaration() {
     }
 
-    public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
+    public EnumDeclaration(NodeList<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public EnumDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
@@ -59,7 +59,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         setEntries(entries);
     }
 
-    public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public EnumDeclaration(Range range, NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                            List<ClassOrInterfaceType> implementsList, List<EnumConstantDeclaration> entries,
                            List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);

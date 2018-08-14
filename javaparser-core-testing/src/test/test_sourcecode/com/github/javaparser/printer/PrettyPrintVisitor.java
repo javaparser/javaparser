@@ -61,7 +61,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         return printer.getSource();
     }
 
-    private void printModifiers(final EnumSet<Modifier> modifiers) {
+    private void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
             printer.print(modifiers.stream().map(Modifier::asString).collect(Collectors.joining(" ")) + " ");
         }

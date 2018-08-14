@@ -21,8 +21,6 @@
  
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AccessSpecifier;
-
 import java.lang.reflect.Modifier;
 
 /**

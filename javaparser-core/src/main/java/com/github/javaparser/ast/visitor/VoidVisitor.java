@@ -311,4 +311,6 @@ public interface VoidVisitor<A> {
     void visit(ReceiverParameter n, A arg);
 
     void visit(VarType n, A arg);
+
+    void visit(Modifier n, A arg);
 }

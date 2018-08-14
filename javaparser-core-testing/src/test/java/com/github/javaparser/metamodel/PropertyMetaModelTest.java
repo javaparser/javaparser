@@ -32,8 +32,8 @@ public class PropertyMetaModelTest {
         PropertyMetaModel bert = new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, false, true, false);
         assertEquals("Modifier", bert.getTypeName());
         assertEquals("Modifier", bert.getTypeNameGenerified());
-        assertEquals("EnumSet<Modifier>", bert.getTypeNameForGetter());
-        assertEquals("EnumSet<Modifier>", bert.getTypeNameForSetter());
+        assertEquals("NodeList<Modifier>", bert.getTypeNameForGetter());
+        assertEquals("NodeList<Modifier>", bert.getTypeNameForSetter());
     }
 
     @Test

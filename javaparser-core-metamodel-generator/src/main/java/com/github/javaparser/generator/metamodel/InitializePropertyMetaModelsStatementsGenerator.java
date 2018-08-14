@@ -10,14 +10,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static com.github.javaparser.JavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 class InitializePropertyMetaModelsStatementsGenerator {
-    void generate(Field field, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
+    void generate(Field field, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) {
         final AstTypeAnalysis fieldTypeAnalysis = new AstTypeAnalysis(field.getGenericType());
 
         final Class<?> fieldType = fieldTypeAnalysis.innerType;

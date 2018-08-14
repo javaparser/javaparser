@@ -3,6 +3,7 @@ package com.github.javaparser.ast.modules;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier;
@@ -12,8 +13,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresStmtMetaModel;
-import java.util.EnumSet;
-import static com.github.javaparser.ast.Modifier.TRANSITIVE;
+import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
@@ -25,16 +25,16 @@ import java.util.Optional;
  */
 public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
 
-    private EnumSet<Modifier> modifiers;
+    private NodeList<Modifier> modifiers;
 
     private Name name;
 
     public ModuleRequiresStmt() {
-        this(null, EnumSet.noneOf(Modifier.class), new Name());
+        this(null, new NodeList<>(), new Name());
     }
 
     @AllFieldsConstructor
-    public ModuleRequiresStmt(EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresStmt(NodeList<Modifier> modifiers, Name name) {
         this(null, modifiers, name);
     }
 
@@ -42,7 +42,7 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleRequiresStmt(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresStmt(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name) {
         super(tokenRange);
         setModifiers(modifiers);
         setName(name);
@@ -62,18 +62,21 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresStmt setModifiers(final EnumSet<Modifier> modifiers) {
+    public ModuleRequiresStmt setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (ModuleRequiresStmt) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -97,7 +100,7 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     }
 
     public boolean isTransitive() {
-        return getModifiers().contains(TRANSITIVE);
+        return hasModifier(TRANSITIVE);
     }
 
     public ModuleRequiresStmt setTransitive(boolean set) {
@@ -109,6 +112,12 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -129,6 +138,12 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
         if (node == name) {
             setName((Name) replacementNode);
             return true;

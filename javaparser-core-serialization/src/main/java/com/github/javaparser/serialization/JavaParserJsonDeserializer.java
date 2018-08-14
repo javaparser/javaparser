@@ -69,9 +69,6 @@ public class JavaParserJsonDeserializer {
                 if (propertyMetaModel.isNodeList()) {
                     JsonArray nodeListJson = nodeJson.getJsonArray(name);
                     parameters.put(name, deserializeNodeList(nodeListJson));
-                } else if (propertyMetaModel.isEnumSet()) {
-                    JsonArray enumSetJson = nodeJson.getJsonArray(name);
-                    parameters.put(name, deserializeEnumSet(enumSetJson));
                 } else if (propertyMetaModel.isNode()) {
                     parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
                 } else {
@@ -80,6 +77,9 @@ public class JavaParserJsonDeserializer {
                         parameters.put(name, nodeJson.getString(name));
                     } else if (type == boolean.class) {
                         parameters.put(name, Boolean.parseBoolean(nodeJson.getString(name)));
+                    } else if (Enum.class.isAssignableFrom(type)) {
+                        Enum<?> value = Enum.valueOf((Class<Enum>) type, nodeJson.getString(name));
+                        parameters.put(name, value);
                     } else {
                         throw new IllegalStateException("Don't know how to convert: " + type);
                     }
@@ -90,10 +90,6 @@ public class JavaParserJsonDeserializer {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private EnumSet<?> deserializeEnumSet(JsonArray enumSetJson) {
-        return enumSetJson.stream().map(v -> (JsonString) v).map(s -> Modifier.valueOf(s.getString())).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)));
     }
 
     private NodeList<?> deserializeNodeList(JsonArray nodeListJson) {

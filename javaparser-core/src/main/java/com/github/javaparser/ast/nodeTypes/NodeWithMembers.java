@@ -35,6 +35,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
@@ -77,10 +81,10 @@ public interface NodeWithMembers<N extends Node> {
      *
      * @param typeClass the type of the field
      * @param name the name of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier... modifiers) {
+    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier.Keyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), name, modifiers);
     }
@@ -90,10 +94,10 @@ public interface NodeWithMembers<N extends Node> {
      *
      * @param type the type of the field
      * @param name the name of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
+    default FieldDeclaration addField(String type, String name, Modifier.Keyword... modifiers) {
         return addField(parseType(type), name, modifiers);
     }
 
@@ -102,15 +106,14 @@ public interface NodeWithMembers<N extends Node> {
      *
      * @param type the type of the field
      * @param name the name of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type type, String name, Modifier... modifiers) {
+    default FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
-        fieldDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        fieldDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(fieldDeclaration);
         return fieldDeclaration;
     }
@@ -121,10 +124,10 @@ public interface NodeWithMembers<N extends Node> {
      * @param typeClass the type of the field
      * @param name the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier.Keyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addFieldWithInitializer(typeClass.getSimpleName(), name, initializer, modifiers);
     }
@@ -135,10 +138,10 @@ public interface NodeWithMembers<N extends Node> {
      * @param type the type of the field
      * @param name the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier.Keyword... modifiers) {
         return addFieldWithInitializer(parseType(type), name, initializer, modifiers);
     }
 
@@ -148,10 +151,10 @@ public interface NodeWithMembers<N extends Node> {
      * @param type the type of the field
      * @param name the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier.Keyword... modifiers) {
         FieldDeclaration declaration = addField(type, name, modifiers);
         declaration.getVariables().iterator().next().setInitializer(initializer);
         return declaration;
@@ -165,7 +168,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPrivateField(Class<?> typeClass, String name) {
-        return addField(typeClass, name, Modifier.PRIVATE);
+        return addField(typeClass, name, PRIVATE);
     }
 
     /**
@@ -177,7 +180,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPrivateField(String type, String name) {
-        return addField(type, name, Modifier.PRIVATE);
+        return addField(type, name, PRIVATE);
     }
 
     /**
@@ -188,7 +191,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPrivateField(Type type, String name) {
-        return addField(type, name, Modifier.PRIVATE);
+        return addField(type, name, PRIVATE);
     }
 
     /**
@@ -199,7 +202,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPublicField(Class<?> typeClass, String name) {
-        return addField(typeClass, name, Modifier.PUBLIC);
+        return addField(typeClass, name, PUBLIC);
     }
 
     /**
@@ -211,7 +214,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPublicField(String type, String name) {
-        return addField(type, name, Modifier.PUBLIC);
+        return addField(type, name, PUBLIC);
     }
 
     /**
@@ -222,7 +225,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPublicField(Type type, String name) {
-        return addField(type, name, Modifier.PUBLIC);
+        return addField(type, name, PUBLIC);
     }
 
     /**
@@ -233,7 +236,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(Class<?> typeClass, String name) {
-        return addField(typeClass, name, Modifier.PROTECTED);
+        return addField(typeClass, name, PROTECTED);
     }
 
     /**
@@ -245,7 +248,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(String type, String name) {
-        return addField(type, name, Modifier.PROTECTED);
+        return addField(type, name, PROTECTED);
     }
 
     /**
@@ -256,22 +259,21 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(Type type, String name) {
-        return addField(type, name, Modifier.PROTECTED);
+        return addField(type, name, PROTECTED);
     }
 
     /**
      * Adds a methods with void return by default to this.
      *
      * @param methodName the method name
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
+    default MethodDeclaration addMethod(String methodName, Keyword... modifiers) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName(methodName);
         methodDeclaration.setType(new VoidType());
-        methodDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        methodDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(methodDeclaration);
         return methodDeclaration;
     }

@@ -43,6 +43,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AnnotationDeclaration n, final A arg) {
         n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -52,6 +53,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AnnotationMemberDeclaration n, final A arg) {
         n.getDefaultValue().ifPresent(l -> l.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getType().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
@@ -168,6 +170,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getImplementedTypes().forEach(p -> p.accept(this, arg));
         n.getTypeParameters().forEach(p -> p.accept(this, arg));
         n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -206,6 +209,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ConstructorDeclaration n, final A arg) {
         n.getBody().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
         n.getReceiverParameter().ifPresent(l -> l.accept(this, arg));
@@ -265,6 +269,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getEntries().forEach(p -> p.accept(this, arg));
         n.getImplementedTypes().forEach(p -> p.accept(this, arg));
         n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -298,6 +303,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final FieldDeclaration n, final A arg) {
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getVariables().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -409,6 +415,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final MethodDeclaration n, final A arg) {
         n.getBody().ifPresent(l -> l.accept(this, arg));
         n.getType().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
         n.getReceiverParameter().ifPresent(l -> l.accept(this, arg));
@@ -462,6 +469,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final Parameter n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getType().accept(this, arg);
         n.getVarArgsAnnotations().forEach(p -> p.accept(this, arg));
@@ -631,6 +639,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final VariableDeclarationExpr n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getVariables().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -715,6 +724,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ModuleRequiresStmt n, final A arg) {
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -768,6 +778,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final VarType n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final Modifier n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

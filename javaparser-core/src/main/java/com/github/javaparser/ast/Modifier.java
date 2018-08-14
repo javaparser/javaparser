@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2018 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,55 +18,197 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
-import java.util.EnumSet;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.Arrays;
+import static com.github.javaparser.ast.NodeList.toNodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ModifierMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
- * One of the modifiers known in Java.
+ * A modifier, like private, public, or volatile.
  */
-public enum Modifier {
-    PUBLIC,
-    PROTECTED,
-    PRIVATE,
-    ABSTRACT,
-    STATIC,
-    FINAL,
-    TRANSIENT,
-    VOLATILE,
-    SYNCHRONIZED,
-    NATIVE,
-    STRICTFP,
-    TRANSITIVE,
-    DEFAULT;
+public final class Modifier extends Node {
 
-    final String codeRepresentation;
+    public static Modifier publicModifier() {
+        return new Modifier(Keyword.PUBLIC);
+    }
 
-    Modifier() {
-        this.codeRepresentation = name().toLowerCase();
+    public static Modifier protectedModifier() {
+        return new Modifier(Keyword.PROTECTED);
+    }
+
+    public static Modifier privateModifier() {
+        return new Modifier(Keyword.PRIVATE);
+    }
+
+    public static Modifier abstractModifier() {
+        return new Modifier(Keyword.ABSTRACT);
+    }
+
+    public static Modifier staticModifier() {
+        return new Modifier(Keyword.STATIC);
+    }
+
+    public static Modifier finalModifier() {
+        return new Modifier(Keyword.FINAL);
+    }
+
+    public static Modifier transientModifier() {
+        return new Modifier(Keyword.TRANSIENT);
+    }
+
+    public static Modifier volatileModifier() {
+        return new Modifier(Keyword.VOLATILE);
+    }
+
+    public static Modifier synchronizedModifier() {
+        return new Modifier(Keyword.SYNCHRONIZED);
+    }
+
+    public static Modifier nativeModifier() {
+        return new Modifier(Keyword.NATIVE);
+    }
+
+    public static Modifier strictfpModifier() {
+        return new Modifier(Keyword.STRICTFP);
+    }
+
+    public static Modifier transitiveModifier() {
+        return new Modifier(Keyword.TRANSITIVE);
     }
 
     /**
-     * @return the keyword represented by this modifier.
+     * The Java modifier keywords.
      */
-    public String asString() {
-        return codeRepresentation;
-    }
+    public enum Keyword {
 
-    public EnumSet<Modifier> toEnumSet() {
-        return EnumSet.of(this);
-    }
+        PUBLIC("public", false),
+        PROTECTED("protected", false),
+        PRIVATE("private", false),
+        ABSTRACT("abstract", false),
+        STATIC("static", false),
+        FINAL("final", false),
+        TRANSIENT("transient", false),
+        VOLATILE("volatile", false),
+        SYNCHRONIZED("synchronized", false),
+        NATIVE("native", false),
+        STRICTFP("strictfp", false),
+        TRANSITIVE("transitive", false),
+        DEFAULT("", true);
 
-    public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
-        if (modifiers.contains(Modifier.PUBLIC)) {
-            return AccessSpecifier.PUBLIC;
-        } else if (modifiers.contains(Modifier.PROTECTED)) {
-            return AccessSpecifier.PROTECTED;
-        } else if (modifiers.contains(Modifier.PRIVATE)) {
-            return AccessSpecifier.PRIVATE;
-        } else {
-            return AccessSpecifier.DEFAULT;
+        private final String codeRepresentation;
+
+        private final boolean pseudoKeyword;
+
+        Keyword(String codeRepresentation, boolean pseudoKeyword) {
+            this.codeRepresentation = codeRepresentation;
+            this.pseudoKeyword = pseudoKeyword;
         }
+
+        /**
+         * @return the Java keyword represented by this enum constant.
+         */
+        public String asString() {
+            return codeRepresentation;
+        }
+
+        /**
+         * @return true when this keyword is not an actual keyword in source code.
+         * The only case is "DEFAULT."
+         */
+        public boolean isPseudoKeyword() {
+            return pseudoKeyword;
+        }
+    }
+
+    private Keyword keyword;
+
+    public Modifier() {
+        this(Keyword.PUBLIC);
+    }
+
+    @AllFieldsConstructor
+    public Modifier(Keyword keyword) {
+        this(null, keyword);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public Modifier(TokenRange tokenRange, Keyword keyword) {
+        super(tokenRange);
+        setKeyword(keyword);
+        customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Keyword getKeyword() {
+        return keyword;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Modifier setKeyword(final Keyword keyword) {
+        assertNotNull(keyword);
+        if (keyword == this.keyword) {
+            return (Modifier) this;
+        }
+        notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
+        this.keyword = keyword;
+        return this;
+    }
+
+    /**
+     * Utility method that instantiaties "Modifier"s for the keywords,
+     * and puts them in a NodeList.
+     */
+    public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
+        return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public Modifier clone() {
+        return (Modifier) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ModifierMetaModel getMetaModel() {
+        return JavaParserMetaModel.modifierMetaModel;
     }
 }

@@ -13,11 +13,15 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.javaparser.JavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.FINAL;
-import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
@@ -50,7 +54,7 @@ public class PropertyGenerator extends NodeGenerator {
             return;
         }
 
-        final MethodDeclaration setter = new MethodDeclaration(EnumSet.of(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
+        final MethodDeclaration setter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             setter.setType(parseType("T"));
         }
@@ -90,7 +94,7 @@ public class PropertyGenerator extends NodeGenerator {
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
-        final MethodDeclaration getter = new MethodDeclaration(EnumSet.of(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
+        final MethodDeclaration getter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
         if (property.isOptional()) {

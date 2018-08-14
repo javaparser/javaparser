@@ -53,20 +53,20 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     private SimpleName name;
 
-    private EnumSet<Modifier> modifiers;
+    private NodeList<Modifier> modifiers;
 
     private NodeList<BodyDeclaration<?>> members;
 
     public TypeDeclaration() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>());
+        this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
-    public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public TypeDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, members);
     }
 
@@ -74,7 +74,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypeDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setName(name);
@@ -105,7 +105,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -126,13 +126,16 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setModifiers(final EnumSet<Modifier> modifiers) {
+    public T setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
         return (T) this;
     }
 
@@ -164,6 +167,12 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) == node) {
                 members.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
@@ -212,6 +221,12 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) == node) {
                 members.set(i, (BodyDeclaration) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
