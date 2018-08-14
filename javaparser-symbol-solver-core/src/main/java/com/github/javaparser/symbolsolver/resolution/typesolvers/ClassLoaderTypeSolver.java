@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2016-2018 The JavaParser Team.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import java.util.Optional;
 
 /**
- * This TypeSolver wraps a ClassLoader. It can solve all types that the given ClassLoader can solve.
+ * This TypeSolver wraps a ClassLoader. It can solve all types that the given ClassLoader can load.
  * This is intended to be used with custom classloaders. To support typical cases based on reflection
  * just use the ReflectionTypeSolver
  *
