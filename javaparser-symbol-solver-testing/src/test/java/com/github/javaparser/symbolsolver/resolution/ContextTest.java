@@ -16,37 +16,39 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -471,6 +473,183 @@ public class ContextTest extends AbstractTest {
         assertEquals("overloaded", ref.getName());
         assertEquals(1, ref.getNoParams());
         assertEquals("java.lang.Object", ref.getParamTypes().get(0).describe());
+    }
+
+    private <PS extends Node> PS parse(String code, ParseStart<PS> parseStart) {
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
+        ParseResult<PS> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
+        if (!parseResult.isSuccessful()) {
+            parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));
+        }
+        assertTrue(parseResult.isSuccessful());
+        PS root = parseResult.getResult().get();
+        return root;
+    }
+
+    @Test
+    public void localVariableDeclarationInScope() {
+        String name = "a";
+        CompilationUnit cu = parse("class A { void foo() {\n" +
+                "SomeClass a; a.aField;" + "\n" +
+                "} }", ParseStart.COMPILATION_UNIT);
+
+        // The block statement expose to the 2nd statement the local var
+        BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
+        Context context1 = JavaParserFactory.getContext(blockStmt, typeSolver);
+        assertEquals(1, context1.localVariablesExposedToChild(blockStmt.getStatement(1)).size());
+
+        Node nameNode = cu.findAll(NameExpr.class).get(0);
+        Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+        assertEquals(true, context.localVariableDeclarationInScope(name).isPresent());
+    }
+
+    //
+    // Testing JLS 6.3 Scope of a Declaration
+    //
+
+    // The scope of a formal parameter of a method (§8.4.1), constructor (§8.8.1), or lambda expression (§15.27) is the
+    // entire body of the method, constructor, or lambda expression.
+
+    private void assertNoParamsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 0, "the element is exposed and it should not");
+    }
+
+    private void assertOneParamExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfParamsExposedToChildInContextNamed(parent, child, paramName, 1, "the element is not exposed as expected");
+    }
+
+    private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
+                                                                  int expectedNumber, String message) {
+        assertEquals(message, expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
+                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+    }
+
+    private void assertNoVarsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfVarsExposedToChildInContextNamed(parent, child, paramName, 0, "the element is exposed and it should not");
+    }
+
+    private void assertOneVarExposedToChildInContextNamed(Node parent, Node child, String paramName) {
+        assertNumberOfVarsExposedToChildInContextNamed(parent, child, paramName, 1, "the element is not exposed as expected");
+    }
+
+    private void assertNumberOfVarsExposedToChildInContextNamed(Node parent, Node child, String paramName,
+                                                                  int expectedNumber, String message) {
+        List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .localVariablesExposedToChild(child);
+        assertEquals(message, expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+    }
+
+    @Test
+    public void parametersExposedToChildForMethod() {
+        MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
+                ParseStart.CLASS_BODY).asMethodDeclaration();
+        assertOneParamExposedToChildInContextNamed(method, method.getBody().get(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(method, method.getType(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(method, method.getParameter(0), "myParam");
+    }
+
+    @Test
+    public void parametersExposedToChildForConstructor() {
+        ConstructorDeclaration constructor = parse("Foo(int myParam) { aCall(); }",
+                ParseStart.CLASS_BODY).asConstructorDeclaration();
+        assertOneParamExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(constructor, constructor.getParameter(0), "myParam");
+    }
+
+    @Test
+    public void parametersExposedToChildForLambda() {
+        LambdaExpr lambda = (LambdaExpr)parse("Object myLambda = (myParam) -> myParam * 2;",
+                ParseStart.STATEMENT).asExpressionStmt().getExpression().asVariableDeclarationExpr()
+                .getVariables().get(0).getInitializer().get();
+        assertOneParamExposedToChildInContextNamed(lambda, lambda.getBody(), "myParam");
+        assertNoParamsExposedToChildInContextNamed(lambda, lambda.getParameter(0), "myParam");
+    }
+
+    // The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
+    // appears, starting with its own initializer and including any further declarators to the right in the local
+    // variable declaration statement.
+
+    @Test
+    public void localVariablesExposedToChildWithinABlock() {
+        BlockStmt blockStmt = parse("{ preStatement(); int a = 1, b = 2; otherStatement(); }",
+                ParseStart.STATEMENT).asBlockStmt();
+        assertNoVarsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "a");
+        assertNoVarsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "b");
+        assertOneVarExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "a");
+        assertOneVarExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(2), "b");
+
+        VariableDeclarationExpr varDecl = blockStmt.getStatement(1).asExpressionStmt().getExpression()
+                .asVariableDeclarationExpr();
+        VariableDeclarator varA = varDecl.getVariables().get(0);
+        VariableDeclarator varB = varDecl.getVariables().get(1);
+        assertOneVarExposedToChildInContextNamed(varA,
+                varA.getInitializer().get(), "a");
+        assertOneVarExposedToChildInContextNamed(varDecl,
+                varB, "a");
+        assertNoVarsExposedToChildInContextNamed(varDecl,
+                varA, "b");
+    }
+
+    // The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all of the following:
+    // * Its own initializer
+    // * Any further declarators to the right in the ForInit part of the for statement
+    // * The Expression and ForUpdate parts of the for statement
+    // * The contained Statement
+
+    @Test
+    public void localVariablesExposedToChildWithinForStmt() {
+        ForStmt forStmt = parse("for (int i=0, j=1;i<10;i++) { body(); }",
+                ParseStart.STATEMENT).asForStmt();
+        VariableDeclarationExpr initializations = forStmt.getInitialization().get(0).asVariableDeclarationExpr();
+        assertOneVarExposedToChildInContextNamed(initializations,
+                initializations.getVariable(1),
+                "i");
+        assertOneVarExposedToChildInContextNamed(forStmt,
+                forStmt.getCompare().get(),
+                "i");
+        assertOneVarExposedToChildInContextNamed(forStmt,
+                forStmt.getUpdate().get(0),
+                "i");
+        assertOneVarExposedToChildInContextNamed(forStmt,
+                forStmt.getBody(),
+                "i");
+    }
+
+    // The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
+    // the contained Statement.
+
+    @Test
+    public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
+        ForeachStmt foreachStmt = parse("for (int i: myList) { body(); }",
+                ParseStart.STATEMENT).asForeachStmt();
+        assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
+        assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
+        assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");
+    }
+
+    // The scope of a parameter of an exception handler that is declared in a catch clause of a try statement (§14.20)
+    // is the entire block associated with the catch.
+
+    @Test
+    public void parametersExposedToChildWithinTryStatement() {
+        CatchClause catchClause = parse("try {  } catch(Exception e) { body(); }",
+                ParseStart.STATEMENT).asTryStmt().getCatchClauses().get(0);
+        assertOneParamExposedToChildInContextNamed(catchClause, catchClause.getBody(), "e");
+        assertNoParamsExposedToChildInContextNamed(catchClause, catchClause.getParameter(), "e");
+    }
+
+    // The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
+    // from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
+    // associated with the try-with-resources statement.
+
+    @Test
+    public void localVariablesExposedToChildWithinTryWithResourcesStatement() {
+        TryStmt stmt = parse("try (Object res1 = foo(); Object res2 = foo()) { body(); }",
+                ParseStart.STATEMENT).asTryStmt();
+        assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
+        assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
+        assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
     }
 
 }

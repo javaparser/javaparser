@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -25,10 +26,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -38,7 +36,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -265,6 +266,24 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
         return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+    }
+
+    @Override
+    public List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+        List<ResolvedFieldDeclaration> res = new LinkedList<>();
+        // Consider the static imports for static fields
+        for (ImportDeclaration importDeclaration : wrappedNode.getImports()) {
+            if (importDeclaration.isStatic()) {
+                Name typeNameAsNode = importDeclaration.isAsterisk() ? importDeclaration.getName() : importDeclaration.getName().getQualifier().get();
+                String typeName = typeNameAsNode.asString();
+                ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(typeName);
+                res.addAll(typeDeclaration.getAllFields().stream()
+                        .filter(f -> f.isStatic())
+                        .filter(f -> importDeclaration.isAsterisk() || importDeclaration.getName().getIdentifier().equals(f.getName()))
+                        .collect(Collectors.toList()));
+            }
+        }
+        return res;
     }
 
     ///
