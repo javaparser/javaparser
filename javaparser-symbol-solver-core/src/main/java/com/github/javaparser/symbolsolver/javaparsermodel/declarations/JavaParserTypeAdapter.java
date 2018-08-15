@@ -41,15 +41,15 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     }
 
     public String getPackageName() {
-        return Helper.getPackageName(wrappedNode);
+        return AstResolutionUtils.getPackageName(wrappedNode);
     }
 
     public String getClassName() {
-        return Helper.getClassName("", wrappedNode);
+        return AstResolutionUtils.getClassName("", wrappedNode);
     }
 
     public String getQualifiedName() {
-        String containerName = Helper.containerName(getParentNode(wrappedNode));
+        String containerName = AstResolutionUtils.containerName(getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         } else {

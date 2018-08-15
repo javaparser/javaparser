@@ -31,7 +31,7 @@ public class Issue144 extends AbstractResolutionTest {
         typeSolver = new JavaParserTypeSolver(srcDir);
     }
 
-    @Test(expected = UnsolvedSymbolException.class)
+    @Test
     public void issue144() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
@@ -40,7 +40,9 @@ public class Issue144 extends AbstractResolutionTest {
         Expression firstParameter = methodCallExpr.getArgument(0);
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        javaParserFacade.solve(firstParameter).isSolved();
+        assertEquals(true, javaParserFacade.solve(firstParameter).isSolved());
+        assertEquals(true, javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().isField());
+        assertEquals("hw", javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().getName());
     }
 
     @Test
