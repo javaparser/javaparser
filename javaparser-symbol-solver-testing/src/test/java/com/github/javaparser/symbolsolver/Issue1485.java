@@ -17,12 +17,12 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class Issue1485 {
+public class Issue1485 extends AbstractTest {
 
     @Test
     public void issue1485withoutSpecifyingJARs() throws IOException {
-        File dir = new File("src/test/resources/issue1485");
-        File file = new File("src/test/resources/issue1485/Complex.java");
+        File dir = adaptPath("src/test/resources/issue1485").toFile();
+        File file = adaptPath("src/test/resources/issue1485/Complex.java").toFile();
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
@@ -35,6 +35,6 @@ public class Issue1485 {
 
         MethodCallExpr methodCallExpr = unit.findFirst(MethodCallExpr.class, m -> m.getName().getIdentifier().equals("println")).get();
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
-        assertEquals("java.io.PrintStream.println(double)", resolvedMethodDeclaration.getQualifiedSignature());
+        assertEquals("java.io.PrintStream.println(java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 }
