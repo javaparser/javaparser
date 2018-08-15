@@ -40,10 +40,18 @@ public enum NameCategory {
         this.needDisambiguation = needDisambiguation;
     }
 
+    /**
+     * Certain category include two or more unambiguous categories.
+     * These ambiguous categories are recognized solely through a syntactic process. In order to disambiguate them
+     * a semantic process (i.e., consider the symbols which are actually visible in a given context) is needed.
+     */
     public boolean isNeedingDisambiguation() {
         return needDisambiguation;
     }
 
+    /**
+     * Is the given name acceptable for the given category?
+     */
     public boolean isNameAcceptable(String name) {
         if (this == TYPE_NAME && name.equals("var")) {
             return false;
