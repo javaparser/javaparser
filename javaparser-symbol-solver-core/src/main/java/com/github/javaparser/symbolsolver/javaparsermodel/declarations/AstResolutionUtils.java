@@ -33,18 +33,10 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-class Helper {
+class AstResolutionUtils {
 
-    public static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
-        if (modifiers.contains(Modifier.PRIVATE)) {
-            return AccessSpecifier.PRIVATE;
-        } else if (modifiers.contains(Modifier.PROTECTED)) {
-            return AccessSpecifier.PROTECTED;
-        } else if (modifiers.contains(Modifier.PUBLIC)) {
-            return AccessSpecifier.PUBLIC;
-        } else {
-            return AccessSpecifier.DEFAULT;
-        }
+    static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
+        return Modifier.getAccessSpecifier(modifiers);
     }
 
     static String containerName(Node container) {

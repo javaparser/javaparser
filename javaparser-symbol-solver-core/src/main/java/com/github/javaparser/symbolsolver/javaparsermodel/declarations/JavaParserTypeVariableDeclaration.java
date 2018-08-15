@@ -56,12 +56,12 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     @Override
     public String getPackageName() {
-        return Helper.getPackageName(wrappedNode);
+        return AstResolutionUtils.getPackageName(wrappedNode);
     }
 
     @Override
     public String getClassName() {
-        return Helper.getClassName("", wrappedNode);
+        return AstResolutionUtils.getClassName("", wrappedNode);
     }
 
     @Override

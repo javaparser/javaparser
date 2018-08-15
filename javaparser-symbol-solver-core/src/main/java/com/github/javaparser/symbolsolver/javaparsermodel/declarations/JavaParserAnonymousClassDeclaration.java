@@ -1,7 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -161,17 +159,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public String getPackageName() {
-    return Helper.getPackageName(wrappedNode);
+    return AstResolutionUtils.getPackageName(wrappedNode);
   }
 
   @Override
   public String getClassName() {
-    return Helper.getClassName("", wrappedNode);
+    return AstResolutionUtils.getClassName("", wrappedNode);
   }
 
   @Override
   public String getQualifiedName() {
-    String containerName = Helper.containerName(wrappedNode.getParentNode().orElse(null));
+    String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
     if (containerName.isEmpty()) {
       return getName();
     } else {
