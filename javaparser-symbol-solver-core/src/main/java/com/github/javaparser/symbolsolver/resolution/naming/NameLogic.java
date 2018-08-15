@@ -64,7 +64,7 @@ public class NameLogic {
         }
     }
 
-    public static Node getQualifier(Node node) {
+    private static Node getQualifier(Node node) {
         if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
             return fieldAccessExpr.getScope();
@@ -72,7 +72,7 @@ public class NameLogic {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
-    public static Node getRightMostName(Node node) {
+    private static Node getRightMostName(Node node) {
         if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
             return fieldAccessExpr.getName();
