@@ -96,7 +96,7 @@ class Helper {
             SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
                     .solveType(annotationExpr.getName().getId(), typeSolver);
             if (ref.isSolved()) {
-                if (ref.getCorrespondingDeclaration().getQualifiedName().endsWith(canonicalName)) {
+                if (ref.getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
                     return true;
                 }
             } else {
