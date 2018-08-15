@@ -197,12 +197,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        for (AnnotationExpr annotationExpr : wrappedNode.getAnnotations()) {
-            if (solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
-                return true;
-            }
-        }
-        return false;
+        return Helper.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override

@@ -17,6 +17,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -81,5 +88,21 @@ class Helper {
             return getClassName(base, container.getParentNode().orElse(null));
         }
         return base;
+    }
+
+    static boolean hasDirectlyAnnotation(NodeWithAnnotations<?> nodeWithAnnotations, TypeSolver typeSolver,
+                                         String canonicalName) {
+        for (AnnotationExpr annotationExpr : nodeWithAnnotations.getAnnotations()) {
+            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
+                    .solveType(annotationExpr.getName().getId(), typeSolver);
+            if (ref.isSolved()) {
+                if (ref.getCorrespondingDeclaration().getQualifiedName().endsWith(canonicalName)) {
+                    return true;
+                }
+            } else {
+                throw new UnsolvedSymbolException(annotationExpr.getName().getId());
+            }
+        }
+        return false;
     }
 }
