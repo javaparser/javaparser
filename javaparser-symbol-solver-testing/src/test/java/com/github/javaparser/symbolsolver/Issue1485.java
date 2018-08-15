@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
-public class Issue1485 extends AbstractTest {
+public class Issue1485 extends AbstractSymbolResolutionTest {
 
     @Test
     public void issue1485withoutSpecifyingJARs() throws IOException {

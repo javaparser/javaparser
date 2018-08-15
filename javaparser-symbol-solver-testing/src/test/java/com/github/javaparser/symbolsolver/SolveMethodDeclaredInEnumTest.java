@@ -40,7 +40,7 @@ import java.nio.file.Path;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class SolveMethodDeclaredInEnumTest extends AbstractTest {
+public class SolveMethodDeclaredInEnumTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void methodDeclaredInEnum_enumFromJar() throws IOException {
