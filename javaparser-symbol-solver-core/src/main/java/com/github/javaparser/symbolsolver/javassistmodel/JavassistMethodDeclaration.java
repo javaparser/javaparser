@@ -131,12 +131,14 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
             if ((ctMethod.getModifiers() & javassist.Modifier.VARARGS) > 0) {
                 variadic = i == (ctMethod.getParameterTypes().length - 1);
             }
+            String paramName = JavassistUtils.extractParameterName(ctMethod, i);
             if (ctMethod.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
-                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType, typeSolver, this), typeSolver, variadic);
+                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType,
+                        typeSolver, this), typeSolver, variadic, paramName);
             } else {
-                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic);
+                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic, paramName);
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
