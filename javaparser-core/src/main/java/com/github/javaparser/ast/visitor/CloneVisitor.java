@@ -830,12 +830,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(final ForeachStmt n, final Object arg) {
+    public Visitable visit(final ForEachStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression iterable = cloneNode(n.getIterable(), arg);
         VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ForeachStmt r = new ForeachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
+        ForEachStmt r = new ForEachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
         r.setComment(comment);
         return r;
     }

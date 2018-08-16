@@ -223,7 +223,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ForeachStmt n, final Void arg) {
+    public Integer visit(final ForEachStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getIterable().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 

@@ -364,7 +364,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(ForeachStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ForEachStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
