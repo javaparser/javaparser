@@ -50,20 +50,26 @@ public interface HasParentNode<T> extends Observable {
     Node getParentNodeForChildren();
 
     /**
-     * Get the ancestor of the node having the given type, or null if no ancestor of the given type is found.
-     *
-     * @deprecated use findParent
+     * @deprecated use findAncestor
      */
     @Deprecated
     default <N> Optional<N> getAncestorOfType(Class<N> classType) {
-        return findParent(classType);
+        return findAncestor(classType);
+    }
+
+    /**
+     * @deprecated use findAncestor
+     */
+    @Deprecated
+    default <N> Optional<N> findParent(Class<N> type) {
+        return findAncestor(type);
     }
 
     /**
      * Walks the parents of this node, returning the first node of type "type" or empty() if none is found.
      * Also works for other types, like the With... interfaces.
      */
-    default <N> Optional<N> findParent(Class<N> type) {
+    default <N> Optional<N> findAncestor(Class<N> type) {
         Optional<Node> possibleParent = getParentNode();
         while (possibleParent.isPresent()) {
             Node parent = possibleParent.get();

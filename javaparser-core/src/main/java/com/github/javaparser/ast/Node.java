@@ -51,7 +51,7 @@ import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -412,7 +412,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        findParent(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
+        findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
     }
 
     /**
