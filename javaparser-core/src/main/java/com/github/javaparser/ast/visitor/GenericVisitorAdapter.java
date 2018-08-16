@@ -1880,7 +1880,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getModuleStmts().accept(this, arg);
+            result = n.getDirectives().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1899,7 +1899,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ModuleRequiresStmt n, final A arg) {
+    public R visit(final ModuleRequiresDirective n, final A arg) {
         R result;
         {
             result = n.getName().accept(this, arg);
@@ -1916,7 +1916,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ModuleExportsStmt n, final A arg) {
+    public R visit(final ModuleExportsDirective n, final A arg) {
         R result;
         {
             result = n.getModuleNames().accept(this, arg);
@@ -1938,7 +1938,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ModuleProvidesStmt n, final A arg) {
+    public R visit(final ModuleProvidesDirective n, final A arg) {
         R result;
         {
             result = n.getName().accept(this, arg);
@@ -1960,7 +1960,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ModuleUsesStmt n, final A arg) {
+    public R visit(final ModuleUsesDirective n, final A arg) {
         R result;
         {
             result = n.getName().accept(this, arg);
@@ -1977,7 +1977,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ModuleOpensStmt n, final A arg) {
+    public R visit(final ModuleOpensDirective n, final A arg) {
         R result;
         {
             result = n.getModuleNames().accept(this, arg);

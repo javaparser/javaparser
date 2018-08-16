@@ -854,13 +854,13 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.LBRACE),
                 newline(),
                 indent(),
-                list(ObservableProperty.MODULE_STMTS),
+                list(ObservableProperty.DIRECTIVES),
                 unindent(),
                 token(GeneratedJavaParserConstants.RBRACE),
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(ModuleExportsStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ModuleExportsDirective.class, sequence(
                 token(GeneratedJavaParserConstants.EXPORTS),
                 space(),
                 child(ObservableProperty.NAME),
@@ -872,7 +872,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(ModuleOpensStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ModuleOpensDirective.class, sequence(
                 token(GeneratedJavaParserConstants.OPENS),
                 space(),
                 child(ObservableProperty.NAME),
@@ -884,7 +884,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(ModuleProvidesStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ModuleProvidesDirective.class, sequence(
                 token(GeneratedJavaParserConstants.PROVIDES),
                 space(),
                 child(ObservableProperty.NAME),
@@ -896,7 +896,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(ModuleRequiresStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ModuleRequiresDirective.class, sequence(
                 token(GeneratedJavaParserConstants.REQUIRES),
                 space(),
                 modifiers(),
@@ -905,7 +905,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(ModuleUsesStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ModuleUsesDirective.class, sequence(
                 token(GeneratedJavaParserConstants.USES),
                 space(),
                 child(ObservableProperty.NAME),

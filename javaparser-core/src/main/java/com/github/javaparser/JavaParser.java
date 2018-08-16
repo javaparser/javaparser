@@ -30,7 +30,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
-import com.github.javaparser.ast.modules.ModuleStmt;
+import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -547,14 +547,14 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a module directive and returns it as a ModuleStmt.
+     * Parses a module directive and returns it as a ModuleDirective.
      *
      * @param moduleDirective a directive like "opens C;"
      * @return the AST for the module directive
      * @throws ParseProblemException if the source code has parser errors
-     * @see ModuleStmt
+     * @see ModuleDirective
      */
-    public static ModuleStmt parseModuleDirective(String moduleDirective) {
+    public static ModuleDirective parseModuleDirective(String moduleDirective) {
         return simplifiedParse(MODULE_DIRECTIVE, provider(moduleDirective));
     }
 
