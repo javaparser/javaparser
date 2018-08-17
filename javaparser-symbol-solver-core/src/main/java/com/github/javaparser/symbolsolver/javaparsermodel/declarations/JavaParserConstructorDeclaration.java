@@ -78,7 +78,7 @@ public class JavaParserConstructorDeclaration implements ResolvedConstructorDecl
     
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override

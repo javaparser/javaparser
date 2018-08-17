@@ -11,18 +11,18 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
-public class Issue1485 {
+public class Issue1485 extends AbstractSymbolResolutionTest {
 
     @Test
     public void issue1485withoutSpecifyingJARs() throws IOException {
-        File dir = new File("src/test/resources/issue1485");
-        File file = new File("src/test/resources/issue1485/Complex.java");
+        Path dir = adaptPath("src/test/resources/issue1485");
+        Path file = adaptPath("src/test/resources/issue1485/Complex.java");
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
@@ -31,10 +31,11 @@ public class Issue1485 {
         JavaParser javaParser = new JavaParser();
         javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
-        CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(file))).getResult().get();
+        CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
+                new StreamProvider(Files.newInputStream(file))).getResult().get();
 
         MethodCallExpr methodCallExpr = unit.findFirst(MethodCallExpr.class, m -> m.getName().getIdentifier().equals("println")).get();
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
-        assertEquals("java.io.PrintStream.println(double)", resolvedMethodDeclaration.getQualifiedSignature());
+        assertEquals("java.io.PrintStream.println(java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 }
