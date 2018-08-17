@@ -59,7 +59,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
-import javax.annotation.Generated;
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;

@@ -44,19 +44,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.FieldDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static

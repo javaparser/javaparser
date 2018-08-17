@@ -6,18 +6,16 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleProvidesStmtMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A provides directive in module-info.java. <code>provides X.Y with Z1.Z2, Z3.Z4;</code>
@@ -148,6 +146,7 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithName
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
