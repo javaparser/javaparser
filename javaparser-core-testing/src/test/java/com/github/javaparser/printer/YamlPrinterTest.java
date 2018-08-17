@@ -21,14 +21,20 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static org.junit.Assert.assertEquals;
 
+import com.github.javaparser.*;
+import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
 
-public class YamlPrinterTest {
+public class YamlPrinterTest implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
 
     @Test
     public void testWithType() {
@@ -44,7 +50,7 @@ public class YamlPrinterTest {
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("x(1,1)");
+        Expression expression = parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -61,7 +67,7 @@ public class YamlPrinterTest {
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(false);
-        Expression expression = JavaParser.parseExpression("1+1");
+        Expression expression = parseExpression("1+1");
         String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -74,7 +80,7 @@ public class YamlPrinterTest {
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
+        Expression expression = parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -87,7 +93,7 @@ public class YamlPrinterTest {
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
+        Expression expression = parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }

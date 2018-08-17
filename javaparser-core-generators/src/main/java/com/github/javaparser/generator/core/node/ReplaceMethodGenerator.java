@@ -10,9 +10,7 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.capitalize;
 
 public class ReplaceMethodGenerator extends NodeGenerator {
     public ReplaceMethodGenerator(SourceRoot sourceRoot) {

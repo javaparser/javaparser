@@ -21,17 +21,25 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class GeneratedJavaParserTokenManagerTest {
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+
+public class GeneratedJavaParserTokenManagerTest implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
+
     private String makeFilename(String sampleName) {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
     @Test
     public void issue1003() throws IOException {
-        JavaParser.parseResource(makeFilename("issue1003"));
+        parseResource(makeFilename("issue1003"));
     }
 }

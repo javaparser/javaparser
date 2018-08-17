@@ -43,6 +43,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
@@ -189,7 +190,7 @@ public class SourceFileInfoExtractor {
                 if (printFileName) {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
-                CompilationUnit cu = JavaParser.parse(file);
+                CompilationUnit cu = getInternalParser().parse(file);
                 List<Node> nodes = collectAllNodes(cu);
                 nodes.forEach(n -> solve(n));
             }
@@ -207,7 +208,7 @@ public class SourceFileInfoExtractor {
                 if (printFileName) {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
-                CompilationUnit cu = JavaParser.parse(file);
+                CompilationUnit cu = getInternalParser().parse(file);
                 solveMethodCalls(cu);
             }
         }

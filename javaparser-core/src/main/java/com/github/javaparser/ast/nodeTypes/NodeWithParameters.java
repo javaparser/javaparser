@@ -29,7 +29,7 @@ import com.github.javaparser.ast.type.Type;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static java.util.stream.Collectors.toSet;
 
 public interface NodeWithParameters<N extends Node> {
@@ -55,7 +55,7 @@ public interface NodeWithParameters<N extends Node> {
 
     default N addParameter(Class<?> paramClass, String name) {
         tryAddImportToParentCompilationUnit(paramClass);
-        return addParameter(parseType(paramClass.getSimpleName()), name);
+        return addParameter(getInternalParser().parseType(paramClass.getSimpleName()), name);
     }
 
     /**
@@ -65,7 +65,7 @@ public interface NodeWithParameters<N extends Node> {
      * @param name the name of the parameter
      */
     default N addParameter(String className, String name) {
-        return addParameter(parseType(className), name);
+        return addParameter(getInternalParser().parseType(className), name);
     }
 
     @SuppressWarnings("unchecked")
@@ -80,7 +80,7 @@ public interface NodeWithParameters<N extends Node> {
 
     default Parameter addAndGetParameter(Class<?> paramClass, String name) {
         tryAddImportToParentCompilationUnit(paramClass);
-        return addAndGetParameter(parseType(paramClass.getSimpleName()), name);
+        return addAndGetParameter(getInternalParser().parseType(paramClass.getSimpleName()), name);
     }
 
     /**
@@ -91,7 +91,7 @@ public interface NodeWithParameters<N extends Node> {
      * @return the {@link Parameter} created
      */
     default Parameter addAndGetParameter(String className, String name) {
-        return addAndGetParameter(parseType(className), name);
+        return addAndGetParameter(getInternalParser().parseType(className), name);
     }
 
     default Parameter addAndGetParameter(Parameter parameter) {

@@ -43,11 +43,11 @@ class JavadocParser {
     private static String BLOCK_TAG_PREFIX = "@";
     private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
-    public static Javadoc parse(JavadocComment comment) {
+    public Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
     }
 
-    public static Javadoc parse(String commentContent) {
+    public Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, EOL));
         int indexOfFirstBlockTag = cleanLines.stream()
                 .filter(JavadocParser::isABlockLine)
@@ -64,9 +64,7 @@ class JavadocParser {
 
             //Combine cleaned lines, but only starting with the first block tag till the end
             //In this combined string it is easier to handle multiple lines which actually belong together
-            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
-                .stream()
-                .collect(Collectors.joining(EOL));
+            String tagBlock = String.join(EOL, cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()));
 
             //Split up the entire tag back again, considering now that some lines belong to the same block tag.
             //The pattern splits the block at each new line starting with the '@' symbol, thus the symbol

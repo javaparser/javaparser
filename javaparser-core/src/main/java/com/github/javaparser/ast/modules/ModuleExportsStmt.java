@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.modules;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -11,7 +12,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleExportsStmtMetaModel;
-import static com.github.javaparser.JavaParser.parseName;
+
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
@@ -165,7 +167,7 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     }
 
     public ModuleExportsStmt addModuleName(String name) {
-        moduleNames.add(parseName(name));
+        moduleNames.add(getInternalParser().parseName(name));
         return this;
     }
 }

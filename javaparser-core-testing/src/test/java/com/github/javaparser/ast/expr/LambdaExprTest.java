@@ -4,19 +4,19 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static org.junit.Assert.*;
 
 public class LambdaExprTest {
     @Test
     public void lambdaRange1(){
-        Expression expression = parseExpression("x -> y");
+        Expression expression = getInternalParser().parseExpression("x -> y");
         assertRange("x", "y", expression);
     }
 
     @Test
     public void lambdaRange2(){
-        Expression expression = parseExpression("(x) -> y");
+        Expression expression = getInternalParser().parseExpression("(x) -> y");
         assertRange("(", "y", expression);
     }
 
@@ -28,13 +28,13 @@ public class LambdaExprTest {
 
     @Test
     public void getExpressionBody(){
-        LambdaExpr lambdaExpr = parseExpression("x -> y").asLambdaExpr();
+        LambdaExpr lambdaExpr = getInternalParser().parseExpression("x -> y").asLambdaExpr();
         assertEquals("Optional[y]", lambdaExpr.getExpressionBody().toString());
     }
 
     @Test
     public void getNoExpressionBody(){
-        LambdaExpr lambdaExpr = parseExpression("x -> {y;}").asLambdaExpr();
+        LambdaExpr lambdaExpr = getInternalParser().parseExpression("x -> {y;}").asLambdaExpr();
         assertEquals("Optional.empty", lambdaExpr.getExpressionBody().toString());
     }
 

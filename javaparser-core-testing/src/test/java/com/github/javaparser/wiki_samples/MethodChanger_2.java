@@ -39,7 +39,7 @@ public class MethodChanger_2 {
         FileInputStream in = new FileInputStream("test.java");
         
         // parse the file
-        CompilationUnit cu = JavaParser.parse(in);
+        CompilationUnit cu = new JavaParser().parse(in);
 
         // change the methods names and parameters
         changeMethods(cu);

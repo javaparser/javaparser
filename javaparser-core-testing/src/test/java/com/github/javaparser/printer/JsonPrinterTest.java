@@ -1,11 +1,13 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.*;
 
@@ -15,7 +17,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.io.BufferedWriter;
 
-public class JsonPrinterTest {
+public class JsonPrinterTest implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
+
     @Test
     public void testWithType() {
         JsonPrinter jsonPrinter = new JsonPrinter(true);

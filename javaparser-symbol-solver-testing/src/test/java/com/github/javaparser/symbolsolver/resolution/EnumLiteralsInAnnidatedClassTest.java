@@ -29,10 +29,9 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 4);
 
         assertTrue(fae.isPresent());
@@ -51,10 +50,9 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 5);
 
         assertTrue(fae.isPresent());
@@ -73,10 +71,9 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 6);
 
         assertTrue(fae.isPresent());
@@ -95,11 +92,9 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
-
+        CompilationUnit cu = parser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 7);
 
         assertTrue(fae.isPresent());

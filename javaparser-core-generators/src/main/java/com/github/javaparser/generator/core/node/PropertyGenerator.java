@@ -15,7 +15,6 @@ import com.github.javaparser.utils.SourceRoot;
 
 import java.util.*;
 
-import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;

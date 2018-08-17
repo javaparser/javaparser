@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
@@ -32,16 +33,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import static com.github.javaparser.JavaParser.parseType;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.metamodel.OptionalProperty;
+
+import javax.annotation.Generated;
+import java.util.Optional;
 import java.util.function.Consumer;
+
+import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -188,11 +187,11 @@ public final class ArrayCreationExpr extends Expression {
      */
     public ArrayCreationExpr setElementType(Class<?> typeClass) {
         tryAddImportToParentCompilationUnit(typeClass);
-        return setElementType(parseType(typeClass.getSimpleName()));
+        return setElementType(getInternalParser().parseType(typeClass.getSimpleName()));
     }
 
     public ArrayCreationExpr setElementType(final String type) {
-        return setElementType(parseType(type));
+        return setElementType(getInternalParser().parseType(type));
     }
 
     @Override

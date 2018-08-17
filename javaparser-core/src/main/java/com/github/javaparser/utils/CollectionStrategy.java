@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
 
+import static com.github.javaparser.JavaParser.getInternalParser;
+
 /**
  * A strategy for discovering the structure of a project.
  * Implementations could read a pom.xml, a Gradle build file, a makefile...
@@ -20,7 +22,7 @@ public interface CollectionStrategy {
 
     default Optional<Path> getRoot(Path file) throws FileNotFoundException {
         try {
-            return JavaParser.parse(file.toFile()).getStorage()
+            return getInternalParser().parse(file.toFile()).getStorage()
                     .map(CompilationUnit.Storage::getSourceRoot);
         } catch (ParseProblemException e) {
             Log.info("Problem parsing file %s", file);

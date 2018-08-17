@@ -73,7 +73,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(methodCallExpr);
         assertEquals("java.lang.Throwable.getMessage()", methodUsage.getQualifiedSignature());
     }
@@ -95,7 +95,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertEquals(true, symbolReference.isSolved());
@@ -117,7 +117,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        public X x = null;\n" +
                 "    }\n" +
                 "}";
-        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(JavaParser.parse(code), FieldDeclaration.class);
+        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(parse(code), FieldDeclaration.class);
         Type jpType = fieldDeclaration.getCommonType();
         ResolvedType jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
         assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
@@ -129,7 +129,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         String code = "import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {\n" +
                 "    sc.nextLine();\n" +
                 "} } }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine").get();
         Expression scope = methodCallExpr.getScope().get();
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);

@@ -34,6 +34,8 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+import static com.github.javaparser.JavaParser.getInternalParser;
+
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
  *
@@ -72,7 +74,7 @@ public final class JavadocComment extends Comment {
     }
 
     public Javadoc parse() {
-        return JavaParser.parseJavadoc(getContent());
+        return getInternalParser().parseJavadoc(getContent());
     }
 
     @Override

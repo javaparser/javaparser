@@ -24,7 +24,7 @@ public class Example {
                 "    }\n" +
                 "}";
         InputStream stream = new ByteArrayInputStream(code.getBytes("UTF-8"));
-        CompilationUnit cu = JavaParser.parse(stream);
+        CompilationUnit cu = getInternalParser().parse(stream);
 
     }
 

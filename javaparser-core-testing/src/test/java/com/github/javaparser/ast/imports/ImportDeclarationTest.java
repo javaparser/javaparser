@@ -21,37 +21,43 @@
 
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-public class ImportDeclarationTest {
+public class ImportDeclarationTest implements JavaParserSugar  {
     @Test
     public void singleTypeImportDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import a.b.c.X;");
+        ImportDeclaration i = parseImport("import a.b.c.X;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 
     @Test
     public void typeImportOnDemandDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import a.b.c.D.*;");
+        ImportDeclaration i = parseImport("import a.b.c.D.*;");
         assertEquals("a.b.c.D", i.getName().toString());
         assertEquals("D", i.getName().getIdentifier());
     }
 
     @Test
     public void singleStaticImportDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import static a.b.c.X.def;");
+        ImportDeclaration i = parseImport("import static a.b.c.X.def;");
         assertEquals("a.b.c.X", i.getName().getQualifier().get().asString());
         assertEquals("def", i.getName().getIdentifier());
     }
 
     @Test
     public void staticImportOnDemandDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import static a.b.c.X.*;");
+        ImportDeclaration i = parseImport("import static a.b.c.X.*;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
 }

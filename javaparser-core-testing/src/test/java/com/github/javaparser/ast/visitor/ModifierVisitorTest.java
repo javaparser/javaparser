@@ -30,7 +30,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
@@ -73,7 +73,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void binaryExprReturnsLeftExpressionWhenRightSideIsRemoved() {
-        Expression expression = parseExpression("1+2");
+        Expression expression = getInternalParser().parseExpression("1+2");
         Visitable result = expression.accept(new ModifierVisitor<Void>() {
             public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
                 if (integerLiteralExpr.getValue().equals("1")) {
@@ -87,7 +87,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void binaryExprReturnsRightExpressionWhenLeftSideIsRemoved() {
-        final Expression expression = parseExpression("1+2");
+        final Expression expression = getInternalParser().parseExpression("1+2");
         final Visitable result = expression.accept(new ModifierVisitor<Void>() {
             public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
                 if (integerLiteralExpr.getValue().equals("2")) {
@@ -101,7 +101,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void fieldDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("int x=1;");
+        final BodyDeclaration<?> bodyDeclaration = getInternalParser().parseBodyDeclaration("int x=1;");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {
@@ -114,7 +114,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void variableDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("void x() {int x=1;}");
+        final BodyDeclaration<?> bodyDeclaration = getInternalParser().parseBodyDeclaration("void x() {int x=1;}");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {

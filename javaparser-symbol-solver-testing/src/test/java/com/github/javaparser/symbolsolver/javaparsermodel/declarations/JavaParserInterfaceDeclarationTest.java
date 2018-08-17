@@ -16,9 +16,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -45,10 +46,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
 public class JavaParserInterfaceDeclarationTest extends AbstractTest {
-
     private TypeSolver typeSolver;
 
     @Before
@@ -846,9 +847,9 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
     @Test
     public void issue1528() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        configuration = configuration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        CompilationUnit compilationUnit = JavaParser.parse("public interface Foo extends Comparable { }");
+        CompilationUnit compilationUnit = parse("public interface Foo extends Comparable { }");
         ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
         ResolvedInterfaceDeclaration interfaceDeclaration = javaParserFacade.getTypeDeclaration(foo).asInterface();
 

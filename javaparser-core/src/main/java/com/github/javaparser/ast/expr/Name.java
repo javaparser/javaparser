@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import javax.annotation.Generated;
 import java.util.Optional;
+
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -125,12 +127,12 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
      *
      * @param qualifiedName qualified name
      * @return instanceof {@link Name}
-     * @deprecated use JavaParser.parseName instead
+     * @deprecated use getInternalParser().parseName instead
      */
     @Deprecated
     public static Name parse(String qualifiedName) {
         assertNonEmpty(qualifiedName);
-        return JavaParser.parseName(qualifiedName);
+        return getInternalParser().parseName(qualifiedName);
     }
 
     /**

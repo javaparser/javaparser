@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,19 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class JavaParserJsonSerializerTest {
+class JavaParserJsonSerializerTest implements JavaParserSugar  {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
+
+
     @Test
     void test() {
-        CompilationUnit cu = JavaParser.parse("class X{java.util.Y y;}");
+        CompilationUnit cu = parse("class X{java.util.Y y;}");
 
         String serialized = serialize(cu, false);
 

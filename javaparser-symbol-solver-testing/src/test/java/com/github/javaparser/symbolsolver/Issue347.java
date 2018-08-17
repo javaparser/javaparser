@@ -44,7 +44,7 @@ public class Issue347 extends AbstractResolutionTest{
                 "class UsingFoo {\n" +
                 "    Foo myFooField;\n" +
                 "}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(cu, FieldDeclaration.class);
         ResolvedType fieldType = javaParserFacade.getType(fieldDeclaration);
         assertEquals(true, fieldType.isReferenceType());

@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.MethodUsage;
@@ -484,7 +483,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     public void testGetAllGenericFields() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/GenericFields.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/GenericFields.java.txt"));
         JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
 
         assertEquals(3, classDeclaration.getAllFields().size());
@@ -841,7 +840,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     public void testHasDirectlyAnnotation() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/Annotations.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/Annotations.java.txt"));
 
         JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
         assertTrue(ca.hasDirectlyAnnotation("foo.bar.MyAnnotation"));
@@ -862,7 +861,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     public void testHasAnnotation() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/Annotations.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/Annotations.java.txt"));
 
         JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
         assertTrue(ca.hasAnnotation("foo.bar.MyAnnotation"));

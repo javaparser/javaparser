@@ -39,13 +39,13 @@ public class Issue343 extends AbstractResolutionTest{
 
     @Test(expected = IllegalStateException.class)
     public void toResolveDoubleWeNeedTheAST() {
-        getExpressionType(typeResolver, JavaParser.parseExpression("new Double[]{2.0d, 3.0d}[1]"));
+        getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]"));
     }
 
 
     @Test(expected = IllegalStateException.class)
     public void toResolveFloatWeNeedTheAST() {
-        getExpressionType(typeResolver, JavaParser.parseExpression("new Float[]{2.0d, 3.0d}"));
+        getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}"));
     }
 
     @Test
