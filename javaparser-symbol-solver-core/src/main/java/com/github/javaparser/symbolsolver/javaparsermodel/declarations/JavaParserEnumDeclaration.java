@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
@@ -102,7 +101,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -315,7 +314,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public AccessSpecifier accessSpecifier() {
-            return Helper.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
+            return AstResolutionUtils.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
         }
 
         @Override

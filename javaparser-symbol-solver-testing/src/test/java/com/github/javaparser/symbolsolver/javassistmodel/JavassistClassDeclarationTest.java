@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class JavassistClassDeclarationTest extends AbstractTest {
+public class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
