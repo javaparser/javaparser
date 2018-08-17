@@ -107,13 +107,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final EnumDeclaration n, final Object arg) {
-        NodeList<EnumConstantDeclaration> entries = cloneList(n.getConstants(), arg);
+        NodeList<EnumConstantDeclaration> constants = cloneList(n.getConstants(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        EnumDeclaration r = new EnumDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, name, implementedTypes, entries, members);
+        EnumDeclaration r = new EnumDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, name, implementedTypes, constants, members);
         r.setComment(comment);
         return r;
     }

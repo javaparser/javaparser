@@ -551,7 +551,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Register a new observer for the given node. Depending on the mode specified also descendants, existing
-     * and new, could be observed. For more details see <i>ObserverRegistrationMode</i>.
+     * and new, could be observed. For more details see <i>ObserverRegistrationMode</i>.CONSTANTS
      */
     public void register(AstObserver observer, ObserverRegistrationMode mode) {
         if (mode == null) {

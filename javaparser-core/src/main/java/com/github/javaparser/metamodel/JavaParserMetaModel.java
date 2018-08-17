@@ -78,7 +78,7 @@ public final class JavaParserMetaModel {
         enumDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.namePropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(enumDeclarationMetaModel.implementedTypesPropertyMetaModel);
-        enumDeclarationMetaModel.getConstructorParameters().add(enumDeclarationMetaModel.entriesPropertyMetaModel);
+        enumDeclarationMetaModel.getConstructorParameters().add(enumDeclarationMetaModel.constantsPropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.membersPropertyMetaModel);
         fieldDeclarationMetaModel.getConstructorParameters().add(fieldDeclarationMetaModel.modifiersPropertyMetaModel);
         fieldDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
@@ -434,8 +434,8 @@ public final class JavaParserMetaModel {
         enumConstantDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumConstantDeclarationMetaModel.classBodyPropertyMetaModel);
         enumConstantDeclarationMetaModel.namePropertyMetaModel = new PropertyMetaModel(enumConstantDeclarationMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false, false);
         enumConstantDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumConstantDeclarationMetaModel.namePropertyMetaModel);
-        enumDeclarationMetaModel.entriesPropertyMetaModel = new PropertyMetaModel(enumDeclarationMetaModel, "entries", com.github.javaparser.ast.body.EnumConstantDeclaration.class, Optional.of(enumConstantDeclarationMetaModel), false, false, true, false, false);
-        enumDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumDeclarationMetaModel.entriesPropertyMetaModel);
+        enumDeclarationMetaModel.constantsPropertyMetaModel = new PropertyMetaModel(enumDeclarationMetaModel, "constants", com.github.javaparser.ast.body.EnumConstantDeclaration.class, Optional.of(enumConstantDeclarationMetaModel), false, false, true, false, false);
+        enumDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumDeclarationMetaModel.constantsPropertyMetaModel);
         enumDeclarationMetaModel.implementedTypesPropertyMetaModel = new PropertyMetaModel(enumDeclarationMetaModel, "implementedTypes", com.github.javaparser.ast.type.ClassOrInterfaceType.class, Optional.of(classOrInterfaceTypeMetaModel), false, false, true, false, false);
         enumDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumDeclarationMetaModel.implementedTypesPropertyMetaModel);
         fieldDeclarationMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(fieldDeclarationMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.empty(), false, false, false, true, false);

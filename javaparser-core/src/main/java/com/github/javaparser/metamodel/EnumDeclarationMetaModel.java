@@ -8,7 +8,7 @@ public class EnumDeclarationMetaModel extends TypeDeclarationMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.body.EnumDeclaration.class, "EnumDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public PropertyMetaModel entriesPropertyMetaModel;
+    public PropertyMetaModel constantsPropertyMetaModel;
 
     public PropertyMetaModel implementedTypesPropertyMetaModel;
 }

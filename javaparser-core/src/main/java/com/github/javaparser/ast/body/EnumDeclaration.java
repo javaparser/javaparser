@@ -121,7 +121,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         if (constants == this.constants) {
             return (EnumDeclaration) this;
         }
-        notifyPropertyChange(ObservableProperty.ENTRIES, this.constants, constants);
+        notifyPropertyChange(ObservableProperty.CONSTANTS, this.constants, constants);
         if (this.constants != null)
             this.constants.setParentNode(null);
         this.constants = constants;

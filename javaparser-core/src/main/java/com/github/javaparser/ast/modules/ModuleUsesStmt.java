@@ -131,6 +131,7 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
