@@ -23,8 +23,6 @@ package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -50,7 +48,7 @@ public class EnumDeclarationBuildersTest {
     public void testAddEnumConstant() {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addEnumConstant("MY_ENUM_CONSTANT");
-        assertEquals(1, testEnum.getEntries().size());
+        assertEquals(1, testEnum.getConstants().size());
         assertEquals("MY_ENUM_CONSTANT", testEnum.getEntry(0).getNameAsString());
     }
 }

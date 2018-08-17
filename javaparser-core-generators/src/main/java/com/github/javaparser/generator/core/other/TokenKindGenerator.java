@@ -34,7 +34,7 @@ public class TokenKindGenerator extends Generator {
         final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
         final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind")).orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
-        kindEnum.getEntries().clear();
+        kindEnum.getConstants().clear();
         annotateGenerated(kindEnum);
 
         final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
@@ -66,6 +66,6 @@ public class TokenKindGenerator extends Generator {
     private void generateEnumEntry(EnumDeclaration kindEnum, String name, IntegerLiteralExpr kind) {
         final EnumConstantDeclaration enumEntry = new EnumConstantDeclaration(name);
         enumEntry.getArguments().add(kind);
-        kindEnum.addEntry(enumEntry);
+        kindEnum.addConstant(enumEntry);
     }
 }

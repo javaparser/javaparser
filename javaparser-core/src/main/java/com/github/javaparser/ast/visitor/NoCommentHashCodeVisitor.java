@@ -186,7 +186,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentHashCodeVisitorGenerator")
     public Integer visit(final EnumDeclaration n, final Void arg) {
-        return (n.getEntries().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getConstants().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentHashCodeVisitorGenerator")

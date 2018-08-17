@@ -296,6 +296,6 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
 
     protected EnumConstantDeclaration considerEcd(String code) {
         considerCode("enum A { " + code + " }");
-        return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
+        return ((EnumDeclaration)cu.getType(0)).getConstants().get(0);
     }
 }

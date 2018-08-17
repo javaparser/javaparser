@@ -167,7 +167,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
-        if (!nodesEquals(n.getEntries(), n2.getEntries()))
+        if (!nodesEquals(n.getConstants(), n2.getConstants()))
             return false;
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
             return false;

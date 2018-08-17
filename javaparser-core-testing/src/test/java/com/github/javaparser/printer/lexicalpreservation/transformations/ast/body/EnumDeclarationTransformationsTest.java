@@ -80,7 +80,7 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
         EnumDeclaration ed = consider("enum A {" + EOL +
                 " E1" + EOL +
                 "}");
-        ed.getEntries().addLast(new EnumConstantDeclaration("E2"));
+        ed.getConstants().addLast(new EnumConstantDeclaration("E2"));
         assertTransformedToString("enum A {" + EOL +
                 " E1," + EOL +
                 " E2" + EOL +

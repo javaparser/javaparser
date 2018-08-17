@@ -647,7 +647,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final EnumDeclaration n, final A arg) {
         R result;
         {
-            result = n.getEntries().accept(this, arg);
+            result = n.getConstants().accept(this, arg);
             if (result != null)
                 return result;
         }

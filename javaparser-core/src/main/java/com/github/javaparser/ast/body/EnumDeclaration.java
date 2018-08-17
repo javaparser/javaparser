@@ -54,7 +54,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
-    private NodeList<EnumConstantDeclaration> entries;
+    private NodeList<EnumConstantDeclaration> constants;
 
     public EnumDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new NodeList<>());
@@ -65,18 +65,18 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @AllFieldsConstructor
-    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
-        this(null, modifiers, annotations, name, implementedTypes, entries, members);
+    public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> constants, NodeList<BodyDeclaration<?>> members) {
+        this(null, modifiers, annotations, name, implementedTypes, constants, members);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public EnumDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
+    public EnumDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> constants, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         setImplementedTypes(implementedTypes);
-        setEntries(entries);
+        setConstants(constants);
         customInitialization();
     }
 
@@ -93,22 +93,21 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<EnumConstantDeclaration> getEntries() {
-        return entries;
+    public NodeList<EnumConstantDeclaration> getConstants() {
+        return constants;
     }
 
     public EnumConstantDeclaration getEntry(int i) {
-        return getEntries().get(i);
+        return getConstants().get(i);
     }
 
-    public EnumDeclaration setEntry(int i, EnumConstantDeclaration element) {
-        getEntries().set(i, element);
+    public EnumDeclaration setConstant(int i, EnumConstantDeclaration element) {
+        getConstants().set(i, element);
         return this;
     }
 
-    public EnumDeclaration addEntry(EnumConstantDeclaration element) {
-        getEntries().add(element);
-        return this;
+    public void addConstant(EnumConstantDeclaration enumEntry) {
+        getConstants().add(enumEntry);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -117,16 +116,16 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
-        assertNotNull(entries);
-        if (entries == this.entries) {
+    public EnumDeclaration setConstants(final NodeList<EnumConstantDeclaration> constants) {
+        assertNotNull(constants);
+        if (constants == this.constants) {
             return (EnumDeclaration) this;
         }
-        notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
-        if (this.entries != null)
-            this.entries.setParentNode(null);
-        this.entries = entries;
-        setAsParentNodeOf(entries);
+        notifyPropertyChange(ObservableProperty.ENTRIES, this.constants, constants);
+        if (this.constants != null)
+            this.constants.setParentNode(null);
+        this.constants = constants;
+        setAsParentNodeOf(constants);
         return this;
     }
 
@@ -147,7 +146,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumConstantDeclaration addEnumConstant(String name) {
         assertNonEmpty(name);
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
-        getEntries().add(enumConstant);
+        getConstants().add(enumConstant);
         return enumConstant;
     }
 
@@ -156,9 +155,9 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < entries.size(); i++) {
-            if (entries.get(i) == node) {
-                entries.remove(i);
+        for (int i = 0; i < constants.size(); i++) {
+            if (constants.get(i) == node) {
+                constants.remove(i);
                 return true;
             }
         }
@@ -188,9 +187,9 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < entries.size(); i++) {
-            if (entries.get(i) == node) {
-                entries.set(i, (EnumConstantDeclaration) replacementNode);
+        for (int i = 0; i < constants.size(); i++) {
+            if (constants.get(i) == node) {
+                constants.set(i, (EnumConstantDeclaration) replacementNode);
                 return true;
             }
         }

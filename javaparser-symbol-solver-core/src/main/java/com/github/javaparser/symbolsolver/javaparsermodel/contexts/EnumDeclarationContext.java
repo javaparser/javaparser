@@ -48,7 +48,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         if (typeSolver == null) throw new IllegalArgumentException();
 
         // among constants
-        for (EnumConstantDeclaration constant : wrappedNode.getEntries()) {
+        for (EnumConstantDeclaration constant : wrappedNode.getConstants()) {
             if (constant.getName().getId().equals(name)) {
                 return SymbolReference.solved(new JavaParserEnumConstantDeclaration(constant, typeSolver));
             }

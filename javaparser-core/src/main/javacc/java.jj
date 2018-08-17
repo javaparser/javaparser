@@ -780,7 +780,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	SimpleName name;
     NodeList<ClassOrInterfaceType> impList = emptyList();
 	EnumConstantDeclaration entry;
-	NodeList<EnumConstantDeclaration> entries = emptyList();
+	NodeList<EnumConstantDeclaration> constants = emptyList();
 	BodyDeclaration<?> member;
     NodeList<BodyDeclaration<?>> members = emptyList();
 	JavaToken begin = modifier.begin;
@@ -791,7 +791,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
     [ impList = ImplementsList() ]
     "{"
     [
-        entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
+        entry = EnumConstantDeclaration() { constants.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { constants.add(entry); } )*
     ]
     [ "," ]
     [
@@ -803,7 +803,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
     ]
     "}"
     
-    { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
+    { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, constants, members); }
 }
 
 

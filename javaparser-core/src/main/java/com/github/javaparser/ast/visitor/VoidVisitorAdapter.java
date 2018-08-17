@@ -262,7 +262,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EnumDeclaration n, final A arg) {
-        n.getEntries().forEach(p -> p.accept(this, arg));
+        n.getConstants().forEach(p -> p.accept(this, arg));
         n.getImplementedTypes().forEach(p -> p.accept(this, arg));
         n.getMembers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);

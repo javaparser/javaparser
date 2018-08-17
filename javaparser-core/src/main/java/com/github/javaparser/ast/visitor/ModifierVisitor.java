@@ -412,7 +412,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final EnumDeclaration n, final A arg) {
-        NodeList<EnumConstantDeclaration> entries = modifyList(n.getEntries(), arg);
+        NodeList<EnumConstantDeclaration> entries = modifyList(n.getConstants(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
@@ -420,7 +420,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
             return null;
-        n.setEntries(entries);
+        n.setConstants(entries);
         n.setImplementedTypes(implementedTypes);
         n.setMembers(members);
         n.setName(name);

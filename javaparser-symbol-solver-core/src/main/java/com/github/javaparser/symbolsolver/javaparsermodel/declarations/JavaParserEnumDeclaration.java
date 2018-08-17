@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
@@ -244,7 +243,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public List<ResolvedEnumConstantDeclaration> getEnumConstants() {
-        return wrappedNode.getEntries().stream()
+        return wrappedNode.getConstants().stream()
                 .map(entry -> new JavaParserEnumConstantDeclaration(entry, typeSolver))
                 .collect(Collectors.toList());
     }
