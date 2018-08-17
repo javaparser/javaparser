@@ -22,7 +22,7 @@ public class Issue276 extends AbstractResolutionTest{
 
     @Test
     public void testSolveStaticallyImportedMemberType() throws IOException {
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/issue276/foo/C.java"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/issue276/foo/C.java"));
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "C");
         TypeSolver typeSolver = new CombinedTypeSolver(
         		new ReflectionTypeSolver(), 

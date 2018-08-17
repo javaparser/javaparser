@@ -58,7 +58,7 @@ public class ContextTest extends AbstractTest {
 
     private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
+        return parse(is);
     }
 
     @Test

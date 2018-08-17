@@ -1,5 +1,6 @@
 package com.github.javaparser.generator;
 
+import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -12,20 +13,27 @@ import com.github.javaparser.utils.SourceRoot;
 import javax.annotation.Generated;
 import java.util.List;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A general pattern that the generators in this module will follow.
  */
-public abstract class Generator {
+public abstract class Generator implements JavaParserSugar {
     protected final SourceRoot sourceRoot;
+    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
 
     protected Generator(SourceRoot sourceRoot) {
         this.sourceRoot = sourceRoot;
     }
 
     public abstract void generate() throws Exception;
+
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return javaParser.parse(start, provider);
+    }
 
     protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
         annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));

@@ -24,7 +24,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.JavaParser.getInternalParser;
 
 /**
  * A node that has an expression in it.
@@ -35,6 +35,6 @@ public interface NodeWithExpression<N extends Node> {
     N setExpression(Expression expression);
 
     default N setExpression(String expression) {
-        return setExpression(parseExpression(expression));
+        return setExpression(getInternalParser().parseExpression(expression));
     }
 }

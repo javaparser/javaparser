@@ -21,18 +21,24 @@
 
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class NameTest {
+public class NameTest implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
 
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {

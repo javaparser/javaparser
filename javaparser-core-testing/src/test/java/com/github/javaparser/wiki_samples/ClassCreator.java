@@ -29,13 +29,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VoidType;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.JavaParser.getInternalParser;
 
 public class ClassCreator {
 
@@ -53,7 +51,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackageDeclaration(new PackageDeclaration(parseName("java.parser.test")));
+        cu.setPackageDeclaration(new PackageDeclaration(getInternalParser().parseName("java.parser.test")));
 
         // or a shortcut
         cu.setPackageDeclaration("java.parser.test");
@@ -72,7 +70,7 @@ public class ClassCreator {
         MethodDeclaration main2 = type.addMethod("main2", Modifier.PUBLIC, Modifier.STATIC);
 
         // add a parameter to the method
-        Parameter param = new Parameter(parseClassOrInterfaceType("String"), "args");
+        Parameter param = new Parameter(getInternalParser().parseClassOrInterfaceType("String"), "args");
         param.setVarArgs(true);
         method.addParameter(param);
         

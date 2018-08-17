@@ -41,7 +41,7 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 public class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     Statement consider(String code) {
-        Statement statement = JavaParser.parseStatement(code);
+        Statement statement = parseStatement(code);
         LexicalPreservingPrinter.setup(statement);
         return statement;
     }

@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.getInternalParser;
 
 /**
  * A node that extends other types.
@@ -86,7 +86,7 @@ public interface NodeWithExtends<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addExtendedType(String name) {
-        getExtendedTypes().add(parseClassOrInterfaceType(name));
+        getExtendedTypes().add(getInternalParser().parseClassOrInterfaceType(name));
         return (N) this;
     }
 }

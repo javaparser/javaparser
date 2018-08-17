@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
@@ -71,7 +71,7 @@ public class CommentTest {
 
     @Test
     public void unicodeEscapesArePreservedInComments() {
-        CompilationUnit cu = parse("// xxx\\u2122xxx");
+        CompilationUnit cu = getInternalParser().parse("// xxx\\u2122xxx");
         Comment comment = cu.getAllContainedComments().get(0);
         assertEquals(" xxx\\u2122xxx", comment.getContent());
     }
@@ -79,7 +79,7 @@ public class CommentTest {
     @Test
     public void testReplaceDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
+        CompilationUnit cu = getInternalParser().parse("public class MyClass {" + EOL +
                 EOL +
                 "  /**" + EOL +
                 "   * Comment A" + EOL +
@@ -120,7 +120,7 @@ public class CommentTest {
     @Test
     public void testRemoveDuplicateComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
+        CompilationUnit cu = getInternalParser().parse("public class MyClass {" + EOL +
                 EOL +
                 "  /**" + EOL +
                 "   * Comment A" + EOL +
@@ -158,7 +158,7 @@ public class CommentTest {
     @Test
     public void testRemoveDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
+        CompilationUnit cu = getInternalParser().parse("public class MyClass {" + EOL +
                 EOL +
                 "  /**" + EOL +
                 "   * Comment A" + EOL +

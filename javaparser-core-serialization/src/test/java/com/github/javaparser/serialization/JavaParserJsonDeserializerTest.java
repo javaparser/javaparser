@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.Type;
@@ -30,17 +30,23 @@ import javax.json.Json;
 
 import java.io.StringReader;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.*;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class JavaParserJsonDeserializerTest {
+class JavaParserJsonDeserializerTest implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
+
     private final JavaParserJsonDeserializer deserializer = new JavaParserJsonDeserializer();
 
     @Test
     void simpleTest() {
-        CompilationUnit cu = JavaParser.parse("public class X{} class Z{}");
+        CompilationUnit cu = parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -51,7 +57,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testRawType() {
-        Type type = JavaParser.parseType("Blub");
+        Type type = parseType("Blub");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -62,7 +68,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testDiamondType() {
-        Type type = JavaParser.parseType("Blub<>");
+        Type type = parseType("Blub<>");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -73,7 +79,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testGenerics() {
-        Type type = JavaParser.parseType("Blub<Blab, Bleb>");
+        Type type = parseType("Blub<Blab, Bleb>");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));

@@ -354,7 +354,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
         } catch (final Exception | Error e) {
             System.out.println(e);
         }
-        return JavaParser.parse(file);
+        return getInternalParser().parse(file);
     }
 
     class A<T extends Integer & Serializable> implements XXX, Serializable {

@@ -21,7 +21,7 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.ParseException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
@@ -37,10 +37,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.Assert.assertEquals;
 
-public class PrettyPrintingSteps {
+public class PrettyPrintingSteps implements JavaParserSugar {
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
+    }
 
     private Node resultNode;
     private String sourceUnderTest;

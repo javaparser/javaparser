@@ -38,11 +38,11 @@ public class NodeMetaModelGenerator {
         final String superNodeMetaModel = nodeMetaModelName(superclass);
 
         boolean isRootNode = !isNode(superclass);
-        nodeField.getVariable(0).setInitializer(parseExpression(f("new %s(%s)",
+        nodeField.getVariable(0).setInitializer(getInternalParser().parseExpression(f("new %s(%s)",
                 className,
                 optionalOf(decapitalize(superNodeMetaModel), !isRootNode))));
 
-        initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
+        initializeNodeMetaModelsStatements.add(getInternalParser().parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
         classMetaModelJavaFile.addImport("java.util.Optional");
@@ -61,7 +61,7 @@ public class NodeMetaModelGenerator {
                 .addParameter("Optional<" + BASE_NODE_META_MODEL + ">", "super" + BASE_NODE_META_MODEL);
         classMMConstructor
                 .getBody()
-                .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
+                .addStatement(getInternalParser().parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
                         BASE_NODE_META_MODEL,
                         nodeClass.getName(),
                         nodeClass.getSimpleName(),
@@ -71,7 +71,7 @@ public class NodeMetaModelGenerator {
 
         if (typeAnalysis.isAbstract) {
             classMetaModelJavaFile.addImport(Node.class);
-            nodeMetaModelClass.addMember(parseBodyDeclaration(f(
+            nodeMetaModelClass.addMember(getInternalParser().parseBodyDeclaration(f(
                     "protected %s(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {" +
                             "super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);" +
                             " }",

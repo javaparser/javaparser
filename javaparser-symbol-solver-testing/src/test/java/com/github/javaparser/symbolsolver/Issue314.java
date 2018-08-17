@@ -45,7 +45,7 @@ public class Issue314 extends AbstractResolutionTest{
                 "            return a;\n" +
                 "        }\n" +
                 "    }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a").get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = javaParserFacade.solve(refToA);
         assertEquals(true, symbolReference.isSolved());

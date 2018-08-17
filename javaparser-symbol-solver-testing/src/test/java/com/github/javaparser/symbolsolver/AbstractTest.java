@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import com.github.javaparser.*;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.utils.CodeGenerationUtils;
 
 import java.io.File;
@@ -23,7 +25,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public abstract class AbstractTest {
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+
+public abstract class AbstractTest implements JavaParserSugar {
+    protected ParserConfiguration configuration = new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE);
+    @Override
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return new JavaParser(configuration).parse(start, provider);
+    }
 
     protected static Path adaptPath(Path path) {
         if (Files.exists(path)) {

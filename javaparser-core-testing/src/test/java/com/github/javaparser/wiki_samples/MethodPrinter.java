@@ -35,7 +35,7 @@ public class MethodPrinter {
         FileInputStream in = new FileInputStream("test.java");
 
         // parse it
-        CompilationUnit cu = JavaParser.parse(in);
+        CompilationUnit cu = new JavaParser().parse(in);
 
         // visit and print the methods names
         cu.accept(new MethodVisitor(), null);

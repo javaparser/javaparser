@@ -20,21 +20,20 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+
+import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An import declaration.
@@ -42,7 +41,7 @@ import com.github.javaparser.TokenRange;
  * <br/><code>import com.github.javaparser.*;</code>
  * <br/><code>import com.github.javaparser.JavaParser.*; </code>
  * <br/><code>import static com.github.javaparser.JavaParser.*;</code>
- * <br/><code>import static com.github.javaparser.JavaParser.parse;</code>
+ * <br/><code>import static com.github.javaparser.getInternalParser().parse;</code>
  *
  * <p>The name does not include the asterisk or the static keyword.</p>
  * @author Julio Vilmar Gesser
@@ -60,7 +59,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     }
 
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
-        this(null, parseName(name), isStatic, isAsterisk);
+        this(null, getInternalParser().parseName(name), isStatic, isAsterisk);
     }
 
     @AllFieldsConstructor

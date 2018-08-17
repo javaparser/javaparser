@@ -1,5 +1,6 @@
 package com.github.javaparser.generator.metamodel;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -9,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelFieldName;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.propertyMetaModelFieldName;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -28,7 +29,7 @@ class InitializeConstructorParametersStatementsGenerator {
                     nodeMetaModelFieldName(field.getDeclaringClass()),
                     propertyMetaModelFieldName(field));
 
-            initializeConstructorParametersStatements.add(parseStatement(addFieldStatement));
+            initializeConstructorParametersStatements.add(getInternalParser().parseStatement(addFieldStatement));
         }
     }
 

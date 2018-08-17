@@ -35,7 +35,7 @@ public class Issue257 extends AbstractTest {
     @Test
     public void issue257() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
-        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
+        CompilationUnit cu = parse(pathToSourceFile);
         Statement statement = cu.getClassByName("A").get().getMethodsByName("run").get(0).getBody().get().getStatement(0);
         ExpressionStmt expressionStmt = (ExpressionStmt)statement;
         Expression expression = expressionStmt.getExpression();

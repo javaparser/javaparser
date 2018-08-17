@@ -56,12 +56,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import static com.github.javaparser.JavaParser.parseName;
+
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -285,7 +285,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageDeclaration(String name) {
-        setPackageDeclaration(new PackageDeclaration(parseName(name)));
+        setPackageDeclaration(new PackageDeclaration(getInternalParser().parseName(name)));
         return this;
     }
 
@@ -339,7 +339,7 @@ public final class CompilationUnit extends Node {
             i.append(".*");
         }
         i.append(";");
-        ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
+        ImportDeclaration importDeclaration = getInternalParser().parseImport(i.toString());
         if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
@@ -574,7 +574,7 @@ public final class CompilationUnit extends Node {
      * @return the module
      */
     public ModuleDeclaration setModule(String name) {
-        final ModuleDeclaration module = new ModuleDeclaration(parseName(name), false);
+        final ModuleDeclaration module = new ModuleDeclaration(getInternalParser().parseName(name), false);
         setModule(module);
         return module;
     }

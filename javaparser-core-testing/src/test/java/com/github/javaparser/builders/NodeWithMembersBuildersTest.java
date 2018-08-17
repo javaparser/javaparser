@@ -29,9 +29,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.JavaParser.parseExpression;
-import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.JavaParser.getInternalParser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -101,8 +99,8 @@ public class NodeWithMembersBuildersTest {
     public void testGetMethodsWithParameterTypes() {
         classDeclaration.addMethod("foo", Modifier.PUBLIC);
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
-        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
-        type.setTypeArguments(parseClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = getInternalParser().parseClassOrInterfaceType("List");
+        type.setTypeArguments(getInternalParser().parseClassOrInterfaceType("String"));
         MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(type, "overload");
         MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", Modifier.PUBLIC).addParameter(int.class, "overload");
 
@@ -138,7 +136,7 @@ public class NodeWithMembersBuildersTest {
     public void testAddPrivateFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPrivateField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPrivateField(getInternalParser().parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -153,7 +151,7 @@ public class NodeWithMembersBuildersTest {
     public void testAddPublicFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPublicField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPublicField(getInternalParser().parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -168,7 +166,7 @@ public class NodeWithMembersBuildersTest {
     public void testAddProtectedFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addProtectedField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addProtectedField(getInternalParser().parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -186,7 +184,7 @@ public class NodeWithMembersBuildersTest {
         classOrInterfaceDeclaration.addFieldWithInitializer(
                 "java.lang.String",
                 "name",
-                parseExpression("John"),
+                getInternalParser().parseExpression("John"),
                 Modifier.PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -205,7 +203,7 @@ public class NodeWithMembersBuildersTest {
         classOrInterfaceDeclaration.addFieldWithInitializer(
                 List.class,
                 "skills",
-                parseExpression("new ArrayList()"),
+                getInternalParser().parseExpression("new ArrayList()"),
                 Modifier.PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
