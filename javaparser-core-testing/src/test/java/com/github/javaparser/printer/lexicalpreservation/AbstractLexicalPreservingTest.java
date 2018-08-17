@@ -21,32 +21,28 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import org.junit.Before;
 
 import java.io.IOException;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.TestUtils.readResource;
 import static org.junit.Assert.assertEquals;
 
-public abstract class AbstractLexicalPreservingTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public abstract class AbstractLexicalPreservingTest {
 
     protected CompilationUnit cu;
     protected Expression expression;
 
     protected void considerCode(String code) {
-        cu = LexicalPreservingPrinter.setup(parse(code));
+        cu = LexicalPreservingPrinter.setup(JavaParser.parse(code));
     }
 
     protected void considerExpression(String code) {
-        expression = LexicalPreservingPrinter.setup(parseExpression(code));
+        expression = LexicalPreservingPrinter.setup(JavaParser.parseExpression(code));
     }
 
     protected String considerExample(String resourceName) throws IOException {

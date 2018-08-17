@@ -34,7 +34,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseType;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
@@ -94,7 +94,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
-        return addField(getInternalParser().parseType(type), name, modifiers);
+        return addField(parseType(type), name, modifiers);
     }
 
     /**
@@ -139,7 +139,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier... modifiers) {
-        return addFieldWithInitializer(getInternalParser().parseType(type), name, initializer, modifiers);
+        return addFieldWithInitializer(parseType(type), name, initializer, modifiers);
     }
 
     /**

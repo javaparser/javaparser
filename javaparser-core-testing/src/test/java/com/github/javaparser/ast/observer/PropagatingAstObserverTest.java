@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast.observer;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -31,19 +31,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-public class PropagatingAstObserverTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class PropagatingAstObserverTest {
     @Test
     public void verifyPropagation() {
         String code = "class A {  }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new PropagatingAstObserver() {
             @Override

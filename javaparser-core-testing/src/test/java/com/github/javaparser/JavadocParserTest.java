@@ -21,39 +21,33 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
-public class JavadocParserTest implements JavaParserSugar{
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class JavadocParserTest {
 
     @Test
     public void parseSimplestContent() {
         Assert.assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
-                parseJavadoc("A simple line of text"));
+                JavadocParser.parse("A simple line of text"));
     }
 
     @Test
     public void parseSingleLineWithSpacing() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The line number of the first character of this Token.")),
-                parseJavadoc(" The line number of the first character of this Token. "));
+                JavadocParser.parse(" The line number of the first character of this Token. "));
     }
 
     @Test
     public void parseSingleLineWithNewLines() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The string image of the token.")),
-                parseJavadoc(EOL +
+                JavadocParser.parse(EOL +
                         "   * The string image of the token." + EOL +
                         "   "));
     }
@@ -68,7 +62,7 @@ public class JavadocParserTest implements JavaParserSugar{
         assertEquals(new Javadoc(JavadocDescription.parseText("The version identifier for this Serializable class." + EOL +
                         "Increment only if the <i>serialized</i> form of the" + EOL +
                         "class changes.")),
-                parseJavadoc(text));
+                JavadocParser.parse(text));
     }
 
     @Test
@@ -85,7 +79,7 @@ public class JavadocParserTest implements JavaParserSugar{
                         "   case MyParserConstants.ID : return new IDToken(ofKind, image);" + EOL +
                         EOL +
                         "to the following switch statement. Then you can cast matchedToken")),
-                parseJavadoc(text));
+                JavadocParser.parse(text));
     }
 
     @Test
@@ -96,7 +90,7 @@ public class JavadocParserTest implements JavaParserSugar{
                 "   ";
         assertEquals(new Javadoc(JavadocDescription.parseText(""))
                 .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.DEPRECATED, ""))
-                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.SEE, "#getEndColumn")), parseJavadoc(text));
+                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.SEE, "#getEndColumn")), JavadocParser.parse(text));
     }
 
     @Test
@@ -109,7 +103,7 @@ public class JavadocParserTest implements JavaParserSugar{
                 .addBlockTag(new JavadocBlockTag("unofficial", ""));
 
 
-        assertEquals(underTest, parseJavadoc(expectedText));
+        assertEquals(underTest, JavadocParser.parse(expectedText));
         assertEquals(1, underTest.getBlockTags().size());
         assertEquals("unofficial", underTest.getBlockTags().get(0).getTagName());
     }
@@ -124,7 +118,7 @@ public class JavadocParserTest implements JavaParserSugar{
                 "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}" + EOL +
                 "     * @return the {@link FieldDeclaration} created" + EOL +
                 "     ";
-        Javadoc res = parseJavadoc(text);
+        Javadoc res = JavadocParser.parse(text);
         assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
@@ -143,7 +137,7 @@ public class JavadocParserTest implements JavaParserSugar{
                 "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}" + EOL +
                 "     * @return the {@link FieldDeclaration} created" + EOL +
                 "     ";
-        Javadoc res = parseJavadoc(text);
+        Javadoc res = JavadocParser.parse(text);
         assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field" + EOL + "    continued in a second line"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))

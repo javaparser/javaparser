@@ -53,21 +53,21 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         return combinedTypeSolver;
     }
 
-    private CompilationUnit parseFile(String fileName) throws IOException {
+    private CompilationUnit parse(String fileName) throws IOException {
         Path sourceFile = src.resolve(fileName + ".java");
-        return parse(sourceFile);
+        return JavaParser.parse(sourceFile);
     }
 
 //    @Test
 //    public void o1TypeIsCorrect() throws IOException, ParseException {
-//        CompilationUnit cu = parseFile("com/github/javaparser/utils/PositionUtils");
+//        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
 //        NameExpr o1 = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("o1")).findFirst().get();
 //        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o1).getCorrespondingDeclaration().getType());
 //    }
 //
 //    @Test
 //    public void o2TypeIsCorrect() throws IOException, ParseException {
-//        CompilationUnit cu = parseFile("com/github/javaparser/utils/PositionUtils");
+//        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
 //        NameExpr o2 = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("o2")).findFirst().get();
 //        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o2).getCorrespondingDeclaration().getType());
 //    }
@@ -75,14 +75,14 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 //    // To calculate the type of o1 and o2 I need to first calculate the type of the lambda
 //    @Test
 //    public void lambdaTypeIsCorrect() throws IOException, ParseException {
-//        CompilationUnit cu = parseFile("com/github/javaparser/utils/PositionUtils");
+//        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
 //        LambdaExpr lambda = Navigator.findAllNodesOfGivenClass(cu, LambdaExpr.class).stream().filter(it -> it.getRange().begin.line == 50).findFirst().get();
 //        System.out.println(JavaParserFacade.get(TYPESOLVER).getType(lambda));
 //    }
 
     @Test
     public void nodesTypeIsCorrect() throws IOException {
-        CompilationUnit cu = parseFile("com/github/javaparser/utils/PositionUtils");
+        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
         NameExpr nodes = cu.findAll(NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
         ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
         assertEquals("java.util.List<T>", type.describe());

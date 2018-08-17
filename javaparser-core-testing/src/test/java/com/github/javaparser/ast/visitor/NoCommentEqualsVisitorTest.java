@@ -21,40 +21,34 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-public class NoCommentEqualsVisitorTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class NoCommentEqualsVisitorTest {
 
     @Test
     public void testEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class X { }");
+        CompilationUnit p1 = JavaParser.parse("class X { }");
+        CompilationUnit p2 = JavaParser.parse("class X { }");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
     public void testEqualsWithDifferentComments() {
-        CompilationUnit p1 = parse("/* a */ class X { /** b */} //c");
-        CompilationUnit p2 = parse("/* b */ class X { }  //c");
+        CompilationUnit p1 = JavaParser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit p2 = JavaParser.parse("/* b */ class X { }  //c");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
     public void testNotEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class Y { }");
+        CompilationUnit p1 = JavaParser.parse("class X { }");
+        CompilationUnit p2 = JavaParser.parse("class Y { }");
         assertFalse(NoCommentEqualsVisitor.equals(p1, p2));
     }
 }

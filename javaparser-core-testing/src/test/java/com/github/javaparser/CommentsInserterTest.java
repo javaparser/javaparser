@@ -22,24 +22,17 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import org.junit.Test;
 
 import java.io.IOException;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
-public class CommentsInserterTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class CommentsInserterTest {
     private String makeFilename(String sampleName) {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
     }

@@ -28,7 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.JavaParser.parseName;
 
 /**
  * A node that can be annotated.
@@ -68,7 +69,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addAnnotation(String name) {
         NormalAnnotationExpr annotation = new NormalAnnotationExpr(
-                getInternalParser().parseName(name), new NodeList<>());
+                parseName(name), new NodeList<>());
         addAnnotation(annotation);
         return (N) this;
     }
@@ -82,7 +83,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default NormalAnnotationExpr addAndGetAnnotation(String name) {
         NormalAnnotationExpr annotation = new NormalAnnotationExpr(
-                getInternalParser().parseName(name), new NodeList<>());
+                parseName(name), new NodeList<>());
         addAnnotation(annotation);
         return annotation;
     }
@@ -118,7 +119,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                getInternalParser().parseName(name));
+                parseName(name));
         addAnnotation(markerAnnotationExpr);
         return (N) this;
     }
@@ -144,7 +145,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, Expression expression) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                getInternalParser().parseName(name), expression);
+                parseName(name), expression);
         return addAnnotation(singleMemberAnnotationExpr);
     }
 
@@ -168,7 +169,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addSingleMemberAnnotation(String name, String value) {
-        return addSingleMemberAnnotation(name, getInternalParser().parseExpression(value));
+        return addSingleMemberAnnotation(name, parseExpression(value));
     }
 
     /**

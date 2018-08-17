@@ -1,22 +1,15 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-public class XmlPrinterTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class XmlPrinterTest {
     @Test
     public void testWithType() {
-        Expression expression = parseExpression("1+1");
+        Expression expression = JavaParser.parseExpression("1+1");
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(expression);
@@ -26,7 +19,7 @@ public class XmlPrinterTest implements JavaParserSugar {
 
     @Test
     public void testWithoutType() {
-        Expression expression = parseExpression("1+1");
+        Expression expression = JavaParser.parseExpression("1+1");
 
         XmlPrinter xmlOutput = new XmlPrinter(false);
 
@@ -37,7 +30,7 @@ public class XmlPrinterTest implements JavaParserSugar {
 
     @Test
     public void testList() {
-        Expression expression = parseExpression("a(1,2)");
+        Expression expression = JavaParser.parseExpression("a(1,2)");
 
         XmlPrinter xmlOutput = new XmlPrinter(true);
 

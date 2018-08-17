@@ -549,7 +549,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -795,7 +795,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         methodDeclaration.getBody().get().getStatements().add(new ExpressionStmt(
                 new VariableDeclarationExpr(
                         new VariableDeclarator(
-                                parseClassOrInterfaceType("String"),
+                                JavaParser.parseClassOrInterfaceType("String"),
                                 "test2",
                                 new StringLiteralExpr("")))
         ));
@@ -815,7 +815,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected @Override void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -854,7 +854,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected @Override void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -895,7 +895,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -928,7 +928,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -956,7 +956,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -978,7 +978,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 + "  Object f() {" + EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new ModifierVisitor<>(), null);
     }
@@ -987,7 +987,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     public void handleDeprecatedAnnotationFinalClass() {
         String code = "public final class A {}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
@@ -1001,7 +1001,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     public void handleDeprecatedAnnotationAbstractClass() {
         String code = "public abstract class A {}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
@@ -1015,7 +1015,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "public class Foo {" + EOL + EOL
                 + "// Some comment" + EOL + EOL // does work with only one \n
                 + "public void writeExternal() {}" + EOL + "}";
-        CompilationUnit originalCu = parse(code);
+        CompilationUnit originalCu = JavaParser.parse(code);
         CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
 
         cu.findAll(ClassOrInterfaceDeclaration.class).forEach(c -> {
@@ -1047,7 +1047,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   }" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new AddFooCallModifierVisitor(), null);
     }
@@ -1070,7 +1070,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   }" + EOL +
                 "}";
 
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new CallModifierVisitor(), null);
     }
@@ -1078,7 +1078,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     @Test
     public void addedBlockCommentsPrinted() {
         String code = "public class Foo { }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getClassByName("Foo").get()
@@ -1094,7 +1094,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     @Test
     public void addedLineCommentsPrinted() {
         String code = "public class Foo { }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getClassByName("Foo").get()
@@ -1109,7 +1109,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void issue1321() {
-        CompilationUnit compilationUnit = parse("class X { X() {} private void testme() {} }");
+        CompilationUnit compilationUnit = JavaParser.parse("class X { X() {} private void testme() {} }");
         LexicalPreservingPrinter.setup(compilationUnit);
 
         ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();

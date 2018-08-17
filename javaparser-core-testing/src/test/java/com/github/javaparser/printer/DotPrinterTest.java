@@ -21,21 +21,14 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
 
-public class DotPrinterTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class DotPrinterTest {
     @Test
     public void testWithType() {
         String expectedOutput = "digraph {" + System.lineSeparator();
@@ -57,7 +50,7 @@ public class DotPrinterTest implements JavaParserSugar {
         expectedOutput += "}";
 
         DotPrinter dotPrinter = new DotPrinter(true);
-        Expression expression = parseExpression("x(1,1)");
+        Expression expression = JavaParser.parseExpression("x(1,1)");
         String output = dotPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -79,7 +72,7 @@ public class DotPrinterTest implements JavaParserSugar {
         expectedOutput += "}";
 
         DotPrinter dotPrinter = new DotPrinter(false);
-        Expression expression = parseExpression("1+1");
+        Expression expression = JavaParser.parseExpression("1+1");
         String output = dotPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }

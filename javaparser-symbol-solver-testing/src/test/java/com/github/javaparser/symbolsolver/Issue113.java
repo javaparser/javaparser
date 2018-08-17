@@ -31,7 +31,7 @@ public class Issue113 extends AbstractTest {
     @Test
     public void issue113providedCodeDoesNotCrash() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = parse(pathToSourceFile);
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
         JavaParserFacade parserFacade = JavaParserFacade.get(typeSolver);
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).stream()
@@ -42,7 +42,7 @@ public class Issue113 extends AbstractTest {
     @Test
     public void issue113superClassIsResolvedCorrectly() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = parse(pathToSourceFile);
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
         JavaParserClassDeclaration jssExtendedWidget = new JavaParserClassDeclaration(cu.getClassByName("Widget").get(), typeSolver);
         ResolvedReferenceType superClass = jssExtendedWidget.getSuperClass();

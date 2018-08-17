@@ -21,7 +21,6 @@
 
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -30,25 +29,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 
-public class VisitorListTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class VisitorListTest {
 
     @Test
     public void visitorAddAll() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
@@ -59,21 +53,21 @@ public class VisitorListTest implements JavaParserSugar {
     @Test
     public void visitorAddAllAtIndex() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class Y{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class Y{}"));
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        vList.add(parse("class A{}"));
-        vList.add(parse("class B{}"));
+        vList.add(JavaParser.parse("class A{}"));
+        vList.add(JavaParser.parse("class B{}"));
         vList.addAll(2, list);
-        vList.add(parse("class C{}"));
+        vList.add(JavaParser.parse("class C{}"));
         for (int i = 0; i < list.size(); i++)
             assertEquals(list.get(i), vList.get(2 + i));
     }
 
     @Test
     public void visitorListContains() {
-        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(x1);
@@ -83,8 +77,8 @@ public class VisitorListTest implements JavaParserSugar {
     @Test
     public void visitorListContainsAll() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
@@ -95,9 +89,9 @@ public class VisitorListTest implements JavaParserSugar {
     public void visitorListIterator() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x1 = JavaParser.parse("class X{}");
         list.add(x1);
-        CompilationUnit x2 = parse("class X{}");
+        CompilationUnit x2 = JavaParser.parse("class X{}");
         list.add(x2);
         Iterator<CompilationUnit> itr = list.iterator();
         assertEquals(x1, itr.next());
@@ -112,11 +106,11 @@ public class VisitorListTest implements JavaParserSugar {
     public void visitorListListIterator() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
-        CompilationUnit x1 = parse("class X{}");
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        CompilationUnit x1 = JavaParser.parse("class X{}");
         list.add(x1);
-        CompilationUnit x2 = parse("class X{}");
+        CompilationUnit x2 = JavaParser.parse("class X{}");
         list.add(x2);
         Iterator<CompilationUnit> itr = list.listIterator(2);
         assertEquals(x1, itr.next());
@@ -129,7 +123,7 @@ public class VisitorListTest implements JavaParserSugar {
 
     @Test
     public void visitorListRemove() {
-        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(x1);
@@ -139,8 +133,8 @@ public class VisitorListTest implements JavaParserSugar {
     @Test
     public void visitorListRemoveAll() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
@@ -151,12 +145,12 @@ public class VisitorListTest implements JavaParserSugar {
     @Test
     public void visitorListRetainAll() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
-        vList.add(parse("class X{}"));
+        vList.add(JavaParser.parse("class X{}"));
         vList.retainAll(list);
         assertTrue(vList.size() == 2);
     }
@@ -165,14 +159,14 @@ public class VisitorListTest implements JavaParserSugar {
     public void visitorListSubList() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         assertTrue(list.size() == 4);
         List<CompilationUnit> subLst = list.subList(1, 3);
         assertTrue(subLst.size() == 2);
-        subLst.add(parse("class X{}"));
+        subLst.add(JavaParser.parse("class X{}"));
         assertTrue(subLst.size() == 3);
         assertTrue(list.size() == 5);
 
@@ -181,8 +175,8 @@ public class VisitorListTest implements JavaParserSugar {
     @Test
     public void visitorListToArray() {
         List<CompilationUnit> list = new ArrayList<>();
-        list.add(parse("class X{}"));
-        list.add(parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         List<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);

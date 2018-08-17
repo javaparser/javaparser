@@ -20,7 +20,7 @@ public class TestComments {
         // Correct path so that it will point to the file with this code
         try (FileInputStream in = new FileInputStream(
                 new File(".\\src\\main\\java\\org\\test\\TestComments.java"))) {
-            CompilationUnit compilationUnit = getInternalParser().parse(in);
+            CompilationUnit compilationUnit = JavaParser.parse(in);
 
             new VoidVisitorAdapter<Object>() {
                 public void visit(MethodDeclaration method, Object arg) {

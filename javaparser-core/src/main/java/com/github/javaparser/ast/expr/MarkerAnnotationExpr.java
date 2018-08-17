@@ -27,12 +27,11 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static com.github.javaparser.JavaParser.parseName;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
-
-import static com.github.javaparser.JavaParser.getInternalParser;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -47,7 +46,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     }
 
     public MarkerAnnotationExpr(final String name) {
-        this(null, getInternalParser().parseName(name));
+        this(null, parseName(name));
     }
 
     @AllFieldsConstructor

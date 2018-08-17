@@ -27,7 +27,7 @@ public class Widget extends com.foo.base.Widget {
         combinedTypeSolver.add(new ReflectionTypeSolver(true));
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
 
-        CompilationUnit compilationUnit = getInternalParser().parse(new File(CLASS));
+        CompilationUnit compilationUnit = JavaParser.parse(new File(CLASS));
 
         JavaParserFacade parserFacade = JavaParserFacade.get(combinedTypeSolver);
         MethodDeclaration methodDeclaration = compilationUnit.getNodesByType(MethodDeclaration.class).stream()

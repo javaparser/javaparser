@@ -38,11 +38,12 @@ public class Issue1491 {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aJava);
-        cu.accept(new VoidVisitorAdapter<Void>() {
-            public void visit(NameExpr n, Void arg) {
+        CompilationUnit cu = JavaParser.parse(aJava);
+        cu.accept(new VoidVisitorAdapter() {
+            public void visit(NameExpr n, Object arg) {
                 ResolvedType type = JavaParserFacade.get(localCts)
                             .getType(n);
                 super.visit(n, arg);
@@ -61,12 +62,13 @@ public class Issue1491 {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aJava);
-        cu.accept(new VoidVisitorAdapter<Void>() {
+        CompilationUnit cu = JavaParser.parse(aJava);
+        cu.accept(new VoidVisitorAdapter() {
 
-            public void visit(MethodCallExpr n, Void arg) {
+            public void visit(MethodCallExpr n, Object arg) {
                 ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration();
                 super.visit(n, arg);
             }
@@ -84,11 +86,12 @@ public class Issue1491 {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aJava);
-        cu.accept(new VoidVisitorAdapter<Void>() {
-            public void visit(NameExpr n, Void arg) {
+        CompilationUnit cu = JavaParser.parse(aJava);
+        cu.accept(new VoidVisitorAdapter() {
+            public void visit(NameExpr n, Object arg) {
                 try {
                     ResolvedType type = JavaParserFacade.get(localCts).getType(n);
                 } catch (UnsolvedSymbolException e) {
@@ -97,7 +100,7 @@ public class Issue1491 {
                 super.visit(n, arg);
             }
 
-            public void visit(MethodCallExpr n, Void arg) {
+            public void visit(MethodCallExpr n, Object arg) {
                 ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration();
                 super.visit(n, arg);
             }

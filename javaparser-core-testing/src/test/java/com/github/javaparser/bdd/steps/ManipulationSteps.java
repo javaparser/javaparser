@@ -45,7 +45,8 @@ import org.jbehave.core.annotations.When;
 import java.util.EnumSet;
 import java.util.Map;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
@@ -104,12 +105,12 @@ public class ManipulationSteps {
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
     public void whenIsTheStringIsParsedByTheJavaParser(String value) {
-        blockStmt = getInternalParser().getInternalParser().parseBlock(value);
+        blockStmt = JavaParser.parseBlock(value);
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
     public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) {
-        statement = getInternalParser().parseStatement(value);
+        statement = JavaParser.parseStatement(value);
     }
 
     @When("the List of VariableDeclarations are set as the resources on TryStmt")
@@ -125,7 +126,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackageDeclaration(new PackageDeclaration(getInternalParser().parseName(packageName)));
+        compilationUnit.setPackageDeclaration(new PackageDeclaration(parseName(packageName)));
         state.put("cu1", compilationUnit);
     }
 

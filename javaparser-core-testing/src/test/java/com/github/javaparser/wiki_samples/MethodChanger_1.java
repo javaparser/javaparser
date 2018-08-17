@@ -32,7 +32,7 @@ public class MethodChanger_1 {
 
     public static void main(String[] args) throws Exception {
         // parse a file
-        CompilationUnit cu = new JavaParser().parse(new File("test.java"));
+        CompilationUnit cu = JavaParser.parse(new File("test.java"));
 
         // visit and change the methods names and parameters
         cu.accept(new MethodChangerVisitor(), null);

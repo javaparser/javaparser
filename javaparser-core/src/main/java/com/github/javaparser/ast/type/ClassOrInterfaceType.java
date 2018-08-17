@@ -72,7 +72,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     /**
-     * @deprecated use getInternalParser().parseClassOrInterfaceType instead. This constructor does not understand generics.
+     * @deprecated use JavaParser.parseClassOrInterfaceType instead. This constructor does not understand generics.
      */
     public ClassOrInterfaceType(final String name) {
         this(null, null, new SimpleName(name), null, new NodeList<>());

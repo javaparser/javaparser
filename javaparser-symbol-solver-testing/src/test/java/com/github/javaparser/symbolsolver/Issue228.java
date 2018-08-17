@@ -22,7 +22,7 @@ public class Issue228 extends AbstractResolutionTest{
                 + "    return i; "
                 + "  }"
                 + "}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         MethodCallExpr methodCall = cu.findAll(MethodCallExpr.class).get(0);
         JavaParserFacade parserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         MethodUsage solvedCall = parserFacade.solveMethodAsUsage(methodCall);

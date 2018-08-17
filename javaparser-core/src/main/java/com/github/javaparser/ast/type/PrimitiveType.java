@@ -20,27 +20,28 @@
  */
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-
-import javax.annotation.Generated;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.function.Consumer;
-
-import static com.github.javaparser.JavaParser.getInternalParser;
+import java.util.List;
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A primitive type.
@@ -100,7 +101,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         private String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
-            return getInternalParser().parseClassOrInterfaceType(nameOfBoxedType);
+            return parseClassOrInterfaceType(nameOfBoxedType);
         }
 
         public String asString() {

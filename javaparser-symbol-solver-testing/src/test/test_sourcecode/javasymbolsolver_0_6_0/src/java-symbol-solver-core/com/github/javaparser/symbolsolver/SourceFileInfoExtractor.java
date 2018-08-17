@@ -186,7 +186,7 @@ public class SourceFileInfoExtractor {
                 if (printFileName) {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
-                CompilationUnit cu = getInternalParser().parse(file);
+                CompilationUnit cu = JavaParser.parse(file);
                 List<Node> nodes = collectAllNodes(cu);
                 nodes.forEach(n -> solve(n));
             }
@@ -203,7 +203,7 @@ public class SourceFileInfoExtractor {
                 if (printFileName) {
                     out.println("- parsing " + file.getAbsolutePath());
                 }
-                CompilationUnit cu = getInternalParser().parse(file);
+                CompilationUnit cu = JavaParser.parse(file);
                 solveMethodCalls(cu);
             }
         }

@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -36,8 +35,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
-
-import javax.security.auth.login.Configuration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -71,7 +68,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
     @Test
     public void resolveEnumConstantAccess() {
         // configure symbol solver before parsing
-        configuration = configuration.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("EnumFieldAccess");

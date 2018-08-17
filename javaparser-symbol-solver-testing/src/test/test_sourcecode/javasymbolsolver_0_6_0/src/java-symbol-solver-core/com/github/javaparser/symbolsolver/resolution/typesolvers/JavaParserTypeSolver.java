@@ -70,7 +70,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private CompilationUnit parse(File srcFile) throws FileNotFoundException {
         if (!parsedFiles.containsKey(srcFile.getAbsolutePath())) {
-            parsedFiles.put(srcFile.getAbsolutePath(), getInternalParser().parse(srcFile));
+            parsedFiles.put(srcFile.getAbsolutePath(), JavaParser.parse(srcFile));
         }
         return parsedFiles.get(srcFile.getAbsolutePath());
     }

@@ -12,7 +12,8 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -80,11 +81,11 @@ public class ModuleDeclarationTest {
 
         ModuleExportsStmt moduleExportsStmt = module.getModuleStmts().get(5).asModuleExportsStmt();
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(getInternalParser().parseName("T1.U1"), getInternalParser().parseName("T2.U2"));
+        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
         ModuleOpensStmt moduleOpensStmt = module.getModuleStmts().get(7).asModuleOpensStmt();
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(getInternalParser().parseName("T1.U1"), getInternalParser().parseName("T2.U2"));
+        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
         ModuleUsesStmt moduleUsesStmt = module.getModuleStmts().get(8).asModuleUsesStmt();
         assertThat(moduleUsesStmt.getNameAsString()).isEqualTo("V.W");
@@ -92,8 +93,8 @@ public class ModuleDeclarationTest {
         ModuleProvidesStmt moduleProvidesStmt = module.getModuleStmts().get(9).asModuleProvidesStmt();
         assertThat(moduleProvidesStmt.getNameAsString()).isEqualTo("X.Y");
         assertThat(moduleProvidesStmt.getWith()).containsExactly(
-                getInternalParser().parseName("Z1.Z2"),
-                getInternalParser().parseName("Z3.Z4"));
+                parseName("Z1.Z2"),
+                parseName("Z3.Z4"));
 
     }
 

@@ -41,6 +41,6 @@ public abstract class AbstractResolutionTest extends AbstractTest {
         if (is == null) {
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
-        return parse(is);
+        return JavaParser.parse(is);
     }
 }

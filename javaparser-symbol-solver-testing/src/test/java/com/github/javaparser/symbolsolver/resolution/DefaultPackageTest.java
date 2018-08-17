@@ -1,8 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -19,17 +18,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
 /**
  * See issue #16
  */
-public class DefaultPackageTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class DefaultPackageTest {
 
     private class MyClassDeclaration extends AbstractClassDeclaration {
 
@@ -136,7 +130,7 @@ public class DefaultPackageTest implements JavaParserSugar {
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
-        ClassOrInterfaceType jpType = parse(code).getClassByName("A").get().getExtendedTypes(0);
+        ClassOrInterfaceType jpType = JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0);
         ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
@@ -147,7 +141,7 @@ public class DefaultPackageTest implements JavaParserSugar {
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
-        ClassOrInterfaceType jpType = parse(code).getClassByName("A").get().getExtendedTypes(0);
+        ClassOrInterfaceType jpType = JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0);
         ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
@@ -158,7 +152,7 @@ public class DefaultPackageTest implements JavaParserSugar {
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
-        ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(parse(code).getClassByName("A").get().getExtendedTypes(0));
+        ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0));
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
 }

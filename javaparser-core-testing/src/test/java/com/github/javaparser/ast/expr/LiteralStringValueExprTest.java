@@ -20,16 +20,15 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.JavaParser;
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static com.github.javaparser.JavaParser.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("OctalInteger")
-public class LiteralStringValueExprTest implements JavaParserSugar {
+public class LiteralStringValueExprTest {
 
     @Test
     public void trivialLiteralsAreConverted() {
@@ -164,8 +163,4 @@ public class LiteralStringValueExprTest implements JavaParserSugar {
         assertThat(new StringLiteralExpr("Hello\nWorld\rHello\"World\'").asString()).isEqualTo("Hello\nWorld\rHello\"World\'");
     }
 
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
 }

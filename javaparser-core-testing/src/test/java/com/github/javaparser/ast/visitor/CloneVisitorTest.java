@@ -21,9 +21,7 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.Type;
@@ -34,10 +32,9 @@ import org.junit.Test;
 import java.util.Iterator;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-public class CloneVisitorTest implements JavaParserSugar {
+public class CloneVisitorTest {
     CompilationUnit cu;
 
     @Before
@@ -107,8 +104,4 @@ public class CloneVisitorTest implements JavaParserSugar {
         assertEquals("List<@C ? extends Object>", type.toString());
     }
 
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
 }

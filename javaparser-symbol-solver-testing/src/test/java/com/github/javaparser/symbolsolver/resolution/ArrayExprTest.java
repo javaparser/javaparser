@@ -1,8 +1,10 @@
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -16,22 +18,17 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
 /**
  * See issue #17
  */
-public class ArrayExprTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class ArrayExprTest {
 
     @Test
     public void verifyAnArrayAccessExprTypeIsCalculatedProperly() {
         String code = "class A { String[] arrSQL; String toExamine = arrSQL[1]; }";
-        FieldDeclaration field = parse(code).getClassByName("A").get().getFieldByName("toExamine").get();
+        FieldDeclaration field = JavaParser.parse(code).getClassByName("A").get().getFieldByName("toExamine").get();
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(field.getVariables().get(0).getInitializer().get());
         assertEquals(true, type.isReferenceType());

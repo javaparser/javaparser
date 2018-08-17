@@ -3,13 +3,13 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parse;
 import static org.junit.Assert.assertEquals;
 
 public class FieldDeclarationTest {
     @Test
     public void wofjweoifj() {
-        CompilationUnit compilationUnit = getInternalParser().parse("" +
+        CompilationUnit compilationUnit = parse("" +
                 "class A {\n" +
                 "    int a, b;\n" +
                 "}");

@@ -28,14 +28,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.Assert.assertEquals;
 
 public class CompilationUnitTest {
     @Test
     public void issue578TheFirstCommentIsWithinTheCompilationUnit() {
-        CompilationUnit compilationUnit = getInternalParser().parse("// This is my class, with my comment\n" +
+        CompilationUnit compilationUnit = parse("// This is my class, with my comment\n" +
                 "class A {\n" +
                 "    static int a;\n" +
                 "}");
@@ -48,7 +48,7 @@ public class CompilationUnitTest {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "Z.java"));
 
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = parse(testFile);
         Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
         assertEquals(sourceRoot, sourceRoot1);
     }
@@ -58,7 +58,7 @@ public class CompilationUnitTest {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
 
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = parse(testFile);
         cu.getStorage().get().getSourceRoot();
     }
 
@@ -67,7 +67,7 @@ public class CompilationUnitTest {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources", "com", "github", "javaparser", "storage")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("B.java"));
 
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = parse(testFile);
         Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
         assertEquals(sourceRoot, sourceRoot1);
     }
@@ -76,14 +76,14 @@ public class CompilationUnitTest {
     public void testGetPrimaryTypeName() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = JavaParser.parse(testFile);
         
         assertEquals("PrimaryType", cu.getPrimaryTypeName().get());
     }
 
     @Test
     public void testNoPrimaryTypeName() {
-        CompilationUnit cu = getInternalParser().parse("class PrimaryType{}");
+        CompilationUnit cu = JavaParser.parse("class PrimaryType{}");
 
         assertEquals(false, cu.getPrimaryTypeName().isPresent());
     }
@@ -91,7 +91,7 @@ public class CompilationUnitTest {
     public void testGetPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = JavaParser.parse(testFile);
 
         assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
     }
@@ -100,7 +100,7 @@ public class CompilationUnitTest {
     public void testNoPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType2.java"));
-        CompilationUnit cu = getInternalParser().parse(testFile);
+        CompilationUnit cu = JavaParser.parse(testFile);
 
         assertEquals(false, cu.getPrimaryType().isPresent());
     }

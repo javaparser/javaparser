@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseExpression;
 
 /**
  * A node with arguments.
@@ -41,7 +41,7 @@ public interface NodeWithArguments<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N addArgument(String arg) {
-        return addArgument(getInternalParser().parseExpression(arg));
+        return addArgument(parseExpression(arg));
     }
 
     @SuppressWarnings("unchecked")

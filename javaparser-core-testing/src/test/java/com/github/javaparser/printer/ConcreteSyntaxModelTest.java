@@ -21,20 +21,15 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
-public class ConcreteSyntaxModelTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class ConcreteSyntaxModelTest {
 
     private String print(Node node) {
         return ConcreteSyntaxModel.genericPrettyPrint(node);
@@ -42,32 +37,32 @@ public class ConcreteSyntaxModelTest implements JavaParserSugar {
 
     @Test
     public void printSimpleClassExpr() {
-        ClassExpr expr = parseExpression("Foo.class");
+        ClassExpr expr = JavaParser.parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
     public void printArrayClassExpr() {
-        ClassExpr expr = parseExpression("Foo[].class");
+        ClassExpr expr = JavaParser.parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
     public void printGenericClassExpr() {
-        ClassExpr expr = parseExpression("Foo<String>.class");
+        ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
     public void printSimplestClass() {
-        Node node = parse("class A {}");
+        Node node = JavaParser.parse("class A {}");
         assertEquals("class A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
     public void printAClassWithField() {
-        Node node = parse("class A { int a; }");
+        Node node = JavaParser.parse("class A { int a; }");
         assertEquals("class A {" + EOL
                 + EOL +
                 "    int a;" + EOL +
@@ -76,26 +71,26 @@ public class ConcreteSyntaxModelTest implements JavaParserSugar {
 
     @Test
     public void printParameters() {
-        Node node = parseBodyDeclaration("int x(int y, int z) {}");
+        Node node = JavaParser.parseBodyDeclaration("int x(int y, int z) {}");
         assertEquals("int x(int y, int z) {" + EOL + "}", print(node));
     }
 
     @Test
     public void printReceiverParameter() {
-        Node node = parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
+        Node node = JavaParser.parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
         assertEquals("int x(X A.B.this, int y, int z) {" + EOL + "}", print(node));
     }
 
     @Test
     public void printAnEmptyInterface() {
-        Node node = parse("interface A {}");
+        Node node = JavaParser.parse("interface A {}");
         assertEquals("interface A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
     public void printAnEmptyInterfaceWithModifier() {
-        Node node = parse("public interface A {}");
+        Node node = JavaParser.parse("public interface A {}");
         assertEquals("public interface A {" + EOL +
                 "}" + EOL, print(node));
     }

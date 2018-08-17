@@ -34,7 +34,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.EnumSet;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.EOL;
 
 /**
@@ -114,7 +114,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void replacingExtendedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
-        cid.getExtendedTypes().set(0, getInternalParser().parseClassOrInterfaceType("Bar"));
+        cid.getExtendedTypes().set(0, parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A extends Bar {}", cid);
     }
 
@@ -137,7 +137,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void replacingImplementedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
-        cid.getImplementedTypes().set(0, getInternalParser().parseClassOrInterfaceType("Bar"));
+        cid.getImplementedTypes().set(0, parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A implements Bar {}", cid);
     }
 

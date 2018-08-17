@@ -1,23 +1,16 @@
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ClassOrInterfaceDeclarationTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class ClassOrInterfaceDeclarationTest {
     @Test
     public void staticNestedClass() {
-        CompilationUnit cu = parse("class X{static class Y{}}");
+        CompilationUnit cu = JavaParser.parse("class X{static class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
@@ -27,7 +20,7 @@ public class ClassOrInterfaceDeclarationTest implements JavaParserSugar {
 
     @Test
     public void nestedInterface() {
-        CompilationUnit cu = parse("class X{interface Y{}}");
+        CompilationUnit cu = JavaParser.parse("class X{interface Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
@@ -37,7 +30,7 @@ public class ClassOrInterfaceDeclarationTest implements JavaParserSugar {
 
     @Test
     public void nonStaticNestedClass() {
-        CompilationUnit cu = parse("class X{class Y{}}");
+        CompilationUnit cu = JavaParser.parse("class X{class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertTrue(y.isInnerClass());
@@ -47,7 +40,7 @@ public class ClassOrInterfaceDeclarationTest implements JavaParserSugar {
 
     @Test
     public void topClass() {
-        CompilationUnit cu = parse("class X{}");
+        CompilationUnit cu = JavaParser.parse("class X{}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get();
 
         assertFalse(y.isInnerClass());
@@ -57,7 +50,7 @@ public class ClassOrInterfaceDeclarationTest implements JavaParserSugar {
 
     @Test
     public void localClass() {
-        MethodDeclaration method= (MethodDeclaration)parseBodyDeclaration("void x(){class X{};}");
+        MethodDeclaration method= (MethodDeclaration)JavaParser.parseBodyDeclaration("void x(){class X{};}");
         ClassOrInterfaceDeclaration x = method.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         assertFalse(x.isInnerClass());

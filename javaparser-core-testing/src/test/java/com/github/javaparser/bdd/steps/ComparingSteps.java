@@ -21,22 +21,16 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ComparingSteps implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class ComparingSteps {
 
     private CompilationUnit first;
     private CompilationUnit second;
@@ -47,12 +41,12 @@ public class ComparingSteps implements JavaParserSugar {
 
     @Given("the first class:$classSrc")
     public void givenTheFirstClass(String classSrc) {
-        this.first = parse(classSrc.trim());
+        this.first = JavaParser.parse(classSrc.trim());
     }
 
     @Given("the second class:$classSrc")
     public void givenTheSecondClass(String classSrc) {
-        this.second = parse(classSrc.trim());
+        this.second = JavaParser.parse(classSrc.trim());
     }
 
     /*

@@ -9,7 +9,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
@@ -37,8 +37,8 @@ class InitializePropertyMetaModelsStatementsGenerator {
         final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
         final String fieldAddition = f("%s.getDeclaredPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);
 
-        initializePropertyMetaModelsStatements.add(getInternalParser().parseStatement(fieldSetting));
-        initializePropertyMetaModelsStatements.add(getInternalParser().parseStatement(fieldAddition));
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldSetting));
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
     void generateDerivedProperty(Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) {
@@ -61,8 +61,8 @@ class InitializePropertyMetaModelsStatementsGenerator {
         final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
         final String fieldAddition = f("%s.getDerivedPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);
 
-        initializePropertyMetaModelsStatements.add(getInternalParser().parseStatement(fieldSetting));
-        initializePropertyMetaModelsStatements.add(getInternalParser().parseStatement(fieldAddition));
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldSetting));
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
     private boolean isNonEmpty(Field field) {

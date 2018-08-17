@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Name;
@@ -36,13 +36,12 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class NodeListTest implements JavaParserSugar {
+public class NodeListTest {
 
     private AstObserver createObserver(List<String> changes) {
         return new AstObserver() {
@@ -77,7 +76,7 @@ public class NodeListTest implements JavaParserSugar {
     public void addAllWithoutIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -91,7 +90,7 @@ public class NodeListTest implements JavaParserSugar {
     public void addAllWithIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -105,7 +104,7 @@ public class NodeListTest implements JavaParserSugar {
     public void clear() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -119,7 +118,7 @@ public class NodeListTest implements JavaParserSugar {
     public void set() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -132,7 +131,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -144,7 +143,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeFirstNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -164,7 +163,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeLastNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -184,7 +183,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeObject() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -196,7 +195,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -209,7 +208,7 @@ public class NodeListTest implements JavaParserSugar {
     public void retainAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -223,7 +222,7 @@ public class NodeListTest implements JavaParserSugar {
     public void replaceAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -242,7 +241,7 @@ public class NodeListTest implements JavaParserSugar {
     public void removeIf() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int longName; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -326,10 +325,5 @@ public class NodeListTest implements JavaParserSugar {
         list.addAfter(new Name("xxx"), cde);
 
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
-    }
-
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
     }
 }

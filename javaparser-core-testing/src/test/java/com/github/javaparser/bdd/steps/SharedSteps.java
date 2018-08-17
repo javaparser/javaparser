@@ -21,9 +21,8 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -38,14 +37,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
 
-public class SharedSteps implements JavaParserSugar {
+public class SharedSteps {
 
     /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
@@ -74,23 +72,23 @@ public class SharedSteps implements JavaParserSugar {
 
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) {
-        state.put("cu1", parse(classSrc.trim()));
+        state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following source is parsed (trimming space):$classSrc")
     public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) {
-        state.put("cu1", parse(classSrc.trim()));
+        state.put("cu1", JavaParser.parse(classSrc.trim()));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) {
-        state.put("cu2", parse(classSrc.trim()));
+        state.put("cu2", JavaParser.parse(classSrc.trim()));
     }
 
     @When("file \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
-        CompilationUnit compilationUnit = parse(new File(url.toURI()));
+        CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));
         state.put("cu1", compilationUnit);
     }
 
@@ -161,10 +159,5 @@ public class SharedSteps implements JavaParserSugar {
             memberCount++;
         }
         throw new IllegalArgumentException("Method not found at position " + methodPosition + "in class " + classPosition);
-    }
-
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
     }
 }

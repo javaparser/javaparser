@@ -21,9 +21,8 @@
 
 package com.github.javaparser.javadoc;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
@@ -33,16 +32,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JavadocTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class JavadocTest {
 
     @Test
     public void toTextForEmptyJavadoc() {
@@ -84,7 +78,7 @@ public class JavadocTest implements JavaParserSugar {
 
     @Test
     public void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
+        Javadoc javadoc = JavaParser.parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
         assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
         assertEquals(2, javadoc.getBlockTags().size());
     }
@@ -98,7 +92,7 @@ public class JavadocTest implements JavaParserSugar {
                         "@param versionID the id of the {@link TOVersion}." + EOL +
                         "@return the filenames" + EOL +
                         "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
-        String javadoc = parseJavadoc(docText).toText();
+        String javadoc = JavaParser.parseJavadoc(docText).toText();
         assertTrue(javadoc.contains("{@link TOVersion}"));
     }
 
@@ -111,7 +105,7 @@ public class JavadocTest implements JavaParserSugar {
                 " * @author censored" + EOL +
                 " * " + EOL +
                 " * @param <T>" + EOL;
-        Javadoc javadoc = parseJavadoc(comment);
+        Javadoc javadoc = JavaParser.parseJavadoc(comment);
         assertEquals(2, javadoc.getBlockTags().size());
     }
 
@@ -148,7 +142,7 @@ public class JavadocTest implements JavaParserSugar {
 
     @Test
     public void issue1533() {
-        CompilationUnit compilationUnit = parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
+        CompilationUnit compilationUnit = JavaParser.parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
         List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
         assertEquals(3, elements.size());
         assertEquals(new JavadocSnippet("hallo "), elements.get(0));

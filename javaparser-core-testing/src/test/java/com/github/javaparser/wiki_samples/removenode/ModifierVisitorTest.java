@@ -31,13 +31,11 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 
 import java.io.FileInputStream;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
-
 public class ModifierVisitorTest {
 
     public static void main(String... args) throws Exception {
         // parse the file
-        CompilationUnit cu = new JavaParser().parse(new FileInputStream("forGitHubTest.java"));
+        CompilationUnit cu = JavaParser.parse(new FileInputStream("forGitHubTest.java"));
 
         // The visitor should remove all a=20 variable declarations.
         cu.accept(new MyVisitor(), null);

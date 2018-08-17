@@ -1,8 +1,7 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -16,7 +15,6 @@ import java.nio.file.Path;
 
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -28,7 +26,7 @@ public class Issue185 extends AbstractResolutionTest {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        CompilationUnit agendaCu = parse(adaptPath("src/test/resources/recursion-issue/Usage.java"));
+        CompilationUnit agendaCu = JavaParser.parse(adaptPath("src/test/resources/recursion-issue/Usage.java"));
         MethodCallExpr foo = Navigator.findMethodCall(agendaCu, "foo").get();
         assertNotNull(foo);
         JavaParserFacade.get(combinedTypeSolver).getType(foo);

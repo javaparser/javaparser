@@ -4,7 +4,11 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -29,9 +33,10 @@ public class InternalClassInInterfaceTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aClass);
+        CompilationUnit cu = JavaParser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("AnInterface.ListChangeType.ADDITION") && n.getRange().get().begin.line == 4);
 
         assertTrue(fae.isPresent());
@@ -50,9 +55,10 @@ public class InternalClassInInterfaceTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aClass);
+        CompilationUnit cu = JavaParser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.AnInterface.ListChangeType.ADDITION") && n.getRange().get().begin.line == 5);
 
         assertTrue(fae.isPresent());
@@ -71,9 +77,10 @@ public class InternalClassInInterfaceTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aClass);
+        CompilationUnit cu = JavaParser.parse(aClass);
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("AnInterface.ListChangeType.ADDITION") && n.getRange().get().begin.line == 6);
 
         assertTrue(fae.isPresent());
@@ -92,9 +99,10 @@ public class InternalClassInInterfaceTest {
         localCts.add(new ReflectionTypeSolver());
         localCts.add(new JavaParserTypeSolver(src));
 
-        JavaParser parser = new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts)));
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
-        CompilationUnit cu = parser.parse(aClass);
+        CompilationUnit cu = JavaParser.parse(aClass);
 
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.AnInterface.ListChangeType.ADDITION") && n.getRange().get().begin.line == 7);
 

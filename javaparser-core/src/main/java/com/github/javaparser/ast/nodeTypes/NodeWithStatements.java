@@ -69,7 +69,7 @@ public interface NodeWithStatements<N extends Node> {
      * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semicolon
      */
     default N addStatement(String statement) {
-        return addStatement(getInternalParser().parseStatement(statement));
+        return addStatement(parseStatement(statement));
     }
 
     default N addStatement(int index, final Expression expr) {

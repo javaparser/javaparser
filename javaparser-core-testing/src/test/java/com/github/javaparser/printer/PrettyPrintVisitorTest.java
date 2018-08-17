@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,35 +33,30 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
-public class PrettyPrintVisitorTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
+public class PrettyPrintVisitorTest {
 
     @Test
     public void getMaximumCommonTypeWithoutAnnotations() {
-        VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a[], b[]");
+        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
         assertEquals("int[]", vde1.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[][] a[], b[]");
+        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
         assertEquals("int[][][]", vde2.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde3 = parseVariableDeclarationExpr("int[][] a, b[]");
+        VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
         assertEquals("int[][]", vde3.getMaximumCommonType().get().toString());
     }
 
     @Test
     public void getMaximumCommonTypeWithAnnotations() {
-        VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a @Foo [], b[]");
+        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
         assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
+        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
         assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().get().toString());
     }
 
@@ -71,32 +66,32 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
 
     @Test
     public void printSimpleClassExpr() {
-        ClassExpr expr = parseExpression("Foo.class");
+        ClassExpr expr = JavaParser.parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
     public void printArrayClassExpr() {
-        ClassExpr expr = parseExpression("Foo[].class");
+        ClassExpr expr = JavaParser.parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
     public void printGenericClassExpr() {
-        ClassExpr expr = parseExpression("Foo<String>.class");
+        ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
     public void printSimplestClass() {
-        Node node = parse("class A {}");
+        Node node = JavaParser.parse("class A {}");
         assertEquals("class A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
     public void printAClassWithField() {
-        Node node = parse("class A { int a; }");
+        Node node = JavaParser.parse("class A { int a; }");
         assertEquals("class A {" + EOL
                 + EOL +
                 "    int a;" + EOL +
@@ -105,7 +100,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
 
     @Test
     public void printAReceiverParameter() {
-        Node node = parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
+        Node node = JavaParser.parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
         assertEquals("int x(@O X A.B.this, int y) {" + EOL + "}", print(node));
     }
 
@@ -117,7 +112,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
                 "    r = (Runnable & Serializable)() -> {};" + EOL +
                 "    r = (Runnable & I)() -> {};" + EOL +
                 "  }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + EOL + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
@@ -126,7 +121,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
     @Test
     public void printIntersectionType() {
         String code = "(Runnable & Serializable) (() -> {})";
-        Expression expression = parseExpression(code);
+        Expression expression = JavaParser.parseExpression(code);
         Type type = ((CastExpr) expression).getType();
 
         assertEquals("Runnable & Serializable", print(type));
@@ -138,7 +133,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
                 + "  Object f() {" + EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("return (Comparator<Map.Entry<K, V>> & Serializable) (c1, c2) -> c1.getKey().compareTo(c2.getKey());", print(methodDeclaration.getBody().get().getStatements().get(0)));
@@ -147,7 +142,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
     @Test
     public void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
@@ -156,7 +151,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
     @Test
     public void printImportsDefaultOrder() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         String content = cu.toString();
         assertEqualsNoEol("import x.y.z;\n" +
                 "import a.b.c;\n" +
@@ -169,7 +164,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
     @Test
     public void printImportsOrdered() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
         String content = cu.toString(orderImports);
         assertEqualsNoEol("import static b.c.d;\n" +
@@ -293,7 +288,7 @@ public class PrettyPrintVisitorTest implements JavaParserSugar {
 
     @Test
     public void blockcommentGetsNoFormatting() {
-        CompilationUnit cu = parse("class A {\n" +
+        CompilationUnit cu = JavaParser.parse("class A {\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
                 "        //sdfsdfsdf\n" +
                 "            //sdfds\n" +

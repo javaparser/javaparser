@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.utils.CodeGenerationUtils;
@@ -31,15 +31,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.Assert.assertEquals;
 
-public class ConcreteSyntaxModelAcceptanceTest implements JavaParserSugar {
-    @Override
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(start, provider);
-    }
-
+public class ConcreteSyntaxModelAcceptanceTest {
     private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(ConcreteSyntaxModelAcceptanceTest.class).resolve("src/test/test_sourcecode");
 
     private String prettyPrint(Node node) {
@@ -52,13 +46,13 @@ public class ConcreteSyntaxModelAcceptanceTest implements JavaParserSugar {
 
     @Test
     public void printingExamplePrettyPrintVisitor() throws IOException {
-        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
+        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
         assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
     @Test
     public void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
+        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
         assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
     }
 

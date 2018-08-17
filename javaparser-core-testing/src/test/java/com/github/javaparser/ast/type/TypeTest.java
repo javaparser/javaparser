@@ -8,7 +8,8 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
@@ -45,12 +46,12 @@ public class TypeTest {
     }
 
     private String typeAsString(String s) {
-        return getInternalParser().parseVariableDeclarationExpr(s).getVariable(0).getType().asString();
+        return parseVariableDeclarationExpr(s).getVariable(0).getType().asString();
     }
 
     @Test
     public void arrayType() {
-        Type type = getInternalParser().parseType("int[]");
+        Type type = parseType("int[]");
         assertTrue(type.isArrayType());
         ArrayType arrayType = type.asArrayType();
         final ArrayType[] s = new ArrayType[1];
@@ -60,7 +61,7 @@ public class TypeTest {
 
     @Test
     public void issue1251() {
-        final Type type = getInternalParser().parseType("TypeUtilsTest<String>.Tester");
+        final Type type = parseType("TypeUtilsTest<String>.Tester");
         assertEquals("TypeUtilsTest<String>.Tester", type.toString());
     }
 

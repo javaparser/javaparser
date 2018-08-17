@@ -43,7 +43,7 @@ public class Issue300 extends AbstractResolutionTest {
     @Test
     public void fieldAccessIssue() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue300/Issue300.java");
-        CompilationUnit cu = parse(pathToSourceFile);
+        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
         final FieldAccessExpr fieldAccess = Navigator.findNodeOfGivenClass(cu, FieldAccessExpr.class);
         assertNotNull(fieldAccess);

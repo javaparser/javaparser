@@ -33,7 +33,7 @@ public class CuPrinter {
         FileInputStream in = new FileInputStream("test.java");
 
         // parse the file
-        CompilationUnit cu = new JavaParser().parse(in);
+        CompilationUnit cu = JavaParser.parse(in);
 
         // prints the resulting compilation unit to default system output
         System.out.println(cu.toString());

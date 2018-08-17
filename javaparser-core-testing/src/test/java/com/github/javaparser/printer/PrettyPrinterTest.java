@@ -33,7 +33,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.getInternalParser;
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
@@ -45,12 +46,12 @@ import static org.junit.Assert.assertEquals;
 public class PrettyPrinterTest {
 
     private String prettyPrintField(String code) {
-        CompilationUnit cu = getInternalParser().parse(code);
+        CompilationUnit cu = parse(code);
         return new PrettyPrinter().print(cu.findFirst(FieldDeclaration.class).get());
     }
 
     private String prettyPrintVar(String code) {
-        CompilationUnit cu = getInternalParser().parse(code);
+        CompilationUnit cu = parse(code);
         return new PrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
@@ -93,7 +94,7 @@ public class PrettyPrinterTest {
     }
 
     private String prettyPrintConfigurable(String code) {
-        CompilationUnit cu = getInternalParser().parse(code);
+        CompilationUnit cu = parse(code);
         PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
@@ -125,7 +126,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(getInternalParser().parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -142,7 +143,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(getInternalParser().parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -165,7 +166,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(getInternalParser().parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -182,24 +183,24 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(getInternalParser().parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
     public void enumConstantsHorizontally() {
-        CompilationUnit cu = getInternalParser().parse("enum X{A, B, C, D, E}");
+        CompilationUnit cu = parse("enum X{A, B, C, D, E}");
         assertEqualsNoEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrinter().print(cu));
     }
 
     @Test
     public void enumConstantsVertically() {
-        CompilationUnit cu = getInternalParser().parse("enum X{A, B, C, D, E, F}");
+        CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
         assertEqualsNoEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrinter().print(cu));
     }
 
     @Test
     public void printingInconsistentVariables() {
-        FieldDeclaration fieldDeclaration = getInternalParser().parseBodyDeclaration("int a, b;").asFieldDeclaration();
+        FieldDeclaration fieldDeclaration = parseBodyDeclaration("int a, b;").asFieldDeclaration();
 
         assertEquals("int a, b;", fieldDeclaration.toString());
 
@@ -215,7 +216,7 @@ public class PrettyPrinterTest {
     @Test
     public void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = getInternalParser().parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
                 .print(cu);
 
@@ -256,7 +257,7 @@ public class PrettyPrinterTest {
 
     @Test
     public void noChainsIndentsInIf() {
-        Statement cu = getInternalParser().parseStatement("if (x.y().z()) { boo().baa().bee(); }");
+        Statement cu = JavaParser.parseStatement("if (x.y().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -269,7 +270,7 @@ public class PrettyPrinterTest {
 
     @Test
     public void noChainsIndentsInFor() {
-        Statement cu = getInternalParser().parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
+        Statement cu = JavaParser.parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -282,7 +283,7 @@ public class PrettyPrinterTest {
 
     @Test
     public void noChainsIndentsInWhile() {
-        Statement cu = getInternalParser().parseStatement("while(x.y().z()) { boo().baa().bee(); }");
+        Statement cu = JavaParser.parseStatement("while(x.y().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -296,7 +297,7 @@ public class PrettyPrinterTest {
     @Test
     public void indentWithTabsAsFarAsPossible() {
 
-        CompilationUnit cu = getInternalParser().parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
@@ -322,7 +323,7 @@ public class PrettyPrinterTest {
     @Test
     public void indentWithTabsAlignWithSpaces() {
 
-        CompilationUnit cu = getInternalParser().parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
+        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
