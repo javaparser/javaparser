@@ -44,6 +44,7 @@ public class GrammarLetterGenerator {
         }
         // Too lazy to remove the final illegal comma.
         System.out.println("]");
+        System.out.println("        | <UNICODE_ESCAPE>");
         System.out.println("  >");
     }
 
