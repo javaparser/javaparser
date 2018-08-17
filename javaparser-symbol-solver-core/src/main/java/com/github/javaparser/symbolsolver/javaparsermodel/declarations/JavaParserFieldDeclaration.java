@@ -100,7 +100,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override
