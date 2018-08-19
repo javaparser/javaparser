@@ -105,7 +105,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public ResolvedTypeDeclaration declaringType() {
-        Optional<TypeDeclaration> typeDeclaration = wrappedNode.findParent(TypeDeclaration.class);
+        Optional<TypeDeclaration> typeDeclaration = wrappedNode.findAncestor(TypeDeclaration.class);
         if (typeDeclaration.isPresent()) {
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(typeDeclaration.get());
         }
