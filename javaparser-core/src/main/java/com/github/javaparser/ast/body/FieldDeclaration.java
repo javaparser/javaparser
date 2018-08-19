@@ -21,10 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
@@ -48,7 +45,6 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 
-import javax.annotation.Generated;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -56,11 +52,6 @@ import java.util.function.Consumer;
 import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static
