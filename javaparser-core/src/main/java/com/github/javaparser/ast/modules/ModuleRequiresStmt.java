@@ -15,10 +15,10 @@ import com.github.javaparser.metamodel.ModuleRequiresStmtMetaModel;
 import java.util.EnumSet;
 import static com.github.javaparser.ast.Modifier.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A require directive in module-info.java. <code>require a.b.C;</code>

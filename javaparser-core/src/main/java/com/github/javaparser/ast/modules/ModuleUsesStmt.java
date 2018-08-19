@@ -11,10 +11,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
-import javax.annotation.Generated;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A uses directive in module-info.java. <code>uses V.W;</code>
@@ -131,6 +131,7 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
