@@ -204,7 +204,22 @@ class JavassistUtils {
         }
     }
 
-    static String extractParameterName(CtBehavior method, int paramNumber) {
+    /**
+     * Returns the {@code paramNumber}th parameter of a method or constructor, if it is available.
+     * <p>
+     * The name is not available, if
+     * <ul>
+     * <li>the method is abstract, i.e. explicitly declared as abstract or it is a non-default interface method</li>
+     * <li>methods and constructors from jar files, which have been compiled without debug symbols</li>
+     * </ul>
+     * <p>
+     * The parameters are counted from 0, skipping the implicit {@code this} parameter of non-static methods.
+     *
+     * @param method the method to look into
+     * @param paramNumber the number of the parameter to look for
+     * @return the found parameter name or empty, if the name is not available
+     */
+    static Optional<String> extractParameterName(CtBehavior method, int paramNumber) {
         MethodInfo methodInfo = method.getMethodInfo();
         CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
         if (codeAttribute != null) {
@@ -212,10 +227,10 @@ class JavassistUtils {
                     .tag);
             if (attr != null) {
                 int pos = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
-                return attr.variableName(paramNumber + pos);
+                return Optional.ofNullable(attr.variableName(paramNumber + pos));
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }

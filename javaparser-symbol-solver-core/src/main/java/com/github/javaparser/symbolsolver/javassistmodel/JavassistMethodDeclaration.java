@@ -36,6 +36,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -131,14 +132,15 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
             if ((ctMethod.getModifiers() & javassist.Modifier.VARARGS) > 0) {
                 variadic = i == (ctMethod.getParameterTypes().length - 1);
             }
-            String paramName = JavassistUtils.extractParameterName(ctMethod, i);
+            Optional<String> paramName = JavassistUtils.extractParameterName(ctMethod, i);
             if (ctMethod.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
                 return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType,
-                        typeSolver, this), typeSolver, variadic, paramName);
+                        typeSolver, this), typeSolver, variadic, paramName.orElse(null));
             } else {
-                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic, paramName);
+                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic,
+                        paramName.orElse(null));
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

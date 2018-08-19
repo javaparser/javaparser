@@ -28,6 +28,7 @@ import javassist.bytecode.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -90,15 +91,15 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
             if ((ctConstructor.getModifiers() & javassist.Modifier.VARARGS) > 0) {
                 variadic = i == (ctConstructor.getParameterTypes().length - 1);
             }
-            String paramName = JavassistUtils.extractParameterName(ctConstructor, i);
+            Optional<String> paramName = JavassistUtils.extractParameterName(ctConstructor, i);
             if (ctConstructor.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctConstructor.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
                 return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType,
-                        typeSolver, this), typeSolver, variadic, paramName);
+                        typeSolver, this), typeSolver, variadic, paramName.orElse(null));
             } else {
                 return new JavassistParameterDeclaration(ctConstructor.getParameterTypes()[i], typeSolver, variadic,
-                        paramName);
+                        paramName.orElse(null));
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

@@ -47,7 +47,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void noNamesAvailable_inInterfaceMethods() {
+    public void noNamesAvailableInInterfaceMethods() {
         JavassistInterfaceDeclaration namesNotAvailable = (JavassistInterfaceDeclaration) typeSolver
                 .solveType("com.github.javaparser.ast.nodeTypes.NodeWithBody");
 
@@ -60,7 +60,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void name_forConstructorParameter() {
+    public void nameForConstructorParameter() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         ResolvedConstructorDeclaration constructor = rangeDecl.getConstructors().get(0);
         assertEquals("begin", constructor.getParam(0).getName());
@@ -70,7 +70,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void name_forMethodParameters() {
+    public void nameForMethodParameters() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         for (ResolvedMethodDeclaration methodDecl : rangeDecl.getDeclaredMethods()) {
             switch (methodDecl.getName()) {
