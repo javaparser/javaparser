@@ -1,3 +1,11 @@
+Version 3.6.18
+------------------
+* Parsing Java 11 is now supported.
+* Running on Java 11 is now supported.
+* Building on JDK 11 is NOT yet supported.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/101?closed=1)
+
 Version 3.6.17
 ------------------
 * A new artifact was added: javaparser-core-serialization.

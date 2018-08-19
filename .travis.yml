@@ -4,7 +4,6 @@ install: mvn install -DskipTests=true
 script: mvn test -P AlsoSlowTests
 jdk:
   - oraclejdk8
-  - oraclejdk9
   - oraclejdk10
 notifications:
   webhooks:
