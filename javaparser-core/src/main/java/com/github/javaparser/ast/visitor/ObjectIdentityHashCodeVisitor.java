@@ -219,7 +219,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityHashCodeVisitorGenerator")
-    public Integer visit(final ForeachStmt n, final Void arg) {
+    public Integer visit(final ForEachStmt n, final Void arg) {
         return n.hashCode();
     }
 

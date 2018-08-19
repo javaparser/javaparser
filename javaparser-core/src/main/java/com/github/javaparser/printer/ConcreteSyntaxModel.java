@@ -602,7 +602,7 @@ public class ConcreteSyntaxModel {
                 semicolon()
         ));
 
-        concreteSyntaxModelByClass.put(ForeachStmt.class, sequence(
+        concreteSyntaxModelByClass.put(ForEachStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.FOR),
                 space(),

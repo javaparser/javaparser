@@ -487,7 +487,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
-    public Visitable visit(final ForeachStmt n, final A arg) {
+    public Visitable visit(final ForEachStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
         Expression iterable = (Expression) n.getIterable().accept(this, arg);
         VariableDeclarationExpr variable = (VariableDeclarationExpr) n.getVariable().accept(this, arg);

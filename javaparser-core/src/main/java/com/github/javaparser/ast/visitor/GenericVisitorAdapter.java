@@ -774,7 +774,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final ForeachStmt n, final A arg) {
+    public R visit(final ForEachStmt n, final A arg) {
         R result;
         {
             result = n.getBody().accept(this, arg);

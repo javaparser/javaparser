@@ -932,8 +932,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ForeachStmt n, final Visitable arg) {
-        final ForeachStmt n2 = (ForeachStmt) arg;
+    public Boolean visit(final ForEachStmt n, final Visitable arg) {
+        final ForEachStmt n2 = (ForEachStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodeEquals(n.getIterable(), n2.getIterable()))

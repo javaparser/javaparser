@@ -254,7 +254,7 @@ public interface GenericVisitor<R, A> {
     R visit(DoStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ForeachStmt n, A arg);
+    R visit(ForEachStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ForStmt n, A arg);

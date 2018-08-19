@@ -146,7 +146,7 @@ public interface VoidVisitor<A> {
     void visit(ForStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ForeachStmt n, A arg);
+    void visit(ForEachStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(IfStmt n, A arg);

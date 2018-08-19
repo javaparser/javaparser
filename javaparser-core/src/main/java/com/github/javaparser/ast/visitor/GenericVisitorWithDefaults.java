@@ -239,7 +239,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorWithDefaultsGenerator")
-    public R visit(final ForeachStmt n, final A arg) {
+    public R visit(final ForEachStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 

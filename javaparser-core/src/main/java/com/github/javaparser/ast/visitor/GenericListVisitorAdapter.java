@@ -865,7 +865,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ForeachStmt n, final A arg) {
+    public List<R> visit(final ForEachStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
