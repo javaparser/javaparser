@@ -142,7 +142,7 @@ public class JavaParserFacade {
 
         solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
         if (!optAncestor.isPresent()) {
             return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
         }
@@ -180,7 +180,7 @@ public class JavaParserFacade {
                 return SymbolReference.solved(clazz.getCorrespondingDeclaration());
             }
             // Attempt to resolve locally in Compilation unit
-            Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
+            Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
             if (cu.isPresent()) {
                 Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
                 if (classByName.isPresent()) {
