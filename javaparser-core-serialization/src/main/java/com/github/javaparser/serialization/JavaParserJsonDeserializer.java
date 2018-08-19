@@ -80,6 +80,8 @@ public class JavaParserJsonDeserializer {
                         parameters.put(name, nodeJson.getString(name));
                     } else if (type == boolean.class) {
                         parameters.put(name, Boolean.parseBoolean(nodeJson.getString(name)));
+                    } else if (Enum.class.isAssignableFrom(type)) {
+                        parameters.put(name, Enum.valueOf((Class<? extends Enum>) type, nodeJson.getString(name)));
                     } else {
                         throw new IllegalStateException("Don't know how to convert: " + type);
                     }
