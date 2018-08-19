@@ -117,7 +117,7 @@ public class MetaModelGenerator {
         add(EmptyStmt.class);
         add(ExplicitConstructorInvocationStmt.class);
         add(ExpressionStmt.class);
-        add(ForeachStmt.class);
+        add(ForEachStmt.class);
         add(ForStmt.class);
         add(IfStmt.class);
         add(LabeledStmt.class);

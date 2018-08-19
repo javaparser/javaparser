@@ -2308,7 +2308,7 @@ Statement ForStatement():
 
   {
   	if (varExpr != null) {
-  		return new ForeachStmt(range(begin, token()),varExpr, expr, body);
+  		return new ForEachStmt(range(begin, token()),varExpr, expr, body);
   	}
 	return new ForStmt(range(begin, token()),init, expr, update, body);
   }

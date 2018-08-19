@@ -478,7 +478,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityEqualsVisitorGenerator")
-    public Boolean visit(final ForeachStmt n, final Visitable arg) {
+    public Boolean visit(final ForEachStmt n, final Visitable arg) {
         return n == arg;
     }
 

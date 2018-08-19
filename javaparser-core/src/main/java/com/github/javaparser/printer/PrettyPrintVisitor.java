@@ -1271,7 +1271,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final ForeachStmt n, final Void arg) {
+    public void visit(final ForEachStmt n, final Void arg) {
         printComment(n.getComment(), arg);
         printer.print("for (");
         n.getVariable().accept(this, arg);

@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -32,9 +32,9 @@ import java.util.List;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
-public class ForechStatementContext extends AbstractJavaParserContext<ForeachStmt> {
+public class ForEachStatementContext extends AbstractJavaParserContext<ForEachStmt> {
 
-    public ForechStatementContext(ForeachStmt wrappedNode, TypeSolver typeSolver) {
+    public ForEachStatementContext(ForEachStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 

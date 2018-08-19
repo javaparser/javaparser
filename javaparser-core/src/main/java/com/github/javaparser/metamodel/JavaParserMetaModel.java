@@ -191,9 +191,9 @@ public final class JavaParserMetaModel {
         explicitConstructorInvocationStmtMetaModel.getConstructorParameters().add(explicitConstructorInvocationStmtMetaModel.expressionPropertyMetaModel);
         explicitConstructorInvocationStmtMetaModel.getConstructorParameters().add(explicitConstructorInvocationStmtMetaModel.argumentsPropertyMetaModel);
         expressionStmtMetaModel.getConstructorParameters().add(expressionStmtMetaModel.expressionPropertyMetaModel);
-        foreachStmtMetaModel.getConstructorParameters().add(foreachStmtMetaModel.variablePropertyMetaModel);
-        foreachStmtMetaModel.getConstructorParameters().add(foreachStmtMetaModel.iterablePropertyMetaModel);
-        foreachStmtMetaModel.getConstructorParameters().add(foreachStmtMetaModel.bodyPropertyMetaModel);
+        forEachStmtMetaModel.getConstructorParameters().add(forEachStmtMetaModel.variablePropertyMetaModel);
+        forEachStmtMetaModel.getConstructorParameters().add(forEachStmtMetaModel.iterablePropertyMetaModel);
+        forEachStmtMetaModel.getConstructorParameters().add(forEachStmtMetaModel.bodyPropertyMetaModel);
         forStmtMetaModel.getConstructorParameters().add(forStmtMetaModel.initializationPropertyMetaModel);
         forStmtMetaModel.getConstructorParameters().add(forStmtMetaModel.comparePropertyMetaModel);
         forStmtMetaModel.getConstructorParameters().add(forStmtMetaModel.updatePropertyMetaModel);
@@ -290,8 +290,8 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(expressionStmtMetaModel);
         nodeMetaModels.add(fieldAccessExprMetaModel);
         nodeMetaModels.add(fieldDeclarationMetaModel);
+        nodeMetaModels.add(forEachStmtMetaModel);
         nodeMetaModels.add(forStmtMetaModel);
-        nodeMetaModels.add(foreachStmtMetaModel);
         nodeMetaModels.add(ifStmtMetaModel);
         nodeMetaModels.add(importDeclarationMetaModel);
         nodeMetaModels.add(initializerDeclarationMetaModel);
@@ -644,12 +644,12 @@ public final class JavaParserMetaModel {
         explicitConstructorInvocationStmtMetaModel.getDerivedPropertyMetaModels().add(explicitConstructorInvocationStmtMetaModel.usingDiamondOperatorPropertyMetaModel);
         expressionStmtMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(expressionStmtMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false, false);
         expressionStmtMetaModel.getDeclaredPropertyMetaModels().add(expressionStmtMetaModel.expressionPropertyMetaModel);
-        foreachStmtMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(foreachStmtMetaModel, "body", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, false, false, false);
-        foreachStmtMetaModel.getDeclaredPropertyMetaModels().add(foreachStmtMetaModel.bodyPropertyMetaModel);
-        foreachStmtMetaModel.iterablePropertyMetaModel = new PropertyMetaModel(foreachStmtMetaModel, "iterable", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false, false);
-        foreachStmtMetaModel.getDeclaredPropertyMetaModels().add(foreachStmtMetaModel.iterablePropertyMetaModel);
-        foreachStmtMetaModel.variablePropertyMetaModel = new PropertyMetaModel(foreachStmtMetaModel, "variable", com.github.javaparser.ast.expr.VariableDeclarationExpr.class, Optional.of(variableDeclarationExprMetaModel), false, false, false, false, false);
-        foreachStmtMetaModel.getDeclaredPropertyMetaModels().add(foreachStmtMetaModel.variablePropertyMetaModel);
+        forEachStmtMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "body", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, false, false, false);
+        forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.bodyPropertyMetaModel);
+        forEachStmtMetaModel.iterablePropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "iterable", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false, false);
+        forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.iterablePropertyMetaModel);
+        forEachStmtMetaModel.variablePropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "variable", com.github.javaparser.ast.expr.VariableDeclarationExpr.class, Optional.of(variableDeclarationExprMetaModel), false, false, false, false, false);
+        forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.variablePropertyMetaModel);
         forStmtMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "body", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, false, false, false);
         forStmtMetaModel.getDeclaredPropertyMetaModels().add(forStmtMetaModel.bodyPropertyMetaModel);
         forStmtMetaModel.comparePropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "compare", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false, false);
@@ -913,7 +913,7 @@ public final class JavaParserMetaModel {
 
     public static final ExpressionStmtMetaModel expressionStmtMetaModel = new ExpressionStmtMetaModel(Optional.of(statementMetaModel));
 
-    public static final ForeachStmtMetaModel foreachStmtMetaModel = new ForeachStmtMetaModel(Optional.of(statementMetaModel));
+    public static final ForEachStmtMetaModel forEachStmtMetaModel = new ForEachStmtMetaModel(Optional.of(statementMetaModel));
 
     public static final ForStmtMetaModel forStmtMetaModel = new ForStmtMetaModel(Optional.of(statementMetaModel));
 

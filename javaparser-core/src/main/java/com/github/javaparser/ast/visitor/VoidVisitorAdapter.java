@@ -305,7 +305,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ForeachStmt n, final A arg) {
+    public void visit(final ForEachStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getIterable().accept(this, arg);
         n.getVariable().accept(this, arg);

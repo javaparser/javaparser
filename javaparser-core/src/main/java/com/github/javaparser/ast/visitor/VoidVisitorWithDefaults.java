@@ -243,7 +243,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ForeachStmt n, final A arg) {
+    public void visit(final ForEachStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
