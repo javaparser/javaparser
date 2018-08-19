@@ -39,7 +39,6 @@ import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-import javax.annotation.Generated;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -54,6 +53,7 @@ import static java.util.Spliterator.NONNULL;
 
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.

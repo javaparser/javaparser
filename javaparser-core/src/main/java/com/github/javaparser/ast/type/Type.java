@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -30,13 +29,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 

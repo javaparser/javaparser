@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,12 +30,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * An occurrence of the "this" keyword. <br/>

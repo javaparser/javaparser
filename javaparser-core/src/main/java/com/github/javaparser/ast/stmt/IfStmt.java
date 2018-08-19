@@ -34,10 +34,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * An if-then-else statement. The else is optional.

@@ -28,7 +28,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
-import javax.annotation.Generated;
+import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
 
