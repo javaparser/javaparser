@@ -16,9 +16,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -60,16 +62,18 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
             }
         }
 
-        // look for declaration in other switch statements
+        // look for declaration in this and previous switch entry statements
         for (SwitchEntryStmt seStmt : switchStmt.getEntries()) {
-            if (!seStmt.equals(wrappedNode)) {
-                for (Statement stmt : seStmt.getStatements()) {
-                    SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
-                    SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
-                    if (symbolReference.isSolved()) {
-                        return symbolReference;
-                    }
+            for (Statement stmt : seStmt.getStatements()) {
+                SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+                if (symbolReference.isSolved()) {
+                    return symbolReference;
                 }
+            }
+            // once we reach this switch entry statement, stop: we do not want to look in later switch entry statements
+            if (seStmt == wrappedNode) {
+                break;
             }
         }
 

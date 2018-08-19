@@ -26,12 +26,12 @@ public class VarValidator implements TypedValidator<VarType> {
     @Override
     public void accept(VarType node, ProblemReporter reporter) {
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something else.
-        Optional<VariableDeclarator> variableDeclarator = node.findParent(VariableDeclarator.class);
+        Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
         if (!variableDeclarator.isPresent()) {
             // Java 11's var in lambda's
             if (varAllowedInLambdaParameters) {
                 boolean valid = node
-                        .findParent(Parameter.class)
+                        .findAncestor(Parameter.class)
                         .flatMap(Node::getParentNode)
                         .map((Node p) -> p instanceof LambdaExpr).orElse(false);
                 if (valid) {

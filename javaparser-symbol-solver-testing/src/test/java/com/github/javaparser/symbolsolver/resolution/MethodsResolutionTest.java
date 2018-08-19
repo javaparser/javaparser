@@ -35,6 +35,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MethodsResolutionTest extends AbstractResolutionTest {
 
@@ -357,5 +358,24 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
         assertEquals(true, type.isReferenceType());
         assertEquals(true, type.asReferenceType().getTypeDeclaration() instanceof JavaParserAnonymousClassDeclaration);
+    }
+
+    @Test
+    public void resolveMethodCallWithScopeDeclarationInSwitchEntryStmt() {
+        CompilationUnit cu = parseSample("TryInSwitch");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TryInSwitch");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+
+        MethodCallExpr callExpr = method.getBody().get().getStatement(1)
+                                          .asSwitchStmt().getEntry(0).getStatement(1)
+                                          .asTryStmt().getTryBlock().getStatement(1)
+                                          .asExpressionStmt().getExpression()
+                                          .asMethodCallExpr();
+
+        SymbolReference<ResolvedMethodDeclaration> reference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(callExpr);
+
+        assertTrue(reference.isSolved());
+        assertEquals("java.io.File.delete()", reference.getCorrespondingDeclaration().getQualifiedSignature());
     }
 }

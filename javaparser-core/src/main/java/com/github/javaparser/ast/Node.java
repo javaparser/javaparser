@@ -51,7 +51,7 @@ import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -412,7 +412,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
+        findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
     }
 
     /**
@@ -820,20 +820,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
             return Optional.empty();
         });
-    }
-
-    /**
-     * Walks the parents of this node, returning the first node of type "nodeType" or empty() if none is found.
-     */
-    public <N extends Node> Optional<N> findParent(Class<N> nodeType) {
-        Node n = this;
-        while (n.getParentNode().isPresent()) {
-            n = n.getParentNode().get();
-            if (nodeType.isAssignableFrom(n.getClass())) {
-                return Optional.of(nodeType.cast(n));
-            }
-        }
-        return Optional.empty();
     }
 
     /**
