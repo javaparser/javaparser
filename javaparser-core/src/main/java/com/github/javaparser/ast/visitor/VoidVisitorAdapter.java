@@ -305,7 +305,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ForeachStmt n, final A arg) {
+    public void visit(final ForEachStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getIterable().accept(this, arg);
         n.getVariable().accept(this, arg);
@@ -708,20 +708,20 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ModuleDeclaration n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
-        n.getModuleStmts().forEach(p -> p.accept(this, arg));
+        n.getDirectives().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ModuleRequiresStmt n, final A arg) {
+    public void visit(final ModuleRequiresDirective n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ModuleExportsStmt n, final A arg) {
+    public void visit(final ModuleExportsDirective n, final A arg) {
         n.getModuleNames().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -729,7 +729,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ModuleProvidesStmt n, final A arg) {
+    public void visit(final ModuleProvidesDirective n, final A arg) {
         n.getName().accept(this, arg);
         n.getWith().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -737,14 +737,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ModuleUsesStmt n, final A arg) {
+    public void visit(final ModuleUsesDirective n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
-    public void visit(final ModuleOpensStmt n, final A arg) {
+    public void visit(final ModuleOpensDirective n, final A arg) {
         n.getModuleNames().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));

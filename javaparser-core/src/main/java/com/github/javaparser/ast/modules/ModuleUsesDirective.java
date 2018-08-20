@@ -9,26 +9,26 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
 import javax.annotation.Generated;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.ModuleUsesDirectiveMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A uses directive in module-info.java. <code>uses V.W;</code>
  */
-public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<ModuleUsesStmt> {
+public final class ModuleUsesDirective extends ModuleDirective implements NodeWithName<ModuleUsesDirective> {
 
     private Name name;
 
-    public ModuleUsesStmt() {
+    public ModuleUsesDirective() {
         this(null, new Name());
     }
 
     @AllFieldsConstructor
-    public ModuleUsesStmt(Name name) {
+    public ModuleUsesDirective(Name name) {
         this(null, name);
     }
 
@@ -36,7 +36,7 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleUsesStmt(TokenRange tokenRange, Name name) {
+    public ModuleUsesDirective(TokenRange tokenRange, Name name) {
         super(tokenRange);
         setName(name);
         customInitialization();
@@ -63,10 +63,10 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleUsesStmt setType(final Name name) {
+    public ModuleUsesDirective setType(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleUsesStmt) this;
+            return (ModuleUsesDirective) this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.name, name);
         if (this.name != null)
@@ -78,14 +78,8 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ModuleUsesStmt clone() {
-        return (ModuleUsesStmt) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ModuleUsesStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.moduleUsesStmtMetaModel;
+    public ModuleUsesDirective clone() {
+        return (ModuleUsesDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -96,18 +90,18 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ModuleUsesStmt asModuleUsesStmt() {
+    public ModuleUsesDirective asModuleUsesStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
+    public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ModuleUsesStmt> toModuleUsesStmt() {
+    public Optional<ModuleUsesDirective> toModuleUsesStmt() {
         return Optional.of(this);
     }
 
@@ -117,10 +111,10 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleUsesStmt setName(final Name name) {
+    public ModuleUsesDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleUsesStmt) this;
+            return (ModuleUsesDirective) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -140,5 +134,34 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithName<Mod
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleUsesDirective() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleUsesDirective asModuleUsesDirective() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<ModuleUsesDirective> toModuleUsesDirective() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleUsesDirective(Consumer<ModuleUsesDirective> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ModuleUsesDirectiveMetaModel getMetaModel() {
+        return JavaParserMetaModel.moduleUsesDirectiveMetaModel;
     }
 }

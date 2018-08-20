@@ -176,8 +176,8 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ForeachStmt asForeachStmt() {
-        throw new IllegalStateException(f("%s is not an ForeachStmt", this));
+    public ForEachStmt asForeachStmt() {
+        throw new IllegalStateException(f("%s is not an ForEachStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -327,7 +327,7 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifForeachStmt(Consumer<ForeachStmt> action) {
+    public void ifForeachStmt(Consumer<ForEachStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -420,7 +420,7 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ForeachStmt> toForeachStmt() {
+    public Optional<ForEachStmt> toForeachStmt() {
         return Optional.empty();
     }
 
@@ -477,5 +477,24 @@ public abstract class Statement extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<WhileStmt> toWhileStmt() {
         return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isForEachStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ForEachStmt asForEachStmt() {
+        throw new IllegalStateException(f("%s is not an ForEachStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<ForEachStmt> toForEachStmt() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifForEachStmt(Consumer<ForEachStmt> action) {
     }
 }

@@ -146,7 +146,7 @@ public interface VoidVisitor<A> {
     void visit(ForStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ForeachStmt n, A arg);
+    void visit(ForEachStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(IfStmt n, A arg);
@@ -290,19 +290,19 @@ public interface VoidVisitor<A> {
     void visit(ModuleDeclaration n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ModuleRequiresStmt n, A arg);
+    void visit(ModuleRequiresDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ModuleExportsStmt n, A arg);
+    void visit(ModuleExportsDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ModuleProvidesStmt n, A arg);
+    void visit(ModuleProvidesDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ModuleUsesStmt n, A arg);
+    void visit(ModuleUsesDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(ModuleOpensStmt n, A arg);
+    void visit(ModuleOpensDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(UnparsableStmt n, A arg);

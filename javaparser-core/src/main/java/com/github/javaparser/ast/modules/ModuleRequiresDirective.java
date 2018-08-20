@@ -10,8 +10,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.ModuleRequiresStmtMetaModel;
 import java.util.EnumSet;
 import static com.github.javaparser.ast.Modifier.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -19,22 +17,24 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A require directive in module-info.java. <code>require a.b.C;</code>
  */
-public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
+public final class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
     private EnumSet<Modifier> modifiers;
 
     private Name name;
 
-    public ModuleRequiresStmt() {
+    public ModuleRequiresDirective() {
         this(null, EnumSet.noneOf(Modifier.class), new Name());
     }
 
     @AllFieldsConstructor
-    public ModuleRequiresStmt(EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(EnumSet<Modifier> modifiers, Name name) {
         this(null, modifiers, name);
     }
 
@@ -42,7 +42,7 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleRequiresStmt(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
         super(tokenRange);
         setModifiers(modifiers);
         setName(name);
@@ -67,10 +67,10 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresStmt setModifiers(final EnumSet<Modifier> modifiers) {
+    public ModuleRequiresDirective setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (ModuleRequiresStmt) this;
+            return (ModuleRequiresDirective) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
@@ -83,10 +83,10 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresStmt setName(final Name name) {
+    public ModuleRequiresDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleRequiresStmt) this;
+            return (ModuleRequiresDirective) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -100,7 +100,7 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
         return getModifiers().contains(TRANSITIVE);
     }
 
-    public ModuleRequiresStmt setTransitive(boolean set) {
+    public ModuleRequiresDirective setTransitive(boolean set) {
         return setModifier(TRANSITIVE, set);
     }
 
@@ -114,14 +114,8 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ModuleRequiresStmt clone() {
-        return (ModuleRequiresStmt) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ModuleRequiresStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.moduleRequiresStmtMetaModel;
+    public ModuleRequiresDirective clone() {
+        return (ModuleRequiresDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -144,18 +138,47 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ModuleRequiresStmt asModuleRequiresStmt() {
+    public ModuleRequiresDirective asModuleRequiresStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleRequiresStmt(Consumer<ModuleRequiresStmt> action) {
+    public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ModuleRequiresStmt> toModuleRequiresStmt() {
+    public Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
         return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleRequiresDirective() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleRequiresDirective asModuleRequiresDirective() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<ModuleRequiresDirective> toModuleRequiresDirective() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ModuleRequiresDirectiveMetaModel getMetaModel() {
+        return JavaParserMetaModel.moduleRequiresDirectiveMetaModel;
     }
 }
