@@ -295,19 +295,19 @@ public interface GenericVisitor<R, A> {
     R visit(ModuleDeclaration n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ModuleRequiresStmt n, A arg);
+    R visit(ModuleRequiresDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ModuleExportsStmt n, A arg);
+    R visit(ModuleExportsDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ModuleProvidesStmt n, A arg);
+    R visit(ModuleProvidesDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ModuleUsesStmt n, A arg);
+    R visit(ModuleUsesDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(ModuleOpensStmt n, A arg);
+    R visit(ModuleOpensDirective n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(UnparsableStmt n, A arg);

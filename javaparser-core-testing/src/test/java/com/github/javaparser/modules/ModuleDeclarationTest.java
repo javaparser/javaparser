@@ -7,12 +7,10 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
@@ -42,7 +40,7 @@ public class ModuleDeclarationTest {
     @Test
     public void issue988RequireTransitiveShouldRequireAModuleCalledTransitive() {
         CompilationUnit cu = parse("module X { requires transitive; }");
-        ModuleRequiresStmt requiresTransitive = (ModuleRequiresStmt) cu.getModule().get().getModuleStmts().get(0);
+        ModuleRequiresDirective requiresTransitive = (ModuleRequiresDirective) cu.getModule().get().getDirectives().get(0);
         assertEquals("transitive", requiresTransitive.getNameAsString());
         assertEquals(IDENTIFIER, requiresTransitive.getName().getTokenRange().get().getBegin().getKind());
     }
@@ -75,22 +73,22 @@ public class ModuleDeclarationTest {
                 new SingleMemberAnnotationExpr(new Name("Foo"), new IntegerLiteralExpr("2")),
                 new MarkerAnnotationExpr(new Name("Bar")));
 
-        ModuleRequiresStmt moduleRequiresStmt = module.getModuleStmts().get(0).asModuleRequiresStmt();
+        ModuleRequiresDirective moduleRequiresStmt = module.getDirectives().get(0).asModuleRequiresStmt();
         assertThat(moduleRequiresStmt.getNameAsString()).isEqualTo("A.B");
         assertThat(moduleRequiresStmt.getModifiers()).isEmpty();
 
-        ModuleExportsStmt moduleExportsStmt = module.getModuleStmts().get(5).asModuleExportsStmt();
+        ModuleExportsDirective moduleExportsStmt = module.getDirectives().get(5).asModuleExportsStmt();
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
         assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
-        ModuleOpensStmt moduleOpensStmt = module.getModuleStmts().get(7).asModuleOpensStmt();
+        ModuleOpensDirective moduleOpensStmt = module.getDirectives().get(7).asModuleOpensStmt();
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
         assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
-        ModuleUsesStmt moduleUsesStmt = module.getModuleStmts().get(8).asModuleUsesStmt();
+        ModuleUsesDirective moduleUsesStmt = module.getDirectives().get(8).asModuleUsesStmt();
         assertThat(moduleUsesStmt.getNameAsString()).isEqualTo("V.W");
 
-        ModuleProvidesStmt moduleProvidesStmt = module.getModuleStmts().get(9).asModuleProvidesStmt();
+        ModuleProvidesDirective moduleProvidesStmt = module.getDirectives().get(9).asModuleProvidesStmt();
         assertThat(moduleProvidesStmt.getNameAsString()).isEqualTo("X.Y");
         assertThat(moduleProvidesStmt.getWith()).containsExactly(
                 parseName("Z1.Z2"),
@@ -195,15 +193,15 @@ public class ModuleDeclarationTest {
                 .addDirective("exports com.laamella.base.entity.channel.internal to com.laamella.core;")
                 .addDirective("uses com.laamella.base.util.internal.FactoryDelegate;");
 
-        moduleDeclaration.getModuleStmts()
-                .addLast(new ModuleExportsStmt()
+        moduleDeclaration.getDirectives()
+                .addLast(new ModuleExportsDirective()
                         .setName("foo.bar")
                         .addModuleName("other.foo")
                         .addModuleName("other.bar")
                 );
 
         moduleDeclaration
-                .addDirective(new ModuleExportsStmt()
+                .addDirective(new ModuleExportsDirective()
                         .setName("foo.bar.x")
                         .addModuleName("other.foo")
                         .addModuleName("other.bar")

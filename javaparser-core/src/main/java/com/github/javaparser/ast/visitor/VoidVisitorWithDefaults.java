@@ -552,31 +552,31 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ModuleRequiresStmt n, final A arg) {
+    public void visit(final ModuleRequiresDirective n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ModuleExportsStmt n, final A arg) {
+    public void visit(final ModuleExportsDirective n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ModuleProvidesStmt n, final A arg) {
+    public void visit(final ModuleProvidesDirective n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ModuleUsesStmt n, final A arg) {
+    public void visit(final ModuleUsesDirective n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator")
-    public void visit(final ModuleOpensStmt n, final A arg) {
+    public void visit(final ModuleOpensDirective n, final A arg) {
         defaultAction(n, arg);
     }
 

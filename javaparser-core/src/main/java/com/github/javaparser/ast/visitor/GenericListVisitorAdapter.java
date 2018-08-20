@@ -1879,7 +1879,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         {
-            tmp = n.getModuleStmts().accept(this, arg);
+            tmp = n.getDirectives().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1898,7 +1898,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ModuleExportsStmt n, final A arg) {
+    public List<R> visit(final ModuleExportsDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1921,7 +1921,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ModuleOpensStmt n, final A arg) {
+    public List<R> visit(final ModuleOpensDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1944,7 +1944,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ModuleProvidesStmt n, final A arg) {
+    public List<R> visit(final ModuleProvidesDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1967,7 +1967,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ModuleRequiresStmt n, final A arg) {
+    public List<R> visit(final ModuleRequiresDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1985,7 +1985,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(final ModuleUsesStmt n, final A arg) {
+    public List<R> visit(final ModuleUsesDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {

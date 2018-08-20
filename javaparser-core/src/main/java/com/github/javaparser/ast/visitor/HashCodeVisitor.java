@@ -467,35 +467,35 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(final ModuleDeclaration n, final Void arg) {
-        return (n.getAnnotations().accept(this, arg)) * 31 + (n.isOpen() ? 1 : 0) * 31 + (n.getModuleStmts().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getAnnotations().accept(this, arg)) * 31 + (n.getDirectives().accept(this, arg)) * 31 + (n.isOpen() ? 1 : 0) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ModuleRequiresStmt n, final Void arg) {
+    public Integer visit(final ModuleRequiresDirective n, final Void arg) {
         return (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ModuleExportsStmt n, final Void arg) {
+    public Integer visit(final ModuleExportsDirective n, final Void arg) {
         return (n.getModuleNames().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ModuleProvidesStmt n, final Void arg) {
+    public Integer visit(final ModuleProvidesDirective n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getWith().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ModuleUsesStmt n, final Void arg) {
+    public Integer visit(final ModuleUsesDirective n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(final ModuleOpensStmt n, final Void arg) {
+    public Integer visit(final ModuleOpensDirective n, final Void arg) {
         return (n.getModuleNames().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
