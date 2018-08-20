@@ -364,7 +364,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(ForeachStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ForEachStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
@@ -434,27 +434,27 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(ModuleRequiresStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleRequiresDirective node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(ModuleExportsStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleExportsDirective node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(ModuleProvidesStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleProvidesDirective node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(ModuleUsesStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleUsesDirective node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(ModuleOpensStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleOpensDirective node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 

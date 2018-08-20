@@ -153,25 +153,25 @@ public class NameLogic {
         if (whenParentIs(ModuleDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
-        if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleRequiresDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getModuleNames().contains(c))) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getModuleNames().contains(c))) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleUsesDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleProvidesDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {

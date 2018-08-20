@@ -932,8 +932,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ForeachStmt n, final Visitable arg) {
-        final ForeachStmt n2 = (ForeachStmt) arg;
+    public Boolean visit(final ForEachStmt n, final Visitable arg) {
+        final ForEachStmt n2 = (ForEachStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodeEquals(n.getIterable(), n2.getIterable()))
@@ -1063,9 +1063,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final ModuleDeclaration n2 = (ModuleDeclaration) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
-        if (!objEquals(n.isOpen(), n2.isOpen()))
+        if (!nodesEquals(n.getDirectives(), n2.getDirectives()))
             return false;
-        if (!nodesEquals(n.getModuleStmts(), n2.getModuleStmts()))
+        if (!objEquals(n.isOpen(), n2.isOpen()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
@@ -1074,8 +1074,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ModuleRequiresStmt n, final Visitable arg) {
-        final ModuleRequiresStmt n2 = (ModuleRequiresStmt) arg;
+    public Boolean visit(final ModuleRequiresDirective n, final Visitable arg) {
+        final ModuleRequiresDirective n2 = (ModuleRequiresDirective) arg;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1085,8 +1085,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ModuleExportsStmt n, final Visitable arg) {
-        final ModuleExportsStmt n2 = (ModuleExportsStmt) arg;
+    public Boolean visit(final ModuleExportsDirective n, final Visitable arg) {
+        final ModuleExportsDirective n2 = (ModuleExportsDirective) arg;
         if (!nodesEquals(n.getModuleNames(), n2.getModuleNames()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1096,8 +1096,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ModuleProvidesStmt n, final Visitable arg) {
-        final ModuleProvidesStmt n2 = (ModuleProvidesStmt) arg;
+    public Boolean visit(final ModuleProvidesDirective n, final Visitable arg) {
+        final ModuleProvidesDirective n2 = (ModuleProvidesDirective) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getWith(), n2.getWith()))
@@ -1107,8 +1107,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ModuleUsesStmt n, final Visitable arg) {
-        final ModuleUsesStmt n2 = (ModuleUsesStmt) arg;
+    public Boolean visit(final ModuleUsesDirective n, final Visitable arg) {
+        final ModuleUsesDirective n2 = (ModuleUsesDirective) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         return true;
@@ -1116,8 +1116,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
-    public Boolean visit(final ModuleOpensStmt n, final Visitable arg) {
-        final ModuleOpensStmt n2 = (ModuleOpensStmt) arg;
+    public Boolean visit(final ModuleOpensDirective n, final Visitable arg) {
+        final ModuleOpensDirective n2 = (ModuleOpensDirective) arg;
         if (!nodesEquals(n.getModuleNames(), n2.getModuleNames()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
