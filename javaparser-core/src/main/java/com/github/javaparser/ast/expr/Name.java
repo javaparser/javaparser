@@ -35,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import javax.annotation.Generated;
 import java.util.Optional;
 
@@ -251,8 +250,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
      * An internal name is a name that constitutes a part of a larger Name instance.
      */
     public boolean isInternal() {
-        return getParentNode()
-                .filter(parent -> parent instanceof Name)
-                .isPresent();
+        return getParentNode().filter(parent -> parent instanceof Name).isPresent();
     }
 }

@@ -621,7 +621,7 @@ public class ContextTest extends AbstractTest {
 
     @Test
     public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
-        ForeachStmt foreachStmt = parse("for (int i: myList) { body(); }",
+        ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
                 ParseStart.STATEMENT).asForeachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");

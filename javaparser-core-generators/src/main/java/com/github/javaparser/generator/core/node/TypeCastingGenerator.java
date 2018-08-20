@@ -21,7 +21,7 @@ public class TypeCastingGenerator extends NodeGenerator {
             JavaParserMetaModel.statementMetaModel,
             JavaParserMetaModel.expressionMetaModel,
             JavaParserMetaModel.typeMetaModel,
-            JavaParserMetaModel.moduleStmtMetaModel,
+            JavaParserMetaModel.moduleDirectiveMetaModel,
             JavaParserMetaModel.bodyDeclarationMetaModel,
             JavaParserMetaModel.commentMetaModel
     );

@@ -15,6 +15,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 
 import static com.github.javaparser.JavaParser.getInternalParser;
@@ -31,7 +32,7 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
 
     private boolean isOpen;
 
-    private NodeList<ModuleStmt> moduleStmts;
+    private NodeList<ModuleDirective> directives;
 
     public ModuleDeclaration() {
         this(null, new NodeList<>(), new Name(), false, new NodeList<>());
@@ -42,20 +43,20 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
     }
 
     @AllFieldsConstructor
-    public ModuleDeclaration(NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
-        this(null, annotations, name, isOpen, moduleStmts);
+    public ModuleDeclaration(NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
+        this(null, annotations, name, isOpen, directives);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
+    public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
         super(tokenRange);
         setAnnotations(annotations);
         setName(name);
         setOpen(isOpen);
-        setModuleStmts(moduleStmts);
+        setDirectives(directives);
         customInitialization();
     }
 
@@ -120,9 +121,9 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
                 return true;
             }
         }
-        for (int i = 0; i < moduleStmts.size(); i++) {
-            if (moduleStmts.get(i) == node) {
-                moduleStmts.remove(i);
+        for (int i = 0; i < directives.size(); i++) {
+            if (directives.get(i) == node) {
+                directives.remove(i);
                 return true;
             }
         }
@@ -145,21 +146,21 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ModuleStmt> getModuleStmts() {
-        return moduleStmts;
+    public NodeList<ModuleDirective> getDirectives() {
+        return directives;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setModuleStmts(final NodeList<ModuleStmt> moduleStmts) {
-        assertNotNull(moduleStmts);
-        if (moduleStmts == this.moduleStmts) {
+    public ModuleDeclaration setDirectives(final NodeList<ModuleDirective> directives) {
+        assertNotNull(directives);
+        if (directives == this.directives) {
             return (ModuleDeclaration) this;
         }
-        notifyPropertyChange(ObservableProperty.MODULE_STMTS, this.moduleStmts, moduleStmts);
-        if (this.moduleStmts != null)
-            this.moduleStmts.setParentNode(null);
-        this.moduleStmts = moduleStmts;
-        setAsParentNodeOf(moduleStmts);
+        notifyPropertyChange(ObservableProperty.DIRECTIVES, this.directives, directives);
+        if (this.directives != null)
+            this.directives.setParentNode(null);
+        this.directives = directives;
+        setAsParentNodeOf(directives);
         return this;
     }
 
@@ -186,9 +187,9 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
                 return true;
             }
         }
-        for (int i = 0; i < moduleStmts.size(); i++) {
-            if (moduleStmts.get(i) == node) {
-                moduleStmts.set(i, (ModuleStmt) replacementNode);
+        for (int i = 0; i < directives.size(); i++) {
+            if (directives.get(i) == node) {
+                directives.set(i, (ModuleDirective) replacementNode);
                 return true;
             }
         }
@@ -206,8 +207,8 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
         return addDirective(getInternalParser().parseModuleDirective(directive));
     }
 
-    public ModuleDeclaration addDirective(ModuleStmt directive) {
-        getModuleStmts().add(directive);
+    public ModuleDeclaration addDirective(ModuleDirective directive) {
+        getDirectives().add(directive);
         return this;
     }
 }

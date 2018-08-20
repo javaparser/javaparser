@@ -255,7 +255,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(final ForeachStmt n, final Object arg) {
+    public void visit(final ForEachStmt n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }
