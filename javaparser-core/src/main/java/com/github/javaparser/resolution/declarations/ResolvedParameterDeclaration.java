@@ -52,7 +52,7 @@ public interface ResolvedParameterDeclaration extends ResolvedValueDeclaration {
 
     /**
      * Describe the type of the parameter. In practice add three dots to the type name
-     * is the parameter is variadic.
+     * if the parameter is variadic.
      */
     default String describeType() {
         if (isVariadic()) {

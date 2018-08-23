@@ -23,7 +23,7 @@ public class JsonPrinterTest {
 
         String output = jsonPrinter.output(expression);
 
-        assertEquals("{\"type\":\"MethodCallExpr\",\"name\":{\"type\":\"SimpleName\",\"identifier\":\"x\"},\"arguments\":[{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"},{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"}]}", output);
+        assertEquals("{\"_type\":\"MethodCallExpr\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"x\"},\"arguments\":[{\"_type\":\"IntegerLiteralExpr\",\"value\":\"1\"},{\"_type\":\"IntegerLiteralExpr\",\"value\":\"1\"}]}", output);
     }
 
     @Test
@@ -70,6 +70,6 @@ public class JsonPrinterTest {
 
         String output = printer.output(unit);
 
-        assertEquals("{\"type\":\"CompilationUnit\",\"types\":[{\"type\":\"ClassOrInterfaceDeclaration\",\"isInterface\":\"false\",\"name\":{\"type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"}}]}", output);
+        assertEquals("{\"_type\":\"CompilationUnit\",\"types\":[{\"_type\":\"ClassOrInterfaceDeclaration\",\"modifiers\":[\"public\"],\"isInterface\":\"false\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"_type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"}}]}", output);
     }
 }
