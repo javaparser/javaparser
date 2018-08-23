@@ -100,13 +100,17 @@ public class JavaParserTypeDeclarationAdapter {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name))
-                .filter(m -> !staticOnly || (staticOnly &&  m.isStatic()))
+                .filter(m -> !staticOnly || m.isStatic())
                 .collect(Collectors.toList());
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors()) {
 		// Avoid recursion on self
                 if (typeDeclaration != ancestor.getTypeDeclaration()) {
+                    candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors()
+                            .stream()
+                            .filter(m -> m.getName().equals(name))
+                            .collect(Collectors.toList()));
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic
                             .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
                     // consider methods from superclasses and only default methods from interfaces :
