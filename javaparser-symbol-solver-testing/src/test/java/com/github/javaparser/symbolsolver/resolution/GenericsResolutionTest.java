@@ -43,23 +43,10 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests related to resolved Generics types.
+ */
 public class GenericsResolutionTest extends AbstractResolutionTest {
-
-    @Test
-    public void complexTypeSolving() {
-        CompilationUnit cu = parseSample("ComplexTypeResolving");
-        ClassOrInterfaceDeclaration mainClass = Navigator.demandClass(cu, "Main");
-
-        ClassOrInterfaceDeclaration childDec = (ClassOrInterfaceDeclaration) mainClass.getMember(1);
-        ExpressionStmt stmt =
-                (ExpressionStmt) Navigator.demandMethod(childDec, "foo").getBody().get().getStatement(0);
-        ReferenceTypeImpl resolvedType =
-                (ReferenceTypeImpl) JavaParserFacade.get(new ReflectionTypeSolver()).getType(stmt.getExpression());
-        ClassOrInterfaceDeclaration resolvedTypeDeclaration
-                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration()).getWrappedNode();
-
-        assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
-    }
 
     @Test
     public void resolveFieldWithGenericTypeToString() {

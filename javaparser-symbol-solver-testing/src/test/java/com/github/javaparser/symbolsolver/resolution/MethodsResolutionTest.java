@@ -22,6 +22,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -29,8 +30,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -377,5 +380,21 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
         assertTrue(reference.isSolved());
         assertEquals("java.io.File.delete()", reference.getCorrespondingDeclaration().getQualifiedSignature());
+    }
+
+    @Test
+    public void complexTypeSolving() {
+        CompilationUnit cu = parseSample("ComplexTypeResolving");
+        ClassOrInterfaceDeclaration mainClass = Navigator.demandClass(cu, "Main");
+
+        ClassOrInterfaceDeclaration childDec = (ClassOrInterfaceDeclaration) mainClass.getMember(1);
+        ExpressionStmt stmt =
+                (ExpressionStmt) Navigator.demandMethod(childDec, "foo").getBody().get().getStatement(0);
+        ReferenceTypeImpl resolvedType =
+                (ReferenceTypeImpl) JavaParserFacade.get(new ReflectionTypeSolver()).getType(stmt.getExpression());
+        ClassOrInterfaceDeclaration resolvedTypeDeclaration
+                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration()).getWrappedNode();
+
+        assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
     }
 }
