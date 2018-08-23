@@ -321,7 +321,7 @@ public class NameLogic {
         if (ambiguousCategory == NameCategory.PACKAGE_OR_TYPE_NAME) {
             return reclassificationOfContextuallyAmbiguosPackageOrTypeName(name, typeSolver);
         }
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("I do not know how to handle this semantic reclassification of ambiguous name categories");
     }
 
     private static NameCategory reclassificationOfContextuallyAmbiguosPackageOrTypeName(Node name, TypeSolver typeSolver) {
@@ -358,7 +358,7 @@ public class NameLogic {
             }
         }
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("This is unexpected: the name is neither simple or qualified");
     }
 
     private static NameCategory reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(Node nameNode,
@@ -415,7 +415,7 @@ public class NameLogic {
                     }
                     return NameCategory.COMPILATION_ERROR;
                 } else {
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("The name is a type but it has been resolved to something that is not a reference type");
                 }
             } else {
                 throw new UnsolvedSymbolException("Unable to solve context type: " + NameLogic.nameAsString(leftName));
@@ -430,7 +430,7 @@ public class NameLogic {
             return NameCategory.EXPRESSION_NAME;
         }
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("I do not know how to handle this semantic reclassification of ambiguous name categories");
     }
 
     private static NameCategory reclassificationOfContextuallyAmbiguousSimpleAmbiguousName(Node nameNode,
