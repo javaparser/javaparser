@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**

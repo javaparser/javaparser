@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclarati
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 
 import javassist.bytecode.SignatureAttribute;
 

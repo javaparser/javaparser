@@ -21,7 +21,7 @@ import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;

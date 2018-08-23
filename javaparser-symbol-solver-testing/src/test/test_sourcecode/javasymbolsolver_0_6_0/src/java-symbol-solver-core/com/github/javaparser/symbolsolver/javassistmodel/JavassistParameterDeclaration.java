@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
 

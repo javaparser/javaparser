@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.resolution.ApplicabilityCheckStrategy;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
@@ -91,6 +92,7 @@ public class ParserConfiguration {
     private boolean ignoreAnnotationsWhenAttributingComments = false;
     private boolean lexicalPreservationEnabled = false;
     private SymbolResolver symbolResolver = null;
+    private ApplicabilityCheckStrategy applicabilityCheckStrategy = null;
     private int tabSize = 1;
     private LanguageLevel languageLevel = CURRENT;
 
@@ -269,7 +271,7 @@ public class ParserConfiguration {
     public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
         this.symbolResolver = symbolResolver;
         return this;
-    }
+    }    
 
     public List<ParseResult.PostProcessor> getPostProcessors() {
         return postProcessors;
@@ -282,5 +284,13 @@ public class ParserConfiguration {
 
     public LanguageLevel getLanguageLevel() {
         return languageLevel;
+    }
+
+    public ApplicabilityCheckStrategy getApplicabilityCheckStrategy() {
+        return applicabilityCheckStrategy;
+    }
+
+    public void setApplicabilityCheckStrategy(ApplicabilityCheckStrategy applicabilityCheckStrategy) {
+        this.applicabilityCheckStrategy = applicabilityCheckStrategy;
     }
 }

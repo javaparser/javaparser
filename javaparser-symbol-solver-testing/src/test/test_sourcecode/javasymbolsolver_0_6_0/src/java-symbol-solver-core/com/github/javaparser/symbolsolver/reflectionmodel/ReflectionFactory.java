@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.lang.reflect.GenericArrayType;

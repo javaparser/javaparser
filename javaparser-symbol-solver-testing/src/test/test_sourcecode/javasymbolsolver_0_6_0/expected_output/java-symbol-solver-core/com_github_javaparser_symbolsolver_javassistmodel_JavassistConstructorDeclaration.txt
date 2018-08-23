@@ -7,7 +7,7 @@
   Line 92) SignatureAttribute.toMethodSignature(ctConstructor.getGenericSignature()) ==> javassist.bytecode.SignatureAttribute.toMethodSignature(java.lang.String)
   Line 92) ctConstructor.getGenericSignature() ==> javassist.CtBehavior.getGenericSignature()
   Line 93) methodSignature.getParameterTypes() ==> javassist.bytecode.SignatureAttribute.MethodSignature.getParameterTypes()
-  Line 94) JavassistUtils.signatureTypeToType(signatureType, typeSolver, this) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistUtils.signatureTypeToType(javassist.bytecode.SignatureAttribute.Type, com.github.javaparser.symbolsolver.model.resolution.TypeSolver, com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable)
+  Line 94) JavassistUtils.signatureTypeToType(signatureType, typeSolver, this) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistUtils.signatureTypeToType(javassist.bytecode.SignatureAttribute.Type, com.github.javaparser.resolution.TypeSolver, com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable)
   Line 96) ctConstructor.getParameterTypes() ==> javassist.CtBehavior.getParameterTypes()
   Line 108) ctConstructor.getGenericSignature() ==> javassist.CtBehavior.getGenericSignature()
   Line 109) Collections.emptyList() ==> java.util.Collections.emptyList()

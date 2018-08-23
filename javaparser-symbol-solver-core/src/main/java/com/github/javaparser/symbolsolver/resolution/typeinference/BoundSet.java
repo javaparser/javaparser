@@ -1,8 +1,8 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.*;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSameAsType;

@@ -1,5 +1,5 @@
   Line 33) ctClazz.isArray() ==> javassist.CtClass.isArray()
-  Line 34) typeUsageFor(ctClazz.getComponentType(), typeSolver) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory.typeUsageFor(javassist.CtClass, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 34) typeUsageFor(ctClazz.getComponentType(), typeSolver) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory.typeUsageFor(javassist.CtClass, com.github.javaparser.resolution.TypeSolver)
   Line 34) ctClazz.getComponentType() ==> javassist.CtClass.getComponentType()
   Line 35) ctClazz.isPrimitive() ==> javassist.CtClass.isPrimitive()
   Line 36) ctClazz.getName().equals("void") ==> java.lang.String.equals(java.lang.Object)

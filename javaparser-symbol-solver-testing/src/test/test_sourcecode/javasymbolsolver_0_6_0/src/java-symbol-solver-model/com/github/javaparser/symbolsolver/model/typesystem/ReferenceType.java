@@ -20,7 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParameterValueProvider;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametersMap;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametrized;
