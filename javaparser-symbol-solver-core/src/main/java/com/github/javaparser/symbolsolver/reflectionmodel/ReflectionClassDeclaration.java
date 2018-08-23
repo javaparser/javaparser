@@ -154,6 +154,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
+        // when empty there is no sense in trying to find the most applicable
+        if (methods.isEmpty()) {
+            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        }
         return MethodResolutionLogic.findMostApplicable(methods, name, argumentsTypes, typeSolver);
     }
 
