@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -81,7 +82,14 @@ public class JavaParserTypeDeclarationAdapter {
         for (ResolvedReferenceType ancestor : declaration.getAncestors()) {
             try {
                 for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
-                    if (internalTypeDeclaration.getName().equals(name)) {
+                    boolean visible = true;
+                    if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
+                        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = internalTypeDeclaration.asReferenceType();
+                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
+                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier() != AccessSpecifier.PRIVATE;
+                        }
+                    }
+                    if (internalTypeDeclaration.getName().equals(name) && visible) {
                         return internalTypeDeclaration;
                     }
                 }
