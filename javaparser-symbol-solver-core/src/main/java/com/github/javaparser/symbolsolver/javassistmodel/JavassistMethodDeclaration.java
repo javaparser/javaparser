@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -177,7 +178,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        throw new UnsupportedOperationException();
+        return JavassistFactory.modifiersToAccessLevel(ctMethod.getModifiers());
     }
 
     @Override
