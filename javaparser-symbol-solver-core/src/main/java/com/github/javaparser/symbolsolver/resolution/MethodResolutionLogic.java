@@ -36,6 +36,9 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclarat
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -337,21 +340,13 @@ public class MethodResolutionLogic {
         }
         return true;
     }
-
+    
     /**
-     * Filters out duplicate {@param methods} by their signature.
+     * filters by given function
      */
-    private static List<ResolvedMethodDeclaration> getMethodsWithoutDuplicates(List<ResolvedMethodDeclaration> methods) {
-        List<ResolvedMethodDeclaration> res = new ArrayList<>();
-        Set<String> usedSignatures = new HashSet<>();
-        for (ResolvedMethodDeclaration md : methods) {
-            String signature = md.getQualifiedSignature();
-            if (!usedSignatures.contains(signature)) {
-                usedSignatures.add(signature);
-                res.add(md);
-            }
-        }
-        return res;
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 
     /**
@@ -368,8 +363,18 @@ public class MethodResolutionLogic {
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods,
                                                                                 String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<ResolvedMethodDeclaration> methodsWithMatchingName = methods.stream().filter(m -> m.getName().equals(name)).collect(Collectors.toList());
-        List<ResolvedMethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methodsWithMatchingName).stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+        
+        List<ResolvedMethodDeclaration> methodsWithMatchingName = methods.stream()
+                .filter(m -> m.getName().equals(name))
+                .collect(Collectors.toList());
+        
+        List<ResolvedMethodDeclaration> applicableMethods = methodsWithMatchingName.stream()
+                // Filters out duplicate {@param methods} by their signature.
+                .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)) 
+                // checks if ResolvedMethodDeclaration is applicable to arguments
+                .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
+                .collect(Collectors.toList());
+        
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
