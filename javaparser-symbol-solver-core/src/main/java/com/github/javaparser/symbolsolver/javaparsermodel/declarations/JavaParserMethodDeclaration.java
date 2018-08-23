@@ -147,7 +147,7 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override

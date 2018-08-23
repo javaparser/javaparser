@@ -24,13 +24,10 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
+import javassist.*;
+import javassist.bytecode.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -144,7 +141,7 @@ class JavassistUtils {
                     removeTypeArguments(internalNameToCanonicalName(typeName)));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
-            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
+            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
             Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
             if (!typeParameterDeclarationOpt.isPresent()) {
                 throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
@@ -165,7 +162,7 @@ class JavassistUtils {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
     }
-    
+
     private static String removeTypeArguments(String typeName) {
         if (typeName.contains("<")) {
             return typeName.substring(0, typeName.indexOf('<'));
@@ -174,7 +171,7 @@ class JavassistUtils {
         }
     }
 
-    private static String internalNameToCanonicalName(String typeName) {
+    static String internalNameToCanonicalName(String typeName) {
         return typeName.replaceAll("\\$", ".");
     }
 
@@ -182,8 +179,8 @@ class JavassistUtils {
         String typeName = typeArgument.jvmTypeName();
         Optional<ResolvedType> type = getGenericParameterByName(typeName, typeParametrizable);
         return type.orElseGet(() -> new ReferenceTypeImpl(
-            typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
-            typeSolver));
+                typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
+                typeSolver));
     }
 
     private static Optional<ResolvedType> getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable) {
@@ -206,4 +203,34 @@ class JavassistUtils {
             return objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable);
         }
     }
+
+    /**
+     * Returns the {@code paramNumber}th parameter of a method or constructor, if it is available.
+     * <p>
+     * The name is not available, if
+     * <ul>
+     * <li>the method is abstract, i.e. explicitly declared as abstract or it is a non-default interface method</li>
+     * <li>methods and constructors from jar files, which have been compiled without debug symbols</li>
+     * </ul>
+     * <p>
+     * The parameters are counted from 0, skipping the implicit {@code this} parameter of non-static methods.
+     *
+     * @param method the method to look into
+     * @param paramNumber the number of the parameter to look for
+     * @return the found parameter name or empty, if the name is not available
+     */
+    static Optional<String> extractParameterName(CtBehavior method, int paramNumber) {
+        MethodInfo methodInfo = method.getMethodInfo();
+        CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
+        if (codeAttribute != null) {
+            LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute
+                    .tag);
+            if (attr != null) {
+                int pos = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
+                return Optional.ofNullable(attr.variableName(paramNumber + pos));
+            }
+        }
+        return Optional.empty();
+    }
+
 }

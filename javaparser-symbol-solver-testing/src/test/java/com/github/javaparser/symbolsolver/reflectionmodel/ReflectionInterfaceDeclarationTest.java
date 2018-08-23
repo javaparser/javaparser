@@ -21,7 +21,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReflectionInterfaceDeclarationTest extends AbstractTest {
+public class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void testGetDeclaredMethods() {
@@ -47,6 +47,16 @@ public class ReflectionInterfaceDeclarationTest extends AbstractTest {
                 .collect(Collectors.toList());
         if (isJava9()) {
             assertEquals(40, methods.size());
+            assertEquals("clear", methods.get(4).getName());
+            assertEquals(true, methods.get(4).isAbstract());
+            assertEquals(0, methods.get(4).getNumberOfParams());
+            assertEquals("contains", methods.get(5).getName());
+            assertEquals(true, methods.get(5).isAbstract());
+            assertEquals(1, methods.get(5).getNumberOfParams());
+            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
+            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+        } else if (isJava10()) {
+            assertEquals(41, methods.size());
             assertEquals("clear", methods.get(4).getName());
             assertEquals(true, methods.get(4).isAbstract());
             assertEquals(0, methods.get(4).getNumberOfParams());

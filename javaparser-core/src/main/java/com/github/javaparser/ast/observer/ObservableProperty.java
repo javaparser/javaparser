@@ -22,12 +22,12 @@ package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Arrays;
-import javax.annotation.Generated;
 
 /**
  * Properties considered by the AstObserver
@@ -117,7 +117,7 @@ public enum ObservableProperty {
     VARIABLES(Type.MULTIPLE_REFERENCE),
     VAR_ARGS(Type.SINGLE_ATTRIBUTE),
     VAR_ARGS_ANNOTATIONS(Type.MULTIPLE_REFERENCE),
-    WITH_TYPES(Type.MULTIPLE_REFERENCE),
+    WITH(Type.MULTIPLE_REFERENCE),
     CASCADING_IF_STMT(Type.SINGLE_ATTRIBUTE, true),
     ELSE_BLOCK(Type.SINGLE_ATTRIBUTE, true),
     ELSE_BRANCH(Type.SINGLE_ATTRIBUTE, true),

@@ -5,7 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -17,7 +17,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class Issue257 extends AbstractTest {
+public class Issue257 extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 

@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -101,7 +101,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -198,11 +198,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
-        if (this.wrappedNode.getEntries() != null) {
-            for (EnumConstantDeclaration member : this.wrappedNode.getEntries()) {
-                fields.add(new JavaParserFieldDeclaration(member, typeSolver));
-            }
-        }
+        this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
+
+        this.wrappedNode.getMembers().stream().filter(m -> m instanceof FieldDeclaration).forEach(m -> {
+                FieldDeclaration fd = (FieldDeclaration)m;
+                fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
+        });
 
         return fields;
     }
@@ -313,7 +314,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public AccessSpecifier accessSpecifier() {
-            return Helper.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
+            return AstResolutionUtils.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
         }
 
         @Override

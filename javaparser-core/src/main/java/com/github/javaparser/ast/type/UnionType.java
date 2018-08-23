@@ -27,8 +27,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import com.github.javaparser.ast.Node;
@@ -36,12 +34,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>The union type</h1>

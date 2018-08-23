@@ -495,7 +495,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        n.getAncestorOfType(NodeWithVariables.class).ifPresent(ancestor -> {
+        n.findAncestor(NodeWithVariables.class).ifPresent(ancestor -> {
             ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
                 final Type type = n.getType();
@@ -723,7 +723,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         AtomicBoolean columnAlignFirstMethodChain = new AtomicBoolean();
         if (configuration.isColumnAlignFirstMethodChain()) {
             // pick the kind of expressions where vertically aligning method calls is okay.
-            if (n.findParent(Statement.class).map(p -> p.isReturnStmt()
+            if (n.findAncestor(Statement.class).map(p -> p.isReturnStmt()
                     || p.isThrowStmt()
                     || p.isAssertStmt()
                     || p.isExpressionStmt()).orElse(false)) {
@@ -1597,15 +1597,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(ModuleProvidesStmt n, Void arg) {
         printer.print("provides ");
-        n.getType().accept(this, arg);
-        printPrePostFixRequiredList(n.getWithTypes(), arg, " with ", ", ", "");
+        n.getName().accept(this, arg);
+        printPrePostFixRequiredList(n.getWith(), arg, " with ", ", ", "");
         printer.println(";");
     }
 
     @Override
     public void visit(ModuleUsesStmt n, Void arg) {
         printer.print("uses ");
-        n.getType().accept(this, arg);
+        n.getName().accept(this, arg);
         printer.println(";");
     }
 

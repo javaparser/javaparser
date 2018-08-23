@@ -239,9 +239,9 @@ public final class JavaParserMetaModel {
         moduleRequiresStmtMetaModel.getConstructorParameters().add(moduleRequiresStmtMetaModel.namePropertyMetaModel);
         moduleExportsStmtMetaModel.getConstructorParameters().add(moduleExportsStmtMetaModel.namePropertyMetaModel);
         moduleExportsStmtMetaModel.getConstructorParameters().add(moduleExportsStmtMetaModel.moduleNamesPropertyMetaModel);
-        moduleProvidesStmtMetaModel.getConstructorParameters().add(moduleProvidesStmtMetaModel.typePropertyMetaModel);
-        moduleProvidesStmtMetaModel.getConstructorParameters().add(moduleProvidesStmtMetaModel.withTypesPropertyMetaModel);
-        moduleUsesStmtMetaModel.getConstructorParameters().add(moduleUsesStmtMetaModel.typePropertyMetaModel);
+        moduleProvidesStmtMetaModel.getConstructorParameters().add(moduleProvidesStmtMetaModel.namePropertyMetaModel);
+        moduleProvidesStmtMetaModel.getConstructorParameters().add(moduleProvidesStmtMetaModel.withPropertyMetaModel);
+        moduleUsesStmtMetaModel.getConstructorParameters().add(moduleUsesStmtMetaModel.namePropertyMetaModel);
         moduleOpensStmtMetaModel.getConstructorParameters().add(moduleOpensStmtMetaModel.namePropertyMetaModel);
         moduleOpensStmtMetaModel.getConstructorParameters().add(moduleOpensStmtMetaModel.moduleNamesPropertyMetaModel);
     }
@@ -740,21 +740,21 @@ public final class JavaParserMetaModel {
         moduleExportsStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleExportsStmtMetaModel.moduleNamesPropertyMetaModel);
         moduleExportsStmtMetaModel.namePropertyMetaModel = new PropertyMetaModel(moduleExportsStmtMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false, false);
         moduleExportsStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleExportsStmtMetaModel.namePropertyMetaModel);
-        moduleProvidesStmtMetaModel.typePropertyMetaModel = new PropertyMetaModel(moduleProvidesStmtMetaModel, "type", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false, false);
-        moduleProvidesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleProvidesStmtMetaModel.typePropertyMetaModel);
-        moduleProvidesStmtMetaModel.withTypesPropertyMetaModel = new PropertyMetaModel(moduleProvidesStmtMetaModel, "withTypes", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, true, false, false);
-        moduleProvidesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleProvidesStmtMetaModel.withTypesPropertyMetaModel);
-        moduleUsesStmtMetaModel.typePropertyMetaModel = new PropertyMetaModel(moduleUsesStmtMetaModel, "type", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false, false);
-        moduleUsesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleUsesStmtMetaModel.typePropertyMetaModel);
+        moduleProvidesStmtMetaModel.namePropertyMetaModel = new PropertyMetaModel(moduleProvidesStmtMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false, false);
+        moduleProvidesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleProvidesStmtMetaModel.namePropertyMetaModel);
+        moduleProvidesStmtMetaModel.withPropertyMetaModel = new PropertyMetaModel(moduleProvidesStmtMetaModel, "with", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, true, false, false);
+        moduleProvidesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleProvidesStmtMetaModel.withPropertyMetaModel);
+        moduleUsesStmtMetaModel.namePropertyMetaModel = new PropertyMetaModel(moduleUsesStmtMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false, false);
+        moduleUsesStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleUsesStmtMetaModel.namePropertyMetaModel);
         moduleOpensStmtMetaModel.moduleNamesPropertyMetaModel = new PropertyMetaModel(moduleOpensStmtMetaModel, "moduleNames", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, true, false, false);
         moduleOpensStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleOpensStmtMetaModel.moduleNamesPropertyMetaModel);
         moduleOpensStmtMetaModel.namePropertyMetaModel = new PropertyMetaModel(moduleOpensStmtMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false, false);
         moduleOpensStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleOpensStmtMetaModel.namePropertyMetaModel);
     }
 
-    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<? extends Node> c) {
+    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
         for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getTypeNameGenerified().equals(c.getSimpleName())) {
+            if (nodeMetaModel.getTypeName().equals(c.getSimpleName())) {
                 return Optional.of(nodeMetaModel);
             }
         }

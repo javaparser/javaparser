@@ -2,7 +2,7 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.*;
 
-public class SymbolSolverWithJavassistInterfaceTest extends AbstractTest {
+public class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
     private JavassistInterfaceDeclaration interfaceDeclarationStandalone;

@@ -16,7 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -27,6 +29,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +100,15 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         return javaParserTypeDeclarationAdapter.solveConstructor(argumentsTypes, typeSolver);
+    }
+
+    @Override
+    public List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+        List<ResolvedFieldDeclaration> fields = new LinkedList<>();
+        fields.addAll(this.wrappedNode.resolve().getDeclaredFields());
+        this.wrappedNode.getExtendedTypes().forEach(i -> fields.addAll(i.resolve().getAllFieldsVisibleToInheritors()));
+        this.wrappedNode.getImplementedTypes().forEach(i -> fields.addAll(i.resolve().getAllFieldsVisibleToInheritors()));
+        return fields;
     }
 
     ///

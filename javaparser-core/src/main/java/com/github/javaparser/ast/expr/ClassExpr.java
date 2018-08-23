@@ -32,10 +32,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * Defines an expression that accesses the class of a type.

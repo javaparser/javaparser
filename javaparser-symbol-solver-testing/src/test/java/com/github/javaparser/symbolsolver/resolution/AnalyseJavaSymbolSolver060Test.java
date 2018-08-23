@@ -34,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * We analyze JavaParser version 0.6.0.
@@ -70,7 +69,7 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
 
-    static String readFile(File file)
+    private static String readFile(File file)
             throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         return new String(encoded, StandardCharsets.UTF_8);
@@ -95,7 +94,7 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         String path = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = new File(path);
 
-        if (isJava9()) {
+        if (isJavaVersion9OrAbove()) {
             String path9 = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + "_J9.txt";
             File dstFile9 = new File(path9);
             if (dstFile9.exists()) {
@@ -108,15 +107,15 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
             System.err.println(output);
         }
 
-        assertTrue("No failures expected when analyzing " + path, 0 == sourceFileInfoExtractor.getKo());
-        assertTrue("No UnsupportedOperationException expected when analyzing " + path, 0 == sourceFileInfoExtractor.getUnsupported());
+        assertEquals("No failures expected when analyzing " + path, 0, sourceFileInfoExtractor.getKo());
+        assertEquals("No UnsupportedOperationException expected when analyzing " + path, 0, sourceFileInfoExtractor.getUnsupported());
 
-        if (!dstFile.exists()) {
-            // If we need to update the file uncomment these lines
+        // If we need to update the file uncomment these lines
+//        if (!dstFile.exists()) {
 //            PrintWriter writer = new PrintWriter(dstFile.getAbsoluteFile(), "UTF-8");
 //            writer.print(output);
 //            writer.close();
-        }
+//        }
 
         String expected = readFile(dstFile);
 
@@ -154,12 +153,16 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
+    public void parseCoreJavaparsermodelTypeExtractor() throws IOException {
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
+    }
+
+    @Test
     public void parseCoreJavaparsermodel() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFacade");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFactory");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/LambdaArgumentTypePlaceholder");
-        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/UnsolvedSymbolException");
     }
 
@@ -197,15 +200,23 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
+    public void parseCoreJavaparsermodelDeclarationsHelper() throws IOException {
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/Helper");
+    }
+
+    @Test
+    public void parseCoreJavaparsermodelDeclarationsJavaParserFieldDeclaration() throws IOException {
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserFieldDeclaration");
+    }
+
+    @Test
     public void parseCoreJavaparsermodelDeclarations() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/DefaultConstructorDeclaration");
-        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/Helper");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnnotationDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserClassDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserConstructorDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumConstantDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumDeclaration");
-        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserFieldDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserMethodDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserParameterDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserSymbolDeclaration");
@@ -224,8 +235,12 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    public void parseCoreJavassistmodel() throws IOException {
+    public void parseCoreJavassistmodelJavassistClassDeclaration() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration");
+    }
+
+    @Test
+    public void parseCoreJavassistmodel() throws IOException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistEnumDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistFactory");

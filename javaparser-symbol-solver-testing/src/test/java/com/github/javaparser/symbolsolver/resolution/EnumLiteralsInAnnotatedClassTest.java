@@ -17,11 +17,11 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class EnumLiteralsInAnnidatedClassTest {
+public class EnumLiteralsInAnnotatedClassTest {
 
     @Test
     public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedSamePackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
                 + File.separator + "AClass.java");
 
@@ -43,7 +43,7 @@ public class EnumLiteralsInAnnidatedClassTest {
 
     @Test
     public void resolveFieldOfEnumAsInternalClassOfClassQualifiedSamePackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
                 + File.separator + "AClass.java");
 
@@ -65,7 +65,7 @@ public class EnumLiteralsInAnnidatedClassTest {
 
     @Test
     public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedDifferentPackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
@@ -87,7 +87,7 @@ public class EnumLiteralsInAnnidatedClassTest {
 
     @Test
     public void resolveFieldOfEnumAsInternalClassOfClassQualifiedDifferentPackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
