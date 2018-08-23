@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -32,8 +31,10 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -43,6 +44,22 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 
 public class GenericsResolutionTest extends AbstractResolutionTest {
+
+    @Test
+    public void complexTypeSolving() {
+        CompilationUnit cu = parseSample("ComplexTypeResolving");
+        ClassOrInterfaceDeclaration mainClass = Navigator.demandClass(cu, "Main");
+
+        ClassOrInterfaceDeclaration childDec = (ClassOrInterfaceDeclaration) mainClass.getMember(1);
+        ExpressionStmt stmt =
+                (ExpressionStmt) Navigator.demandMethod(childDec, "foo").getBody().get().getStatement(0);
+        ReferenceTypeImpl resolvedType =
+                (ReferenceTypeImpl) JavaParserFacade.get(new ReflectionTypeSolver()).getType(stmt.getExpression());
+        ClassOrInterfaceDeclaration resolvedTypeDeclaration
+                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration()).getWrappedNode();
+
+        assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
+    }
 
     @Test
     public void resolveFieldWithGenericTypeToString() {
