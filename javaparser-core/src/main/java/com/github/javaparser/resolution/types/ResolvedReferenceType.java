@@ -392,14 +392,24 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * type plus all declared fields which are not private.
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
-        List<ResolvedFieldDeclaration> res = new LinkedList<>();
-
-        res.addAll(this.getDeclaredFields().stream()
+        List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
                 .filter(f -> f.accessSpecifier() != PRIVATE)
                 .collect(Collectors.toList()));
 
         getDirectAncestors().forEach(a ->
                 res.addAll(a.getAllFieldsVisibleToInheritors()));
+
+        return res;
+    }
+
+    public List<ResolvedMethodDeclaration> getAllMethodsVisibleToInheritors() {
+        List<ResolvedMethodDeclaration> res = new LinkedList<>(this.getDeclaredMethods().stream()
+                .map(m -> m.getDeclaration())
+                .filter(m -> m.accessSpecifier() != PRIVATE)
+                .collect(Collectors.toList()));
+
+        getDirectAncestors().forEach(a ->
+                res.addAll(a.getAllMethodsVisibleToInheritors()));
 
         return res;
     }

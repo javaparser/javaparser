@@ -200,4 +200,6 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   public Optional<ResolvedReferenceTypeDeclaration> containerType() {
     throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
+
+
 }
