@@ -342,7 +342,14 @@ public class MethodResolutionLogic {
     }
     
     /**
-     * Filters by given function {@param keyExtractor}.
+     * Filters by given function {@param keyExtractor} using a stateful filter mechanism.
+     * 
+     * <pre>
+     *      persons.stream().filter(distinctByKey(Person::getName))
+     * </pre>
+     * 
+     * The example above would return a distinct list of persons containing only one person per name.
+     * 
      */
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
