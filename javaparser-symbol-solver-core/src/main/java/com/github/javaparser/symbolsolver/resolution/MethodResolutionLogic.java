@@ -342,7 +342,7 @@ public class MethodResolutionLogic {
     }
     
     /**
-     * filters by given function
+     * Filters by given function {@param keyExtractor}.
      */
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
@@ -369,9 +369,9 @@ public class MethodResolutionLogic {
                 .collect(Collectors.toList());
         
         List<ResolvedMethodDeclaration> applicableMethods = methodsWithMatchingName.stream()
-                // Filters out duplicate {@param methods} by their signature.
+                // Filters out duplicate ResolvedMethodDeclaration by their signature.
                 .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)) 
-                // checks if ResolvedMethodDeclaration is applicable to arguments
+                // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
         
