@@ -23,6 +23,7 @@ package com.github.javaparser.serialization;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
@@ -79,6 +80,28 @@ class JavaParserJsonDeserializerTest {
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
         assertEqualsNoEol("Blub<Blab, Bleb>", deserialized.toString());
+        assertEquals(type.hashCode(), deserialized.hashCode());
+    }
+
+    @Test
+    void testOperator() {
+        Expression expr = JavaParser.parseExpression("1+1");
+        String serialized = serialize(expr, false);
+
+        Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+
+        assertEqualsNoEol("1 + 1", deserialized.toString());
+        assertEquals(expr.hashCode(), deserialized.hashCode());
+    }
+
+    @Test
+    void testPrimitiveType() {
+        Type type = JavaParser.parseType("int");
+        String serialized = serialize(type, false);
+
+        Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+
+        assertEqualsNoEol("int", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
     }
 
