@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -81,7 +82,14 @@ public class JavaParserTypeDeclarationAdapter {
         for (ResolvedReferenceType ancestor : declaration.getAncestors()) {
             try {
                 for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
-                    if (internalTypeDeclaration.getName().equals(name)) {
+                    boolean visible = true;
+                    if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
+                        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = internalTypeDeclaration.asReferenceType();
+                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
+                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier() != AccessSpecifier.PRIVATE;
+                        }
+                    }
+                    if (internalTypeDeclaration.getName().equals(name) && visible) {
                         return internalTypeDeclaration;
                     }
                 }
@@ -100,13 +108,17 @@ public class JavaParserTypeDeclarationAdapter {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name))
-                .filter(m -> !staticOnly || (staticOnly &&  m.isStatic()))
+                .filter(m -> !staticOnly || m.isStatic())
                 .collect(Collectors.toList());
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors()) {
 		// Avoid recursion on self
                 if (typeDeclaration != ancestor.getTypeDeclaration()) {
+                    candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors()
+                            .stream()
+                            .filter(m -> m.getName().equals(name))
+                            .collect(Collectors.toList()));
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic
                             .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
                     // consider methods from superclasses and only default methods from interfaces :
