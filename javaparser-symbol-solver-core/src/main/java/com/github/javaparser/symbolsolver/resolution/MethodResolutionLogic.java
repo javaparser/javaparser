@@ -16,8 +16,12 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.resolution.ApplicabilityCheckStrategy;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.SymbolReference;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -28,8 +32,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
@@ -46,7 +48,9 @@ import java.util.stream.Collectors;
  */
 public class MethodResolutionLogic {
 
-    private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
+    private static ApplicabilityCheckStrategy applicabilityCheckStrategy = new DefaultApplicabilityCheckStrategy();
+    
+    static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
         List<ResolvedType> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));
         List<ResolvedType> variadicValues = argumentsTypes.subList(startVariadic, argumentsTypes.size());
         if (variadicValues.isEmpty()) {
@@ -68,81 +72,12 @@ public class MethodResolutionLogic {
     }
 
     public static boolean isApplicable(ResolvedMethodDeclaration method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        return isApplicable(method, name, argumentsTypes, typeSolver, false);
-    }
-
-    private static boolean isApplicable(ResolvedMethodDeclaration method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
-        if (!method.getName().equals(name)) {
-            return false;
-        }
-        if (method.hasVariadicParameter()) {
-            int pos = method.getNumberOfParams() - 1;
-            if (method.getNumberOfParams() == argumentsTypes.size()) {
-                // check if the last value is directly assignable as an array
-                ResolvedType expectedType = method.getLastParam().getType();
-                ResolvedType actualType = argumentsTypes.get(pos);
-                if (!expectedType.isAssignableBy(actualType)) {
-                    for (ResolvedTypeParameterDeclaration tp : method.getTypeParameters()) {
-                        expectedType = replaceTypeParam(expectedType, tp, typeSolver);
-                    }
-                    if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
-                            argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
-                        } else {
-                            argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
-                        }
-                    }
-                } // else it is already assignable, nothing to do
-            } else {
-                if (pos > argumentsTypes.size()) {
-                    return false;
-                }
-                argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
-            }
-        }
-
-        if (method.getNumberOfParams() != argumentsTypes.size()) {
-            return false;
-        }
-        Map<String, ResolvedType> matchedParameters = new HashMap<>();
-        boolean needForWildCardTolerance = false;
-        for (int i = 0; i < method.getNumberOfParams(); i++) {
-            ResolvedType expectedType = method.getParam(i).getType();
-            ResolvedType actualType = argumentsTypes.get(i);
-            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
-                matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
-                continue;
-            }
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
-                    (method.getParam(i).isVariadic() && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
-            if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
-                isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
-                        expectedType.asReferenceType(),
-                        actualType.asReferenceType(),
-                        matchedParameters);
-            }
-            if (!isAssignableWithoutSubstitution) {
-                List<ResolvedTypeParameterDeclaration> typeParameters = method.getTypeParameters();
-                typeParameters.addAll(method.declaringType().getTypeParameters());
-                for (ResolvedTypeParameterDeclaration tp : typeParameters) {
-                    expectedType = replaceTypeParam(expectedType, tp, typeSolver);
-                }
-
-                if (!expectedType.isAssignableBy(actualType)) {
-                    if (actualType.isWildcard() && withWildcardTolerance && !expectedType.isPrimitive()) {
-                        needForWildCardTolerance = true;
-                        continue;
-                    }
-                    if (method.hasVariadicParameter() && i == method.getNumberOfParams() - 1) {
-                        if (new ResolvedArrayType(expectedType).isAssignableBy(actualType)) {
-                            continue;
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        return !withWildcardTolerance || needForWildCardTolerance;
+        
+        final ApplicabilityCheckStrategy strategy = JavaParser.getStaticConfiguration()
+                .getApplicabilityCheckStrategy() == null ? applicabilityCheckStrategy
+                        : JavaParser.getStaticConfiguration().getApplicabilityCheckStrategy();
+        
+        return strategy.isApplicable(method, name, argumentsTypes, typeSolver, false);
     }
 
     public static boolean isAssignableMatchTypeParameters(ResolvedType expected, ResolvedType actual,
@@ -375,11 +310,15 @@ public class MethodResolutionLogic {
                 .filter(m -> m.getName().equals(name))
                 .collect(Collectors.toList());
         
+        final ApplicabilityCheckStrategy strategy = JavaParser.getStaticConfiguration()
+                .getApplicabilityCheckStrategy() == null ? applicabilityCheckStrategy
+                        : JavaParser.getStaticConfiguration().getApplicabilityCheckStrategy();
+ 
         List<ResolvedMethodDeclaration> applicableMethods = methodsWithMatchingName.stream()
                 // Filters out duplicate ResolvedMethodDeclaration by their signature.
                 .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)) 
                 // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-                .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
+                .filter((m) -> strategy.isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
         
         if (applicableMethods.isEmpty()) {

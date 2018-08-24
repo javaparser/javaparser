@@ -14,9 +14,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.SymbolReference;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.io.File;
 import java.io.IOException;

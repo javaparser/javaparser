@@ -2,8 +2,8 @@ package com.github.javaparser.symbolsolver.resolution.naming;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 
 import java.util.List;

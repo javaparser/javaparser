@@ -1,9 +1,9 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import com.github.javaparser.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti

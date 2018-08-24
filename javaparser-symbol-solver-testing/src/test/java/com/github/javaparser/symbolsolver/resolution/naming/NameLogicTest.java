@@ -6,7 +6,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import org.junit.Test;
 
@@ -27,6 +26,8 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.TypeSolver;
+
 import org.junit.Test;
 
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.DECLARATION;

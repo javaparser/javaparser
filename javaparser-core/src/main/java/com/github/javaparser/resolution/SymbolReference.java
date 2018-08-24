@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.model.resolution;
+package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 
