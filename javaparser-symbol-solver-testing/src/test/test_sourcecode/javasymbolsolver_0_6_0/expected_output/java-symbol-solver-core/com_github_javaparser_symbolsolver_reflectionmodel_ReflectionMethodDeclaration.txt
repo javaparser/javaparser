@@ -8,7 +8,7 @@
   Line 80) method.getDeclaringClass() ==> java.lang.reflect.Method.getDeclaringClass()
   Line 81) method.getDeclaringClass() ==> java.lang.reflect.Method.getDeclaringClass()
   Line 83) method.getDeclaringClass() ==> java.lang.reflect.Method.getDeclaringClass()
-  Line 89) ReflectionFactory.typeUsageFor(method.getGenericReturnType(), typeSolver) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory.typeUsageFor(java.lang.reflect.Type, com.github.javaparser.resolution.TypeSolver)
+  Line 89) ReflectionFactory.typeUsageFor(method.getGenericReturnType(), typeSolver) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory.typeUsageFor(java.lang.reflect.Type, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 89) method.getGenericReturnType() ==> java.lang.reflect.Method.getGenericReturnType()
   Line 94) method.getParameterTypes() ==> java.lang.reflect.Method.getParameterTypes()
   Line 100) method.isVarArgs() ==> java.lang.reflect.Method.isVarArgs()

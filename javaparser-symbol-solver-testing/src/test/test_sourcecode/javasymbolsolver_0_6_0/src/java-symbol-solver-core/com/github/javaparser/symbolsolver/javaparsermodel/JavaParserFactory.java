@@ -34,7 +34,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDe
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;

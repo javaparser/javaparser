@@ -21,7 +21,7 @@ import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;

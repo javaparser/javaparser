@@ -17,8 +17,8 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityException;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.resolution.SymbolReference;
-import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 

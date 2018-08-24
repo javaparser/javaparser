@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti

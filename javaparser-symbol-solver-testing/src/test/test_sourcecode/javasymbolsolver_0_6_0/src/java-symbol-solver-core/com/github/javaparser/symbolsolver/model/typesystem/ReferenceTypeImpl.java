@@ -23,8 +23,8 @@ import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.resolution.SymbolReference;
-import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
 import java.util.List;

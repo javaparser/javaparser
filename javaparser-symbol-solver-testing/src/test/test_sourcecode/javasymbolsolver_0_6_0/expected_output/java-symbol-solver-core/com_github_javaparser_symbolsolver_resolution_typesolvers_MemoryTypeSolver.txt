@@ -4,6 +4,6 @@
   Line 59) declarationMap.hashCode() ==> java.util.Map.hashCode()
   Line 74) this.declarationMap.put(name, typeDeclaration) ==> java.util.Map.put(K, V)
   Line 79) declarationMap.containsKey(name) ==> java.util.Map.containsKey(java.lang.Object)
-  Line 80) SymbolReference.solved(declarationMap.get(name)) ==> com.github.javaparser.resolution.SymbolReference.solved(S2)
+  Line 80) SymbolReference.solved(declarationMap.get(name)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 80) declarationMap.get(name) ==> java.util.Map.get(java.lang.Object)
-  Line 82) SymbolReference.unsolved(ReferenceTypeDeclaration.class) ==> com.github.javaparser.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 82) SymbolReference.unsolved(ReferenceTypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)

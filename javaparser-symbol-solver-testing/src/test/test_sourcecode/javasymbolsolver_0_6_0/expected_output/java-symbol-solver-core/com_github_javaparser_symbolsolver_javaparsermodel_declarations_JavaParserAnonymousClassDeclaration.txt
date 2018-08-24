@@ -1,7 +1,7 @@
   Line 37) UUID.randomUUID() ==> java.util.UUID.randomUUID()
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver).getCorrespondingDeclaration() ==> com.github.javaparser.resolution.SymbolReference.getCorrespondingDeclaration()
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.resolution.TypeSolver)
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.resolution.TypeSolver)
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver).getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 44) wrappedNode.getParentNode().get() ==> java.util.Optional.get()
   Line 44) wrappedNode.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 45) wrappedNode.getType().getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
@@ -16,7 +16,7 @@
   Line 58) memberClass.isAssignableFrom(node.getClass()) ==> ERROR
   Line 58) node.getClass() ==> ERROR
   Line 60) Collectors.toList() ==> java.util.stream.Collectors.toList()
-  Line 65) typeSolver.solveType(Object.class.getCanonicalName()) ==> com.github.javaparser.resolution.TypeSolver.solveType(java.lang.String)
+  Line 65) typeSolver.solveType(Object.class.getCanonicalName()) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
   Line 65) Object.class.getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 70) superTypeDeclaration.asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
   Line 76) superTypeDeclaration.asReferenceType().getAncestors().stream().filter(type -> type.getTypeDeclaration().isInterface()).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
@@ -80,7 +80,7 @@
   Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class).stream() ==> java.util.Collection.stream()
   Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.findMembersOfKind(java.lang.Class<T>)
   Line 185) JavaParserFacade.get(typeSolver).getTypeDeclaration(typeMember) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?>)
-  Line 185) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.resolution.TypeSolver)
+  Line 185) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 186) Collectors.toSet() ==> java.util.stream.Collectors.toSet()
   Line 196) Lists.newArrayList() ==> com.google.common.collect.Lists.newArrayList()
   Line 201) this.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
