@@ -1,3 +1,7 @@
+Version 3.6.19
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/102?closed=1)
+
 Version 3.6.18
 ------------------
 * Parsing Java 11 is now supported.
