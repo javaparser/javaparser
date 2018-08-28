@@ -1,11 +1,14 @@
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
@@ -55,4 +58,17 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 		assertEquals(expectedConstructor, actualConstructor);
 	}
 
+	@Test
+	public void solveEnumConstructor() {
+		// configure symbol solver before parsing
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		CompilationUnit cu = parseSample("ConstructorCallsEnum");
+		EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
+		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(2);
+
+		ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
+
+		// TODO: check if resolved constructor is the expected one.
+	}
 }
