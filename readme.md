@@ -101,7 +101,7 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 ## More information
 
-#### [JavaParser.org](https://www.javaparser.org) is the main information site.
+#### [JavaParser.org](https://javaparser.org) is the main information site.
 
 ## License
 
