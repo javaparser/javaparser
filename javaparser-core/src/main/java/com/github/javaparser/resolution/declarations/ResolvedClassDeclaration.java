@@ -80,6 +80,7 @@ public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclarati
      * List of constructors available for the class.
      * This list should also include the default constructor.
      */
+    @Override
     List<ResolvedConstructorDeclaration> getConstructors();
 
 }

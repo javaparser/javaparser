@@ -261,4 +261,9 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
                 .map(f -> new JavassistEnumConstantDeclaration(f, typeSolver))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        throw new UnsupportedOperationException("To be implemented");
+    }
 }

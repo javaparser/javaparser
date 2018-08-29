@@ -89,9 +89,9 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof ConstructorDeclaration) {
             ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration) node;
-            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) node.getParentNode().get();
-            ResolvedClassDeclaration resolvedClass = resolveDeclaration(classOrInterfaceDeclaration, ResolvedClassDeclaration.class).asClass();
-            ResolvedConstructorDeclaration resolved = resolvedClass.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration).findFirst().get();
+            TypeDeclaration<?> typeDeclaration = (TypeDeclaration<?>) node.getParentNode().get();
+            ResolvedReferenceTypeDeclaration resolvedTypeDeclaration = resolveDeclaration(typeDeclaration, ResolvedReferenceTypeDeclaration.class);
+            ResolvedConstructorDeclaration resolved = resolvedTypeDeclaration.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }

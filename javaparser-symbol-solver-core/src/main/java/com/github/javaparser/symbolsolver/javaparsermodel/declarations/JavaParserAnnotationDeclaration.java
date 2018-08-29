@@ -8,6 +8,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -97,5 +98,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
                 .filter(m -> m instanceof AnnotationMemberDeclaration)
                 .map(m -> new JavaParserAnnotationMemberDeclaration((AnnotationMemberDeclaration)m, typeSolver))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
     }
 }

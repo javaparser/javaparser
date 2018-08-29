@@ -19,14 +19,20 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.google.common.collect.ImmutableList;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -96,5 +102,19 @@ class AstResolutionUtils {
             }
         }
         return false;
+    }
+
+    static <N extends ResolvedReferenceTypeDeclaration> List<ResolvedConstructorDeclaration> getConstructors(NodeWithConstructors<?> wrappedNode,
+                                                                TypeSolver typeSolver,
+                                                                N container) {
+        List<ResolvedConstructorDeclaration> declared = wrappedNode.getConstructors().stream()
+                .map(c -> new JavaParserConstructorDeclaration<N>(container, c, typeSolver))
+                .collect(Collectors.toList());
+        if (declared.isEmpty()) {
+            // If there are no constructors insert the default constructor
+            return ImmutableList.of(new DefaultConstructorDeclaration<N>(container));
+        } else {
+            return declared;
+        }
     }
 }

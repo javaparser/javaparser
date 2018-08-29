@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -107,6 +108,9 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 		ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
 
-		// TODO: check if resolved constructor is the expected one.
+		assertEquals("ConstructorCallsEnum", resolvedConstructor.declaringType().getName());
+		assertEquals(1, resolvedConstructor.getNumberOfParams());
+		assertEquals("i", resolvedConstructor.getParam(0).getName());
+		assertEquals(ResolvedPrimitiveType.INT, resolvedConstructor.getParam(0).getType());
 	}
 }

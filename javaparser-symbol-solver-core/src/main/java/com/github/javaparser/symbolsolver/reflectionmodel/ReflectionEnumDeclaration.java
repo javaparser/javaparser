@@ -206,4 +206,9 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
             .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
             .collect(Collectors.toSet());
   }
+
+  @Override
+  public List<ResolvedConstructorDeclaration> getConstructors() {
+      throw new UnsupportedOperationException("To be implemented");
+  }
 }
