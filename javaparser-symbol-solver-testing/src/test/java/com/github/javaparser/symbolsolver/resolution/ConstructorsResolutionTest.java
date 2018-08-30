@@ -98,7 +98,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveEnumConstructorForJavaParserClass() {
+	public void solveEnumConstructor() {
 		// configure symbol solver before parsing
 		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
@@ -113,4 +113,5 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 		assertEquals("i", resolvedConstructor.getParam(0).getName());
 		assertEquals(ResolvedPrimitiveType.INT, resolvedConstructor.getParam(0).getType());
 	}
+
 }

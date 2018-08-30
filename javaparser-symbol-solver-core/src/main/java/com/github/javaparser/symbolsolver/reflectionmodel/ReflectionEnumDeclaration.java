@@ -209,6 +209,6 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
 
   @Override
   public List<ResolvedConstructorDeclaration> getConstructors() {
-      throw new UnsupportedOperationException("To be implemented");
+    return reflectionClassAdapter.getConstructors();
   }
 }
