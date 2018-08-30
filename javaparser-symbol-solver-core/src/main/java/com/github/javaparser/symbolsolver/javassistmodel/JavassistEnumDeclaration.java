@@ -264,6 +264,6 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-        throw new UnsupportedOperationException("To be implemented");
+        return javassistTypeDeclarationAdapter.getConstructors();
     }
 }
