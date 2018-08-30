@@ -38,6 +38,8 @@ import static com.github.javaparser.ast.NodeList.nodeList;
  *     new X&lt;>();      --> typeArguments = [], diamondOperator = true
  *     new X&lt;C,D>();   --> typeArguments = [C,D], diamondOperator = false
  * </pre>
+ * Only ObjectCreationExpr uses the diamond operator.
+ * On other nodes it is treated the same as the first case.
  */
 public interface NodeWithTypeArguments<N extends Node> {
     /**
