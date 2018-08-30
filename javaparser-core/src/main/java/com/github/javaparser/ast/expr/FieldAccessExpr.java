@@ -60,11 +60,11 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     private SimpleName name;
 
     public FieldAccessExpr() {
-        this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
+        this(null, new ThisExpr(), null, new SimpleName());
     }
 
     public FieldAccessExpr(final Expression scope, final String name) {
-        this(null, scope, new NodeList<>(), new SimpleName(name));
+        this(null, scope, null, new SimpleName(name));
     }
 
     @AllFieldsConstructor
