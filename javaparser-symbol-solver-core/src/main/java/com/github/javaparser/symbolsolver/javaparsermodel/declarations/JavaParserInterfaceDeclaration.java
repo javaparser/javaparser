@@ -304,7 +304,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = null;
-        String typeName = classOrInterfaceType.getNameAsString();
+        String typeName = classOrInterfaceType.asString();
         if (typeName.indexOf('.') > -1) {
             ref = typeSolver.tryToSolveType(typeName);
         }

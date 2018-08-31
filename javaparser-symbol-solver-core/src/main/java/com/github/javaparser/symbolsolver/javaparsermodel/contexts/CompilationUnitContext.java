@@ -32,6 +32,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
@@ -134,9 +135,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 SymbolReference<ResolvedTypeDeclaration> ref = null;
                 SymbolReference<ResolvedTypeDeclaration> outerMostRef =
                         solveType(name.substring(0, name.indexOf(".")), typeSolver);
-                if (outerMostRef.isSolved() &&
+                if (outerMostRef != null && outerMostRef.isSolved() &&
                     outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
                     ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
+                                  .solveType(name.substring(name.indexOf(".") + 1), typeSolver);
+                } else if (outerMostRef != null && outerMostRef.isSolved() &&
+                           outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
+                    ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
                                   .solveType(name.substring(name.indexOf(".") + 1), typeSolver);
                 }
                 if (ref != null && ref.isSolved()) {
