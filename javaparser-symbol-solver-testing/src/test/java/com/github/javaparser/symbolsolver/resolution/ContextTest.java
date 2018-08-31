@@ -241,7 +241,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     public void resolveReferenceToMethodCalledOnArrayAccess() {
         CompilationUnit cu = parseSample("ArrayAccess");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "access");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "fieldAccess");
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim").get();
 
         Path src = adaptPath("src/test/resources");

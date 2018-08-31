@@ -2,12 +2,29 @@ class ArrayAccess {
 
 	private String[] array;
 
-	private char access() {
+	private char fieldAccess() {
 		return array[0].trim();
 	}
 
-	private String localaccess() {
-	    String[] foo = new String[2];
-   		return foo[0];
+	private char explicitFieldAccess() {
+   		return this.array[0];
    	}
+
+	private String localAccess() {
+	    String[] array = new String[2];
+   		return array[0];
+   	}
+
+	private String localEnclosedAccess() {
+  	    String[] array = new String[2];
+   		return (((array)))[0];
+   	}
+
+	private String declarationLessAccess() {
+   	    return createArray()[2];
+    }
+
+    private String[] createArray() {
+        return new String[] {"One", "Two", "Three"};
+    }
 }

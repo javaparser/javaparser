@@ -31,6 +31,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 
 public class ArrayAccessResolutionTest extends AbstractResolutionTest {
@@ -43,19 +45,45 @@ public class ArrayAccessResolutionTest extends AbstractResolutionTest {
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ArrayAccess");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "access");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "fieldAccess");
+
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
-        ArrayAccessExpr expression = returnStmt.getExpression().get().asMethodCallExpr()
-                                             .getScope().get().asArrayAccessExpr();
+        ArrayAccessExpr expression = returnStmt.getExpression().get().asMethodCallExpr().getScope().get()
+                                             .asArrayAccessExpr();
 
         // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+        Optional<ResolvedValueDeclaration> resolvedValueDeclaration = expression.resolveAccessedArray();
 
         // get expected field declaration
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "array");
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration.get())
+                                                 .getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveArrayExplicitField() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ArrayAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "explicitFieldAccess");
+
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ArrayAccessExpr expression = returnStmt.getExpression().get().asArrayAccessExpr();
+
+        // resolve field access expression
+        Optional<ResolvedValueDeclaration> resolvedValueDeclaration = expression.resolveAccessedArray();
+
+        // get expected field declaration
+        VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "array");
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration.get())
+                                                 .getVariableDeclarator());
     }
 
     @Test
@@ -66,20 +94,65 @@ public class ArrayAccessResolutionTest extends AbstractResolutionTest {
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ArrayAccess");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "localaccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "localAccess");
+
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatement(1);
         ArrayAccessExpr expression = returnStmt.getExpression().get().asArrayAccessExpr();
 
         // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+        Optional<ResolvedValueDeclaration> resolvedValueDeclaration = expression.resolveAccessedArray();
 
         // get expected field declaration
         VariableDeclarator variableDeclarator = method.getBody().get().getStatement(0).asExpressionStmt()
                                                         .getExpression().asVariableDeclarationExpr().getVariable(0);
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserSymbolDeclaration) resolvedValueDeclaration).getWrappedNode());
+        assertEquals(variableDeclarator, ((JavaParserSymbolDeclaration) resolvedValueDeclaration.get())
+                                                 .getWrappedNode());
     }
 
+    @Test
+    public void resolveLocalEnclosedArray() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ArrayAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "localEnclosedAccess");
+
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatement(1);
+        ArrayAccessExpr expression = returnStmt.getExpression().get().asArrayAccessExpr();
+
+        // resolve field access expression
+        Optional<ResolvedValueDeclaration> resolvedValueDeclaration = expression.resolveAccessedArray();
+
+        // get expected field declaration
+        VariableDeclarator variableDeclarator = method.getBody().get().getStatement(0).asExpressionStmt()
+                                                        .getExpression().asVariableDeclarationExpr().getVariable(0);
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(variableDeclarator, ((JavaParserSymbolDeclaration) resolvedValueDeclaration.get())
+                                                 .getWrappedNode());
+    }
+
+    @Test
+    public void resolveDeclarationLessAccess() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ArrayAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "declarationLessAccess");
+
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatement(0);
+        ArrayAccessExpr expression = returnStmt.getExpression().get().asArrayAccessExpr();
+
+        // resolve field access expression
+        Optional<ResolvedValueDeclaration> resolvedValueDeclaration = expression.resolveAccessedArray();
+
+        // check that the expected field declaration equals the resolved field declaration
+        assertEquals(Optional.empty(), resolvedValueDeclaration);
+    }
 }

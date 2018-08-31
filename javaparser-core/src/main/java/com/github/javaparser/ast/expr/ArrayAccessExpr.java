@@ -29,7 +29,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
@@ -45,7 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ArrayAccessExpr extends Expression implements Resolvable<ResolvedValueDeclaration> {
+public final class ArrayAccessExpr extends Expression {
 
     private Expression name;
 
@@ -175,19 +174,46 @@ public final class ArrayAccessExpr extends Expression implements Resolvable<Reso
     }
 
     /**
-     * Attempts to resolve the declaration corresponding to the accessed array. If successful, a
-     * {@link ResolvedValueDeclaration} representing the declaration of the array accessed by this
-     * {@code ArrayAccessExpr} is returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
+     * Convenience method to resolve the declaration corresponding to the accessed array. If successful, an
+     * {@code Optional} of a {@link ResolvedValueDeclaration} representing the declaration of the array accessed by this
+     * {@code ArrayAccessExpr} is returned.
+     * <p>
+     * Note that the accessed array must not necessarily have an explicit definition anywhere in the source code. For
+     * instance, it could instead access an array dynamically like: {@code (new String[] {"One", "Two", "Three"})[2]},
+     * or it could access the return value of a method like: {@code foo()[2]}.
+     * <p>
+     * If, however, the accessed array is a name (e.g., {@code foo[2]}) or a field access expression (e.g.,
+     * {@code this.foo[2]}), then the accessed array must correspond to a declaration of a local variable or a field,
+     * and this method will attempt to resolve that variable or field.
+     * <p>
+     * In addition, an array access of an enclosed expression may or may not refer to a declaration: For instance,
+     * {@code (foo)[2]} does, but {@code (foo())[2]} does not.
+     * <p>
+     * When this array access's name is a {@link NameExpr} or {@link FieldAccessExpr}, then this method will attempt to
+     * resolve the corresponding declaration. If this arrray access's name is an {@link EnclosedExpr}, that expression's
+     * inner expression is used (multiple nested enclosed expressions are also handled). If this array access's name is
+     * not a {@link NameExpr} nor a {@link FieldAccessExpr} nor an {@link EnclosedExpr} which wraps one of the latter
+     * two expressions, then an empty Optional is returned.
      *
-     * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed array.
-     * @throws UnsolvedSymbolException if the declaration corresponding to the array access expression could not be
-     *                                 resolved.
-     * @see NameExpr#resolve()
-     * @see FieldAccessExpr#resolve()
+     * @return an Optional of {@link ResolvedValueDeclaration} representing the declaration of the accessed array if
+     * this array access's name is a {@link NameExpr} or  {@link FieldAccessExpr} or an {@link EnclosedExpr} which wraps
+     * one of the latter two expressions; and an empty Optional otherwise.
+     * @throws UnsolvedSymbolException if this array access's name is a {@link NameExpr} or  {@link FieldAccessExpr} or
+     * an {@link EnclosedExpr} which wraps one of the latter two expressions, yet the corresponding declaration could
+     * not be resolved.
      */
-    @Override
-    public ResolvedValueDeclaration resolve() {
-        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
+    public Optional<ResolvedValueDeclaration> resolveAccessedArray() {
+        Expression name = getName();
+        while (name instanceof EnclosedExpr) {
+            name = ((EnclosedExpr) name).getInner();
+        }
+        // the array access can only refer to an array definition (instead of an array returned from somewhere, for
+        // example) if the accessed name is a field access expression or a name expression.
+        if (name instanceof NameExpr || name instanceof FieldAccessExpr) {
+            return Optional.of(getSymbolResolver().resolveDeclaration(name, ResolvedValueDeclaration.class));
+        }
+
+        return Optional.empty();
     }
 
     @Override
