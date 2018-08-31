@@ -400,7 +400,6 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveMethodCallOfMethodInMemberClassOfAnotherClass() {
-
         CompilationUnit cu = parseSample("NestedClasses");
         ClassOrInterfaceDeclaration classA = Navigator.demandClass(cu, "A");
 
@@ -418,7 +417,6 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveMethodCallOfMethodInMemberInterfaceOfAnotherInterface() {
-
         CompilationUnit cu = parseSample("NestedInterfaces");
         ClassOrInterfaceDeclaration classA = Navigator.demandInterface(cu, "A");
 
@@ -436,7 +434,6 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveMethodCallOfMethodInMemberInterfaceWithIdenticalNameOfAnotherInterface() {
-
         CompilationUnit cu = parseSample("NestedInterfacesWithIdenticalNames");
         ClassOrInterfaceDeclaration classA = Navigator.demandInterface(cu, "A");
 

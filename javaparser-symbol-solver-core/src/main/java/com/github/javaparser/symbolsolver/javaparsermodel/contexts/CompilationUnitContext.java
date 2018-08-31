@@ -116,7 +116,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+
         if (wrappedNode.getTypes() != null) {
+            // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
+            // interface in this compilation unit called "A".
             for (TypeDeclaration<?> type : wrappedNode.getTypes()) {
                 if (type.getName().getId().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
@@ -130,7 +133,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     }
                 }
             }
-            // look for member classes/interfaces of types in this compilation unit
+            // Look for member classes/interfaces of types in this compilation unit. For instance, if the given name is
+            // "A.B", there may be a class or interface in this compilation unit called "A" which has another member
+            // class or interface called "B". Since the type that we're looking for can be nested arbitrarily deeply
+            // ("A.B.C.D"), we look for the outermost type ("A" in the previous example) first, then recursively invoke
+            // this method for the remaining part of the given name.
             if (name.indexOf('.') > -1) {
                 SymbolReference<ResolvedTypeDeclaration> ref = null;
                 SymbolReference<ResolvedTypeDeclaration> outerMostRef =
