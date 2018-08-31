@@ -30,6 +30,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -128,6 +129,20 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     }
                 }
             }
+            // look for member classes/interfaces of types in this compilation unit
+            if (name.indexOf('.') > -1) {
+                SymbolReference<ResolvedTypeDeclaration> ref = null;
+                SymbolReference<ResolvedTypeDeclaration> outerMostRef =
+                        solveType(name.substring(0, name.indexOf(".")), typeSolver);
+                if (outerMostRef.isSolved() &&
+                    outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
+                    ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
+                                  .solveType(name.substring(name.indexOf(".") + 1), typeSolver);
+                }
+                if (ref != null && ref.isSolved()) {
+                    return ref;
+                }
+            }
         }
 
         // Look in current package
@@ -168,7 +183,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     }
                     if (found) {
                         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                        if (ref.isSolved()) {
+                        if (ref != null && ref.isSolved()) {
                             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                         }
                     }
@@ -179,7 +194,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString() + "." + name;
                     SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                    if (ref.isSolved()) {
+                    if (ref != null && ref.isSolved()) {
                         return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                     }
                 }
@@ -188,7 +203,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
         // Look in the java.lang package
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
-        if (ref.isSolved()) {
+        if (ref != null && ref.isSolved()) {
             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
         }
 

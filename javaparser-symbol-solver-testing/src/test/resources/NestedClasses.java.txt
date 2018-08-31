@@ -1,0 +1,13 @@
+class A extends X.Y {
+
+	void foo() {
+		X.Y xy = null;
+		xy.bar();
+	}
+}
+
+class X {
+	static class Y {
+		void bar() {}
+	}
+}

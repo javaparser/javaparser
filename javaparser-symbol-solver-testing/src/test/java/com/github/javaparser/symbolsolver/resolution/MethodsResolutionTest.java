@@ -397,4 +397,22 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
     }
+
+    @Test
+    public void resolveMethodCallOfMethodInMemberClassOfAnotherClass() {
+
+        CompilationUnit cu = parseSample("NestedClasses");
+        ClassOrInterfaceDeclaration classA = Navigator.demandClass(cu, "A");
+
+        MethodDeclaration method = Navigator.demandMethod(classA, "foo");
+
+        MethodCallExpr callExpr = method.getBody().get().getStatement(1)
+                                          .asExpressionStmt().getExpression().asMethodCallExpr();
+
+        SymbolReference<ResolvedMethodDeclaration> reference = JavaParserFacade.get(new ReflectionTypeSolver())
+                                                                       .solve(callExpr);
+
+        assertTrue(reference.isSolved());
+        assertEquals("X.Y.bar()", reference.getCorrespondingDeclaration().getQualifiedSignature());
+    }
 }
