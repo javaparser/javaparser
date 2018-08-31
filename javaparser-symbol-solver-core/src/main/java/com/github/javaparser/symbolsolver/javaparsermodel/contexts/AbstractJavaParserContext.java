@@ -168,7 +168,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             } catch (Exception e) {
                 // If the scope corresponds to a type we should treat it differently
                 if (scope instanceof FieldAccessExpr) {
-                    FieldAccessExpr scopeName = (FieldAccessExpr)scope;
+                    FieldAccessExpr scopeName = (FieldAccessExpr) scope;
                     if (this.solveType(scopeName.toString(), typeSolver).isSolved()) {
                         return Collections.emptyList();
                     }
@@ -205,4 +205,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
     }
 
+    public N getWrappedNode() {
+        return wrappedNode;
+    }
 }

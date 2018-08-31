@@ -81,7 +81,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof EnumConstantDeclaration) {
-            ResolvedEnumDeclaration enumDeclaration = node.findParent(EnumDeclaration.class).get().resolve().asEnum();
+            ResolvedEnumDeclaration enumDeclaration = node.findAncestor(EnumDeclaration.class).get().resolve().asEnum();
             ResolvedEnumConstantDeclaration resolved = enumDeclaration.getEnumConstants().stream().filter(c -> ((JavaParserEnumConstantDeclaration) c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
@@ -103,7 +103,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof AnnotationMemberDeclaration) {
-            ResolvedAnnotationDeclaration annotationDeclaration = node.findParent(AnnotationDeclaration.class).get().resolve();
+            ResolvedAnnotationDeclaration annotationDeclaration = node.findAncestor(AnnotationDeclaration.class).get().resolve();
             ResolvedAnnotationMemberDeclaration resolved = annotationDeclaration.getAnnotationMembers().stream().filter(c -> ((JavaParserAnnotationMemberDeclaration) c).getWrappedNode() == node).findFirst().get();
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
@@ -120,7 +120,14 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof VariableDeclarator) {
-            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
+            ResolvedValueDeclaration resolved;
+            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldDeclaration) {
+                resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
+            } else if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof VariableDeclarationExpr) {
+                resolved = new JavaParserVariableDeclaration((VariableDeclarator) node, typeSolver);
+            } else {
+                throw new UnsupportedOperationException("Parent of VariableDeclarator is: " + node.getParentNode());
+            }
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
@@ -206,7 +213,7 @@ public class JavaSymbolSolver implements SymbolResolver {
         if (node instanceof Parameter) {
             if (ResolvedParameterDeclaration.class.equals(resultClass)) {
                 Parameter parameter = (Parameter) node;
-                CallableDeclaration callableDeclaration = node.findParent(CallableDeclaration.class).get();
+                CallableDeclaration callableDeclaration = node.findAncestor(CallableDeclaration.class).get();
                 ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration;
                 if (callableDeclaration.isConstructorDeclaration()) {
                     resolvedMethodLikeDeclaration = callableDeclaration.asConstructorDeclaration().resolve();

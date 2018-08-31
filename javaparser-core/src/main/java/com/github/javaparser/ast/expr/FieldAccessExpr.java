@@ -36,13 +36,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * Access of a field of an object.
@@ -60,11 +60,11 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     private SimpleName name;
 
     public FieldAccessExpr() {
-        this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
+        this(null, new ThisExpr(), null, new SimpleName());
     }
 
     public FieldAccessExpr(final Expression scope, final String name) {
-        this(null, scope, new NodeList<>(), new SimpleName(name));
+        this(null, scope, null, new SimpleName(name));
     }
 
     @AllFieldsConstructor

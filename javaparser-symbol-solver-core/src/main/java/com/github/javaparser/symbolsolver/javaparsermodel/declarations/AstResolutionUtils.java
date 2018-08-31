@@ -17,6 +17,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -26,18 +33,10 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-class Helper {
+class AstResolutionUtils {
 
-    public static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
-        if (modifiers.contains(Modifier.PRIVATE)) {
-            return AccessSpecifier.PRIVATE;
-        } else if (modifiers.contains(Modifier.PROTECTED)) {
-            return AccessSpecifier.PROTECTED;
-        } else if (modifiers.contains(Modifier.PUBLIC)) {
-            return AccessSpecifier.PUBLIC;
-        } else {
-            return AccessSpecifier.DEFAULT;
-        }
+    static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
+        return Modifier.getAccessSpecifier(modifiers);
     }
 
     static String containerName(Node container) {
@@ -81,5 +80,21 @@ class Helper {
             return getClassName(base, container.getParentNode().orElse(null));
         }
         return base;
+    }
+
+    static boolean hasDirectlyAnnotation(NodeWithAnnotations<?> nodeWithAnnotations, TypeSolver typeSolver,
+                                         String canonicalName) {
+        for (AnnotationExpr annotationExpr : nodeWithAnnotations.getAnnotations()) {
+            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
+                    .solveType(annotationExpr.getName().getId(), typeSolver);
+            if (ref.isSolved()) {
+                if (ref.getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
+                    return true;
+                }
+            } else {
+                throw new UnsolvedSymbolException(annotationExpr.getName().getId());
+            }
+        }
+        return false;
     }
 }

@@ -16,13 +16,18 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +58,9 @@ public interface Context {
 
     /* Symbol resolution */
 
-    SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return getParent().solveSymbol(name, typeSolver);
+    }
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name, typeSolver);
@@ -65,12 +72,101 @@ public interface Context {
         }
     }
 
+    /**
+     * The local variables that are declared in this immediate context and made visible to a given child.
+     * This list could include values which are shadowed.
+     */
+    default List<VariableDeclarator> localVariablesExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
+    /**
+     * The parameters that are declared in this immediate context and made visible to a given child.
+     * This list could include values which are shadowed.
+     */
+    default List<Parameter> parametersExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
+    /**
+     * The fields that are declared and in this immediate context made visible to a given child.
+     * This list could include values which are shadowed.
+     */
+    default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Aim to resolve the given name by looking for a variable matching it.
+     *
+     * To do it consider local variables that are visible in a certain scope as defined in JLS 6.3. Scope of a Declaration.
+     *
+     * 1. The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
+     * appears, starting with its own initializer and including any further declarators to the right in the local
+     * variable declaration statement.
+     *
+     * 2. The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all
+     * of the following:
+     * 2.1 Its own initializer
+     * 2.2 Any further declarators to the right in the ForInit part of the for statement
+     * 2.3 The Expression and ForUpdate parts of the for statement
+     * 2.4 The contained Statement
+     *
+     * 3. The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
+     * the contained Statement.
+     * 4. The scope of a parameter of an exception handler that is declared in a catch clause of a try statement
+     * (§14.20) is the entire block associated with the catch.
+     *
+     * 5. The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
+     * from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
+     * associated with the try-with-resources statement.
+     */
+    default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<VariableDeclarator> localRes = getParent().localVariablesExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().localVariableDeclarationInScope(name);
+    }
+
+    default Optional<Parameter> parameterDeclarationInScope(String name) {
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<Parameter> localRes = getParent().parametersExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().parameterDeclarationInScope(name);
+    }
+
+    default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {
+        if (getParent() == null) {
+            return Optional.empty();
+        }
+        Optional<ResolvedFieldDeclaration> localRes = getParent().fieldsExposedToChild(((AbstractJavaParserContext)this)
+                .getWrappedNode()).stream().filter(vd -> vd.getName().equals(name)).findFirst();
+        if (localRes.isPresent()) {
+            return localRes;
+        }
+
+        return getParent().fieldDeclarationInScope(name);
+    }
+
     /* Constructor resolution */
 
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes,
+                                                                             TypeSolver typeSolver) {
         throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
     }
 
@@ -79,7 +175,10 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                   boolean staticOnly, TypeSolver typeSolver) {
+        return getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+    }
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
@@ -95,4 +194,5 @@ public interface Context {
             return Optional.empty();
         }
     }
+
 }

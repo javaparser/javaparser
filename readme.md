@@ -13,8 +13,8 @@ Our main site is at [JavaParser.org](http://javaparser.org)
 
 The project binaries are available in Maven Central. 
 
-We strongly advises users to adopt Maven, Gradle or another build system for their projects. If you are not familiar with them
-we suggest taking a look at the maven quickstart projects 
+We strongly advise users to adopt Maven, Gradle or another build system for their projects.
+If you are not familiar with them we suggest taking a look at the maven quickstart projects 
 ([javaparser-maven-sample](https://github.com/javaparser/javaparser-maven-sample), 
 [javasymbolsolver-maven-sample](https://github.com/javaparser/javasymbolsolver-maven-sample)).
 
@@ -28,14 +28,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.6.16</version>
+    <version>3.6.19</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-symbol-solver-core:3.6.16'
+compile 'com.github.javaparser:javaparser-symbol-solver-core:3.6.19'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. 
@@ -50,14 +50,33 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.6.16</version>
+    <version>3.6.19</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.6.16'
+compile 'com.github.javaparser:javaparser-core:3.6.19'
+```
+
+Since version 3.6.17 the AST can be serialized to JSON.
+There is a separate module for this:
+
+**Maven**: 
+
+```xml
+<dependency>
+    <groupId>com.github.javaparser</groupId>
+    <artifactId>javaparser-core-serialization</artifactId>
+    <version>3.6.19</version>
+</dependency>
+```
+
+**Gradle**:
+
+```
+compile 'com.github.javaparser:javaparser-core-serialization:3.6.19'
 ```
 
 ## How To Compile Sources
@@ -82,7 +101,7 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 ## More information
 
-#### [JavaParser.org](https://www.javaparser.org) is the main information site.
+#### [JavaParser.org](https://javaparser.org) is the main information site.
 
 ## License
 

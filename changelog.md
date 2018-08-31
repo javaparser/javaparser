@@ -1,3 +1,22 @@
+Version 3.6.19
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/102?closed=1)
+
+Version 3.6.18
+------------------
+* Parsing Java 11 is now supported.
+* Running on Java 11 is now supported.
+* Building on JDK 11 is NOT yet supported.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/101?closed=1)
+
+Version 3.6.17
+------------------
+* A new artifact was added: javaparser-core-serialization.
+It contains a JSON serializer, and might get more serializers in the future.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/100?closed=1)
+
 Version 3.6.16
 ------------------
 * BREAKING: some parts of the module syntax used `Type` where they should have used `Name`.

@@ -752,9 +752,9 @@ public final class JavaParserMetaModel {
         moduleOpensStmtMetaModel.getDeclaredPropertyMetaModels().add(moduleOpensStmtMetaModel.namePropertyMetaModel);
     }
 
-    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<? extends Node> c) {
+    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
         for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getTypeNameGenerified().equals(c.getSimpleName())) {
+            if (nodeMetaModel.getTypeName().equals(c.getSimpleName())) {
                 return Optional.of(nodeMetaModel);
             }
         }

@@ -16,12 +16,12 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReflectionTypeSolverTest extends AbstractTest {
+public class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void testHasType() {

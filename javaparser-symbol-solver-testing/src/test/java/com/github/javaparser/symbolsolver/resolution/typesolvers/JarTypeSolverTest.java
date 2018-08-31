@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 
-public class JarTypeSolverTest extends AbstractTest {
+public class JarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void initial() throws IOException {

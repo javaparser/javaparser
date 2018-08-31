@@ -3,7 +3,7 @@ package com.github.javaparser.ast.validator.chunks;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -26,12 +26,12 @@ public class VarValidator implements TypedValidator<VarType> {
     @Override
     public void accept(VarType node, ProblemReporter reporter) {
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something else.
-        Optional<VariableDeclarator> variableDeclarator = node.findParent(VariableDeclarator.class);
+        Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
         if (!variableDeclarator.isPresent()) {
             // Java 11's var in lambda's
             if (varAllowedInLambdaParameters) {
                 boolean valid = node
-                        .findParent(Parameter.class)
+                        .findAncestor(Parameter.class)
                         .flatMap(Node::getParentNode)
                         .map((Node p) -> p instanceof LambdaExpr).orElse(false);
                 if (valid) {
@@ -42,6 +42,9 @@ public class VarValidator implements TypedValidator<VarType> {
             return;
         }
         variableDeclarator.ifPresent(vd -> {
+            if (vd.getType().isArrayType()) {
+                reporter.report(vd, "\"var\" cannot have extra array brackets.");
+            }
             Optional<Node> variableDeclarationExpr = vd.getParentNode();
             if (!variableDeclarationExpr.isPresent()) {
                 reportIllegalPosition(node, reporter);
@@ -75,7 +78,7 @@ public class VarValidator implements TypedValidator<VarType> {
                             if (initializer instanceof NullLiteralExpr) {
                                 reporter.report(node, "\"var\" cannot infer type from just null.");
                             }
-                            if (initializer instanceof ArrayCreationExpr) {
+                            if (initializer instanceof ArrayInitializerExpr) {
                                 reporter.report(node, "\"var\" cannot infer array types.");
                             }
                         });

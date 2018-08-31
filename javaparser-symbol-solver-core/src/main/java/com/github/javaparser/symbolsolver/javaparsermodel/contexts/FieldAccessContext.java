@@ -76,6 +76,12 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return Optional.of(new Value(ResolvedPrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME));
             }
             if (typeOfScope.isReferenceType()) {
+                if (typeOfScope.asReferenceType().getTypeDeclaration().isEnum()) {
+                    ResolvedEnumDeclaration enumDeclaration = (ResolvedEnumDeclaration)typeOfScope.asReferenceType().getTypeDeclaration();
+                    if (enumDeclaration.hasEnumConstant(name)) {
+                        return Optional.of(new Value(enumDeclaration.getEnumConstant(name).getType(), name));
+                    }
+                }
                 Optional<ResolvedType> typeUsage = typeOfScope.asReferenceType().getFieldType(name);
                 return typeUsage.map(resolvedType -> new Value(resolvedType, name));
             } else {

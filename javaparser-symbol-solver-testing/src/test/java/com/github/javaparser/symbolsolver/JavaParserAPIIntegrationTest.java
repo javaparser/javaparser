@@ -3,7 +3,6 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -17,8 +16,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -26,7 +23,7 @@ import java.util.List;
 import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.assertEquals;
 
-public class JavaParserAPIIntegrationTest extends AbstractTest {
+public class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
     private ResolvedReferenceType string;

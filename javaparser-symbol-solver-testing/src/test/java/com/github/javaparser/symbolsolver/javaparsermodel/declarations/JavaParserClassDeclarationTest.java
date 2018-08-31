@@ -27,7 +27,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class JavaParserClassDeclarationTest extends AbstractTest {
+public class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
     private TypeSolver typeSolverNewCode;

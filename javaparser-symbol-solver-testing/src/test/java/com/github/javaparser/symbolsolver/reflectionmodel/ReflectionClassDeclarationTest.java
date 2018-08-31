@@ -20,7 +20,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ReflectionClassDeclarationTest extends AbstractTest {
+public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
@@ -173,7 +173,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
                 .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
-        if (isJava9()) {
+        if (isJavaVersion9OrAbove()) {
             assertEquals(69, methods.size());
         } else {
             assertEquals(67, methods.size());
@@ -182,7 +182,7 @@ public class ReflectionClassDeclarationTest extends AbstractTest {
         assertEquals(false, methods.get(0).isAbstract());
         assertEquals(1, methods.get(0).getNumberOfParams());
         assertEquals("int", methods.get(0).getParam(0).getType().describe());
-        if (isJava9()) {
+        if (isJavaVersion9OrAbove()) {
             assertEquals("compareTo", methods.get(6).getName());
             assertEquals(false, methods.get(6).isAbstract());
             assertEquals(1, methods.get(6).getNumberOfParams());
