@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dominik Hardtke
- * @since 01.09.2018
+ * @since 01/09/2018
  */
 public class Issue1814 extends AbstractResolutionTest {
     private JavaParser javaParser;
