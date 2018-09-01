@@ -31,12 +31,12 @@ public class Issue1814 extends AbstractResolutionTest {
 
     @Before
     public void setup() {
+        final CompilationUnit compilationUnit = new CompilationUnit();
+        compilationUnit.setPackageDeclaration("java.lang");
         // construct a fake java.lang.Object class with only one method (java.lang.Object#equals(java.lang.Object)
-        ClassOrInterfaceDeclaration fakeObject = new ClassOrInterfaceDeclaration();
-        fakeObject.setName(new SimpleName("java.lang.Object"));
-
-        final MethodDeclaration equals = fakeObject.addMethod("equals", Modifier.PUBLIC);
-        equals.addParameter("java.lang.Object", "obj");
+        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.PUBLIC);
+        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.PUBLIC);
+        equals.addParameter("Object", "obj");
         final BlockStmt body = new BlockStmt();
         body.addStatement("return this == obj;");
         equals.setBody(body);
@@ -55,7 +55,7 @@ public class Issue1814 extends AbstractResolutionTest {
             public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
                 if ("java.lang.Object".equals(name)) {
                     // custom handling
-                    return SymbolReference.solved(new JavaParserClassDeclaration(fakeObject, this));
+                    return SymbolReference.solved(new JavaParserClassDeclaration(clazz, this));
                 }
 
                 return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
