@@ -102,6 +102,14 @@ public final class Navigator {
         return cd;
     }
 
+    public static ClassOrInterfaceDeclaration demandInterface(CompilationUnit cu, String qualifiedName) {
+        ClassOrInterfaceDeclaration cd = demandClassOrInterface(cu, qualifiedName);
+        if (!cd.isInterface()) {
+            throw new IllegalStateException("Type is not an interface");
+        }
+        return cd;
+    }
+
     public static EnumDeclaration demandEnum(CompilationUnit cu, String qualifiedName) {
         Optional<TypeDeclaration<?>> res = findType(cu, qualifiedName);
         if (!res.isPresent()) {
