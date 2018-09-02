@@ -17,6 +17,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.function.Supplier;
+
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
  * from JavaParser nodes.
@@ -89,9 +91,13 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof ConstructorDeclaration) {
             ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration) node;
-            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) node.getParentNode().get();
-            ResolvedClassDeclaration resolvedClass = resolveDeclaration(classOrInterfaceDeclaration, ResolvedClassDeclaration.class).asClass();
-            ResolvedConstructorDeclaration resolved = resolvedClass.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration).findFirst().get();
+            TypeDeclaration<?> typeDeclaration = (TypeDeclaration<?>) node.getParentNode().get();
+            ResolvedReferenceTypeDeclaration resolvedTypeDeclaration = resolveDeclaration(typeDeclaration, ResolvedReferenceTypeDeclaration.class);
+            ResolvedConstructorDeclaration resolved = resolvedTypeDeclaration.getConstructors().stream()
+                    .filter(c -> c instanceof JavaParserConstructorDeclaration)
+                    .filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("This constructor cannot be found in its parent. This seems wrong"));
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }

@@ -18,10 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -183,5 +180,10 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return asTypeParameter().containerType();
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
     }
 }

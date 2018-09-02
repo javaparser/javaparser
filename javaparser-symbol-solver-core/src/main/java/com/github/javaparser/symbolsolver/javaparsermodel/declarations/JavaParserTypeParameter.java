@@ -220,4 +220,9 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         }
         return Optional.empty();
     }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
 }

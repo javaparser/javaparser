@@ -298,6 +298,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return javaParserTypeAdapter.containerType();
     }
 
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
+
     ///
     /// Private methods
     ///

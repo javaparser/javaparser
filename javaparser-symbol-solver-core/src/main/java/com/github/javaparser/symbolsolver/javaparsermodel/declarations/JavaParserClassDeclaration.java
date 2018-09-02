@@ -179,19 +179,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-        List<ResolvedConstructorDeclaration> declared = new LinkedList<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
-                com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
-                declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
-            }
-        }
-        if (declared.isEmpty()) {
-            // If there are no constructors insert the default constructor
-            return ImmutableList.of(new DefaultConstructorDeclaration(this));
-        } else {
-            return declared;
-        }
+        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
 
     @Override

@@ -348,4 +348,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javaParserTypeAdapter.containerType();
     }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
+    }
 }
