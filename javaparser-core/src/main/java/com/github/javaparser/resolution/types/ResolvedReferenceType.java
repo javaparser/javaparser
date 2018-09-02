@@ -408,8 +408,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 .filter(m -> m.accessSpecifier() != PRIVATE)
                 .collect(Collectors.toList()));
 
-        getDirectAncestors().forEach(a ->
-                res.addAll(a.getAllMethodsVisibleToInheritors()));
+        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+            getDirectAncestors().forEach(a ->
+                    res.addAll(a.getAllMethodsVisibleToInheritors()));
+        }
 
         return res;
     }
