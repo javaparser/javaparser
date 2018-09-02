@@ -273,4 +273,9 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
 }

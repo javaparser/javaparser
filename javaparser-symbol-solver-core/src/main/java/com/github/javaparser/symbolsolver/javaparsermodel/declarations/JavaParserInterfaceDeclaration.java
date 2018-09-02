@@ -298,13 +298,18 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return javaParserTypeAdapter.containerType();
     }
 
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
+
     ///
     /// Private methods
     ///
 
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = null;
-        String typeName = classOrInterfaceType.getNameAsString();
+        String typeName = classOrInterfaceType.asString();
         if (typeName.indexOf('.') > -1) {
             ref = typeSolver.tryToSolveType(typeName);
         }

@@ -22,6 +22,7 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -244,4 +245,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         }
         return Optional.empty();
     }
+
+    List<ResolvedConstructorDeclaration> getConstructors();
 }
