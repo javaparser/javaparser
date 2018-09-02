@@ -1,0 +1,13 @@
+interface A extends X.Y {
+
+	default void foo() {
+		X.Y xy = null;
+		xy.bar();
+	}
+}
+
+interface X {
+	interface Y {
+		void bar();
+	}
+}
