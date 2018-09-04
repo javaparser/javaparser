@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -128,6 +129,19 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 		stmt.resolve();
 
 		// TODO: check resolved constructor corresponds to the desired one.
+	}
+
+	@Test
+	public void solveParametrizedParametersConstructor() {
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		CompilationUnit cu = parseSample("ParametrizedParametersConstructor");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ParametrizedParametersConstructor");
+		MethodDeclaration fooMethod = Navigator.demandMethod(clazz, "foo");
+		Statement stmt = fooMethod.getBody().get().getStatement(1);
+		ObjectCreationExpr objectCreationExpr = stmt.asExpressionStmt().getExpression().asVariableDeclarationExpr()
+				                                        .getVariable(0).getInitializer().get().asObjectCreationExpr();
+		ResolvedConstructorDeclaration resolvedConstructorDeclaration = objectCreationExpr.resolve();
 	}
 
 }

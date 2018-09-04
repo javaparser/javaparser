@@ -1,0 +1,17 @@
+public class ParametrizedParametersConstructor {
+    public void foo() {
+        EClass arg = new EClass();
+        ParametrizedClass<String> pc = new ParametrizedClass<>(arg, arg);
+    }
+
+    class EClass implements BaseType<String> {
+    }
+}
+
+class ParametrizedClass<T> {
+    public ParametrizedClass(BaseType<T> arg1, BaseType<T> arg2) {
+    }
+}
+
+interface BaseType<T> {
+}
