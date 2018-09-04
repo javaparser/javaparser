@@ -1,5 +1,7 @@
 version: '{build}'
 os: Windows Server 2012
+environment:
+  appveyor_build_worker_cloud: gce
 install:
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
