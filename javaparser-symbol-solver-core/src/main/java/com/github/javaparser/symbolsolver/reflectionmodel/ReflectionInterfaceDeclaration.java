@@ -304,4 +304,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
 }

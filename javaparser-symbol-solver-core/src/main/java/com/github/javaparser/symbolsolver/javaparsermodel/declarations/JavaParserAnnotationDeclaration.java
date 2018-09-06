@@ -8,12 +8,11 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -60,17 +59,17 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public String getPackageName() {
-        return Helper.getPackageName(wrappedNode);
+        return AstResolutionUtils.getPackageName(wrappedNode);
     }
 
     @Override
     public String getClassName() {
-        return Helper.getClassName("", wrappedNode);
+        return AstResolutionUtils.getClassName("", wrappedNode);
     }
 
     @Override
     public String getQualifiedName() {
-        String containerName = Helper.containerName(wrappedNode.getParentNode().orElse(null));
+        String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         } else {
@@ -99,5 +98,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
                 .filter(m -> m instanceof AnnotationMemberDeclaration)
                 .map(m -> new JavaParserAnnotationMemberDeclaration((AnnotationMemberDeclaration)m, typeSolver))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
     }
 }

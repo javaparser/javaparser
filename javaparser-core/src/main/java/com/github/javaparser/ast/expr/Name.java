@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -33,14 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-import java.util.Arrays;
-import java.util.List;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -237,5 +235,19 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    /**
+     * A top level name is a name that is not contained in a larger Name instance.
+     */
+    public boolean isTopLevel() {
+        return !isInternal();
+    }
+
+    /**
+     * An internal name is a name that constitutes a part of a larger Name instance.
+     */
+    public boolean isInternal() {
+        return getParentNode().filter(parent -> parent instanceof Name).isPresent();
     }
 }

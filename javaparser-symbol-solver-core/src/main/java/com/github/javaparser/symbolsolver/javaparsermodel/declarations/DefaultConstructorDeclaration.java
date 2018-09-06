@@ -17,10 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
@@ -32,17 +29,17 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public class DefaultConstructorDeclaration implements ResolvedConstructorDeclaration {
+public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration> implements ResolvedConstructorDeclaration {
 
-    private ResolvedClassDeclaration classDeclaration;
+    private N declaringType;
 
-    DefaultConstructorDeclaration(ResolvedClassDeclaration classDeclaration) {
-        this.classDeclaration = classDeclaration;
+    DefaultConstructorDeclaration(N declaringType) {
+        this.declaringType = declaringType;
     }
 
     @Override
-    public ResolvedClassDeclaration declaringType() {
-        return classDeclaration;
+    public N declaringType() {
+        return declaringType;
     }
 
     @Override
@@ -57,7 +54,7 @@ public class DefaultConstructorDeclaration implements ResolvedConstructorDeclara
 
     @Override
     public String getName() {
-        return classDeclaration.getName();
+        return declaringType.getName();
     }
 
     @Override

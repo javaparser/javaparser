@@ -85,8 +85,14 @@ public class Java10ValidatorTest {
     }
 
     @Test
+    public void extraBracketPairsNotAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var d[] = new int[4];"));
+        assertProblems(result, "(line 1,col 5) \"var\" cannot have extra array brackets.");
+    }
+
+    @Test
     public void arrayDimensionBracketsNotAllowed() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a=new String[]{};"));
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var a={ 6 };"));
         assertProblems(result, "(line 1,col 1) \"var\" cannot infer array types.");
     }
 

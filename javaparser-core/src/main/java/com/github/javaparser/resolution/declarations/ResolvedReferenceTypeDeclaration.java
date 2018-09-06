@@ -22,6 +22,7 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -160,7 +161,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all the fields declared in this type.
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
+                .equals(getQualifiedName())).collect(Collectors.toList());
     }
 
     ///
@@ -243,4 +245,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         }
         return Optional.empty();
     }
+
+    List<ResolvedConstructorDeclaration> getConstructors();
 }

@@ -33,14 +33,15 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForeachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A for-each statement.
  * <br/><code>for(Object o: objects) { ... }</code>
+ * It was introduced in Java 5.
  *
  * @author Julio Vilmar Gesser
  */

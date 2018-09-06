@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -180,29 +179,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-        List<ResolvedConstructorDeclaration> declared = new LinkedList<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
-                com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
-                declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
-            }
-        }
-        if (declared.isEmpty()) {
-            // If there are no constructors insert the default constructor
-            return ImmutableList.of(new DefaultConstructorDeclaration(this));
-        } else {
-            return declared;
-        }
+        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        for (AnnotationExpr annotationExpr : wrappedNode.getAnnotations()) {
-            if (solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
-                return true;
-            }
-        }
-        return false;
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -385,7 +367,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
     ///
