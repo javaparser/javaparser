@@ -65,7 +65,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     public String getClassName() {
         String qualifiedName = getQualifiedName();
         if(qualifiedName.contains(".")) {
-            return qualifiedName.substring(qualifiedName.lastIndexOf("."), qualifiedName.length());
+            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1, qualifiedName.length());
         } else {
             return qualifiedName;
         }
@@ -108,8 +108,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getName() {
-        String[] nameElements = ctClass.getSimpleName().replace('$', '.').split("\\.");
-        return nameElements[nameElements.length - 1];
+        return getClassName();
     }
 
     @Override
