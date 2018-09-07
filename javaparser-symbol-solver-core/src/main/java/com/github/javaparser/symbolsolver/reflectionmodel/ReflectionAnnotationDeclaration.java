@@ -65,16 +65,17 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         if (clazz.getPackage() != null) {
             return clazz.getPackage().getName();
         }
-        return null;
+        return "";
     }
 
     @Override
     public String getClassName() {
-        String canonicalName = clazz.getCanonicalName();
-        if (canonicalName != null && getPackageName() != null) {
-            return canonicalName.substring(getPackageName().length() + 1, canonicalName.length());
+        String qualifiedName = getQualifiedName();
+        if(qualifiedName.contains(".")) {
+            return qualifiedName.substring(qualifiedName.lastIndexOf("."), qualifiedName.length());
+        } else {
+            return qualifiedName;
         }
-        return null;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public int hashCode() {
-        return clazz.hashCode();
+        return clazz.getCanonicalName().hashCode();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override

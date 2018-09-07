@@ -55,6 +55,8 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("foo.bar.MyAnnotation", resolved.getQualifiedName());
+        assertEquals("foo.bar", resolved.getPackageName());
+        assertEquals("MyAnnotation", resolved.getName());
     }
 
     @Test
@@ -69,6 +71,8 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("foo.bar.MyAnnotationWithSingleValue", resolved.getQualifiedName());
+        assertEquals("foo.bar", resolved.getPackageName());
+        assertEquals("MyAnnotationWithSingleValue", resolved.getName());
     }
 
     @Test
@@ -82,7 +86,9 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // check that the expected annotation declaration equals the resolved annotation declaration
-        assertEquals("foo.bar.MyAnnotationWithFields", resolved.getQualifiedName());
+        assertEquals("foo.bar.MyAnnotationWithElements", resolved.getQualifiedName());
+        assertEquals("foo.bar", resolved.getPackageName());
+        assertEquals("MyAnnotationWithElements", resolved.getName());
     }
 
     @Test
@@ -98,6 +104,8 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("java.lang.Override", resolved.getQualifiedName());
+        assertEquals("java.lang", resolved.getPackageName());
+        assertEquals("Override", resolved.getName());
     }
 
     @Test
@@ -108,14 +116,16 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         SingleMemberAnnotationExpr annotationExpr =
                 (SingleMemberAnnotationExpr) method.getBody().get().getStatement(0)
-                                                     .asExpressionStmt().getExpression()
-                                                     .asVariableDeclarationExpr().getAnnotation(0);
+                        .asExpressionStmt().getExpression()
+                        .asVariableDeclarationExpr().getAnnotation(0);
 
         // resolve annotation expression
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("java.lang.SuppressWarnings", resolved.getQualifiedName());
+        assertEquals("java.lang", resolved.getPackageName());
+        assertEquals("SuppressWarnings", resolved.getName());
     }
 
     @Test
@@ -131,6 +141,8 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("org.junit.Before", resolved.getQualifiedName());
+        assertEquals("org.junit", resolved.getPackageName());
+        assertEquals("Before", resolved.getName());
     }
 
     @Test
@@ -146,6 +158,8 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("org.junit.Ignore", resolved.getQualifiedName());
+        assertEquals("org.junit", resolved.getPackageName());
+        assertEquals("Ignore", resolved.getName());
     }
 
     @Test
@@ -161,5 +175,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected annotation declaration equals the resolved annotation declaration
         assertEquals("org.junit.Test", resolved.getQualifiedName());
+        assertEquals("org.junit", resolved.getPackageName());
+        assertEquals("Test", resolved.getName());
     }
 }

@@ -12,7 +12,7 @@ public @interface MyAnnotationWithSingleValue {
     int value();
 }
 
-public @interface MyAnnotationWithFields {
+public @interface MyAnnotationWithElements {
     int num();
     String str();
 }
@@ -38,7 +38,7 @@ class CC {
     @Ignore("lalala") @Test public void testSomething() {}
 }
 
-@MyAnnotationWithFields(num = 42, str = "test")
+@MyAnnotationWithElements(num = 42, str = "test")
 class CD {
     @Test(expected = Throwable.class, timeout = 42L) public void testSomethingElse() {}
 }

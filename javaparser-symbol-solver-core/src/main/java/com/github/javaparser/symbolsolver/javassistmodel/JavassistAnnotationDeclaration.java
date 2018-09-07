@@ -63,11 +63,12 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String getClassName() {
-        String className = ctClass.getName().replace('$', '.');
-        if (getPackageName() != null) {
-            return className.substring(getPackageName().length() + 1, className.length());
+        String qualifiedName = getQualifiedName();
+        if(qualifiedName.contains(".")) {
+            return qualifiedName.substring(qualifiedName.lastIndexOf("."), qualifiedName.length());
+        } else {
+            return qualifiedName;
         }
-        return className;
     }
 
     @Override
