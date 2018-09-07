@@ -13,6 +13,8 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,11 +28,23 @@ import static org.junit.Assert.assertEquals;
  */
 public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
+    @BeforeClass
+    public static void configureSymbolSolver() throws IOException {
+        // configure symbol solver before parsing
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new ReflectionTypeSolver());
+        typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+    }
+
+    @AfterClass
+    public static void unConfigureSymbolSolver() {
+        // unconfigure symbol solver so as not to potentially disturb tests in other classes
+        JavaParser.getStaticConfiguration().setSymbolResolver(null);
+    }
+
     @Test
     public void solveJavaParserMarkerAnnotation() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -45,9 +59,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveJavaParserSingleMemberAnnotation() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -62,9 +73,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveJavaParserNormalAnnotation() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CD");
@@ -79,9 +87,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveReflectionMarkerAnnotation() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -97,9 +102,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveReflectionSingleMemberAnnotation() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -118,12 +120,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveJavassistMarkerAnnotation() throws IOException {
-        // configure symbol solver before parsing
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new ReflectionTypeSolver());
-        typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -139,12 +135,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveJavassistSingleMemberAnnotation() throws IOException {
-        // configure symbol solver before parsing
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new ReflectionTypeSolver());
-        typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -160,12 +150,6 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void solveJavassistNormalAnnotation() throws IOException {
-        // configure symbol solver before parsing
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new ReflectionTypeSolver());
-        typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CD");
