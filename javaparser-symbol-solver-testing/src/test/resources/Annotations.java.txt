@@ -1,5 +1,7 @@
 package foo.bar;
 
+import org.junit.*;
+
 public @interface MyAnnotation {
 }
 
@@ -19,6 +21,9 @@ public @interface MyAnnotationWithFields {
 class CA {
     @Override
     public boolean equals(Object o) { return true; }
+
+    @Before
+    public void setUp() {}
 }
 
 @MyAnnotation2
@@ -29,9 +34,11 @@ class CB extends CA {
 @MyAnnotationWithSingleValue(42)
 class CC {
     public boolean foo(Object o) { @SuppressWarnings("unchecked") String s = (String) o; }
+
+    @Ignore("lalala") @Test public void testSomething() {}
 }
 
 @MyAnnotationWithFields(num = 42, str = "test")
 class CD {
-
+    @Test(expected = Throwable.class, timeout = 42L) public void testSomethingElse() {}
 }
