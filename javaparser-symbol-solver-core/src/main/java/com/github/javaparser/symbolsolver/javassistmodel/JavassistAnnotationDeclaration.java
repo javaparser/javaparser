@@ -78,11 +78,13 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
+        // TODO #1836
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
+        // TODO #1837
         throw new UnsupportedOperationException();
     }
 
@@ -98,11 +100,13 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+        // TODO #1838
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
+        // TODO #1839
         throw new UnsupportedOperationException();
     }
 
@@ -113,11 +117,13 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+        // TODO #1840
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        // TODO #1841
         throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
     }
 
