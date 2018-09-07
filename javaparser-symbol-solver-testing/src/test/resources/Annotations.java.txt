@@ -17,7 +17,8 @@ public @interface MyAnnotationWithFields {
 
 @MyAnnotation
 class CA {
-
+    @Override
+    public boolean equals(Object o) { return true; }
 }
 
 @MyAnnotation2
@@ -27,7 +28,7 @@ class CB extends CA {
 
 @MyAnnotationWithSingleValue(42)
 class CC {
-
+    public boolean foo(Object o) { @SuppressWarnings("unchecked") String s = (String) o; }
 }
 
 @MyAnnotationWithFields(num = 42, str = "test")
