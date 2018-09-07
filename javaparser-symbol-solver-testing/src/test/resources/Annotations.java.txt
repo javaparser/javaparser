@@ -6,8 +6,13 @@ public @interface MyAnnotation {
 public @interface MyAnnotation2 {
 }
 
+public @interface MyAnnotationWithSingleValue {
+    int value();
+}
+
 public @interface MyAnnotationWithFields {
-    int field();
+    int num();
+    String str();
 }
 
 @MyAnnotation
@@ -20,3 +25,12 @@ class CB extends CA {
 
 }
 
+@MyAnnotationWithSingleValue(42)
+class CC {
+
+}
+
+@MyAnnotationWithFields(num = 42, str = "test")
+class CD {
+
+}
