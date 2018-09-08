@@ -69,8 +69,7 @@ public class YamlPrinter {
 
         level++;
         for (PropertyMetaModel a : attributes) {
-            builder.append(System.lineSeparator() + indent(level) + a.getName() + ": \""
-                    + a.getValue(node).toString() + "\"");
+        	builder.append(System.lineSeparator() + indent(level) + a.getName() + ": " + escapeValue(a.getValue(node).toString()));
         }
 
         for (PropertyMetaModel sn : subNodes) {
@@ -97,5 +96,10 @@ public class YamlPrinter {
             for (int j = 0; j < NUM_SPACES_FOR_INDENT; j++)
                 sb.append(" ");
         return sb.toString();
+    }
+    
+    private String escapeValue(String value) {
+    	return "\"" + value.replace("\\", "\\\\").replaceAll("\"", "\\\\\"").replace("\n", "\\n").
+    			replace("\t", "\\t") + "\"";
     }
 }
