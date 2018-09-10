@@ -79,7 +79,7 @@ public class JavaParserTypeDeclarationAdapter {
      * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
      */
     private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {
-        for (ResolvedReferenceType ancestor : declaration.getAncestors()) {
+        for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
             try {
                 for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
                     boolean visible = true;
@@ -112,7 +112,7 @@ public class JavaParserTypeDeclarationAdapter {
                 .collect(Collectors.toList());
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
-            for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors()) {
+            for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
 		// Avoid recursion on self
                 if (typeDeclaration != ancestor.getTypeDeclaration()) {
                     candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors()

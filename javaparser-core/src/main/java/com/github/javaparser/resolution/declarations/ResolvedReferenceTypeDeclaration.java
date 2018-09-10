@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
-        ResolvedTypeParametrizable {
+                                                                  ResolvedTypeParametrizable {
 
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
@@ -50,14 +50,41 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     ///
 
     /**
-     * The list of all the direct ancestors of the current declaration.
-     * Note that the ancestor can be parametrized types with values specified. For example:
+     * Resolves the types of all direct ancestors (i.e., the directly extended class and the directly implemented
+     * interfaces) and returns the list of ancestors as a list of resolved reference types.
+     * <p>
+     * In case any ancestor cannot be resolved, an {@code UnsolvedSymbolException} is thrown. In order to obtain a list
+     * of only the resolvable direct ancestors, use {@link #getAncestors(boolean)} and pass the value {@code true}.
+     * <p>
+     * Note that an ancestor can be parametrized types with values specified. For example:
      * <p>
      * class A implements Comparable&lt;String&gt; {}
      * <p>
      * In this case the ancestor is Comparable&lt;String&gt;
+     *
+     * @return The list of resolved ancestors.
+     * @throws UnsolvedSymbolException if some ancestor could not be resolved.
      */
-    List<ResolvedReferenceType> getAncestors();
+    default List<ResolvedReferenceType> getAncestors() {
+        return getAncestors(false);
+    }
+
+    /**
+     * Resolves the types of all direct ancestors (i.e., the directly extended class and the directly implemented
+     * interfaces) and returns the list of ancestors as a list of resolved reference types.
+     * <p>
+     * If {@code acceptIncompleteList} is {@code false}, then an {@code UnsolvedSymbolException} is thrown if any
+     * ancestor cannot be resolved. Otherwise, a list of only the resolvable direct ancestors is returned.
+     *
+     * @param acceptIncompleteList When set to {@code false}, this method throws an {@link UnsolvedSymbolException} if
+     *                             one or more ancestor could not be resolved. When set to {@code true}, this method
+     *                             does not throw an {@link UnsolvedSymbolException}, but the list of returned ancestors
+     *                             may be incomplete in case one or more ancestor could not be resolved.
+     * @return The list of resolved ancestors.
+     * @throws UnsolvedSymbolException if some ancestor could not be resolved and {@code acceptIncompleteList} is set to
+     *                                 {@code false}.
+     */
+    List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList);
 
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
@@ -66,9 +93,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     default List<ResolvedReferenceType> getAllAncestors() {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {       
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
             for (ResolvedReferenceType ancestor : getAncestors()) {
-                ancestors.add(ancestor);    
+                ancestors.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
                     if (!ancestors.contains(inheritedAncestor)) {
                         ancestors.add(inheritedAncestor);
@@ -139,8 +166,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
-                .collect(Collectors.toList());
+                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
+                       .collect(Collectors.toList());
     }
 
     /**
@@ -162,7 +189,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
         return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
-                .equals(getQualifiedName())).collect(Collectors.toList());
+                                                            .equals(getQualifiedName())).collect(Collectors.toList());
     }
 
     ///

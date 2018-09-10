@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -27,6 +28,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
@@ -447,5 +449,24 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
         assertTrue(reference.isSolved());
         assertEquals("X.A.bar()", reference.getCorrespondingDeclaration().getQualifiedSignature());
+    }
+
+    @Test
+    public void resolveLocalMethodInClassExtendingUnknownClass() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExtendingUnknownClass");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+        MethodCallExpr methodCallExpr = method.getBody().get().getStatements().get(0).asExpressionStmt()
+                                                .getExpression().asMethodCallExpr();
+
+        // resolve field access expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+
+        // check that the expected method declaration equals the resolved method declaration
+        assertEquals("ClassExtendingUnknownClass.bar(java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 }
