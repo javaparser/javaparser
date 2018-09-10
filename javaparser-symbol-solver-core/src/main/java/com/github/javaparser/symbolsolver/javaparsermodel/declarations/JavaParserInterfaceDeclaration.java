@@ -242,16 +242,30 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         if (wrappedNode.getExtendedTypes() != null) {
             for (ClassOrInterfaceType extended : wrappedNode.getExtendedTypes()) {
-                ancestors.add(toReferenceType(extended));
+                try {
+                    ancestors.add(toReferenceType(extended));
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                        throw e;
+                    }
+                }
             }
         }
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
-                ancestors.add(toReferenceType(implemented));
+                try {
+                    ancestors.add(toReferenceType(implemented));
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                        throw e;
+                    }
+                }
             }
         }
         return ancestors;

@@ -106,7 +106,9 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
   }
 
   @Override
-  public List<ResolvedReferenceType> getAncestors() {
+  public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
+    // we do not attempt to perform any symbol solving when analyzing ancestors in the reflection model, so we can
+    // simply ignore the boolean parameter here; an UnsolvedSymbolException cannot occur
     return reflectionClassAdapter.getAncestors();
   }
 

@@ -11,4 +11,10 @@ public class ClassExtendingUnknownClass extends UnknownClass {
     public int getFoo2() {
         return this.foo;
     }
+
+    public void foo(String s) {
+        bar(s);
+    }
+
+    public void bar(String s) {}
 }

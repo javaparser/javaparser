@@ -269,30 +269,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return getContext().getParent().solveType(name, typeSolver);
     }
 
-    /**
-     * Resolves the type of all ancestors (i.e., the extended class and the implemented interfaces) and returns the list
-     * of ancestors as a list of resolved reference types.
-     *
-     * @return The list of resolved ancestors.
-     * @throws UnsolvedSymbolException if some ancestor could not be resolved.
-     */
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
-        return getAncestors(false);
-    }
-
-    /**
-     * Resolves the type of all ancestors (i.e., the extended class and the implemented interfaces) and returns the list
-     * of ancestors as a list of resolved reference types.
-     *
-     * @param acceptIncompleteList When set to {@code false}, this method throws an {@link UnsolvedSymbolException} if
-     *                             one or more ancestor could not be resolved. When set to {@code true}, this method
-     *                             does not throw an {@link UnsolvedSymbolException}, but the list of returned ancestors
-     *                             may be incomplete in case one or more ancestor could not be resolved.
-     * @return The list of resolved ancestors.
-     * @throws UnsolvedSymbolException if some ancestor could not be resolved and {@code acceptIncompleteList} is set to
-     *                                 {@code false}.
-     */
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 

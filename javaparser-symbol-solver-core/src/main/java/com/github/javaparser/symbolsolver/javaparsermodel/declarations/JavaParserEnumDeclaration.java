@@ -209,7 +209,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         ResolvedReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
         ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
@@ -218,7 +218,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
                 SymbolReference<ResolvedTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
-                if (!implementedDeclRef.isSolved()) {
+                if (!implementedDeclRef.isSolved() && !acceptIncompleteList) {
                     throw new UnsolvedSymbolException(implementedType.getName().getId());
                 }
                 ancestors.add(new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
