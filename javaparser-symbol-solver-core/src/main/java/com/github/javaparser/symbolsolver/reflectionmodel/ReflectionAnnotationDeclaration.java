@@ -130,7 +130,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         throw new UnsupportedOperationException();
     }
 
