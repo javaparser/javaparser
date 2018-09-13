@@ -59,8 +59,8 @@ public class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, provider(f)).getResult().get();
-        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
-        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
+        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(3);
+        assertEquals("MyAnnotationWithElements", declaration.getNameAsString());
         AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
         ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
     }

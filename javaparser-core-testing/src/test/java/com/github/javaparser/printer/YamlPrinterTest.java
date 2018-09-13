@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 
 public class YamlPrinterTest {
@@ -89,6 +90,31 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void testParsingJavadocWithQuoteAndNewline() {
+    	String code = "/**" + System.lineSeparator() + 
+				" * \" this comment contains a quote and newlines" + System.lineSeparator() + 
+				" */" + System.lineSeparator() +
+				"public class Dog {" + System.lineSeparator() +
+				"" + System.lineSeparator() +
+				"}";
+	    String expectedOutput = "---" + System.lineSeparator();
+	    expectedOutput += "root(Type=CompilationUnit): " + System.lineSeparator();
+	    expectedOutput += "    types: " + System.lineSeparator();
+	    expectedOutput += "        - type(Type=ClassOrInterfaceDeclaration): " + System.lineSeparator();
+	    expectedOutput += "            isInterface: \"false\"" + System.lineSeparator();
+	    expectedOutput += "            name(Type=SimpleName): " + System.lineSeparator();
+	    expectedOutput += "                identifier: \"Dog\"" + System.lineSeparator();
+	    expectedOutput += "            comment(Type=JavadocComment): " + System.lineSeparator();
+	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote\\n \"" + System.lineSeparator();
+	    expectedOutput += "...";
+	
+	    YamlPrinter yamlPrinter = new YamlPrinter(true);
+	    CompilationUnit computationUnit = JavaParser.parse(code);
+	    String output = yamlPrinter.output(computationUnit);
         assertEquals(expectedOutput, output);
     }
 }

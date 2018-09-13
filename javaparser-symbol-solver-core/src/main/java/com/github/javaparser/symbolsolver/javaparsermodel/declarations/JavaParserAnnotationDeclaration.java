@@ -28,22 +28,25 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
+        // TODO #1837
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+        // TODO #1838
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
+        // TODO #1836
         throw new UnsupportedOperationException();
     }
 
@@ -54,6 +57,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public boolean hasDirectlyAnnotation(String qualifiedName) {
+        // TODO #1839
         throw new UnsupportedOperationException();
     }
 
@@ -84,11 +88,13 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+        // TODO #1840
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        // TODO #1841
         throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
     }
 
