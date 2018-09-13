@@ -10,8 +10,14 @@ public class Main {
 	}
 }
 
-class ParentClass {
+class ParentClass extends SuperParentClass {
 	private class ResolveMe {
 		public String s = "incorrect";
+	}
+}
+
+class SuperParentClass {
+	public class ResolveMe {
+		public String s = "also incorrect";
 	}
 }
