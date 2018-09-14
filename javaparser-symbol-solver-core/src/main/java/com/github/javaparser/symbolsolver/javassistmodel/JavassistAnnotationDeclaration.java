@@ -22,6 +22,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,9 +44,9 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{" +
-               "ctClass=" + ctClass.getName() +
-               ", typeSolver=" + typeSolver +
-               '}';
+                "ctClass=" + ctClass.getName() +
+                ", typeSolver=" + typeSolver +
+                '}';
     }
 
     public JavassistAnnotationDeclaration(CtClass ctClass, TypeSolver typeSolver) {
@@ -64,7 +66,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public String getClassName() {
         String qualifiedName = getQualifiedName();
-        if(qualifiedName.contains(".")) {
+        if (qualifiedName.contains(".")) {
             return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1, qualifiedName.length());
         } else {
             return qualifiedName;
@@ -106,8 +108,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        // TODO #1839
-        throw new UnsupportedOperationException();
+        return ctClass.hasAnnotation(canonicalName);
     }
 
     @Override
@@ -135,7 +136,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers() {
         return Stream.of(ctClass.getDeclaredMethods())
-                       .map(m -> new JavassistAnnotationMemberDeclaration(m, typeSolver))
-                       .collect(Collectors.toList());
+                .map(m -> new JavassistAnnotationMemberDeclaration(m, typeSolver))
+                .collect(Collectors.toList());
     }
 }

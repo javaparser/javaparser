@@ -1,7 +1,10 @@
 package foo.bar;
 
+import java.lang.annotation.*;
 import org.junit.*;
 
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnotation {
 }
 
