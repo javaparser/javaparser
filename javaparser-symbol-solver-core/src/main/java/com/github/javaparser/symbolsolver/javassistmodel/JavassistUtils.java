@@ -93,7 +93,6 @@ class JavassistUtils {
     }
 
     private static List<ResolvedType> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
-        String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
             if (!signature.endsWith(">")) {
@@ -178,9 +177,7 @@ class JavassistUtils {
 
     private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
         if(typeArgument instanceof SignatureAttribute.ArrayType){
-            String baseTypeName = ((SignatureAttribute.ArrayType) typeArgument).getComponentType().jvmTypeName();
-            ResolvedType baseType = getGenericParameterByName(baseTypeName, typeParametrizable, typeSolver);
-            return new ResolvedArrayType(baseType);
+            return signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable);
         } else {
             String typeName = typeArgument.jvmTypeName();
             return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
@@ -188,9 +185,6 @@ class JavassistUtils {
     }
 
     private static ResolvedType getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
-        if(ResolvedPrimitiveType.isPrimitive(typeName))
-            return ResolvedPrimitiveType.byName(typeName);
-
         Optional<ResolvedType> type = typeParametrizable.findTypeParameter(typeName).map(ResolvedTypeVariable::new);
         return type.orElseGet(() -> new ReferenceTypeImpl(
                 typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),

@@ -64,14 +64,6 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         throw new IllegalArgumentException("Name " + name);
     }
 
-    public static boolean isPrimitive(String name){
-        for (ResolvedPrimitiveType type : values()) {
-            if(type.name.equals(name))
-                return true;
-        }
-        return false;
-    }
-
     @Override
     public String toString() {
         return "PrimitiveTypeUsage{" +
