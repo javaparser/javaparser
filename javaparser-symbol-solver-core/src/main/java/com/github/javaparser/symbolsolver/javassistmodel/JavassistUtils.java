@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -92,7 +93,6 @@ class JavassistUtils {
     }
 
     private static List<ResolvedType> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
-        String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
             if (!signature.endsWith(">")) {
@@ -176,16 +176,19 @@ class JavassistUtils {
     }
 
     private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
-        String typeName = typeArgument.jvmTypeName();
-        Optional<ResolvedType> type = getGenericParameterByName(typeName, typeParametrizable);
+        if(typeArgument instanceof SignatureAttribute.ArrayType){
+            return signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable);
+        } else {
+            String typeName = typeArgument.jvmTypeName();
+            return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
+        }
+    }
+
+    private static ResolvedType getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
+        Optional<ResolvedType> type = typeParametrizable.findTypeParameter(typeName).map(ResolvedTypeVariable::new);
         return type.orElseGet(() -> new ReferenceTypeImpl(
                 typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
                 typeSolver));
-    }
-
-    private static Optional<ResolvedType> getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable) {
-        Optional<ResolvedTypeParameterDeclaration> tp = typeParametrizable.findTypeParameter(typeName);
-        return tp.map(ResolvedTypeVariable::new);
     }
 
     private static ResolvedType typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
