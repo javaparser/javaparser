@@ -79,7 +79,7 @@ public class JavaParserTypeDeclarationAdapter {
      * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
      */
     private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {
-        for (ResolvedReferenceType ancestor : declaration.getAncestors()) {
+        for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
             try {
                 for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
                     boolean visible = true;
@@ -89,8 +89,12 @@ public class JavaParserTypeDeclarationAdapter {
                             visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier() != AccessSpecifier.PRIVATE;
                         }
                     }
-                    if (internalTypeDeclaration.getName().equals(name) && visible) {
-                        return internalTypeDeclaration;
+                    if (internalTypeDeclaration.getName().equals(name)) {
+                        if (visible) {
+                            return internalTypeDeclaration;
+                        } else {
+                            return null;
+                        }
                     }
                 }
                 // check recursively the ancestors of this ancestor
@@ -112,8 +116,8 @@ public class JavaParserTypeDeclarationAdapter {
                 .collect(Collectors.toList());
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
-            for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors()) {
-		// Avoid recursion on self
+            for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
+                // Avoid recursion on self
                 if (typeDeclaration != ancestor.getTypeDeclaration()) {
                     candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors()
                             .stream()
@@ -127,7 +131,7 @@ public class JavaParserTypeDeclarationAdapter {
                     if (res.isSolved()) {
                         candidateMethods.add(res.getCorrespondingDeclaration());
                     }
-		}
+                }
             }
         }
         // We want to avoid infinite recursion when a class is using its own method

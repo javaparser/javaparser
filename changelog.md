@@ -1,10 +1,18 @@
+Version 3.6.22
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/106?closed=1)
+
+Version 3.6.21
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/105?closed=1)
+
 Version 3.6.20
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/103?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/104?closed=1)
 
 Version 3.6.19
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/102?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/103?closed=1)
 
 Version 3.6.18
 ------------------

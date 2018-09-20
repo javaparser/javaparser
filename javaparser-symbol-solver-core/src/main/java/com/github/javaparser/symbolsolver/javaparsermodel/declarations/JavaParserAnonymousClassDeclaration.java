@@ -95,12 +95,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<ResolvedReferenceType> getAncestors() {
+  public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
     return
         ImmutableList.
             <ResolvedReferenceType>builder()
             .add(getSuperClass())
-            .addAll(superTypeDeclaration.asReferenceType().getAncestors())
+            .addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList))
             .build();
   }
 
