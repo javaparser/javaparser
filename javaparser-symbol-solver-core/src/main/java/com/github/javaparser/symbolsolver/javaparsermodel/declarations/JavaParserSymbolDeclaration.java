@@ -37,6 +37,8 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.requirePar
 /**
  * This should not be used to represent fields of parameters.
  *
+ * Eventually this should be renamed in JavaParserVariableDeclaration.
+ *
  * @author Federico Tomassetti
  */
 public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
