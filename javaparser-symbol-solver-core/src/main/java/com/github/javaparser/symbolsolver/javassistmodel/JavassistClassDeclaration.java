@@ -168,12 +168,27 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (getSuperClass() != null) {
-            ancestors.add(getSuperClass());
+        try {
+            ResolvedReferenceType superClass = getSuperClass();
+            if (superClass != null) {
+                ancestors.add(superClass);
+            }
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
         }
-        ancestors.addAll(getInterfaces());
+        try {
+            ancestors.addAll(getInterfaces());
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
+        }
         return ancestors;
     }
 

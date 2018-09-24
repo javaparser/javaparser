@@ -1,18 +1,32 @@
 package foo.bar;
 
+import java.lang.annotation.*;
+import org.junit.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnotation {
 }
 
 public @interface MyAnnotation2 {
 }
 
-public @interface MyAnnotationWithFields {
-    int field();
+public @interface MyAnnotationWithSingleValue {
+    int value();
+}
+
+public @interface MyAnnotationWithElements {
+    int num();
+    String str();
 }
 
 @MyAnnotation
 class CA {
+    @Override
+    public boolean equals(Object o) { return true; }
 
+    @Before
+    public void setUp() {}
 }
 
 @MyAnnotation2
@@ -20,3 +34,14 @@ class CB extends CA {
 
 }
 
+@MyAnnotationWithSingleValue(42)
+class CC {
+    public boolean foo(Object o) { @SuppressWarnings("unchecked") String s = (String) o; }
+
+    @Ignore("lalala") @Test public void testSomething() {}
+}
+
+@MyAnnotationWithElements(num = 42, str = "test")
+class CD {
+    @Test(expected = Throwable.class, timeout = 42L) public void testSomethingElse() {}
+}

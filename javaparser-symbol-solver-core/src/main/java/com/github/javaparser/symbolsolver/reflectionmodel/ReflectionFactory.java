@@ -43,6 +43,8 @@ public class ReflectionFactory {
             throw new IllegalArgumentException("No type declaration available for an Array");
         } else if (clazz.isPrimitive()) {
             throw new IllegalArgumentException();
+        } else if (clazz.isAnnotation()) {
+            return new ReflectionAnnotationDeclaration(clazz, typeSolver);
         } else if (clazz.isInterface()) {
             return new ReflectionInterfaceDeclaration(clazz, typeSolver);
         } else if (clazz.isEnum()) {
