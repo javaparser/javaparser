@@ -39,12 +39,14 @@ import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
@@ -419,8 +421,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Recursively finds all nodes of a certain type.
      *
      * @param clazz the type of node to find.
-     * @deprecated use find(Class)
+     * @deprecated use {@link Node#findAll(Class)} but be aware that findAll also considers the initial node.
      */
+    @Deprecated
     public <N extends Node> List<N> getChildNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
         for (Node child : getChildNodes()) {
@@ -433,7 +436,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use findAll(Class)
+     * @deprecated use {@link Node#findAll(Class)} but be aware that findAll also considers the initial node.
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
@@ -557,7 +560,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch(mode) {
+        switch (mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -695,7 +698,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch(traversal) {
+        switch (traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:
