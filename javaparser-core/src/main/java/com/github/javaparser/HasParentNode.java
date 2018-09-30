@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 public interface HasParentNode<T> extends Observable {
 
     /**
-     * Returns the parent node, or {@code null} if no parent is set.
+     * Returns the parent node, or {@code Optional.empty} if no parent is set.
      */
     Optional<Node> getParentNode();
 
