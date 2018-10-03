@@ -313,8 +313,8 @@ public final class CompilationUnit extends Node {
             return this;
         else if (clazz.isMemberClass())
             return addImport(clazz.getName().replace("$", "."));
-        else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType()) && !clazz.getComponentType().getName().startsWith("java.lang"))
-            return addImport(clazz.getComponentType().getName());
+        else if (clazz.isArray())
+            return addImport(clazz.getComponentType());
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
             throw new RuntimeException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getName());

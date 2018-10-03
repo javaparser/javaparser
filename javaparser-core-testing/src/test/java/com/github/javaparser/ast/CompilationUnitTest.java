@@ -105,4 +105,11 @@ public class CompilationUnitTest {
         assertEquals(false, cu.getPrimaryType().isPresent());
     }
 
+    @Test
+    public void testImportCoreArrayClass() throws Exception {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addImport(Class.forName("[Ljava.lang.String;"));
+
+        assertEquals(true, cu.getImports().isEmpty());
+    }
 }
