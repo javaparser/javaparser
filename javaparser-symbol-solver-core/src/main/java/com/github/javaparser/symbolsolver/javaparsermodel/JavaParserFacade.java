@@ -37,11 +37,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.utils.Log;
 
 import java.util.*;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
@@ -52,15 +50,6 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.requirePar
  * @author Federico Tomassetti
  */
 public class JavaParserFacade {
-
-    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
-
-    static {
-        logger.setLevel(Level.INFO);
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.INFO);
-        logger.addHandler(consoleHandler);
-    }
 
     private static Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
     private TypeSolver typeSolver;
@@ -204,7 +193,7 @@ public class JavaParserFacade {
         if (!classDecl.isReferenceType()) {
             return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
         }
-        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) classDecl.asReferenceType().getTypeDeclaration()).getConstructors(), argumentTypes, typeSolver);
+        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(classDecl.asReferenceType().getTypeDeclaration().getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -328,7 +317,7 @@ public class JavaParserFacade {
                     cacheWithLambdasSolved.remove(node);
                     cacheWithLambdasSolved.put(node, getType(node, true));
                 }
-                logger.finer("getType on " + node + " -> " + res);
+                Log.trace("getType on %s  -> %s" ,node, res);
             }
             return cacheWithLambdasSolved.get(node);
         } else {
@@ -340,7 +329,7 @@ public class JavaParserFacade {
             if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
                 cacheWithoutLambdasSolved.put(node, resType);
-                logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
+                Log.trace("getType on %s (no solveLambdas) -> %s", node, res);
                 return resType;
             }
             return res.get();
