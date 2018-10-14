@@ -17,11 +17,14 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This represents the default constructor added by the compiler for objects not declaring one.
@@ -75,5 +78,10 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
     @Override
     public ResolvedType getSpecifiedException(int index) {
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAst() {
+        return Optional.empty();
     }
 }
