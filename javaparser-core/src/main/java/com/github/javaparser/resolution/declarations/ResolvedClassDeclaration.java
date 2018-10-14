@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier {
+        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<ClassOrInterfaceDeclaration> {
 
     /**
      * This method should always return true.
