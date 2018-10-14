@@ -171,7 +171,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAST() {
+    public Optional<AnnotationDeclaration> toAst() {
         return Optional.empty();
     }
 }

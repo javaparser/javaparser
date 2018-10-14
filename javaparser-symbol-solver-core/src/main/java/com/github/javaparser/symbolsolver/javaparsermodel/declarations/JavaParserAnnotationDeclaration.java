@@ -112,7 +112,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAST() {
+    public Optional<AnnotationDeclaration> toAst() {
         return Optional.of(wrappedNode);
     }
 }

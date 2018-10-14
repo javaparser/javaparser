@@ -207,7 +207,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public Optional<Node> toAST() {
+  public Optional<Node> toAst() {
     return Optional.of(wrappedNode);
   }
 

@@ -394,7 +394,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Optional<Node> toAST() {
+    public Optional<Node> toAst() {
         return Optional.empty();
     }
 }

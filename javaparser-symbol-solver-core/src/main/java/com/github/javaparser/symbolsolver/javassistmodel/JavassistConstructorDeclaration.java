@@ -150,7 +150,7 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
     }
 
     @Override
-    public Optional<ConstructorDeclaration> toAST() {
+    public Optional<ConstructorDeclaration> toAst() {
         return Optional.empty();
     }
 }

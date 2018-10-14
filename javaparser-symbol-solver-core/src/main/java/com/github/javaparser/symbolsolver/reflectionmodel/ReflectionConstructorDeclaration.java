@@ -98,7 +98,7 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     }
 
     @Override
-    public Optional<ConstructorDeclaration> toAST() {
+    public Optional<ConstructorDeclaration> toAst() {
         return Optional.empty();
     }
 }

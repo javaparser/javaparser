@@ -329,7 +329,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public Optional<MethodDeclaration> toAST() {
+        public Optional<MethodDeclaration> toAst() {
             return Optional.empty();
         }
     }

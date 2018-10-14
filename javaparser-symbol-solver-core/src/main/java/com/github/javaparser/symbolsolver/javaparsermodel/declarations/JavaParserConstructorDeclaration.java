@@ -102,7 +102,7 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
     }
 
     @Override
-    public Optional<ConstructorDeclaration> toAST() {
+    public Optional<ConstructorDeclaration> toAst() {
         return Optional.of(wrappedNode);
     }
 }

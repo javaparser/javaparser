@@ -15,7 +15,7 @@ public interface AssociableToAST<N extends Node> {
      * Declaration based on source code have an AST node associated while others don't. Example
      * of other declarations are declarations coming from reflection or JARs.
      */
-    default Optional<N> toAST() {
+    default Optional<N> toAst() {
         throw new UnsupportedOperationException();
     }
 }

@@ -342,7 +342,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Optional<Node> toAST() {
+    public Optional<Node> toAst() {
         return Optional.empty();
     }
 

@@ -142,7 +142,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAST() {
+    public Optional<AnnotationDeclaration> toAst() {
         return Optional.empty();
     }
 }

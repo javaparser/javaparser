@@ -318,7 +318,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public Optional<ClassOrInterfaceDeclaration> toAST() {
+    public Optional<ClassOrInterfaceDeclaration> toAst() {
         return Optional.of(wrappedNode);
     }
 

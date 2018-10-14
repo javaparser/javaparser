@@ -81,7 +81,7 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
     }
 
     @Override
-    public Optional<ConstructorDeclaration> toAST() {
+    public Optional<ConstructorDeclaration> toAst() {
         return Optional.empty();
     }
 }

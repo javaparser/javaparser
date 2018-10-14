@@ -348,7 +348,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Optional<Node> toAST() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 
