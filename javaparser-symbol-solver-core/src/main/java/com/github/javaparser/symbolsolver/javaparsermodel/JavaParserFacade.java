@@ -267,22 +267,22 @@ public class JavaParserFacade {
      * This method was originally intended to get the type of a value: any value has a type.
      * <p>
      * For example:
-     * <code>
+     * <pre>
      * int foo(int a) {
-     * return a; // when getType is invoked on "a" it returns the type "int"
+     *     return a; // when getType is invoked on "a" it returns the type "int"
      * }
-     * </code>
+     * </pre>
      * <p>
      * Now, users started using also of names of types itself, which do not have a type.
      * <p>
      * For example:
-     * <code>
+     * <pre>
      * class A {
-     * int foo(int a) {
-     * return A.someStaticField; // when getType is invoked on "A", which represents a class, it returns
-     * // the type "A" itself while it used to throw UnsolvedSymbolException
+     *     int foo(int a) {
+     *         return A.someStaticField; // when getType is invoked on "A", which represents a class, it returns
+     *             // the type "A" itself while it used to throw UnsolvedSymbolException
      * }
-     * </code>
+     * </pre>
      * <p>
      * To accomodate this usage and avoid confusion this method return
      * the type itself when used on the name of type.
