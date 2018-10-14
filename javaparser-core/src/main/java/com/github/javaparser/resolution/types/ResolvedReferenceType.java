@@ -61,6 +61,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
+        if (typeDeclaration == null) {
+            throw new IllegalArgumentException("TypeDeclaration is not expected to be null");
+        }
         if (typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
@@ -500,7 +503,14 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
 
     private static List<ResolvedType> deriveParams(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map(ResolvedTypeVariable::new).collect(Collectors.toList());
+        if (typeDeclaration == null) {
+            throw new IllegalArgumentException("TypeDeclaration is not expected to be null");
+        }
+        List<ResolvedTypeParameterDeclaration> typeParameters = typeDeclaration.getTypeParameters();
+        if (typeParameters == null) {
+            throw new RuntimeException("Type parameters are not expected to be null");
+        }
+        return typeParameters.stream().map(ResolvedTypeVariable::new).collect(Collectors.toList());
     }
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);

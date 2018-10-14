@@ -68,7 +68,11 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public ResolvedReferenceType getSuperClass() {
-    return new ReferenceTypeImpl(superTypeDeclaration.asReferenceType(), typeSolver);
+    ResolvedReferenceTypeDeclaration superRRTD = superTypeDeclaration.asReferenceType();
+    if (superRRTD == null) {
+      throw new RuntimeException("The super ResolvedReferenceTypeDeclaration is not expected to be null");
+    }
+    return new ReferenceTypeImpl(superRRTD, typeSolver);
   }
 
   @Override
