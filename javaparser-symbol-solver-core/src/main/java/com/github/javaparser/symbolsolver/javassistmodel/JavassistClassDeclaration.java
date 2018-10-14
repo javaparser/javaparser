@@ -392,4 +392,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
+
+    @Override
+    public Optional<Node> toAST() {
+        return Optional.empty();
+    }
 }

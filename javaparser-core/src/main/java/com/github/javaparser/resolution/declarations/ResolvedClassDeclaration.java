@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
@@ -29,10 +30,13 @@ import java.util.List;
 /**
  * Declaration of a Class (not an interface or an enum).
  *
+ * Note that it can be associated to a Node AST because anonymous class declarations return an incompatible
+ * node type, compared to classic class declarations.
+ *
  * @author Federico Tomassetti
  */
 public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<ClassOrInterfaceDeclaration> {
+        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<Node> {
 
     /**
      * This method should always return true.

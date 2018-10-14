@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -201,5 +202,9 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
 
+  @Override
+  public Optional<Node> toAST() {
+    return Optional.of(wrappedNode);
+  }
 
 }

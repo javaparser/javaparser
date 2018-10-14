@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -138,5 +139,10 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
         return Stream.of(ctClass.getDeclaredMethods())
                 .map(m -> new JavassistAnnotationMemberDeclaration(m, typeSolver))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<AnnotationDeclaration> toAST() {
+        return Optional.empty();
     }
 }

@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -201,5 +202,10 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<MethodDeclaration> toAST() {
+        return Optional.empty();
     }
 }

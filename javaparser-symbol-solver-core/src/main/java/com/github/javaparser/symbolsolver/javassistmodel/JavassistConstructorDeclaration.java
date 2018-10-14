@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.CallableDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -146,5 +147,10 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAST() {
+        return Optional.empty();
     }
 }

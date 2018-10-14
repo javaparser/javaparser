@@ -341,6 +341,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public Optional<Node> toAST() {
+        return Optional.empty();
+    }
+
     ///
     /// Protected methods
     ///

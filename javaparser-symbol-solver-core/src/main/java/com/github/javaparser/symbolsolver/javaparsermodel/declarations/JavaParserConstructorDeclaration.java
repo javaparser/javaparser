@@ -17,12 +17,15 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -96,5 +99,10 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
         }
         return JavaParserFacade.get(typeSolver)
                 .convert(wrappedNode.getThrownExceptions().get(index), wrappedNode);
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAST() {
+        return Optional.of(wrappedNode);
     }
 }

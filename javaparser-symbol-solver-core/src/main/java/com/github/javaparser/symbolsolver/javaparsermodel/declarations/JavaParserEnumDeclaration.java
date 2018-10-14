@@ -20,6 +20,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -325,6 +326,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         @Override
         public ResolvedType getSpecifiedException(int index) {
             throw new UnsupportedOperationException("The values method of an enum does not throw any exception");
+        }
+
+        @Override
+        public Optional<MethodDeclaration> toAST() {
+            return Optional.empty();
         }
     }
 
