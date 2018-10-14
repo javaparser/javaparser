@@ -445,16 +445,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @param <M> The type of the data.
      * @param key The key for the data
-     * @return The data or null of no data was found for the given key.
-     * To differentiate between these two, use containsData to check if no data was found.
+     * @return The data.
+     * @throws IllegalStateException if the key was not set in this node.
+     * @see Node#containsData(DataKey)
      * @see DataKey
      */
     @SuppressWarnings("unchecked")
     public <M> M getData(final DataKey<M> key) {
         if (data == null) {
-            return null;
+            throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
         }
-        return (M) data.get(key);
+        M value = (M) data.get(key);
+        if (value == null) {
+            throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
+        }
+        return value;
     }
 
     /**
