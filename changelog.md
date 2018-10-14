@@ -1,3 +1,17 @@
+Version 3.6.25
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/109?closed=1)
+
+Version 3.6.24
+------------------
+* `findAncestor(type, predicate)` is now available
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/108?closed=1)
+
+Version 3.6.23
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/107?closed=1)
+
 Version 3.6.22
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/106?closed=1)
