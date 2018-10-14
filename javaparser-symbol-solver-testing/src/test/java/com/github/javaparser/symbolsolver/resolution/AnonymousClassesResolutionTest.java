@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AnonymousClassesResolutionTest extends AbstractResolutionTest {
 
@@ -38,6 +39,7 @@ public class AnonymousClassesResolutionTest extends AbstractResolutionTest {
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
 
         ResolvedReferenceTypeDeclaration cd = mock(ResolvedReferenceTypeDeclaration.class);
+        when(cd.asReferenceType()).thenReturn(cd);
         memoryTypeSolver.addDeclaration("org.springframework.transaction.support.TransactionCallbackWithoutResult",
                 cd);
 
