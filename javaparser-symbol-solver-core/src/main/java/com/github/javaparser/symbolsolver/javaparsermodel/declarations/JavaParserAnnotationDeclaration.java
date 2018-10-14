@@ -110,4 +110,9 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
     }
+
+    @Override
+    public Optional<AnnotationDeclaration> toAst() {
+        return Optional.of(wrappedNode);
+    }
 }
