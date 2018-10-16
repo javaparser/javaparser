@@ -3,7 +3,7 @@ Version 3.6.26
 * BREAKING: Node.getData now throws an exception if the data was not set before.
 This can be rewritten by checking with Node.containsData before doing getData.
 
-[issues resolved](https://github.com/javaparser/javaparser/milestone/109?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/110?closed=1)
 
 Version 3.6.25
 ------------------
