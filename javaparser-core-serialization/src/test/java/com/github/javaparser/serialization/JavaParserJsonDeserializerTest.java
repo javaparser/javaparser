@@ -21,6 +21,8 @@
 package com.github.javaparser.serialization;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
@@ -28,8 +30,14 @@ import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
 import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.stream.JsonGenerator;
 
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.*;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -103,6 +111,44 @@ class JavaParserJsonDeserializerTest {
 
         assertEqualsNoEol("int", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
+    }
+
+    @Test
+    void testDelegate() {
+        CompilationUnit cu = JavaParser.parse("public class X{} class Z{}");
+        List<JavaParserJsonSerializer.Delegate> serializerDelegates = new LinkedList<>();
+        JavaParserJsonSerializer.Delegate rangeSerializerDelegate = (node, generator) -> {
+            if (node.getRange().isPresent()) {
+                Range range = node.getRange().get();
+                generator.writeStartObject("range");
+                generator.write("beginLine", range.begin.line);
+                generator.write("beginColumn", range.begin.column);
+                generator.write("endLine", range.end.line);
+                generator.write("endColumn", range.end.column);
+                generator.writeEnd();
+            }
+        };
+        serializerDelegates.add(rangeSerializerDelegate);
+        String serialized = serialize(cu, false, serializerDelegates);
+
+        Map<String, JavaParserJsonDeserializer.Delegate> deserializerDelegates = new HashMap<>();
+        JavaParserJsonDeserializer.Delegate rangeDeserializerDelegate = (propertyName, jsonValue, node) -> {
+            JsonObject jsonNode = (JsonObject)jsonValue;
+            Position begin = new Position(jsonNode.getInt("beginLine"), jsonNode.getInt("beginColumn"));
+            Position end = new Position(jsonNode.getInt("endLine"), jsonNode.getInt("endColumn"));
+            node.setRange(new Range(begin, end));
+        };
+        deserializerDelegates.put("range", rangeDeserializerDelegate);
+
+        Node deserialized = deserializer.deserializeObject(
+                Json.createReader(new StringReader(serialized)),
+                deserializerDelegates
+        );
+        Range range = deserialized.getRange().get();
+        assertEquals(range.begin.line, 1);
+        assertEquals(range.begin.line, 1);
+        assertEquals(range.end.line, 1);
+        assertEquals(range.end.column, 26);
     }
 
     /**

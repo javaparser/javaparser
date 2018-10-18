@@ -30,6 +30,8 @@ import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +47,9 @@ class JavaParserJsonSerializerTest {
     }
 
     static String serialize(Node node, boolean prettyPrint) {
+        return serialize(node, prettyPrint, new LinkedList<>());
+    }
+    static String serialize(Node node, boolean prettyPrint, List<JavaParserJsonSerializer.Delegate> delegates) {
         Map<String, ?> config = new HashMap<>();
         if (prettyPrint) {
             config.put(JsonGenerator.PRETTY_PRINTING, null);
@@ -53,7 +58,7 @@ class JavaParserJsonSerializerTest {
         JavaParserJsonSerializer serializer = new JavaParserJsonSerializer();
         StringWriter jsonWriter = new StringWriter();
         try (JsonGenerator generator = generatorFactory.createGenerator(jsonWriter)) {
-            serializer.serialize(node, generator);
+            serializer.serialize(node, generator, delegates);
         }
         return jsonWriter.toString();
     }

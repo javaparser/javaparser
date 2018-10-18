@@ -26,14 +26,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.Pair;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonString;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import javax.json.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
@@ -46,19 +42,29 @@ import static com.github.javaparser.serialization.JavaParserJsonSerializer.SERIA
 public class JavaParserJsonDeserializer {
 
     public Node deserializeObject(JsonReader reader) {
-        Log.info("Deserializing JSON to Node.");
-        JsonObject jsonObject = reader.readObject();
-        return deserializeObject(jsonObject);
+        return deserializeObject(reader, new HashMap<>());
     }
 
-    private Node deserializeObject(JsonObject nodeJson) {
+    public Node deserializeObject(JsonReader reader, Map<String, Delegate> delegates) {
+        Log.info("Deserializing JSON to Node.");
+        JsonObject jsonObject = reader.readObject();
+        return deserializeObject(jsonObject, delegates);
+    }
+
+    private Node deserializeObject(JsonObject nodeJson, Map<String, Delegate> delegates) {
         try {
             String serializedNodeType = nodeJson.getString(SERIALIZED_CLASS_KEY);
             BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
                     .orElseThrow(() -> new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
             Map<String, Object> parameters = new HashMap<>();
+            List<Pair<String, JsonValue>> jsonValuesForDelegates = new LinkedList<>();
             for (String name : nodeJson.keySet()) {
                 if (name.equals(SERIALIZED_CLASS_KEY)) {
+                    continue;
+                } else if (delegates.containsKey(name)) {
+                    jsonValuesForDelegates.add(
+                            new Pair<>(name, nodeJson.get(name))
+                    );
                     continue;
                 }
 
@@ -68,12 +74,12 @@ public class JavaParserJsonDeserializer {
 
                 if (propertyMetaModel.isNodeList()) {
                     JsonArray nodeListJson = nodeJson.getJsonArray(name);
-                    parameters.put(name, deserializeNodeList(nodeListJson));
+                    parameters.put(name, deserializeNodeList(nodeListJson, delegates));
                 } else if (propertyMetaModel.isEnumSet()) {
                     JsonArray enumSetJson = nodeJson.getJsonArray(name);
                     parameters.put(name, deserializeEnumSet(enumSetJson));
                 } else if (propertyMetaModel.isNode()) {
-                    parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
+                    parameters.put(name, deserializeObject(nodeJson.getJsonObject(name), delegates));
                 } else {
                     Class<?> type = propertyMetaModel.getType();
                     if (type == String.class) {
@@ -88,7 +94,12 @@ public class JavaParserJsonDeserializer {
                 }
             }
 
-            return nodeMetaModel.construct(parameters);
+            Node node = nodeMetaModel.construct(parameters);
+            for (Pair<String, JsonValue> nameAndValue : jsonValuesForDelegates) {
+                delegates.get(nameAndValue.a).fromJson(nameAndValue.a, nameAndValue.b, node);
+            }
+
+            return node;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +109,11 @@ public class JavaParserJsonDeserializer {
         return enumSetJson.stream().map(v -> (JsonString) v).map(s -> Modifier.valueOf(s.getString())).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)));
     }
 
-    private NodeList<?> deserializeNodeList(JsonArray nodeListJson) {
-        return nodeListJson.stream().map(nodeJson -> deserializeObject((JsonObject) nodeJson)).collect(toNodeList());
+    private NodeList<?> deserializeNodeList(JsonArray nodeListJson, Map<String, Delegate> delegates) {
+        return nodeListJson.stream().map(nodeJson -> deserializeObject((JsonObject) nodeJson, delegates)).collect(toNodeList());
+    }
+
+    interface Delegate {
+        void fromJson(String propertyName, JsonValue jsonValue, Node node);
     }
 }

@@ -29,6 +29,8 @@ import com.github.javaparser.utils.Log;
 
 import javax.json.stream.JsonGenerator;
 import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -39,12 +41,16 @@ public class JavaParserJsonSerializer {
     public static final String SERIALIZED_CLASS_KEY = "!";
 
     public void serialize(Node node, JsonGenerator generator) {
-        requireNonNull(node);
-        Log.info("Serializing Node to JSON.");
-        serialize(null, node, generator);
+        serialize(node, generator, new LinkedList<>());
     }
 
-    private void serialize(String nodeName, Node node, JsonGenerator generator) {
+    public void serialize(Node node, JsonGenerator generator, List<Delegate> delegates) {
+        requireNonNull(node);
+        Log.info("Serializing Node to JSON.");
+        serialize(null, node, generator, delegates);
+    }
+
+    private void serialize(String nodeName, Node node, JsonGenerator generator, List<Delegate> delegates) {
         requireNonNull(node);
         BaseNodeMetaModel nodeMetaModel = JavaParserMetaModel.getNodeMetaModel(node.getClass()).orElseThrow(() -> new IllegalStateException("Unknown Node: " + node.getClass()));
 
@@ -54,6 +60,9 @@ public class JavaParserJsonSerializer {
             generator.writeStartObject(nodeName);
         }
         generator.write(SERIALIZED_CLASS_KEY, node.getClass().getName());
+        for (Delegate delegate : delegates) {
+            delegate.toJson(node, generator);
+        }
         for (PropertyMetaModel propertyMetaModel : nodeMetaModel.getAllPropertyMetaModels()) {
             String name = propertyMetaModel.getName();
             Object value = propertyMetaModel.getValue(node);
@@ -62,7 +71,7 @@ public class JavaParserJsonSerializer {
                     NodeList<Node> list = (NodeList<Node>) value;
                     generator.writeStartArray(name);
                     for (Node n : list) {
-                        serialize(null, n, generator);
+                        serialize(null, n, generator, delegates);
                     }
                     generator.writeEnd();
                 } else if (propertyMetaModel.isEnumSet()) {
@@ -73,12 +82,16 @@ public class JavaParserJsonSerializer {
                     }
                     generator.writeEnd();
                 } else if (propertyMetaModel.isNode()) {
-                    serialize(name, (Node) value, generator);
+                    serialize(name, (Node) value, generator, delegates);
                 } else {
                     generator.write(name, value.toString());
                 }
             }
         }
         generator.writeEnd();
+    }
+
+    interface Delegate {
+        void toJson(Node node, JsonGenerator generator);
     }
 }
