@@ -20,13 +20,15 @@
  */
 package com.github.javaparser.serialization;
 
+import com.github.javaparser.*;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.Pair;
 
 import javax.json.*;
 import java.util.*;
@@ -42,44 +44,41 @@ import static com.github.javaparser.serialization.JavaParserJsonSerializer.SERIA
 public class JavaParserJsonDeserializer {
 
     public Node deserializeObject(JsonReader reader) {
-        return deserializeObject(reader, new HashMap<>());
-    }
-
-    public Node deserializeObject(JsonReader reader, Map<String, Delegate> delegates) {
         Log.info("Deserializing JSON to Node.");
         JsonObject jsonObject = reader.readObject();
-        return deserializeObject(jsonObject, delegates);
+        return deserializeObject(jsonObject);
     }
 
-    private Node deserializeObject(JsonObject nodeJson, Map<String, Delegate> delegates) {
+    private Node deserializeObject(JsonObject nodeJson) {
         try {
             String serializedNodeType = nodeJson.getString(SERIALIZED_CLASS_KEY);
             BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
                     .orElseThrow(() -> new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
             Map<String, Object> parameters = new HashMap<>();
-            List<Pair<String, JsonValue>> jsonValuesForDelegates = new LinkedList<>();
+            Map<String, JsonValue> deferredJsonValues = new HashMap<>();
+
             for (String name : nodeJson.keySet()) {
                 if (name.equals(SERIALIZED_CLASS_KEY)) {
                     continue;
-                } else if (delegates.containsKey(name)) {
-                    jsonValuesForDelegates.add(
-                            new Pair<>(name, nodeJson.get(name))
-                    );
+                }
+
+                Optional<PropertyMetaModel> optionalPropertyMetaModel = nodeMetaModel.getAllPropertyMetaModels().stream()
+                        .filter(mm -> mm.getName().equals(name))
+                        .findFirst();
+                if (!optionalPropertyMetaModel.isPresent()) {
+                    deferredJsonValues.put(name, nodeJson.get(name));
                     continue;
                 }
 
-                PropertyMetaModel propertyMetaModel = nodeMetaModel.getAllPropertyMetaModels().stream()
-                        .filter(mm -> mm.getName().equals(name))
-                        .findFirst().orElseThrow(() -> new IllegalStateException("Unknown property: " + nodeMetaModel.getQualifiedClassName() + "." + name));
-
+                PropertyMetaModel propertyMetaModel = optionalPropertyMetaModel.get();
                 if (propertyMetaModel.isNodeList()) {
                     JsonArray nodeListJson = nodeJson.getJsonArray(name);
-                    parameters.put(name, deserializeNodeList(nodeListJson, delegates));
+                    parameters.put(name, deserializeNodeList(nodeListJson));
                 } else if (propertyMetaModel.isEnumSet()) {
                     JsonArray enumSetJson = nodeJson.getJsonArray(name);
                     parameters.put(name, deserializeEnumSet(enumSetJson));
                 } else if (propertyMetaModel.isNode()) {
-                    parameters.put(name, deserializeObject(nodeJson.getJsonObject(name), delegates));
+                    parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
                 } else {
                     Class<?> type = propertyMetaModel.getType();
                     if (type == String.class) {
@@ -95,9 +94,18 @@ public class JavaParserJsonDeserializer {
             }
 
             Node node = nodeMetaModel.construct(parameters);
-            for (Pair<String, JsonValue> nameAndValue : jsonValuesForDelegates) {
-                delegates.get(nameAndValue.a).fromJson(nameAndValue.a, nameAndValue.b, node);
+            // Note: comment is a property meta model, but it is not listed as constructor parameter and not attached to node
+            // @see BaseNodeMetaModel.getConstructorParameters
+            if (parameters.containsKey("comment")) {
+                node.setComment((Comment)parameters.get("comment"));
             }
+
+            for (String name : deferredJsonValues.keySet()) {
+                if (!readNonMetaProperties(name, deferredJsonValues.get(name), node)) {
+                    throw new IllegalStateException("Unknown property: " + nodeMetaModel.getQualifiedClassName() + "." + name);
+                }
+            }
+            ensureSymbolResolverIsAttached(node);
 
             return node;
         } catch (ClassNotFoundException e) {
@@ -109,11 +117,49 @@ public class JavaParserJsonDeserializer {
         return enumSetJson.stream().map(v -> (JsonString) v).map(s -> Modifier.valueOf(s.getString())).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)));
     }
 
-    private NodeList<?> deserializeNodeList(JsonArray nodeListJson, Map<String, Delegate> delegates) {
-        return nodeListJson.stream().map(nodeJson -> deserializeObject((JsonObject) nodeJson, delegates)).collect(toNodeList());
+    private NodeList<?> deserializeNodeList(JsonArray nodeListJson) {
+        return nodeListJson.stream().map(nodeJson -> deserializeObject((JsonObject) nodeJson)).collect(toNodeList());
     }
 
-    interface Delegate {
-        void fromJson(String propertyName, JsonValue jsonValue, Node node);
+    protected boolean readNonMetaProperties(String name, JsonValue jsonValue, Node node) {
+        return readRange(name, jsonValue, node)
+                || readTokenRange(name, jsonValue, node);
+    }
+
+    protected boolean readRange(String name, JsonValue jsonValue, Node node) {
+        if (name.equals("range")) {
+            JsonObject jsonObject = (JsonObject)jsonValue;
+            Position begin = new Position(jsonObject.getInt("beginLine"), jsonObject.getInt("beginColumn"));
+            Position end = new Position(jsonObject.getInt("endLine"), jsonObject.getInt("endColumn"));
+            node.setRange(new Range(begin, end));
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean readTokenRange(String name, JsonValue jsonValue, Node node) {
+        if (name.equals("tokenRange")) {
+            JsonObject jsonObject = (JsonObject)jsonValue;
+            JavaToken begin = readToken("beginToken", jsonObject);
+            JavaToken end = readToken("endToken", jsonObject);
+            node.setTokenRange(new TokenRange(begin, end));
+            return true;
+        }
+        return false;
+    }
+
+    protected JavaToken readToken(String name, JsonObject jsonObject) {
+        JsonObject tokenJson = jsonObject.getJsonObject(name);
+        return new JavaToken(
+                tokenJson.getInt("kind"),
+                tokenJson.getString("text")
+        );
+    }
+
+    private void ensureSymbolResolverIsAttached(Node node) {
+        if (node instanceof CompilationUnit && JavaParser.getStaticConfiguration().getSymbolResolver().isPresent()) {
+            CompilationUnit cu = (CompilationUnit)node;
+            cu.setData(Node.SYMBOL_RESOLVER_KEY, JavaParser.getStaticConfiguration().getSymbolResolver().get());
+        }
     }
 }
