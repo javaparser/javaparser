@@ -105,7 +105,7 @@ public class JavaParserJsonDeserializer {
                     throw new IllegalStateException("Unknown property: " + nodeMetaModel.getQualifiedClassName() + "." + name);
                 }
             }
-            ensureSymbolResolverIsAttached(node);
+            setSymbolResolverIfCompilationUnit(node);
 
             return node;
         } catch (ClassNotFoundException e) {
@@ -156,7 +156,7 @@ public class JavaParserJsonDeserializer {
         );
     }
 
-    private void ensureSymbolResolverIsAttached(Node node) {
+    private void setSymbolResolverIfCompilationUnit(Node node) {
         if (node instanceof CompilationUnit && JavaParser.getStaticConfiguration().getSymbolResolver().isPresent()) {
             CompilationUnit cu = (CompilationUnit)node;
             cu.setData(Node.SYMBOL_RESOLVER_KEY, JavaParser.getStaticConfiguration().getSymbolResolver().get());
