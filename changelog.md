@@ -1,3 +1,10 @@
+Version 3.6.27
+------------------
+* The Json serialization now serializes more fields,
+which *should* not impact existing code.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/111?closed=1)
+
 Version 3.6.26
 ------------------
 * BREAKING: Node.getData now throws an exception if the data was not set before.
