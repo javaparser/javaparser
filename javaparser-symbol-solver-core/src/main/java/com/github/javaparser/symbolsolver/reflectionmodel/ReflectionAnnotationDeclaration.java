@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -167,5 +168,10 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         return Stream.of(clazz.getDeclaredMethods())
                        .map(m -> new ReflectionAnnotationMemberDeclaration(m, typeSolver))
                        .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<AnnotationDeclaration> toAst() {
+        return Optional.empty();
     }
 }

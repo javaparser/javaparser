@@ -347,6 +347,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
+    }
+
     ///
     /// Protected methods
     ///

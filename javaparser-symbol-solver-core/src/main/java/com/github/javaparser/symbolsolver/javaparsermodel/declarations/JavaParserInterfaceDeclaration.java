@@ -317,6 +317,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return Collections.emptyList();
     }
 
+    @Override
+    public Optional<ClassOrInterfaceDeclaration> toAst() {
+        return Optional.of(wrappedNode);
+    }
+
     ///
     /// Private methods
     ///

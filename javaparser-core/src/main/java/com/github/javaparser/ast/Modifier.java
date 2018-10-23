@@ -22,6 +22,7 @@
 package com.github.javaparser.ast;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * One of the modifiers known in Java.
@@ -58,7 +59,7 @@ public enum Modifier {
         return EnumSet.of(this);
     }
 
-    public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
+    public static AccessSpecifier getAccessSpecifier(Set<Modifier> modifiers) {
         if (modifiers.contains(Modifier.PUBLIC)) {
             return AccessSpecifier.PUBLIC;
         } else if (modifiers.contains(Modifier.PROTECTED)) {
