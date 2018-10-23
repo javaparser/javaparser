@@ -64,6 +64,10 @@ public class UnsolvedSymbolException extends RuntimeException {
         this.cause = cause;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "UnsolvedSymbolException{" +

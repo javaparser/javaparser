@@ -1,7 +1,9 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -11,18 +13,19 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class EnumLiteralsInAnnidatedClassTest {
+public class EnumLiteralsInAnnotatedClassTest {
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedSamePackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
-        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedSamePackage() throws IOException {
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
@@ -30,9 +33,10 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new JavaParserTypeSolver(src));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(parserConfiguration);
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 4);
 
         assertTrue(fae.isPresent());
@@ -42,9 +46,9 @@ public class EnumLiteralsInAnnidatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedSamePackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
-        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedSamePackage() throws IOException {
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
@@ -52,9 +56,10 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new JavaParserTypeSolver(src));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(parserConfiguration);
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 5);
 
         assertTrue(fae.isPresent());
@@ -64,9 +69,9 @@ public class EnumLiteralsInAnnidatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedDifferentPackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
-        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedDifferentPackage() throws IOException {
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
@@ -74,9 +79,10 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new JavaParserTypeSolver(src));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(parserConfiguration);
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
+        CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 6);
 
         assertTrue(fae.isPresent());
@@ -86,9 +92,9 @@ public class EnumLiteralsInAnnidatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedDifferentPackage() throws FileNotFoundException {
-        File src = new File("src/test/resources/enumLiteralsInAnnidatedClass");
-        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator+ "bar"
+    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedDifferentPackage() throws IOException {
+        File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
+        File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
 
         CombinedTypeSolver localCts = new CombinedTypeSolver();
@@ -96,10 +102,10 @@ public class EnumLiteralsInAnnidatedClassTest {
         localCts.add(new JavaParserTypeSolver(src));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        JavaParser parser = new JavaParser(parserConfiguration);
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
 
-        CompilationUnit cu = JavaParser.parse(aClass);
-
+        CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 7);
 
         assertTrue(fae.isPresent());

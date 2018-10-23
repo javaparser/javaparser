@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -153,12 +154,19 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                ResolvedReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
-                ancestors.add(superInterfaze);
+                try {
+                    ResolvedReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
+                    ancestors.add(superInterfaze);
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                        throw e;
+                    }
+                }
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
@@ -272,5 +280,15 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Optional<ClassOrInterfaceDeclaration> toAst() {
+        return Optional.empty();
     }
 }

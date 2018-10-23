@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
-public class Issue113 extends AbstractTest {
+public class Issue113 extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 

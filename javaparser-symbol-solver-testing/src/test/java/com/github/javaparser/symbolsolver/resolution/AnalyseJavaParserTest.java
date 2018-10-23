@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.SlowTest;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Category(SlowTest.class)
-public class AnalyseJavaParserTest extends AbstractTest {
+public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
 
     private static final Path root = adaptPath("src/test/test_sourcecode/javaparser_src");
     private static final Path properSrc = root.resolve("proper_source");

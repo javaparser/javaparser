@@ -61,6 +61,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
+        if (typeDeclaration == null) {
+            throw new IllegalArgumentException("TypeDeclaration is not expected to be null");
+        }
         if (typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
@@ -392,14 +395,27 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * type plus all declared fields which are not private.
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
-        List<ResolvedFieldDeclaration> res = new LinkedList<>();
-
-        res.addAll(this.getDeclaredFields().stream()
+        List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
                 .filter(f -> f.accessSpecifier() != PRIVATE)
                 .collect(Collectors.toList()));
 
         getDirectAncestors().forEach(a ->
                 res.addAll(a.getAllFieldsVisibleToInheritors()));
+
+        return res;
+    }
+
+    public List<ResolvedMethodDeclaration> getAllMethodsVisibleToInheritors() {
+        List<ResolvedMethodDeclaration> res = new LinkedList<>(this.getDeclaredMethods().stream()
+                .map(m -> m.getDeclaration())
+                .filter(m -> m.accessSpecifier() != PRIVATE)
+                .collect(Collectors.toList()));
+
+        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+            getDirectAncestors().forEach(a ->
+                    res.addAll(a.getAllMethodsVisibleToInheritors()));
+        }
 
         return res;
     }
@@ -487,7 +503,14 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
 
     private static List<ResolvedType> deriveParams(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return typeDeclaration.getTypeParameters().stream().map(ResolvedTypeVariable::new).collect(Collectors.toList());
+        if (typeDeclaration == null) {
+            throw new IllegalArgumentException("TypeDeclaration is not expected to be null");
+        }
+        List<ResolvedTypeParameterDeclaration> typeParameters = typeDeclaration.getTypeParameters();
+        if (typeParameters == null) {
+            throw new RuntimeException("Type parameters are not expected to be null");
+        }
+        return typeParameters.stream().map(ResolvedTypeVariable::new).collect(Collectors.toList());
     }
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);

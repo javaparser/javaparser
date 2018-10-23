@@ -24,14 +24,11 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
@@ -103,12 +100,12 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override
     public ResolvedTypeDeclaration declaringType() {
-        Optional<TypeDeclaration> typeDeclaration = wrappedNode.findParent(TypeDeclaration.class);
+        Optional<TypeDeclaration> typeDeclaration = wrappedNode.findAncestor(TypeDeclaration.class);
         if (typeDeclaration.isPresent()) {
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(typeDeclaration.get());
         }

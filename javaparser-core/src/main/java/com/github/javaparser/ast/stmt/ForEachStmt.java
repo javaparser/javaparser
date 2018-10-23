@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -31,7 +32,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import javax.annotation.Generated;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -41,6 +41,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 /**
  * A for-each statement.
  * <br/><code>for(Object o: objects) { ... }</code>
+ * It was introduced in Java 5.
  *
  * @author Julio Vilmar Gesser
  */

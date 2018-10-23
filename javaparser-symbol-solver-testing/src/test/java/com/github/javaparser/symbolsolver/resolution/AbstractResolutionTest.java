@@ -17,16 +17,15 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 
 import java.io.InputStream;
 
 /**
  * @author Federico Tomassetti
  */
-public abstract class AbstractResolutionTest extends AbstractTest {
+public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTest {
 
     protected CompilationUnit parseSampleWithStandardExtension(String sampleName) {
         return parseSample(sampleName, "java");

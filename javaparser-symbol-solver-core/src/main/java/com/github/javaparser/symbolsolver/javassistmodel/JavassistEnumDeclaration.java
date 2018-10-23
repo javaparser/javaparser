@@ -88,18 +88,32 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         // Direct ancestors of an enum are java.lang.Enum and interfaces
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         String superClassName = ctClass.getClassFile().getSuperclass();
 
         if (superClassName != null) {
-            ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(superClassName), typeSolver));
+            try {
+                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(superClassName), typeSolver));
+            } catch (UnsolvedSymbolException e) {
+                if (!acceptIncompleteList) {
+                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                    throw e;
+                }
+            }
         }
 
         for (String interfazeName : ctClass.getClassFile().getInterfaces()) {
-            ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(interfazeName), typeSolver));
+            try {
+                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(interfazeName), typeSolver));
+            } catch (UnsolvedSymbolException e) {
+                if (!acceptIncompleteList) {
+                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                    throw e;
+                }
+            }
         }
 
         return ancestors;
@@ -260,5 +274,10 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
                 .filter(f -> (f.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) != 0)
                 .map(f -> new JavassistEnumConstantDeclaration(f, typeSolver))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return javassistTypeDeclarationAdapter.getConstructors();
     }
 }

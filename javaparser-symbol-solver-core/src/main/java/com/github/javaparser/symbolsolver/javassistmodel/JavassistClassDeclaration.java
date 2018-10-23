@@ -168,12 +168,27 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (getSuperClass() != null) {
-            ancestors.add(getSuperClass());
+        try {
+            ResolvedReferenceType superClass = getSuperClass();
+            if (superClass != null) {
+                ancestors.add(superClass);
+            }
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
         }
-        ancestors.addAll(getInterfaces());
+        try {
+            ancestors.addAll(getInterfaces());
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
+        }
         return ancestors;
     }
 
@@ -376,5 +391,10 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
     }
 }

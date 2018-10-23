@@ -25,9 +25,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
@@ -557,6 +557,9 @@ public abstract class Expression extends Node {
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
     }
 
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     public ResolvedType calculateResolvedType() {
         return getSymbolResolver().calculateType(this);
     }

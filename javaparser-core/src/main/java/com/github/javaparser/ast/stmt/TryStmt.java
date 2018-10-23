@@ -32,12 +32,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.TryStmtMetaModel;
-import javax.annotation.Generated;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>The try statement</h1>

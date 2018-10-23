@@ -20,6 +20,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -101,7 +102,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -209,7 +210,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         ResolvedReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
         ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
@@ -218,7 +219,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
                 SymbolReference<ResolvedTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
-                if (!implementedDeclRef.isSolved()) {
+                if (!implementedDeclRef.isSolved() && !acceptIncompleteList) {
                     throw new UnsolvedSymbolException(implementedType.getName().getId());
                 }
                 ancestors.add(new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
@@ -314,7 +315,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public AccessSpecifier accessSpecifier() {
-            return Helper.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
+            return AstResolutionUtils.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
         }
 
         @Override
@@ -325,6 +326,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         @Override
         public ResolvedType getSpecifiedException(int index) {
             throw new UnsupportedOperationException("The values method of an enum does not throw any exception");
+        }
+
+        @Override
+        public Optional<MethodDeclaration> toAst() {
+            return Optional.empty();
         }
     }
 
@@ -347,5 +353,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javaParserTypeAdapter.containerType();
+    }
+
+    @Override
+    public List<ResolvedConstructorDeclaration> getConstructors() {
+        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
 }
