@@ -1,9 +1,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -69,7 +68,11 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public ResolvedReferenceType getSuperClass() {
-    return new ReferenceTypeImpl(superTypeDeclaration.asReferenceType(), typeSolver);
+    ResolvedReferenceTypeDeclaration superRRTD = superTypeDeclaration.asReferenceType();
+    if (superRRTD == null) {
+      throw new RuntimeException("The super ResolvedReferenceTypeDeclaration is not expected to be null");
+    }
+    return new ReferenceTypeImpl(superRRTD, typeSolver);
   }
 
   @Override
@@ -97,12 +100,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<ResolvedReferenceType> getAncestors() {
+  public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
     return
         ImmutableList.
             <ResolvedReferenceType>builder()
             .add(getSuperClass())
-            .addAll(superTypeDeclaration.asReferenceType().getAncestors())
+            .addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList))
             .build();
   }
 
@@ -161,17 +164,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public String getPackageName() {
-    return Helper.getPackageName(wrappedNode);
+    return AstResolutionUtils.getPackageName(wrappedNode);
   }
 
   @Override
   public String getClassName() {
-    return Helper.getClassName("", wrappedNode);
+    return AstResolutionUtils.getClassName("", wrappedNode);
   }
 
   @Override
   public String getQualifiedName() {
-    String containerName = Helper.containerName(wrappedNode.getParentNode().orElse(null));
+    String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
     if (containerName.isEmpty()) {
       return getName();
     } else {
@@ -202,4 +205,10 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   public Optional<ResolvedReferenceTypeDeclaration> containerType() {
     throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
+
+  @Override
+  public Optional<Node> toAst() {
+    return Optional.of(wrappedNode);
+  }
+
 }

@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -180,29 +179,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-        List<ResolvedConstructorDeclaration> declared = new LinkedList<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
-                com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
-                declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
-            }
-        }
-        if (declared.isEmpty()) {
-            // If there are no constructors insert the default constructor
-            return ImmutableList.of(new DefaultConstructorDeclaration(this));
-        } else {
-            return declared;
-        }
+        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        for (AnnotationExpr annotationExpr : wrappedNode.getAnnotations()) {
-            if (solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
-                return true;
-            }
-        }
-        return false;
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -287,30 +269,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return getContext().getParent().solveType(name, typeSolver);
     }
 
-    /**
-     * Resolves the type of all ancestors (i.e., the extended class and the implemented interfaces) and returns the list
-     * of ancestors as a list of resolved reference types.
-     *
-     * @return The list of resolved ancestors.
-     * @throws UnsolvedSymbolException if some ancestor could not be resolved.
-     */
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
-        return getAncestors(false);
-    }
-
-    /**
-     * Resolves the type of all ancestors (i.e., the extended class and the implemented interfaces) and returns the list
-     * of ancestors as a list of resolved reference types.
-     *
-     * @param acceptIncompleteList When set to {@code false}, this method throws an {@link UnsolvedSymbolException} if
-     *                             one or more ancestor could not be resolved. When set to {@code true}, this method
-     *                             does not throw an {@link UnsolvedSymbolException}, but the list of returned ancestors
-     *                             may be incomplete in case one or more ancestor could not be resolved.
-     * @return The list of resolved ancestors.
-     * @throws UnsolvedSymbolException if some ancestor could not be resolved and {@code acceptIncompleteList} is set to
-     *                                 {@code false}.
-     */
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
@@ -385,7 +344,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        return Helper.toAccessLevel(wrappedNode.getModifiers());
+        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
     }
 
     ///

@@ -25,41 +25,74 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
- * An object that has a parent node.
+ * An object that can have a parent node.
  */
 public interface HasParentNode<T> extends Observable {
 
     /**
-     * Return the parent node or null, if no parent is set.
+     * Returns the parent node, or {@code Optional.empty} if no parent is set.
      */
     Optional<Node> getParentNode();
 
     /**
-     * Set the parent node.
+     * Sets the parent node.
      *
-     * @param parentNode the parent node or null, to set no parent
-     * @return return <i>this</i>
+     * @param parentNode the parent node, or {@code null} to set no parent.
+     * @return return {@code this}
      */
     T setParentNode(Node parentNode);
 
     /**
-     * <i>this</i> for everything except NodeLists. NodeLists use their parent as their children parent.
+     * Returns the parent node from the perspective of the children of this node.
+     * <p>
+     * That is, this method returns {@code this} for everything except {@code NodeList}. A {@code NodeList} returns its
+     * parent node instead. This is because a {@code NodeList} sets the parent of all its children to its own parent
+     * node (see {@link com.github.javaparser.ast.NodeList} for details).
      */
     Node getParentNodeForChildren();
 
     /**
-     * Get the ancestor of the node having the given type, or null if no ancestor of the given type is found.
+     * @deprecated use {@link #findAncestor(Class)}.
      */
+    @Deprecated
     default <N> Optional<N> getAncestorOfType(Class<N> classType) {
-        Node parent = getParentNode().orElse(null);
-        while (parent != null) {
-            if (classType.isAssignableFrom(parent.getClass())) {
-                return Optional.of(classType.cast(parent));
+        return findAncestor(classType);
+    }
+
+    /**
+     * @deprecated use {@link #findAncestor(Class)}.
+     */
+    @Deprecated
+    default <N> Optional<N> findParent(Class<N> type) {
+        return findAncestor(type);
+    }
+
+    /**
+     * Walks the parents of this node and returns the first node of type {@code type}, or {@code empty()} if none is
+     * found. The given type may also be an interface type, such as one of the {@code NodeWith...} interface types.
+     */
+    default <N> Optional<N> findAncestor(Class<N> type) {
+        return findAncestor(type, x -> true);
+    }
+
+    /**
+     * Walks the parents of this node and returns the first node of type {@code type} that matches {@code predicate}, or
+     * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
+     * {@code NodeWith...} interface types.
+     */
+    default <N> Optional<N> findAncestor(Class<N> type, Predicate<N> predicate) {
+        Optional<Node> possibleParent = getParentNode();
+        while (possibleParent.isPresent()) {
+            Node parent = possibleParent.get();
+            if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {
+                return Optional.of(type.cast(parent));
             }
-            parent = parent.getParentNode().orElse(null);
+            possibleParent = parent.getParentNode();
         }
         return Optional.empty();
     }
+
 }

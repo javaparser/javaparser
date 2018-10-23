@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -27,6 +28,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -93,5 +95,10 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
             throw new IllegalArgumentException();
         }
         return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver);
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAst() {
+        return Optional.empty();
     }
 }

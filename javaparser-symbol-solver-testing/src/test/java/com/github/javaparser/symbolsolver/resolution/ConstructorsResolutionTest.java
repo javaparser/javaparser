@@ -1,11 +1,16 @@
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
@@ -92,4 +97,40 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 		assertEquals(expectedConstructor, actualConstructor);
 	}
+
+	@Test
+	public void solveEnumConstructor() {
+		// configure symbol solver before parsing
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		CompilationUnit cu = parseSample("ConstructorCallsEnum");
+		EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
+		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(2);
+
+		ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
+
+		assertEquals("ConstructorCallsEnum", resolvedConstructor.declaringType().getName());
+		assertEquals(1, resolvedConstructor.getNumberOfParams());
+		assertEquals("i", resolvedConstructor.getParam(0).getName());
+		assertEquals(ResolvedPrimitiveType.INT, resolvedConstructor.getParam(0).getType());
+	}
+
+	@Test
+	public void solveNonPublicParentConstructorReflection() {
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		CompilationUnit cu = parseSample("ReflectionTypeSolverConstructorResolution");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ReflectionTypeSolverConstructionResolution");
+		ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
+		ExplicitConstructorInvocationStmt stmt =
+				(ExplicitConstructorInvocationStmt) constructorDeclaration.getBody().getStatement(0);
+
+		ResolvedConstructorDeclaration cd = stmt.resolve();
+
+		assertEquals(1, cd.getNumberOfParams());
+		assertEquals(ResolvedPrimitiveType.INT, cd.getParam(0).getType());
+		assertEquals("java.lang.AbstractStringBuilder", cd.declaringType().getQualifiedName());
+
+	}
+
 }

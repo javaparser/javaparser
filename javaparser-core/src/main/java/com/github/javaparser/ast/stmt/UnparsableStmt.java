@@ -5,13 +5,13 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
-import javax.annotation.Generated;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnparsableStmtMetaModel;
 import static com.github.javaparser.ast.Node.Parsedness.*;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A statement that had parse errors.

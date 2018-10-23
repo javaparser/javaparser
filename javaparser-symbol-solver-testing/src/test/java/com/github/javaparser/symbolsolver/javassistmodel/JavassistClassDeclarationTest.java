@@ -16,8 +16,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -28,11 +30,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class JavassistClassDeclarationTest extends AbstractTest {
+public class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
@@ -138,6 +143,27 @@ public class JavassistClassDeclarationTest extends AbstractTest {
     public void testHasAnnotation() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildClass");
         assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
+    }
+
+    @Test
+    public void testGetGenericTypeField(){
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.ClassWithFields");
+        List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
+        assertEquals(6, declarationList.size());
+
+        Map<String, ResolvedType> fields = new HashMap<>();
+        for (ResolvedFieldDeclaration fieldDeclaration : declarationList) {
+            String name = fieldDeclaration.getName();
+            ResolvedType type = fieldDeclaration.getType();
+            fields.put(name, type);
+        }
+
+        assertTrue(fields.containsKey("genericParamObjectField"));
+        assertTrue(fields.containsKey("genericPrimitiveArrayField"));
+        assertTrue(fields.containsKey("genericObjectArrayField"));
+        assertTrue(fields.containsKey("genericField"));
+        assertTrue(fields.containsKey("primitiveField"));
+        assertTrue(fields.containsKey("objectField"));
     }
 
     ///

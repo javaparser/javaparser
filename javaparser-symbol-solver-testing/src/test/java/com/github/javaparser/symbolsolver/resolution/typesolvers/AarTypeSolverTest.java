@@ -16,16 +16,15 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
-public class AarTypeSolverTest extends AbstractTest {
+public class AarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void initial() throws IOException {

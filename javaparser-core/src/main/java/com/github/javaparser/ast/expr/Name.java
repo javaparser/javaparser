@@ -35,10 +35,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-import javax.annotation.Generated;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A name that may consist of multiple identifiers.

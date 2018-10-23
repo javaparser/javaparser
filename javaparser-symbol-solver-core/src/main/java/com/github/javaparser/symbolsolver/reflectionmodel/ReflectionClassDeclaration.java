@@ -87,7 +87,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
+        // we do not attempt to perform any symbol solving when analyzing ancestors in the reflection model, so we can
+        // simply ignore the boolean parameter here; an UnsolvedSymbolException cannot occur
         return reflectionClassAdapter.getAncestors();
     }
 
@@ -153,6 +155,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
+        }
+        // When empty there is no sense in trying to find the most applicable.
+        // This is useful for debugging. Performance is not affected as 
+        // MethodResolutionLogic.findMostApplicable method returns very early 
+        // when methods is empty.
+        if (methods.isEmpty()) {
+            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
         return MethodResolutionLogic.findMostApplicable(methods, name, argumentsTypes, typeSolver);
     }
@@ -330,6 +339,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return Arrays.stream(this.clazz.getDeclaredClasses())
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
     }
 
     ///

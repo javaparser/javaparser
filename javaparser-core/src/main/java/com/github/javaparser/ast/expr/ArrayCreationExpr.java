@@ -32,16 +32,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.

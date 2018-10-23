@@ -7,12 +7,12 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_11_PREVIEW;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_11;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 
 public class Java11ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_11_PREVIEW));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_11));
 
     @Test
     public void varAllowedInLocalVariableDeclaration() {

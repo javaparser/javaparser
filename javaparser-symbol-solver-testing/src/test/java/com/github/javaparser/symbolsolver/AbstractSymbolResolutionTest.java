@@ -18,18 +18,17 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.utils.CodeGenerationUtils;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public abstract class AbstractTest {
+public abstract class AbstractSymbolResolutionTest {
 
     protected static Path adaptPath(Path path) {
         if (Files.exists(path)) {
             return path.toAbsolutePath();
         }
-        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractTest.class).resolve("javaparser-symbol-solver-testing").resolve(path);
+        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractSymbolResolutionTest.class).resolve("javaparser-symbol-solver-testing").resolve(path);
         if (Files.exists(underSymbolSolver)) {
             return underSymbolSolver;
         } else {
