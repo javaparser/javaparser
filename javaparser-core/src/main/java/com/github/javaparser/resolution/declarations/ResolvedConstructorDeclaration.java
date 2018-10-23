@@ -21,12 +21,15 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+
 /**
  * A declaration of a constructor.
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration {
+public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration,
+        AssociableToAST<ConstructorDeclaration> {
 
     /**
      * A constructor can be declared in a class or an enum.

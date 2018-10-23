@@ -223,6 +223,16 @@ public class JavaSymbolSolver implements SymbolResolver {
                 }
             }
         }
+        if (node instanceof AnnotationExpr) {
+            SymbolReference<ResolvedAnnotationDeclaration> result = JavaParserFacade.get(typeSolver).solve((AnnotationExpr) node);
+            if (result.isSolved()) {
+                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+            } else {
+                throw new UnsolvedSymbolException("We are unable to find the annotation declaration corresponding to " + node);
+            }
+        }
         throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()
                 + " from " + node.getClass().getSimpleName());
     }

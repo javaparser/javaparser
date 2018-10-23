@@ -21,12 +21,13 @@
 
 package com.github.javaparser.printer;
 
-import static org.junit.Assert.assertEquals;
-
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.expr.Expression;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static org.junit.Assert.assertEquals;
 
 public class DotPrinterTest {
     @Test
@@ -75,5 +76,29 @@ public class DotPrinterTest {
         Expression expression = JavaParser.parseExpression("1+1");
         String output = dotPrinter.output(expression);
         assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void testIssue1871() {
+        DotPrinter printer = new DotPrinter(false);
+        CompilationUnit cu = JavaParser.parse("//q\"q\nclass X{}");
+        String output = printer.output(cu);
+        assertEqualsNoEol("digraph {\n" +
+                "n0 [label=\"root\"];\n" +
+                "n1 [label=\"types\"];\n" +
+                "n0 -> n1;\n" +
+                "n2 [label=\"type\"];\n" +
+                "n1 -> n2;\n" +
+                "n3 [label=\"isInterface='false'\"];\n" +
+                "n2 -> n3;\n" +
+                "n4 [label=\"name\"];\n" +
+                "n2 -> n4;\n" +
+                "n5 [label=\"identifier='X'\"];\n" +
+                "n4 -> n5;\n" +
+                "n6 [label=\"comment\"];\n" +
+                "n2 -> n6;\n" +
+                "n7 [label=\"content='q\\\"q'\"];\n" +
+                "n6 -> n7;\n" +
+                "}", output);
     }
 }
