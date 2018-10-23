@@ -36,6 +36,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
 import java.nio.file.Path;
@@ -67,7 +68,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) assignExpr.getTarget();
 
         Path src = adaptPath("src/test/resources");
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src), new ReflectionTypeSolver());
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src, new LeanParserConfiguration()), new ReflectionTypeSolver());
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getName().getId(), fieldAccessExpr);
 
