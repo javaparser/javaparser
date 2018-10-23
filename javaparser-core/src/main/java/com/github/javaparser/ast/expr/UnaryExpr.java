@@ -32,14 +32,14 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
 /**
  * An expression where an operator is applied to a single expression.
- * It supports the operators that are found the the UnaryExpr.Operator enum.
+ * It supports the operators that are found in the UnaryExpr.Operator enum.
  * <br/><code>11++</code>
  * <br/><code>++11</code>
  * <br/><code>~1</code>

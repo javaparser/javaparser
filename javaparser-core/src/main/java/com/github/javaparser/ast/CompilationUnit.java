@@ -45,7 +45,6 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
-import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,6 +61,7 @@ import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <p>
@@ -309,12 +309,13 @@ public final class CompilationUnit extends Node {
      * @throws RuntimeException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
+        if(clazz.isArray()){
+            return addImport(clazz.getComponentType());
+        }
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
             return this;
         else if (clazz.isMemberClass())
             return addImport(clazz.getName().replace("$", "."));
-        else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType()) && !clazz.getComponentType().getName().startsWith("java.lang"))
-            return addImport(clazz.getComponentType().getName());
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
             throw new RuntimeException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getName());

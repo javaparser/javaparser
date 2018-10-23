@@ -39,22 +39,21 @@ import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-import javax.annotation.Generated;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -413,15 +412,16 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
+        findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
     }
 
     /**
      * Recursively finds all nodes of a certain type.
      *
      * @param clazz the type of node to find.
-     * @deprecated use find(Class)
+     * @deprecated use {@link Node#findAll(Class)} but be aware that findAll also considers the initial node.
      */
+    @Deprecated
     public <N extends Node> List<N> getChildNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
         for (Node child : getChildNodes()) {
@@ -434,7 +434,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use findAll(Class)
+     * @deprecated use {@link Node#findAll(Class)} but be aware that findAll also considers the initial node.
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
@@ -446,15 +446,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @param <M> The type of the data.
      * @param key The key for the data
-     * @return The data or null of no data was found for the given key
+     * @return The data.
+     * @throws IllegalStateException if the key was not set in this node.
+     * @see Node#containsData(DataKey)
      * @see DataKey
      */
     @SuppressWarnings("unchecked")
     public <M> M getData(final DataKey<M> key) {
         if (data == null) {
-            return null;
+            throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
         }
-        return (M) data.get(key);
+        M value = (M) data.get(key);
+        if (value == null) {
+            throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
+        }
+        return value;
     }
 
     /**
@@ -475,12 +481,24 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @return does this node have data for this key?
+     * @see DataKey
      */
     public boolean containsData(DataKey<?> key) {
         if (data == null) {
             return false;
         }
-        return data.get(key) != null;
+        return data.containsKey(key);
+    }
+
+    /**
+     * Remove data by key.
+     *
+     * @see DataKey
+     */
+    public void removeData(DataKey<ResolvedType> key) {
+        if (data != null) {
+            data.remove(key);
+        }
     }
 
     /**
@@ -558,7 +576,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch(mode) {
+        switch (mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -696,7 +714,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch(traversal) {
+        switch (traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:
@@ -821,20 +839,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
             return Optional.empty();
         });
-    }
-
-    /**
-     * Walks the parents of this node, returning the first node of type "nodeType" or empty() if none is found.
-     */
-    public <N extends Node> Optional<N> findParent(Class<N> nodeType) {
-        Node n = this;
-        while (n.getParentNode().isPresent()) {
-            n = n.getParentNode().get();
-            if (nodeType.isAssignableFrom(n.getClass())) {
-                return Optional.of(nodeType.cast(n));
-            }
-        }
-        return Optional.empty();
     }
 
     /**

@@ -54,7 +54,7 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public List<ResolvedReferenceType> getAncestors() {
+        public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
             throw new UnsupportedOperationException();
         }
 

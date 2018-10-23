@@ -17,17 +17,19 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.CallableDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtConstructor;
 import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.*;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -90,12 +92,15 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
             if ((ctConstructor.getModifiers() & javassist.Modifier.VARARGS) > 0) {
                 variadic = i == (ctConstructor.getParameterTypes().length - 1);
             }
+            Optional<String> paramName = JavassistUtils.extractParameterName(ctConstructor, i);
             if (ctConstructor.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctConstructor.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
-                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType, typeSolver, this), typeSolver, variadic);
+                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType,
+                        typeSolver, this), typeSolver, variadic, paramName.orElse(null));
             } else {
-                return new JavassistParameterDeclaration(ctConstructor.getParameterTypes()[i], typeSolver, variadic);
+                return new JavassistParameterDeclaration(ctConstructor.getParameterTypes()[i], typeSolver, variadic,
+                        paramName.orElse(null));
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
@@ -142,5 +147,10 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAst() {
+        return Optional.empty();
     }
 }

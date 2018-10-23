@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -26,6 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -35,6 +37,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -128,12 +131,15 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
             if ((ctMethod.getModifiers() & javassist.Modifier.VARARGS) > 0) {
                 variadic = i == (ctMethod.getParameterTypes().length - 1);
             }
+            Optional<String> paramName = JavassistUtils.extractParameterName(ctMethod, i);
             if (ctMethod.getGenericSignature() != null) {
                 SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
                 SignatureAttribute.Type signatureType = methodSignature.getParameterTypes()[i];
-                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType, typeSolver, this), typeSolver, variadic);
+                return new JavassistParameterDeclaration(JavassistUtils.signatureTypeToType(signatureType,
+                        typeSolver, this), typeSolver, variadic, paramName.orElse(null));
             } else {
-                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic);
+                return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic,
+                        paramName.orElse(null));
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
@@ -170,7 +176,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
 
     @Override
     public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
-        throw new UnsupportedOperationException();
+        return JavassistFactory.modifiersToAccessLevel(ctMethod.getModifiers());
     }
 
     @Override
@@ -193,5 +199,10 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<MethodDeclaration> toAst() {
+        return Optional.empty();
     }
 }

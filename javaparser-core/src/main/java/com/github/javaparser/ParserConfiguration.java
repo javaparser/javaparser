@@ -73,8 +73,8 @@ public class ParserConfiguration {
         JAVA_9(new Java9Validator(), null),
         /** Java 10 */
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
-        /** Java 11 (work in progress) */
-        JAVA_11_PREVIEW(new Java11Validator(), new Java11PostProcessor());
+        /** Java 11 */
+        JAVA_11(new Java11Validator(), new Java11PostProcessor());
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;

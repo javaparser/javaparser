@@ -35,23 +35,21 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
+ * This should not be used to represent fields of parameters.
+ *
+ * Eventually this should be renamed in JavaParserVariableDeclaration.
+ *
  * @author Federico Tomassetti
  */
 public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     private String name;
     private Node wrappedNode;
-    private boolean field;
-    private boolean parameter;
-    private boolean variable;
     private TypeSolver typeSolver;
 
-    private JavaParserSymbolDeclaration(Node wrappedNode, String name, TypeSolver typeSolver, boolean field, boolean parameter, boolean variable) {
+    private JavaParserSymbolDeclaration(Node wrappedNode, String name, TypeSolver typeSolver) {
         this.name = name;
         this.wrappedNode = wrappedNode;
-        this.field = field;
-        this.variable = variable;
-        this.parameter = parameter;
         this.typeSolver = typeSolver;
     }
 
@@ -64,7 +62,7 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     }
 
     public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getName().getId(), typeSolver, false, false, true);
+        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getName().getId(), typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {
@@ -105,12 +103,12 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     @Override
     public boolean isField() {
-        return field;
+        return false;
     }
 
     @Override
     public boolean isParameter() {
-        return parameter;
+        return false;
     }
 
     @Override

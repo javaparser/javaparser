@@ -56,12 +56,12 @@ public class JavassistFactory {
   }
 
   public static ResolvedReferenceTypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
-    if (ctClazz.isInterface()) {
+    if (ctClazz.isAnnotation()) {
+      return new JavassistAnnotationDeclaration(ctClazz, typeSolver);
+    } else if (ctClazz.isInterface()) {
       return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
     } else if (ctClazz.isEnum()) {
       return new JavassistEnumDeclaration(ctClazz, typeSolver);
-    } else if (ctClazz.isAnnotation()) {
-      throw new UnsupportedOperationException("CtClass of annotation not yet supported");
     } else if (ctClazz.isArray()) {
       throw new IllegalArgumentException("This method should not be called passing an array");
     } else {

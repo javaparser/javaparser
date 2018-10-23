@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.serialization;
 
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
@@ -54,6 +57,7 @@ public class JavaParserJsonSerializer {
             generator.writeStartObject(nodeName);
         }
         generator.write(SERIALIZED_CLASS_KEY, node.getClass().getName());
+        this.writeNonMetaProperties(node, generator);
         for (PropertyMetaModel propertyMetaModel : nodeMetaModel.getAllPropertyMetaModels()) {
             String name = propertyMetaModel.getName();
             Object value = propertyMetaModel.getValue(node);
@@ -81,4 +85,39 @@ public class JavaParserJsonSerializer {
         }
         generator.writeEnd();
     }
+
+    protected void writeNonMetaProperties(Node node, JsonGenerator generator) {
+        this.writeRange(node, generator);
+        this.writeTokens(node, generator);
+    }
+
+    protected void writeRange(Node node, JsonGenerator generator) {
+        if (node.getRange().isPresent()) {
+            Range range = node.getRange().get();
+            generator.writeStartObject("range");
+            generator.write("beginLine", range.begin.line);
+            generator.write("beginColumn", range.begin.column);
+            generator.write("endLine", range.end.line);
+            generator.write("endColumn", range.end.column);
+            generator.writeEnd();
+        }
+    }
+
+    protected void writeTokens(Node node, JsonGenerator generator) {
+        if (node.getTokenRange().isPresent()) {
+            TokenRange tokenRange = node.getTokenRange().get();
+            generator.writeStartObject("tokenRange");
+            writeToken("beginToken", tokenRange.getBegin(), generator);
+            writeToken("endToken", tokenRange.getEnd(), generator);
+            generator.writeEnd();
+        }
+    }
+
+    protected void writeToken(String name, JavaToken token, JsonGenerator generator) {
+        generator.writeStartObject(name);
+        generator.write("kind", token.getKind());
+        generator.write("text", token.getText());
+        generator.writeEnd();
+    }
+
 }

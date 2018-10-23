@@ -37,15 +37,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -66,27 +64,31 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     private NodeList<Expression> arguments;
 
     public MethodCallExpr() {
-        this(null, null, new NodeList<>(), new SimpleName(), new NodeList<>());
+        this(null, null, null, new SimpleName(), new NodeList<>());
     }
 
     public MethodCallExpr(String name, Expression... arguments) {
-        this(null, null, new NodeList<>(), new SimpleName(name), new NodeList<>(arguments));
+        this(null, null, null, new SimpleName(name), new NodeList<>(arguments));
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
-        this(null, scope, new NodeList<>(), new SimpleName(name), new NodeList<>());
+        this(null, scope, null, new SimpleName(name), new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final SimpleName name) {
-        this(null, scope, new NodeList<>(), name, new NodeList<>());
+        this(null, scope, null, name, new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final String name, final NodeList<Expression> arguments) {
-        this(null, scope, new NodeList<>(), new SimpleName(name), arguments);
+        this(null, scope, null, new SimpleName(name), arguments);
+    }
+
+    public MethodCallExpr(final Expression scope, final NodeList<Type> typeArguments, final String name, final NodeList<Expression> arguments) {
+        this(null, scope, typeArguments, new SimpleName(name), arguments);
     }
 
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
-        this(null, scope, new NodeList<>(), name, arguments);
+        this(null, scope, null, name, arguments);
     }
 
     @AllFieldsConstructor

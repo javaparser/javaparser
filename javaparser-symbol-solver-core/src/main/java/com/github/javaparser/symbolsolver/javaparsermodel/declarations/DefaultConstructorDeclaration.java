@@ -17,14 +17,14 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This represents the default constructor added by the compiler for objects not declaring one.
@@ -32,17 +32,17 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public class DefaultConstructorDeclaration implements ResolvedConstructorDeclaration {
+public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration> implements ResolvedConstructorDeclaration {
 
-    private ResolvedClassDeclaration classDeclaration;
+    private N declaringType;
 
-    DefaultConstructorDeclaration(ResolvedClassDeclaration classDeclaration) {
-        this.classDeclaration = classDeclaration;
+    DefaultConstructorDeclaration(N declaringType) {
+        this.declaringType = declaringType;
     }
 
     @Override
-    public ResolvedClassDeclaration declaringType() {
-        return classDeclaration;
+    public N declaringType() {
+        return declaringType;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DefaultConstructorDeclaration implements ResolvedConstructorDeclara
 
     @Override
     public String getName() {
-        return classDeclaration.getName();
+        return declaringType.getName();
     }
 
     @Override
@@ -78,5 +78,10 @@ public class DefaultConstructorDeclaration implements ResolvedConstructorDeclara
     @Override
     public ResolvedType getSpecifiedException(int index) {
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAst() {
+        return Optional.empty();
     }
 }

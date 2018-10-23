@@ -50,6 +50,17 @@ public class CompilationUnitBuildersTest {
         assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
     }
 
+    @Test
+    public void testAddImportArrayTypes() {
+        cu.addImport(CompilationUnit[][][].class);
+        cu.addImport(int[][][].class);
+        cu.addImport(Integer[][][].class);
+        cu.addImport(List[][][].class);
+        assertEquals(2, cu.getImports().size());
+        assertEquals("com.github.javaparser.ast.CompilationUnit", cu.getImport(0).getNameAsString());
+        assertEquals("java.util.List", cu.getImport(1).getNameAsString());
+    }
+
     class testInnerClass {
 
     }

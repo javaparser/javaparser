@@ -41,6 +41,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 /**
  * A for-each statement.
  * <br/><code>for(Object o: objects) { ... }</code>
+ * It was introduced in Java 5.
  *
  * @author Julio Vilmar Gesser
  */

@@ -16,12 +16,19 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StringProvider;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -43,7 +50,7 @@ import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class JavaParserEnumDeclarationTest extends AbstractTest {
+public class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
@@ -838,4 +845,41 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
     // Set<TypeDeclaration> internalTypes()
 
     // Optional<TypeDeclaration> containerType()
+
+    ///
+    /// Annotations
+    ///
+
+    // Issue 1749
+    @Test
+    public void testHasDirectlyAnnotationNegative() {
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(
+                new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT,
+                new StringProvider("public class Employee {"
+                        + "    public enum Weekend { SUNDAY, SATURDAY }"
+                        + "    private Weekend weekend;"
+                        + "}"
+        )).getResult().get();
+        FieldDeclaration field = cu.getClassByName("Employee").get().getMembers().get(1).asFieldDeclaration();
+        ResolvedReferenceTypeDeclaration dec = field.getElementType().resolve().asReferenceType().getTypeDeclaration();
+        assertEquals(false, dec.hasDirectlyAnnotation("javax.persistence.Embeddable"));
+    }
+
+    // Issue 1749
+    @Test
+    public void testHasDirectlyAnnotationPositive() {
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(
+                new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT,
+                new StringProvider("@interface MyAnno {} public class Employee {"
+                        + "    public @MyAnno enum Weekend { SUNDAY, SATURDAY }"
+                        + "    private Weekend weekend;"
+                        + "}"
+                )).getResult().get();
+        FieldDeclaration field = cu.getClassByName("Employee").get().getMembers().get(1).asFieldDeclaration();
+        ResolvedReferenceTypeDeclaration dec = field.getElementType().resolve().asReferenceType().getTypeDeclaration();
+        assertEquals(false, dec.hasDirectlyAnnotation("javax.persistence.Embeddable"));
+        assertEquals(true, dec.hasDirectlyAnnotation("MyAnno"));
+    }
 }

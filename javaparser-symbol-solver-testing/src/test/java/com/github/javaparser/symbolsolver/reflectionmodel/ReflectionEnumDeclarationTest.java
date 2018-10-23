@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReflectionEnumDeclarationTest extends AbstractTest {
+public class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver(false);
 

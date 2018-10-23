@@ -341,7 +341,7 @@ public class NodeTest {
     public void findParent() {
         CompilationUnit cu = parse("class X{int x;}");
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0).getName();
-        assertEquals("int x;", x.findParent(FieldDeclaration.class).get().toString());
+        assertEquals("int x;", x.findAncestor(FieldDeclaration.class).get().toString());
     }
 
     @Test

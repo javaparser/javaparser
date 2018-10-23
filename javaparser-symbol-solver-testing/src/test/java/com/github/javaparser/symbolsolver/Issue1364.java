@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 /**
  * @author Dominik Hardtke
- * @since 02.02.2018
+ * @since 02/02/2018
  */
 public class Issue1364 extends AbstractResolutionTest {
     private JavaParser javaParser;

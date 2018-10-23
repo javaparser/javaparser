@@ -19,7 +19,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -36,7 +36,7 @@ import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static java.util.Comparator.*;
 import static org.junit.Assert.*;
 
-public class ReflectionClassDeclarationTest extends AbstractTest {
+public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 

@@ -17,16 +17,29 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.google.common.collect.ImmutableList;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-class Helper {
+class AstResolutionUtils {
 
     static String containerName(Node container) {
         String packageName = getPackageName(container);
@@ -69,5 +82,35 @@ class Helper {
             return getClassName(base, container.getParentNode().orElse(null));
         }
         return base;
+    }
+
+    static boolean hasDirectlyAnnotation(NodeWithAnnotations<?> nodeWithAnnotations, TypeSolver typeSolver,
+                                         String canonicalName) {
+        for (AnnotationExpr annotationExpr : nodeWithAnnotations.getAnnotations()) {
+            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
+                    .solveType(annotationExpr.getName().getId(), typeSolver);
+            if (ref.isSolved()) {
+                if (ref.getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
+                    return true;
+                }
+            } else {
+                throw new UnsolvedSymbolException(annotationExpr.getName().getId());
+            }
+        }
+        return false;
+    }
+
+    static <N extends ResolvedReferenceTypeDeclaration> List<ResolvedConstructorDeclaration> getConstructors(NodeWithConstructors<?> wrappedNode,
+                                                                TypeSolver typeSolver,
+                                                                N container) {
+        List<ResolvedConstructorDeclaration> declared = wrappedNode.getConstructors().stream()
+                .map(c -> new JavaParserConstructorDeclaration<N>(container, c, typeSolver))
+                .collect(Collectors.toList());
+        if (declared.isEmpty()) {
+            // If there are no constructors insert the default constructor
+            return ImmutableList.of(new DefaultConstructorDeclaration<N>(container));
+        } else {
+            return declared;
+        }
     }
 }

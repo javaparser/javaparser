@@ -25,19 +25,27 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.VoidTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedVoidType;
-import javax.annotation.Generated;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.metamodel.VarTypeMetaModel;
 
+import com.github.javaparser.metamodel.VarTypeMetaModel;
+import com.github.javaparser.ast.Generated;
+
+/**
+ * <h1>A type called "var" waiting for Java to infer it.</h1>
+ * Examples:
+ * <ol>
+ * <li><b>var</b> a = 1;</li>
+ * <li><b>var</b> a = new ArrayList&lt;String>();</li>
+ * </ol>
+ *
+ */
 public final class VarType extends Type {
 
     @AllFieldsConstructor

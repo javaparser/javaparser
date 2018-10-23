@@ -17,36 +17,36 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserConstructorDeclaration implements ResolvedConstructorDeclaration {
+public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration> implements ResolvedConstructorDeclaration {
 
-    private ResolvedClassDeclaration classDeclaration;
+    private N declaringType;
     private com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    JavaParserConstructorDeclaration(ResolvedClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
+    JavaParserConstructorDeclaration(N declaringType, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
                                      TypeSolver typeSolver) {
-        this.classDeclaration = classDeclaration;
+        this.declaringType = declaringType;
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
 
     @Override
-    public ResolvedClassDeclaration declaringType() {
-        return classDeclaration;
+    public N declaringType() {
+        return declaringType;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class JavaParserConstructorDeclaration implements ResolvedConstructorDecl
 
     @Override
     public String getName() {
-        return this.classDeclaration.getName();
+        return this.declaringType.getName();
     }
 
     /**
@@ -99,5 +99,10 @@ public class JavaParserConstructorDeclaration implements ResolvedConstructorDecl
         }
         return JavaParserFacade.get(typeSolver)
                 .convert(wrappedNode.getThrownExceptions().get(index), wrappedNode);
+    }
+
+    @Override
+    public Optional<ConstructorDeclaration> toAst() {
+        return Optional.of(wrappedNode);
     }
 }

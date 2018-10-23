@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -32,6 +33,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
@@ -163,5 +165,10 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
         }
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions()
                 .get(index), wrappedNode);
+    }
+
+    @Override
+    public Optional<MethodDeclaration> toAst() {
+        return Optional.of(wrappedNode);
     }
 }
