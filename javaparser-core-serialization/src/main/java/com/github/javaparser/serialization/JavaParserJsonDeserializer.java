@@ -115,7 +115,7 @@ public class JavaParserJsonDeserializer {
             }
 
             Node node = nodeMetaModel.construct(parameters);
-            // comment is in the property meta model, but not required as constructor parameter.
+            // Comment is in the property meta model, but not required as constructor parameter.
             // Set it after construction
             if (parameters.containsKey(COMMENT_PROPERTY_KEY)) {
                 node.setComment((Comment)parameters.get(COMMENT_PROPERTY_KEY));
