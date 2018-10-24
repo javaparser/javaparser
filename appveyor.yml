@@ -18,9 +18,7 @@ install:
   - cmd: SET M2_HOME=C:\maven\apache-maven-3.2.5
   - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk9
 build_script:
-  - mvn clean package --batch-mode -DskipTest
-test_script:
-  - mvn install --batch-mode
+  - mvn clean install --batch-mode
 cache:
   - C:\maven\
   - C:\Users\appveyor\.m2
