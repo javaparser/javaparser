@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 
@@ -42,13 +43,33 @@ import static com.github.javaparser.serialization.JavaParserJsonSerializer.SERIA
  * Deserializes the JSON file that was built by {@link JavaParserJsonSerializer}.
  */
 public class JavaParserJsonDeserializer {
+    public static final String COMMENT_PROPERTY_KEY =
+            CommentMetaModel.NAME.substring(0, 1).toLowerCase() + CommentMetaModel.NAME.substring(1);
 
+    /**
+     * Deserializes json, contained by JsonReader, into AST node.
+     * The root node and all its child nodes will be deserialized.
+     * @param reader json-p reader (object-level reader, <a href="https://javaee.github.io/jsonp/"></a>see their docs</a>)
+     * @return the root level deserialized node
+     */
     public Node deserializeObject(JsonReader reader) {
         Log.info("Deserializing JSON to Node.");
         JsonObject jsonObject = reader.readObject();
         return deserializeObject(jsonObject);
     }
 
+    /**
+     * Recursive depth-first deserializing method that creates a Node instance from JsonObject.
+     *
+     * @param nodeJson json object at current level containg values as properties
+     * @return deserialized node including all children.
+     * @implNote the Node instance will be constructed by the properties defined in the meta model.
+     *           Non meta properties will be set after Node is instantiated.
+     * @implNote comment is included in the property meta model, but not set when constructing the Node instance.
+     *           That is, comment is not included in the constructor property list, and therefore needs to be set
+     *           after constructing the node.
+     *           See {@link com.github.javaparser.metamodel.BaseNodeMetaModel#construct(Map)} how the node is contructed
+     */
     private Node deserializeObject(JsonObject nodeJson) {
         try {
             String serializedNodeType = nodeJson.getString(SERIALIZED_CLASS_KEY);
@@ -94,10 +115,10 @@ public class JavaParserJsonDeserializer {
             }
 
             Node node = nodeMetaModel.construct(parameters);
-            // Note: comment is a property meta model, but it is not listed as constructor parameter and not attached to node
-            // @see BaseNodeMetaModel.getConstructorParameters
-            if (parameters.containsKey("comment")) {
-                node.setComment((Comment)parameters.get("comment"));
+            // comment is in the property meta model, but not required as constructor parameter.
+            // Set it after construction
+            if (parameters.containsKey(COMMENT_PROPERTY_KEY)) {
+                node.setComment((Comment)parameters.get(COMMENT_PROPERTY_KEY));
             }
 
             for (String name : deferredJsonValues.keySet()) {
@@ -121,16 +142,30 @@ public class JavaParserJsonDeserializer {
         return nodeListJson.stream().map(nodeJson -> deserializeObject((JsonObject) nodeJson)).collect(toNodeList());
     }
 
+    /**
+     * Reads properties from json not included in meta model (i.e., Range and TokenRange).
+     * When read, it sets the deserialized value to the node instance.
+     * @param name property name for json value
+     * @param jsonValue json value that needs to be deserialized for this property
+     * @param node instance to which the deserialized value will be set to
+     * @return true if property is read from json and set to Node instance
+     */
     protected boolean readNonMetaProperties(String name, JsonValue jsonValue, Node node) {
         return readRange(name, jsonValue, node)
                 || readTokenRange(name, jsonValue, node);
     }
 
     protected boolean readRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals("range")) {
+        if (name.equals(JavaParserJsonSerializer.RANGE_PROPERTY_KEY)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
-            Position begin = new Position(jsonObject.getInt("beginLine"), jsonObject.getInt("beginColumn"));
-            Position end = new Position(jsonObject.getInt("endLine"), jsonObject.getInt("endColumn"));
+            Position begin = new Position(
+                    jsonObject.getInt(JavaParserJsonSerializer.RANGE_BEGIN_LINE_PROPERTY_KEY),
+                    jsonObject.getInt(JavaParserJsonSerializer.RANGE_BEGIN_COLUMN_PROPERTY_KEY)
+            );
+            Position end = new Position(
+                    jsonObject.getInt(JavaParserJsonSerializer.RANGE_END_LINE_PROPERTY_KEY),
+                    jsonObject.getInt(JavaParserJsonSerializer.RANGE_END_COLUMN_PROPERTY_KEY)
+            );
             node.setRange(new Range(begin, end));
             return true;
         }
@@ -138,10 +173,14 @@ public class JavaParserJsonDeserializer {
     }
 
     protected boolean readTokenRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals("tokenRange")) {
+        if (name.equals(JavaParserJsonSerializer.TOKEN_RANGE_PROPERTY_KEY)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
-            JavaToken begin = readToken("beginToken", jsonObject);
-            JavaToken end = readToken("endToken", jsonObject);
+            JavaToken begin = readToken(
+                    JavaParserJsonSerializer.TOKEN_RANGE_BEGIN_PROPERTY_KEY, jsonObject
+            );
+            JavaToken end = readToken(
+                    JavaParserJsonSerializer.TOKEN_RANGE_END_PROPERTY_KEY, jsonObject
+            );
             node.setTokenRange(new TokenRange(begin, end));
             return true;
         }
@@ -151,11 +190,20 @@ public class JavaParserJsonDeserializer {
     protected JavaToken readToken(String name, JsonObject jsonObject) {
         JsonObject tokenJson = jsonObject.getJsonObject(name);
         return new JavaToken(
-                tokenJson.getInt("kind"),
-                tokenJson.getString("text")
+                tokenJson.getInt(JavaParserJsonSerializer.TOKEN_KIND_PROPERTY_KEY),
+                tokenJson.getString(JavaParserJsonSerializer.TOKEN_TEXT_PROPERTY_KEY)
         );
     }
 
+    /**
+     * This method sets symbol resolver to Node if it a instance of CompilationUnit
+     * and a SymbolResolver is configured in the static configuration. This is necessary to be able to resolve symbols
+     * within the cu after deserialization. Normally, when parsing java with JavaParser, the symbol resolver is injected
+     * to the cu as data element with key SYMBOL_RESOLVER_KEY.
+     * @param node instance to which symbol resolver will be set to when instance of a Compilation Unit
+     * @see com.github.javaparser.ast.Node#SYMBOL_RESOLVER_KEY
+     * @see com.github.javaparser.ParserConfiguration#ParserConfiguration()
+     */
     private void setSymbolResolverIfCompilationUnit(Node node) {
         if (node instanceof CompilationUnit && JavaParser.getStaticConfiguration().getSymbolResolver().isPresent()) {
             CompilationUnit cu = (CompilationUnit)node;

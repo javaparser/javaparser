@@ -40,12 +40,35 @@ import static java.util.Objects.requireNonNull;
  */
 public class JavaParserJsonSerializer {
     public static final String SERIALIZED_CLASS_KEY = "!";
+    public static final String RANGE_PROPERTY_KEY = "range";
+    public static final String RANGE_BEGIN_LINE_PROPERTY_KEY = "beginLine";
+    public static final String RANGE_BEGIN_COLUMN_PROPERTY_KEY = "beginColumn";
+    public static final String RANGE_END_LINE_PROPERTY_KEY = "endLine";
+    public static final String RANGE_END_COLUMN_PROPERTY_KEY = "endColumn";
+    public static final String TOKEN_RANGE_PROPERTY_KEY = "tokenRange";
+    public static final String TOKEN_RANGE_BEGIN_PROPERTY_KEY = "beginToken";
+    public static final String TOKEN_RANGE_END_PROPERTY_KEY = "endToken";
+    public static final String TOKEN_TEXT_PROPERTY_KEY = "text";
+    public static final String TOKEN_KIND_PROPERTY_KEY = "kind";
 
+    /**
+     * Serializes node and all its children into json. Any node siblings will be ignored.
+     * @param node the node that will be the root level json object
+     * @param generator  the json-p generator for writing the json
+     * @see <a href="https://javaee.github.io/jsonp/">json-p</a>
+     */
     public void serialize(Node node, JsonGenerator generator) {
         requireNonNull(node);
         Log.info("Serializing Node to JSON.");
         serialize(null, node, generator);
     }
+
+    /**
+     * Recursive depth-first method that serializes nodes into json
+     * @param nodeName nullable String. If null, it is the root object, otherwise it is the property key for the object
+     * @param node the current node to be serialized
+     * @param generator the json-p generator for writing the json
+     */
 
     private void serialize(String nodeName, Node node, JsonGenerator generator) {
         requireNonNull(node);
@@ -86,6 +109,13 @@ public class JavaParserJsonSerializer {
         generator.writeEnd();
     }
 
+    /***
+     * This method writes json for properties not included in meta model (i.e., Range and TokenRange).
+     * This method could be overriden so that - for example - tokens are not written to json to save space
+     *
+     * @see com.github.javaparser.metamodel.BaseNodeMetaModel#getAllPropertyMetaModels()
+     */
+
     protected void writeNonMetaProperties(Node node, JsonGenerator generator) {
         this.writeRange(node, generator);
         this.writeTokens(node, generator);
@@ -94,11 +124,11 @@ public class JavaParserJsonSerializer {
     protected void writeRange(Node node, JsonGenerator generator) {
         if (node.getRange().isPresent()) {
             Range range = node.getRange().get();
-            generator.writeStartObject("range");
-            generator.write("beginLine", range.begin.line);
-            generator.write("beginColumn", range.begin.column);
-            generator.write("endLine", range.end.line);
-            generator.write("endColumn", range.end.column);
+            generator.writeStartObject(RANGE_PROPERTY_KEY);
+            generator.write(RANGE_BEGIN_LINE_PROPERTY_KEY, range.begin.line);
+            generator.write(RANGE_BEGIN_COLUMN_PROPERTY_KEY, range.begin.column);
+            generator.write(RANGE_END_LINE_PROPERTY_KEY, range.end.line);
+            generator.write(RANGE_END_COLUMN_PROPERTY_KEY, range.end.column);
             generator.writeEnd();
         }
     }
@@ -106,17 +136,17 @@ public class JavaParserJsonSerializer {
     protected void writeTokens(Node node, JsonGenerator generator) {
         if (node.getTokenRange().isPresent()) {
             TokenRange tokenRange = node.getTokenRange().get();
-            generator.writeStartObject("tokenRange");
-            writeToken("beginToken", tokenRange.getBegin(), generator);
-            writeToken("endToken", tokenRange.getEnd(), generator);
+            generator.writeStartObject(TOKEN_RANGE_PROPERTY_KEY);
+            writeToken(TOKEN_RANGE_BEGIN_PROPERTY_KEY, tokenRange.getBegin(), generator);
+            writeToken(TOKEN_RANGE_END_PROPERTY_KEY, tokenRange.getEnd(), generator);
             generator.writeEnd();
         }
     }
 
     protected void writeToken(String name, JavaToken token, JsonGenerator generator) {
         generator.writeStartObject(name);
-        generator.write("kind", token.getKind());
-        generator.write("text", token.getText());
+        generator.write(TOKEN_KIND_PROPERTY_KEY, token.getKind());
+        generator.write(TOKEN_TEXT_PROPERTY_KEY, token.getText());
         generator.writeEnd();
     }
 
