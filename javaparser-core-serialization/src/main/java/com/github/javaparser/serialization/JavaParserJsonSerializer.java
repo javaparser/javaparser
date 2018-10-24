@@ -26,6 +26,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
@@ -33,13 +34,13 @@ import com.github.javaparser.utils.Log;
 import javax.json.stream.JsonGenerator;
 import java.util.EnumSet;
 
+import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Objects.requireNonNull;
 
 /**
  * Serializes an AST or a partial AST to JSON.
  */
 public class JavaParserJsonSerializer {
-    public static final String SERIALIZED_CLASS_KEY = "!";
 
     /**
      * Serializes node and all its children into json. Any node siblings will be ignored.
@@ -69,7 +70,7 @@ public class JavaParserJsonSerializer {
         } else {
             generator.writeStartObject(nodeName);
         }
-        generator.write(SERIALIZED_CLASS_KEY, node.getClass().getName());
+        generator.write(JsonNode.Class.propertyKey, node.getClass().getName());
         this.writeNonMetaProperties(node, generator);
         for (PropertyMetaModel propertyMetaModel : nodeMetaModel.getAllPropertyMetaModels()) {
             String name = propertyMetaModel.getName();
@@ -114,7 +115,7 @@ public class JavaParserJsonSerializer {
     protected void writeRange(Node node, JsonGenerator generator) {
         if (node.getRange().isPresent()) {
             Range range = node.getRange().get();
-            generator.writeStartObject(JsonRange.Range.propertyKey);
+            generator.writeStartObject(JsonNode.Range.propertyKey);
             generator.write(JsonRange.BeginLine.propertyKey, range.begin.line);
             generator.write(JsonRange.BeginColumn.propertyKey, range.begin.column);
             generator.write(JsonRange.EndLine.propertyKey, range.end.line);
@@ -126,7 +127,7 @@ public class JavaParserJsonSerializer {
     protected void writeTokens(Node node, JsonGenerator generator) {
         if (node.getTokenRange().isPresent()) {
             TokenRange tokenRange = node.getTokenRange().get();
-            generator.writeStartObject(JsonTokenRange.TokenRange.propertyKey);
+            generator.writeStartObject(JsonNode.TokenRange.propertyKey);
             writeToken(JsonTokenRange.BeginToken.propertyKey, tokenRange.getBegin(), generator);
             writeToken(JsonTokenRange.EndToken.propertyKey, tokenRange.getEnd(), generator);
             generator.writeEnd();
@@ -140,8 +141,22 @@ public class JavaParserJsonSerializer {
         generator.writeEnd();
     }
 
-    public enum JsonRange {
+    /** excludes properties from meta model (except comment) **/
+    public enum JsonNode {
         Range("range"),
+        TokenRange("tokenRange"),
+        Comment(decapitalize(CommentMetaModel.NAME)),
+        Class("!");
+        final String propertyKey;
+        JsonNode(String p) {
+            this.propertyKey = p;
+        }
+        public String toString() {
+            return this.propertyKey;
+        }
+    }
+
+    public enum JsonRange {
         BeginLine("beginLine"),
         BeginColumn("beginColumn"),
         EndLine("endLine"),
@@ -155,7 +170,6 @@ public class JavaParserJsonSerializer {
         }
     }
     public enum JsonTokenRange {
-        TokenRange("tokenRange"),
         BeginToken("beginToken"),
         EndToken("endToken");
         final String propertyKey;

@@ -27,7 +27,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 
@@ -38,14 +37,11 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.metamodel.JavaParserMetaModel.getNodeMetaModel;
 import static com.github.javaparser.serialization.JavaParserJsonSerializer.*;
-import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
  * Deserializes the JSON file that was built by {@link JavaParserJsonSerializer}.
  */
 public class JavaParserJsonDeserializer {
-    private static final String COMMENT_PROPERTY_KEY = decapitalize(CommentMetaModel.NAME);
-
     /**
      * Deserializes json, contained by JsonReader, into AST node.
      * The root node and all its child nodes will be deserialized.
@@ -72,14 +68,14 @@ public class JavaParserJsonDeserializer {
      */
     private Node deserializeObject(JsonObject nodeJson) {
         try {
-            String serializedNodeType = nodeJson.getString(SERIALIZED_CLASS_KEY);
+            String serializedNodeType = nodeJson.getString(JsonNode.Class.propertyKey);
             BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
                     .orElseThrow(() -> new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
             Map<String, Object> parameters = new HashMap<>();
             Map<String, JsonValue> deferredJsonValues = new HashMap<>();
 
             for (String name : nodeJson.keySet()) {
-                if (name.equals(SERIALIZED_CLASS_KEY)) {
+                if (name.equals(JsonNode.Class.propertyKey)) {
                     continue;
                 }
 
@@ -117,8 +113,8 @@ public class JavaParserJsonDeserializer {
             Node node = nodeMetaModel.construct(parameters);
             // Comment is in the propertyKey meta model, but not required as constructor parameter.
             // Set it after construction
-            if (parameters.containsKey(COMMENT_PROPERTY_KEY)) {
-                node.setComment((Comment)parameters.get(COMMENT_PROPERTY_KEY));
+            if (parameters.containsKey(JsonNode.Comment.propertyKey)) {
+                node.setComment((Comment)parameters.get(JsonNode.Comment.propertyKey));
             }
 
             for (String name : deferredJsonValues.keySet()) {
@@ -156,7 +152,7 @@ public class JavaParserJsonDeserializer {
     }
 
     protected boolean readRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals(JsonRange.Range.propertyKey)) {
+        if (name.equals(JsonNode.Range.propertyKey)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
             Position begin = new Position(
                     jsonObject.getInt(JsonRange.BeginLine.propertyKey),
@@ -173,7 +169,7 @@ public class JavaParserJsonDeserializer {
     }
 
     protected boolean readTokenRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals(JsonTokenRange.TokenRange.propertyKey)) {
+        if (name.equals(JsonNode.TokenRange.propertyKey)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
             JavaToken begin = readToken(
                     JsonTokenRange.BeginToken.propertyKey, jsonObject
