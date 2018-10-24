@@ -49,7 +49,7 @@ public class JavaParserJsonDeserializer {
     /**
      * Deserializes json, contained by JsonReader, into AST node.
      * The root node and all its child nodes will be deserialized.
-     * @param reader json-p reader (object-level reader, <a href="https://javaee.github.io/jsonp/"></a>see their docs</a>)
+     * @param reader json-p reader (object-level reader, <a href="https://javaee.github.io/jsonp/">see their docs</a>)
      * @return the root level deserialized node
      */
     public Node deserializeObject(JsonReader reader) {
