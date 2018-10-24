@@ -40,16 +40,6 @@ import static java.util.Objects.requireNonNull;
  */
 public class JavaParserJsonSerializer {
     public static final String SERIALIZED_CLASS_KEY = "!";
-    public static final String RANGE_PROPERTY_KEY = "range";
-    public static final String RANGE_BEGIN_LINE_PROPERTY_KEY = "beginLine";
-    public static final String RANGE_BEGIN_COLUMN_PROPERTY_KEY = "beginColumn";
-    public static final String RANGE_END_LINE_PROPERTY_KEY = "endLine";
-    public static final String RANGE_END_COLUMN_PROPERTY_KEY = "endColumn";
-    public static final String TOKEN_RANGE_PROPERTY_KEY = "tokenRange";
-    public static final String TOKEN_RANGE_BEGIN_PROPERTY_KEY = "beginToken";
-    public static final String TOKEN_RANGE_END_PROPERTY_KEY = "endToken";
-    public static final String TOKEN_TEXT_PROPERTY_KEY = "text";
-    public static final String TOKEN_KIND_PROPERTY_KEY = "kind";
 
     /**
      * Serializes node and all its children into json. Any node siblings will be ignored.
@@ -124,11 +114,11 @@ public class JavaParserJsonSerializer {
     protected void writeRange(Node node, JsonGenerator generator) {
         if (node.getRange().isPresent()) {
             Range range = node.getRange().get();
-            generator.writeStartObject(RANGE_PROPERTY_KEY);
-            generator.write(RANGE_BEGIN_LINE_PROPERTY_KEY, range.begin.line);
-            generator.write(RANGE_BEGIN_COLUMN_PROPERTY_KEY, range.begin.column);
-            generator.write(RANGE_END_LINE_PROPERTY_KEY, range.end.line);
-            generator.write(RANGE_END_COLUMN_PROPERTY_KEY, range.end.column);
+            generator.writeStartObject(JsonRange.Range.propertyKey);
+            generator.write(JsonRange.BeginLine.propertyKey, range.begin.line);
+            generator.write(JsonRange.BeginColumn.propertyKey, range.begin.column);
+            generator.write(JsonRange.EndLine.propertyKey, range.end.line);
+            generator.write(JsonRange.EndColumn.propertyKey, range.end.column);
             generator.writeEnd();
         }
     }
@@ -136,18 +126,55 @@ public class JavaParserJsonSerializer {
     protected void writeTokens(Node node, JsonGenerator generator) {
         if (node.getTokenRange().isPresent()) {
             TokenRange tokenRange = node.getTokenRange().get();
-            generator.writeStartObject(TOKEN_RANGE_PROPERTY_KEY);
-            writeToken(TOKEN_RANGE_BEGIN_PROPERTY_KEY, tokenRange.getBegin(), generator);
-            writeToken(TOKEN_RANGE_END_PROPERTY_KEY, tokenRange.getEnd(), generator);
+            generator.writeStartObject(JsonTokenRange.TokenRange.propertyKey);
+            writeToken(JsonTokenRange.BeginToken.propertyKey, tokenRange.getBegin(), generator);
+            writeToken(JsonTokenRange.EndToken.propertyKey, tokenRange.getEnd(), generator);
             generator.writeEnd();
         }
     }
 
     protected void writeToken(String name, JavaToken token, JsonGenerator generator) {
         generator.writeStartObject(name);
-        generator.write(TOKEN_KIND_PROPERTY_KEY, token.getKind());
-        generator.write(TOKEN_TEXT_PROPERTY_KEY, token.getText());
+        generator.write(JsonToken.Kind.propertyKey, token.getKind());
+        generator.write(JsonToken.Text.propertyKey, token.getText());
         generator.writeEnd();
     }
 
+    public enum JsonRange {
+        Range("range"),
+        BeginLine("beginLine"),
+        BeginColumn("beginColumn"),
+        EndLine("endLine"),
+        EndColumn("endColumn");
+        final String propertyKey;
+        JsonRange(String p) {
+            this.propertyKey = p;
+        }
+        public String toString() {
+            return this.propertyKey;
+        }
+    }
+    public enum JsonTokenRange {
+        TokenRange("tokenRange"),
+        BeginToken("beginToken"),
+        EndToken("endToken");
+        final String propertyKey;
+        JsonTokenRange(String p) {
+            this.propertyKey = p;
+        }
+        public String toString() {
+            return this.propertyKey;
+        }
+    }
+    public enum JsonToken {
+        Text("text"),
+        Kind("kind");
+        final String propertyKey;
+        JsonToken(String p) {
+            this.propertyKey = p;
+        }
+        public String toString() {
+            return this.propertyKey;
+        }
+    }
 }
