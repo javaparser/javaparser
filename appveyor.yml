@@ -18,6 +18,8 @@ install:
   - cmd: SET M2_HOME=C:\maven\apache-maven-3.2.5
   - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk9
 build_script:
+  - echo ignore this
+test_script:
   - mvn clean install --batch-mode
 cache:
   - C:\maven\
