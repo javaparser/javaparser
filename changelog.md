@@ -1,3 +1,10 @@
+Version 3.7.0
+------------------
+* BREAKING: `ForeachStmt` is now correctly capitalized: `ForEachStmt`
+* BREAKING: when using modules, everything that was called `...Statement` is now correctly called `...Directive`
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/112?closed=1)
+
 Version 3.6.27
 ------------------
 * The Json serialization now serializes more fields,
