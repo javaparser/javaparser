@@ -47,7 +47,7 @@ public class MetaModelGenerator {
         add(StringLiteralExpr.class);
 
         add(ModuleDeclaration.class);
-        add(ModuleStmt.class);
+        add(ModuleDirective.class);
 
         //
         add(ArrayCreationLevel.class);
@@ -117,7 +117,7 @@ public class MetaModelGenerator {
         add(EmptyStmt.class);
         add(ExplicitConstructorInvocationStmt.class);
         add(ExpressionStmt.class);
-        add(ForeachStmt.class);
+        add(ForEachStmt.class);
         add(ForStmt.class);
         add(IfStmt.class);
         add(LabeledStmt.class);
@@ -142,11 +142,11 @@ public class MetaModelGenerator {
         add(WildcardType.class);
         add(VarType.class);
 
-        add(ModuleRequiresStmt.class);
-        add(ModuleExportsStmt.class);
-        add(ModuleProvidesStmt.class);
-        add(ModuleUsesStmt.class);
-        add(ModuleOpensStmt.class);
+        add(ModuleRequiresDirective.class);
+        add(ModuleExportsDirective.class);
+        add(ModuleProvidesDirective.class);
+        add(ModuleUsesDirective.class);
+        add(ModuleOpensDirective.class);
     }};
 
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";

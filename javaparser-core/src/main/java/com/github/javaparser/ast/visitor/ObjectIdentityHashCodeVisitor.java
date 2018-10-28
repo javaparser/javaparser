@@ -182,7 +182,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    public Integer visit(final ForeachStmt n, final Void arg) {
+    public Integer visit(final ForEachStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -378,27 +378,27 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    public Integer visit(final ModuleRequiresStmt n, final Void arg) {
+    public Integer visit(final ModuleRequiresDirective n, final Void arg) {
         return n.hashCode();
     }
 
     @Override()
-    public Integer visit(final ModuleExportsStmt n, final Void arg) {
+    public Integer visit(final ModuleExportsDirective n, final Void arg) {
         return n.hashCode();
     }
 
     @Override()
-    public Integer visit(final ModuleProvidesStmt n, final Void arg) {
+    public Integer visit(final ModuleProvidesDirective n, final Void arg) {
         return n.hashCode();
     }
 
     @Override()
-    public Integer visit(final ModuleUsesStmt n, final Void arg) {
+    public Integer visit(final ModuleUsesDirective n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final ModuleOpensStmt n, final Void arg) {
+    public Integer visit(final ModuleOpensDirective n, final Void arg) {
         return n.hashCode();
     }
 
