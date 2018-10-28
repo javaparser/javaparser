@@ -759,12 +759,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final ForeachStmt n, final Object arg) {
+    public Visitable visit(final ForEachStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression iterable = cloneNode(n.getIterable(), arg);
         VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ForeachStmt r = new ForeachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
+        ForEachStmt r = new ForEachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
         r.setComment(comment);
         return r;
     }
@@ -875,19 +875,19 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ModuleDeclaration n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
-        NodeList<ModuleStmt> moduleStmts = cloneList(n.getModuleStmts(), arg);
+        NodeList<ModuleDirective> directives = cloneList(n.getDirectives(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleDeclaration r = new ModuleDeclaration(n.getTokenRange().orElse(null), annotations, name, n.isOpen(), moduleStmts);
+        ModuleDeclaration r = new ModuleDeclaration(n.getTokenRange().orElse(null), annotations, name, n.isOpen(), directives);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(final ModuleRequiresStmt n, final Object arg) {
+    public Visitable visit(final ModuleRequiresDirective n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleRequiresStmt r = new ModuleRequiresStmt(n.getTokenRange().orElse(null), n.getModifiers(), name);
+        ModuleRequiresDirective r = new ModuleRequiresDirective(n.getTokenRange().orElse(null), n.getModifiers(), name);
         r.setComment(comment);
         return r;
     }
@@ -924,40 +924,40 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final ModuleExportsStmt n, final Object arg) {
+    public Visitable visit(final ModuleExportsDirective n, final Object arg) {
         NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleExportsStmt r = new ModuleExportsStmt(n.getTokenRange().orElse(null), name, moduleNames);
+        ModuleExportsDirective r = new ModuleExportsDirective(n.getTokenRange().orElse(null), name, moduleNames);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(final ModuleProvidesStmt n, final Object arg) {
+    public Visitable visit(final ModuleProvidesDirective n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         NodeList<Name> with = cloneList(n.getWith(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleProvidesStmt r = new ModuleProvidesStmt(n.getTokenRange().orElse(null), name, with);
+        ModuleProvidesDirective r = new ModuleProvidesDirective(n.getTokenRange().orElse(null), name, with);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(final ModuleUsesStmt n, final Object arg) {
+    public Visitable visit(final ModuleUsesDirective n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleUsesStmt r = new ModuleUsesStmt(n.getTokenRange().orElse(null), name);
+        ModuleUsesDirective r = new ModuleUsesDirective(n.getTokenRange().orElse(null), name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(final ModuleOpensStmt n, final Object arg) {
+    public Visitable visit(final ModuleOpensDirective n, final Object arg) {
         NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleOpensStmt r = new ModuleOpensStmt(n.getTokenRange().orElse(null), name, moduleNames);
+        ModuleOpensDirective r = new ModuleOpensDirective(n.getTokenRange().orElse(null), name, moduleNames);
         r.setComment(comment);
         return r;
     }

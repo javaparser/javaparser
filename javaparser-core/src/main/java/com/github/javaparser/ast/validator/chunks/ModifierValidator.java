@@ -4,7 +4,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.modules.ModuleRequiresStmt;
+import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.stmt.CatchClause;
@@ -156,7 +156,7 @@ public class ModifierValidator extends VisitorValidator {
     }
 
     @Override
-    public void visit(ModuleRequiresStmt n, ProblemReporter reporter) {
+    public void visit(ModuleRequiresDirective n, ProblemReporter reporter) {
         validateModifiers(n, reporter, TRANSITIVE, STATIC);
         super.visit(n, reporter);
     }

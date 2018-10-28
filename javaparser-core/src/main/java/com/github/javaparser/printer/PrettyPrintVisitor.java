@@ -1271,7 +1271,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final ForeachStmt n, final Void arg) {
+    public void visit(final ForEachStmt n, final Void arg) {
         printComment(n.getComment(), arg);
         printer.print("for (");
         n.getVariable().accept(this, arg);
@@ -1574,12 +1574,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("module ");
         n.getName().accept(this, arg);
         printer.println(" {").indent();
-        n.getModuleStmts().accept(this, arg);
+        n.getDirectives().accept(this, arg);
         printer.unindent().println("}");
     }
 
     @Override
-    public void visit(ModuleRequiresStmt n, Void arg) {
+    public void visit(ModuleRequiresDirective n, Void arg) {
         printer.print("requires ");
         printModifiers(n.getModifiers());
         n.getName().accept(this, arg);
@@ -1587,7 +1587,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ModuleExportsStmt n, Void arg) {
+    public void visit(ModuleExportsDirective n, Void arg) {
         printer.print("exports ");
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
@@ -1595,7 +1595,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ModuleProvidesStmt n, Void arg) {
+    public void visit(ModuleProvidesDirective n, Void arg) {
         printer.print("provides ");
         n.getName().accept(this, arg);
         printPrePostFixRequiredList(n.getWith(), arg, " with ", ", ", "");
@@ -1603,14 +1603,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ModuleUsesStmt n, Void arg) {
+    public void visit(ModuleUsesDirective n, Void arg) {
         printer.print("uses ");
         n.getName().accept(this, arg);
         printer.println(";");
     }
 
     @Override
-    public void visit(ModuleOpensStmt n, Void arg) {
+    public void visit(ModuleOpensDirective n, Void arg) {
         printer.print("opens ");
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");

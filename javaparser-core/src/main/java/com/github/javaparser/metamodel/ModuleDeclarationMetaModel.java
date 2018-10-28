@@ -10,9 +10,9 @@ public class ModuleDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel annotationsPropertyMetaModel;
 
-    public PropertyMetaModel isOpenPropertyMetaModel;
+    public PropertyMetaModel directivesPropertyMetaModel;
 
-    public PropertyMetaModel moduleStmtsPropertyMetaModel;
+    public PropertyMetaModel isOpenPropertyMetaModel;
 
     public PropertyMetaModel namePropertyMetaModel;
 }

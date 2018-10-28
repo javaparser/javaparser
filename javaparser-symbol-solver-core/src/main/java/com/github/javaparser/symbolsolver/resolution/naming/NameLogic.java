@@ -189,25 +189,25 @@ public class NameLogic {
         if (whenParentIs(ModuleDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
-        if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleRequiresDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getModuleNames().contains(c))) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(c))) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getModuleNames().contains(c))) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleUsesDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleProvidesDirective.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
@@ -593,16 +593,16 @@ public class NameLogic {
         //
         // 1. In a requires directive in a module declaration (§7.7.1)
 
-        if (whenParentIs(ModuleRequiresStmt.class, name, (p, c) -> p.getName() == name)) {
+        if (whenParentIs(ModuleRequiresDirective.class, name, (p, c) -> p.getName() == name)) {
             return true;
         }
 
         // 2. To the right of to in an exports or opens directive in a module declaration (§7.7.2)
 
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getModuleNames().contains(name))) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getModuleNames().contains(name))) {
             return true;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getModuleNames().contains(name))) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getModuleNames().contains(name))) {
             return true;
         }
 
@@ -613,10 +613,10 @@ public class NameLogic {
         // A name is syntactically classified as a PackageName in these contexts:
         //
         // 1. To the right of exports or opens in a module declaration
-        if (whenParentIs(ModuleExportsStmt.class, name, (p, c) -> p.getName() == name)) {
+        if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getName() == name)) {
             return true;
         }
-        if (whenParentIs(ModuleOpensStmt.class, name, (p, c) -> p.getName() == name)) {
+        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getName() == name)) {
             return true;
         }
         // 2. To the left of the "." in a qualified PackageName
@@ -635,10 +635,10 @@ public class NameLogic {
         //
         // 1. In a uses or provides directive in a module declaration (§7.7.1)
 
-        if (whenParentIs(ModuleUsesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleUsesDirective.class, name, (p, c) -> p.getName() == c)) {
             return true;
         }
-        if (whenParentIs(ModuleProvidesStmt.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(ModuleProvidesDirective.class, name, (p, c) -> p.getName() == c)) {
             return true;
         }
 
