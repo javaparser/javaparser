@@ -206,7 +206,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final ForeachStmt n, final A arg) {
+    public R visit(final ForEachStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -471,27 +471,27 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final ModuleRequiresStmt n, final A arg) {
+    public R visit(final ModuleRequiresDirective n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override()
-    public R visit(final ModuleExportsStmt n, final A arg) {
+    public R visit(final ModuleExportsDirective n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override()
-    public R visit(final ModuleProvidesStmt n, final A arg) {
+    public R visit(final ModuleProvidesDirective n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override()
-    public R visit(final ModuleUsesStmt n, final A arg) {
+    public R visit(final ModuleUsesDirective n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override
-    public R visit(final ModuleOpensStmt n, final A arg) {
+    public R visit(final ModuleOpensDirective n, final A arg) {
         return defaultAction(n, arg);
     }
 

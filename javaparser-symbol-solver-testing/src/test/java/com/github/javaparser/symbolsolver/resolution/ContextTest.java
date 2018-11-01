@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -245,7 +246,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim").get();
 
         Path src = adaptPath("src/test/resources");
-        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
 
@@ -621,7 +622,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
 
     @Test
     public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
-        ForeachStmt foreachStmt = parse("for (int i: myList) { body(); }",
+        ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
                 ParseStart.STATEMENT).asForeachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");

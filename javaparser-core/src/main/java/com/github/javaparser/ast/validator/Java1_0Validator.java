@@ -11,7 +11,7 @@ import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.UnionType;
@@ -71,7 +71,7 @@ public class Java1_0Validator extends Validators {
             Parameter::isVarArgs,
             (n, reporter) -> reporter.report(n, "Varargs are not supported.")
     );
-    protected final Validator noForEach = new SimpleValidator<>(ForeachStmt.class,
+    protected final Validator noForEach = new SimpleValidator<>(ForEachStmt.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "For-each loops are not supported.")
     );

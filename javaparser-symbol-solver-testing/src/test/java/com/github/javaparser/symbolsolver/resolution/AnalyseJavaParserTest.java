@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
@@ -23,6 +24,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -43,15 +45,15 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     private SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(properSrc));
-        combinedTypeSolver.add(new JavaParserTypeSolver(root.resolve("generated")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(properSrc, new LeanParserConfiguration()));
+        combinedTypeSolver.add(new JavaParserTypeSolver(root.resolve("generated"), new LeanParserConfiguration()));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
         return sourceFileInfoExtractor;
     }
 
-    static String readFile(Path file)
+    private static String readFile(Path file)
             throws IOException {
         byte[] encoded = Files.readAllBytes(file);
         return new String(encoded, StandardCharsets.UTF_8);

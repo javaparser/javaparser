@@ -404,7 +404,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final ForeachStmt n, final Visitable arg) {
+    public Boolean visit(final ForEachStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -464,27 +464,27 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final ModuleRequiresStmt n, final Visitable arg) {
+    public Boolean visit(final ModuleRequiresDirective n, final Visitable arg) {
         return n == arg;
     }
 
     @Override()
-    public Boolean visit(final ModuleExportsStmt n, final Visitable arg) {
+    public Boolean visit(final ModuleExportsDirective n, final Visitable arg) {
         return n == arg;
     }
 
     @Override()
-    public Boolean visit(final ModuleProvidesStmt n, final Visitable arg) {
+    public Boolean visit(final ModuleProvidesDirective n, final Visitable arg) {
         return n == arg;
     }
 
     @Override()
-    public Boolean visit(final ModuleUsesStmt n, final Visitable arg) {
+    public Boolean visit(final ModuleUsesDirective n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final ModuleOpensStmt n, final Visitable arg) {
+    public Boolean visit(final ModuleOpensDirective n, final Visitable arg) {
         return n == arg;
     }
 

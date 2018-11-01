@@ -9,30 +9,30 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.ModuleExportsStmtMetaModel;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
+import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
  * An exports directive in module-info.java. <code>exports R.S to T1.U1, T2.U2;</code>
  */
-public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
+public final class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
 
     private Name name;
 
     private NodeList<Name> moduleNames;
 
-    public ModuleExportsStmt() {
+    public ModuleExportsDirective() {
         this(null, new Name(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ModuleExportsStmt(Name name, NodeList<Name> moduleNames) {
+    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {
         this(null, name, moduleNames);
     }
 
@@ -40,7 +40,7 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleExportsStmt(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
+    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
         super(tokenRange);
         setName(name);
         setModuleNames(moduleNames);
@@ -79,10 +79,10 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleExportsStmt setName(final Name name) {
+    public ModuleExportsDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleExportsStmt) this;
+            return (ModuleExportsDirective) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -98,10 +98,10 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleExportsStmt setModuleNames(final NodeList<Name> moduleNames) {
+    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {
-            return (ModuleExportsStmt) this;
+            return (ModuleExportsDirective) this;
         }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
         if (this.moduleNames != null)
@@ -113,14 +113,8 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ModuleExportsStmt clone() {
-        return (ModuleExportsStmt) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ModuleExportsStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.moduleExportsStmtMetaModel;
+    public ModuleExportsDirective clone() {
+        return (ModuleExportsDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -149,23 +143,52 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ModuleExportsStmt asModuleExportsStmt() {
+    public ModuleExportsDirective asModuleExportsStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleExportsStmt(Consumer<ModuleExportsStmt> action) {
+    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ModuleExportsStmt> toModuleExportsStmt() {
+    public Optional<ModuleExportsDirective> toModuleExportsStmt() {
         return Optional.of(this);
     }
 
-    public ModuleExportsStmt addModuleName(String name) {
+    public ModuleExportsDirective addModuleName(String name) {
         moduleNames.add(parseName(name));
         return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleExportsDirective() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleExportsDirective asModuleExportsDirective() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<ModuleExportsDirective> toModuleExportsDirective() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ModuleExportsDirectiveMetaModel getMetaModel() {
+        return JavaParserMetaModel.moduleExportsDirectiveMetaModel;
     }
 }

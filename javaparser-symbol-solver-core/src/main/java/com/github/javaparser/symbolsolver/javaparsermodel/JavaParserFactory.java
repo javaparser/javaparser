@@ -47,8 +47,8 @@ public class JavaParserFactory {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
-        } else if (node instanceof ForeachStmt) {
-            return new ForechStatementContext((ForeachStmt) node, typeSolver);
+        } else if (node instanceof ForEachStmt) {
+            return new ForEachStatementContext((ForEachStmt) node, typeSolver);
         } else if (node instanceof ForStmt) {
             return new ForStatementContext((ForStmt) node, typeSolver);
         } else if (node instanceof LambdaExpr) {
@@ -119,8 +119,8 @@ public class JavaParserFactory {
             }
         } else if (node instanceof IfStmt) {
             return new NoSymbolDeclarator<>((IfStmt) node, typeSolver);
-        } else if (node instanceof ForeachStmt) {
-            ForeachStmt foreachStmt = (ForeachStmt) node;
+        } else if (node instanceof ForEachStmt) {
+            ForEachStmt foreachStmt = (ForEachStmt) node;
             return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);
         } else {
             return new NoSymbolDeclarator<>(node, typeSolver);
