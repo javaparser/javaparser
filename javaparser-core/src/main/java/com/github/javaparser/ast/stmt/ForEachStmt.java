@@ -232,6 +232,7 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForEachStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forEachStmtMetaModel;
     }

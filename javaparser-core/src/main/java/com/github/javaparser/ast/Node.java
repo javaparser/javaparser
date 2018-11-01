@@ -40,20 +40,21 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -576,7 +577,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch (mode) {
+        switch(mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -714,7 +715,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch (traversal) {
+        switch(traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:

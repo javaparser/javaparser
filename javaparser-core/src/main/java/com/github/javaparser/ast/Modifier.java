@@ -22,17 +22,16 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ModifierMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
+import com.github.javaparser.ast.Generated;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -189,6 +188,7 @@ public final class Modifier extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -196,6 +196,7 @@ public final class Modifier extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -203,11 +204,13 @@ public final class Modifier extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Modifier clone() {
         return (Modifier) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModifierMetaModel getMetaModel() {
         return JavaParserMetaModel.modifierMetaModel;
     }
