@@ -143,6 +143,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return ctx.solveMethod(name, parameterTypes, false, typeSolver);
     }
 
+    /**
+     * This method is deprecated because the context is an implementation detail that should not be exposed.
+     * Ideally this method should become private. For this reason all further usages of this method are discouraged.
+     */
     @Deprecated
     public Context getContext() {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
