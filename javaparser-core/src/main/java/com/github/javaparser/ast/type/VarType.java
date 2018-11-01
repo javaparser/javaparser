@@ -30,10 +30,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.metamodel.VarTypeMetaModel;
 import com.github.javaparser.ast.Generated;
 
@@ -44,7 +42,6 @@ import com.github.javaparser.ast.Generated;
  * <li><b>var</b> a = 1;</li>
  * <li><b>var</b> a = new ArrayList&lt;String>();</li>
  * </ol>
- *
  */
 public final class VarType extends Type {
 
