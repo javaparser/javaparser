@@ -9,6 +9,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class Issue1485 extends AbstractSymbolResolutionTest {
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
-        typeSolver.add(new JavaParserTypeSolver(dir));
+        typeSolver.add(new JavaParserTypeSolver(dir, new LeanParserConfiguration()));
 
         JavaParser javaParser = new JavaParser();
         javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));

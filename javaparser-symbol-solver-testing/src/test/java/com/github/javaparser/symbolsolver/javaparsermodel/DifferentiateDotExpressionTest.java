@@ -11,6 +11,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
     public void setup() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/resources/differentiate_dot_expressions")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/resources/differentiate_dot_expressions"), new LeanParserConfiguration()));
         typeSolver = combinedTypeSolver;
     }
 

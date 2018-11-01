@@ -30,6 +30,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
 import java.nio.file.Path;
@@ -92,7 +93,7 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         List<MethodCallExpr> calls = method.findAll(MethodCallExpr.class);
 
         Path src = adaptPath("src/test/resources");
-        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0));
