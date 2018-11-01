@@ -255,6 +255,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return false;
     }
 
+    /**
+     * This method is deprecated because it receives the TypesSolver as a parameter.
+     * Eventually we would like to remove all usages of TypeSolver as a parameter.
+     *
+     * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
+     * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
+     * implementations.
+     */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getName().getId().equals(name)) {
