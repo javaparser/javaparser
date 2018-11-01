@@ -13,6 +13,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class Issue144 extends AbstractResolutionTest {
     @Before
     public void setup() {
         Path srcDir = adaptPath("src/test/resources/issue144");
-        typeSolver = new JavaParserTypeSolver(srcDir);
+        typeSolver = new JavaParserTypeSolver(srcDir, new LeanParserConfiguration());
     }
 
     @Test

@@ -31,6 +31,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,7 +82,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         Path src = Paths.get("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(src)));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(src), new LeanParserConfiguration()));
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
 
@@ -102,7 +103,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         Path src = adaptPath("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(src));
+        combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
 

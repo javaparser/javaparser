@@ -31,7 +31,6 @@ public class NameLogicTestingJss060Test extends AbstractResolutionTest {
         names.addAll(cu.findAll(SimpleName.class));
         names.forEach(n -> {
             NameRole role = NameLogic.classifyRole(n);
-            System.out.println(n.toString() + " -> " + role);
         });
     }
 
@@ -45,7 +44,6 @@ public class NameLogicTestingJss060Test extends AbstractResolutionTest {
         names.forEach(n -> {
             if (NameLogic.classifyRole(n) == NameRole.REFERENCE) {
                 NameCategory nameCategory = NameLogic.syntacticClassificationAccordingToContext(n);
-                System.out.println(n.toString() + " -> " + nameCategory);
             }
         });
     }

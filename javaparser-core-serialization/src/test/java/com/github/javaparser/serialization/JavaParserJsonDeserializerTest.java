@@ -31,6 +31,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
 import org.junit.jupiter.api.Test;
@@ -136,6 +138,33 @@ class JavaParserJsonDeserializerTest {
         assertEquals(methodDeclaration.getComment().isPresent(), true);
         assertEquals(methodDeclaration.getComment().get().getClass().getName(), "com.github.javaparser.ast.comments.LineComment");
         assertEquals(methodDeclaration.getComment().get().getContent(), " line comment");
+    }
+
+    @Test
+    void testJavaDocComment() {
+        CompilationUnit cu = JavaParser.parse("public class X{ " +
+                "     /**\n" +
+                "     * Woke text.\n" +
+                "     * @param a blub\n" +
+                "     * @return true \n" +
+                "     */" +
+                "     public boolean test(int a) { return true; }\n" +
+                "}");
+        String serialized = serialize(cu, false);
+
+        CompilationUnit deserialized = (CompilationUnit)deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        ClassOrInterfaceDeclaration classDeclaration = deserialized.getClassByName("X").get();
+        MethodDeclaration methodDeclaration = classDeclaration.getMethods().get(0);
+        assertEquals(methodDeclaration.getJavadoc().isPresent(), true);
+        Javadoc javadoc = methodDeclaration.getJavadoc().get();
+
+        JavadocBlockTag paramBlockTag = javadoc.getBlockTags().get(0);
+        assertEquals(paramBlockTag.getTagName(), "param");
+        assertEquals(paramBlockTag.getContent().toText(), "blub");
+
+        JavadocBlockTag returnBlockTag = javadoc.getBlockTags().get(1);
+        assertEquals(returnBlockTag.getTagName(), "return");
+        assertEquals(returnBlockTag.getContent().toText(), "true");
     }
 
     @Test

@@ -15,6 +15,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleOpensDirectiveMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
