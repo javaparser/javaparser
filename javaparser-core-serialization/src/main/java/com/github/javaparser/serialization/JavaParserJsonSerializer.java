@@ -145,7 +145,7 @@ public class JavaParserJsonSerializer {
     public enum JsonNode {
         Range("range"),
         TokenRange("tokenRange"),
-        Comment(decapitalize(CommentMetaModel.NAME)),
+        Comment(decapitalize(JavaParserMetaModel.commentMetaModel.getTypeName())),
         Class("!");
         final String propertyKey;
         JsonNode(String p) {
