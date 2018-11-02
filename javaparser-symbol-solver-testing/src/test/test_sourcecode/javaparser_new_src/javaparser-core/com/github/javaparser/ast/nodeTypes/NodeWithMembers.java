@@ -77,7 +77,7 @@ public interface NodeWithMembers<T> {
         fieldDeclaration.getVariables().add(variable);
         variable.setParentNode(fieldDeclaration);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> new NodeList<>())));
+                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         variable.setType(type);
         getMembers().add(fieldDeclaration);
         return fieldDeclaration;
@@ -164,7 +164,7 @@ public interface NodeWithMembers<T> {
         methodDeclaration.setName(methodName);
         methodDeclaration.setType(VOID_TYPE);
         methodDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> new NodeList<>())));
+                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);
         methodDeclaration.setParentNode((Node) this);
         return methodDeclaration;
@@ -179,7 +179,7 @@ public interface NodeWithMembers<T> {
     default ConstructorDeclaration addCtor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> new NodeList<>())));
+                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
         getMembers().add(constructorDeclaration);
         constructorDeclaration.setParentNode((Node) this);
