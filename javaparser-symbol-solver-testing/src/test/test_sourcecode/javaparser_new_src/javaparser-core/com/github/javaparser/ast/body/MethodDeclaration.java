@@ -25,7 +25,11 @@ import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.ensureNotNull;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -44,6 +48,8 @@ import com.github.javaparser.utils.Pair;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.ensureNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -58,7 +64,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithThrowable<MethodDeclaration>, 
         NodeWithBlockStmt<MethodDeclaration> {
 
-    private NodeList<Modifier> modifiers = new NodeList<>();
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<TypeParameter> typeParameters;
 
@@ -81,13 +87,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     public MethodDeclaration() {
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final Type elementType, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name) {
         setModifiers(modifiers);
         setElementType(elementType);
         setName(name);
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final Type elementType, final String name,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type elementType, final String name,
                              final List<Parameter> parameters) {
         setModifiers(modifiers);
         setElementType(elementType);
@@ -95,7 +101,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setParameters(parameters);
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, 
                              final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, 
                              final Type elementType,
@@ -118,7 +124,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     public MethodDeclaration(Range range,
-                             final NodeList<Modifier> modifiers,
+                             final EnumSet<Modifier> modifiers, 
                              final List<AnnotationExpr> annotations,
                              final List<TypeParameter> typeParameters, 
                              final Type elementType,
@@ -162,7 +168,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
      * @return modifiers
      */
     @Override
-    public NodeList<Modifier> getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -212,7 +218,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }

@@ -54,13 +54,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration() {
     }
 
-    public ClassOrInterfaceDeclaration(final NodeList<Modifier> modifiers, final boolean isInterface,
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
         super(modifiers, name);
         setInterface(isInterface);
     }
 
-    public ClassOrInterfaceDeclaration(final NodeList<Modifier> modifiers,
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,
@@ -74,7 +74,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         setImplements(implementsList);
     }
 
-    public ClassOrInterfaceDeclaration(Range range, final NodeList<Modifier> modifiers,
+    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final List<AnnotationExpr> annotations, final boolean isInterface,
                                        final String name,
                                        final List<TypeParameter> typeParameters,

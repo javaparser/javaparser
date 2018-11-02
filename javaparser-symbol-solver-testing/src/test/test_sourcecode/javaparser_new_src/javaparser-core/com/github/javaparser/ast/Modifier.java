@@ -28,11 +28,11 @@ public enum Modifier {
         return lib;
     }
 
-    public NodeList<Modifier> toEnumSet() {
+    public EnumSet<Modifier> toEnumSet() {
         return EnumSet.of(this);
     }
 
-    public static AccessSpecifier getAccessSpecifier(NodeList<Modifier> modifiers) {
+    public static AccessSpecifier getAccessSpecifier(EnumSet<Modifier> modifiers) {
         if (modifiers.contains(Modifier.PUBLIC)) {
             return AccessSpecifier.PUBLIC;
         } else if (modifiers.contains(Modifier.PROTECTED)) {

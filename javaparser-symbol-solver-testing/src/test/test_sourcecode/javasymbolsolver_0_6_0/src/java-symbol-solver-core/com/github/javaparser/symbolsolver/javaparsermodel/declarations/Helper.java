@@ -32,7 +32,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
  */
 class Helper {
 
-    public static AccessLevel toAccessLevel(NodeList<Modifier> modifiers) {
+    public static AccessLevel toAccessLevel(EnumSet<Modifier> modifiers) {
         if (modifiers.contains(Modifier.PRIVATE)) {
             return AccessLevel.PRIVATE;
         } else if (modifiers.contains(Modifier.PROTECTED)) {
