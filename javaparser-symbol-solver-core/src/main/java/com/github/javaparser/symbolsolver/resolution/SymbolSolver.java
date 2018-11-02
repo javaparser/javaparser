@@ -157,6 +157,9 @@ public class SymbolSolver {
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
+     *
+     * Similarly to solveType this should eventually disappear as the symbol resolution logic should be more general
+     * and do not be specific to JavaParser classes like in this case.
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(ResolvedTypeDeclaration typeDeclaration, String name) {
