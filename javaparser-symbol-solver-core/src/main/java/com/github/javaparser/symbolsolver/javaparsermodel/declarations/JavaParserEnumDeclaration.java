@@ -189,12 +189,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
-                                                    TypeSolver typeSolver, Context invokationContext, List<ResolvedType> typeParameterValues) {
+                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
         if (name.equals("values") && parameterTypes.isEmpty()) {
             return Optional.of(new ValuesMethod(this, typeSolver).getUsage(null));
         }
         // TODO add methods inherited from Enum
-        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
+        return getContext().solveMethodAsUsage(name, parameterTypes);
     }
 
     @Override

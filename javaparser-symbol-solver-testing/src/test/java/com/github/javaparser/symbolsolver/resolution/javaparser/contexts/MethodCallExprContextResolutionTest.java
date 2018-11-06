@@ -70,7 +70,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
 
         Context context = new MethodCallExprContext(methodCallExpr, typeSolver);
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList(), typeSolver);
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList());
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
     }
@@ -91,7 +91,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
 
         MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList(), typeSolver);
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList());
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
         assertEquals(Collections.singletonList("java.lang.Integer"), ref.get().typeParametersMap().getTypes().stream().map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
@@ -118,7 +118,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
         List<ResolvedType> argumentsTypes = new ArrayList<>();
         argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes, typeSolver);
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
         assertEquals(Collections.singletonList("java.lang.String"), ref.get().typeParametersMap().getTypes().stream().map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));

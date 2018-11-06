@@ -24,7 +24,6 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.Collections;
@@ -43,27 +42,27 @@ public interface Context {
 
     /* Type resolution */
 
-    default Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
+    default Optional<ResolvedType> solveGenericType(String name) {
         return Optional.empty();
     }
 
-    default SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         Context parent = getParent();
         if (parent == null) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         } else {
-            return parent.solveType(name, typeSolver);
+            return parent.solveType(name);
         }
     }
 
     /* Symbol resolution */
 
-    default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return getParent().solveSymbol(name, typeSolver);
+    default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        return getParent().solveSymbol(name);
     }
 
-    default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name, typeSolver);
+    default Optional<Value> solveSymbolAsValue(String name) {
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name);
         if (ref.isSolved()) {
             Value value = Value.from(ref.getCorrespondingDeclaration());
             return Optional.of(value);
@@ -165,8 +164,7 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes,
-                                                                             TypeSolver typeSolver) {
+    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
         throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
     }
 
@@ -184,7 +182,7 @@ public interface Context {
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
      * resolved type variables.
      */
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();

@@ -120,7 +120,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ctClass.getName().replace('$', '.');
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
@@ -134,14 +134,14 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         final String superclassFQN = getSuperclassFQN();
-        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbolForFQN(name, typeSolver, superclassFQN);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbolForFQN(name, superclassFQN);
         if (ref.isSolved()) {
             return ref;
         }
 
         String[] interfaceFQNs = getInterfaceFQNs();
         for (String interfaceFQN : interfaceFQNs) {
-            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, typeSolver, interfaceFQN);
+            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, interfaceFQN);
             if (interfaceRef.isSolved()) {
                 return interfaceRef;
             }
@@ -150,7 +150,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
-    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, String fqn) {
         if (fqn == null) {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }

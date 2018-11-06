@@ -200,7 +200,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
@@ -248,7 +248,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
         String[] interfaceFQNs = getInterfaceFQNs();
         for (String interfaceFQN : interfaceFQNs) {
-            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, typeSolver, interfaceFQN);
+            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, interfaceFQN);
             if (interfaceRef.isSolved()) {
                 return interfaceRef;
             }
@@ -257,7 +257,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
-    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, String fqn) {
         if (fqn == null) {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }

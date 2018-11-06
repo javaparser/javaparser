@@ -179,7 +179,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(this, typeSolver);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext, List<ResolvedType> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;

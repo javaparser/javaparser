@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -69,7 +68,7 @@ class JavassistUtils {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, argumentsTypes, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -80,7 +79,7 @@ class JavassistUtils {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, null);
+                Optional<MethodUsage> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, argumentsTypes, invokationContext, null);
                 if (ref.isPresent()) {
                     return ref;
                 }

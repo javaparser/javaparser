@@ -39,7 +39,7 @@ public class JavaParserTypeDeclarationAdapter {
         this.context = context;
     }
 
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
@@ -51,9 +51,9 @@ public class JavaParserTypeDeclarationAdapter {
                 if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
                 } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
                 }
             }
         }
@@ -70,7 +70,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Look into extended classes and implemented interfaces
         ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
-        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name, typeSolver));
+        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name));
     }
 
     /**
@@ -154,9 +154,9 @@ public class JavaParserTypeDeclarationAdapter {
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
     }
 
-    public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
         if (typeDeclaration instanceof ResolvedClassDeclaration) {
-            return ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDeclaration).getConstructors(), argumentsTypes, typeSolver);
+            return ConstructorResolutionLogic.findMostApplicable(typeDeclaration.getConstructors(), argumentsTypes, typeSolver);
         }
         return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
     }

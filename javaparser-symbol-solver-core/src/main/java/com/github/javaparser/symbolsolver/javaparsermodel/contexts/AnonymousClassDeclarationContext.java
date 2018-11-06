@@ -95,7 +95,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   }
 
   @Override
-  public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+  public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
     List<com.github.javaparser.ast.body.TypeDeclaration> typeDeclarations =
         myDeclaration
             .findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class);
@@ -121,8 +121,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             .map(internalType ->
                      JavaParserFactory
                          .getContext(internalType, typeSolver)
-                         .solveType(name.substring(internalType.getName().getId().length() + 1),
-                                    typeSolver));
+                         .solveType(name.substring(internalType.getName().getId().length() + 1)));
 
     if (recursiveMatch.isPresent()) {
       return recursiveMatch.get();
@@ -165,19 +164,18 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       }
     }
     
-    return getParent().solveType(name, typeSolver);
+    return getParent().solveType(name);
   }
 
   @Override
-  public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name,
-                                                                         TypeSolver typeSolver) {
+  public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
     Preconditions.checkArgument(typeSolver != null);
 
     if (myDeclaration.hasVisibleField(name)) {
       return SymbolReference.solved(myDeclaration.getVisibleField(name));
     }
 
-    return getParent().solveSymbol(name, typeSolver);
+    return getParent().solveSymbol(name);
   }
 
 }

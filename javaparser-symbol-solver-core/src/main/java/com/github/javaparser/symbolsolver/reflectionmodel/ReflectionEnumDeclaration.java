@@ -165,7 +165,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
             typeSolver,this, clazz);
   }
 
-  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes, TypeSolver typeSolver,
+  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
                                                   Context invokationContext, List<ResolvedType> typeParameterValues) {
     Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
             typeParameterValues, this, clazz);

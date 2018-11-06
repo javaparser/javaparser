@@ -118,7 +118,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedReferenceType> getInterfacesExtended() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
         for (ClassOrInterfaceType t : wrappedNode.getExtendedTypes()) {
-            interfaces.add(new ReferenceTypeImpl(solveType(t.getName().getId(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
+            interfaces.add(new ReferenceTypeImpl(
+                    solveType(t.getName().getId()).getCorrespondingDeclaration().asInterface(), typeSolver));
         }
         return interfaces;
     }
@@ -234,21 +235,21 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
      * implementations.
      */
     @Deprecated
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(this);
         }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name, typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
         if (ref.isSolved()) {
             return ref;
         }
 
         String prefix = wrappedNode.getName() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
 
-        return getContext().getParent().solveType(name, typeSolver);
+        return getContext().getParent().solveType(name);
     }
 
     @Override
@@ -349,10 +350,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             ref = typeSolver.tryToSolveType(typeName);
         }
         if (ref == null || !ref.isSolved()) {
-            ref = solveType(typeName, typeSolver);
+            ref = solveType(typeName);
         }
         if (!ref.isSolved()) {
-            ref = solveType(classOrInterfaceType.getName().getId(), typeSolver);
+            ref = solveType(classOrInterfaceType.getName().getId());
         }
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());

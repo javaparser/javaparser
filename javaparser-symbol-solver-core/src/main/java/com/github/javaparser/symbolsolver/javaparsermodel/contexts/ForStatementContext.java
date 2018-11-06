@@ -44,7 +44,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Expression expression : wrappedNode.getInitialization()) {
             if (expression instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
@@ -61,7 +61,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
         if (requireParentNode(wrappedNode) instanceof NodeWithStatements) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
-            return getParent().solveSymbol(name, typeSolver);
+            return getParent().solveSymbol(name);
         }
     }
 

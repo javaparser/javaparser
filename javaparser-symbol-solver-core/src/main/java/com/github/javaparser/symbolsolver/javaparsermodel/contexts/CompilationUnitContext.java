@@ -69,14 +69,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     ///
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
 
         // solve absolute references
         String itName = name;
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName, typeSolver);
+            SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName);
             if (type.isSolved()) {
                 return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             } else {
@@ -115,7 +115,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
 
         if (wrappedNode.getTypes() != null) {
             // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
@@ -141,15 +141,15 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (name.indexOf('.') > -1) {
                 SymbolReference<ResolvedTypeDeclaration> ref = null;
                 SymbolReference<ResolvedTypeDeclaration> outerMostRef =
-                        solveType(name.substring(0, name.indexOf(".")), typeSolver);
+                        solveType(name.substring(0, name.indexOf(".")));
                 if (outerMostRef != null && outerMostRef.isSolved() &&
                     outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
                     ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                                  .solveType(name.substring(name.indexOf(".") + 1), typeSolver);
+                                  .solveType(name.substring(name.indexOf(".") + 1));
                 } else if (outerMostRef != null && outerMostRef.isSolved() &&
                            outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
                     ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                                  .solveType(name.substring(name.indexOf(".") + 1), typeSolver);
+                                  .solveType(name.substring(name.indexOf(".") + 1));
                 }
                 if (ref != null && ref.isSolved()) {
                     return ref;

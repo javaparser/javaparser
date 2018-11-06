@@ -44,7 +44,7 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
             ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
@@ -63,12 +63,12 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
         while (parentNode instanceof ObjectCreationExpr) {
             parentNode = requireParentNode(parentNode);
         }
-        return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name, typeSolver);
+        return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name);
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveSymbol(name, typeSolver);
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveSymbol(name);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Issue276 extends AbstractResolutionTest{
         for (MethodDeclaration method: methods) {
         	if (method.getNameAsString().equals("overrideMe")) {
         		MethodContext context = new MethodContext(method, typeSolver);
-        		isSolved = context.solveType("FindMeIfYouCan", typeSolver).isSolved();
+        		isSolved = context.solveType("FindMeIfYouCan").isSolved();
         	}
         }
         Assert.assertTrue(isSolved);
