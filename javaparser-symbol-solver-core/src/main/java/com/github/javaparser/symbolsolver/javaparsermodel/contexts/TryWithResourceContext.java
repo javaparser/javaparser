@@ -87,8 +87,8 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+                                                                  boolean staticOnly) {
+        return getParent().solveMethod(name, argumentsTypes, false);
     }
 
     @Override

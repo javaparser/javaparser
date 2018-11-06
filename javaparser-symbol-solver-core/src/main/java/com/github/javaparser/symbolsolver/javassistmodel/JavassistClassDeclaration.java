@@ -192,6 +192,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ancestors;
     }
 
+    @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
@@ -206,27 +207,22 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         // add the method declaration of the superclass to the candidates, if present
         SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic
-                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly);
         if (superClassMethodRef.isSolved()) {
             candidates.add(superClassMethodRef.getCorrespondingDeclaration());
         }
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
-                    staticOnly, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef =
+                    MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
+                                                            staticOnly);
             if (interfaceMethodRef.isSolved()) {
                 candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
             }
         }
 
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
-    }
-
-    @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return solveMethod(name, argumentsTypes, staticOnly);
     }
 
     public ResolvedType getUsage(Node node) {

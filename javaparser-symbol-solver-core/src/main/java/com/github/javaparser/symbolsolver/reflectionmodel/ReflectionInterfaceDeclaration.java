@@ -28,7 +28,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlac
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabalities;
+import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabilities;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, TypeDeclarationWithResolutionCapabalities {
+        implements ResolvedInterfaceDeclaration, TypeDeclarationWithResolutionCapabilities {
 
     ///
     /// Fields
@@ -97,16 +97,11 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return clazz.getCanonicalName();
     }
 
+    @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
                 typeSolver,this, clazz);
-    }
-
-    @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

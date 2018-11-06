@@ -41,8 +41,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   @Override
   public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name,
                                                                 List<ResolvedType> argumentsTypes,
-                                                                boolean staticOnly,
-                                                                TypeSolver typeSolver) {
+                                                                boolean staticOnly) {
     List<ResolvedMethodDeclaration> candidateMethods =
         myDeclaration
             .getDeclaredMethods()
@@ -56,8 +55,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(),
                                                     name,
                                                     argumentsTypes,
-                                                    staticOnly,
-                                                    typeSolver);
+                                                    staticOnly);
         // consider methods from superclasses and only default methods from interfaces :
         // not true, we should keep abstract as a valid candidate
         // abstract are removed in MethodResolutionLogic.isApplicable is necessary
@@ -71,7 +69,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     // see issue #75
     if (candidateMethods.isEmpty()) {
       SymbolReference<ResolvedMethodDeclaration> parentSolution =
-          getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+          getParent().solveMethod(name, argumentsTypes, staticOnly);
       if (parentSolution.isSolved()) {
         candidateMethods.add(parentSolution.getCorrespondingDeclaration());
       }
@@ -84,8 +82,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
                                                                                  typeSolver),
                                                   name,
                                                   argumentsTypes,
-                                                  false,
-                                                  typeSolver);
+                                                  false);
       if (res.isSolved()) {
         candidateMethods.add(res.getCorrespondingDeclaration());
       }

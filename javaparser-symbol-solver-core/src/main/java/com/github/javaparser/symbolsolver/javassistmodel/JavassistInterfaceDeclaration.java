@@ -25,7 +25,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabalities;
+import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabilities;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, TypeDeclarationWithResolutionCapabalities {
+        implements ResolvedInterfaceDeclaration, TypeDeclarationWithResolutionCapabilities {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -102,6 +102,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
 
+    @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
@@ -138,12 +139,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         }
 
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
-    }
-
-    @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

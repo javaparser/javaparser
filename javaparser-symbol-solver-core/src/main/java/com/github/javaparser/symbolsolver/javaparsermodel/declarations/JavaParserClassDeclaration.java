@@ -140,7 +140,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, false, typeSolver);
+        return ctx.solveMethod(name, parameterTypes, false);
     }
 
     /**
@@ -283,8 +283,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+                                                                  boolean staticOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

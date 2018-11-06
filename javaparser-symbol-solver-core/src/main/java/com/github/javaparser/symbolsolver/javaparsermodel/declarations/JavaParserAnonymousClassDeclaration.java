@@ -64,8 +64,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                boolean staticOnly, TypeSolver typeSolver) {
-    return getContext().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+                                                                boolean staticOnly) {
+    return getContext().solveMethod(name, argumentsTypes, staticOnly);
   }
 
   @Override
