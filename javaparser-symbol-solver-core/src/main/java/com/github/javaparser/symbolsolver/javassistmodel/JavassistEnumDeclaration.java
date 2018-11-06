@@ -25,6 +25,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabalities;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -45,7 +46,8 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements ResolvedEnumDeclaration {
+public class JavassistEnumDeclaration extends AbstractTypeDeclaration
+        implements ResolvedEnumDeclaration, TypeDeclarationWithResolutionCapabalities {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -196,6 +198,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         }
 
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly, TypeSolver typeSolver) {
+        return solveMethod(name, argumentsTypes, staticOnly);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,

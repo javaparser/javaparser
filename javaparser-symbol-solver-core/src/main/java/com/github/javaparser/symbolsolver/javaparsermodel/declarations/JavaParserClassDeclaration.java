@@ -270,6 +270,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly, TypeSolver typeSolver) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+    }
+
+    @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 

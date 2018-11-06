@@ -167,6 +167,12 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly, TypeSolver typeSolver) {
+        return solveMethod(name, argumentsTypes, staticOnly);
+    }
+
+    @Override
     public String toString() {
         return "ReflectionClassDeclaration{" +
                 "clazz=" + getId() +
@@ -354,5 +360,4 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     protected ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
-
 }

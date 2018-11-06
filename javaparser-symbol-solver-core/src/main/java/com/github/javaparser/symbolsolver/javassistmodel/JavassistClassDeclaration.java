@@ -223,6 +223,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly, TypeSolver typeSolver) {
+        return solveMethod(name, argumentsTypes, staticOnly);
+    }
+
     public ResolvedType getUsage(Node node) {
         return new ReferenceTypeImpl(this, typeSolver);
     }

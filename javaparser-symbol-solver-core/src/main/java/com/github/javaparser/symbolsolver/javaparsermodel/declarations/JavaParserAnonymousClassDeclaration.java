@@ -11,6 +11,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.google.common.collect.ImmutableList;
@@ -59,6 +60,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   
   public Context getContext() {
       return JavaParserFactory.getContext(wrappedNode, typeSolver);
+  }
+
+  @Override
+  public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                boolean staticOnly, TypeSolver typeSolver) {
+    return getContext().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
   }
 
   @Override
