@@ -21,7 +21,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;

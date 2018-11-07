@@ -26,13 +26,11 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 
 import javax.json.stream.JsonGenerator;
-import java.util.EnumSet;
 
 import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Objects.requireNonNull;
@@ -81,13 +79,6 @@ public class JavaParserJsonSerializer {
                     generator.writeStartArray(name);
                     for (Node n : list) {
                         serialize(null, n, generator);
-                    }
-                    generator.writeEnd();
-                } else if (propertyMetaModel.isEnumSet()) {
-                    EnumSet<? extends Enum> set = (EnumSet<? extends Enum>) value;
-                    generator.writeStartArray(name);
-                    for (Enum n : set) {
-                        generator.write(n.name());
                     }
                     generator.writeEnd();
                 } else if (propertyMetaModel.isNode()) {

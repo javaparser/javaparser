@@ -111,11 +111,7 @@ public class PropertyGenerator extends NodeGenerator {
         String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
         EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
         if (isAttribute) {
-            if (property.isEnumSet()) {
-                enumConstantDeclaration.addArgument("Type.MULTIPLE_ATTRIBUTE");
-            } else {
-                enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
-            }
+            enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
         } else {
             if (property.isNodeList()) {
                 enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
