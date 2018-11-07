@@ -46,20 +46,20 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
 	private NameExpr name;
 
-    private NodeList<Modifier> modifiers = new NodeList<>();
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<BodyDeclaration<?>> members;
 
 	public TypeDeclaration() {
 	}
 
-    public TypeDeclaration(NodeList<Modifier> modifiers, String name) {
+    public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
 		setName(name);
 		setModifiers(modifiers);
 	}
 
 	public TypeDeclaration(List<AnnotationExpr> annotations,
-                           NodeList<Modifier> modifiers, String name,
+                           EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(annotations);
 		setName(name);
@@ -68,7 +68,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 	}
 
 	public TypeDeclaration(Range range, List<AnnotationExpr> annotations,
-                           NodeList<Modifier> modifiers, String name,
+                           EnumSet<Modifier> modifiers, String name,
                            List<BodyDeclaration<?>> members) {
 		super(range, annotations);
 		setName(name);
@@ -107,7 +107,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
      * @return modifiers
      */
 	@Override
-    public final NodeList<Modifier> getModifiers() {
+    public final EnumSet<Modifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -126,7 +126,7 @@ public abstract class TypeDeclaration<T> extends BodyDeclaration<T>
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setModifiers(NodeList<Modifier> modifiers) {
+    public T setModifiers(EnumSet<Modifier> modifiers) {
 		this.modifiers = modifiers;
         return (T) this;
 	}

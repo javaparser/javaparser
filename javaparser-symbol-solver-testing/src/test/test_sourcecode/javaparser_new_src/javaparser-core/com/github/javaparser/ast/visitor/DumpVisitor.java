@@ -125,7 +125,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
 		return printer.getSource();
 	}
 
-	private void printModifiers(final NodeList<Modifier> modifiers) {
+	private void printModifiers(final EnumSet<Modifier> modifiers) {
 		if (modifiers.size() > 0)
 			printer.print(modifiers.stream().map(Modifier::getLib).collect(Collectors.joining(" ")) + " ");
 	}

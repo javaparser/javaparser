@@ -53,7 +53,7 @@ public final class Parameter extends Node implements
 
     private boolean isVarArgs;
 
-    private NodeList<Modifier> modifiers = new NodeList<>();
+    private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 
     private List<AnnotationExpr> annotations;
 
@@ -82,14 +82,14 @@ public final class Parameter extends Node implements
         return new Parameter(elementType, new VariableDeclaratorId(name));
     }
 
-    public Parameter(NodeList<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
+    public Parameter(EnumSet<Modifier> modifiers, Type elementType, VariableDeclaratorId id) {
         setModifiers(modifiers);
         setId(id);
         setElementType(elementType);
     }
 
     public Parameter(final Range range, 
-                     NodeList<Modifier> modifiers,
+                     EnumSet<Modifier> modifiers, 
                      List<AnnotationExpr> annotations, 
                      Type elementType,
                      List<ArrayBracketPair> arrayBracketPairsAfterElementType,
@@ -173,7 +173,7 @@ public final class Parameter extends Node implements
      * @return modifiers
      */
     @Override
-    public NodeList<Modifier> getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -196,7 +196,7 @@ public final class Parameter extends Node implements
 
     @Override
     @SuppressWarnings("unchecked")
-    public Parameter setModifiers(NodeList<Modifier> modifiers) {
+    public Parameter setModifiers(EnumSet<Modifier> modifiers) {
         this.modifiers = modifiers;
         return this;
     }

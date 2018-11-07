@@ -24,6 +24,7 @@ package com.github.javaparser.ast.body;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.DocumentableNode;
 import com.github.javaparser.ast.NamedNode;
 import com.github.javaparser.ast.TypeParameter;

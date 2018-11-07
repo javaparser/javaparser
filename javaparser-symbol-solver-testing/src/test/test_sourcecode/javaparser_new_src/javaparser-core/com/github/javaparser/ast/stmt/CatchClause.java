@@ -54,7 +54,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     public CatchClause(final Range range,
-                       final NodeList<Modifier> exceptModifier,
+                       final EnumSet<Modifier> exceptModifier, 
                        final List<AnnotationExpr> exceptAnnotations,
                        final Type exceptType,
                        final VariableDeclaratorId exceptId, 

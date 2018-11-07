@@ -34,11 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class EmptyTypeDeclaration extends TypeDeclaration<EmptyTypeDeclaration> {
 
     public EmptyTypeDeclaration() {
-        super(null, new NodeList<>(), null, null);
+        super(null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     public EmptyTypeDeclaration(Range range) {
-        super(range, null, new NodeList<>(), null, null);
+        super(range, null, EnumSet.noneOf(Modifier.class), null, null);
     }
 
     @Override

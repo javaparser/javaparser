@@ -57,25 +57,25 @@ final class ASTParser implements ASTParserConstants {
     }
 
         private class ModifierHolder {
-                final NodeList<Modifier> modifiers;
+                final EnumSet<Modifier> modifiers;
                 final List<AnnotationExpr> annotations;
                 final Position begin;
 
-                public ModifierHolder(Position begin, NodeList<Modifier> modifiers, List<AnnotationExpr> annotations) {
+                public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations) {
                         this.begin = begin;
                         this.modifiers = modifiers;
                         this.annotations = annotations;
                 }
         }
 
-    public void addModifier(NodeList<Modifier> modifiers, Modifier mod) {
+    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
             addProblem("Duplicated modifier");
         }
         modifiers.add(mod);
     }
 
-    public void addMultipleModifier(NodeList<Modifier> modifiers, NodeList<Modifier> mods) {
+    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods) {
         if(mods == null)
             return;
         for(Modifier m : mods)
@@ -108,14 +108,14 @@ final class ASTParser implements ASTParserConstants {
                 Expression inner = ((EnclosedExpr) ret).getInner();
                 if (inner != null && inner instanceof NameExpr) {
                     VariableDeclaratorId id = new VariableDeclaratorId(inner.getRange(), ((NameExpr)inner).getName(), null);
-                    List<Parameter> params = add(null, new Parameter(ret.getRange(), new NodeList<>(), null, new UnknownType(), null, false, id));
+                    List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
                     ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
                 } else {
                     ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), null, lambdaBody, true);
                 }
             } else if (ret instanceof NameExpr) {
                     VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr)ret).getName(), null);
-                List<Parameter> params = add(null, new Parameter(ret.getRange(), new NodeList<>(), null, new UnknownType(), null, false, id));
+                List<Parameter> params = add(null, new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
                 ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
             } else if (ret instanceof LambdaExpr) {
                 ((LambdaExpr) ret).setBody(lambdaBody);
@@ -340,7 +340,7 @@ return new ImportDeclaration(range(begin, tokenEnd()),name, isStatic, isAsterisk
  */
   final public 
 ModifierHolder Modifiers() {Position begin = INVALID;
-    NodeList<Modifier> modifiers = new NodeList<>();
+    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
     List<AnnotationExpr> annotations = null;
     AnnotationExpr ann;
     label_3:
@@ -863,7 +863,7 @@ return ret;
 
   final public BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface) {ModifierHolder modifier;
    ModifierHolder modifier2 = null;
-   NodeList<Modifier> aux = null;
+   EnumSet<Modifier> aux = null;
    BodyDeclaration<?> ret;
    boolean isDefault = false;
 
@@ -1346,7 +1346,7 @@ return ret;
   VariableDeclaratorId id;
     jj_consume_token(COMMA);
     id = VariableDeclaratorId();
-ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), new NodeList<>(), null, new UnknownType(), null, false, id));
+ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
     label_19:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -1360,7 +1360,7 @@ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), new NodeList<>()
       }
       jj_consume_token(COMMA);
       id = VariableDeclaratorId();
-ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), new NodeList<>(), null, new UnknownType(), null, false, id));
+ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id));
     }
 return ret;
   }
@@ -2999,7 +2999,7 @@ if(!isLambda) { ret = new EnclosedExpr(range(begin, tokenEnd()), ret);}
                                           if(ret instanceof NameExpr)
                                           {
                                             id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), null);
-                                            p = new Parameter(range(ret.getBegin(), ret.getEnd()), new NodeList<>(), null, new UnknownType(), null, false, id);
+                                            p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), null, new UnknownType(), null, false, id);
                                           }
 
                                         }

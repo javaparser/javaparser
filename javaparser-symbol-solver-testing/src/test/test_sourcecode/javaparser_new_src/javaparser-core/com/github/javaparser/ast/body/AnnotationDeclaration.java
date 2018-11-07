@@ -39,16 +39,16 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     public AnnotationDeclaration() {
     }
 
-    public AnnotationDeclaration(NodeList<Modifier> modifiers, String name) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
         super(modifiers, name);
     }
 
-    public AnnotationDeclaration(NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                                  List<BodyDeclaration<?>> members) {
         super(annotations, modifiers, name, members);
     }
 
-    public AnnotationDeclaration(Range range, NodeList<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, List<AnnotationExpr> annotations, String name,
                                  List<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
     }
