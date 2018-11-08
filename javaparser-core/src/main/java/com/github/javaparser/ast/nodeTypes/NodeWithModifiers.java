@@ -91,6 +91,13 @@ public interface NodeWithModifiers<N extends Node> {
     }
 
     /**
+     * Creates a list of modifier nodes corresponding to the keywords passed, and set it.
+     */
+    default N setModifiers(final Modifier.Keyword... modifiers) {
+        return setModifiers(Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList()));
+    }
+
+    /**
      * @return Modifier.Keyword.PUBLIC, Modifier.Keyword.PROTECTED,
      * Modifier.Keyword.PRIVATE, or Modifier.Keyword.DEFAULT when none of the others exists.
      */
@@ -104,6 +111,5 @@ public interface NodeWithModifiers<N extends Node> {
             }
         }
         return Modifier.Keyword.DEFAULT;
-
     }
 }

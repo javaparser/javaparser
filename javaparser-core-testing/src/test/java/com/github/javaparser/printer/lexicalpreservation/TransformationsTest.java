@@ -36,7 +36,7 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     public void example1() throws IOException {
         considerExample("Example1_original");
-        cu.getClassByName("A").get().getFieldByName("a").get().addModifier(STATIC);
+        cu.getClassByName("A").get().getFieldByName("a").get().setModifiers(STATIC);
         assertTransformed("Example1", cu);
     }
 
