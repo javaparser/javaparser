@@ -23,6 +23,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
+import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabilities;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -34,7 +35,8 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implements ResolvedEnumDeclaration {
+public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
+        implements ResolvedEnumDeclaration, TypeDeclarationWithResolutionCapabilities {
 
   ///
   /// Fields
@@ -157,12 +159,13 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
     return reflectionClassAdapter.getTypeParameters();
   }
 
+  @Override
   public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
     return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
             typeSolver,this, clazz);
   }
 
-  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes, TypeSolver typeSolver,
+  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
                                                   Context invokationContext, List<ResolvedType> typeParameterValues) {
     Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
             typeParameterValues, this, clazz);

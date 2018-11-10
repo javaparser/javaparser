@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
@@ -47,7 +46,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
     }
 
     @Override
-    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+    public Optional<Value> solveSymbolAsValue(String name) {
         for (Expression expr : wrappedNode.getResources()) {
             if (expr instanceof VariableDeclarationExpr) {
                 for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
@@ -62,12 +61,12 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
         if (requireParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
         } else {
-            return getParent().solveSymbolAsValue(name, typeSolver);
+            return getParent().solveSymbolAsValue(name);
         }
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Expression expr : wrappedNode.getResources()) {
             if (expr instanceof VariableDeclarationExpr) {
                 for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
@@ -81,14 +80,14 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
         if (requireParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
-            return getParent().solveSymbol(name, typeSolver);
+            return getParent().solveSymbol(name);
         }
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+                                                                  boolean staticOnly) {
+        return getParent().solveMethod(name, argumentsTypes, false);
     }
 
     @Override

@@ -30,7 +30,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         super(wrappedNode, typeSolver);
     }
 
-    public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
@@ -40,24 +40,24 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name, typeSolver);
+        return getParent().solveSymbol(name);
     }
 
     @Override
-    public final Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
+    public final Optional<ResolvedType> solveGenericType(String name) {
         for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
-        return super.solveGenericType(name, typeSolver);
+        return super.solveGenericType(name);
     }
 
     @Override
-    public final Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+    public final Optional<Value> solveSymbolAsValue(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
+            Optional<Value> symbolReference = solveWithAsValue(sb, name);
             if (symbolReference.isPresent()) {
                 // Perform parameter type substitution as needed
                 return symbolReference;
@@ -65,11 +65,11 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbolAsValue(name, typeSolver);
+        return getParent().solveSymbolAsValue(name);
     }
 
     @Override
-    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().getId().equals(name)) {
@@ -86,16 +86,16 @@ public abstract class AbstractMethodLikeDeclarationContext
                 return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
             } else if (name.startsWith(String.format("%s.", localType.getName()))) {
                 return JavaParserFactory.getContext(localType, typeSolver).solveType(
-                        name.substring(localType.getName().getId().length() + 1), typeSolver);
+                        name.substring(localType.getName().getId().length() + 1));
             }
         }
         
-        return getParent().solveType(name, typeSolver);
+        return getParent().solveType(name);
     }
 
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
-        return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return getParent().solveMethod(name, argumentsTypes, false);
     }
 }

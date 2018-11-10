@@ -22,6 +22,6 @@ public class Issue232 extends AbstractResolutionTest {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         Context context = JavaParserFactory.getContext(cls, typeSolver);
-        SymbolReference<ResolvedTypeDeclaration> reference = context.solveType("OfPrimitive<Double, DoubleConsumer, OfDouble>", typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> reference = context.solveType("OfPrimitive<Double, DoubleConsumer, OfDouble>");
     }
 }

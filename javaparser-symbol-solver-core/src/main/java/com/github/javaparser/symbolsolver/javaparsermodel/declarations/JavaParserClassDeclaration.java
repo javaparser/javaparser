@@ -33,7 +33,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import com.google.common.collect.ImmutableList;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -140,7 +139,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, false, typeSolver);
+        return ctx.solveMethod(name, parameterTypes, false);
     }
 
     /**
@@ -256,29 +255,32 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     /**
-     * This method is deprecated because it receives the TypesSolver as a parameter.
-     * Eventually we would like to remove all usages of TypeSolver as a parameter.
-     *
-     * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
+     * Resolution should move out of declarations, so that they are pure declarations and the resolution should
      * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
      * implementations.
      */
     @Deprecated
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(this);
         }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name, typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
         if (ref.isSolved()) {
             return ref;
         }
 
         String prefix = wrappedNode.getName() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
 
-        return getContext().getParent().solveType(name, typeSolver);
+        return getContext().getParent().solveType(name);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override
@@ -399,12 +401,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             // look for the qualified name (for example class of type Rectangle2D.Double)
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
-        SymbolReference<ResolvedTypeDeclaration> ref = solveType(className, typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
         if (!ref.isSolved()) {
             Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
             if (localScope.isPresent()) {
                 String localName = localScope.get().getName().getId() + "." + classOrInterfaceType.getName().getId();
-                ref = solveType(localName, typeSolver);
+                ref = solveType(localName);
             }
         }
         if (!ref.isSolved()) {

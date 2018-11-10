@@ -44,10 +44,10 @@ public class MethodDeclarationCommonLogic {
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
-        ResolvedType returnType = replaceTypeParams(methodDeclaration.getReturnType(), typeSolver, context);
+        ResolvedType returnType = replaceTypeParams(methodDeclaration.getReturnType(), context);
         List<ResolvedType> params = new ArrayList<>();
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
-            ResolvedType replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), typeSolver, context);
+            ResolvedType replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), context);
             params.add(replaced);
         }
 
@@ -66,11 +66,11 @@ public class MethodDeclarationCommonLogic {
         return new MethodUsage(methodDeclaration, params, returnType);
     }
 
-    private ResolvedType replaceTypeParams(ResolvedType type, TypeSolver typeSolver, Context context) {
+    private ResolvedType replaceTypeParams(ResolvedType type, Context context) {
         if (type.isTypeVariable()) {
             ResolvedTypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnType()) {
-                Optional<ResolvedType> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
+                Optional<ResolvedType> typeParam = typeParamByName(typeParameter.getName(), context);
                 if (typeParam.isPresent()) {
                     type = typeParam.get();
                 }
@@ -78,13 +78,13 @@ public class MethodDeclarationCommonLogic {
         }
 
         if (type.isReferenceType()) {
-            type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp, typeSolver, context));
+            type.asReferenceType().transformTypeParameters(tp -> replaceTypeParams(tp, context));
         }
 
         return type;
     }
 
-    protected Optional<ResolvedType> typeParamByName(String name, TypeSolver typeSolver, Context context) {
+    protected Optional<ResolvedType> typeParamByName(String name, Context context) {
         return methodDeclaration.getTypeParameters().stream().filter(tp -> tp.getName().equals(name)).map(tp -> toType(tp)).findFirst();
     }
 
