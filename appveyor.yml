@@ -16,8 +16,7 @@ install:
   - cmd: SET MAVEN_OPTS=-Xmx1g
   - cmd: SET JAVA_OPTS=-Xmx1g
   - cmd: SET M2_HOME=C:\maven\apache-maven-3.2.5
-  - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk9
-  - cmd: dir C:\Program Files\Java\
+  - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk10
 build_script:
   - echo ignore this
 test_script:
