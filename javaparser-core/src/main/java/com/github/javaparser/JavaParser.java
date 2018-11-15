@@ -125,6 +125,11 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
+
+        for (PreProcessor preProcessor : configuration.getPreProcessors()) {
+            provider = preProcessor.process(provider);
+        }
+
         final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
