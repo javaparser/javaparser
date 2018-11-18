@@ -1,3 +1,11 @@
+Version 3.8.0
+------------------
+* Unicode preprocessing is back, but it is optional. See ParserConfiguration.
+* *compiling and releasing* JavaParser is now done with JDK11. It should still be compatible with Java 8.
+Tell us in an issue when anything is broken.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/114?closed=1)
+
 Version 3.7.1
 ------------------
 * slightly breaking: the enum constants in JsonToken are now capitalized.
