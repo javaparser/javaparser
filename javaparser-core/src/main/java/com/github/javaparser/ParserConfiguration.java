@@ -28,6 +28,7 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
+import com.github.javaparser.version.Java12PostProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,9 @@ public class ParserConfiguration {
         /** Java 10 */
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
         /** Java 11 */
-        JAVA_11(new Java11Validator(), new Java11PostProcessor());
+        JAVA_11(new Java11Validator(), new Java11PostProcessor()),
+        /** Java 12 */
+        JAVA_12(new Java12Validator(), new Java12PostProcessor());
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
