@@ -65,13 +65,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         return printer.getSource();
     }
 
-    private void printModifiers(final EnumSet<Modifier> modifiers) {
+    protected void printModifiers(final EnumSet<Modifier> modifiers) {
         if (modifiers.size() > 0) {
             printer.print(modifiers.stream().map(Modifier::asString).collect(Collectors.joining(" ")) + " ");
         }
     }
 
-    private void printMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
+    protected void printMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
         for (final BodyDeclaration<?> member : members) {
             printer.println();
             member.accept(this, arg);
@@ -79,7 +79,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printMemberAnnotations(final NodeList<AnnotationExpr> annotations, final Void arg) {
+    protected void printMemberAnnotations(final NodeList<AnnotationExpr> annotations, final Void arg) {
         if (annotations.isEmpty()) {
             return;
         }
@@ -89,7 +89,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace,
+    protected void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace,
                                   final Void arg) {
         if (annotations.isEmpty()) {
             return;
@@ -103,7 +103,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Void arg) {
+    protected void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Void arg) {
         NodeList<Type> typeArguments = nodeWithTypeArguments.getTypeArguments().orElse(null);
         if (!isNullOrEmpty(typeArguments)) {
             printer.print("<");
@@ -118,7 +118,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printTypeParameters(final NodeList<TypeParameter> args, final Void arg) {
+    protected void printTypeParameters(final NodeList<TypeParameter> args, final Void arg) {
         if (!isNullOrEmpty(args)) {
             printer.print("<");
             for (final Iterator<TypeParameter> i = args.iterator(); i.hasNext(); ) {
@@ -132,7 +132,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printArguments(final NodeList<Expression> args, final Void arg) {
+    protected void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
         if (!isNullOrEmpty(args)) {
             boolean columnAlignParameters = (args.size() > 1) && configuration.isColumnAlignParameters();
@@ -158,7 +158,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print(")");
     }
 
-    private void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    protected void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         if (!args.isEmpty()) {
             printer.print(prefix);
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -172,7 +172,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printPrePostFixRequiredList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    protected void printPrePostFixRequiredList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         printer.print(prefix);
         if (!args.isEmpty()) {
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -186,7 +186,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print(postfix);
     }
 
-    private void printComment(final Optional<Comment> comment, final Void arg) {
+    protected void printComment(final Optional<Comment> comment, final Void arg) {
         comment.ifPresent(c -> c.accept(this, arg));
     }
 
@@ -1622,7 +1622,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("???;");
     }
 
-    private void printOrphanCommentsBeforeThisChildNode(final Node node) {
+    protected void printOrphanCommentsBeforeThisChildNode(final Node node) {
         if (configuration.isIgnoreComments()) return;
         if (node instanceof Comment) return;
 
@@ -1652,7 +1652,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printOrphanCommentsEnding(final Node node) {
+    protected void printOrphanCommentsEnding(final Node node) {
         if (configuration.isIgnoreComments()) return;
 
         List<Node> everything = new LinkedList<>();
