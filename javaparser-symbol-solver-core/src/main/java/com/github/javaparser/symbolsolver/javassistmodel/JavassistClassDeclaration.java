@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistClassDeclaration extends AbstractClassDeclaration {
+public class JavassistClassDeclaration extends AbstractClassDeclaration implements MethodUsageResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
