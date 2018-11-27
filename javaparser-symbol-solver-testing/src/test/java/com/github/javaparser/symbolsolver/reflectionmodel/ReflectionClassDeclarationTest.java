@@ -32,8 +32,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     
@@ -171,28 +170,33 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
                 .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
-                .sorted((a, b) -> a.getName().compareTo(b.getName()))
+                .sorted(Comparator.comparing(ResolvedDeclaration::getName))
                 .collect(Collectors.toList());
-        if (isJavaVersion9OrAbove()) {
-            assertEquals(69, methods.size());
-        } else {
-            assertEquals(67, methods.size());
+
+        int foundCount=0;
+        for (ResolvedMethodDeclaration method : methods) {
+            switch (method.getName()){
+                case "charAt":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("int", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+                case "compareTo":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("java.lang.String", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+                case "concat":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("java.lang.String", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+            }
         }
-        assertEquals("charAt", methods.get(0).getName());
-        assertEquals(false, methods.get(0).isAbstract());
-        assertEquals(1, methods.get(0).getNumberOfParams());
-        assertEquals("int", methods.get(0).getParam(0).getType().describe());
-        if (isJavaVersion9OrAbove()) {
-            assertEquals("compareTo", methods.get(6).getName());
-            assertEquals(false, methods.get(6).isAbstract());
-            assertEquals(1, methods.get(6).getNumberOfParams());
-            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
-        } else {
-            assertEquals("concat", methods.get(6).getName());
-            assertEquals(false, methods.get(6).isAbstract());
-            assertEquals(1, methods.get(6).getNumberOfParams());
-            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
-        }
+        assertEquals(3, foundCount);
     }
 
     @Test
