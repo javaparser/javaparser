@@ -1,9 +1,17 @@
-Version 3.7.1
+Version 3.8.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/114?closed=1)
+
+Version 3.8.0
 ------------------
 * slightly breaking: the enum constants in JsonToken are now capitalized.
 * slightly breaking: [some obscure methods in the symbol solver changed](https://github.com/javaparser/javaparser/pull/1922) 
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/113?closed=1)
+
+Version 3.7.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/115?closed=1)
 
 Version 3.7.0
 ------------------
