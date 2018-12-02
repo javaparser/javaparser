@@ -39,7 +39,7 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         if (wrappedNode.getVariable().getVariables().size() != 1) {
             throw new IllegalStateException();
         }
@@ -50,15 +50,15 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
             if (requireParentNode(wrappedNode) instanceof BlockStmt) {
                 return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
             } else {
-                return getParent().solveSymbol(name, typeSolver);
+                return getParent().solveSymbol(name);
             }
         }
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                  boolean staticOnly, TypeSolver typeSolver) {
-        return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+                                                                  boolean staticOnly) {
+        return getParent().solveMethod(name, argumentsTypes, false);
     }
 
     @Override

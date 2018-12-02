@@ -309,7 +309,7 @@ public final class CompilationUnit extends Node {
      * @throws RuntimeException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
-        if(clazz.isArray()){
+        if (clazz.isArray()) {
             return addImport(clazz.getComponentType());
         }
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))

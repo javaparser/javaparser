@@ -30,9 +30,11 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -46,7 +48,8 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implements ResolvedEnumDeclaration {
+public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
+        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
 
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
@@ -185,14 +188,19 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         return wrappedNode.hashCode();
     }
 
-    @Deprecated
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
-                                                    TypeSolver typeSolver, Context invokationContext, List<ResolvedType> typeParameterValues) {
-        if (name.equals("values") && parameterTypes.isEmpty()) {
-            return Optional.of(new ValuesMethod(this, typeSolver).getUsage(null));
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentTypes,
+                                                    Context invokationContext, List<ResolvedType> typeParameters) {
+        return getContext().solveMethodAsUsage(name, argumentTypes);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                  boolean staticOnly) {
+        if (name.equals("values") && argumentsTypes.isEmpty()) {
+            return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
-        // TODO add methods inherited from Enum
-        return getContext().solveMethodAsUsage(name, parameterTypes, typeSolver);
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

@@ -68,14 +68,14 @@ public class JavaParserJsonDeserializer {
      */
     private Node deserializeObject(JsonObject nodeJson) {
         try {
-            String serializedNodeType = nodeJson.getString(JsonNode.Class.propertyKey);
+            String serializedNodeType = nodeJson.getString(JsonNode.CLASS.propertyKey);
             BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
                     .orElseThrow(() -> new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
             Map<String, Object> parameters = new HashMap<>();
             Map<String, JsonValue> deferredJsonValues = new HashMap<>();
 
             for (String name : nodeJson.keySet()) {
-                if (name.equals(JsonNode.Class.propertyKey)) {
+                if (name.equals(JsonNode.CLASS.propertyKey)) {
                     continue;
                 }
 
@@ -111,10 +111,10 @@ public class JavaParserJsonDeserializer {
             }
 
             Node node = nodeMetaModel.construct(parameters);
-            // Comment is in the propertyKey meta model, but not required as constructor parameter.
+            // COMMENT is in the propertyKey meta model, but not required as constructor parameter.
             // Set it after construction
-            if (parameters.containsKey(JsonNode.Comment.propertyKey)) {
-                node.setComment((Comment)parameters.get(JsonNode.Comment.propertyKey));
+            if (parameters.containsKey(JsonNode.COMMENT.propertyKey)) {
+                node.setComment((Comment)parameters.get(JsonNode.COMMENT.propertyKey));
             }
 
             for (String name : deferredJsonValues.keySet()) {
@@ -139,7 +139,7 @@ public class JavaParserJsonDeserializer {
     }
 
     /**
-     * Reads properties from json not included in meta model (i.e., Range and TokenRange).
+     * Reads properties from json not included in meta model (i.e., RANGE and TOKEN_RANGE).
      * When read, it sets the deserialized value to the node instance.
      * @param name propertyKey name for json value
      * @param jsonValue json value that needs to be deserialized for this propertyKey
@@ -152,15 +152,15 @@ public class JavaParserJsonDeserializer {
     }
 
     protected boolean readRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals(JsonNode.Range.propertyKey)) {
+        if (name.equals(JsonNode.RANGE.propertyKey)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
             Position begin = new Position(
-                    jsonObject.getInt(JsonRange.BeginLine.propertyKey),
-                    jsonObject.getInt(JsonRange.BeginColumn.propertyKey)
+                    jsonObject.getInt(JsonRange.BEGIN_LINE.propertyKey),
+                    jsonObject.getInt(JsonRange.BEGIN_COLUMN.propertyKey)
             );
             Position end = new Position(
-                    jsonObject.getInt(JsonRange.EndLine.propertyKey),
-                    jsonObject.getInt(JsonRange.EndColumn.propertyKey)
+                    jsonObject.getInt(JsonRange.END_LINE.propertyKey),
+                    jsonObject.getInt(JsonRange.END_COLUMN.propertyKey)
             );
             node.setRange(new Range(begin, end));
             return true;
@@ -169,13 +169,13 @@ public class JavaParserJsonDeserializer {
     }
 
     protected boolean readTokenRange(String name, JsonValue jsonValue, Node node) {
-        if (name.equals(JsonNode.TokenRange.propertyKey)) {
+        if (name.equals(JsonNode.TOKEN_RANGE.propertyKey)) {
             JsonObject jsonObject = (JsonObject)jsonValue;
             JavaToken begin = readToken(
-                    JsonTokenRange.BeginToken.propertyKey, jsonObject
+                    JsonTokenRange.BEGIN_TOKEN.propertyKey, jsonObject
             );
             JavaToken end = readToken(
-                    JsonTokenRange.EndToken.propertyKey, jsonObject
+                    JsonTokenRange.END_TOKEN.propertyKey, jsonObject
             );
             node.setTokenRange(new TokenRange(begin, end));
             return true;
@@ -186,8 +186,8 @@ public class JavaParserJsonDeserializer {
     protected JavaToken readToken(String name, JsonObject jsonObject) {
         JsonObject tokenJson = jsonObject.getJsonObject(name);
         return new JavaToken(
-                tokenJson.getInt(JsonToken.Kind.propertyKey),
-                tokenJson.getString(JsonToken.Text.propertyKey)
+                tokenJson.getInt(JsonToken.KIND.propertyKey),
+                tokenJson.getString(JsonToken.TEXT.propertyKey)
         );
     }
 
