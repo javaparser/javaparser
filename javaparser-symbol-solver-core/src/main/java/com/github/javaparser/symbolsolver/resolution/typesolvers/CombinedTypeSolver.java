@@ -16,13 +16,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A container for type solvers. All solving is done by the contained type solvers.
@@ -34,11 +35,27 @@ public class CombinedTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private List<TypeSolver> elements = new ArrayList<>();
+    private Predicate<Exception> errorFilter;
 
     public CombinedTypeSolver(TypeSolver... elements) {
+        this(ExceptionFilters.IGNORE_ALL, elements);
+    }
+
+    /** @see #setFilter(Predicate) */
+    public CombinedTypeSolver(Predicate<Exception> errorFilter, TypeSolver... elements) {
+        setFilter(errorFilter);
+
         for (TypeSolver el : elements) {
             add(el);
         }
+    }
+
+    /**
+     * @param errorFilter A filter which determines if an exception raised while solving should be ignored.
+     *            Should return <code>true</code> when the exception must be <b>ignored</b>.
+     */
+    public void setFilter(Predicate<Exception> errorFilter) {
+        this.errorFilter = errorFilter;
     }
 
     @Override
@@ -59,9 +76,15 @@ public class CombinedTypeSolver implements TypeSolver {
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         for (TypeSolver ts : elements) {
-            SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveType(name);
-            if (res.isSolved()) {
-                return res;
+            try {
+                SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveType(name);
+                if (res.isSolved()) {
+                    return res;
+                }
+            } catch (Exception e) {
+                if (!errorFilter.test(e)) { // we shouldn't ignore this exception
+                    throw e;
+                }
             }
         }
         return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
@@ -74,6 +97,83 @@ public class CombinedTypeSolver implements TypeSolver {
             return res.getCorrespondingDeclaration();
         } else {
             throw new UnsolvedSymbolException(name);
+        }
+    }
+
+    /** Provides some convenience filter implementations */
+    public static class ExceptionFilters {
+
+        /** Doesn't ignore any exceptions (default) */
+        public static final Predicate<Exception> IGNORE_NONE = e -> false;
+
+        /** Ignores all exceptions */
+        public static final Predicate<Exception> IGNORE_ALL = e -> true;
+
+        /**
+         * Ignores any exception that is {@link Class#isAssignableFrom(Class) assignable from}
+         * {@link UnsupportedOperationException}.
+         * 
+         * @see #getTypeBasedWhitelist(Class...)
+         */
+        public static final Predicate<Exception> IGNORE_UNSUPPORTED_OPERATION = getTypeBasedWhitelist(
+                UnsupportedOperationException.class);
+
+        /**
+         * Ignores any exception that is {@link Class#isAssignableFrom(Class) assignable from}
+         * {@link UnsolvedSymbolException}.
+         * 
+         * @see #getTypeBasedWhitelist(Class...)
+         */
+        public static final Predicate<Exception> IGNORE_UNSOLVED_SYMBOL = getTypeBasedWhitelist(
+                UnsolvedSymbolException.class);
+
+        /**
+         * Ignores any exception that is {@link Class#isAssignableFrom(Class) assignable from} either
+         * {@link UnsolvedSymbolException} or {@link UnsupportedOperationException}.
+         * 
+         * @see #IGNORE_UNSOLVED_SYMBOL
+         * @see #IGNORE_UNSUPPORTED_OPERATION
+         * @see #getTypeBasedWhitelist(Class...)
+         */
+        public static final Predicate<Exception> IGNORE_UNSUPPORTED_AND_UNSOLVED = getTypeBasedWhitelist(
+                UnsupportedOperationException.class, UnsolvedSymbolException.class);
+
+        /**
+         * @see CombinedTypeSolver#setFilter(Predicate)
+         * @see #getTypeBasedWhitelist(Class...)
+         * 
+         * @return A filter that ignores an exception if <b>none</b> of the listed classes are
+         *         {@link Class#isAssignableFrom(Class) assignable from}
+         *         the thrown exception class.
+         */
+        public static Predicate<Exception> getTypeBasedBlacklist(Class<? extends Exception>... blacklist) {
+            return e -> {
+                for (Class<? extends Exception> clazz : blacklist) {
+                    if (clazz.isAssignableFrom(e.getClass())) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+        }
+
+        /**
+         * @see CombinedTypeSolver#setFilter(Predicate)
+         * @see #getTypeBasedBlacklist(Class...)
+         * 
+         * @return A filter that ignores an exception if <b>any</b> of the listed classes are
+         *         {@link Class#isAssignableFrom(Class) assignable from}
+         *         the thrown exception class.
+         */
+        public static Predicate<Exception> getTypeBasedWhitelist(Class<? extends Exception>... whitelist) {
+            return e -> {
+                for (Class<? extends Exception> clazz : whitelist) {
+                    if (clazz.isAssignableFrom(e.getClass())) {
+                        return true;
+                    }
+                }
+                return false;
+            };
         }
     }
 }
