@@ -35,27 +35,37 @@ public class CombinedTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private List<TypeSolver> elements = new ArrayList<>();
-    private Predicate<Exception> errorFilter;
+    
+    /**
+     * A predicate which determines what to do if an exception is raised during the parsing process.
+     * If it returns <code>true</code> the exception will be ignored, and solving will continue using the next solver in line.
+     * If it returns <code>false</code> the exception will be thrown, stopping the solving process.
+     * 
+     * Main use case for this is to circumvent bugs or missing functionality in some type solvers.
+     * If for example solver A has a bug resulting in a {@link NullPointerException}, you could use a {@link ExceptionHandlers#getTypeBasedWhitelist(Class...) whitelist} to ignore that type of exception.
+     * A secondary solver would then be able to step in when such an error occurs.
+     * 
+     * @see #CombinedTypeSolver(Predicate, TypeSolver...)
+     * @see #setExceptionHandler(Predicate)
+     */
+    private Predicate<Exception> exceptionHandler;
 
     public CombinedTypeSolver(TypeSolver... elements) {
-        this(ExceptionFilters.IGNORE_ALL, elements);
+        this(ExceptionHandlers.IGNORE_NONE, elements);
     }
 
-    /** @see #setFilter(Predicate) */
-    public CombinedTypeSolver(Predicate<Exception> errorFilter, TypeSolver... elements) {
-        setFilter(errorFilter);
+    /** @see #exceptionHandler */
+    public CombinedTypeSolver(Predicate<Exception> exceptionHandler, TypeSolver... elements) {
+        setExceptionHandler(exceptionHandler);
 
         for (TypeSolver el : elements) {
             add(el);
         }
     }
 
-    /**
-     * @param errorFilter A filter which determines if an exception raised while solving should be ignored.
-     *            Should return <code>true</code> when the exception must be <b>ignored</b>.
-     */
-    public void setFilter(Predicate<Exception> errorFilter) {
-        this.errorFilter = errorFilter;
+    /** @see #exceptionHandler */
+    public void setExceptionHandler(Predicate<Exception> exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
     }
 
     @Override
@@ -82,7 +92,7 @@ public class CombinedTypeSolver implements TypeSolver {
                     return res;
                 }
             } catch (Exception e) {
-                if (!errorFilter.test(e)) { // we shouldn't ignore this exception
+                if (!exceptionHandler.test(e)) { // we shouldn't ignore this exception
                     throw e;
                 }
             }
@@ -100,8 +110,11 @@ public class CombinedTypeSolver implements TypeSolver {
         }
     }
 
-    /** Provides some convenience filter implementations */
-    public static class ExceptionFilters {
+    /**
+     * Provides some convenience exception handler implementations
+     * @see CombinedTypeSolver#setExceptionHandler(Predicate)
+     */
+    public static class ExceptionHandlers {
 
         /** Doesn't ignore any exceptions (default) */
         public static final Predicate<Exception> IGNORE_NONE = e -> false;
@@ -139,7 +152,7 @@ public class CombinedTypeSolver implements TypeSolver {
                 UnsupportedOperationException.class, UnsolvedSymbolException.class);
 
         /**
-         * @see CombinedTypeSolver#setFilter(Predicate)
+         * @see CombinedTypeSolver#setExceptionHandler(Predicate)
          * @see #getTypeBasedWhitelist(Class...)
          * 
          * @return A filter that ignores an exception if <b>none</b> of the listed classes are
@@ -158,7 +171,7 @@ public class CombinedTypeSolver implements TypeSolver {
         }
 
         /**
-         * @see CombinedTypeSolver#setFilter(Predicate)
+         * @see CombinedTypeSolver#setExceptionHandler(Predicate)
          * @see #getTypeBasedBlacklist(Class...)
          * 
          * @return A filter that ignores an exception if <b>any</b> of the listed classes are

@@ -33,7 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver.ExceptionFilters;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver.ExceptionHandlers;
 
 @RunWith(Parameterized.class)
 public class CombinedTypeSolverTest {
@@ -41,14 +41,14 @@ public class CombinedTypeSolverTest {
     @Parameters
     public static List<Object[]> parameters() {
         // Why these classes? NFE is a subclass, IOOBE is a superclass and ISE is a class without children (by default)
-        Predicate<Exception> whitelistTestFilter = ExceptionFilters.getTypeBasedWhitelist(NumberFormatException.class,
+        Predicate<Exception> whitelistTestFilter = ExceptionHandlers.getTypeBasedWhitelist(NumberFormatException.class,
                 IndexOutOfBoundsException.class, IllegalStateException.class);
-        Predicate<Exception> blacklistTestFilter = ExceptionFilters.getTypeBasedBlacklist(NumberFormatException.class,
+        Predicate<Exception> blacklistTestFilter = ExceptionHandlers.getTypeBasedBlacklist(NumberFormatException.class,
                 IndexOutOfBoundsException.class, IllegalStateException.class);
 
         return Arrays.asList(new Object[][] {
-                { new RuntimeException(), ExceptionFilters.IGNORE_ALL, true }, // 0
-                { new RuntimeException(), ExceptionFilters.IGNORE_NONE, false }, // 1
+                { new RuntimeException(), ExceptionHandlers.IGNORE_ALL, true }, // 0
+                { new RuntimeException(), ExceptionHandlers.IGNORE_NONE, false }, // 1
 
                 { new RuntimeException(), whitelistTestFilter, false }, // 2
                 { new IllegalStateException(), whitelistTestFilter, true }, // 3
