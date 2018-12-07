@@ -84,7 +84,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      * @param arguments Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Expression> arguments) {
-        this(null, scope, type, new NodeList<>(), arguments, null);
+        this(null, scope, type, null, arguments, null);
     }
 
     @AllFieldsConstructor
