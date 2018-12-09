@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>javaparser-core</module>
@@ -15,7 +16,7 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.8.1</version>
+    <version>3.7.2-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -135,7 +136,7 @@
         <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
         <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
         <url>https://github.com/javaparser/javaparser.git</url>
-        <tag>javaparser-parent-3.8.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
