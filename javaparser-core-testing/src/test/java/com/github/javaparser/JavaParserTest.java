@@ -22,12 +22,10 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -41,7 +39,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
@@ -257,6 +256,15 @@ public class JavaParserTest {
         assertEquals("j", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getNameAsString());
         assertFalse(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
         assertTrue(forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
+    }
+
+    @Test
+    public void creatingNewObjectCreationExprShouldDefaultToParsing() {
+        String className = String.class.getCanonicalName();
+        ClassOrInterfaceType type = JavaParser.parseClassOrInterfaceType(className);
+        ObjectCreationExpr expected = JavaParser.parseExpression("new " + className + "()");
+        ObjectCreationExpr actual = new ObjectCreationExpr(null, type, NodeList.nodeList());
+        assertEquals(expected, actual);
     }
 
     @Test

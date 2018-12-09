@@ -4,10 +4,12 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -23,7 +25,8 @@ import java.util.stream.Collectors;
 /**
  * An anonymous class declaration representation.
  */
-public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaration {
+public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaration
+        implements MethodUsageResolutionCapability {
 
   private final TypeSolver typeSolver;
   private final ObjectCreationExpr wrappedNode;
@@ -66,6 +69,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                 boolean staticOnly) {
     return getContext().solveMethod(name, argumentsTypes, staticOnly);
+  }
+
+  @Override
+  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentTypes,
+                                                  Context invocationContext, List<ResolvedType> typeParameters) {
+    return getContext().solveMethodAsUsage(name, argumentTypes);
   }
 
   @Override

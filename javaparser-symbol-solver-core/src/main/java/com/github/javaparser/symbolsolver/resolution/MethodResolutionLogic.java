@@ -20,7 +20,7 @@ import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.logic.TypeDeclarationWithResolutionCapabilities;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -571,9 +571,9 @@ public class MethodResolutionLogic {
                                                                                List<ResolvedType> argumentsTypes,
                                                                                boolean staticOnly) {
 
-        if (typeDeclaration instanceof TypeDeclarationWithResolutionCapabilities) {
-            return ((TypeDeclarationWithResolutionCapabilities) typeDeclaration).solveMethod(name, argumentsTypes,
-                                                                                             staticOnly);
+        if (typeDeclaration instanceof MethodResolutionCapability) {
+            return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes,
+                                                                              staticOnly);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
