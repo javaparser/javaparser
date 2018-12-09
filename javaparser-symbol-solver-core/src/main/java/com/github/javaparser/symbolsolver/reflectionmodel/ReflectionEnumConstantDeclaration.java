@@ -1,8 +1,10 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.reflect.Field;
 
@@ -26,6 +28,8 @@ public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDe
 
     @Override
     public ResolvedType getType() {
-        throw new UnsupportedOperationException();
+        Class<?> enumClass = enumConstant.getDeclaringClass();
+        ResolvedReferenceTypeDeclaration typeDeclaration = new ReflectionEnumDeclaration(enumClass, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 }
