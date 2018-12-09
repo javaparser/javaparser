@@ -3,7 +3,6 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>javaparser-core</module>
-        <module>javaparser-core-testing</module>
         <module>javaparser-core-generators</module>
         <module>javaparser-core-metamodel-generator</module>
         <module>javaparser-core-serialization</module>
