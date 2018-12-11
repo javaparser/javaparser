@@ -31,6 +31,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -258,7 +259,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     // Needed by ContextHelper
-    public static class ValuesMethod implements ResolvedMethodDeclaration {
+    public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
         private JavaParserEnumDeclaration enumDeclaration;
         private TypeSolver typeSolver;

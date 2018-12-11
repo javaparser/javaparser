@@ -186,7 +186,15 @@ public interface Context {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-            MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, argumentsTypes);//methodDeclaration.resolveTypeVariables(this, argumentsTypes);
+
+            MethodUsage methodUsage;
+            if (methodDeclaration instanceof TypeVariableResolutionCapability) {
+                methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
+                                      .resolveTypeVariables(this, argumentsTypes);
+            } else {
+                throw new UnsupportedOperationException();
+            }
+
             return Optional.of(methodUsage);
         } else {
             return Optional.empty();
