@@ -192,7 +192,7 @@ public interface Context {
                 methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
                                       .resolveTypeVariables(this, argumentsTypes);
             } else {
-                return Optional.empty();
+                throw new UnsupportedOperationException();
             }
 
             return Optional.of(methodUsage);

@@ -149,6 +149,11 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
     }
 
+    /**
+     * Annotation declarations cannot have type parameters and hence this method always returns an empty list.
+     *
+     * @return An empty list.
+     */
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         // Annotation declarations cannot have type parameters - i.e. we can always return an empty list.
