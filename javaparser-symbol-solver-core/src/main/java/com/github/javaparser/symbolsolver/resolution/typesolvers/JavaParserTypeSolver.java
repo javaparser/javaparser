@@ -113,7 +113,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         try {
             return parsedFiles.get(srcFile.toAbsolutePath(), () -> {
                 try {
-                    if (!Files.exists(srcFile)) {
+                    if (!Files.exists(srcFile) || !Files.isRegularFile(srcFile)) {
                         return Optional.empty();
                     }
                     return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
