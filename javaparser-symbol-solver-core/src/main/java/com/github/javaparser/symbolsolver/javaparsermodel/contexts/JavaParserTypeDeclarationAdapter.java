@@ -40,7 +40,7 @@ public class JavaParserTypeDeclarationAdapter {
         this.context = context;
     }
 
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
@@ -52,9 +52,9 @@ public class JavaParserTypeDeclarationAdapter {
                 if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
                 } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeSolver);
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
                 }
             }
         }
@@ -71,7 +71,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Look into extended classes and implemented interfaces
         ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
-        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name, typeSolver));
+        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name));
     }
 
     /**
@@ -110,7 +110,7 @@ public class JavaParserTypeDeclarationAdapter {
         return null;
     }
 
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name))
                 .filter(m -> !staticOnly || m.isStatic())
@@ -125,7 +125,7 @@ public class JavaParserTypeDeclarationAdapter {
                             .filter(m -> m.getName().equals(name))
                             .collect(Collectors.toList()));
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic
-                            .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+                            .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
@@ -138,7 +138,7 @@ public class JavaParserTypeDeclarationAdapter {
         // We want to avoid infinite recursion when a class is using its own method
         // see issue #75
         if (candidateMethods.isEmpty()) {
-            SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, staticOnly);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }
@@ -146,7 +146,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
-            SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
@@ -155,9 +155,9 @@ public class JavaParserTypeDeclarationAdapter {
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
     }
 
-    public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
         if (typeDeclaration instanceof ResolvedClassDeclaration) {
-            return ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDeclaration).getConstructors(), argumentsTypes, typeSolver);
+            return ConstructorResolutionLogic.findMostApplicable(typeDeclaration.getConstructors(), argumentsTypes, typeSolver);
         }
         return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
     }

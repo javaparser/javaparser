@@ -20,20 +20,10 @@ import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -570,52 +560,23 @@ public class MethodResolutionLogic {
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(ResolvedTypeDeclaration typeDeclaration,
-                                                                               String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        return solveMethodInType(typeDeclaration, name, argumentsTypes, false, typeSolver);
+                                                                               String name,
+                                                                               List<ResolvedType> argumentsTypes) {
+        return solveMethodInType(typeDeclaration, name, argumentsTypes, false);
     }
 
     // TODO: Replace TypeDeclaration.solveMethod
     public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(ResolvedTypeDeclaration typeDeclaration,
-                                                                               String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
-                                                                               TypeSolver typeSolver) {
-        if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+                                                                               String name,
+                                                                               List<ResolvedType> argumentsTypes,
+                                                                               boolean staticOnly) {
+
+        if (typeDeclaration instanceof MethodResolutionCapability) {
+            return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes,
+                                                                              staticOnly);
+        } else {
+            throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
-        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
-        }
-        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
-            if (name.equals("values") && argumentsTypes.isEmpty()) {
-                return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
-            }
-            Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
-        }
-        if (typeDeclaration instanceof JavaParserAnonymousClassDeclaration) {
-            Context ctx = ((JavaParserAnonymousClassDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
-        }
-        if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        if (typeDeclaration instanceof ReflectionEnumDeclaration) {
-            return ((ReflectionEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        if (typeDeclaration instanceof JavassistEnumDeclaration) {
-            return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
-        }
-        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
     private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {

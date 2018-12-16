@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
+public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
     private Method method;
     private TypeSolver typeSolver;

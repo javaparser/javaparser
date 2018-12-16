@@ -51,9 +51,9 @@ public class MethodContextResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodWithTypes");
         ClassOrInterfaceDeclaration cd = Navigator.demandClass(cu, "Main");
         MethodDeclaration md = Navigator.demandMethod(cd, "methodWithLocalTypes");
-        Context context = new MethodContext(md, typeSolver);
+        Context context = new MethodContext(md, new MemoryTypeSolver());
 
-        SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("LocalClass", new MemoryTypeSolver());
+        SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("LocalClass");
         assertEquals(true, ref.isSolved());
     }
 }

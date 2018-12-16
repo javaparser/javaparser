@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -210,6 +211,13 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         MethodDeclaration it = consider("@Override public void A(){}");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("@Override void A(){}", it);
+    }
+
+    @Test
+    public void removingPublicModifierFromPublicStaticMethod() {
+        MethodDeclaration it = consider("public static void a(){}");
+        it.removeModifier(Modifier.Keyword.PUBLIC);
+        assertTransformedToString("static void a(){}", it);
     }
 
     @Test
@@ -422,4 +430,5 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "  }\n" +
                         "}\n", result);
     }
+
 }

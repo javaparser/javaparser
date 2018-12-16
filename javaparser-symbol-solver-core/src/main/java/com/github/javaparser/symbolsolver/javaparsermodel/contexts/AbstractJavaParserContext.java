@@ -98,12 +98,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     }
 
     @Override
-    public Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
+    public Optional<ResolvedType> solveGenericType(String name) {
         Context parent = getParent();
         if (parent == null) {
             return Optional.empty();
         } else {
-            return parent.solveGenericType(name, typeSolver);
+            return parent.solveGenericType(name);
         }
     }
 
@@ -142,21 +142,21 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     /// Protected methods
     ///
 
-    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
+    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name) {
         return symbolDeclarator.getSymbolDeclarations().stream()
                 .filter(d -> d.getName().equals(name))
                 .map(Value::from)
                 .findFirst();
     }
 
-    protected Collection<ResolvedReferenceTypeDeclaration> findTypeDeclarations(Optional<Expression> optScope, TypeSolver typeSolver) {
+    protected Collection<ResolvedReferenceTypeDeclaration> findTypeDeclarations(Optional<Expression> optScope) {
         if (optScope.isPresent()) {
             Expression scope = optScope.get();
 
             // consider static methods
             if (scope instanceof NameExpr) {
                 NameExpr scopeAsName = scope.asNameExpr();
-                SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
+                SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId());
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
                 }
@@ -169,7 +169,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 // If the scope corresponds to a type we should treat it differently
                 if (scope instanceof FieldAccessExpr) {
                     FieldAccessExpr scopeName = (FieldAccessExpr) scope;
-                    if (this.solveType(scopeName.toString(), typeSolver).isSolved()) {
+                    if (this.solveType(scopeName.toString()).isSolved()) {
                         return Collections.emptyList();
                     }
                 }

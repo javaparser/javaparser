@@ -21,7 +21,6 @@
 package com.github.javaparser.serialization;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
@@ -38,19 +37,13 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import org.junit.jupiter.api.Test;
 
 import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.stream.JsonGenerator;
-
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
-import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.*;
+import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserJsonDeserializerTest {
     private final JavaParserJsonDeserializer deserializer = new JavaParserJsonDeserializer();
@@ -126,18 +119,18 @@ class JavaParserJsonDeserializerTest {
         CompilationUnit cu = JavaParser.parse("/* block comment */\npublic class X{ \n // line comment\npublic void test() {}\n}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit)deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
         ClassOrInterfaceDeclaration classXDeclaration = deserialized.getClassByName("X").get();
-        assertEquals(classXDeclaration.getComment().isPresent(), true);
+        assertTrue(classXDeclaration.getComment().isPresent());
 
         Comment comment = classXDeclaration.getComment().get();
-        assertEquals(comment.getClass().getName(), "com.github.javaparser.ast.comments.BlockComment");
-        assertEquals(comment.getContent(), " block comment ");
+        assertEquals("com.github.javaparser.ast.comments.BlockComment", comment.getClass().getName());
+        assertEquals(" block comment ", comment.getContent());
 
         MethodDeclaration methodDeclaration = classXDeclaration.getMethods().get(0);
-        assertEquals(methodDeclaration.getComment().isPresent(), true);
-        assertEquals(methodDeclaration.getComment().get().getClass().getName(), "com.github.javaparser.ast.comments.LineComment");
-        assertEquals(methodDeclaration.getComment().get().getContent(), " line comment");
+        assertTrue(methodDeclaration.getComment().isPresent());
+        assertEquals("com.github.javaparser.ast.comments.LineComment", methodDeclaration.getComment().get().getClass().getName());
+        assertEquals(" line comment", methodDeclaration.getComment().get().getContent());
     }
 
     @Test
@@ -152,19 +145,19 @@ class JavaParserJsonDeserializerTest {
                 "}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit)deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
         ClassOrInterfaceDeclaration classDeclaration = deserialized.getClassByName("X").get();
         MethodDeclaration methodDeclaration = classDeclaration.getMethods().get(0);
-        assertEquals(methodDeclaration.getJavadoc().isPresent(), true);
+        assertTrue(methodDeclaration.getJavadoc().isPresent());
         Javadoc javadoc = methodDeclaration.getJavadoc().get();
 
         JavadocBlockTag paramBlockTag = javadoc.getBlockTags().get(0);
-        assertEquals(paramBlockTag.getTagName(), "param");
-        assertEquals(paramBlockTag.getContent().toText(), "blub");
+        assertEquals("param", paramBlockTag.getTagName());
+        assertEquals("blub", paramBlockTag.getContent().toText());
 
         JavadocBlockTag returnBlockTag = javadoc.getBlockTags().get(1);
-        assertEquals(returnBlockTag.getTagName(), "return");
-        assertEquals(returnBlockTag.getContent().toText(), "true");
+        assertEquals("return", returnBlockTag.getTagName());
+        assertEquals("true", returnBlockTag.getContent().toText());
     }
 
     @Test
@@ -172,18 +165,18 @@ class JavaParserJsonDeserializerTest {
         CompilationUnit cu = JavaParser.parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit)deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEquals(deserialized.getRange().isPresent(), true);
+        assertTrue(deserialized.getRange().isPresent());
         Range range = deserialized.getRange().get();
-        assertEquals(range.begin.line, 1);
-        assertEquals(range.begin.line, 1);
-        assertEquals(range.end.column, 26);
+        assertEquals(1, range.begin.line);
+        assertEquals(1, range.begin.line);
+        assertEquals(26, range.end.column);
 
-        assertEquals(deserialized.getTokenRange().isPresent(), true);
+        assertTrue(deserialized.getTokenRange().isPresent());
         TokenRange tokenRange = deserialized.getTokenRange().get();
-        assertEquals(tokenRange.getBegin().getText(), "public");
-        assertEquals(tokenRange.getEnd().getText(), "");
+        assertEquals("public", tokenRange.getBegin().getText());
+        assertEquals("", tokenRange.getEnd().getText());
     }
 
     @Test
@@ -208,9 +201,9 @@ class JavaParserJsonDeserializerTest {
         CompilationUnit cu = JavaParser.parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit)deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
-        assertEquals(deserialized.containsData(Node.SYMBOL_RESOLVER_KEY), true);
-        assertEquals(deserialized.getData(Node.SYMBOL_RESOLVER_KEY), stubResolver);
+        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        assertTrue(deserialized.containsData(Node.SYMBOL_RESOLVER_KEY));
+        assertEquals(stubResolver, deserialized.getData(Node.SYMBOL_RESOLVER_KEY));
     }
 
     /**

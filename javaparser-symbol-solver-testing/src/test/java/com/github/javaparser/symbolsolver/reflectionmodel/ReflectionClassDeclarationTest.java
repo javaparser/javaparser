@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -37,7 +38,7 @@ import static java.util.Comparator.*;
 import static org.junit.Assert.*;
 
 public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
-    
+
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
     @Test
@@ -171,29 +172,33 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessSpecifier() != PRIVATE && m.accessSpecifier() != DEFAULT)
-                .sorted(comparing(ResolvedDeclaration::getName))
+                .filter(m -> m.accessSpecifier() != Modifier.Keyword.PRIVATE && m.accessSpecifier() != Modifier.Keyword.DEFAULT)
+                .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
-        if (isJavaVersion9OrAbove()) {
-            assertEquals(69, methods.size());
-        } else {
-            assertEquals(67, methods.size());
+        int foundCount = 0;
+        for (ResolvedMethodDeclaration method : methods) {
+            switch (method.getName()) {
+                case "charAt":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("int", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+                case "compareTo":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("java.lang.String", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+                case "concat":
+                    assertFalse(method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals("java.lang.String", method.getParam(0).getType().describe());
+                    foundCount++;
+                    break;
+            }
         }
-        assertEquals("charAt", methods.get(0).getName());
-        assertFalse(methods.get(0).isAbstract());
-        assertEquals(1, methods.get(0).getNumberOfParams());
-        assertEquals("int", methods.get(0).getParam(0).getType().describe());
-        if (isJavaVersion9OrAbove()) {
-            assertEquals("compareTo", methods.get(6).getName());
-            assertFalse(methods.get(6).isAbstract());
-            assertEquals(1, methods.get(6).getNumberOfParams());
-            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
-        } else {
-            assertEquals("concat", methods.get(6).getName());
-            assertFalse(methods.get(6).isAbstract());
-            assertEquals(1, methods.get(6).getNumberOfParams());
-            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
-        }
+        assertEquals(3, foundCount);
     }
 
     @Test

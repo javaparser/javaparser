@@ -22,6 +22,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionClassDeclaration extends AbstractClassDeclaration {
+public class ReflectionClassDeclaration extends AbstractClassDeclaration implements MethodUsageResolutionCapability {
 
     ///
     /// Fields
@@ -132,6 +133,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return clazz.getCanonicalName();
     }
 
+    @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> methods = new ArrayList<>();
@@ -144,13 +146,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, staticOnly, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, staticOnly);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, staticOnly);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
@@ -177,7 +179,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(this, typeSolver);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext, List<ResolvedType> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
         List<MethodUsage> methods = new ArrayList<>();
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
@@ -192,13 +194,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(superClass, name, argumentsTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(superClass, name, argumentsTypes, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
         }
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, typeParameterValues);
+            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, invokationContext, typeParameterValues);
             if (ref.isPresent()) {
                 methods.add(ref.get());
             }
@@ -353,5 +355,4 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     protected ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
-
 }

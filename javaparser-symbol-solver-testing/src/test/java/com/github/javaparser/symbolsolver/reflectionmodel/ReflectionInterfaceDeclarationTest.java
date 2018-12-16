@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -28,13 +29,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -43,39 +43,26 @@ public class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolution
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = list.getDeclaredMethods().stream()
-                .sorted((a, b) -> a.getName().compareTo(b.getName()))
+                .sorted(comparing(ResolvedDeclaration::getName))
                 .collect(Collectors.toList());
-        if (isJava9()) {
-            assertEquals(40, methods.size());
-            assertEquals("clear", methods.get(4).getName());
-            assertEquals(true, methods.get(4).isAbstract());
-            assertEquals(0, methods.get(4).getNumberOfParams());
-            assertEquals("contains", methods.get(5).getName());
-            assertEquals(true, methods.get(5).isAbstract());
-            assertEquals(1, methods.get(5).getNumberOfParams());
-            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
-            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
-        } else if (isJava10()) {
-            assertEquals(41, methods.size());
-            assertEquals("clear", methods.get(4).getName());
-            assertEquals(true, methods.get(4).isAbstract());
-            assertEquals(0, methods.get(4).getNumberOfParams());
-            assertEquals("contains", methods.get(5).getName());
-            assertEquals(true, methods.get(5).isAbstract());
-            assertEquals(1, methods.get(5).getNumberOfParams());
-            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
-            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
-        } else {
-            assertEquals(28, methods.size());
-            assertEquals("clear", methods.get(4).getName());
-            assertEquals(true, methods.get(4).isAbstract());
-            assertEquals(0, methods.get(4).getNumberOfParams());
-            assertEquals("contains", methods.get(5).getName());
-            assertEquals(true, methods.get(5).isAbstract());
-            assertEquals(1, methods.get(5).getNumberOfParams());
-            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
-            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+        int foundCount = 0;
+        for (ResolvedMethodDeclaration method : methods) {
+            switch (method.getName()) {
+                case "clear":
+                    assertTrue(method.isAbstract());
+                    assertEquals(0, method.getNumberOfParams());
+                    foundCount++;
+                    break;
+                case "contains":
+                    assertEquals(true, method.isAbstract());
+                    assertEquals(1, method.getNumberOfParams());
+                    assertEquals(true, method.getParam(0).getType().isReferenceType());
+                    assertEquals(Object.class.getCanonicalName(), method.getParam(0).getType().asReferenceType().getQualifiedName());
+                    foundCount++;
+                    break;
+            }
         }
+        assertEquals(2, foundCount);
     }
 
     @Test

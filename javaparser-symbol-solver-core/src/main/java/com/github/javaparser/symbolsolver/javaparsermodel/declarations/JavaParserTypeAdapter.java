@@ -89,7 +89,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
      * implementations.
      */
     @Deprecated
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
         if(wrappedNode instanceof NodeWithTypeParameters<?>) {
             NodeList<TypeParameter> typeParameters = ((NodeWithTypeParameters<?>) wrappedNode).getTypeParameters();
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : typeParameters) {
@@ -119,9 +119,9 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
-                            return new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+                            return new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
                         } else {
-                            return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
+                            return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
                         }
                     } else if (internalType instanceof EnumDeclaration) {
                         return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));

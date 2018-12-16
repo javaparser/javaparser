@@ -334,7 +334,7 @@ public class NameLogic {
         // the meaning of the reclassified name.
 
         if (isSimpleName(name)) {
-            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name), typeSolver).isSolved()) {
+            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name)).isSolved()) {
                 return NameCategory.TYPE_NAME;
             } else {
                 return NameCategory.PACKAGE_NAME;
@@ -351,7 +351,7 @@ public class NameLogic {
         // of the reclassified name.
 
         if (isQualifiedName(name)) {
-            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name), typeSolver).isSolved()) {
+            if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name)).isSolved()) {
                 return NameCategory.TYPE_NAME;
             } else {
                 return NameCategory.PACKAGE_NAME;
@@ -399,7 +399,7 @@ public class NameLogic {
 
         if (leftNameCategory == NameCategory.TYPE_NAME) {
             SymbolReference<ResolvedTypeDeclaration> scopeTypeRef = JavaParserFactory.getContext(leftName, typeSolver)
-                    .solveType(NameLogic.nameAsString(leftName), typeSolver);
+                    .solveType(NameLogic.nameAsString(leftName));
             if (scopeTypeRef.isSolved()) {
                 ResolvedTypeDeclaration scopeType = scopeTypeRef.getCorrespondingDeclaration();
                 if (scopeType instanceof ResolvedReferenceTypeDeclaration) {

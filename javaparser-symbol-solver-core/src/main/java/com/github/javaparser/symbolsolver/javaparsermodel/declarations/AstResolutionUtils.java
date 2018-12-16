@@ -87,7 +87,7 @@ class AstResolutionUtils {
                                          String canonicalName) {
         for (AnnotationExpr annotationExpr : nodeWithAnnotations.getAnnotations()) {
             SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
-                    .solveType(annotationExpr.getName().getId(), typeSolver);
+                    .solveType(annotationExpr.getName().getId());
             if (ref.isSolved()) {
                 if (ref.getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
                     return true;
