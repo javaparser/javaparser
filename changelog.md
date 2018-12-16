@@ -1,3 +1,7 @@
+Version 3.8.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/117?closed=1)
+
 Version 3.8.2
 ------------------
 * slightly breaking: `ObjectCreationExpr` no longer gets a diamond when constructed with the default constructor.
