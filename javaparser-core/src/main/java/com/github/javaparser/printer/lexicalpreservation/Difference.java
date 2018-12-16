@@ -535,12 +535,15 @@ public class Difference {
         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
 
         List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
+        List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
+        WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
+
         for (int ni = 0; ni< nextOrderElements.size(); ni++) {
             boolean found = false;
             CsmElement ne = nextOrderElements.get(ni);
 
-            List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
-            for (int pi = 0; pi< previousOrderElements.size() && !found; pi++) {
+            for (int counter = 0; counter< previousOrderElements.size() && !found; counter++) {
+                Integer pi = piNext.next();
                 CsmElement pe = previousOrderElements.get(pi);
                 if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
                         && DifferenceElementCalculator.matching(ne, pe)) {
