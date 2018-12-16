@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,7 +32,6 @@ import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.Ignore;
@@ -41,10 +39,8 @@ import org.junit.Test;
 
 import java.util.EnumSet;
 
-import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -425,5 +421,12 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "  public void testCase() {\n" +
                         "  }\n" +
                         "}\n", result);
+    }
+
+    @Test
+    public void removingPublicModifierFromPublicStaticMethod() {
+        MethodDeclaration it = consider("public static void a(){}");
+        it.removeModifier(Modifier.PUBLIC);
+        assertTransformedToString("static void a(){}", it);
     }
 }
