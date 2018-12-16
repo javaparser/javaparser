@@ -192,7 +192,8 @@ public interface Context {
                 methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
                                       .resolveTypeVariables(this, argumentsTypes);
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Resolved method declarations should have the " +
+                                                        TypeVariableResolutionCapability.class.getName() + ".");
             }
 
             return Optional.of(methodUsage);
