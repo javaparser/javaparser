@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -31,10 +30,10 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.EnumSet;
-
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.Utils.EOL;
 
 /**
@@ -146,21 +145,21 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
-        cid.setModifiers(EnumSet.of(Modifier.PUBLIC));
+        cid.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
     public void removingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("public class A {}");
-        cid.setModifiers(EnumSet.noneOf(Modifier.class));
+        cid.setModifiers(new NodeList<>());
         assertTransformedToString("class A {}", cid);
     }
 
     @Test
     public void replacingModifiers() {
         ClassOrInterfaceDeclaration cid = consider("public class A {}");
-        cid.setModifiers(EnumSet.of(Modifier.PROTECTED));
+        cid.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected class A {}", cid);
     }
 
@@ -183,7 +182,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void replacingFieldWithAnotherField() {
         ClassOrInterfaceDeclaration cid = consider("public class A {float f;}");
-        cid.getMembers().set(0, new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "bar")));
+        cid.getMembers().set(0, new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "bar")));
         assertTransformedToString("public class A {int bar;}", cid);
     }
 
