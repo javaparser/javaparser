@@ -6,6 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.EnumSet;
 import java.util.Optional;
 
 import static java.lang.reflect.Modifier.isAbstract;
@@ -13,12 +14,13 @@ import static java.lang.reflect.Modifier.isAbstract;
 /**
  * A hacky thing that collects flags we need from AST types to generate the metamodel.
  */
-class AstTypeAnalysis {
-    final boolean isAbstract;
-    boolean isOptional = false;
-    boolean isNodeList = false;
-    boolean isSelfType = false;
-    Class<?> innerType;
+public class AstTypeAnalysis {
+    public final boolean isAbstract;
+    public boolean isOptional = false;
+    public boolean isEnumSet = false;
+    public boolean isNodeList = false;
+    public boolean isSelfType = false;
+    public Class<?> innerType;
 
     AstTypeAnalysis(Type type) {
         if (type instanceof Class<?>) {
@@ -35,6 +37,9 @@ class AstTypeAnalysis {
                 }
                 if (currentOuterType == Optional.class) {
                     isOptional = true;
+                }
+                if (currentOuterType == EnumSet.class) {
+                    isEnumSet = true;
                 }
 
                 if (t.getActualTypeArguments()[0] instanceof WildcardType) {
