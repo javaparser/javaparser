@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -72,7 +71,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public boolean isStatic() {
-        return wrappedNode.getModifiers().contains(Modifier.STATIC);
+        return wrappedNode.hasModifier(Modifier.Keyword.STATIC);
     }
 
     @Override
@@ -99,8 +98,8 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    public Modifier.Keyword accessSpecifier() {
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override
