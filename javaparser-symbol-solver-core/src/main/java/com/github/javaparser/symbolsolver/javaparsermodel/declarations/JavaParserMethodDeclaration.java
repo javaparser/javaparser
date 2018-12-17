@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -41,7 +42,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.requirePar
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
+public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
     private com.github.javaparser.ast.body.MethodDeclaration wrappedNode;
     private TypeSolver typeSolver;
@@ -148,8 +149,8 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    public Modifier.Keyword accessSpecifier() {
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override
