@@ -44,6 +44,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -59,7 +60,7 @@ import com.github.javaparser.ast.Generated;
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration>, Resolvable<ResolvedAnnotationMemberDeclaration> {
 
-    private NodeList<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers;
 
     private Type type;
 
@@ -69,15 +70,15 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), null);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), null);
     }
 
-    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
         this(null, modifiers, new NodeList<>(), type, new SimpleName(name), defaultValue);
     }
 
     @AllFieldsConstructor
-    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         this(null, modifiers, annotations, type, name, defaultValue);
     }
 
@@ -85,7 +86,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AnnotationMemberDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -118,7 +119,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> getModifiers() {
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -157,16 +158,13 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationMemberDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public AnnotationMemberDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (AnnotationMemberDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
-        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -209,12 +207,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 return true;
             }
         }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.remove(i);
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -238,12 +230,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         if (defaultValue != null) {
             if (node == defaultValue) {
                 setDefaultValue((Expression) replacementNode);
-                return true;
-            }
-        }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }

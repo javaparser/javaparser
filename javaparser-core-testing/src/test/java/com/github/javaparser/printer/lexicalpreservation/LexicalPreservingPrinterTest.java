@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -596,7 +595,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", PUBLIC);
+                .addMethod("setAField", Modifier.PUBLIC);
         assertEquals("public void setAField() {" + EOL +
                 "    }", LexicalPreservingPrinter.print(setter));
     }
@@ -609,7 +608,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", PUBLIC);
+                .addMethod("setAField", Modifier.PUBLIC);
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step2"), LexicalPreservingPrinter.print(cu));
     }
 
@@ -621,7 +620,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", PUBLIC);
+                .addMethod("setAField", Modifier.PUBLIC);
         setter.addParameter("boolean", "aField");
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), LexicalPreservingPrinter.print(cu));
     }
@@ -655,7 +654,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", PUBLIC);
+                .addMethod("setAField", Modifier.PUBLIC);
         setter.addParameter("boolean", "aField");
         setter.getBody().get().getStatements().add(new ExpressionStmt(
                 new AssignExpr(
