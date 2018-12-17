@@ -23,11 +23,10 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 
 import java.util.Arrays;
-
-import static com.github.javaparser.ast.NodeList.toNodeList;
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 /**
  * A Node with Modifiers.
@@ -42,38 +41,28 @@ public interface NodeWithModifiers<N extends Node> {
      * @return modifiers
      * @see Modifier
      */
-    NodeList<Modifier> getModifiers();
+    EnumSet<Modifier> getModifiers();
 
-    N setModifiers(NodeList<Modifier> modifiers);
+    N setModifiers(EnumSet<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
-    default N addModifier(Modifier.Keyword... newModifiers) {
-        NodeList<Modifier> existingModifiers = new NodeList<>(getModifiers());
-        for (Modifier.Keyword newModifier : newModifiers) {
-            boolean alreadyPresent = existingModifiers.stream().anyMatch(m -> m.getKeyword() == newModifier);
-            if (!alreadyPresent) {
-                existingModifiers.add(new Modifier(newModifier));
-            }
-        }
-        setModifiers(existingModifiers);
+    default N addModifier(Modifier... modifiers) {
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.addAll(Arrays.stream(modifiers)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default N removeModifier(Modifier.Keyword... modifiersToRemove) {
-        NodeList<Modifier> existingModifiers = new NodeList<>(getModifiers());
-        for (Modifier.Keyword modifierToRemove : modifiersToRemove) {
-            for (Modifier existingModifier : existingModifiers) {
-                if (existingModifier.getKeyword() == modifierToRemove) {
-                    existingModifiers.remove(existingModifier);
-                }
-            }
-        }
-        setModifiers(existingModifiers);
+    default N removeModifier(Modifier... m) {
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.removeAll(Arrays.stream(m)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
         return (N) this;
     }
-
-    default N setModifier(Modifier.Keyword m, boolean set) {
+    default N setModifier(Modifier m, boolean set) {
         if (set) {
             return addModifier(m);
         } else {
@@ -81,35 +70,4 @@ public interface NodeWithModifiers<N extends Node> {
         }
     }
 
-    default boolean hasModifier(Modifier.Keyword modifier) {
-        for (Modifier m : getModifiers()) {
-            if (m.getKeyword() == modifier) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Creates a list of modifier nodes corresponding to the keywords passed, and set it.
-     */
-    default N setModifiers(final Modifier.Keyword... modifiers) {
-        return setModifiers(Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList()));
-    }
-
-    /**
-     * @return Modifier.Keyword.PUBLIC, Modifier.Keyword.PROTECTED,
-     * Modifier.Keyword.PRIVATE, or Modifier.Keyword.DEFAULT when none of the others exists.
-     */
-    default Modifier.Keyword getAccessSpecifier() {
-        for (Modifier modifier : getModifiers()) {
-            switch (modifier.getKeyword()) {
-                case PUBLIC:
-                case PROTECTED:
-                case PRIVATE:
-                    return modifier.getKeyword();
-            }
-        }
-        return Modifier.Keyword.DEFAULT;
-    }
 }

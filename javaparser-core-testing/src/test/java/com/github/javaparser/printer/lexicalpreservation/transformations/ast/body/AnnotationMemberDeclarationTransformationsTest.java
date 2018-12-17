@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
@@ -29,10 +30,10 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
+import java.util.EnumSet;
+
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -68,21 +69,21 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingModifiers() {
         AnnotationMemberDeclaration md = consider("int foo();");
-        md.setModifiers(createModifierList(PUBLIC));
+        md.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public int foo();", md);
     }
 
     @Test
     public void removingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
-        md.setModifiers(new NodeList<>());
+        md.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("int foo();", md);
     }
 
     @Test
     public void replacingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
-        md.setModifiers(createModifierList(PROTECTED));
+        md.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected int foo();", md);
     }
 
@@ -98,7 +99,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void removingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo() default 10;");
-        assertTrue(md.getDefaultValue().get().remove());
+        assertEquals(true, md.getDefaultValue().get().remove());
         assertTransformedToString("int foo();", md);
     }
 
