@@ -250,7 +250,7 @@ class LexicalDifferenceCalculator {
     }
 
     private int toToken(Modifier modifier) {
-        switch (modifier) {
+        switch (modifier.getKeyword()) {
             case PUBLIC:
                 return GeneratedJavaParserConstants.PUBLIC;
             case PRIVATE:
@@ -264,7 +264,7 @@ class LexicalDifferenceCalculator {
             case ABSTRACT:
                 return GeneratedJavaParserConstants.ABSTRACT;
             default:
-                throw new UnsupportedOperationException(modifier.name());
+                throw new UnsupportedOperationException(modifier.getKeyword().name());
         }
     }
 
