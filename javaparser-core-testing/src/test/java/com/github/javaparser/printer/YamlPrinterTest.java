@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -115,6 +116,6 @@ public class YamlPrinterTest {
 	    YamlPrinter yamlPrinter = new YamlPrinter(true);
 	    CompilationUnit computationUnit = JavaParser.parse(code);
 	    String output = yamlPrinter.output(computationUnit);
-        assertEquals(expectedOutput, output);
+        assertEqualsNoEol(expectedOutput, output);
     }
 }
