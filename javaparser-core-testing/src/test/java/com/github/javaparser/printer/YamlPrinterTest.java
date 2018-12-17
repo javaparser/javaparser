@@ -21,14 +21,13 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
+import org.junit.Test;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static org.junit.Assert.assertEquals;
 
 public class YamlPrinterTest {
 
@@ -102,15 +101,15 @@ public class YamlPrinterTest {
 				"public class Dog {" + System.lineSeparator() +
 				"" + System.lineSeparator() +
 				"}";
-	    String expectedOutput = "---" + System.lineSeparator();
-	    expectedOutput += "root(Type=CompilationUnit): " + System.lineSeparator();
-	    expectedOutput += "    types: " + System.lineSeparator();
-	    expectedOutput += "        - type(Type=ClassOrInterfaceDeclaration): " + System.lineSeparator();
-	    expectedOutput += "            isInterface: \"false\"" + System.lineSeparator();
-	    expectedOutput += "            name(Type=SimpleName): " + System.lineSeparator();
-	    expectedOutput += "                identifier: \"Dog\"" + System.lineSeparator();
-	    expectedOutput += "            comment(Type=JavadocComment): " + System.lineSeparator();
-	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote and newlines\\n \"" + System.lineSeparator();
+	    String expectedOutput = "---\n";
+	    expectedOutput += "root(Type=CompilationUnit): \n";
+	    expectedOutput += "    types: \n";
+	    expectedOutput += "        - type(Type=ClassOrInterfaceDeclaration): \n";
+	    expectedOutput += "            isInterface: \"false\"\n";
+	    expectedOutput += "            name(Type=SimpleName): \n";
+	    expectedOutput += "                identifier: \"Dog\"\n";
+	    expectedOutput += "            comment(Type=JavadocComment): \n";
+	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote and newlines\\n \"\n";
 	    expectedOutput += "...";
 	
 	    YamlPrinter yamlPrinter = new YamlPrinter(true);
