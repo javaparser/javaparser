@@ -1,6 +1,5 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -13,7 +12,8 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.EnumSet;
+
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.
@@ -36,7 +36,7 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     public void example1() throws IOException {
         considerExample("Example1_original");
-        cu.getClassByName("A").get().getFieldByName("a").get().setModifiers(EnumSet.of(Modifier.STATIC));
+        cu.getClassByName("A").get().getFieldByName("a").get().setModifiers(STATIC);
         assertTransformed("Example1", cu);
     }
 

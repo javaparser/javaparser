@@ -22,19 +22,15 @@
 package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.JavaParser.parseExpression;
-import static com.github.javaparser.JavaParser.parseType;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static org.junit.Assert.*;
 
 public class NodeWithMembersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -42,7 +38,7 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testAddField() {
-        FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
+        FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addField, classDeclaration.getMember(0));
         assertEquals("fieldName", addField.getVariable(0).getNameAsString());
@@ -50,7 +46,7 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testAddMethod() {
-        MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
+        MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addMethod, classDeclaration.getMember(0));
         assertEquals("foo", addMethod.getNameAsString());
@@ -58,7 +54,7 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testAddCtor() {
-        ConstructorDeclaration addCtor = classDeclaration.addConstructor(Modifier.PUBLIC);
+        ConstructorDeclaration addCtor = classDeclaration.addConstructor(PUBLIC);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addCtor, classDeclaration.getMember(0));
         assertEquals(classDeclaration.getName(), addCtor.getName());
@@ -77,8 +73,8 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testGetMethodsWithName() {
-        MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
-        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
+        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
         List<MethodDeclaration> methodsByName = classDeclaration.getMethodsByName("foo");
         assertEquals(2, methodsByName.size());
         assertTrue(methodsByName.contains(addMethod));
@@ -87,8 +83,8 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testGetMethods() {
-        MethodDeclaration addMethod = classDeclaration.addMethod("foo", Modifier.PUBLIC);
-        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
+        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
 
         List<MethodDeclaration> methods = classDeclaration.getMethods();
 
@@ -99,12 +95,12 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testGetMethodsWithParameterTypes() {
-        classDeclaration.addMethod("foo", Modifier.PUBLIC);
-        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
+        classDeclaration.addMethod("foo", PUBLIC);
+        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
         type.setTypeArguments(parseClassOrInterfaceType("String"));
-        MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(type, "overload");
-        MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", Modifier.PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", PUBLIC).addParameter(type, "overload");
+        MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "overload");
 
         List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypes(int.class);
         assertEquals(2, methodsByParam.size());
@@ -117,16 +113,16 @@ public class NodeWithMembersBuildersTest {
 
     @Test
     public void testGetFieldWithName() {
-        FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
-        classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
+        FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
+        classDeclaration.addField(float.class, "secondField", PRIVATE);
         FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName").get();
         assertEquals(addField, fieldByName);
     }
 
     @Test
     public void testGetFields() {
-        FieldDeclaration firstField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
-        FieldDeclaration secondField = classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
+        FieldDeclaration firstField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
+        FieldDeclaration secondField = classDeclaration.addField(float.class, "secondField", PRIVATE);
 
         List<FieldDeclaration> fields = classDeclaration.getFields();
 
@@ -144,7 +140,7 @@ public class NodeWithMembersBuildersTest {
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
         FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(Modifier.PRIVATE, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals(PRIVATE, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
     }
@@ -159,7 +155,7 @@ public class NodeWithMembersBuildersTest {
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
         FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
     }
@@ -174,7 +170,7 @@ public class NodeWithMembersBuildersTest {
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
         FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(Modifier.PROTECTED, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals(PROTECTED, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
     }
@@ -187,12 +183,12 @@ public class NodeWithMembersBuildersTest {
                 "java.lang.String",
                 "name",
                 parseExpression("John"),
-                Modifier.PUBLIC);
+                PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
         FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("java.lang.String",fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name",fieldDeclaration.getVariables().get(0).getName().toString());
         assertEquals("John",fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
@@ -206,12 +202,12 @@ public class NodeWithMembersBuildersTest {
                 List.class,
                 "skills",
                 parseExpression("new ArrayList()"),
-                Modifier.PUBLIC);
+                PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
         FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(Modifier.PUBLIC, fieldDeclaration.getModifiers().iterator().next());
+        assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("List",fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("skills",fieldDeclaration.getVariables().get(0).getName().toString());
         assertEquals("new ArrayList()",fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
