@@ -21,18 +21,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.EnumSet;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Transforming AnnotationDeclaration and verifying the LexicalPreservation works as expected.
@@ -60,21 +58,21 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void addingModifiers() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(createModifierList(PUBLIC));
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformed("AnnotationDeclaration_Example2", cu);
     }
 
     @Test
     public void removingModifiers() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(new NodeList<>());
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformed("AnnotationDeclaration_Example3", cu);
     }
 
     @Test
     public void replacingModifiers() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(createModifierList(PROTECTED));
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformed("AnnotationDeclaration_Example4", cu);
     }
 
@@ -83,7 +81,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void addingMember() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().addMember(new AnnotationMemberDeclaration(new NodeList<>(), PrimitiveType.intType(), "foo", null));
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().addMember(new AnnotationMemberDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), "foo", null));
         assertTransformed("AnnotationDeclaration_Example5", cu);
     }
 
@@ -97,7 +95,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void replacingMember() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().setMember(2, new AnnotationMemberDeclaration(new NodeList<>(), PrimitiveType.intType(), "foo", null));
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setMember(2, new AnnotationMemberDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), "foo", null));
         assertTransformed("AnnotationDeclaration_Example7", cu);
     }
 
@@ -114,7 +112,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     public void removingJavadoc() throws IOException {
         considerExample("AnnotationDeclaration_Example9_original");
         boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavadocComment().get().remove();
-        assertTrue(removed);
+        assertEquals(true, removed);
         assertTransformed("AnnotationDeclaration_Example9", cu);
     }
 

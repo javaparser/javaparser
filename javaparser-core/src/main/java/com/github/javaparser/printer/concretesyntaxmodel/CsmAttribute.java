@@ -27,8 +27,6 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 public class CsmAttribute implements CsmElement {
     public ObservableProperty getProperty() {
         return property;
@@ -49,7 +47,6 @@ public class CsmAttribute implements CsmElement {
     /**
      * Obtain the token type corresponding to the specific value of the attribute.
      * For example, to the attribute "Operator" different token could correspond like PLUS or MINUS.
-     *
      * @param tokenText Operator's token text
      */
     public int getTokenType(Node node, String text, String tokenText) {
@@ -63,9 +60,8 @@ public class CsmAttribute implements CsmElement {
                         return i;
                     }
                 }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), text));
+                throw new RuntimeException("Attribute 'type' does not corresponding to any expected value. Text: " + text);
             }
-            case KEYWORD:
             case OPERATOR: {
                 String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
                 for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
@@ -73,7 +69,7 @@ public class CsmAttribute implements CsmElement {
                         return i;
                     }
                 }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), tokenText));
+                throw new RuntimeException("Attribute 'operator' does not corresponding to any expected value. Text: " + tokenText);
             }
             case VALUE:
                 if (node instanceof IntegerLiteralExpr) {

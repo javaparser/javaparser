@@ -12,7 +12,7 @@ import com.github.javaparser.utils.SourceRoot;
 
 import java.util.Optional;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.PUBLIC;
 
 /**
  * Makes it easier to generate visitor classes.

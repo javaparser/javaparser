@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -65,7 +66,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 

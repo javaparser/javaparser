@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -31,10 +31,7 @@ import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservi
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
+import java.util.EnumSet;
 
 /**
  * Transforming ConstructorDeclaration and verifying the LexicalPreservation works as expected.
@@ -60,58 +57,58 @@ public class ConstructorDeclarationTransformationsTest extends AbstractLexicalPr
     // Modifiers
 
     @Test
-    public void addingModifiers() {
+    public void addingModifiers() throws IOException {
         ConstructorDeclaration cd = consider("A(){}");
-        cd.setModifiers(createModifierList(PUBLIC));
+        cd.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public A(){}", cd);
     }
 
     @Test
     public void removingModifiers() throws IOException {
         ConstructorDeclaration cd = consider("public A(){}");
-        cd.setModifiers(new NodeList<>());
+        cd.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("A(){}", cd);
     }
 
     @Test
-    public void replacingModifiers() {
+    public void replacingModifiers() throws IOException {
         ConstructorDeclaration cd = consider("public A(){}");
-        cd.setModifiers(createModifierList(PROTECTED));
+        cd.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected A(){}", cd);
     }
 
     // Parameters
 
     @Test
-    public void addingParameters() {
+    public void addingParameters() throws IOException {
         ConstructorDeclaration cd = consider("A(){}");
         cd.addParameter(PrimitiveType.doubleType(), "d");
         assertTransformedToString("A(double d){}", cd);
     }
 
     @Test
-    public void removingOnlyParameter() {
+    public void removingOnlyParameter() throws IOException {
         ConstructorDeclaration cd = consider("public A(double d){}");
         cd.getParameters().remove(0);
         assertTransformedToString("public A(){}", cd);
     }
 
     @Test
-    public void removingFirstParameterOfMany() {
+    public void removingFirstParameterOfMany() throws IOException {
         ConstructorDeclaration cd = consider("public A(double d, float f){}");
         cd.getParameters().remove(0);
         assertTransformedToString("public A(float f){}", cd);
     }
 
     @Test
-    public void removingLastParameterOfMany() {
+    public void removingLastParameterOfMany() throws IOException {
         ConstructorDeclaration cd = consider("public A(double d, float f){}");
         cd.getParameters().remove(1);
         assertTransformedToString("public A(double d){}", cd);
     }
 
     @Test
-    public void replacingOnlyParameter() {
+    public void replacingOnlyParameter() throws IOException {
         ConstructorDeclaration cd = consider("public A(float f){}");
         cd.getParameters().set(0, new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo")));
         assertTransformedToString("public A(int[] foo){}", cd);

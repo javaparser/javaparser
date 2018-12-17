@@ -1,11 +1,13 @@
 package com.github.javaparser.printer;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +39,23 @@ public class JsonPrinter {
         List<PropertyMetaModel> attributes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).collect(toList());
         List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).collect(toList());
         List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
+        List<PropertyMetaModel> subEnumSets = allPropertyMetaModels.stream().filter(PropertyMetaModel::isEnumSet).collect(toList());
 
         final List<String> content = new ArrayList<>();
 
         if (outputNodeType) {
             content.add(q("_type") + ":" + q(metaModel.getTypeName()));
+        }
+
+        for (PropertyMetaModel enumSetMetaModel : subEnumSets) {
+            EnumSet<Modifier> value = (EnumSet<Modifier>) enumSetMetaModel.getValue(node);
+            if (!value.isEmpty()) {
+                List<String> enumSetContent = new ArrayList<>();
+                for (Modifier modifier : value) {
+                    enumSetContent.add(q(modifier.asString()));
+                }
+                content.add(enumSetContent.stream().collect(Collectors.joining(",", q(enumSetMetaModel.getName()) + ":[", "]")));
+            }
         }
 
         for (PropertyMetaModel attributeMetaModel : attributes) {
