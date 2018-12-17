@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -445,6 +446,21 @@ public class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("overloaded", ref.getName());
         assertEquals(1, ref.getNoParams());
         assertEquals("java.lang.String", ref.getParamTypes().get(0).describe());
+    }
+
+    @Test
+    public void resolveReferenceToMethodWithGenericArrayTypeParam() {
+        CompilationUnit cu = parseSample("GenericArrayMethodArgument");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericArrayMethodArgument");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr call = Navigator.findMethodCall(method, "foo").get();
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("foo", ref.getName());
+        assertEquals(1, ref.getNoParams());
+        assertEquals("java.lang.String[]", ref.getParamType(0).describe());
     }
 
     @Test
