@@ -201,4 +201,20 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
+    @Test
+    public void resolveInheritedFieldFromInterface() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ReflectionTypeSolverFieldFromInterfaceResolution");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        Expression expression = returnStmt.getExpression().get();
+
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+        assertEquals("int", ref.describe());
+    }
+
 }

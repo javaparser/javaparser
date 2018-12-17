@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
@@ -30,14 +30,10 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import org.junit.Test;
 
-import java.util.EnumSet;
-
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CommentTest {
 
@@ -45,7 +41,7 @@ public class CommentTest {
 
     @Test
     public void removeOrphanComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
@@ -55,12 +51,12 @@ public class CommentTest {
 
     @Test
     public void removeAssociatedComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.setComment(c);
-        assertEquals(true, decl.getComment().isPresent());
+        assertTrue(decl.getComment().isPresent());
         assertTrue(c.remove());
-        assertEquals(false, decl.getComment().isPresent());
+        assertFalse(decl.getComment().isPresent());
     }
 
     @Test

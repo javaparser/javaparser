@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;

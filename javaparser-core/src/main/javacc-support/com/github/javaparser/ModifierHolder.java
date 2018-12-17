@@ -12,11 +12,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Helper class for {@link GeneratedJavaParser}
  */
 class ModifierHolder {
-    final EnumSet<Modifier> modifiers;
+    final NodeList<Modifier> modifiers;
     final NodeList<AnnotationExpr> annotations;
     final JavaToken begin;
 
-    ModifierHolder(JavaToken begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
+    ModifierHolder(JavaToken begin, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
         this.begin = begin;
         this.modifiers = assertNotNull(modifiers);
         this.annotations = annotations;
