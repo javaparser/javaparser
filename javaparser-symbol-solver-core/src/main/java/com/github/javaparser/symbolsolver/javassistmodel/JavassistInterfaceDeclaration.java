@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -205,7 +204,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 

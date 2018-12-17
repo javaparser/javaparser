@@ -3,6 +3,7 @@ package com.github.javaparser.ast.modules;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier;
@@ -10,8 +11,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.EnumSet;
-import static com.github.javaparser.ast.Modifier.TRANSITIVE;
+import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
@@ -25,16 +25,16 @@ import com.github.javaparser.ast.Generated;
  */
 public final class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
-    private EnumSet<Modifier> modifiers;
+    private NodeList<Modifier> modifiers;
 
     private Name name;
 
     public ModuleRequiresDirective() {
-        this(null, EnumSet.noneOf(Modifier.class), new Name());
+        this(null, new NodeList<>(), new Name());
     }
 
     @AllFieldsConstructor
-    public ModuleRequiresDirective(EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(NodeList<Modifier> modifiers, Name name) {
         this(null, modifiers, name);
     }
 
@@ -42,7 +42,7 @@ public final class ModuleRequiresDirective extends ModuleDirective implements No
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleRequiresDirective(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name) {
         super(tokenRange);
         setModifiers(modifiers);
         setName(name);
@@ -62,18 +62,21 @@ public final class ModuleRequiresDirective extends ModuleDirective implements No
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumSet<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresDirective setModifiers(final EnumSet<Modifier> modifiers) {
+    public ModuleRequiresDirective setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (ModuleRequiresDirective) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -97,7 +100,7 @@ public final class ModuleRequiresDirective extends ModuleDirective implements No
     }
 
     public boolean isTransitive() {
-        return getModifiers().contains(TRANSITIVE);
+        return hasModifier(TRANSITIVE);
     }
 
     public ModuleRequiresDirective setTransitive(boolean set) {
@@ -109,6 +112,12 @@ public final class ModuleRequiresDirective extends ModuleDirective implements No
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -123,6 +132,12 @@ public final class ModuleRequiresDirective extends ModuleDirective implements No
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
         if (node == name) {
             setName((Name) replacementNode);
             return true;

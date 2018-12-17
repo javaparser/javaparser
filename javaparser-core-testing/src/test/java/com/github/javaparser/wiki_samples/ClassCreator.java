@@ -23,23 +23,28 @@ package com.github.javaparser.wiki_samples;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VoidType;
-
-import java.util.EnumSet;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.ast.Modifier.staticModifier;
 
 public class ClassCreator {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // creates the compilation unit
         CompilationUnit cu = createCU();
 
@@ -62,14 +67,14 @@ public class ClassCreator {
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
 
         // create a method
-        EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
+        NodeList<Modifier> modifiers = createModifierList(PUBLIC);
         MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), "main");
-        modifiers.add(Modifier.STATIC);
+        modifiers.add(staticModifier());
         method.setModifiers(modifiers);
         type.addMember(method);
         
         // or a shortcut
-        MethodDeclaration main2 = type.addMethod("main2", Modifier.PUBLIC, Modifier.STATIC);
+        MethodDeclaration main2 = type.addMethod("main2", PUBLIC, STATIC);
 
         // add a parameter to the method
         Parameter param = new Parameter(parseClassOrInterfaceType("String"), "args");
