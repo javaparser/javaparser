@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AnnotationDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.EnumSet;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
@@ -47,15 +48,15 @@ import com.github.javaparser.ast.Generated;
 public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration>, Resolvable<ResolvedAnnotationDeclaration> {
 
     public AnnotationDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
-    public AnnotationDeclaration(NodeList<Modifier> modifiers, String name) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public AnnotationDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, members);
     }
 
@@ -63,7 +64,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AnnotationDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public AnnotationDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         customInitialization();
     }
