@@ -71,7 +71,7 @@ public class YamlPrinterTest {
     public void testWithColonFollowedBySpaceInValue() {
         String expectedOutput = "---" + System.lineSeparator();
         expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "    value: \"a\\\\: b\"" + System.lineSeparator();
+        expectedOutput += "    value: \"a\\\\\\\\: b\"" + System.lineSeparator();
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
@@ -84,7 +84,7 @@ public class YamlPrinterTest {
     public void testWithColonFollowedByLineSeparatorInValue() {
         String expectedOutput = "---" + System.lineSeparator();
         expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "    value: \"a\\\\:\\\\nb\"" + System.lineSeparator();
+        expectedOutput += "    value: \"a\\\\\\\\:\\\\\\\\nb\"" + System.lineSeparator();
         expectedOutput += "...";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
@@ -109,7 +109,7 @@ public class YamlPrinterTest {
 	    expectedOutput += "            name(Type=SimpleName): " + System.lineSeparator();
 	    expectedOutput += "                identifier: \"Dog\"" + System.lineSeparator();
 	    expectedOutput += "            comment(Type=JavadocComment): " + System.lineSeparator();
-	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote\\n \"" + System.lineSeparator();
+	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote and newlines\\n \"" + System.lineSeparator();
 	    expectedOutput += "...";
 	
 	    YamlPrinter yamlPrinter = new YamlPrinter(true);
