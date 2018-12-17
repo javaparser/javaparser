@@ -104,8 +104,12 @@ class ReflectionClassAdapter {
                 return true;
             }
         }
-        ReferenceTypeImpl superclass = getSuperClass();
-        return superclass != null && superclass.getTypeDeclaration().hasField(name);
+        for (ResolvedReferenceType ancestor : typeDeclaration.getAllAncestors()) {
+            if (ancestor.getTypeDeclaration().hasField(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<ResolvedFieldDeclaration> getAllFields() {

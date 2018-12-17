@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -26,9 +25,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -44,7 +43,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
+public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
     private CtMethod ctMethod;
     private TypeSolver typeSolver;
 
@@ -110,9 +109,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
             } else {
                 return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (BadBytecode e) {
+        } catch (NotFoundException | BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -178,7 +175,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctMethod.getModifiers());
     }
 

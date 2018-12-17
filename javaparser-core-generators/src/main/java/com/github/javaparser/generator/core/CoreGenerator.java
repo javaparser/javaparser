@@ -1,5 +1,6 @@
 package com.github.javaparser.generator.core;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
@@ -10,6 +11,8 @@ import com.github.javaparser.utils.SourceRoot;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
+
 /**
  * Generates all generated visitors in the javaparser-core module.
  * Suggested usage is by running the run_core_generators.sh script.
@@ -17,6 +20,7 @@ import java.nio.file.Paths;
  */
 public class CoreGenerator {
     private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
+            .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
 //                                .setLexicalPreservationEnabled(true)
@@ -31,6 +35,7 @@ public class CoreGenerator {
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)

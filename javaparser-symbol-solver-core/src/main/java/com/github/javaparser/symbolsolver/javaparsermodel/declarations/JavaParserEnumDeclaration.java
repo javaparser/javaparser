@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -31,6 +30,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -258,7 +258,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     // Needed by ContextHelper
-    public static class ValuesMethod implements ResolvedMethodDeclaration {
+    public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
         private JavaParserEnumDeclaration enumDeclaration;
         private TypeSolver typeSolver;
@@ -322,8 +322,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public AccessSpecifier accessSpecifier() {
-            return AstResolutionUtils.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
+        public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+            return enumDeclaration.getWrappedNode().getAccessSpecifier();
         }
 
         @Override
@@ -343,7 +343,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
         throw new UnsupportedOperationException();
     }
 
