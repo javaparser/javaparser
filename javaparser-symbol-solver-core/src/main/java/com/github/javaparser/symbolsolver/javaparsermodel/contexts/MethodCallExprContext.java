@@ -402,9 +402,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else if (wildcardUsage.isExtends()) {
-                throw new UnsupportedOperationException("extends wildcard");
+                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else {
-                throw new UnsupportedOperationException("unbounded wildcard");
+                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
             }
         } else if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
