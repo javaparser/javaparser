@@ -198,6 +198,8 @@ public abstract class BaseNodeMetaModel {
                         if (paramArray[i] == null && constructorParameter.isRequired()) {
                             if (constructorParameter.isNodeList()) {
                                 paramArray[i] = new NodeList<>();
+                            } else if (constructorParameter.isEnumSet()) {
+                                paramArray[i] = EnumSet.noneOf(Modifier.class);
                             }
                             // We could have more defaults here.
                         }

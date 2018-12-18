@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -109,7 +110,9 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
             } else {
                 return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
             }
-        } catch (NotFoundException | BadBytecode e) {
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -175,7 +178,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctMethod.getModifiers());
     }
 

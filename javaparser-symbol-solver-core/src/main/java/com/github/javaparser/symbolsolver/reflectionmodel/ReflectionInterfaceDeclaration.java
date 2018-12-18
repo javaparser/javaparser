@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -307,7 +308,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 
