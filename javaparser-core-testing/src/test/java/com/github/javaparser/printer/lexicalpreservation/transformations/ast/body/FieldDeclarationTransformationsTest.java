@@ -76,6 +76,12 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
         assertTransformedToString("Xyz a, b;", it);
     }
 
+    @Test
+    public void changingNonePrimitiveTypes() {
+        FieldDeclaration it = consider("String a;");
+        it.getVariable(0).setType("Xyz");
+    }
+
     // Annotations
     @Test
     public void removingAnnotations() {
