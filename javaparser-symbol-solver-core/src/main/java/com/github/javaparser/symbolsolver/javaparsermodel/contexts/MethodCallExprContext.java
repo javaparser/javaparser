@@ -255,6 +255,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             mappings.put(target.asTypeParameter(), source);
             return;
         }
+        if (source.isArray() && target.isArray()) {
+            ResolvedType sourceComponentType = source.asArrayType().getComponentType();
+            ResolvedType targetComponentType = target.asArrayType().getComponentType();
+            inferTypes(sourceComponentType, targetComponentType, mappings);
+            return;
+        }
         if (source.isArray() && target.isWildcard()){
             if(target.asWildcard().isBounded()){
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
