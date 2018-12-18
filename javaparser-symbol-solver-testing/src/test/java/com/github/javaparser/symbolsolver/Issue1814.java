@@ -5,6 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -33,8 +34,8 @@ public class Issue1814 extends AbstractResolutionTest {
         final CompilationUnit compilationUnit = new CompilationUnit();
         compilationUnit.setPackageDeclaration("java.lang");
         // construct a fake java.lang.Object class with only one method (java.lang.Object#equals(java.lang.Object)
-        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.Keyword.PUBLIC);
-        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.Keyword.PUBLIC);
+        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.PUBLIC);
+        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.PUBLIC);
         equals.addParameter("Object", "obj");
         final BlockStmt body = new BlockStmt();
         body.addStatement("return this == obj;");

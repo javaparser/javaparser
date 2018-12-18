@@ -19,9 +19,10 @@ public class PropertyMetaModel {
     private final boolean isOptional;
     private final boolean isNonEmpty;
     private final boolean isNodeList;
+    private final boolean isEnumSet;
     private final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean hasWildcard) {
+    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
         this.containingNodeMetaModel = containingNodeMetaModel;
         this.name = name;
         this.type = type;
@@ -29,6 +30,7 @@ public class PropertyMetaModel {
         this.isOptional = isOptional;
         this.isNonEmpty = isNonEmpty;
         this.isNodeList = isNodeList;
+        this.isEnumSet = isEnumSet;
         this.hasWildcard = hasWildcard;
     }
 
@@ -117,6 +119,13 @@ public class PropertyMetaModel {
     }
 
     /**
+     * @return whether this property is contained in an EnumSet.
+     */
+    public boolean isEnumSet() {
+        return isEnumSet;
+    }
+
+    /**
      * @return whether this property has a wildcard following it, like BodyDeclaration&lt;?&gt;.
      */
     public boolean hasWildcard() {
@@ -127,7 +136,7 @@ public class PropertyMetaModel {
      * @return whether this property is not a list or set.
      */
     public boolean isSingular() {
-        return !isNodeList;
+        return !(isNodeList || isEnumSet);
     }
 
     @Override
@@ -156,7 +165,7 @@ public class PropertyMetaModel {
     }
 
     /**
-     * @return the type of a single element of this property, so no Optional or NodeList.
+     * @return the type of a single element of this property, so no Optional or NodeList or EnumSet.
      */
     public String getTypeNameGenerified() {
         if (hasWildcard) {
@@ -188,6 +197,9 @@ public class PropertyMetaModel {
     public String getTypeNameForSetter() {
         if (isNodeList) {
             return "NodeList<" + getTypeNameGenerified() + ">";
+        }
+        if (isEnumSet) {
+            return "EnumSet<" + getTypeNameGenerified() + ">";
         }
         return getTypeNameGenerified();
     }

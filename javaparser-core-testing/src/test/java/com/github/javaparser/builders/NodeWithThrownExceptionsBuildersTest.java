@@ -30,19 +30,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class NodeWithThrownExceptionsBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testThrows() {
-        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
+        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
         addMethod.addThrownException(IllegalStateException.class);
         assertEquals(1, addMethod.getThrownExceptions().size());
-        assertTrue(addMethod.isThrown(IllegalStateException.class));
+        assertEquals(true, addMethod.isThrown(IllegalStateException.class));
         addMethod.addThrownException(parseClassOrInterfaceType("Test"));
         assertEquals(2, addMethod.getThrownExceptions().size());
         assertEquals("Test", addMethod.getThrownException(1).toString());

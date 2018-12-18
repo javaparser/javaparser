@@ -34,6 +34,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.jbehave.core.annotations.Alias;
@@ -41,14 +42,13 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.util.EnumSet;
 import java.util.Map;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.ast.Modifier.staticModifier;
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.ast.type.PrimitiveType.intType;
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
@@ -133,7 +133,7 @@ public class ManipulationSteps {
     @When("a public class called \"$className\" is added to the CompilationUnit")
     public void whenAClassCalledIsAddedToTheCompilationUnit(String className) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(createModifierList(PUBLIC), false, "CreateClass");
+        TypeDeclaration<?> type = new ClassOrInterfaceDeclaration(EnumSet.of(Modifier.PUBLIC), false, "CreateClass");
         compilationUnit.setTypes(nodeList(type));
         state.put("cu1", compilationUnit);
     }
@@ -142,9 +142,9 @@ public class ManipulationSteps {
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration<?> type = compilationUnit.getType(position - 1);
-        NodeList<Modifier> modifiers = createModifierList(PUBLIC);
+        EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
         MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), methodName);
-        modifiers.add(staticModifier());
+        modifiers.add(Modifier.STATIC);
         method.setModifiers(modifiers);
         type.addMember(method);
         state.put("cu1", compilationUnit);
@@ -192,7 +192,7 @@ public class ManipulationSteps {
     }
 
     @When("the compilation unit is cloned")
-    public void whenTheCompilationUnitIsCloned() {
+    public void whenTheCompilationUnitIsCloned() throws CloneNotSupportedException {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         state.put("cu1", compilationUnit.clone());
     }

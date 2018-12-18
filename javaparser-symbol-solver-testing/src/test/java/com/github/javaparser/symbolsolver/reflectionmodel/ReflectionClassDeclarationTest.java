@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -32,13 +32,10 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Modifier.Keyword.DEFAULT;
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
-import static java.util.Comparator.*;
 import static org.junit.Assert.*;
 
 public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
-
+    
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
     @Test
@@ -172,12 +169,13 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessSpecifier() != Modifier.Keyword.PRIVATE && m.accessSpecifier() != Modifier.Keyword.DEFAULT)
-                .sorted((a, b) -> a.getName().compareTo(b.getName()))
+                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
+                .sorted(Comparator.comparing(ResolvedDeclaration::getName))
                 .collect(Collectors.toList());
-        int foundCount = 0;
+
+        int foundCount=0;
         for (ResolvedMethodDeclaration method : methods) {
-            switch (method.getName()) {
+            switch (method.getName()){
                 case "charAt":
                     assertFalse(method.isAbstract());
                     assertEquals(1, method.getNumberOfParams());
@@ -593,7 +591,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
 
         ResolvedReferenceType ancestor;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
-        ancestors.sort(comparing(ResolvedReferenceType::getQualifiedName));
+        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.get(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
@@ -646,7 +644,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
 
         ResolvedReferenceType ancestor;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        ancestors.sort(comparing(ResolvedReferenceType::getQualifiedName));
+        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.HasParentNode", ancestor.getQualifiedName());
