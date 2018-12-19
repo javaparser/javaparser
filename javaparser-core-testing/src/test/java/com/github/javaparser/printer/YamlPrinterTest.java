@@ -41,7 +41,7 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
-        assertEquals(read("yamlWithType.yaml"), output);
+        assertEqualsNoEol(read("yamlWithType.yaml"), output);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
         String output = yamlPrinter.output(expression);
-        assertEquals(read("yamlWithoutType.yaml"), output);
+        assertEqualsNoEol(read("yamlWithoutType.yaml"), output);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
-        assertEquals(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
+        assertEqualsNoEol(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
-        assertEquals(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
+        assertEqualsNoEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
     }
 
     @Test
@@ -78,6 +78,6 @@ public class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         CompilationUnit computationUnit = JavaParser.parse(code);
         String output = yamlPrinter.output(computationUnit);
-        assertEquals(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
+        assertEqualsNoEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
     }
 }

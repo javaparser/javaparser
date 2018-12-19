@@ -99,14 +99,13 @@ public class YamlPrinter {
     }
 
     private String escapeValue(String value) {
-        return "\"" +
-                value
-                        .replace("\\", "\\\\")
-                        .replaceAll("\"", "\\\\\"")
-                        .replace("\n", "\\n")
-                        .replace("\r", "\\r")
-                        .replace("\f", "\\f")
-                        .replace("\b", "\\b")
-                        .replace("\t", "\\t") + "\"";
+        return "\"" + value
+                .replace("\\", "\\\\")
+                .replaceAll("\"", "\\\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\f", "\\f")
+                .replace("\b", "\\b")
+                .replace("\t", "\\t") + "\"";
     }
 }
