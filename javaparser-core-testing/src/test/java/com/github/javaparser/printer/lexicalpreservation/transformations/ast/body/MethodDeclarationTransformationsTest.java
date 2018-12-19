@@ -32,16 +32,18 @@ import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
+import java.util.EnumSet;
+
+import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -195,28 +197,28 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     @Test
     public void addingModifiers() {
         MethodDeclaration it = consider("void A(){}");
-        it.setModifiers(createModifierList(PUBLIC));
+        it.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public void A(){}", it);
     }
 
     @Test
     public void removingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
-        it.setModifiers(new NodeList<>());
+        it.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("void A(){}", it);
     }
 
     @Test
     public void removingModifiersWithExistingAnnotationsShort() {
         MethodDeclaration it = consider("@Override public void A(){}");
-        it.setModifiers(new NodeList<>());
+        it.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("@Override void A(){}", it);
     }
 
     @Test
     public void removingPublicModifierFromPublicStaticMethod() {
         MethodDeclaration it = consider("public static void a(){}");
-        it.removeModifier(Modifier.Keyword.PUBLIC);
+        it.removeModifier(Modifier.PUBLIC);
         assertTransformedToString("static void a(){}", it);
     }
 
@@ -230,7 +232,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "}" + EOL
         );
 
-        cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
+        cu.getType(0).getMethods().get(0).setModifiers(EnumSet.noneOf(Modifier.class));
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsNoEol("class X {\n" +
@@ -243,14 +245,14 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     @Test
     public void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
-        it.setModifiers(createModifierList(PROTECTED));
+        it.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected void A(){}", it);
     }
 
     @Test
     public void replacingModifiersWithExistingAnnotationsShort() {
         MethodDeclaration it = consider("@Override public void A(){}");
-        it.setModifiers(createModifierList(PROTECTED));
+        it.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("@Override protected void A(){}", it);
     }
 
@@ -264,7 +266,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "}" + EOL
         );
 
-        cu.getType(0).getMethods().get(0).setModifiers(createModifierList(PROTECTED));
+        cu.getType(0).getMethods().get(0).setModifiers(EnumSet.of(Modifier.PROTECTED));
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsNoEol("class X {\n" +

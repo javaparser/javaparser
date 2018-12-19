@@ -21,7 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 
 /**
  * Anything which can have an AccessSpecifier.
@@ -32,8 +32,7 @@ public interface HasAccessSpecifier {
 
     /**
      * The access specifier of this element.
-     * Only PUBLIC, PROTECTED, PRIVATE, or DEFAULT are returned.
      */
-    Modifier.Keyword accessSpecifier();
+    AccessSpecifier accessSpecifier();
 
 }

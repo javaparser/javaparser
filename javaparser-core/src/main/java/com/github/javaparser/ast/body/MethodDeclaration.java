@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -35,7 +36,9 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.EnumSet;
 import java.util.Optional;
+import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -65,23 +68,23 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     private BlockStmt body;
 
     public MethodDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final Type type, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
         this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
         this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), parameters, new NodeList<>(), new BlockStmt(), null);
     }
 
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
     }
 
@@ -89,7 +92,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      * @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set.
      */
     @Deprecated
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
         setDefault(isDefault);
     }
@@ -98,7 +101,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
+    public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
         setType(type);
         setBody(body);
@@ -161,7 +164,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
-    public MethodDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         return super.setModifiers(modifiers);
     }
 
@@ -198,23 +201,22 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            Modifier.Keyword accessSpecifier = getAccessSpecifier();
-            if (!accessSpecifier.isPseudoKeyword()) {
-                sb.append(accessSpecifier.asString()).append(" ");
-            }
-            if (isStatic()) {
+            AccessSpecifier accessSpecifier = getAccessSpecifier(getModifiers());
+            sb.append(accessSpecifier.asString());
+            sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
+            if (getModifiers().contains(STATIC)) {
                 sb.append("static ");
             }
-            if (isAbstract()) {
+            if (getModifiers().contains(ABSTRACT)) {
                 sb.append("abstract ");
             }
-            if (isFinal()) {
+            if (getModifiers().contains(FINAL)) {
                 sb.append("final ");
             }
-            if (isNative()) {
+            if (getModifiers().contains(NATIVE)) {
                 sb.append("native ");
             }
-            if (isSynchronized()) {
+            if (getModifiers().contains(SYNCHRONIZED)) {
                 sb.append("synchronized ");
             }
         }
@@ -244,27 +246,27 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     public boolean isNative() {
-        return hasModifier(Modifier.Keyword.NATIVE);
+        return getModifiers().contains(NATIVE);
     }
 
     public boolean isSynchronized() {
-        return hasModifier(Modifier.Keyword.SYNCHRONIZED);
+        return getModifiers().contains(SYNCHRONIZED);
     }
 
     public boolean isDefault() {
-        return hasModifier(Modifier.Keyword.DEFAULT);
+        return getModifiers().contains(DEFAULT);
     }
 
     public MethodDeclaration setNative(boolean set) {
-        return setModifier(Modifier.Keyword.NATIVE, set);
+        return setModifier(NATIVE, set);
     }
 
     public MethodDeclaration setSynchronized(boolean set) {
-        return setModifier(Modifier.Keyword.SYNCHRONIZED, set);
+        return setModifier(SYNCHRONIZED, set);
     }
 
     public MethodDeclaration setDefault(boolean set) {
-        return setModifier(Modifier.Keyword.DEFAULT, set);
+        return setModifier(DEFAULT, set);
     }
 
     @Override

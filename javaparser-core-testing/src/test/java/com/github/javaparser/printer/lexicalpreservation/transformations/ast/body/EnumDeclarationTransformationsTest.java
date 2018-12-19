@@ -21,15 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
+import java.util.EnumSet;
+
 import static com.github.javaparser.utils.Utils.EOL;
 
 /**
@@ -58,21 +57,21 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
     @Test
     public void addingModifiers() {
         EnumDeclaration ed = consider("enum A { E1, E2 }");
-        ed.setModifiers(createModifierList(PUBLIC));
+        ed.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public enum A { E1, E2 }", ed);
     }
 
     @Test
     public void removingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
-        ed.setModifiers(new NodeList<>());
+        ed.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("enum A { E1, E2 }", ed);
     }
 
     @Test
     public void replacingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
-        ed.setModifiers(createModifierList(PROTECTED));
+        ed.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected enum A { E1, E2 }", ed);
     }
 
