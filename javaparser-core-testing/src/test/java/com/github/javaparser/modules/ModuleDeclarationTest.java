@@ -113,7 +113,7 @@ public class ModuleDeclarationTest {
                         "  requires A.B;" +
                         "  requires transitive C.D;" +
                         "  requires static E.F;" +
-                        "  requires transitive static G.H;" +
+                        "  requires static transitive G.H;" +
                         "" +
                         "  exports P.Q;" +
                         "  exports R.S to T1.U1, T2.U2;" +
