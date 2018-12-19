@@ -1,0 +1,10 @@
+---
+root(Type=MethodCallExpr): 
+    name(Type=SimpleName): 
+        identifier: "x"
+    arguments: 
+        - argument(Type=IntegerLiteralExpr): 
+            value: "1"
+        - argument(Type=IntegerLiteralExpr): 
+            value: "1"
+...
