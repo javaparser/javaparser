@@ -88,7 +88,11 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
      * @return the literal value as a double
      */
     public double asDouble() {
-        return Double.parseDouble(value);
+        // Underscores are allowed in number literals for readability reasons but cause a NumberFormatException if
+        // passed along to Double#parseDouble. Hence, we apply a simple filter to remove all underscores.
+        // See https://github.com/javaparser/javaparser/issues/1980 for more information.
+        String noUnderscoreValue = value.replaceAll("_", "");
+        return Double.parseDouble(noUnderscoreValue);
     }
 
     public DoubleLiteralExpr setDouble(double value) {
