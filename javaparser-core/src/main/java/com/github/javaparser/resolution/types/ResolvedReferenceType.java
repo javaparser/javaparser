@@ -30,7 +30,6 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -471,6 +470,12 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             for (int i = 0; i < typeParametersValues().size(); i++) {
                 ResolvedType thisParam = typeParametersValues().get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
+                //Sometimes, thisParam and otherParam may be LazyType.
+                if(thisParam.isReferenceType() && otherParam.isReferenceType()
+                		&& thisParam.asReferenceType().typeDeclaration.equals(otherParam.asReferenceType().typeDeclaration)) {
+                	return true;
+                }
+                	
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof ResolvedWildcard) {
                         ResolvedWildcard thisParamAsWildcard = (ResolvedWildcard) thisParam;
