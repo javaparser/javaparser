@@ -69,7 +69,7 @@ public class YamlPrinter {
 
         level++;
         for (PropertyMetaModel a : attributes) {
-        	builder.append(System.lineSeparator() + indent(level) + a.getName() + ": " + escapeValue(a.getValue(node).toString()));
+            builder.append(System.lineSeparator() + indent(level) + a.getName() + ": " + escapeValue(a.getValue(node).toString()));
         }
 
         for (PropertyMetaModel sn : subNodes) {
@@ -97,9 +97,15 @@ public class YamlPrinter {
                 sb.append(" ");
         return sb.toString();
     }
-    
+
     private String escapeValue(String value) {
-    	return "\"" + value.replace("\\", "\\\\").replaceAll("\"", "\\\\\"").replace("\n", "\\n").
-    			replace("\t", "\\t") + "\"";
+        return "\"" + value
+                .replace("\\", "\\\\")
+                .replaceAll("\"", "\\\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\f", "\\f")
+                .replace("\b", "\\b")
+                .replace("\t", "\\t") + "\"";
     }
 }

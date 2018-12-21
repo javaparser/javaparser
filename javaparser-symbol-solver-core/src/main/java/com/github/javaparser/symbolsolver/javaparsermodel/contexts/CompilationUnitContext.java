@@ -197,6 +197,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref != null && ref.isSolved()) {
                             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                        } else {
+                            return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
                         }
                     }
                 }
@@ -260,8 +262,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if(importDecl.isStatic()){
-                if(importDecl.isAsterisk()){
+            if (importDecl.isStatic()) {
+                if (importDecl.isAsterisk()) {
                     String importString = importDecl.getNameAsString();
 
                     if (this.wrappedNode.getPackageDeclaration().isPresent()
@@ -278,7 +280,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (method.isSolved()) {
                         return method;
                     }
-                } else{
+                } else {
                     String qName = importDecl.getNameAsString();
 
                     if (qName.equals(name) || qName.endsWith("." + name)) {
@@ -287,6 +289,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
                         if (method.isSolved()) {
                             return method;
+                        } else {
+                            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
                         }
                     }
                 }

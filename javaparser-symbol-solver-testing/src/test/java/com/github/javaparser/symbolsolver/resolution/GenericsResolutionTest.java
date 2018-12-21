@@ -198,6 +198,32 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void resolveUsageOfMethodOfGenericClassWithUnboundedWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "unbounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "toString").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("toString", methodUsage.getName());
+        assertEquals("java.lang.Object", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
+    public void resolveUsageOfMethodOfGenericClassWithExtendsWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "bar").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("bar", methodUsage.getName());
+        assertEquals("GenericsWildcard.Foo", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
     public void resolveElementOfList() {
         CompilationUnit cu = parseSample("ElementOfList");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");
