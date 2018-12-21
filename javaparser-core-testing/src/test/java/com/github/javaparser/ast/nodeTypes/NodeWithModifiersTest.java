@@ -58,7 +58,7 @@ public class NodeWithModifiersTest {
         });
         decl.addModifier(PUBLIC);
         assertEquals(1, changes.size());
-        assertEquals("property MODIFIERS is changed to [PUBLIC]", changes.get(0));
+        assertEquals("property MODIFIERS is changed to [public ]", changes.get(0));
     }
 
 }
