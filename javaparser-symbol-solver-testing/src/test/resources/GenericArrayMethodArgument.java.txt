@@ -1,0 +1,12 @@
+class GenericArrayMethodArgument {
+
+    static class Foo<T> {
+        public void foo(T[] array) {}
+    }
+
+    public void bar() {
+        Foo<String> foo = new Foo<>();
+        foo.foo(new String[1]);
+    }
+
+}
