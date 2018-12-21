@@ -70,6 +70,6 @@ public class JsonPrinterTest {
 
         String output = printer.output(unit);
 
-        assertEquals("{\"_type\":\"CompilationUnit\",\"types\":[{\"_type\":\"ClassOrInterfaceDeclaration\",\"modifiers\":[\"public\"],\"isInterface\":\"false\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"_type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"}}]}", output);
+        assertEquals("{\"_type\":\"CompilationUnit\",\"types\":[{\"_type\":\"ClassOrInterfaceDeclaration\",\"isInterface\":\"false\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"_type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"},\"modifiers\":[{\"_type\":\"Modifier\",\"keyword\":\"PUBLIC\"}]}]}", output);
     }
 }
