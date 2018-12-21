@@ -255,7 +255,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final Name n, final Void arg) {
-        return (n.getAnnotations().accept(this, arg)) * 31 + (n.getIdentifier().hashCode()) * 31 + (n.getQualifier().isPresent() ? n.getQualifier().get().accept(this, arg) : 0);
+        return (n.getIdentifier().hashCode()) * 31 + (n.getQualifier().isPresent() ? n.getQualifier().get().accept(this, arg) : 0);
     }
 
     public Integer visit(NodeList n, Void arg) {

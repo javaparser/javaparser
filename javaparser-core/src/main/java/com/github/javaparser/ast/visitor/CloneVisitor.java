@@ -522,10 +522,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final Name n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name qualifier = cloneNode(n.getQualifier(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier(), annotations);
+        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier());
         r.setComment(comment);
         return r;
     }

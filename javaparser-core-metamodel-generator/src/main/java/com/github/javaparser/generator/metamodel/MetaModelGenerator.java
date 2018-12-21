@@ -14,7 +14,6 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -151,7 +150,7 @@ public class MetaModelGenerator {
 
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
-    public static void main(String[] args) throws IOException, NoSuchMethodException {
+    public static void main(String[] args) throws NoSuchMethodException {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
@@ -164,7 +163,7 @@ public class MetaModelGenerator {
         sourceRoot.saveAll();
     }
 
-    private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
+    private void run(SourceRoot sourceRoot) throws NoSuchMethodException {
         final CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java");
 
         generateNodeMetaModels(javaParserMetaModel, sourceRoot);
