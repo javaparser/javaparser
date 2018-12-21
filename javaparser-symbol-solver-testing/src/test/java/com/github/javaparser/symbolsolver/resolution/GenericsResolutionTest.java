@@ -31,10 +31,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -197,6 +195,32 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
 
         assertEquals("callee", methodUsage.getName());
+    }
+
+    @Test
+    public void resolveUsageOfMethodOfGenericClassWithUnboundedWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "unbounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "toString").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("toString", methodUsage.getName());
+        assertEquals("java.lang.Object", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
+    public void resolveUsageOfMethodOfGenericClassWithExtendsWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "bar").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("bar", methodUsage.getName());
+        assertEquals("GenericsWildcard.Foo", methodUsage.declaringType().getQualifiedName());
     }
 
     @Test

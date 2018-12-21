@@ -255,6 +255,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             mappings.put(target.asTypeParameter(), source);
             return;
         }
+        if (source.isArray() && target.isArray()) {
+            ResolvedType sourceComponentType = source.asArrayType().getComponentType();
+            ResolvedType targetComponentType = target.asArrayType().getComponentType();
+            inferTypes(sourceComponentType, targetComponentType, mappings);
+            return;
+        }
         if (source.isArray() && target.isWildcard()){
             if(target.asWildcard().isBounded()){
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
@@ -396,9 +402,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else if (wildcardUsage.isExtends()) {
-                throw new UnsupportedOperationException("extends wildcard");
+                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else {
-                throw new UnsupportedOperationException("unbounded wildcard");
+                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
             }
         } else if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;

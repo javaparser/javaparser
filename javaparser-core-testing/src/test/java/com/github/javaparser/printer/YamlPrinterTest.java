@@ -21,100 +21,63 @@
 
 package com.github.javaparser.printer;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
+import org.junit.Test;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.readTextResource;
+import static org.junit.Assert.assertEquals;
 
 public class YamlPrinterTest {
 
+    private String read(String filename) {
+        return readTextResource(YamlPrinterTest.class, filename);
+    }
+
     @Test
     public void testWithType() {
-        String expectedOutput = "---" + System.lineSeparator();
-        expectedOutput += "root(Type=MethodCallExpr): " + System.lineSeparator();
-        expectedOutput += "    name(Type=SimpleName): " + System.lineSeparator();
-        expectedOutput += "        identifier: \"x\"" + System.lineSeparator();
-        expectedOutput += "    arguments: " + System.lineSeparator();
-        expectedOutput += "        - argument(Type=IntegerLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "            value: \"1\"" + System.lineSeparator();
-        expectedOutput += "        - argument(Type=IntegerLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "            value: \"1\"" + System.lineSeparator();
-        expectedOutput += "...";
-
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
-        assertEquals(expectedOutput, output);
+        assertEqualsNoEol(read("yamlWithType.yaml"), output);
     }
 
     @Test
     public void testWithoutType() {
-        String expectedOutput = "---" + System.lineSeparator();
-        expectedOutput += "root: " + System.lineSeparator();
-        expectedOutput += "    operator: \"PLUS\"" + System.lineSeparator();
-        expectedOutput += "    left: " + System.lineSeparator();
-        expectedOutput += "        value: \"1\"" + System.lineSeparator();
-        expectedOutput += "    right: " + System.lineSeparator();
-        expectedOutput += "        value: \"1\"" + System.lineSeparator();
-        expectedOutput += "...";
-
         YamlPrinter yamlPrinter = new YamlPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
         String output = yamlPrinter.output(expression);
-        assertEquals(expectedOutput, output);
+        assertEqualsNoEol(read("yamlWithoutType.yaml"), output);
     }
 
     @Test
     public void testWithColonFollowedBySpaceInValue() {
-        String expectedOutput = "---" + System.lineSeparator();
-        expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "    value: \"a\\\\: b\"" + System.lineSeparator();
-        expectedOutput += "...";
-
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
-        assertEquals(expectedOutput, output);
+        assertEqualsNoEol(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
     }
 
     @Test
     public void testWithColonFollowedByLineSeparatorInValue() {
-        String expectedOutput = "---" + System.lineSeparator();
-        expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "    value: \"a\\\\:\\\\nb\"" + System.lineSeparator();
-        expectedOutput += "...";
-
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
-        assertEquals(expectedOutput, output);
+        assertEqualsNoEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
     }
 
     @Test
     public void testParsingJavadocWithQuoteAndNewline() {
-    	String code = "/**" + System.lineSeparator() + 
-				" * \" this comment contains a quote and newlines" + System.lineSeparator() + 
-				" */" + System.lineSeparator() +
-				"public class Dog {" + System.lineSeparator() +
-				"" + System.lineSeparator() +
-				"}";
-	    String expectedOutput = "---" + System.lineSeparator();
-	    expectedOutput += "root(Type=CompilationUnit): " + System.lineSeparator();
-	    expectedOutput += "    types: " + System.lineSeparator();
-	    expectedOutput += "        - type(Type=ClassOrInterfaceDeclaration): " + System.lineSeparator();
-	    expectedOutput += "            isInterface: \"false\"" + System.lineSeparator();
-	    expectedOutput += "            name(Type=SimpleName): " + System.lineSeparator();
-	    expectedOutput += "                identifier: \"Dog\"" + System.lineSeparator();
-	    expectedOutput += "            comment(Type=JavadocComment): " + System.lineSeparator();
-	    expectedOutput += "                content: \"\\n * \\\" this comment contains a quote\\n \"" + System.lineSeparator();
-	    expectedOutput += "...";
-	
-	    YamlPrinter yamlPrinter = new YamlPrinter(true);
-	    CompilationUnit computationUnit = JavaParser.parse(code);
-	    String output = yamlPrinter.output(computationUnit);
-        assertEquals(expectedOutput, output);
+        String code = "/**\n" + 
+                " * \" this comment contains a quote and newlines\n" +
+                " */\n" + 
+                "public class Dog {}";
+
+        YamlPrinter yamlPrinter = new YamlPrinter(true);
+        CompilationUnit computationUnit = JavaParser.parse(code);
+        String output = yamlPrinter.output(computationUnit);
+        assertEqualsNoEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
     }
 }
