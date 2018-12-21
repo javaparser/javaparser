@@ -471,10 +471,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 ResolvedType thisParam = typeParametersValues().get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 //Sometimes, thisParam and otherParam may be LazyType.
-                if(thisParam.isReferenceType() && otherParam.isReferenceType()
-                		&& thisParam.asReferenceType().typeDeclaration.equals(otherParam.asReferenceType().typeDeclaration)) {
+                if(thisParam.describe().equals(otherParam.describe()))
                 	return true;
-                }
                 	
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof ResolvedWildcard) {
