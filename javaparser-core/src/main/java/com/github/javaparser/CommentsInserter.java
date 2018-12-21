@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
@@ -34,6 +35,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+import static java.util.stream.Collectors.*;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -92,7 +94,10 @@ class CommentsInserter {
             If they preceed a child they are assigned to it, otherwise they remain "orphans"
          */
 
-        List<Node> children = node.getChildNodes();
+        List<Node> children = node.getChildNodes().stream()
+                // Never attribute comments to modifiers.
+                .filter(n -> !(n instanceof Modifier))
+                .collect(toList());
 
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
@@ -100,7 +105,7 @@ class CommentsInserter {
                     commentsToAttribute.stream()
                             .filter(c -> c.getRange().isPresent())
                             .filter(c -> PositionUtils.nodeContains(child, c,
-                                    configuration.isIgnoreAnnotationsWhenAttributingComments())).collect(Collectors.toList()));
+                                    configuration.isIgnoreAnnotationsWhenAttributingComments())).collect(toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }

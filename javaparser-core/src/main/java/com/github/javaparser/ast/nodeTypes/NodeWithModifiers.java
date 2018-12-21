@@ -99,7 +99,7 @@ public interface NodeWithModifiers<N extends Node> {
 
     /**
      * @return Modifier.Keyword.PUBLIC, Modifier.Keyword.PROTECTED,
-     * Modifier.Keyword.PRIVATE, or Modifier.Keyword.DEFAULT when none of the others exists.
+     * Modifier.Keyword.PRIVATE, or Modifier.Keyword.PACKAGE_PRIVATE when none of the others exists.
      */
     default Modifier.Keyword getAccessSpecifier() {
         for (Modifier modifier : getModifiers()) {
@@ -110,6 +110,6 @@ public interface NodeWithModifiers<N extends Node> {
                     return modifier.getKeyword();
             }
         }
-        return Modifier.Keyword.DEFAULT;
+        return Modifier.Keyword.PACKAGE_PRIVATE;
     }
 }

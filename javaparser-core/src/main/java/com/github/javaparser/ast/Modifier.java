@@ -91,6 +91,7 @@ public final class Modifier extends Node {
      */
     public enum Keyword {
 
+        DEFAULT("default", false),
         PUBLIC("public", false),
         PROTECTED("protected", false),
         PRIVATE("private", false),
@@ -103,7 +104,7 @@ public final class Modifier extends Node {
         NATIVE("native", false),
         STRICTFP("strictfp", false),
         TRANSITIVE("transitive", false),
-        DEFAULT("", true);
+        PACKAGE_PRIVATE("", true);
 
         private final String codeRepresentation;
 
@@ -123,7 +124,7 @@ public final class Modifier extends Node {
 
         /**
          * @return true when this keyword is not an actual keyword in source code.
-         * The only case is "DEFAULT."
+         * The only case is "PACKAGE_PRIVATE."
          */
         public boolean isPseudoKeyword() {
             return pseudoKeyword;

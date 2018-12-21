@@ -23,9 +23,9 @@ import static java.util.Arrays.asList;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
 
     private final boolean hasStrictfp;
     private final boolean hasDefaultAndStaticInterfaceMethods;

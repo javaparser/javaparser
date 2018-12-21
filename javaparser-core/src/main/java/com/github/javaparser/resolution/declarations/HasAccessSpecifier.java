@@ -32,7 +32,7 @@ public interface HasAccessSpecifier {
 
     /**
      * The access specifier of this element.
-     * Only PUBLIC, PROTECTED, PRIVATE, or DEFAULT are returned.
+     * Only PUBLIC, PROTECTED, PRIVATE, or PACKAGE_PRIVATE are returned.
      */
     Modifier.Keyword accessSpecifier();
 

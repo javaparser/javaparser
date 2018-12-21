@@ -77,7 +77,7 @@ public class JavassistFactory {
     } else if (Modifier.isPrivate(modifiers)) {
       return com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
     } else {
-      return com.github.javaparser.ast.Modifier.Keyword.DEFAULT;
+      return com.github.javaparser.ast.Modifier.Keyword.PACKAGE_PRIVATE;
     }
   }
 

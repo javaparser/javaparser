@@ -32,8 +32,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Modifier.Keyword.DEFAULT;
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static java.util.Comparator.*;
 import static org.junit.Assert.*;
 
@@ -172,7 +170,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessSpecifier() != Modifier.Keyword.PRIVATE && m.accessSpecifier() != Modifier.Keyword.DEFAULT)
+                .filter(m -> m.accessSpecifier() != Modifier.Keyword.PRIVATE && m.accessSpecifier() != Modifier.Keyword.PACKAGE_PRIVATE)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         int foundCount = 0;
