@@ -35,6 +35,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
@@ -324,10 +325,10 @@ public class NodeTest {
                 "  }%1$s" +
                 "}%1$s", EOL));
         // remove the second swapped=false
-        Node target = unit.getChildNodes().get(0).getChildNodes().get(1).getChildNodes().get(2).getChildNodes().get(2);
+        ExpressionStmt target = unit.findAll(ExpressionStmt.class).get(2);
         target.remove();
         // This will throw an exception if the parents are bad.
-        System.out.println(unit.toString());
+        unit.toString();
     }
 
     @Test
