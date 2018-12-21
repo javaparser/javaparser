@@ -309,4 +309,23 @@ public class PrettyPrintVisitorTest {
                 "    }\n" +
                 "}\n", cu.toString());
     }
+    
+    @Test
+    public void javadocIssue1907(){
+        CompilationUnit cu = JavaParser.parse(
+                "public class SomeClass{" +
+                        "/**\n" +
+                        " * mutli line comment\n" +
+                        " */\n" +
+                        "public void add(int x, int y){}}");
+        
+        assertEqualsNoEol("public class SomeClass {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * mutli line comment\n" +
+                "     */\n" +
+                "    public void add(int x, int y) {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
 }
