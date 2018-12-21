@@ -2688,7 +2688,7 @@ ModuleDirective ModuleDirective():
     Name tmpName;
     NodeList<Name> names=emptyList();
     JavaToken begin;
-    ModuleDirective directive = new ModuleRequiresDirective();
+    ModuleDirective directive;
     JavaToken transitiveExceptionalToken;
 }
 {

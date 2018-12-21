@@ -133,7 +133,7 @@ public class ModuleDeclarationTest {
                         "    requires A.B;" + EOL +
                         "    requires transitive C.D;" + EOL +
                         "    requires static E.F;" + EOL +
-                        "    requires static transitive G.H;" + EOL +
+                        "    requires transitive static G.H;" + EOL +
                         "    exports P.Q;" + EOL +
                         "    exports R.S to T1.U1, T2.U2;" + EOL +
                         "    opens P.Q;" + EOL +
@@ -172,7 +172,7 @@ public class ModuleDeclarationTest {
                         "    requires A.B;" + EOL +
                         "    requires transitive C.D;" + EOL +
                         "    requires static E.F;" + EOL +
-                        "    requires static transitive G.H;" + EOL +
+                        "    requires transitive static G.H;" + EOL +
                         "    exports P.Q;" + EOL +
                         "    exports R.S to T1.U1, T2.U2;" + EOL +
                         "    opens P.Q;" + EOL +
