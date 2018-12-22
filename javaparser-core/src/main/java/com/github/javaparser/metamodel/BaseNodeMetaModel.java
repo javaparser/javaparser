@@ -1,7 +1,6 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;

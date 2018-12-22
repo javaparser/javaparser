@@ -22,7 +22,6 @@ package com.github.javaparser.serialization;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
@@ -32,7 +31,6 @@ import com.github.javaparser.utils.Log;
 
 import javax.json.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.metamodel.JavaParserMetaModel.getNodeMetaModel;

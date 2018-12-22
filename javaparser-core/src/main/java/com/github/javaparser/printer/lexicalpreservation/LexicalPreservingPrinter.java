@@ -41,7 +41,6 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.io.IOException;
 import java.io.StringWriter;

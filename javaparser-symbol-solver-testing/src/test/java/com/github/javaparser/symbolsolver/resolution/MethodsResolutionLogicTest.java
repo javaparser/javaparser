@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
