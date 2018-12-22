@@ -11,6 +11,7 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.Pair;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Test;
 
 import java.io.File;
@@ -691,7 +692,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Modifier.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -747,7 +748,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Modifier.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
