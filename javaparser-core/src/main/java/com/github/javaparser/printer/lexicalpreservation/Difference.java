@@ -104,8 +104,11 @@ public class Difference {
                     break;
                 }
                 nodeText.removeElement(i);
-                res--;
+                res = i;
             }
+        }
+        if (res < 0) {
+            throw new IllegalStateException();
         }
         return res;
     }
@@ -667,6 +670,9 @@ public class Difference {
             } else {
                 nodeText.getElements().add(nodeTextIndex++, e);
             }
+        }
+        if (nodeTextIndex < 0) {
+            throw new IllegalStateException();
         }
         return nodeTextIndex;
     }
