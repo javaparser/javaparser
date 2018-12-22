@@ -97,15 +97,17 @@ public class Difference {
                 hasOnlyWsBefore = false;
             }
         }
+        int res = nodeTextIndex;
         if (hasOnlyWsBefore) {
             for (int i = nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
                 if (nodeText.getElements().get(i).isNewline()) {
                     break;
                 }
                 nodeText.removeElement(i);
+                res--;
             }
         }
-        return nodeTextIndex;
+        return res;
     }
 
     /**
