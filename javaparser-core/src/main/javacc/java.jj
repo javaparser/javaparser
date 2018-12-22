@@ -687,7 +687,7 @@ ImportDeclaration ImportDeclaration():
 ModifierHolder Modifiers():
 {
 	JavaToken begin = INVALID;
-    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    NodeList<Modifier> modifiers = new NodeList<Modifier>();
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     AnnotationExpr ann;
 }
@@ -695,31 +695,31 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = orIfInvalid(begin, token()); }
+   "public" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PUBLIC)); begin = orIfInvalid(begin, token()); }
   |
-   "static" { addModifier(modifiers, Modifier.STATIC); begin = orIfInvalid(begin, token()); }
+   "static" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STATIC)); begin = orIfInvalid(begin, token()); }
   |
-   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = orIfInvalid(begin, token()); }
+   "protected" {  add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PROTECTED)); begin = orIfInvalid(begin, token()); }
   |
-   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = orIfInvalid(begin, token()); }
+   "private" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PRIVATE)); begin = orIfInvalid(begin, token()); }
   |
-   "final" { addModifier(modifiers, Modifier.FINAL); begin = orIfInvalid(begin, token()); }
+   "final" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.FINAL)); begin = orIfInvalid(begin, token()); }
   |
-   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = orIfInvalid(begin, token()); }
+   "abstract" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.ABSTRACT)); begin = orIfInvalid(begin, token()); }
   |
-   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = orIfInvalid(begin, token()); }
+   "synchronized" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SYNCHRONIZED)); begin = orIfInvalid(begin, token()); }
   |
-   "native" { addModifier(modifiers, Modifier.NATIVE); begin = orIfInvalid(begin, token()); }
+   "native" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NATIVE)); begin = orIfInvalid(begin, token()); }
   |
-   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = orIfInvalid(begin, token()); }
+   "transient" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSIENT)); begin = orIfInvalid(begin, token()); }
   |
-   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = orIfInvalid(begin, token()); }
+   "volatile" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.VOLATILE)); begin = orIfInvalid(begin, token()); }
   |
-   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = orIfInvalid(begin, token()); }
+   "strictfp" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STRICTFP));  begin = orIfInvalid(begin, token()); }
   |
-   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = orIfInvalid(begin, token()); }
+   "transitive" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, token()); }
   |
-   "default" { addModifier(modifiers, Modifier.DEFAULT);  begin = orIfInvalid(begin, token()); }
+   "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
   |
    ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
   )
@@ -1070,9 +1070,9 @@ NodeList<Parameter> InferredLambdaParameters():
     Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a, id.a), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a, id.a), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
     )*
     { return ret;  }
 }
@@ -2688,14 +2688,14 @@ ModuleDirective ModuleDirective():
     Name tmpName;
     NodeList<Name> names=emptyList();
     JavaToken begin;
-    ModuleDirective directive = new ModuleRequiresDirective();
+    ModuleDirective directive;
     JavaToken transitiveExceptionalToken;
 }
 {
     (
         // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'" 
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
-        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), EnumSet.noneOf(Modifier.class), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
+        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
     |
         <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);}
     |
