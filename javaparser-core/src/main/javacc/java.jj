@@ -1112,11 +1112,10 @@ ReceiverParameter ReceiverParameter():
 Name ReceiverParameterId():
 {
 	Name ret = null;
-	NodeList<AnnotationExpr> annotations;
 }
 {
-    [ LOOKAHEAD(Name()) ret = Name() "."] annotations=Annotations() "this" 
-    { return new Name(tokenRange(), ret, token.image, annotations); }
+    [ LOOKAHEAD(Name()) ret = Name() "."] "this" 
+    { return new Name(tokenRange(), ret, token.image); }
 }
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
@@ -1384,12 +1383,10 @@ Name Name():
  */
 {
 	Name ret;
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  annotations=Annotations() Identifier() { ret = new Name(tokenRange(), null, token.image, annotations); }
-  ( LOOKAHEAD("." Annotations() Identifier()) 
-  "." annotations=Annotations() Identifier() { ret = new Name(range(ret, token()), ret, token.image, annotations); } )*
+  Identifier() { ret = new Name(tokenRange(), null, token.image); }
+  ( LOOKAHEAD(2) "." Identifier() { ret = new Name(range(ret, token()), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2695,7 +2692,7 @@ ModuleDirective ModuleDirective():
     (
         // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'" 
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
-        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
+        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));}
     |
         <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);}
     |
