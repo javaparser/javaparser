@@ -49,15 +49,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -356,7 +354,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addClass(String name) {
-        return addClass(name, Modifier.PUBLIC);
+        return addClass(name, Modifier.Keyword.PUBLIC);
     }
 
     /**
@@ -366,8 +364,8 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addClass(String name, Modifier... modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), false, name);
+    public ClassOrInterfaceDeclaration addClass(String name, Modifier.Keyword... modifiers) {
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(createModifierList(modifiers), false, name);
         getTypes().add(classOrInterfaceDeclaration);
         return classOrInterfaceDeclaration;
     }
@@ -379,7 +377,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addInterface(String name) {
-        return addInterface(name, Modifier.PUBLIC);
+        return addInterface(name, Modifier.Keyword.PUBLIC);
     }
 
     /**
@@ -389,8 +387,8 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public ClassOrInterfaceDeclaration addInterface(String name, Modifier... modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), true, name);
+    public ClassOrInterfaceDeclaration addInterface(String name, Modifier.Keyword... modifiers) {
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(createModifierList(modifiers), true, name);
         getTypes().add(classOrInterfaceDeclaration);
         return classOrInterfaceDeclaration;
     }
@@ -402,7 +400,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public EnumDeclaration addEnum(String name) {
-        return addEnum(name, Modifier.PUBLIC);
+        return addEnum(name, Modifier.Keyword.PUBLIC);
     }
 
     /**
@@ -412,8 +410,8 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public EnumDeclaration addEnum(String name, Modifier... modifiers) {
-        EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+    public EnumDeclaration addEnum(String name, Modifier.Keyword... modifiers) {
+        EnumDeclaration enumDeclaration = new EnumDeclaration(createModifierList(modifiers), name);
         getTypes().add(enumDeclaration);
         return enumDeclaration;
     }
@@ -425,7 +423,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public AnnotationDeclaration addAnnotationDeclaration(String name) {
-        return addAnnotationDeclaration(name, Modifier.PUBLIC);
+        return addAnnotationDeclaration(name, Modifier.Keyword.PUBLIC);
     }
 
     /**
@@ -435,8 +433,8 @@ public final class CompilationUnit extends Node {
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
-    public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
-        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+    public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier.Keyword... modifiers) {
+        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(createModifierList(modifiers), name);
         getTypes().add(annotationDeclaration);
         return annotationDeclaration;
     }

@@ -22,7 +22,6 @@ package com.github.javaparser.serialization;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
@@ -32,7 +31,6 @@ import com.github.javaparser.utils.Log;
 
 import javax.json.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.metamodel.JavaParserMetaModel.getNodeMetaModel;
@@ -91,9 +89,6 @@ public class JavaParserJsonDeserializer {
                 if (propertyMetaModel.isNodeList()) {
                     JsonArray nodeListJson = nodeJson.getJsonArray(name);
                     parameters.put(name, deserializeNodeList(nodeListJson));
-                } else if (propertyMetaModel.isEnumSet()) {
-                    JsonArray enumSetJson = nodeJson.getJsonArray(name);
-                    parameters.put(name, deserializeEnumSet(enumSetJson));
                 } else if (propertyMetaModel.isNode()) {
                     parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
                 } else {
@@ -128,10 +123,6 @@ public class JavaParserJsonDeserializer {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private EnumSet<?> deserializeEnumSet(JsonArray enumSetJson) {
-        return enumSetJson.stream().map(v -> (JsonString) v).map(s -> Modifier.valueOf(s.getString())).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class)));
     }
 
     private NodeList<?> deserializeNodeList(JsonArray nodeListJson) {

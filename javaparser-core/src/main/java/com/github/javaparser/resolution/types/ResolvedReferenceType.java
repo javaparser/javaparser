@@ -34,7 +34,7 @@ import com.github.javaparser.utils.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.AccessSpecifier.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values

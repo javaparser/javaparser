@@ -1,6 +1,5 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
@@ -8,12 +7,6 @@ import org.junit.Test;
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.*;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.io.BufferedWriter;
 
 public class JsonPrinterTest {
     @Test
@@ -70,6 +63,6 @@ public class JsonPrinterTest {
 
         String output = printer.output(unit);
 
-        assertEquals("{\"_type\":\"CompilationUnit\",\"types\":[{\"_type\":\"ClassOrInterfaceDeclaration\",\"modifiers\":[\"public\"],\"isInterface\":\"false\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"_type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"}}]}", output);
+        assertEquals("{\"_type\":\"CompilationUnit\",\"types\":[{\"_type\":\"ClassOrInterfaceDeclaration\",\"isInterface\":\"false\",\"name\":{\"_type\":\"SimpleName\",\"identifier\":\"Test\"},\"comment\":{\"_type\":\"BlockComment\",\"content\":\" \\n* Some comment\\n\"},\"modifiers\":[{\"_type\":\"Modifier\",\"keyword\":\"PUBLIC\"}]}]}", output);
     }
 }

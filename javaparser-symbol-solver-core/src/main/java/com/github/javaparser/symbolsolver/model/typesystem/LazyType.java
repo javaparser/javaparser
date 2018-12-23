@@ -2,7 +2,6 @@ package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Map;
 import java.util.function.Function;

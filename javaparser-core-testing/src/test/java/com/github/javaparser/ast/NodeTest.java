@@ -35,6 +35,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
@@ -243,7 +244,7 @@ public class NodeTest {
 
     @Test
     public void removeOrphanCommentPositiveCase() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
@@ -255,8 +256,8 @@ public class NodeTest {
 
     @Test
     public void removeOrphanCommentNegativeCase() {
-        ClassOrInterfaceDeclaration aClass = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
-        FieldDeclaration aField = new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "f"));
+        ClassOrInterfaceDeclaration aClass = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
+        FieldDeclaration aField = new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "f"));
         aClass.getMembers().add(aField);
         Comment c = new LineComment("A comment");
         aField.addOrphanComment(c);
@@ -268,7 +269,7 @@ public class NodeTest {
 
     @Test
     public void hasJavaDocCommentPositiveCaseWithSetJavaDocComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setJavadocComment("A comment");
         assertEquals(true, decl.hasJavaDocComment());
@@ -276,7 +277,7 @@ public class NodeTest {
 
     @Test
     public void hasJavaDocCommentPositiveCaseWithSetComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
         assertEquals(true, decl.hasJavaDocComment());
@@ -284,14 +285,14 @@ public class NodeTest {
 
     @Test
     public void hasJavaDocCommentNegativeCaseNoComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         assertEquals(false, decl.hasJavaDocComment());
     }
 
     @Test
     public void hasJavaDocCommentNegativeCaseLineComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new LineComment("foo"));
         assertEquals(false, decl.hasJavaDocComment());
@@ -299,7 +300,7 @@ public class NodeTest {
 
     @Test
     public void hasJavaDocCommentNegativeCaseBlockComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new BlockComment("foo"));
         assertEquals(false, decl.hasJavaDocComment());
@@ -324,10 +325,10 @@ public class NodeTest {
                 "  }%1$s" +
                 "}%1$s", EOL));
         // remove the second swapped=false
-        Node target = unit.getChildNodes().get(0).getChildNodes().get(1).getChildNodes().get(2).getChildNodes().get(2);
+        ExpressionStmt target = unit.findAll(ExpressionStmt.class).get(2);
         target.remove();
         // This will throw an exception if the parents are bad.
-        System.out.println(unit.toString());
+        unit.toString();
     }
 
     @Test

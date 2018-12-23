@@ -1,24 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.Test;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;

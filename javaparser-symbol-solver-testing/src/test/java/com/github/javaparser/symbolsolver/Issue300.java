@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;

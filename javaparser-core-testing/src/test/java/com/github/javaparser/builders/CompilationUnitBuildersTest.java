@@ -21,23 +21,18 @@
 
 package com.github.javaparser.builders;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.*;
 
 public class CompilationUnitBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -87,7 +82,7 @@ public class CompilationUnitBuildersTest {
 
     @Test
     public void testAddClass() {
-        ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
+        ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", PRIVATE);
         assertEquals(1, cu.getTypes().size());
         assertEquals("testClass", cu.getType(0).getNameAsString());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());

@@ -25,8 +25,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;

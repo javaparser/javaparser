@@ -1,5 +1,7 @@
 package com.github.javaparser.generator.metamodel;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -52,6 +54,7 @@ public class MetaModelGenerator {
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
         add(PackageDeclaration.class);
+        add(Modifier.class);
 
         add(AnnotationDeclaration.class);
         add(AnnotationMemberDeclaration.class);
@@ -155,8 +158,12 @@ public class MetaModelGenerator {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root);
+        final ParserConfiguration parserConfiguration = new ParserConfiguration()
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
+                .setStoreTokens(false);
+        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
         sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
+        JavaParser.setStaticConfiguration(parserConfiguration);
 
         new MetaModelGenerator().run(sourceRoot);
 

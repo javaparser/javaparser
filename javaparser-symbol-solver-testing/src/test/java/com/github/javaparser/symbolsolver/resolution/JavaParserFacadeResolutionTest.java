@@ -24,7 +24,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;

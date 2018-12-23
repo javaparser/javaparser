@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -14,8 +13,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 

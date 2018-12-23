@@ -31,7 +31,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
