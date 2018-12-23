@@ -48,8 +48,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static

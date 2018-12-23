@@ -25,7 +25,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import org.junit.Before;
 
 import java.io.IOException;
 

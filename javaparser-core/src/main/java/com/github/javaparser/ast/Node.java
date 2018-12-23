@@ -48,13 +48,10 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static com.github.javaparser.ast.NodeList.toNodeList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.

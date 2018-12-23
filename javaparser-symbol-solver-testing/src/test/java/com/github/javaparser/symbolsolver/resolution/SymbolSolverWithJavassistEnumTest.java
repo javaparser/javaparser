@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
 
 public class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;

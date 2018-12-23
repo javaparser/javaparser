@@ -22,7 +22,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Declaration of an Enum.

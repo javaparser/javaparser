@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.types.ResolvedType;

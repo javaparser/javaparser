@@ -4,8 +4,6 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 
-import java.util.EnumSet;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

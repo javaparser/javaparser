@@ -1,7 +1,5 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 import com.github.javaparser.ast.validator.chunks.UnderscoreKeywordValidator;

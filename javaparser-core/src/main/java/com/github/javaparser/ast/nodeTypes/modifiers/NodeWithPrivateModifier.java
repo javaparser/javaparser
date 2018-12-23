@@ -3,7 +3,6 @@ package com.github.javaparser.ast.nodeTypes.modifiers;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
-import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**

@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
