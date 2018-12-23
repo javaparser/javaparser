@@ -2,7 +2,6 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
-import com.github.javaparser.utils.Pair;
 
 import java.util.HashSet;
 import java.util.Optional;

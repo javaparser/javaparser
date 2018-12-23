@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.Generated;
 import java.util.Optional;
 
 /**
@@ -530,10 +529,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final Name n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name qualifier = cloneNode(n.getQualifier(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier(), annotations);
+        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier());
         r.setComment(comment);
         return r;
     }

@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 import static java.util.stream.Collectors.*;

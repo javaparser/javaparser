@@ -36,9 +36,9 @@ import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**

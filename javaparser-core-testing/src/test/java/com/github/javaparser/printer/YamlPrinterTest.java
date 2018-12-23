@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.TestUtils.readTextResource;
-import static org.junit.Assert.assertEquals;
 
 public class YamlPrinterTest {
 

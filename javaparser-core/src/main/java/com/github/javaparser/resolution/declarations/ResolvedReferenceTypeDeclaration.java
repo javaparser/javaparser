@@ -22,7 +22,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;

@@ -7,7 +7,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.validator.Java9Validator;
 import org.junit.Test;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;

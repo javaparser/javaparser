@@ -32,7 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * We analyze a more recent version of JavaParser, after the project moved to Java 8.

@@ -27,11 +27,8 @@ import org.junit.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 

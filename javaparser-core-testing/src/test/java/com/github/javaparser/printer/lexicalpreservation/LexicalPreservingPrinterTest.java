@@ -10,11 +10,8 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.utils.Pair;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;

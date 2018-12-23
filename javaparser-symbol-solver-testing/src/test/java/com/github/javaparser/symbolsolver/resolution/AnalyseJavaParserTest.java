@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
@@ -34,7 +33,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @Category(SlowTest.class)
 public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
