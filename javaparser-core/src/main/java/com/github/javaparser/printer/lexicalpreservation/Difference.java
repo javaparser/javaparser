@@ -97,15 +97,20 @@ public class Difference {
                 hasOnlyWsBefore = false;
             }
         }
+        int res = nodeTextIndex;
         if (hasOnlyWsBefore) {
             for (int i = nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
                 if (nodeText.getElements().get(i).isNewline()) {
                     break;
                 }
                 nodeText.removeElement(i);
+                res = i;
             }
         }
-        return nodeTextIndex;
+        if (res < 0) {
+            throw new IllegalStateException();
+        }
+        return res;
     }
 
     /**
@@ -665,6 +670,9 @@ public class Difference {
             } else {
                 nodeText.getElements().add(nodeTextIndex++, e);
             }
+        }
+        if (nodeTextIndex < 0) {
+            throw new IllegalStateException();
         }
         return nodeTextIndex;
     }

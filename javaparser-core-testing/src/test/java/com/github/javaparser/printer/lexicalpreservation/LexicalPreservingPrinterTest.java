@@ -11,6 +11,7 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.Pair;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Test;
 
 import java.io.File;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -595,7 +597,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", Modifier.PUBLIC);
+                .addMethod("setAField", PUBLIC);
         assertEquals("public void setAField() {" + EOL +
                 "    }", LexicalPreservingPrinter.print(setter));
     }
@@ -608,7 +610,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", Modifier.PUBLIC);
+                .addMethod("setAField", PUBLIC);
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step2"), LexicalPreservingPrinter.print(cu));
     }
 
@@ -620,7 +622,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", Modifier.PUBLIC);
+                .addMethod("setAField", PUBLIC);
         setter.addParameter("boolean", "aField");
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), LexicalPreservingPrinter.print(cu));
     }
@@ -654,7 +656,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
-                .addMethod("setAField", Modifier.PUBLIC);
+                .addMethod("setAField", PUBLIC);
         setter.addParameter("boolean", "aField");
         setter.getBody().get().getStatements().add(new ExpressionStmt(
                 new AssignExpr(
@@ -690,7 +692,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Modifier.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -746,7 +748,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Modifier.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));

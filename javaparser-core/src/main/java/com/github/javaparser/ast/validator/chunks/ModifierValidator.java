@@ -15,7 +15,7 @@ import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static java.util.Arrays.asList;
 
 
@@ -23,9 +23,9 @@ import static java.util.Arrays.asList;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final Modifier[] interfaceWithNothingSpecial = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
-    private final Modifier[] interfaceWithStaticAndDefault = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
-    private final Modifier[] interfaceWithStaticAndDefaultAndPrivate = new Modifier[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PACKAGE_PRIVATE, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
 
     private final boolean hasStrictfp;
     private final boolean hasDefaultAndStaticInterfaceMethods;
@@ -104,8 +104,8 @@ public class ModifierValidator extends VisitorValidator {
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
         if (n.isAbstract()) {
             final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
-            for (Modifier m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
-                if (n.getModifiers().contains(m)) {
+            for (Modifier.Keyword m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+                if (n.hasModifier(m)) {
                     builder.append(m.asString());
                 }
             }
@@ -161,7 +161,7 @@ public class ModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         if (hasStrictfp) {
@@ -170,16 +170,16 @@ public class ModifierValidator extends VisitorValidator {
             allowedModifiers = removeModifierFromArray(STRICTFP, allowedModifiers);
         }
         for (Modifier m : n.getModifiers()) {
-            if (!arrayContains(allowedModifiers, m)) {
-                reporter.report(n, "'%s' is not allowed here.", m.asString());
+            if (!arrayContains(allowedModifiers, m.getKeyword())) {
+                reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
             }
         }
     }
 
-    private Modifier[] removeModifierFromArray(Modifier m, Modifier[] allowedModifiers) {
-        final List<Modifier> newModifiers = new ArrayList<>(asList(allowedModifiers));
+    private Modifier.Keyword[] removeModifierFromArray(Modifier.Keyword m, Modifier.Keyword[] allowedModifiers) {
+        final List<Modifier.Keyword> newModifiers = new ArrayList<>(asList(allowedModifiers));
         newModifiers.remove(m);
-        allowedModifiers = newModifiers.toArray(new Modifier[0]);
+        allowedModifiers = newModifiers.toArray(new Modifier.Keyword[0]);
         return allowedModifiers;
     }
 
@@ -192,16 +192,16 @@ public class ModifierValidator extends VisitorValidator {
         return false;
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
-        List<Modifier> foundModifiers = new ArrayList<>();
-        for (Modifier m : modifiers) {
-            if (t.getModifiers().contains(m)) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier.Keyword... modifiers) {
+        List<Modifier.Keyword> foundModifiers = new ArrayList<>();
+        for (Modifier.Keyword m : modifiers) {
+            if (t.hasModifier(m)) {
                 foundModifiers.add(m);
             }
         }
         if (foundModifiers.size() > 1) {
             SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Can have only one of '", "', '", "'.");
-            for (Modifier m : foundModifiers) {
+            for (Modifier.Keyword m : foundModifiers) {
                 builder.append(m.asString());
             }
             reporter.report(t, builder.toString());

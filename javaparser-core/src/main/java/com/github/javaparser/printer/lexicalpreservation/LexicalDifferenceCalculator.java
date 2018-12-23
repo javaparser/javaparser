@@ -244,13 +244,15 @@ class LexicalDifferenceCalculator {
             List<CsmElement> mixElements = new LinkedList<>();
             csmMix.getElements().forEach(e -> calculatedSyntaxModelForNode(e, node, mixElements, change));
             elements.add(new CsmMix(mixElements));
+        } else if (csm instanceof CsmChild) {
+            elements.add(csm);
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName()+ " " + csm);
         }
     }
 
-    private int toToken(Modifier modifier) {
-        switch (modifier) {
+    public static int toToken(Modifier modifier) {
+        switch (modifier.getKeyword()) {
             case PUBLIC:
                 return GeneratedJavaParserConstants.PUBLIC;
             case PRIVATE:
@@ -264,7 +266,7 @@ class LexicalDifferenceCalculator {
             case ABSTRACT:
                 return GeneratedJavaParserConstants.ABSTRACT;
             default:
-                throw new UnsupportedOperationException(modifier.name());
+                throw new UnsupportedOperationException(modifier.getKeyword().name());
         }
     }
 
