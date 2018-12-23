@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.body;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseBodyDeclaration;

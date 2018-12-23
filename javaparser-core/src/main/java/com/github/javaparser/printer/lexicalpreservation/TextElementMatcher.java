@@ -21,10 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.Range;
-
-import java.util.Optional;
-
 public interface TextElementMatcher {
 
     boolean match(TextElement textElement);

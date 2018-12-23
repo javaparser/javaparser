@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -323,8 +322,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public AccessSpecifier accessSpecifier() {
-            return AstResolutionUtils.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
+        public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+            return enumDeclaration.getWrappedNode().getAccessSpecifier();
         }
 
         @Override
@@ -344,7 +343,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
         throw new UnsupportedOperationException();
     }
 

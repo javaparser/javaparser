@@ -21,14 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.EnumSet;
-
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.Utils.EOL;
 
 /**
@@ -48,21 +48,21 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
     @Test
     public void addingModifiers() {
         FieldDeclaration it = consider("int A;");
-        it.setModifiers(EnumSet.of(Modifier.PUBLIC));
+        it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int A;", it);
     }
 
     @Test
     public void removingModifiers() {
         FieldDeclaration it = consider("public int A;");
-        it.setModifiers(EnumSet.noneOf(Modifier.class));
+        it.setModifiers(new NodeList<>());
         assertTransformedToString("int A;", it);
     }
 
     @Test
     public void replacingModifiers() {
         FieldDeclaration it = consider("int A;");
-        it.setModifiers(EnumSet.of(Modifier.PROTECTED));
+        it.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected int A;", it);
     }
 

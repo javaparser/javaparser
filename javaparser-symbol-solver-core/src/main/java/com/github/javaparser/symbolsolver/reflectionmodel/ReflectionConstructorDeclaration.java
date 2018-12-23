@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
@@ -75,7 +75,7 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public Modifier.Keyword accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(constructor.getModifiers());
     }
 

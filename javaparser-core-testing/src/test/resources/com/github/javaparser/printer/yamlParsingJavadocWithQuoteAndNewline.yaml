@@ -7,4 +7,7 @@ root(Type=CompilationUnit):
                 identifier: "Dog"
             comment(Type=JavadocComment): 
                 content: "\n * \" this comment contains a quote and newlines\n "
+            modifiers: 
+                - modifier(Type=Modifier): 
+                    keyword: "PUBLIC"
 ...

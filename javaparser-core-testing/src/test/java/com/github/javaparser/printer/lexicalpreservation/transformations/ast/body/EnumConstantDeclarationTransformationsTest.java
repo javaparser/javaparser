@@ -22,11 +22,8 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * Transforming EnumConstantDeclaration and verifying the LexicalPreservation works as expected.
