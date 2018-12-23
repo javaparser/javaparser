@@ -5,7 +5,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -17,7 +16,6 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;

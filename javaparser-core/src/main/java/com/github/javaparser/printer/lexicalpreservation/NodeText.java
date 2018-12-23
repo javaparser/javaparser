@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.Token;
 import com.github.javaparser.ast.Node;
 
 import java.util.LinkedList;

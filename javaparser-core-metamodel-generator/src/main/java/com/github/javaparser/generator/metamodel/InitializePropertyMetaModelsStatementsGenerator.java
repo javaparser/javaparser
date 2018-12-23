@@ -10,21 +10,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static com.github.javaparser.JavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 class InitializePropertyMetaModelsStatementsGenerator {
-    void generate(Field field, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
+    void generate(Field field, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) {
         final AstTypeAnalysis fieldTypeAnalysis = new AstTypeAnalysis(field.getGenericType());
 
         final Class<?> fieldType = fieldTypeAnalysis.innerType;
         final String typeName = fieldType.getTypeName().replace('$', '.');
         final String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
         nodeMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s, %s)",
+        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
                 nodeMetaModelFieldName,
                 field.getName(),
                 typeName,
@@ -32,7 +32,6 @@ class InitializePropertyMetaModelsStatementsGenerator {
                 isOptional(field),
                 isNonEmpty(field),
                 fieldTypeAnalysis.isNodeList,
-                fieldTypeAnalysis.isEnumSet,
                 fieldTypeAnalysis.isSelfType);
         final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
         final String fieldAddition = f("%s.getDeclaredPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);
@@ -48,7 +47,7 @@ class InitializePropertyMetaModelsStatementsGenerator {
         final String typeName = innermostReturnType.getTypeName().replace('$', '.');
         final String propertyMetaModelFieldName = getterToPropertyName(method.getName()) + "PropertyMetaModel";
         nodeMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s, %s)",
+        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
                 nodeMetaModelFieldName,
                 getterToPropertyName(method.getName()),
                 typeName,
@@ -56,7 +55,6 @@ class InitializePropertyMetaModelsStatementsGenerator {
                 returnTypeAnalysis.isOptional,
                 isNonEmpty(method),
                 returnTypeAnalysis.isNodeList,
-                returnTypeAnalysis.isEnumSet,
                 returnTypeAnalysis.isSelfType);
         final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
         final String fieldAddition = f("%s.getDerivedPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);

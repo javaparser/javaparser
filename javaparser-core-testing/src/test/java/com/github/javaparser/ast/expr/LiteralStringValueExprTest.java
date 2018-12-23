@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.JavaParser;
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
 

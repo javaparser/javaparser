@@ -22,25 +22,23 @@
 package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NodeWithThrownExceptionsBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testThrows() {
-        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
+        MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         addMethod.addThrownException(IllegalStateException.class);
         assertEquals(1, addMethod.getThrownExceptions().size());
-        assertEquals(true, addMethod.isThrown(IllegalStateException.class));
+        assertTrue(addMethod.isThrown(IllegalStateException.class));
         addMethod.addThrownException(parseClassOrInterfaceType("Test"));
         assertEquals(2, addMethod.getThrownExceptions().size());
         assertEquals("Test", addMethod.getThrownException(1).toString());
