@@ -4,13 +4,11 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 public interface NodeWithConstructors<N extends Node> extends NodeWithSimpleName<N>, NodeWithMembers<N> {
@@ -26,12 +24,12 @@ public interface NodeWithConstructors<N extends Node> extends NodeWithSimpleName
     /**
      * Adds a constructor to this
      *
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the created constructor
      */
-    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
+    default ConstructorDeclaration addConstructor(Modifier.Keyword... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
-        constructorDeclaration.setModifiers(Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        constructorDeclaration.setModifiers(createModifierList(modifiers));
         constructorDeclaration.setName(getName());
         getMembers().add(constructorDeclaration);
         return constructorDeclaration;

@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class NameTest {
@@ -52,34 +51,19 @@ public class NameTest {
     }
 
     @Test
-    public void nameCanHaveAnnotationsInside() {
-        Name name = parseName("a.@A b. @C c");
-        assertEquals("a.b.c", name.asString());
-        assertThat(name.getAnnotations()).containsExactly(new MarkerAnnotationExpr("C"));
-        assertThat(name.getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"));
-
-        assertEquals("a.@A b.@C c", name.toString());
-        assertEquals("a.@A b.@C c", ConcreteSyntaxModel.genericPrettyPrint(name));
-    }
-
-    @Test
     public void importName() {
-        ImportDeclaration importDeclaration = parseImport("import java.@Abc util.List;");
+        ImportDeclaration importDeclaration = parseImport("import java.util.List;");
 
-        assertThat(importDeclaration.getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
-
-        assertEquals("import java.@Abc util.List;" + EOL, importDeclaration.toString());
-        assertEquals("import java.@Abc util.List;" , ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
+        assertEquals("import java.util.List;" + EOL, importDeclaration.toString());
+        assertEquals("import java.util.List;" , ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
     @Test
     public void packageName() {
-        CompilationUnit cu = parse("package @Abc p1.p2;");
+        CompilationUnit cu = parse("package p1.p2;");
 
-        assertThat(cu.getPackageDeclaration().get().getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
-
-        assertEquals("package @Abc p1.p2;" + EOL + EOL, cu.toString());
-        assertEquals("package @Abc p1.p2;" + EOL + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
+        assertEquals("package p1.p2;" + EOL + EOL, cu.toString());
+        assertEquals("package p1.p2;" + EOL + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
 
     @Test

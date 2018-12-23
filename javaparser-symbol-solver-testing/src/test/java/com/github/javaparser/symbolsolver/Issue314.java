@@ -14,8 +14,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-
 import static org.junit.Assert.assertEquals;
 
 public class Issue314 extends AbstractResolutionTest{

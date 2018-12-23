@@ -32,13 +32,11 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class NodeListTest {
@@ -69,7 +67,7 @@ public class NodeListTest {
     }
 
     private FieldDeclaration createIntField(String name) {
-        return new FieldDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), name);
+        return new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), name);
     }
 
     @Test

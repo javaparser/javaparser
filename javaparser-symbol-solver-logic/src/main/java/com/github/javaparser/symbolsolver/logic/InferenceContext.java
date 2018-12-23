@@ -18,7 +18,6 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

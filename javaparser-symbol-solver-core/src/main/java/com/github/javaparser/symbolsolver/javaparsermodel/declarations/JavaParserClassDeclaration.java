@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -106,7 +106,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             fields.add(new ResolvedFieldDeclaration() {
 
                 @Override
-                public AccessSpecifier accessSpecifier() {
+                public Modifier.Keyword accessSpecifier() {
                     return f.accessSpecifier();
                 }
 
@@ -365,8 +365,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    public Modifier.Keyword accessSpecifier() {
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override
