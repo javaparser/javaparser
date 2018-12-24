@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
+import javax.xml.soap.Text;
 import java.util.*;
 
 class DifferenceElementCalculator {
@@ -132,6 +133,39 @@ class DifferenceElementCalculator {
         return elements;
     }
 
+    private static void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
+        for (TextElement el : nodeTextForChild.getElements()) {
+            if (el instanceof ChildTextElement) {
+                ChildTextElement cte = (ChildTextElement) el;
+                considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), elements);
+            } else if (el instanceof TokenTextElement) {
+                TokenTextElement tte = (TokenTextElement) el;
+                elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
+            } else {
+                throw new UnsupportedOperationException(el.toString());
+            }
+        }
+    }
+
+    private static int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
+        boolean dealtWith = false;
+        if (removedElement instanceof CsmChild) {
+            CsmChild removedChild = (CsmChild) removedElement;
+            if (removedChild.getChild().getParentNode().isPresent() &&
+                    removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
+                NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
+                considerRemoval(nodeTextForChild, elements);
+                originalIndex++;
+                dealtWith = true;
+            }
+        }
+        if (!dealtWith) {
+            elements.add(new Removed(removedElement));
+            originalIndex++;
+        }
+        return originalIndex;
+    }
+
     private static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
                                                          LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         List<DifferenceElement> elements = new LinkedList<>();
@@ -145,23 +179,7 @@ class DifferenceElementCalculator {
         do {
             if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
                 CsmElement removedElement = original.elements.get(originalIndex);
-                boolean dealtWith = false;
-                if (removedElement instanceof CsmChild) {
-                    CsmChild removedChild = (CsmChild) removedElement;
-                    if (removedChild.getChild().getParentNode().isPresent() &&
-                            removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
-                        NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
-                        for (TextElement el : nodeTextForChild.getElements()) {
-                            throw new UnsupportedOperationException(el.toString());
-                        }
-                        originalIndex++;
-                        dealtWith = true;
-                    }
-                }
-                if (!dealtWith) {
-                    elements.add(new Removed(removedElement));
-                    originalIndex++;
-                }
+                originalIndex = considerRemoval(removedElement, originalIndex, elements);
             } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
                 elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
@@ -183,9 +201,8 @@ class DifferenceElementCalculator {
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
-                    elements.add(new Removed(nextOriginal));
+                    originalIndex = considerRemoval(nextOriginal, originalIndex, elements);
                     elements.add(new Added(nextAfter));
-                    originalIndex++;
                     afterIndex++;
                 } else {
                     // We can try to remove the element or add it and look which one leads to the lower difference
