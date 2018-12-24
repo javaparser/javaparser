@@ -185,6 +185,7 @@ public class LexicalPreservingPrinter {
             if (nodeText == null) {
                 throw new NullPointerException(observedNode.getClass().getSimpleName());
             }
+            nodeText.ensureIsAcceptableFor(observedNode);
 
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
         }
