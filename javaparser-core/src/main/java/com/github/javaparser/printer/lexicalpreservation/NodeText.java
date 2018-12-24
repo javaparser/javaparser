@@ -39,7 +39,7 @@ class NodeText {
 
     public void ensureIsAcceptableFor(Node node) {
         // We want to check that all children in the node and in the node text are the same
-        List<Node> nodeChildren = node.getChildNodes();
+        List<Node> nodeChildren = new LinkedList<>(node.getChildNodes());
         List<Node> textChildren = elements.stream()
                 .filter(TextElement::isChild)
                 .map(el -> ((ChildTextElement)el).getChild())
