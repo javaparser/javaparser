@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
@@ -151,7 +152,7 @@ class DifferenceElementCalculator {
         boolean dealtWith = false;
         if (removedElement instanceof CsmChild) {
             CsmChild removedChild = (CsmChild) removedElement;
-            if (removedChild.getChild().getParentNode().isPresent() &&
+            if (removedChild.getChild() instanceof Type && removedChild.getChild().getParentNode().isPresent() &&
                     removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
                 NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
                 considerRemoval(nodeTextForChild, elements);

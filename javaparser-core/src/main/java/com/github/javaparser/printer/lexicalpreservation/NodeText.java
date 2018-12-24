@@ -37,25 +37,6 @@ class NodeText {
 
     public static final int NOT_FOUND = -1;
 
-    public void ensureIsAcceptableFor(Node node) {
-        // We want to check that all children in the node and in the node text are the same
-        List<Node> nodeChildren = new LinkedList<>(node.getChildNodes());
-        List<Node> textChildren = elements.stream()
-                .filter(TextElement::isChild)
-                .map(el -> ((ChildTextElement)el).getChild())
-                .collect(Collectors.toList());
-        if (nodeChildren.size() != textChildren.size()) {
-            throw new IllegalStateException("Expected " + nodeChildren.size() + " in text but found "
-                    + textChildren.size());
-        }
-        while (!nodeChildren.isEmpty()) {
-            Node childToFindInText = nodeChildren.remove(0);
-            if (!textChildren.remove(childToFindInText)) {
-                throw new IllegalStateException("Child not found in text: " + childToFindInText);
-            }
-        }
-    }
-
     enum Option {
         REMOVE_SPACE_IMMEDIATELY_AFTER,
         EXCLUDE_START,
