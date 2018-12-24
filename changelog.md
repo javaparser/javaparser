@@ -1,3 +1,12 @@
+Version 3.9.0
+------------------
+* MAJOR BREAKAGE: modifiers (like public, static, transient) used to be a special case:
+they were enums stored in an EnumSet.
+This meant they were not true `Node`s, had to be treated in a special way, and missed some information.
+This has now been corrected in [PR 1975](https://github.com/javaparser/javaparser/pull/1975). 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/118?closed=1)
+
 Version 3.8.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/117?closed=1)
