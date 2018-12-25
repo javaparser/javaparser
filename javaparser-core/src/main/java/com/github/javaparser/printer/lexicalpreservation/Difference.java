@@ -473,7 +473,7 @@ public class Difference {
             // just a left brace followed by space
 
             diffIndex++;
-            if (!doWeHaveLeftBraceFollowedBySpace(originalIndex - 1)) {
+            if (!wasSpaceBetweenBraces()) {
                 for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
                     nodeText.removeElement(--originalIndex);
                 }
@@ -481,6 +481,11 @@ public class Difference {
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
+    }
+
+    private boolean wasSpaceBetweenBraces() {
+        return nodeText.getTextElement(originalIndex).isToken(RBRACE)
+                && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1);
     }
 
     private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
