@@ -96,4 +96,9 @@ public class Kept implements DifferenceElement {
 
         return false;
     }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
 }

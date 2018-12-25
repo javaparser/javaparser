@@ -485,7 +485,8 @@ public class Difference {
 
     private boolean wasSpaceBetweenBraces() {
         return nodeText.getTextElement(originalIndex).isToken(RBRACE)
-                && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1);
+                && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1)
+                && (diffIndex < 2 || !diffElements.get(diffIndex - 2).isRemoved());
     }
 
     private boolean doWeHaveLeftBraceFollowedBySpace(int index) {

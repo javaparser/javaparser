@@ -42,6 +42,11 @@ public class Added implements DifferenceElement {
         return true;
     }
 
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
+
     public boolean isIndent() { return element instanceof CsmIndent; }
 
     public boolean isUnindent() { return element instanceof CsmUnindent; }
