@@ -534,8 +534,9 @@ public class Difference {
             }
             nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
             // This remove the space in "{ }" when adding a new line
-            while (originalElements.get(originalIndex).isSpaceOrTab()) {
-                originalElements.remove(originalIndex);
+            while (originalIndex >= 2 && originalElements.get(originalIndex - 2).isSpaceOrTab()) {
+                originalElements.remove(originalIndex - 2);
+                originalIndex--;
             }
             for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
                 nodeText.addElement(originalIndex++, e);
