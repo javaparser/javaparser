@@ -453,7 +453,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsNoEol("class X {\n" +
                 "  @Test\n" +
-                "  public final void testCase() {\n" +
+                "  final public void testCase() {\n" +
                 "  }\n" +
                 "}\n", result);
     }

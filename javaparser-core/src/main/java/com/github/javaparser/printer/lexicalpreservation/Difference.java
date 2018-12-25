@@ -527,7 +527,11 @@ public class Difference {
         boolean used = false;
         if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
             for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                nodeText.addElement(originalIndex++, e);
+                if (e instanceof TokenTextElement && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
+                    originalIndex++;
+                } else {
+                    nodeText.addElement(originalIndex++, e);
+                }
             }
         } else if (isAfterLBrace(nodeText, originalIndex) && !isAReplacement(diffIndex)) {
             if (addedTextElement.isNewline()) {
