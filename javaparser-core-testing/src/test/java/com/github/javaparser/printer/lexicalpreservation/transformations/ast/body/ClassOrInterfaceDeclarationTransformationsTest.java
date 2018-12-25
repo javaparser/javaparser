@@ -176,7 +176,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     public void removingField() {
         ClassOrInterfaceDeclaration cid = consider("public class A { int foo; }");
         cid.getMembers().remove(0);
-        assertTransformedToString("public class A {}", cid);
+        assertTransformedToString("public class A {  }", cid);
     }
 
     @Test
