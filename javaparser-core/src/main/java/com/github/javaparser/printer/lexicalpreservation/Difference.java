@@ -453,6 +453,9 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 originalIndex++;
                 diffIndex++;
+            } else if (kept.isWhiteSpaceOrComment() && originalTextToken.isWhiteSpaceOrComment()) {
+                diffIndex++;
+                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
@@ -606,6 +609,8 @@ public class Difference {
                         } else {
                             potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
+                    } else if (isAlmostCorrespondingElement(textElement, csmElement, node)) {
+                        potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
                     }
                 }
             }
@@ -625,7 +630,7 @@ public class Difference {
     }
 
     private enum MatchClassification {
-        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4);
+        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
 
         private final int priority;
         MatchClassification(int priority) {
@@ -655,6 +660,13 @@ public class Difference {
         }
 
         return false;
+    }
+
+    private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
+        if (isCorrespondingElement(textElement, csmElement, node)) {
+            return false;
+        }
+        return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken)csmElement).isWhiteSpace();
     }
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
