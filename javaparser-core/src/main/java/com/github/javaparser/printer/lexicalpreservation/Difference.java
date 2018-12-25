@@ -453,9 +453,9 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 originalIndex++;
                 diffIndex++;
-            } else if (kept.isWhiteSpaceOrComment() && originalTextToken.isWhiteSpaceOrComment()) {
-                diffIndex++;
+            } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
+                diffIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
@@ -469,12 +469,33 @@ public class Difference {
             diffIndex++;
         } else if (kept.isUnindent()) {
             // Nothing to do, beside considering indentation
+            // However we want to consider the case in which the indentation was not applied, like when we have
+            // just a left brace followed by space
+
             diffIndex++;
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
-                nodeText.removeElement(--originalIndex);
+            if (!doWeHaveLeftBraceFollowedBySpace(originalIndex - 1)) {
+                for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
+                    nodeText.removeElement(--originalIndex);
+                }
             }
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
+        }
+    }
+
+    private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
+        index = rewindSpace(index);
+        return nodeText.getElements().get(index).isToken(LBRACE);
+    }
+
+    private int rewindSpace(int index) {
+        if (index <= 0) {
+            return index;
+        }
+        if (nodeText.getElements().get(index).isWhiteSpace()) {
+            return rewindSpace(index - 1);
+        } else {
+            return index;
         }
     }
 
