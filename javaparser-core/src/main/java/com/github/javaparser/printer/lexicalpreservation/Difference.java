@@ -543,11 +543,11 @@ public class Difference {
         List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
         WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
 
-        for (int ni = 0; ni< nextOrderElements.size(); ni++) {
+        for (int ni = 0; ni < nextOrderElements.size(); ni++) {
             boolean found = false;
             CsmElement ne = nextOrderElements.get(ni);
 
-            for (int counter = 0; counter< previousOrderElements.size() && !found; counter++) {
+            for (int counter = 0; counter < previousOrderElements.size() && !found; counter++) {
                 Integer pi = piNext.next();
                 CsmElement pe = previousOrderElements.get(pi);
                 if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
@@ -576,7 +576,7 @@ public class Difference {
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
 
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = startIndex; i< nodeText.getElements().size(); i++){
+            for (int i = startIndex; i < nodeText.getElements().size(); i++){
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
 
