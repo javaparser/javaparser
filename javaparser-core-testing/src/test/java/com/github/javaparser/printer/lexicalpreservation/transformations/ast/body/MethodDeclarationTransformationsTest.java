@@ -387,7 +387,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
         it.addMarkerAnnotation("Override");
         assertTransformedToString(
                 "@Override" + EOL +
-                "void testMethod(){}", it);
+                        "void testMethod(){}", it);
     }
 
     @Test
@@ -431,4 +431,30 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "}\n", result);
     }
 
+    @Test
+    public void addingModifiersWithExistingAnnotationsShort() {
+        MethodDeclaration it = consider("@Override void A(){}");
+        it.setModifiers(EnumSet.of(Modifier.PUBLIC, Modifier.FINAL));
+        assertTransformedToString("@Override public final void A(){}", it);
+    }
+
+    @Test
+    public void addingModifiersWithExistingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).addModifier(Modifier.KeyWord.FINAL, Modifier.Keyword.PUBLIC);
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  public final void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
 }
