@@ -434,6 +434,15 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
+    public void parseAndPrintAnonymousClassStatement() {
+        Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {\n" +
+                "};");
+        String expected = "Object anonymous = new Object() {\n" +
+                "};";
+        assertTransformedToString(expected, statement);
+    }
+
+    @Test
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
