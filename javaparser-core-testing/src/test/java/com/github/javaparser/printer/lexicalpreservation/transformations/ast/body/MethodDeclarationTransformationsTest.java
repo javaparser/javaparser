@@ -436,7 +436,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     @Test
     public void parseAndPrintAnonymousClassExpression() {
-        Expression expression = JavaParser.parseExpression("new Object() {\n" +
+        Expression expression = JavaParser.parseExpression("new Object() {" + EOL +
                 "}");
         String expected = "new Object() {\n" +
                 "}";
@@ -445,9 +445,9 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     @Test
     public void parseAndPrintAnonymousClassStatement() {
-        Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {\n" +
+        Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
                 "};");
-        String expected = "Object anonymous = new Object() {\n" +
+        String expected = "Object anonymous = new Object() {" + EOL +
                 "};";
         assertTransformedToString(expected, statement);
     }
@@ -456,16 +456,16 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {\n" +
+            Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
                     "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
         });
 
-        String expected = "public void method() {\n" +
-                "    Object anonymous = new Object() {\n" +
-                "    };\n" +
+        String expected = "public void method() {" + EOL +
+                "    Object anonymous = new Object() {" + EOL +
+                "    };" + EOL +
                 "}";
         assertTransformedToString(expected, it);
     }
