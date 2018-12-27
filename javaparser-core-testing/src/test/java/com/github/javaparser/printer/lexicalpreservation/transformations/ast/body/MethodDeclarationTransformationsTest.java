@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
@@ -431,6 +432,15 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "  public void testCase() {\n" +
                         "  }\n" +
                         "}\n", result);
+    }
+
+    @Test
+    public void parseAndPrintAnonymousClassExpression() {
+        Expression expression = JavaParser.parseExpression("new Object() {\n" +
+                "}");
+        String expected = "new Object() {\n" +
+                "}";
+        assertTransformedToString(expected, expression);
     }
 
     @Test
