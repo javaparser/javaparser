@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -28,6 +29,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.javadoc.Javadoc;
@@ -429,6 +431,24 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "  public void testCase() {\n" +
                         "  }\n" +
                         "}\n", result);
+    }
+
+    @Test
+    public void replaceBodyShouldNotBreakAnonymousClasses() {
+        MethodDeclaration it = consider("public void method() { }");
+        it.getBody().ifPresent(body -> {
+            Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {\n" +
+                    "};");
+            NodeList<Statement> statements = new NodeList<>();
+            statements.add(statement);
+            body.setStatements(statements);
+        });
+
+        String expected = "public void method() {\n" +
+                "    Object anonymous = new Object() {\n" +
+                "    };\n" +
+                "}";
+        assertTransformedToString(expected, it);
     }
 
 }
