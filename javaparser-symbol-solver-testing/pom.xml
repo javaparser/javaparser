@@ -122,6 +122,10 @@
             <artifactId>junit-jupiter-params</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-symbol-solver-logic</artifactId>
             <version>${project.version}</version>
