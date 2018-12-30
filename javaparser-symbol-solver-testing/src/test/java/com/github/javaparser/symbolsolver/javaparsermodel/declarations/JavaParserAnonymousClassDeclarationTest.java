@@ -1,8 +1,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -13,12 +13,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
+class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
   @Test
-  public void anonymousClassAsMethodArgument() {
+  void anonymousClassAsMethodArgument() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar1");
@@ -34,7 +34,7 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void callingSuperClassInnerClassMethod() {
+  void callingSuperClassInnerClassMethod() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar2");
@@ -50,7 +50,7 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void callingAnonymousClassInnerMethod() {
+  void callingAnonymousClassInnerMethod() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar3");
@@ -67,7 +67,7 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void usingAnonymousSuperClassInnerType() {
+  void usingAnonymousSuperClassInnerType() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar4");
@@ -82,7 +82,7 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void usingAnonymousClassInnerType() {
+  void usingAnonymousClassInnerType() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar5");

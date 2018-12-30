@@ -10,12 +10,12 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class ConstraintFormulaTest {
+class ConstraintFormulaTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
     private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
@@ -27,7 +27,7 @@ public class ConstraintFormulaTest {
      * Through reduction, this will become the constraint formula: ‹String <: α›.
      */
     @Test
-    public void testExpressionCompatibleWithTypeReduce1() {
+    void testExpressionCompatibleWithTypeReduce1() {
         ResolvedTypeParameterDeclaration tp = mock(ResolvedTypeParameterDeclaration.class);
 
         Expression e = new StringLiteralExpr("hi");

@@ -7,12 +7,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class Issue343 extends AbstractResolutionTest{
+class Issue343 extends AbstractResolutionTest{
 
     private TypeSolver typeResolver;
     private JavaParserFacade javaParserFacade;
@@ -21,40 +22,46 @@ public class Issue343 extends AbstractResolutionTest{
         return JavaParserFacade.get(typeSolver).getType(expression);
     }
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeResolver = new ReflectionTypeSolver();
         javaParserFacade = JavaParserFacade.get(typeResolver);
     }
 
     @Test
-    public void resolveStringLiteralOutsideAST() {
+    void resolveStringLiteralOutsideAST() {
         assertEquals(javaParserFacade.classToResolvedType(String.class), getExpressionType(typeResolver, new StringLiteralExpr("")));
     }
 
     @Test
-    public void resolveIntegerLiteralOutsideAST() {
+    void resolveIntegerLiteralOutsideAST() {
         assertEquals(javaParserFacade.classToResolvedType(int.class), getExpressionType(typeResolver, new IntegerLiteralExpr(2)));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void toResolveDoubleWeNeedTheAST() {
-        getExpressionType(typeResolver, JavaParser.parseExpression("new Double[]{2.0d, 3.0d}[1]"));
+    @Test
+    void toResolveDoubleWeNeedTheAST() {
+        assertThrows(IllegalStateException.class, () -> {
+            getExpressionType(typeResolver, JavaParser.parseExpression("new Double[]{2.0d, 3.0d}[1]"));
+    });
     }
 
 
-    @Test(expected = IllegalStateException.class)
-    public void toResolveFloatWeNeedTheAST() {
-        getExpressionType(typeResolver, JavaParser.parseExpression("new Float[]{2.0d, 3.0d}"));
+    @Test
+    void toResolveFloatWeNeedTheAST() {
+        assertThrows(IllegalStateException.class, () -> {
+            getExpressionType(typeResolver, JavaParser.parseExpression("new Float[]{2.0d, 3.0d}"));
+    });
     }
 
     @Test
-    public void resolveMethodCallOnStringLiteralOutsideAST() {
+    void resolveMethodCallOnStringLiteralOutsideAST() {
         assertEquals(javaParserFacade.classToResolvedType(int.class), getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length")));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void resolveLocaleOutsideAST() {
-        getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US"));
+    @Test
+    void resolveLocaleOutsideAST() {
+        assertThrows(IllegalStateException.class, () -> {
+            getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US"));
+    });
     }
 }

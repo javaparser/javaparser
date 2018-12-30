@@ -13,17 +13,17 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * See issue #17
  */
-public class ArrayExprTest {
+class ArrayExprTest {
 
     @Test
-    public void verifyAnArrayAccessExprTypeIsCalculatedProperly() {
+    void verifyAnArrayAccessExprTypeIsCalculatedProperly() {
         String code = "class A { String[] arrSQL; String toExamine = arrSQL[1]; }";
         FieldDeclaration field = JavaParser.parse(code).getClassByName("A").get().getFieldByName("toExamine").get();
 
@@ -33,7 +33,7 @@ public class ArrayExprTest {
     }
 
     @Test
-    public void arrayLengthValueDeclaration() {
+    void arrayLengthValueDeclaration() {
         String code = "class A { String[] arrSQL; int l = arrSQL.length; }";
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
