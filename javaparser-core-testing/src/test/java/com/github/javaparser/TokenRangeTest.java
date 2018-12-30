@@ -1,13 +1,13 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TokenRangeTest {
+class TokenRangeTest {
     @Test
-    public void toStringWorks() {
+    void toStringWorks() {
         CompilationUnit cu = JavaParser.parse("class X {\n\tX(){\n// hello\n}\n}");
         assertEquals("X(){\n// hello\n}", cu.getClassByName("X").get().getDefaultConstructor().get().getTokenRange().get().toString());
     }

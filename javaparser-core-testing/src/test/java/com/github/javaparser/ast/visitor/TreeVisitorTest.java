@@ -28,14 +28,14 @@ import com.github.javaparser.ast.expr.ArrayInitializerExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TreeVisitorTest {
+class TreeVisitorTest {
     @Test
-    public void isValidBreadthFirstTraversal() {
+    void isValidBreadthFirstTraversal() {
         Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
 
         StringBuilder result = new StringBuilder();
@@ -52,7 +52,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void issue743ConcurrentModificationProblem() {
+    void issue743ConcurrentModificationProblem() {
         Expression expression = JavaParser.parseExpression("new int[]{1,2,3,4}");
 
         StringBuilder result = new StringBuilder();
@@ -71,7 +71,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void isValidPreOrderTraversal() {
+    void isValidPreOrderTraversal() {
         StringBuilder result = new StringBuilder();
         new TreeVisitor() {
             @Override
@@ -83,7 +83,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void isValidPostOrderTraversal() {
+    void isValidPostOrderTraversal() {
         StringBuilder result = new StringBuilder();
         new TreeVisitor() {
             @Override
@@ -95,7 +95,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void preOrderConcurrentModificationIsOk() {
+    void preOrderConcurrentModificationIsOk() {
         new TreeVisitor() {
             @Override
             public void process(Node node) {
@@ -108,7 +108,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void postOrderConcurrentModificationIsOk() {
+    void postOrderConcurrentModificationIsOk() {
         new TreeVisitor() {
             @Override
             public void process(Node node) {
@@ -121,7 +121,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void parents() {
+    void parents() {
         CompilationUnit cu = JavaParser.parse("class X{int x=1;}");
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariable(0).getName();
 
@@ -140,7 +140,7 @@ public class TreeVisitorTest {
     }
 
     @Test
-    public void isValidDirectChildrenTraversal() {
+    void isValidDirectChildrenTraversal() {
         Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
 
         StringBuilder result = new StringBuilder();

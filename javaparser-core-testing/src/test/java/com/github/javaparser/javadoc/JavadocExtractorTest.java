@@ -26,16 +26,16 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 
-public class JavadocExtractorTest {
+class JavadocExtractorTest {
 
     @Test
-    public void canParseAllJavadocsInJavaParser() throws FileNotFoundException {
+    void canParseAllJavadocsInJavaParser() throws FileNotFoundException {
         processDir(new File(".."));
     }
 
