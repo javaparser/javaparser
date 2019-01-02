@@ -21,28 +21,28 @@
 
 package com.github.javaparser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RangeTest {
+class RangeTest {
 
     @Test
-    public void aRangeContainsItself() throws IOException {
+    void aRangeContainsItself() throws IOException {
         Range r = Range.range(1, 1, 3, 10);
         assertEquals(true, r.contains(r));
     }
 
     @Test
-    public void aRangeDoesNotStrictlyContainsItself() throws IOException {
+    void aRangeDoesNotStrictlyContainsItself() throws IOException {
         Range r = Range.range(1, 1, 3, 10);
         assertEquals(false, r.strictlyContains(r));
     }
 
     @Test
-    public void overlappingButNotContainedRangesAreNotOnContains() throws IOException {
+    void overlappingButNotContainedRangesAreNotOnContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 7, 10);
         assertEquals(false, r1.contains(r2));
@@ -50,7 +50,7 @@ public class RangeTest {
     }
 
     @Test
-    public void overlappingButNotContainedRangesAreNotOnStrictlyContains() throws IOException {
+    void overlappingButNotContainedRangesAreNotOnStrictlyContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 7, 10);
         assertEquals(false, r1.strictlyContains(r2));
@@ -58,7 +58,7 @@ public class RangeTest {
     }
 
     @Test
-    public void unrelatedRangesAreNotOnContains() throws IOException {
+    void unrelatedRangesAreNotOnContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(5, 1, 7, 10);
         assertEquals(false, r1.contains(r2));
@@ -66,7 +66,7 @@ public class RangeTest {
     }
 
     @Test
-    public void unrelatedRangesAreNotOnStrictlyContains() throws IOException {
+    void unrelatedRangesAreNotOnStrictlyContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(5, 1, 7, 10);
         assertEquals(false, r1.strictlyContains(r2));
@@ -74,7 +74,7 @@ public class RangeTest {
     }
 
     @Test
-    public void strictlyContainedRangesOnContains() throws IOException {
+    void strictlyContainedRangesOnContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 3, 4);
         assertEquals(true, r1.contains(r2));
@@ -82,7 +82,7 @@ public class RangeTest {
     }
 
     @Test
-    public void strictlyContainedRangesOnStrictlyContains() throws IOException {
+    void strictlyContainedRangesOnStrictlyContains() throws IOException {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 3, 4);
         assertEquals(true, r1.strictlyContains(r2));
@@ -90,7 +90,7 @@ public class RangeTest {
     }
 
     @Test
-    public void containsConsiderLines() {
+    void containsConsiderLines() {
         Range r1 = Range.range(22, 9, 22, 29);
         Range r2 = Range.range(26, 19, 26, 28);
         assertEquals(false, r1.contains(r2));

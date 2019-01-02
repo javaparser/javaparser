@@ -26,19 +26,19 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NodeWithModifiersTest {
+class NodeWithModifiersTest {
 
     @Test
-    public void addModifierWorks() {
+    void addModifierWorks() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.addModifier(PUBLIC);
@@ -46,7 +46,7 @@ public class NodeWithModifiersTest {
     }
 
     @Test
-    public void addModifierTriggerNotification() {
+    void addModifierTriggerNotification() {
         List<String> changes = new LinkedList<>();
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");

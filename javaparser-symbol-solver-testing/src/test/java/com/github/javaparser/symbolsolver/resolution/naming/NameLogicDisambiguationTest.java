@@ -9,17 +9,17 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
+class NameLogicDisambiguationTest extends AbstractNameLogicTest {
 
     private void assertNameInCodeIsDisambiguited(String code, String name,
                                                  NameCategory syntacticClassification,
@@ -31,7 +31,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToLocalVar() {
+    void ambiguousNameToLocalVar() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
                 "SomeClass a; a.aField;" + "\n" +
                 "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -39,7 +39,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToLocalVarInAnnidatedBlocks() {
+    void ambiguousNameToLocalVarInAnnidatedBlocks() {
         assertNameInCodeIsDisambiguited("class A { void foo() {{\n" +
                         "SomeClass a; {{a.aField;}}}" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -47,7 +47,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToLocalVarFromOldFor() {
+    void ambiguousNameToLocalVarFromOldFor() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
                         "for (SomeClass a=null;true;){ a.aField; }" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -55,7 +55,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToLocalVarFromNewFor() {
+    void ambiguousNameToLocalVarFromNewFor() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
                         "for (SomeClass a : null){ a.aField; }" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -63,7 +63,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToLocalVarFromTryWithResource() {
+    void ambiguousNameToLocalVarFromTryWithResource() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
                         "try (SomeClass a = null){ a.aField; }" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -71,7 +71,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToMethodParameter() {
+    void ambiguousNameToMethodParameter() {
         assertNameInCodeIsDisambiguited("class A { void foo(SomeClass a) {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -79,7 +79,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToCatchParameter() {
+    void ambiguousNameToCatchParameter() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
                         "try { } catch (SomeClass a) { a.aField; }" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -87,7 +87,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToInstanceFieldDeclared() {
+    void ambiguousNameToInstanceFieldDeclared() {
         assertNameInCodeIsDisambiguited("class A { SomeClass a; void foo() {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -95,7 +95,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToStaticFieldDeclared() {
+    void ambiguousNameToStaticFieldDeclared() {
         assertNameInCodeIsDisambiguited("class A { static SomeClass a; void foo() {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -103,7 +103,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToInstanceFieldInherited() {
+    void ambiguousNameToInstanceFieldInherited() {
         assertNameInCodeIsDisambiguited("class A { SomeClass a; } class B extends A { void foo() {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -111,7 +111,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToStaticFieldInherited() {
+    void ambiguousNameToStaticFieldInherited() {
         assertNameInCodeIsDisambiguited("class A { static SomeClass a; } class B extends A {  void foo() {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
@@ -123,7 +123,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // AmbiguousName is reclassified as an ExpressionName.
 
     @Test
-    public void ambiguousNameToSingleStaticImportDeclaration() {
+    void ambiguousNameToSingleStaticImportDeclaration() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         ResolvedFieldDeclaration mockedFieldA = mock(ResolvedFieldDeclaration.class);
@@ -139,7 +139,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameToStaticImportOnDemandDeclaration() {
+    void ambiguousNameToStaticImportOnDemandDeclaration() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         ResolvedFieldDeclaration mockedFieldA = mock(ResolvedFieldDeclaration.class);
@@ -155,7 +155,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameDefaultToPackageName() {
+    void ambiguousNameDefaultToPackageName() {
         assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
                         "a.aField;" + "\n" +
                         "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.PACKAGE_NAME, ParseStart.COMPILATION_UNIT,
@@ -175,7 +175,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // of that name actually exists.
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsPackageNameLeadingToType() {
+    void ambiguousNameInQualifiedNameRequalifiedAsPackageNameLeadingToType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         typeSolver.addDeclaration("a.b.C", mockedC);
@@ -187,7 +187,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsPackageNameNotLeadingToType() {
+    void ambiguousNameInQualifiedNameRequalifiedAsPackageNameNotLeadingToType() {
         assertNameInCodeIsDisambiguited("class B {  void foo() {\n" +
                         "a.b.C.d;" + "\n" +
                         "} }", "a.b.C", NameCategory.AMBIGUOUS_NAME, NameCategory.PACKAGE_NAME, ParseStart.COMPILATION_UNIT,
@@ -207,7 +207,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // of that name actually exists.
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToField() {
+    void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToField() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         ResolvedFieldDeclaration mockedFieldC = mock(ResolvedFieldDeclaration.class);
@@ -225,7 +225,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToMethod() {
+    void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToMethod() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         MethodUsage mockedMethodD = mock(MethodUsage.class);
@@ -242,7 +242,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToInternalType() {
+    void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToInternalType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
 
         ResolvedReferenceTypeDeclaration mockedD = mock(ResolvedReferenceTypeDeclaration.class);
@@ -260,7 +260,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToCompilationError() {
+    void ambiguousNameInQualifiedNameRequalifiedAsTypeNameLeadingToCompilationError() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         when(mockedC.asReferenceType()).thenReturn(mockedC);
@@ -275,7 +275,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void ambiguousNameInQualifiedNameRequalifiedAsExpressionName() {
+    void ambiguousNameInQualifiedNameRequalifiedAsExpressionName() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedC = mock(ResolvedReferenceTypeDeclaration.class);
         MethodUsage mockedMethodD = mock(MethodUsage.class);
@@ -297,7 +297,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // PackageOrTypeName is reclassified as a TypeName.
 
     @Test
-    public void packageOrTypeNameSimpleNameMatchingType() {
+    void packageOrTypeNameSimpleNameMatchingType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedMyQualified = mock(ResolvedReferenceTypeDeclaration.class);
         when(mockedMyQualified.asReferenceType()).thenReturn(mockedMyQualified);
@@ -313,7 +313,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // the meaning of the reclassified name.
 
     @Test
-    public void packageOrTypeNameSimpleNameNotMatchingType() {
+    void packageOrTypeNameSimpleNameNotMatchingType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
 
         assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",
@@ -329,7 +329,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // TypeName.
 
     @Test
-    public void packageOrTypeNameQualifiedNameMatchingType() {
+    void packageOrTypeNameQualifiedNameMatchingType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
         ResolvedReferenceTypeDeclaration mockedMyQualified = mock(ResolvedReferenceTypeDeclaration.class);
         when(mockedMyQualified.asReferenceType()).thenReturn(mockedMyQualified);
@@ -345,7 +345,7 @@ public class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     // of the reclassified name.
 
     @Test
-    public void packageOrTypeNameQualifiedNameNotMatchingType() {
+    void packageOrTypeNameQualifiedNameNotMatchingType() {
         MemoryTypeSolver typeSolver = new MemoryTypeSolver();
 
         assertNameInCodeIsDisambiguited("package foo; class Bar {  Bar() { new myQualified.path.to.TypeName(); } }",

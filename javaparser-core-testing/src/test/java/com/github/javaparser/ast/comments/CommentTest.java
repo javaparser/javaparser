@@ -28,19 +28,19 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CommentTest {
+class CommentTest {
 
     private static final PrettyPrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new PrettyPrinterConfiguration().setIndentSize(2);
 
     @Test
-    public void removeOrphanComment() {
+    void removeOrphanComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
@@ -50,7 +50,7 @@ public class CommentTest {
     }
 
     @Test
-    public void removeAssociatedComment() {
+    void removeAssociatedComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.setComment(c);
@@ -60,20 +60,20 @@ public class CommentTest {
     }
 
     @Test
-    public void cannotRemoveCommentNotUsedAnywhere() {
+    void cannotRemoveCommentNotUsedAnywhere() {
         Comment c = new LineComment("A comment");
         assertFalse(c.remove());
     }
 
     @Test
-    public void unicodeEscapesArePreservedInComments() {
+    void unicodeEscapesArePreservedInComments() {
         CompilationUnit cu = parse("// xxx\\u2122xxx");
         Comment comment = cu.getAllContainedComments().get(0);
         assertEquals(" xxx\\u2122xxx", comment.getContent());
     }
 
     @Test
-    public void testReplaceDuplicateJavaDocComment() {
+    void testReplaceDuplicateJavaDocComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +
@@ -114,7 +114,7 @@ public class CommentTest {
     }
 
     @Test
-    public void testRemoveDuplicateComment() {
+    void testRemoveDuplicateComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +
@@ -152,7 +152,7 @@ public class CommentTest {
     }
 
     @Test
-    public void testRemoveDuplicateJavaDocComment() {
+    void testRemoveDuplicateJavaDocComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +

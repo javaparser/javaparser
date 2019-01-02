@@ -24,19 +24,19 @@ package com.github.javaparser.builders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NodeWithParametersBuildersTest {
+class NodeWithParametersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
-    public void testAddParameter() {
+    void testAddParameter() {
         MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         addMethod.addParameter(int.class, "yay");
         Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
@@ -49,14 +49,14 @@ public class NodeWithParametersBuildersTest {
     }
 
     @Test
-    public void testGetParamByName() {
+    void testGetParamByName() {
         MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
         assertEquals(addAndGetParameter, addMethod.getParameterByName("yay").get());
     }
 
     @Test
-    public void testGetParamByType() {
+    void testGetParamByType() {
         MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
         assertEquals(addAndGetParameter, addMethod.getParameterByType("int").get());

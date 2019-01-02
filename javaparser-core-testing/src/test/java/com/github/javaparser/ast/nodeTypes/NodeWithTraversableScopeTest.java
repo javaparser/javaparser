@@ -2,15 +2,15 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class NodeWithTraversableScopeTest {
+class NodeWithTraversableScopeTest {
     @Test
-    public void traverse1() {
+    void traverse1() {
         NodeWithTraversableScope expression = parseExpression("getAddress().name.startsWith(\"abc\")");
 
         assertInstanceOf(MethodCallExpr.class, expression);

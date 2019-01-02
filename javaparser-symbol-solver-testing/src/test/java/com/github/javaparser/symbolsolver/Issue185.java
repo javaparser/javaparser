@@ -10,18 +10,18 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class Issue185 extends AbstractResolutionTest {
+class Issue185 extends AbstractResolutionTest {
 
     @Test
-    public void testIssue() throws IOException {
+    void testIssue() throws IOException {
         Path src = adaptPath("src/test/resources/recursion-issue");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));

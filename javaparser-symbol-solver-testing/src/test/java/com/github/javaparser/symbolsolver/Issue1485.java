@@ -10,18 +10,18 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue1485 extends AbstractSymbolResolutionTest {
+class Issue1485 extends AbstractSymbolResolutionTest {
 
     @Test
-    public void issue1485withoutSpecifyingJARs() throws IOException {
+    void issue1485withoutSpecifyingJARs() throws IOException {
         Path dir = adaptPath("src/test/resources/issue1485");
         Path file = adaptPath("src/test/resources/issue1485/Complex.java");
 

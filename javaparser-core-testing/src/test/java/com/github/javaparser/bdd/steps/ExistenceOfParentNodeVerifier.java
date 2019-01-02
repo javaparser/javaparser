@@ -34,7 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * The <code>ExistenceOfParentNodeVerifier</code> verifies that each node of the compilation unit has a parent set.

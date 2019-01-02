@@ -6,31 +6,34 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TypeTest {
+class TypeTest {
     @Test
-    public void asString() {
+    void asString() {
         assertEquals("int", typeAsString("int x"));
         assertEquals("List<Long>", typeAsString("List<Long> x"));
         assertEquals("String", typeAsString("@A String x"));
         assertEquals("List<? extends Object>", typeAsString("List<? extends Object> x"));
     }
 
-    @Test(expected = ParseProblemException.class)
-    public void primitiveTypeArgumentDefaultValidator() {
-        typeAsString("List<long> x;");
+    @Test
+    void primitiveTypeArgumentDefaultValidator() {
+        assertThrows(ParseProblemException.class, () -> {
+            typeAsString("List<long> x;");
+    });
     }
 
     @Test
-    public void primitiveTypeArgumentLenientValidator() {
+    void primitiveTypeArgumentLenientValidator() {
         ParserConfiguration config = new ParserConfiguration()
                 .setLanguageLevel(RAW);
         config.getPostProcessors().add(new Java5Validator() {{
@@ -50,7 +53,7 @@ public class TypeTest {
     }
 
     @Test
-    public void arrayType() {
+    void arrayType() {
         Type type = parseType("int[]");
         assertTrue(type.isArrayType());
         ArrayType arrayType = type.asArrayType();
@@ -60,7 +63,7 @@ public class TypeTest {
     }
 
     @Test
-    public void issue1251() {
+    void issue1251() {
         final Type type = parseType("TypeUtilsTest<String>.Tester");
         assertEquals("TypeUtilsTest<String>.Tester", type.toString());
     }
