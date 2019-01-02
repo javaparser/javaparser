@@ -23,18 +23,18 @@ package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EnumDeclarationBuildersTest {
+class EnumDeclarationBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
-    public void testAddImplements() {
+    void testAddImplements() {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
@@ -45,7 +45,7 @@ public class EnumDeclarationBuildersTest {
     }
 
     @Test
-    public void testAddEnumConstant() {
+    void testAddEnumConstant() {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addEnumConstant("MY_ENUM_CONSTANT");
         assertEquals(1, testEnum.getEntries().size());

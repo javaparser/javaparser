@@ -2,13 +2,13 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class XmlPrinterTest {
+class XmlPrinterTest {
     @Test
-    public void testWithType() {
+    void testWithType() {
         Expression expression = JavaParser.parseExpression("1+1");
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
@@ -18,7 +18,7 @@ public class XmlPrinterTest {
     }
 
     @Test
-    public void testWithoutType() {
+    void testWithoutType() {
         Expression expression = JavaParser.parseExpression("1+1");
 
         XmlPrinter xmlOutput = new XmlPrinter(false);
@@ -29,7 +29,7 @@ public class XmlPrinterTest {
     }
 
     @Test
-    public void testList() {
+    void testList() {
         Expression expression = JavaParser.parseExpression("a(1,2)");
 
         XmlPrinter xmlOutput = new XmlPrinter(true);

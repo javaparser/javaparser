@@ -21,32 +21,32 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-public class NoCommentEqualsVisitorTest {
+class NoCommentEqualsVisitorTest {
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         CompilationUnit p1 = JavaParser.parse("class X { }");
         CompilationUnit p2 = JavaParser.parse("class X { }");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
-    public void testEqualsWithDifferentComments() {
+    void testEqualsWithDifferentComments() {
         CompilationUnit p1 = JavaParser.parse("/* a */ class X { /** b */} //c");
         CompilationUnit p2 = JavaParser.parse("/* b */ class X { }  //c");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
-    public void testNotEquals() {
+    void testNotEquals() {
         CompilationUnit p1 = JavaParser.parse("class X { }");
         CompilationUnit p2 = JavaParser.parse("class Y { }");
         assertFalse(NoCommentEqualsVisitor.equals(p1, p2));

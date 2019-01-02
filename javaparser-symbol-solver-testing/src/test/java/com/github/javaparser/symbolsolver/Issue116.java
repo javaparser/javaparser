@@ -27,14 +27,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue116 extends AbstractResolutionTest {
+class Issue116 extends AbstractResolutionTest {
 
     @Test
-    public void arrayTypeIsNotPartOfTheTree() {
+    void arrayTypeIsNotPartOfTheTree() {
         CompilationUnit cu = parseSample("Issue116");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");

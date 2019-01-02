@@ -21,66 +21,71 @@
 
 package com.github.javaparser.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UtilsTest {
+class UtilsTest {
 
     @Test
-    public void testScreamingToCamelCase() {
+    void testScreamingToCamelCase() {
         assertEquals("abc", screamingToCamelCase("ABC"));
         assertEquals("abcDef", screamingToCamelCase("ABC_DEF"));
         assertEquals("abc", screamingToCamelCase("ABC_"));
     }
 
     @Test
-    public void screamingEmptyString() {
+    void screamingEmptyString() {
         assertEquals("", camelCaseToScreaming(""));
         assertEquals("ABC", camelCaseToScreaming("abc"));
         assertEquals("HELLO_HELLO", camelCaseToScreaming("HelloHello"));
         assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void capitalizeOnEmptyString() {
-        capitalize("");
+    @Test
+    void capitalizeOnEmptyString() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            capitalize("");
+    });
     }
 
     @Test
-    public void capitalizeOnStringOfOneCharacter() {
+    void capitalizeOnStringOfOneCharacter() {
         assertEquals("F", capitalize("f"));
     }
 
     @Test
-    public void capitalizeOnStringOfTwoCharacters() {
+    void capitalizeOnStringOfTwoCharacters() {
         assertEquals("Fo", capitalize("fo"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void decapitalizeOnEmptyString() {
-        decapitalize("");
+    @Test
+    void decapitalizeOnEmptyString() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            decapitalize("");
+    });
     }
 
     @Test
-    public void decapitalizeOnStringOfOneCharacter() {
+    void decapitalizeOnStringOfOneCharacter() {
         assertEquals("f", decapitalize("F"));
     }
 
     @Test
-    public void decapitalizeOnStringOfTwoCharacters() {
+    void decapitalizeOnStringOfTwoCharacters() {
         assertEquals("fo", decapitalize("Fo"));
     }
     
     @Test
-    public void normalizeEolInTextBlock() {
+    void normalizeEolInTextBlock() {
         String result = Utils.normalizeEolInTextBlock("\r\n \r \n", "Q");
         assertEquals("Q Q Q", result);
     }
 
     @Test
-    public void testTrimTrailingSpaces() {
+    void testTrimTrailingSpaces() {
         assertEquals("abc", trimTrailingSpaces("abc"));
         assertEquals("  abc", trimTrailingSpaces("  abc"));
         assertEquals("abc", trimTrailingSpaces("abc  "));

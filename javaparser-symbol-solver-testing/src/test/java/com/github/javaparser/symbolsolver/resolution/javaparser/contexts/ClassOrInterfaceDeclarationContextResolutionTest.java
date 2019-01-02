@@ -38,28 +38,29 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Federico Tomassetti
  */
-public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutionTest {
+class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new ReflectionTypeSolver();
     }
 
     @Test
-    public void getParentForTopClass() {
+    void getParentForTopClass() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -69,7 +70,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveExistingGenericType() {
+    void solveExistingGenericType() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -89,7 +90,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveUnexistingGenericType() {
+    void solveUnexistingGenericType() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -100,7 +101,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredInstanceField() {
+    void solveSymbolReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -111,7 +112,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredStaticField() {
+    void solveSymbolReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -122,7 +123,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToInheritedInstanceField() {
+    void solveSymbolReferringToInheritedInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -133,7 +134,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToInterfaceInheritedInstanceField() {
+    void solveSymbolReferringToInterfaceInheritedInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -144,7 +145,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToInheritedStaticField() {
+    void solveSymbolReferringToInheritedStaticField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -155,7 +156,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolReferringToUnknownElement() {
+    void solveSymbolReferringToUnknownElement() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -165,7 +166,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredInstanceField() {
+    void solveSymbolAsValueReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -176,7 +177,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredStaticField() {
+    void solveSymbolAsValueReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -187,7 +188,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToInheritedInstanceField() {
+    void solveSymbolAsValueReferringToInheritedInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -198,7 +199,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() {
+    void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         ClassOrInterfaceDeclarationContext context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -209,7 +210,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToInheritedStaticField() {
+    void solveSymbolAsValueReferringToInheritedStaticField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -220,7 +221,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveSymbolAsValueReferringToUnknownElement() {
+    void solveSymbolAsValueReferringToUnknownElement() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -230,7 +231,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToItself() {
+    void solveTypeRefToItself() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -240,7 +241,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToUnexisting() {
+    void solveTypeRefToUnexisting() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -250,7 +251,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToObject() {
+    void solveTypeRefToObject() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -260,7 +261,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToJavaLangObject() {
+    void solveTypeRefToJavaLangObject() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -270,7 +271,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToInternalClass() {
+    void solveTypeRefToInternalClass() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -280,7 +281,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToInternalEnum() {
+    void solveTypeRefToInternalEnum() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -290,7 +291,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToInternalOfInternalClass() {
+    void solveTypeRefToInternalOfInternalClass() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -300,7 +301,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToAnotherClassInFile() {
+    void solveTypeRefToAnotherClassInFile() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -310,7 +311,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToQualifiedInternalClass() {
+    void solveTypeRefToQualifiedInternalClass() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -320,7 +321,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToQualifiedInternalOfInternalClass() {
+    void solveTypeRefToQualifiedInternalOfInternalClass() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -330,7 +331,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveTypeRefToMoreQualifiedInternalOfInternalClass() {
+    void solveTypeRefToMoreQualifiedInternalOfInternalClass() {
         CompilationUnit cu = parseSample("ClassWithTypes");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -340,7 +341,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodSimpleCase() {
+    void solveMethodSimpleCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -352,7 +353,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodOverrideCase() {
+    void solveMethodOverrideCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -364,7 +365,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodInheritedCase() {
+    void solveMethodInheritedCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -376,7 +377,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodWithPrimitiveParameters() {
+    void solveMethodWithPrimitiveParameters() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -390,7 +391,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodWithMoreSpecializedParameter() {
+    void solveMethodWithMoreSpecializedParameter() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
@@ -403,17 +404,19 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
     }
 
-    @Test(expected = MethodAmbiguityException.class)
-    public void solveMethodWithAmbiguosCall() {
-        CompilationUnit cu = parseSample("ClassWithMethods");
+    @Test
+    void solveMethodWithAmbiguosCall() {
+        assertThrows(MethodAmbiguityException.class, () -> {
+            CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
-
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
-    }
+    });
+                
+}
 
     @Test
-    public void solveMethodAsUsageSimpleCase() {
+    void solveMethodAsUsageSimpleCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
@@ -426,7 +429,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodAsUsageOverrideCase() {
+    void solveMethodAsUsageOverrideCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
@@ -439,7 +442,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodAsUsageInheritedCase() {
+    void solveMethodAsUsageInheritedCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
@@ -452,7 +455,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodAsUsageWithPrimitiveParameters() {
+    void solveMethodAsUsageWithPrimitiveParameters() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
@@ -467,7 +470,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
     }
 
     @Test
-    public void solveMethodAsUsageWithMoreSpecializedParameter() {
+    void solveMethodAsUsageWithMoreSpecializedParameter() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
@@ -481,13 +484,14 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         assertEquals(1, ref.get().getNoParams());
     }
 
-    @Test(expected = MethodAmbiguityException.class)
-    public void solveMethodAsUsageWithAmbiguosCall() {
-        CompilationUnit cu = parseSample("ClassWithMethods");
+    @Test
+    void solveMethodAsUsageWithAmbiguosCall() {
+        assertThrows(MethodAmbiguityException.class, () -> {
+            CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
-
+        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
-    }
+    });
+                
+}
 }

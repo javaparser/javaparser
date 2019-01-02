@@ -11,11 +11,11 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class Issue232 extends AbstractResolutionTest {
+class Issue232 extends AbstractResolutionTest {
     @Test
-    public void issue232() {
+    void issue232() {
         CompilationUnit cu = parseSample("Issue232");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "OfDouble");
         TypeSolver typeSolver = new ReflectionTypeSolver();

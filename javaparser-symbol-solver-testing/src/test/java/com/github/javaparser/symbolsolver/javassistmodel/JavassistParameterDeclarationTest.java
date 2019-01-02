@@ -28,26 +28,26 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
+class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() throws IOException {
+    @BeforeEach
+    void setup() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-3.0.0-alpha.2.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
     }
 
     @Test
-    public void noNamesAvailableInInterfaceMethods() {
+    void noNamesAvailableInInterfaceMethods() {
         JavassistInterfaceDeclaration namesNotAvailable = (JavassistInterfaceDeclaration) typeSolver
                 .solveType("com.github.javaparser.ast.nodeTypes.NodeWithBody");
 
@@ -60,7 +60,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void nameForConstructorParameter() {
+    void nameForConstructorParameter() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         ResolvedConstructorDeclaration constructor = rangeDecl.getConstructors().get(0);
         assertEquals("begin", constructor.getParam(0).getName());
@@ -70,7 +70,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void nameForMethodParameters() {
+    void nameForMethodParameters() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         for (ResolvedMethodDeclaration methodDecl : rangeDecl.getDeclaredMethods()) {
             switch (methodDecl.getName()) {
@@ -100,7 +100,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void isField() {
+    void isField() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
@@ -108,7 +108,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void isParameter() {
+    void isParameter() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
@@ -117,7 +117,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
 
     @Test
-    public void isType() {
+    void isType() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
@@ -125,7 +125,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void isVaraidic() {
+    void isVaraidic() {
         JavassistClassDeclaration cuDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github" +
                 ".javaparser" +
                 ".ast.CompilationUnit");
@@ -142,7 +142,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void isEnumConstant() {
+    void isEnumConstant() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
@@ -150,7 +150,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void isMethod() {
+    void isMethod() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
@@ -159,7 +159,7 @@ public class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
 
     @Test
-    public void isVariable() {
+    void isVariable() {
         JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 

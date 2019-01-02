@@ -23,7 +23,7 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
@@ -35,7 +35,7 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 /**
  * Transforming Statement and verifying the LexicalPreservation works as expected.
  */
-public class StatementTransformationsTest extends AbstractLexicalPreservingTest {
+class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     Statement consider(String code) {
         Statement statement = JavaParser.parseStatement(code);
@@ -44,14 +44,14 @@ public class StatementTransformationsTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
-    public void ifStmtTransformation() throws IOException {
+    void ifStmtTransformation() throws IOException {
         Statement stmt = consider("if (a) {} else {}");
         stmt.asIfStmt().setCondition(new NameExpr("b"));
         assertTransformedToString("if (b) {} else {}", stmt);
     }
 
     @Test
-    public void switchEntryCsmHasTrailingUnindent() throws IOException {
+    void switchEntryCsmHasTrailingUnindent() throws IOException {
         Statement stmt = consider("switch (a) { case 1: a; a; }");
         NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
         statements.set(1, statements.get(1).clone()); // clone() to force replacement

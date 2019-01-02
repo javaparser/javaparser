@@ -21,16 +21,16 @@
 package com.github.javaparser.ast.expr;
 
 import org.assertj.core.data.Percentage;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("OctalInteger")
-public class LiteralStringValueExprTest {
+class LiteralStringValueExprTest {
 
     @Test
-    public void trivialLiteralsAreConverted() {
+    void trivialLiteralsAreConverted() {
         assertThat(new CharLiteralExpr('\t').getValue()).isEqualTo("\\t");
         assertThat(new CharLiteralExpr('\b').getValue()).isEqualTo("\\b");
         assertThat(new CharLiteralExpr('\f').getValue()).isEqualTo("\\f");
@@ -72,7 +72,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void lowerAndUpperBoundIntegersAreConverted() {
+    void lowerAndUpperBoundIntegersAreConverted() {
         IntegerLiteralExpr dec = parseExpression("2147483647");
         IntegerLiteralExpr posOct = parseExpression("0177_7777_7777");
         IntegerLiteralExpr negOct = parseExpression("0377_7777_7777");
@@ -91,7 +91,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void lowerAndUpperBoundLongsAreConverted() {
+    void lowerAndUpperBoundLongsAreConverted() {
         LongLiteralExpr dec = parseExpression("9223372036854775807L");
         LongLiteralExpr posOct = parseExpression("07_7777_7777_7777_7777_7777L");
         LongLiteralExpr negOct = parseExpression("010_0000_0000_0000_0000_0000L");
@@ -110,7 +110,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void charLiteralsAreConverted() {
+    void charLiteralsAreConverted() {
         CharLiteralExpr a = parseExpression("'a'");
         CharLiteralExpr percent = parseExpression("'%'");
         CharLiteralExpr tab = parseExpression("'\\t'");
@@ -135,7 +135,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void lowerAndUpperBoundDoublesAreConverted() {
+    void lowerAndUpperBoundDoublesAreConverted() {
         DoubleLiteralExpr posFloat = parseExpression("3.4028235e38f");
         DoubleLiteralExpr negFloat = parseExpression("1.40e-45f");
         DoubleLiteralExpr posDouble = parseExpression("1.7976931348623157e308");
@@ -152,7 +152,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void specialCharactersInStringsAreEscaped() {
+    void specialCharactersInStringsAreEscaped() {
         assertThat(new StringLiteralExpr("\n").getValue()).isEqualTo("\\n");
         assertThat(new StringLiteralExpr("\r").getValue()).isEqualTo("\\r");
         assertThat(new StringLiteralExpr("").setEscapedValue("\n").getValue()).isEqualTo("\\n");

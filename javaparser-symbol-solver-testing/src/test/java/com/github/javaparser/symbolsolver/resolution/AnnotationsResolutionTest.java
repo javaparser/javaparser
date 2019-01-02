@@ -17,25 +17,25 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDe
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests resolution of annotation expressions.
  *
  * @author Malte Skoruppa
  */
-public class AnnotationsResolutionTest extends AbstractResolutionTest {
+class AnnotationsResolutionTest extends AbstractResolutionTest {
 
-    @BeforeClass
-    public static void configureSymbolSolver() throws IOException {
+    @BeforeAll
+    static void configureSymbolSolver() throws IOException {
         // configure symbol solver before parsing
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
@@ -43,14 +43,14 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
         JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
-    @AfterClass
-    public static void unConfigureSymbolSolver() {
+    @AfterAll
+    static void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
         JavaParser.getStaticConfiguration().setSymbolResolver(null);
     }
 
     @Test
-    public void solveJavaParserMarkerAnnotation() {
+    void solveJavaParserMarkerAnnotation() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -66,7 +66,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavaParserSingleMemberAnnotation() {
+    void solveJavaParserSingleMemberAnnotation() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -82,7 +82,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavaParserNormalAnnotation() {
+    void solveJavaParserNormalAnnotation() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CD");
@@ -98,7 +98,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveReflectionMarkerAnnotation() {
+    void solveReflectionMarkerAnnotation() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -115,7 +115,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveReflectionSingleMemberAnnotation() {
+    void solveReflectionSingleMemberAnnotation() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -135,7 +135,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavassistMarkerAnnotation() throws IOException {
+    void solveJavassistMarkerAnnotation() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -152,7 +152,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavassistSingleMemberAnnotation() throws IOException {
+    void solveJavassistSingleMemberAnnotation() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
@@ -169,7 +169,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavassistNormalAnnotation() throws IOException {
+    void solveJavassistNormalAnnotation() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CD");
@@ -186,7 +186,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavaParserMetaAnnotations() {
+    void solveJavaParserMetaAnnotations() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -203,7 +203,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveReflectionMetaAnnotations() {
+    void solveReflectionMetaAnnotations() {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CA");
@@ -221,7 +221,7 @@ public class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveJavassistMetaAnnotation() throws IOException {
+    void solveJavassistMetaAnnotation() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CD");

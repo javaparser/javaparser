@@ -21,30 +21,35 @@
 
 package com.github.javaparser.ast.expr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseSimpleName;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SimpleNameTest {
+class SimpleNameTest {
 
     @Test
-    public void defaultConstructorSetsIdentifierToEmpty() {
+    void defaultConstructorSetsIdentifierToEmpty() {
         assertEquals("empty", new SimpleName().getIdentifier());
     }
 
-    @Test(expected = AssertionError.class)
-    public void identifierMustNotBeEmpty() {
-        new SimpleName("");
-    }
-
-    @Test(expected = AssertionError.class)
-    public void identifierMustNotBeNull() {
-        new SimpleName(null);
+    @Test
+    void identifierMustNotBeEmpty() {
+        assertThrows(AssertionError.class, () -> {
+            new SimpleName("");
+    });
     }
 
     @Test
-    public void unicodeEscapesArePreservedInIdentifiers() {
+    void identifierMustNotBeNull() {
+        assertThrows(AssertionError.class, () -> {
+            new SimpleName(null);
+    });
+    }
+
+    @Test
+    void unicodeEscapesArePreservedInIdentifiers() {
         SimpleName name = parseSimpleName("xxx\\u2122xxx");
         assertEquals("xxx\\u2122xxx", name.asString());
     }

@@ -25,20 +25,21 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CompilationUnitBuildersTest {
+class CompilationUnitBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
-    public void testAddImport() {
+    void testAddImport() {
         cu.addImport(Map.class);
         cu.addImport(Map.class);
         cu.addImport(List.class);
@@ -51,7 +52,7 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testAddImportArrayTypes() {
+    void testAddImportArrayTypes() {
         cu.addImport(CompilationUnit[][][].class);
         cu.addImport(int[][][].class);
         cu.addImport(Integer[][][].class);
@@ -66,22 +67,24 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testAddImportAnonymousClass() {
+    void testAddImportAnonymousClass() {
         cu.addImport(testInnerClass.class);
         assertEquals("import " + testInnerClass.class.getName().replace("$", ".") + ";" + EOL,
                 cu.getImport(0).toString());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testAddImportInnerClass() {
-        Object anonymous = new Object() {
+    @Test
+    void testAddImportInnerClass() {
+        assertThrows(RuntimeException.class, () -> {
+            Object anonymous = new Object(){
 
-        };
-        cu.addImport(anonymous.getClass());
-    }
+            };
+            cu.addImport(anonymous.getClass());
+    });
+}
 
     @Test
-    public void testAddClass() {
+    void testAddClass() {
         ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", PRIVATE);
         assertEquals(1, cu.getTypes().size());
         assertEquals("testClass", cu.getType(0).getNameAsString());
@@ -91,7 +94,7 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testAddInterface() {
+    void testAddInterface() {
         ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
         assertEquals(1, cu.getTypes().size());
         assertEquals("testInterface", cu.getType(0).getNameAsString());
@@ -101,7 +104,7 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testAddEnum() {
+    void testAddEnum() {
         EnumDeclaration myEnumDeclaration = cu.addEnum("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getType(0).getNameAsString());
@@ -110,7 +113,7 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testAddAnnotationDeclaration() {
+    void testAddAnnotationDeclaration() {
         AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getType(0).getNameAsString());
@@ -119,22 +122,22 @@ public class CompilationUnitBuildersTest {
     }
 
     @Test
-    public void testGetClassByName() {
+    void testGetClassByName() {
         assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
     }
 
     @Test
-    public void testGetInterfaceByName() {
+    void testGetInterfaceByName() {
         assertEquals(cu.addInterface("test"), cu.getInterfaceByName("test").get());
     }
 
     @Test
-    public void testGetEnumByName() {
+    void testGetEnumByName() {
         assertEquals(cu.addEnum("test"), cu.getEnumByName("test").get());
     }
 
     @Test
-    public void testGetAnnotationDeclarationByName() {
+    void testGetAnnotationDeclarationByName() {
         assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
     }
 }

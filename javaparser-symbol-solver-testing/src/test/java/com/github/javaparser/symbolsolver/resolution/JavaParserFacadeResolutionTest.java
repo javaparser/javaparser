@@ -37,17 +37,17 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
+class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void typeDeclarationSuperClassImplicitlyIncludeObject() {
+    void typeDeclarationSuperClassImplicitlyIncludeObject() {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
@@ -57,7 +57,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     // See issue 42
     @Test
-    public void solvingReferenceToUnsupportedOperationException() {
+    void solvingReferenceToUnsupportedOperationException() {
         String code = "public class Bla {\n" +
                 "    public void main()\n" +
                 "    {\n" +
@@ -79,7 +79,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     // See issue 46
     @Test
-    public void solvingReferenceToCatchClauseParam() {
+    void solvingReferenceToCatchClauseParam() {
         String code = "public class Bla {\n" +
                 "    public void main()\n" +
                 "    {\n" +
@@ -105,7 +105,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     // See issue 47
     @Test
-    public void solvingReferenceToAnAncestorInternalClass() {
+    void solvingReferenceToAnAncestorInternalClass() {
         String code = "public class Foo {\n" +
                 "    public class Base {\n" +
                 "        public class X {\n" +
@@ -124,7 +124,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     // See issue 119
     @Test
-    public void solveTryWithResourceVariable() {
+    void solveTryWithResourceVariable() {
         String code = "import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {\n" +
                 "    sc.nextLine();\n" +
                 "} } }";
@@ -145,7 +145,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMultiCatchType() {
+    void solveMultiCatchType() {
         String code = "class A {\n" +
                 "        public void foo() {\n" +
                 "            try {\n" +
@@ -163,7 +163,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void classToResolvedTypeViaReflection() {
+    void classToResolvedTypeViaReflection() {
         Class<?> clazz = this.getClass();
         ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
         JavaParserFacade facade = JavaParserFacade.get(reflectionTypeSolver);

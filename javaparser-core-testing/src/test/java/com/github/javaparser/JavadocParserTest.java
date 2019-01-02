@@ -24,28 +24,28 @@ package com.github.javaparser;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JavadocParserTest {
+class JavadocParserTest {
 
     @Test
-    public void parseSimplestContent() {
-        Assert.assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
+    void parseSimplestContent() {
+        Assertions.assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
                 JavadocParser.parse("A simple line of text"));
     }
 
     @Test
-    public void parseSingleLineWithSpacing() {
+    void parseSingleLineWithSpacing() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The line number of the first character of this Token.")),
                 JavadocParser.parse(" The line number of the first character of this Token. "));
     }
 
     @Test
-    public void parseSingleLineWithNewLines() {
+    void parseSingleLineWithNewLines() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The string image of the token.")),
                 JavadocParser.parse(EOL +
                         "   * The string image of the token." + EOL +
@@ -53,7 +53,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseCommentWithNewLines() {
+    void parseCommentWithNewLines() {
         String text = EOL +
                 "   * The version identifier for this Serializable class." + EOL +
                 "   * Increment only if the <i>serialized</i> form of the" + EOL +
@@ -66,7 +66,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseCommentWithIndentation() {
+    void parseCommentWithIndentation() {
         String text = "Returns a new Token object, by default." + EOL +
                 "   * However, if you want, you can create and return subclass objects based on the value of ofKind." + EOL +
                 "   *" + EOL +
@@ -83,7 +83,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseBlockTagsAndEmptyDescription() {
+    void parseBlockTagsAndEmptyDescription() {
         String text = EOL +
                 "   * @deprecated" + EOL +
                 "   * @see #getEndColumn" + EOL +
@@ -94,7 +94,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseBlockTagsAndProvideTagName() {
+    void parseBlockTagsAndProvideTagName() {
         String expectedText = EOL +
                 "   * @unofficial" + EOL + " " +
                 "   ";
@@ -109,7 +109,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseParamBlockTags() {
+    void parseParamBlockTags() {
         String text = EOL +
                 "     * Add a field to this and automatically add the import of the type if needed" + EOL +
                 "     *" + EOL +
@@ -127,7 +127,7 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void parseMultilineParamBlockTags() {
+    void parseMultilineParamBlockTags() {
         String text = EOL +
                 "     * Add a field to this and automatically add the import of the type if needed" + EOL +
                 "     *" + EOL +
@@ -146,22 +146,22 @@ public class JavadocParserTest {
     }
 
     @Test
-    public void startsWithAsteriskEmpty() {
+    void startsWithAsteriskEmpty() {
         assertEquals(-1, JavadocParser.startsWithAsterisk(""));
     }
 
     @Test
-    public void startsWithAsteriskNoAsterisk() {
+    void startsWithAsteriskNoAsterisk() {
         assertEquals(-1, JavadocParser.startsWithAsterisk(" ciao"));
     }
 
     @Test
-    public void startsWithAsteriskAtTheBeginning() {
+    void startsWithAsteriskAtTheBeginning() {
         assertEquals(0, JavadocParser.startsWithAsterisk("* ciao"));
     }
 
     @Test
-    public void startsWithAsteriskAfterSpaces() {
+    void startsWithAsteriskAfterSpaces() {
         assertEquals(3, JavadocParser.startsWithAsterisk("   * ciao"));
     }
 

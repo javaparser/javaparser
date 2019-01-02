@@ -7,19 +7,19 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Instantiation;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SameAsBoundTest {
+class SameAsBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
     private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
 
     @Test
-    public void recognizeInstantiation() {
+    void recognizeInstantiation() {
         // { α = String } contains a single bound, instantiating α as String.
         InferenceVariable inferenceVariable = new InferenceVariable("α", null);
         Bound bound1 = new SameAsBound(inferenceVariable, stringType);
