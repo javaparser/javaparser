@@ -6,9 +6,9 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.utils.SourceZip;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import static com.github.javaparser.utils.TestUtils.download;
 import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
 import static java.util.Comparator.comparing;
 
-public class BulkParseTest {
+class BulkParseTest {
     /**
      * Running this will download a version of the OpenJDK, unzip it, and parse it. If it throws a stack overflow
      * exception, increase the JVM's stack size.
@@ -60,18 +60,18 @@ public class BulkParseTest {
         bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setLanguageLevel(JAVA_9));
     }
 
-    @Before
-    public void startLogging() {
+    @BeforeEach
+    void startLogging() {
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
     }
 
-    @After
-    public void stopLogging() {
+    @AfterEach
+    void stopLogging() {
         Log.setAdapter(new Log.SilentAdapter());
     }
 
     @Test
-    public void parseOwnSourceCode() throws IOException {
+    void parseOwnSourceCode() throws IOException {
         String[] roots = new String[]{
                 "javaparser-core/src/main/java",
                 "javaparser-core-testing/src/test/java",

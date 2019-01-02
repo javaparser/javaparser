@@ -7,15 +7,15 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class TypeInClassWithAnnotationAncestorTest extends AbstractResolutionTest {
+class TypeInClassWithAnnotationAncestorTest extends AbstractResolutionTest {
 
 	@Test
-	public void resolveStringReturnType() {
+	void resolveStringReturnType() {
 		CompilationUnit cu = parseSample("ClassWithAnnotationAncestor");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassWithAnnotationAncestor");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testMethod");

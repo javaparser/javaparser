@@ -21,11 +21,11 @@
 
 package com.github.javaparser.wiki_samples;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PrintingTheCompilationUnitToSystemOutputTest {
+class PrintingTheCompilationUnitToSystemOutputTest {
     @Test
-    public void printingTheCompilationUnitToSystemOutput() throws Exception {
+    void printingTheCompilationUnitToSystemOutput() throws Exception {
         try (TestFileToken f = new TestFileToken("test.java")) {
             CuPrinter.main(new String[]{});
         }

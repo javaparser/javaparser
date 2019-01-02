@@ -12,25 +12,25 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue113 extends AbstractSymbolResolutionTest {
+class Issue113 extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(adaptPath("src/test/resources/issue113"), new LeanParserConfiguration()));
     }
 
     @Test
-    public void issue113providedCodeDoesNotCrash() throws IOException {
+    void issue113providedCodeDoesNotCrash() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
         CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 
@@ -41,7 +41,7 @@ public class Issue113 extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void issue113superClassIsResolvedCorrectly() throws IOException {
+    void issue113superClassIsResolvedCorrectly() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
         CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 

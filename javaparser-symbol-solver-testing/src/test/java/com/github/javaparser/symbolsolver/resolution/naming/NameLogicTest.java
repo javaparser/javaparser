@@ -10,14 +10,14 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.DECLARATION;
 import static com.github.javaparser.symbolsolver.resolution.naming.NameRole.REFERENCE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class NameLogicTest extends AbstractNameLogicTest {
+class NameLogicTest extends AbstractNameLogicTest {
 
 
     private void assertNameInCodeIsSyntactically(String code, String name, NameCategory nameCategory, ParseStart parseStart) {
@@ -26,7 +26,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void requiresModuleName() {
+    void requiresModuleName() {
         assertNameInCodeIsSyntactically("module com.mydeveloperplanet.jpmshello {\n" +
                 "    requires java.base;\n" +
                 "    requires java.xml;\n" +
@@ -35,14 +35,14 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void exportsModuleName() {
+    void exportsModuleName() {
         assertNameInCodeIsSyntactically("module my.module{\n" +
                 "  exports my.packag to other.module, another.module;\n" +
                 "}", "other.module", NameCategory.MODULE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void opensModuleName() {
+    void opensModuleName() {
         assertNameInCodeIsSyntactically("module client.modul{\n" +
                 "    opens some.client.packag to framework.modul;\n" +
                 "    requires framework.modul2;\n" +
@@ -50,295 +50,295 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void exportsPackageName() {
+    void exportsPackageName() {
         assertNameInCodeIsSyntactically("module common.widget{\n" +
                 "  exports com.logicbig;\n" +
                 "}", "com.logicbig", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void opensPackageName() {
+    void opensPackageName() {
         assertNameInCodeIsSyntactically("module foo {\n" +
                 "    opens com.example.bar;\n" +
                 "}", "com.example.bar", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void packageNameInPackageName() {
+    void packageNameInPackageName() {
         assertNameInCodeIsSyntactically("module foo {\n" +
                 "    opens com.example.bar;\n" +
                 "}", "com.example", NameCategory.PACKAGE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void usesTypeName() {
+    void usesTypeName() {
         assertNameInCodeIsSyntactically("module modi.mod {\n" +
                 "    uses modi.api;\n" +
                 "}", "modi.api", NameCategory.TYPE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void providesTypeName() {
+    void providesTypeName() {
         assertNameInCodeIsSyntactically("module foo {\n" +
                 "    provides com.modi.api.query.Query with ModuleQuery;\n" +
                 "}", "com.modi.api.query.Query", NameCategory.TYPE_NAME, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void singleTypeImportTypeName() {
+    void singleTypeImportTypeName() {
         assertNameInCodeIsSyntactically("import a.b.c;", "a.b.c",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void singleStaticTypeImportTypeName() {
+    void singleStaticTypeImportTypeName() {
         assertNameInCodeIsSyntactically("import static a.B.c;", "a.B",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void singleStaticImportOnDemandTypeName() {
+    void singleStaticImportOnDemandTypeName() {
         assertNameInCodeIsSyntactically("import static a.B.*;", "a.B",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void constructorDeclarationTypeName() {
+    void constructorDeclarationTypeName() {
         assertNameInCodeIsSyntactically("A() { }", "A",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void annotationTypeName() {
+    void annotationTypeName() {
         assertNameInCodeIsSyntactically("@Anno class A {} ", "Anno",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classLiteralTypeName() {
+    void classLiteralTypeName() {
         assertNameInCodeIsSyntactically("Class<?> c = String.class;", "String",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
 
     @Test
-    public void thisExprTypeName() {
+    void thisExprTypeName() {
         assertNameInCodeIsSyntactically("Object o = String.this;", "String",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
 
     @Test
-    public void qualifiedSuperFieldAccessTypeName() {
+    void qualifiedSuperFieldAccessTypeName() {
         assertNameInCodeIsSyntactically("Object o = MyClass.super.myField;", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
 
     @Test
-    public void qualifiedSuperCallTypeName() {
+    void qualifiedSuperCallTypeName() {
         assertNameInCodeIsSyntactically("Object o = MyClass.super.myCall();", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
 
     @Test
-    public void qualifiedSuperMethodReferenceTypeName() {
+    void qualifiedSuperMethodReferenceTypeName() {
         assertNameInCodeIsSyntactically("Object o = MyClass.super::myMethod;", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.STATEMENT);
     }
 
     @Test
-    public void extendsClauseTypeName() {
+    void extendsClauseTypeName() {
         assertNameInCodeIsSyntactically("class Foo extends bar.MyClass { }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void implementsClauseTypeName() {
+    void implementsClauseTypeName() {
         assertNameInCodeIsSyntactically("class Foo implements bar.MyClass { }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void returnTypeTypeName() {
+    void returnTypeTypeName() {
         assertNameInCodeIsSyntactically("class Foo { bar.MyClass myMethod() {} }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void qualifiedAnnotationMemberTypeTypeName() {
+    void qualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeIsSyntactically("@interface MyAnno { bar.MyClass myMember(); }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void unqualifiedAnnotationMemberTypeTypeName() {
+    void unqualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeIsSyntactically("@interface MyAnno { MyClass myMember(); }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void throwClauseMethodTypeName() {
+    void throwClauseMethodTypeName() {
         assertNameInCodeIsSyntactically("class Foo { void myMethod() throws bar.MyClass {} }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void qualifiedThrowClauseConstructorTypeName() {
+    void qualifiedThrowClauseConstructorTypeName() {
         assertNameInCodeIsSyntactically("class Foo { Foo() throws bar.MyClass {} }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void unualifiedThrowClauseConstructorTypeName() {
+    void unualifiedThrowClauseConstructorTypeName() {
         assertNameInCodeIsSyntactically("class Foo { Foo() throws MyClass {} }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void qualifiedFieldTypeTypeName() {
+    void qualifiedFieldTypeTypeName() {
         assertNameInCodeIsSyntactically("class Foo { bar.MyClass myField; }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void fieldTypeTypeNameSecondAttempt() {
+    void fieldTypeTypeNameSecondAttempt() {
         assertNameInCodeIsSyntactically("public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {\n" +
                         "private TypeSolver typeSolver; }", "TypeSolver",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void unqualifiedFieldTypeTypeName() {
+    void unqualifiedFieldTypeTypeName() {
         assertNameInCodeIsSyntactically("class Foo { MyClass myField; }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void qualifiedFormalParameterOfMethodTypeName() {
+    void qualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeIsSyntactically("class Foo { void myMethod(bar.MyClass param) {} }", "bar.MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void unqualifiedFormalParameterOfMethodTypeName() {
+    void unqualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeIsSyntactically("class Foo { void myMethod(MyClass param) {} }", "MyClass",
                 NameCategory.TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void receiverParameterOfMethodTypeName() {
+    void receiverParameterOfMethodTypeName() {
         assertNameInCodeIsSyntactically("void myMethod(Foo this) {}", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void variableDeclarationTypeTypeName() {
+    void variableDeclarationTypeTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { Foo myVar; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void exceptionParameterTypeTypeName() {
+    void exceptionParameterTypeTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { try { } catch(Foo e) { } }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void explicitParameterTypeInConstructorCallTypeName() {
+    void explicitParameterTypeInConstructorCallTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { new Call<Foo>(); }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void explicitParameterTypeInMethodCallTypeName() {
+    void explicitParameterTypeInMethodCallTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { new Call().<Foo>myMethod(); }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void instantiationCallTypeName() {
+    void instantiationCallTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { new Foo(); }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void instantiationCallOfAnonymousTypeTypeName() {
+    void instantiationCallOfAnonymousTypeTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { new Foo() { void method() { } } ; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void arrayCreationExpressionTypeName() {
+    void arrayCreationExpressionTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { new Foo[0]; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void castTypeName() {
+    void castTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { Object o = (Foo)someField; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void instanceOfTypeName() {
+    void instanceOfTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { if (myValue instanceof Foo) { }; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void methodReferenceTypeName() {
+    void methodReferenceTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void qualifiedConstructorSuperClassInvocationExpressionName() {
+    void qualifiedConstructorSuperClassInvocationExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression.super(); } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void qualifiedClassInstanceCreationExpressionName() {
+    void qualifiedClassInstanceCreationExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression.new MyClass(); } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void arrayReferenceExpressionName() {
+    void arrayReferenceExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression[0]; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void postfixExpressionName() {
+    void postfixExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression++; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void leftHandAssignmentExpressionName() {
+    void leftHandAssignmentExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { anExpression = 2; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void variableAccessInTryWithResourceExpressionName() {
+    void variableAccessInTryWithResourceExpressionName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { try (anExpression) { }; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void variableAccessInTryWithResourceWothTypeExpressionName() {
+    void variableAccessInTryWithResourceWothTypeExpressionName() {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "anExpression",
                 NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void methodInvocationMethodName() {
+    void methodInvocationMethodName() {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { myMethod(); } } ", "myMethod",
                 NameCategory.METHOD_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void leftOfQualifiedTypeNamePackageOrTypeName() {
+    void leftOfQualifiedTypeNamePackageOrTypeName() {
         assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
                 NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
         assertNameInCodeIsSyntactically("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path",
@@ -348,13 +348,13 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void typeImportOnDemandPackageOrTypeName() {
+    void typeImportOnDemandPackageOrTypeName() {
         assertNameInCodeIsSyntactically("import a.B.*;", "a.B",
                 NameCategory.PACKAGE_OR_TYPE_NAME, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void leftOfExpressionNameAmbiguousName() {
+    void leftOfExpressionNameAmbiguousName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b.c",
                 NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
         assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b",
@@ -364,7 +364,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void leftOfMethodCallAmbiguousName() {
+    void leftOfMethodCallAmbiguousName() {
         assertNameInCodeIsSyntactically("class Bar { Bar() { a.b.c.aMethod(); } } ", "a.b.c",
                 NameCategory.AMBIGUOUS_NAME, ParseStart.COMPILATION_UNIT);
     }
@@ -387,7 +387,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void identifyNamesInSimpleExamples() {
+    void identifyNamesInSimpleExamples() {
         String code = "package a.b.c; class A { void foo(int param) { return a.b.c.D.e; } }";
         CompilationUnit cu = JavaParser.parse(code);
 
@@ -432,7 +432,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void identifyNameRolesInSimpleExamples() {
+    void identifyNameRolesInSimpleExamples() {
         String code = "package a.b.c; class A { void foo(int param) { return a.b.c.D.e; } }";
         CompilationUnit cu = JavaParser.parse(code);
 
@@ -468,7 +468,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void nameAsStringModuleName() {
+    void nameAsStringModuleName() {
         ModuleDeclaration md = parse("module com.mydeveloperplanet.jpmshello {\n" +
                 "    requires java.base;\n" +
                 "    requires java.xml;\n" +
@@ -478,13 +478,13 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void nameAsStringClassName() {
+    void nameAsStringClassName() {
         CompilationUnit cu = parse("class Foo extends bar.MyClass { }", ParseStart.COMPILATION_UNIT);
         assertEquals("Foo", NameLogic.nameAsString(cu.getType(0).getName()));
     }
 
     @Test
-    public void qualifiedModuleName() {
+    void qualifiedModuleName() {
         assertIsQualifiedName("module com.mydeveloperplanet.jpmshello {\n" +
                 "    requires java.base;\n" +
                 "    requires java.xml;\n" +
@@ -493,13 +493,13 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void simpleNameUnqualifiedAnnotationMemberTypeTypeName() {
+    void simpleNameUnqualifiedAnnotationMemberTypeTypeName() {
         assertIsSimpleName("@interface MyAnno { MyClass myMember(); }", "MyClass",
                 ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleModuleName() {
+    void classifyRoleModuleName() {
         assertNameInCodeHasRole("module com.mydeveloperplanet.jpmshello {\n" +
                 "    requires java.base;\n" +
                 "    requires java.xml;\n" +
@@ -508,7 +508,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleRequiresModuleName() {
+    void classifyRoleRequiresModuleName() {
         assertNameInCodeHasRole("module com.mydeveloperplanet.jpmshello {\n" +
                 "    requires java.base;\n" +
                 "    requires java.xml;\n" +
@@ -517,14 +517,14 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleExportsModuleName() {
+    void classifyRoleExportsModuleName() {
         assertNameInCodeHasRole("module my.module{\n" +
                 "  exports my.packag to other.module, another.module;\n" +
                 "}", "other.module", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRoleOpensModuleName() {
+    void classifyRoleOpensModuleName() {
         assertNameInCodeHasRole("module client.modul{\n" +
                 "    opens some.client.packag to framework.modul;\n" +
                 "    requires framework.modul2;\n" +
@@ -532,331 +532,331 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleExportsPackageName() {
+    void classifyRoleExportsPackageName() {
         assertNameInCodeHasRole("module common.widget{\n" +
                 "  exports com.logicbig;\n" +
                 "}", "com.logicbig", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRoleOpensPackageName() {
+    void classifyRoleOpensPackageName() {
         assertNameInCodeHasRole("module foo {\n" +
                 "    opens com.example.bar;\n" +
                 "}", "com.example.bar", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRolePackageNameInPackageName() {
+    void classifyRolePackageNameInPackageName() {
         assertNameInCodeHasRole("module foo {\n" +
                 "    opens com.example.bar;\n" +
                 "}", "com.example", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRoleUsesTypeName() {
+    void classifyRoleUsesTypeName() {
         assertNameInCodeHasRole("module modi.mod {\n" +
                 "    uses modi.api;\n" +
                 "}", "modi.api", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRoleProvidesTypeName() {
+    void classifyRoleProvidesTypeName() {
         assertNameInCodeHasRole("module foo {\n" +
                 "    provides com.modi.api.query.Query with ModuleQuery;\n" +
                 "}", "com.modi.api.query.Query", REFERENCE, ParseStart.MODULE_DECLARATION);
     }
 
     @Test
-    public void classifyRoleSingleTypeImportTypeName() {
+    void classifyRoleSingleTypeImportTypeName() {
         assertNameInCodeHasRole("import a.b.c;", "a.b.c",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleSingleStaticTypeImportTypeName() {
+    void classifyRoleSingleStaticTypeImportTypeName() {
         assertNameInCodeHasRole("import static a.B.c;", "a.B",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleSingleStaticImportOnDemandTypeName() {
+    void classifyRoleSingleStaticImportOnDemandTypeName() {
         assertNameInCodeHasRole("import static a.B.*;", "a.B",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleConstructorDeclarationTypeName() {
+    void classifyRoleConstructorDeclarationTypeName() {
         assertNameInCodeHasRole("A() { }", "A",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleAnnotationTypeName() {
+    void classifyRoleAnnotationTypeName() {
         assertNameInCodeHasRole("@Anno class A {} ", "Anno",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleClassName() {
+    void classifyRoleClassName() {
         assertNameInCodeHasRole("@Anno class A {} ", "A",
                 DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleClassLiteralTypeName() {
+    void classifyRoleClassLiteralTypeName() {
         assertNameInCodeHasRole("Class<?> c = String.class;", "String",
                 REFERENCE, ParseStart.STATEMENT);
     }
 
     @Test
-    public void classifyRoleThisExprTypeName() {
+    void classifyRoleThisExprTypeName() {
         assertNameInCodeHasRole("Object o = String.this;", "String",
                 REFERENCE, ParseStart.STATEMENT);
     }
 
     @Test
-    public void classifyRoleQualifiedSuperFieldAccessTypeName() {
+    void classifyRoleQualifiedSuperFieldAccessTypeName() {
         assertNameInCodeHasRole("Object o = MyClass.super.myField;", "MyClass",
                 REFERENCE, ParseStart.STATEMENT);
     }
 
     @Test
-    public void classifyRoleQualifiedSuperCallTypeName() {
+    void classifyRoleQualifiedSuperCallTypeName() {
         assertNameInCodeHasRole("Object o = MyClass.super.myCall();", "MyClass",
                 REFERENCE, ParseStart.STATEMENT);
     }
 
     @Test
-    public void classifyRoleQualifiedSuperMethodReferenceTypeName() {
+    void classifyRoleQualifiedSuperMethodReferenceTypeName() {
         assertNameInCodeHasRole("Object o = MyClass.super::myMethod;", "MyClass",
                 REFERENCE, ParseStart.STATEMENT);
     }
 
     @Test
-    public void classifyRoleExtendsClauseTypeName() {
+    void classifyRoleExtendsClauseTypeName() {
         assertNameInCodeHasRole("class Foo extends bar.MyClass { }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleImplementsClauseTypeName() {
+    void classifyRoleImplementsClauseTypeName() {
         assertNameInCodeHasRole("class Foo implements bar.MyClass { }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleReturnTypeTypeName() {
+    void classifyRoleReturnTypeTypeName() {
         assertNameInCodeHasRole("class Foo { bar.MyClass myMethod() {} }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleQualifiedAnnotationMemberTypeTypeName() {
+    void classifyRoleQualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeHasRole("@interface MyAnno { bar.MyClass myMember(); }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleAnnotationName() {
+    void classifyRoleAnnotationName() {
         assertNameInCodeHasRole("@interface MyAnno { bar.MyClass myMember(); }", "MyAnno",
                 DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleUnqualifiedAnnotationMemberTypeTypeName() {
+    void classifyRoleUnqualifiedAnnotationMemberTypeTypeName() {
         assertNameInCodeHasRole("@interface MyAnno { MyClass myMember(); }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleThrowClauseMethodTypeName() {
+    void classifyRoleThrowClauseMethodTypeName() {
         assertNameInCodeHasRole("class Foo { void myMethod() throws bar.MyClass {} }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleQualifiedThrowClauseConstructorTypeName() {
+    void classifyRoleQualifiedThrowClauseConstructorTypeName() {
         assertNameInCodeHasRole("class Foo { Foo() throws bar.MyClass {} }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleUnualifiedThrowClauseConstructorTypeName() {
+    void classifyRoleUnualifiedThrowClauseConstructorTypeName() {
         assertNameInCodeHasRole("class Foo { Foo() throws MyClass {} }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleQualifiedFieldTypeTypeName() {
+    void classifyRoleQualifiedFieldTypeTypeName() {
         assertNameInCodeHasRole("class Foo { bar.MyClass myField; }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleFieldTypeTypeNameSecondAttempt() {
+    void classifyRoleFieldTypeTypeNameSecondAttempt() {
         assertNameInCodeHasRole("public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {\n" +
                         "private TypeSolver typeSolver; }", "TypeSolver",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleUnqualifiedFieldTypeTypeName() {
+    void classifyRoleUnqualifiedFieldTypeTypeName() {
         assertNameInCodeHasRole("class Foo { MyClass myField; }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleFieldName() {
+    void classifyRoleFieldName() {
         assertNameInCodeHasRole("class Foo { MyClass myField; }", "myField",
                 DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleQualifiedFormalParameterOfMethodTypeName() {
+    void classifyRoleQualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeHasRole("class Foo { void myMethod(bar.MyClass param) {} }", "bar.MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleUnqualifiedFormalParameterOfMethodTypeName() {
+    void classifyRoleUnqualifiedFormalParameterOfMethodTypeName() {
         assertNameInCodeHasRole("class Foo { void myMethod(MyClass param) {} }", "MyClass",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleMethodName() {
+    void classifyRoleMethodName() {
         assertNameInCodeHasRole("class Foo { void myMethod(MyClass param) {} }", "myMethod",
                 DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleReceiverParameterOfMethodTypeName() {
+    void classifyRoleReceiverParameterOfMethodTypeName() {
         assertNameInCodeHasRole("void myMethod(Foo this) {}", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleVariableDeclarationTypeTypeName() {
+    void classifyRoleVariableDeclarationTypeTypeName() {
         assertNameInCodeHasRole("void myMethod() { Foo myVar; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleExceptionParameterTypeTypeName() {
+    void classifyRoleExceptionParameterTypeTypeName() {
         assertNameInCodeHasRole("void myMethod() { try { } catch(Foo e) { } }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleExceptionParameterName() {
+    void classifyRoleExceptionParameterName() {
         assertNameInCodeHasRole("void myMethod() { try { } catch(Foo e) { } }", "e",
                 DECLARATION, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleExplicitParameterTypeInConstructorCallTypeName() {
+    void classifyRoleExplicitParameterTypeInConstructorCallTypeName() {
         assertNameInCodeHasRole("void myMethod() { new Call<Foo>(); }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleExplicitParameterTypeInMethodCallTypeName() {
+    void classifyRoleExplicitParameterTypeInMethodCallTypeName() {
         assertNameInCodeHasRole("void myMethod() { new Call().<Foo>myMethod(); }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleInstantiationCallTypeName() {
+    void classifyRoleInstantiationCallTypeName() {
         assertNameInCodeHasRole("void myMethod() { new Foo(); }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleInstantiationCallOfAnonymousTypeTypeName() {
+    void classifyRoleInstantiationCallOfAnonymousTypeTypeName() {
         assertNameInCodeHasRole("void myMethod() { new Foo() { void method() { } } ; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleArrayCreationExpressionTypeName() {
+    void classifyRoleArrayCreationExpressionTypeName() {
         assertNameInCodeHasRole("void myMethod() { new Foo[0]; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleCastTypeName() {
+    void classifyRoleCastTypeName() {
         assertNameInCodeHasRole("void myMethod() { Object o = (Foo)someField; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleInstanceOfTypeName() {
+    void classifyRoleInstanceOfTypeName() {
         assertNameInCodeHasRole("void myMethod() { if (myValue instanceof Foo) { }; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleMethodReferenceTypeName() {
+    void classifyRoleMethodReferenceTypeName() {
         assertNameInCodeHasRole("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
     }
 
     @Test
-    public void classifyRoleQualifiedConstructorSuperClassInvocationExpressionName() {
+    void classifyRoleQualifiedConstructorSuperClassInvocationExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { anExpression.super(); } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleQualifiedClassInstanceCreationExpressionName() {
+    void classifyRoleQualifiedClassInstanceCreationExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { anExpression.new MyClass(); } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleArrayReferenceExpressionName() {
+    void classifyRoleArrayReferenceExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { anExpression[0]; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRolePostfixExpressionName() {
+    void classifyRolePostfixExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { anExpression++; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleLeftHandAssignmentExpressionName() {
+    void classifyRoleLeftHandAssignmentExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { anExpression = 2; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleVariableAccessInTryWithResourceExpressionName() {
+    void classifyRoleVariableAccessInTryWithResourceExpressionName() {
         assertNameInCodeHasRole("class Bar { Bar() { try (anExpression) { }; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleVariableAccessInTryWithResourceWithTypeExpressionName() {
+    void classifyRoleVariableAccessInTryWithResourceWithTypeExpressionName() {
         assertNameInCodeHasRole("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "anExpression",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyTryWithResourceName() {
+    void classifyTryWithResourceName() {
         assertNameInCodeHasRole("class Bar {  Bar() { try (Object o = anExpression) { }; } } ", "o",
                 DECLARATION, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleMethodInvocationMethodName() {
+    void classifyRoleMethodInvocationMethodName() {
         assertNameInCodeHasRole("class Bar {  Bar() { myMethod(); } } ", "myMethod",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleLeftOfQualifiedTypeNamePackageOrTypeName() {
+    void classifyRoleLeftOfQualifiedTypeNamePackageOrTypeName() {
         assertNameInCodeHasRole("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path.to",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
         assertNameInCodeHasRole("class Bar {  Bar() { new myQualified.path.to.TypeName(); } } ", "myQualified.path",
@@ -866,13 +866,13 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleTypeImportOnDemandPackageOrTypeName() {
+    void classifyRoleTypeImportOnDemandPackageOrTypeName() {
         assertNameInCodeHasRole("import a.B.*;", "a.B",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void classifyRoleLeftOfExpressionNameAmbiguousName() {
+    void classifyRoleLeftOfExpressionNameAmbiguousName() {
         assertNameInCodeHasRole("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b.c",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
         assertNameInCodeHasRole("class Bar { Bar() { a.b.c.anExpression[0]; } } ", "a.b",
@@ -882,13 +882,13 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleLeftOfMethodCallAmbiguousName() {
+    void classifyRoleLeftOfMethodCallAmbiguousName() {
         assertNameInCodeHasRole("class Bar { Bar() { a.b.c.aMethod(); } } ", "a.b.c",
                 REFERENCE, ParseStart.COMPILATION_UNIT);
     }
 
     @Test
-    public void defaultValueTypeName() {
+    void defaultValueTypeName() {
         assertNameInCodeIsSyntactically("@RequestForEnhancement(\n" +
                         "    id       = 2868724,\n" +
                         "    synopsis = \"Provide time-travel functionality\",\n" +
@@ -900,7 +900,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleDefaultValueTypeName() {
+    void classifyRoleDefaultValueTypeName() {
         assertNameInCodeHasRole("@RequestForEnhancement(\n" +
                         "    id       = 2868724,\n" +
                         "    synopsis = \"Provide time-travel functionality\",\n" +
@@ -912,7 +912,7 @@ public class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
-    public void classifyRoleDefaultValueDeclaration() {
+    void classifyRoleDefaultValueDeclaration() {
         assertNameInCodeHasRole("@RequestForEnhancement(\n" +
                         "    id       = 2868724,\n" +
                         "    synopsis = \"Provide time-travel functionality\",\n" +

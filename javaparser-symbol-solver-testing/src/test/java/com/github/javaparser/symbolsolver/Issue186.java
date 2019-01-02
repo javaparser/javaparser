@@ -10,16 +10,16 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue186 extends AbstractResolutionTest {
+class Issue186 extends AbstractResolutionTest {
 
     @Test
-    public void lambdaFlatMapIssue() {
+    void lambdaFlatMapIssue() {
         CompilationUnit cu = parseSample("Issue186");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
@@ -31,7 +31,7 @@ public class Issue186 extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaPrimitivesIssue() {
+    void lambdaPrimitivesIssue() {
         CompilationUnit cu = parseSample("Issue186");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");

@@ -29,12 +29,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
+class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
 
     private void testGenericArguments(String containingMethodName) {
         CompilationUnit cu = parseSample("GenericMethodArguments");
@@ -48,17 +48,17 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
     }
 
     @Test
-    public void genericMethodWithGenericClassBasedArgument() {
+    void genericMethodWithGenericClassBasedArgument() {
         testGenericArguments("useCase1");
     }
 
     @Test
-    public void genericMethodWithGenericClassArgument() {
+    void genericMethodWithGenericClassArgument() {
         testGenericArguments("useCase2");
     }
 
     @Test
-    public void declaredOnMethodPositiveCase() {
+    void declaredOnMethodPositiveCase() {
         CompilationUnit cu = parseSample("MethodTypeParameter");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
@@ -75,7 +75,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
     }
 
     @Test
-    public void declaredOnMethodNegativeCase() {
+    void declaredOnMethodNegativeCase() {
         CompilationUnit cu = parseSample("ClassTypeParameter");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);

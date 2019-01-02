@@ -17,12 +17,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class Issue1491 {
+class Issue1491 {
 
     @Test
-    public void verifyIssue1491SolvingClassInSameFile() throws FileNotFoundException {
+    void verifyIssue1491SolvingClassInSameFile() throws FileNotFoundException {
         File aJava = new File("src/test/resources/issue1491/A.java");
         if (!aJava.exists()) {
             throw new IllegalStateException();
@@ -46,7 +46,7 @@ public class Issue1491 {
     }
 
     @Test
-    public void verifyIssue1491ResolvingStaticMethodCalls() throws FileNotFoundException {
+    void verifyIssue1491ResolvingStaticMethodCalls() throws FileNotFoundException {
         File aJava = new File("src/test/resources/issue1491/A.java");
         if (!aJava.exists()) {
             throw new IllegalStateException();
@@ -70,7 +70,7 @@ public class Issue1491 {
     }
 
     @Test
-    public void verifyIssue1491Combined() throws FileNotFoundException {
+    void verifyIssue1491Combined() throws FileNotFoundException {
         File aJava = new File("src/test/resources/issue1491/A.java");
         if (!aJava.exists()) {
             throw new IllegalStateException();

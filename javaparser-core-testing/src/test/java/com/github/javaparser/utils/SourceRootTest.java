@@ -4,27 +4,28 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SourceRootTest {
+class SourceRootTest {
     private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         sourceRoot.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
     }
 
     @Test
-    public void parseTestDirectory() throws IOException {
+    void parseTestDirectory() throws IOException {
 
         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
@@ -35,31 +36,35 @@ public class SourceRootTest {
     }
 
     @Test
-    public void saveInCallback() throws IOException {
+    void saveInCallback() throws IOException {
         sourceRoot.parse("", sourceRoot.getParserConfiguration(), (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
     }
 
     @Test
-    public void saveInCallbackParallelized() {
+    void saveInCallbackParallelized() {
         sourceRoot.parseParallelized("", sourceRoot.getParserConfiguration(), ((localPath, absolutePath, result) ->
                 SourceRoot.Callback.Result.SAVE));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void fileAsRootIsNotAllowed() {
-        Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");
+    @Test
+    void fileAsRootIsNotAllowed() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");
         new SourceRoot(path);
-    }
+    });
+}
 
     @Test
-    public void dotsInRootDirectoryAreAllowed() throws IOException {
+    void dotsInRootDirectoryAreAllowed() throws IOException {
         Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/source.root");
         new SourceRoot(path).tryToParse();
     }
 
-    @Test(expected = ParseProblemException.class)
-    public void dotsInPackageAreNotAllowed() {
-        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils");
+    @Test
+    void dotsInPackageAreNotAllowed() {
+        assertThrows(ParseProblemException.class, () -> {
+            Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils");
         new SourceRoot(path).parse("source.root", "Y.java");
-    }
+    });
+}
 }

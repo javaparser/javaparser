@@ -12,15 +12,15 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue1946 {
+class Issue1946 {
 
 
     @Test
-    public void issueWithInternalEnumConstantReference() {
+    void issueWithInternalEnumConstantReference() {
         String code = "package com.github.javaparser.symbolsolver.testingclasses; class Foo { void foo() { UtilityClass.method(SomeClass.InnerEnum.CONSTANT); } }";
         JavaParser jp = new JavaParser();
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new TypeSolver[] {

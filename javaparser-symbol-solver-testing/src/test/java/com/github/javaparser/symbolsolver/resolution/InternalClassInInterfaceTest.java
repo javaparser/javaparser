@@ -10,20 +10,20 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class InternalClassInInterfaceTest {
+class InternalClassInInterfaceTest {
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedSamePackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedSamePackage() throws IOException {
         File src = new File("src/test/resources/internalClassInInterface");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
@@ -46,7 +46,7 @@ public class InternalClassInInterfaceTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedSamePackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedSamePackage() throws IOException {
         File src = new File("src/test/resources/internalClassInInterface");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
@@ -69,7 +69,7 @@ public class InternalClassInInterfaceTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedDifferentPackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfInterfaceUnqualifiedDifferentPackage() throws IOException {
         File src = new File("src/test/resources/internalClassInInterface");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
@@ -92,7 +92,7 @@ public class InternalClassInInterfaceTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedDifferentPackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfInterfaceQualifiedDifferentPackage() throws IOException {
         File src = new File("src/test/resources/internalClassInInterface");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");

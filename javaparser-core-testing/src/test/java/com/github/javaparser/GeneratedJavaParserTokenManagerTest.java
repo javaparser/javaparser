@@ -21,17 +21,17 @@
 
 package com.github.javaparser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class GeneratedJavaParserTokenManagerTest {
+class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
     @Test
-    public void issue1003() throws IOException {
+    void issue1003() throws IOException {
         JavaParser.parseResource(makeFilename("issue1003"));
     }
 }
