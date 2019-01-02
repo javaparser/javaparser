@@ -4,7 +4,7 @@ install: mvn dependency:resolve
 cache:
   directories:
     - $HOME/.m2/repository
-script: mvn test -P AlsoSlowTests
+script: mvn verify -P AlsoSlowTests
 jdk:
   - openjdk11
 notifications:
