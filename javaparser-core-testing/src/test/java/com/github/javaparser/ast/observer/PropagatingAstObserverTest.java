@@ -25,17 +25,17 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PropagatingAstObserverTest {
+class PropagatingAstObserverTest {
     @Test
-    public void verifyPropagation() {
+    void verifyPropagation() {
         String code = "class A {  }";
         CompilationUnit cu = JavaParser.parse(code);
         List<String> changes = new ArrayList<>();

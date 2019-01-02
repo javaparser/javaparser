@@ -10,31 +10,32 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UnknownMethodsResolutionTest extends AbstractResolutionTest {
+class UnknownMethodsResolutionTest extends AbstractResolutionTest {
 
-	@Test(expected = UnsolvedSymbolException.class)
-	public void testUnknownMethod1() {
-		CompilationUnit cu = parseSample("UnknownMethods");
+	@Test
+	void testUnknownMethod1() {
+		assertThrows(UnsolvedSymbolException.class, () -> {
+		    CompilationUnit cu = parseSample("UnknownMethods");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "test1");
-		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(0).asExpressionStmt().getExpression()
-                                                .asMethodCallExpr();
+		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(0).asExpressionStmt().getExpression().asMethodCallExpr();
+		SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
+});
+						
+}
 
-		SymbolReference<ResolvedMethodDeclaration> ref =
-				JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
-	}
-
-	@Test(expected = UnsolvedSymbolException.class)
-	public void testUnknownMethod2() {
-		CompilationUnit cu = parseSample("UnknownMethods");
+	@Test
+	void testUnknownMethod2() {
+		assertThrows(UnsolvedSymbolException.class, () -> {
+		    CompilationUnit cu = parseSample("UnknownMethods");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "test2");
-		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(1).asExpressionStmt().getExpression()
-                                                .asMethodCallExpr();
-
-		SymbolReference<ResolvedMethodDeclaration> ref =
-				JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
-	}
+		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(1).asExpressionStmt().getExpression().asMethodCallExpr();
+		SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
+});
+						
+}
 }

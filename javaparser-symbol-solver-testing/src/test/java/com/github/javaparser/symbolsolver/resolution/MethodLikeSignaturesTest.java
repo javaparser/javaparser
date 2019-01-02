@@ -10,14 +10,14 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MethodLikeSignaturesTest extends AbstractResolutionTest {
+class MethodLikeSignaturesTest extends AbstractResolutionTest {
 
     @Test
-    public void checkReflectionConstructorSignature() {
+    void checkReflectionConstructorSignature() {
         CompilationUnit cu = parseSample("MethodLikeSignaturesTest");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodLikeSignaturesTest");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -34,7 +34,7 @@ public class MethodLikeSignaturesTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void checkReflectionMethodSignature() {
+    void checkReflectionMethodSignature() {
         CompilationUnit cu = parseSample("MethodLikeSignaturesTest");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodLikeSignaturesTest");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");

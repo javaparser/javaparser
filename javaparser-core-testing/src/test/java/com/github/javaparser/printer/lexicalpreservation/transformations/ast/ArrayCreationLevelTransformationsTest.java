@@ -29,14 +29,14 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.Utils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 /**
  * Transforming ArrayCreationLevel and verifying the LexicalPreservation works as expected.
  */
-public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTest {
+class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected ArrayCreationLevel consider(String code) {
         considerExpression("new int" + code);
@@ -47,21 +47,21 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     // Dimension
 
     @Test
-    public void addingDimension() throws IOException {
+    void addingDimension() throws IOException {
         ArrayCreationLevel it = consider("[]");
         it.setDimension(new IntegerLiteralExpr("10"));
         assertTransformedToString("[10]", it);
     }
 
     @Test
-    public void removingDimension() throws IOException {
+    void removingDimension() throws IOException {
         ArrayCreationLevel it = consider("[10]");
         it.removeDimension();
         assertTransformedToString("[]", it);
     }
 
     @Test
-    public void replacingDimension() throws IOException {
+    void replacingDimension() throws IOException {
         ArrayCreationLevel it = consider("[10]");
         it.setDimension(new IntegerLiteralExpr("12"));
         assertTransformedToString("[12]", it);
@@ -70,21 +70,21 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     // Annotations
 
     @Test
-    public void addingAnnotation() throws IOException {
+    void addingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
         assertTransformedToString("@myAnno()"+ Utils.EOL+"[]", it);
     }
 
     @Test
-    public void removingAnnotation() throws IOException {
+    void removingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().remove(0);
         assertTransformedToString("[]", it);
     }
 
     @Test
-    public void replacingAnnotation() throws IOException {
+    void replacingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
         assertTransformedToString("@myOtherAnno() []", it);

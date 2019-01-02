@@ -21,8 +21,8 @@
 
 package com.github.javaparser.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,17 +30,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 
-public class VisitorSetTest {
+class VisitorSetTest {
 
     @Test
-    public void normalEqualsDoesDeepCompare() {
+    void normalEqualsDoesDeepCompare() {
         Set<CompilationUnit> set = new HashSet<>();
         set.add(JavaParser.parse("class X{}"));
         set.add(JavaParser.parse("class X{}"));
@@ -48,7 +48,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void objectIdentityEqualsDoesShallowCompare() {
+    void objectIdentityEqualsDoesShallowCompare() {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         set.add(JavaParser.parse("class X{}"));
@@ -57,7 +57,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetContains() {
+    void visitorSetContains() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
@@ -66,7 +66,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetContainsAll() {
+    void visitorSetContainsAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -77,7 +77,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetIterator() {
+    void visitorSetIterator() {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         CompilationUnit x1 = JavaParser.parse("class X{}");
@@ -94,7 +94,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetRemove() {
+    void visitorSetRemove() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
@@ -103,7 +103,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetRemoveAll() {
+    void visitorSetRemoveAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -115,7 +115,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetRetainAll() {
+    void visitorSetRetainAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -128,7 +128,7 @@ public class VisitorSetTest {
     }
 
     @Test
-    public void visitorSetToArray() {
+    void visitorSetToArray() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));

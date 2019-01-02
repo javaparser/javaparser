@@ -6,22 +6,22 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SymbolSolverCollectionStrategyTest {
+class SymbolSolverCollectionStrategyTest {
 
     private final Path root = classLoaderRoot(SymbolSolverCollectionStrategyTest.class).resolve("../../../javaparser-core").normalize();
     private final ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(root);
 
     @Test
-    public void resolveExpressions() throws IOException {
+    void resolveExpressions() throws IOException {
         SourceRoot sourceRoot = projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
         AtomicInteger unresolved = new AtomicInteger();
         for (ParseResult<CompilationUnit> parseResult : sourceRoot.tryToParse()) {

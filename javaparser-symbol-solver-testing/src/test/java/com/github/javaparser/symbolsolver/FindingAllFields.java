@@ -25,16 +25,16 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FindingAllFields extends AbstractResolutionTest {
+class FindingAllFields extends AbstractResolutionTest {
 
     @Test
-    public void findAllInheritedFields() {
+    void findAllInheritedFields() {
         CompilationUnit cu = parseSample("AClassWithFields");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
@@ -44,7 +44,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     }
 
     @Test
-    public void findAllInheritedFieldsAndGenerics() {
+    void findAllInheritedFieldsAndGenerics() {
         CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);

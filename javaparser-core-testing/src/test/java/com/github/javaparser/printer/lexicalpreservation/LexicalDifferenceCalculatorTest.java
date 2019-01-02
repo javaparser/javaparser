@@ -19,7 +19,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,13 +28,13 @@ import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
+class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
 
     @Test
-    public void compilationUnitExampleOriginal() {
+    void compilationUnitExampleOriginal() {
         considerCode("class A {}");
         CsmElement element = ConcreteSyntaxModel.forClass(cu.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, cu);
@@ -44,7 +44,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void compilationUnitExampleWithPackageSet() {
+    void compilationUnitExampleWithPackageSet() {
         considerCode("class A {}");
         CsmElement element = ConcreteSyntaxModel.forClass(cu.getClass());
         PackageDeclaration packageDeclaration = new PackageDeclaration(new Name(new Name("foo"), "bar"));
@@ -56,7 +56,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void annotationDeclarationModifiersExampleOriginal() throws IOException {
+    void annotationDeclarationModifiersExampleOriginal() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
@@ -87,7 +87,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void annotationDeclarationModifiersExampleModified() throws IOException {
+    void annotationDeclarationModifiersExampleModified() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
@@ -120,7 +120,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void annotationDeclarationNameExampleModified() throws IOException {
+    void annotationDeclarationNameExampleModified() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
@@ -153,7 +153,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void annotationDeclarationJavadocExampleOriginal() throws IOException {
+    void annotationDeclarationJavadocExampleOriginal() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
@@ -186,7 +186,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void annotationDeclarationJavadocExampleAddingJavadoc() throws IOException {
+    void annotationDeclarationJavadocExampleAddingJavadoc() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
@@ -220,7 +220,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void simpleEnumConstantDeclaration() {
+    void simpleEnumConstantDeclaration() {
         EnumConstantDeclaration ecd = considerEcd("A");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(ecd);
 
@@ -230,7 +230,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void csmModelAfterAddingStatementToEmptyBlock() throws IOException {
+    void csmModelAfterAddingStatementToEmptyBlock() throws IOException {
         LexicalDifferenceCalculator ldc = new LexicalDifferenceCalculator();
         considerExample("ASimpleClassWithMoreFormatting_step3");
 
@@ -261,7 +261,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void differenceAfterddingStatementToEmptyBlock() throws IOException {
+    void differenceAfterddingStatementToEmptyBlock() throws IOException {
         LexicalDifferenceCalculator ldc = new LexicalDifferenceCalculator();
         considerExample("ASimpleClassWithMoreFormatting_step3");
 

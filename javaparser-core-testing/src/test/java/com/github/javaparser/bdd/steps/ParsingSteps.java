@@ -46,7 +46,8 @@ import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAnd
 import static java.lang.String.format;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ParsingSteps {
 

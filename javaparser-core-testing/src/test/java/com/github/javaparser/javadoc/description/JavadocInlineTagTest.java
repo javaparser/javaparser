@@ -21,14 +21,14 @@
 
 package com.github.javaparser.javadoc.description;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JavadocInlineTagTest {
+class JavadocInlineTagTest {
 
     @Test
-    public void javadocInlineTagShouldPersistCustomTagNames() {
+    void javadocInlineTagShouldPersistCustomTagNames() {
         String tag = JavadocInlineTag.fromText("{@foo something}").toText();
 
         assertEquals(tag, "{@foo something}");

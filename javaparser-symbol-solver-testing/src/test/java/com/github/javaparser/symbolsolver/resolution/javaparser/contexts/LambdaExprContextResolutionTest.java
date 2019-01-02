@@ -32,30 +32,30 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Malte Langkabel
  */
-public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
+class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new ReflectionTypeSolver();
     }
 
     @Test
-    public void solveParameterOfLambdaInMethodCallExpr() {
+    void solveParameterOfLambdaInMethodCallExpr() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
@@ -72,7 +72,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveParameterOfLambdaInFieldDecl() {
+    void solveParameterOfLambdaInFieldDecl() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
@@ -92,7 +92,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveParameterOfLambdaInVarDecl() {
+    void solveParameterOfLambdaInVarDecl() {
         CompilationUnit cu = parseSample("Lambda");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");

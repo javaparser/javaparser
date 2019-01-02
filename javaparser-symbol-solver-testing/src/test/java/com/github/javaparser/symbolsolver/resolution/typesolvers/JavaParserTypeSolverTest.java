@@ -6,22 +6,21 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JavaParserTypeSolverTest {
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+class JavaParserTypeSolverTest {
 
     @Test
-    public void containsLocationInStorage() {
+    void containsLocationInStorage() {
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(CodeGenerationUtils.mavenModuleRoot(JavaParserTypeSolver.class).resolve("src/main/java"), new LeanParserConfiguration());
 
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver");
@@ -32,15 +31,13 @@ public class JavaParserTypeSolverTest {
     }
 
     @Test
-    public void folderTraversalDoesNotKeepFolderHandlesHostage() throws IOException {
-        File folder = new File(temporaryFolder.getRoot(), "folder");
+    @ExtendWith(TempDirectory.class)
+    void folderTraversalDoesNotKeepFolderHandlesHostage(@TempDirectory.TempDir Path tempDir) throws IOException {
+        File folder = tempDir.resolve("folder").toFile();
         assertTrue(folder.mkdirs());
         File testJava = new File(folder, "Test.java");
         assertTrue(testJava.createNewFile());
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(folder.getParentFile());
         typeSolver.tryToSolveType("folder.Test");
-        assertTrue(testJava.delete());
-        assertTrue(folder.delete());
-        assertTrue(folder.getParentFile().delete());
     }
 }
