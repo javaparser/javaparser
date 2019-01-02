@@ -82,7 +82,7 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     }
 
     /**
-     * Creates a multi-parameter lambda expression with its parameters wrapped in ( ).
+     * Creates a zero or multi-parameter lambda expression with its parameters wrapped in ( ).
      */
     public LambdaExpr(NodeList<Parameter> parameters, Statement body) {
         this(parameters, body, true);
@@ -97,7 +97,7 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     }
 
     /**
-     * Creates a multi-parameter lambda expression with its parameters wrapped in ( ).
+     * Creates a zero or multi-parameter lambda expression with its parameters wrapped in ( ).
      */
     public LambdaExpr(NodeList<Parameter> parameters, Expression body) {
         this(parameters, new ExpressionStmt(body), true);

@@ -66,4 +66,10 @@ class LambdaExprTest {
         assertEquals("(a, b) -> return 5;", expr.toString());
     }
 
+    @Test
+    void zeroParametersAndStatementUtilityConstructor() {
+        LambdaExpr expr = new LambdaExpr(new NodeList<>(), parseStatement("return 5;"));
+        assertEquals("() -> return 5;", expr.toString());
+    }
+
 }
