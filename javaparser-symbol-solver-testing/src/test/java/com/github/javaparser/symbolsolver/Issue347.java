@@ -9,24 +9,24 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue347 extends AbstractResolutionTest{
+class Issue347 extends AbstractResolutionTest{
 
     private TypeSolver typeSolver;
     private JavaParserFacade javaParserFacade;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new ReflectionTypeSolver();
         javaParserFacade = JavaParserFacade.get(typeSolver);
     }
 
     @Test
-    public void resolvingReferenceToEnumDeclarationInSameFile() {
+    void resolvingReferenceToEnumDeclarationInSameFile() {
         String code = "package foo.bar;\nenum Foo {\n" +
                 "    FOO_A, FOO_B\n" +
                 "}\n" +

@@ -25,33 +25,36 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NameTest {
+class NameTest {
 
     @Test
-    public void outerNameExprIsTheRightMostIdentifier() {
+    void outerNameExprIsTheRightMostIdentifier() {
         Name name = parseName("a.b.c");
         assertEquals("c", name.getIdentifier());
     }
 
     @Test
-    public void parsingAndUnparsingWorks() {
+    void parsingAndUnparsingWorks() {
         Name name = parseName("a.b.c");
         assertEquals("a.b.c", name.asString());
     }
 
-    @Test(expected = ParseProblemException.class)
-    public void parsingEmptyNameThrowsException() {
-        parseName("");
+    @Test
+    void parsingEmptyNameThrowsException() {
+        assertThrows(ParseProblemException.class, () -> {
+            parseName("");
+    });
     }
 
     @Test
-    public void importName() {
+    void importName() {
         ImportDeclaration importDeclaration = parseImport("import java.util.List;");
 
         assertEquals("import java.util.List;" + EOL, importDeclaration.toString());
@@ -59,7 +62,7 @@ public class NameTest {
     }
 
     @Test
-    public void packageName() {
+    void packageName() {
         CompilationUnit cu = parse("package p1.p2;");
 
         assertEquals("package p1.p2;" + EOL + EOL, cu.toString());
@@ -67,13 +70,13 @@ public class NameTest {
     }
 
     @Test
-    public void isInternalNegative() {
+    void isInternalNegative() {
         Name name = parseName("a.b.c");
         assertEquals(false, name.isInternal());
     }
 
     @Test
-    public void isInternalPositive() {
+    void isInternalPositive() {
         Name name = parseName("a.b.c");
         assertEquals(true, name
                 .getQualifier().get().isInternal());
@@ -83,7 +86,7 @@ public class NameTest {
     }
 
     @Test
-    public void isTopLevelNegative() {
+    void isTopLevelNegative() {
         Name name = parseName("a.b.c");
         assertEquals(false, name
                 .getQualifier().get().isTopLevel());
@@ -93,7 +96,7 @@ public class NameTest {
     }
 
     @Test
-    public void isTopLevelPositive() {
+    void isTopLevelPositive() {
         Name name = parseName("a.b.c");
         assertEquals(true, name.isTopLevel());
     }

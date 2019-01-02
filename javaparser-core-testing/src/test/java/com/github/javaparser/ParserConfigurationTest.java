@@ -3,18 +3,18 @@ package com.github.javaparser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.Statement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ParserConfigurationTest {
+class ParserConfigurationTest {
     @Test
-    public void storeNoTokens() {
+    void storeNoTokens() {
         ParseResult<CompilationUnit> result = new JavaParser(new ParserConfiguration().setStoreTokens(false)).parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
 
         assertFalse(result.getResult().get().getTokenRange().isPresent());
@@ -22,7 +22,7 @@ public class ParserConfigurationTest {
     }
 
     @Test
-    public void noProblemsHere() {
+    void noProblemsHere() {
         ParseResult<Statement> result =
                 new JavaParser(new ParserConfiguration().setLanguageLevel(RAW))
                         .parse(STATEMENT, provider("try{}"));

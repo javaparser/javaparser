@@ -17,17 +17,17 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AarTypeSolverTest extends AbstractSymbolResolutionTest {
+class AarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
-    public void initial() throws IOException {
+    void initial() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/aars/support-compat-24.2.0.aar");
         AarTypeSolver aarTypeSolver = new AarTypeSolver(pathToJar);
         assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.ActivityCompat").isSolved());

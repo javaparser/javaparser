@@ -26,14 +26,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue18 extends AbstractResolutionTest {
+class Issue18 extends AbstractResolutionTest {
 
     @Test
-    public void typeDeclarationSuperClassImplicitlyIncludeObject() {
+    void typeDeclarationSuperClassImplicitlyIncludeObject() {
         CompilationUnit cu = parseSample("Issue18");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");

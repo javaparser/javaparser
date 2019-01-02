@@ -51,8 +51,8 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ManipulationSteps {
 

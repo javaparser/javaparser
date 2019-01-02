@@ -2,22 +2,22 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class NoCommentHashCodeVisitorTest {
+class NoCommentHashCodeVisitorTest {
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         CompilationUnit p1 = JavaParser.parse("class X { }");
         CompilationUnit p2 = JavaParser.parse("class X { }");
         assertEquals(p1.hashCode(), p2.hashCode());
     }
 
     @Test
-    public void testEqualsWithDifferentComments() {
+    void testEqualsWithDifferentComments() {
         CompilationUnit p1 = JavaParser.parse("/* a */ class X { /** b */} //c");
         CompilationUnit p2 = JavaParser.parse("/* b */ class X { }  //c");
         assertEquals(p1.hashCode(), p2.hashCode());
@@ -26,7 +26,7 @@ public class NoCommentHashCodeVisitorTest {
     }
 
     @Test
-    public void testNotEquals() {
+    void testNotEquals() {
         CompilationUnit p1 = JavaParser.parse("class X { }");
         CompilationUnit p2 = JavaParser.parse("class Y { }");
         assertNotEquals(p1.hashCode(), p2.hashCode());

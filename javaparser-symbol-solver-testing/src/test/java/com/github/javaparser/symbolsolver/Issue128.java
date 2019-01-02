@@ -12,31 +12,31 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue128 extends AbstractResolutionTest {
+class Issue128 extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() throws IOException {
+    @BeforeEach
+    void setup() throws IOException {
         Path srcDir = adaptPath("src/test/resources/issue128");
         typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(srcDir, new LeanParserConfiguration()));
     }
 
     @Test
-    public void verifyJavaTestClassIsSolved() {
+    void verifyJavaTestClassIsSolved() {
         typeSolver.solveType("foo.JavaTest");
     }
 
     @Test
-    public void loopOnStaticallyImportedType() {
+    void loopOnStaticallyImportedType() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue128/foo/Issue128");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("test").get(0).getBody().get().getStatement(0);

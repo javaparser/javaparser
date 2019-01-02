@@ -1,11 +1,11 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.expr.StringLiteralExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestMetaModel extends BaseNodeMetaModel {
 
@@ -14,9 +14,9 @@ class TestMetaModel extends BaseNodeMetaModel {
     }
 }
 
-public class BaseNodeMetaModelTest {
+class BaseNodeMetaModelTest {
     @Test
-    public void testGetters() {
+    void testGetters() {
         TestMetaModel test = new TestMetaModel();
 
         assertEquals("testMetaModel", test.getMetaModelFieldName());

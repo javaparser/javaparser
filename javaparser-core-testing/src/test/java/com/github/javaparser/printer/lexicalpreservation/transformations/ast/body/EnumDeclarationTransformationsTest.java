@@ -25,7 +25,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -35,7 +35,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 /**
  * Transforming EnumDeclaration and verifying the LexicalPreservation works as expected.
  */
-public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+class EnumDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected EnumDeclaration consider(String code) {
         considerCode(code);
@@ -45,7 +45,7 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
     // Name
 
     @Test
-    public void settingName() {
+    void settingName() {
         EnumDeclaration cid = consider("enum A { E1, E2 }");
         cid.setName("B");
         assertTransformedToString("enum B { E1, E2 }", cid);
@@ -56,28 +56,28 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
     // Modifiers
 
     @Test
-    public void addingModifiers() {
+    void addingModifiers() {
         EnumDeclaration ed = consider("enum A { E1, E2 }");
         ed.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public enum A { E1, E2 }", ed);
     }
 
     @Test
-    public void removingModifiers() {
+    void removingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
         ed.setModifiers(new NodeList<>());
         assertTransformedToString("enum A { E1, E2 }", ed);
     }
 
     @Test
-    public void replacingModifiers() {
+    void replacingModifiers() {
         EnumDeclaration ed = consider("public enum A { E1, E2 }");
         ed.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected enum A { E1, E2 }", ed);
     }
 
     @Test
-    public void addingConstants() {
+    void addingConstants() {
         EnumDeclaration ed = consider("enum A {" + EOL +
                 " E1" + EOL +
                 "}");

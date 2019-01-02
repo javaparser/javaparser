@@ -24,19 +24,19 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.TestUtils.readTextResource;
 
-public class YamlPrinterTest {
+class YamlPrinterTest {
 
     private String read(String filename) {
         return readTextResource(YamlPrinterTest.class, filename);
     }
 
     @Test
-    public void testWithType() {
+    void testWithType() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
@@ -44,7 +44,7 @@ public class YamlPrinterTest {
     }
 
     @Test
-    public void testWithoutType() {
+    void testWithoutType() {
         YamlPrinter yamlPrinter = new YamlPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
         String output = yamlPrinter.output(expression);
@@ -52,7 +52,7 @@ public class YamlPrinterTest {
     }
 
     @Test
-    public void testWithColonFollowedBySpaceInValue() {
+    void testWithColonFollowedBySpaceInValue() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
@@ -60,7 +60,7 @@ public class YamlPrinterTest {
     }
 
     @Test
-    public void testWithColonFollowedByLineSeparatorInValue() {
+    void testWithColonFollowedByLineSeparatorInValue() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
@@ -68,7 +68,7 @@ public class YamlPrinterTest {
     }
 
     @Test
-    public void testParsingJavadocWithQuoteAndNewline() {
+    void testParsingJavadocWithQuoteAndNewline() {
         String code = "/**\n" + 
                 " * \" this comment contains a quote and newlines\n" +
                 " */\n" + 

@@ -7,13 +7,13 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Issue228 extends AbstractResolutionTest{
+class Issue228 extends AbstractResolutionTest{
 
     @Test
-    public void testSolvingMethodWitPrimitiveParameterTypeAsUsage() {
+    void testSolvingMethodWitPrimitiveParameterTypeAsUsage() {
         String code = 
                   "class Test { "
                 + "  long l = call(1); "

@@ -12,20 +12,21 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class VarTypeTest {
+class VarTypeTest {
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration()
             .setLanguageLevel(JAVA_10)
             .setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
     @Test
-    public void resolveAPrimitive() {
+    void resolveAPrimitive() {
         CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = 1;}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
 
@@ -35,7 +36,7 @@ public class VarTypeTest {
     }
 
     @Test
-    public void resolveAReferenceType() {
+    void resolveAReferenceType() {
         CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = \"\";}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
 
@@ -44,19 +45,23 @@ public class VarTypeTest {
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver), resolvedType);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void failResolveNoInitializer() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}")).getResult().get();
+    @Test
+    void failResolveNoInitializer() {
+        assertThrows(IllegalStateException.class, () -> {
+            CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
-
         varType.resolve();
-    }
+    });
+        
+}
 
-    @Test(expected = IllegalStateException.class)
-    public void failResolveWrongLocation() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}")).getResult().get();
+    @Test
+    void failResolveWrongLocation() {
+        assertThrows(IllegalStateException.class, () -> {
+            CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}")).getResult().get();
         VarType varType = ast.findFirst(VarType.class).get();
-
         varType.resolve();
-    }
+    });
+        
+}
 }
