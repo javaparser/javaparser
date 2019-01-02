@@ -9,15 +9,15 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTest {
+class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
     private JavassistInterfaceDeclaration interfaceDeclarationStandalone;
@@ -25,8 +25,8 @@ public class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolu
     private JavassistInterfaceDeclaration interfaceDeclarationSubInterfaceIncludedJar;
     private JavassistInterfaceDeclaration interfaceDeclarationSubInterfaceExcludedJar;
 
-    @Before
-    public void setup() throws IOException {
+    @BeforeEach
+    void setup() throws IOException {
         final Path pathToMainJar = adaptPath("src/test/resources/javassist_symbols/main_jar/main_jar.jar");
         final Path pathToIncludedJar = adaptPath("src/test/resources/javassist_symbols/included_jar/included_jar.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToIncludedJar), new JarTypeSolver(pathToMainJar), new ReflectionTypeSolver());
@@ -40,17 +40,17 @@ public class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolu
     }
 
     @Test
-    public void testSolveSymbolInTypeCanResolveFirstNormalField() {
+    void testSolveSymbolInTypeCanResolveFirstNormalField() {
         assertCanSolveSymbol("STATIC_STRING", interfaceDeclarationStandalone);
     }
 
     @Test
-    public void testSolveSymbolInTypeCanResolveSecondNormalField() {
+    void testSolveSymbolInTypeCanResolveSecondNormalField() {
         assertCanSolveSymbol("SECOND_STRING", interfaceDeclarationStandalone);
     }
 
     @Test
-    public void testSolveSymbolInTypeCantResolveNonExistentField() {
+    void testSolveSymbolInTypeCantResolveNonExistentField() {
         SymbolReference<? extends ResolvedValueDeclaration> solvedSymbol = symbolSolver.solveSymbolInType(interfaceDeclarationStandalone, "FIELD_THAT_DOES_NOT_EXIST");
 
         assertFalse(solvedSymbol.isSolved());
@@ -66,17 +66,17 @@ public class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolu
     }
 
     @Test
-    public void testSolveSymbolInTypeCanResolveFieldInExtendedInterfaceOwnJar() {
+    void testSolveSymbolInTypeCanResolveFieldInExtendedInterfaceOwnJar() {
         assertCanSolveSymbol("INTERFACE_FIELD", interfaceDeclarationSubInterfaceOwnJar);
     }
 
     @Test
-    public void testSolveSymbolInTypeCanResolveFieldInExtendedInterfaceIncludedJar() {
+    void testSolveSymbolInTypeCanResolveFieldInExtendedInterfaceIncludedJar() {
         assertCanSolveSymbol("INTERFACE_FIELD", interfaceDeclarationSubInterfaceIncludedJar);
     }
 
     @Test
-    public void testSolveSymbolInTypeThrowsExceptionOnResolveFieldInExtendedInterfaceExcludedJar() {
+    void testSolveSymbolInTypeThrowsExceptionOnResolveFieldInExtendedInterfaceExcludedJar() {
         try {
             symbolSolver.solveSymbolInType(interfaceDeclarationSubInterfaceExcludedJar, "INTERFACE_FIELD");
         } catch (Exception e) {

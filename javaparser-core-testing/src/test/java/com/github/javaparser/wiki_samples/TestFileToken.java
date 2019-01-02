@@ -28,7 +28,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Creates a temporary test file that a sample can use. This way we don't have to rewrite the samples to fit them into

@@ -3,11 +3,11 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class BlockStmtTest {
+class BlockStmtTest {
     @Test
-    public void issue748AddingIdenticalStatementsDoesParentingRight() {
+    void issue748AddingIdenticalStatementsDoesParentingRight() {
         BlockStmt blockStmt = new BlockStmt();
         Expression exp = new NameExpr("x");
         MethodCallExpr expression = new MethodCallExpr(exp, "y");

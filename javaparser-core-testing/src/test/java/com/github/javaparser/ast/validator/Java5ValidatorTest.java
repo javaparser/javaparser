@@ -6,7 +6,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
@@ -15,17 +15,17 @@ import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifi
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
-public class Java5ValidatorTest {
+class Java5ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_5));
 
     @Test
-    public void genericsWithoutDiamond() {
+    void genericsWithoutDiamond() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
         assertProblems(result, "(line 1,col 33) The diamond operator is not supported.");
     }
 
     @Test
-    public void topAnnotationDeclaration() {
+    void topAnnotationDeclaration() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "@interface X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
@@ -45,7 +45,7 @@ public class Java5ValidatorTest {
     }
 
     @Test
-    public void nestedAnnotationDeclaration() {
+    void nestedAnnotationDeclaration() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "@interface I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
@@ -62,7 +62,7 @@ public class Java5ValidatorTest {
     }
 
     @Test
-    public void annotationMember() {
+    void annotationMember() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("@interface X{" + allModifiers + "int x();}"));
         assertProblems(result,
                 "(line 1,col 14) Can have only one of 'public', 'protected', 'private'.",
@@ -83,7 +83,7 @@ public class Java5ValidatorTest {
     }
 
     @Test
-    public void topEnum() {
+    void topEnum() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "enum X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
@@ -104,7 +104,7 @@ public class Java5ValidatorTest {
     }
 
     @Test
-    public void nestedEnum() {
+    void nestedEnum() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
@@ -122,31 +122,31 @@ public class Java5ValidatorTest {
     }
 
     @Test
-    public void varargs() {
+    void varargs() {
         ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
         assertNoProblems(result);
     }
 
     @Test
-    public void foreach() {
+    void foreach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){}"));
         assertNoProblems(result);
     }
 
     @Test
-    public void staticImport() {
+    void staticImport() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
         assertNoProblems(result);
     }
 
     @Test
-    public void noPrimitiveTypeArguments() {
+    void noPrimitiveTypeArguments() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X extends Y<int> {}"));
         assertProblems(result, "(line 1,col 17) Type arguments may not be primitive.");
     }
 
     @Test
-    public void enumAllowedAsIdentifier() {
+    void enumAllowedAsIdentifier() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
         assertProblems(result, "(line 1,col 5) 'enum' cannot be used as an identifier as it is a keyword.");
     }

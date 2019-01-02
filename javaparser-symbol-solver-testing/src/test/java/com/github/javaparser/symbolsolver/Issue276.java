@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.util.List;
 
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class Issue276 extends AbstractResolutionTest{
+class Issue276 extends AbstractResolutionTest{
 
     @Test
-    public void testSolveStaticallyImportedMemberType() throws IOException {
+    void testSolveStaticallyImportedMemberType() throws IOException {
         CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/issue276/foo/C.java"));
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "C");
         TypeSolver typeSolver = new CombinedTypeSolver(
@@ -36,6 +36,6 @@ public class Issue276 extends AbstractResolutionTest{
         		isSolved = context.solveType("FindMeIfYouCan").isSolved();
         	}
         }
-        Assert.assertTrue(isSolved);
+        Assertions.assertTrue(isSolved);
     }
 }

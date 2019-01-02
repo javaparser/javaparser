@@ -17,14 +17,14 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
+class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
-    public void testHasType() {
+    void testHasType() {
         ReflectionTypeSolver ts = new ReflectionTypeSolver();
         assertEquals(true, ts.hasType(String.class.getCanonicalName()));
         assertEquals(true, ts.hasType(Object.class.getCanonicalName()));

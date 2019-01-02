@@ -37,8 +37,8 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -49,7 +49,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
  */
-public class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected MethodDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
@@ -59,7 +59,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Name
 
     @Test
-    public void settingName() {
+    void settingName() {
         MethodDeclaration it = consider("void A(){}");
         it.setName("B");
         assertTransformedToString("void B(){}", it);
@@ -67,9 +67,9 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     // JavaDoc
 
-    @Ignore("Indentation not correct yet")
+    @Disabled
     @Test
-    public void removingDuplicateJavaDocComment() {
+    void removingDuplicateJavaDocComment() {
         // Arrange
         considerCode("public class MyClass {" + EOL +
                 EOL +
@@ -107,9 +107,9 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                 "}\n", result);
     }
 
-    @Ignore("Indentation not correct yet")
+    @Disabled
     @Test
-    public void replacingDuplicateJavaDocComment() {
+    void replacingDuplicateJavaDocComment() {
         // Arrange
         considerCode("public class MyClass {" + EOL +
                 EOL +
@@ -153,9 +153,9 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     // Comments
 
-    @Ignore("Comments not supported yet")
+    @Disabled
     @Test
-    public void removingDuplicateComment() {
+    void removingDuplicateComment() {
         // Arrange
         considerCode("public class MyClass {" + EOL +
                 EOL +
@@ -196,35 +196,35 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Modifiers
 
     @Test
-    public void addingModifiers() {
+    void addingModifiers() {
         MethodDeclaration it = consider("void A(){}");
         it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public void A(){}", it);
     }
 
     @Test
-    public void removingModifiers() {
+    void removingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("void A(){}", it);
     }
 
     @Test
-    public void removingModifiersWithExistingAnnotationsShort() {
+    void removingModifiersWithExistingAnnotationsShort() {
         MethodDeclaration it = consider("@Override public void A(){}");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("@Override void A(){}", it);
     }
 
     @Test
-    public void removingPublicModifierFromPublicStaticMethod() {
+    void removingPublicModifierFromPublicStaticMethod() {
         MethodDeclaration it = consider("public static void a(){}");
         it.removeModifier(Modifier.Keyword.PUBLIC);
         assertTransformedToString("static void a(){}", it);
     }
 
     @Test
-    public void removingModifiersWithExistingAnnotations() {
+    void removingModifiersWithExistingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Test" + EOL +
@@ -244,21 +244,21 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
-    public void replacingModifiers() {
+    void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected void A(){}", it);
     }
 
     @Test
-    public void replacingModifiersWithExistingAnnotationsShort() {
+    void replacingModifiersWithExistingAnnotationsShort() {
         MethodDeclaration it = consider("@Override public void A(){}");
         it.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("@Override protected void A(){}", it);
     }
 
     @Test
-    public void replacingModifiersWithExistingAnnotations() {
+    void replacingModifiersWithExistingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Test" + EOL +
@@ -280,35 +280,35 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     // Parameters
 
     @Test
-    public void addingParameters() {
+    void addingParameters() {
         MethodDeclaration it = consider("void foo(){}");
         it.addParameter(PrimitiveType.doubleType(), "d");
         assertTransformedToString("void foo(double d){}", it);
     }
 
     @Test
-    public void removingOnlyParameter() {
+    void removingOnlyParameter() {
         MethodDeclaration it = consider("public void foo(double d){}");
         it.getParameters().remove(0);
         assertTransformedToString("public void foo(){}", it);
     }
 
     @Test
-    public void removingFirstParameterOfMany() {
+    void removingFirstParameterOfMany() {
         MethodDeclaration it = consider("public void foo(double d, float f){}");
         it.getParameters().remove(0);
         assertTransformedToString("public void foo(float f){}", it);
     }
 
     @Test
-    public void removingLastParameterOfMany() {
+    void removingLastParameterOfMany() {
         MethodDeclaration it = consider("public void foo(double d, float f){}");
         it.getParameters().remove(1);
         assertTransformedToString("public void foo(double d){}", it);
     }
 
     @Test
-    public void replacingOnlyParameter() {
+    void replacingOnlyParameter() {
         MethodDeclaration it = consider("public void foo(float f){}");
         it.getParameters().set(0, new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo")));
         assertTransformedToString("public void foo(int[] foo){}", it);
@@ -320,7 +320,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     // Annotations
     @Test
-    public void addingToExistingAnnotations() {
+    void addingToExistingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Test" + EOL +
@@ -343,7 +343,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
-    public void addingAnnotationsNoModifiers() {
+    void addingAnnotationsNoModifiers() {
         considerCode(
                 "class X {" + EOL +
                         "  void testCase() {" + EOL +
@@ -364,7 +364,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
-    public void replacingAnnotations() {
+    void replacingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Override" + EOL +
@@ -385,7 +385,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
-    public void addingAnnotationsShort() {
+    void addingAnnotationsShort() {
         MethodDeclaration it = consider("void testMethod(){}");
         it.addMarkerAnnotation("Override");
         assertTransformedToString(
@@ -394,7 +394,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     @Test
-    public void removingAnnotations() {
+    void removingAnnotations() {
         considerCode(
                 "class X {" + EOL +
                         "  @Override" + EOL +
@@ -413,9 +413,9 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
                         "}\n", result);
     }
 
-    @Ignore
+    @Disabled
     @Test
-    public void removingAnnotationsWithSpaces() {
+    void removingAnnotationsWithSpaces() {
         considerCode(
                 "class X {" + EOL +
                         "  @Override " + EOL +
