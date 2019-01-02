@@ -106,7 +106,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 		CompilationUnit cu = parseSample("ConstructorCallsEnum");
 		EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
-		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(2);
+		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(3);
 
 		ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
 

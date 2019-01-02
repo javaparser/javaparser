@@ -1,9 +1,6 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;

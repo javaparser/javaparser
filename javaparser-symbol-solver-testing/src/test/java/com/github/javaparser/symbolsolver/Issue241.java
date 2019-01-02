@@ -15,7 +15,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
-import java.io.File;
 import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;

@@ -65,9 +65,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         return printer.getSource();
     }
 
-    private void printModifiers(final EnumSet<Modifier> modifiers) {
+    private void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
-            printer.print(modifiers.stream().map(Modifier::asString).collect(Collectors.joining(" ")) + " ");
+            printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(Collectors.joining(" ")) + " ");
         }
     }
 
@@ -247,7 +247,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getQualifier().get().accept(this, arg);
             printer.print(".");
         }
-        printAnnotations(n.getAnnotations(), false, arg);
         printer.print(n.getIdentifier());
 
         printOrphanCommentsEnding(n);
@@ -551,6 +550,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printer.print("var");
+    }
+
+    @Override
+    public void visit(Modifier n, Void arg) {
+        printer.print(n.getKeyword().asString());
+        printer.print(" ");
     }
 
     @Override

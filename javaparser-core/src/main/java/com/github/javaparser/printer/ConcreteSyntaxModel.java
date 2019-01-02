@@ -403,10 +403,11 @@ public class ConcreteSyntaxModel {
                 attribute(ObservableProperty.IDENTIFIER)
         ));
 
+        concreteSyntaxModelByClass.put(Modifier.class, attribute(ObservableProperty.KEYWORD));
+
         concreteSyntaxModelByClass.put(Name.class, sequence(
                 comment(),
                 conditional(ObservableProperty.QUALIFIER, IS_PRESENT, sequence(child(ObservableProperty.QUALIFIER), token(GeneratedJavaParserConstants.DOT))),
-                list(ObservableProperty.ANNOTATIONS, space(), none(), space()),
                 attribute(ObservableProperty.IDENTIFIER),
                 orphanCommentsEnding()
         ));

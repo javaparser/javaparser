@@ -16,8 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -77,8 +76,8 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
     }
     
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    public Modifier.Keyword accessSpecifier() {
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override

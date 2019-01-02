@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -91,7 +90,7 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
+    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
     }
 }

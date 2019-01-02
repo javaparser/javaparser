@@ -23,6 +23,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.DataKey;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -412,6 +413,11 @@ public class LexicalPreservingPrinter {
         }
         if (node instanceof LineComment) {
             nodeText.addToken(SINGLE_LINE_COMMENT, "//" + ((LineComment) node).getContent());
+            return;
+        }
+        if (node instanceof Modifier) {
+            Modifier modifier = (Modifier)node;
+            nodeText.addToken(LexicalDifferenceCalculator.toToken(modifier), modifier.getKeyword().asString());
             return;
         }
 

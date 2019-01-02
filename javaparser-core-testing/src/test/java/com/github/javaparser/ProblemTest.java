@@ -2,7 +2,6 @@ package com.github.javaparser;
 
 import org.junit.Test;
 
-import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.Assert.assertEquals;
 
