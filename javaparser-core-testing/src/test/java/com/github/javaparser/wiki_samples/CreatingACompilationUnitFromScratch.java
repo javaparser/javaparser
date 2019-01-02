@@ -21,11 +21,11 @@
 
 package com.github.javaparser.wiki_samples;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CreatingACompilationUnitFromScratch {
+class CreatingACompilationUnitFromScratch {
     @Test
-    public void printingTheCompilationUnitToSystemOutput() throws Exception {
+    void printingTheCompilationUnitToSystemOutput() throws Exception {
         ClassCreator.main(new String[]{});
     }
 }

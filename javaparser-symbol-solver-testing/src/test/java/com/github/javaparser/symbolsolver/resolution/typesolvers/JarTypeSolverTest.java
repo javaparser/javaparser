@@ -20,19 +20,20 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class JarTypeSolverTest extends AbstractSymbolResolutionTest {
+class JarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
-    public void initial() throws IOException {
+    void initial() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
         assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
@@ -44,7 +45,7 @@ public class JarTypeSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void dependenciesBetweenJarsNotTriggeringReferences() throws IOException {
+    void dependenciesBetweenJarsNotTriggeringReferences() throws IOException {
         Path pathToJar1 = adaptPath("src/test/resources/jar1.jar");
         JarTypeSolver jarTypeSolver1 = new JarTypeSolver(pathToJar1);
         assertEquals(true, jarTypeSolver1.tryToSolveType("foo.bar.A").isSolved());
@@ -56,17 +57,19 @@ public class JarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     }
 
-    @Test(expected = UnsolvedSymbolException.class)
-    public void dependenciesBetweenJarsTriggeringReferencesThatCannotBeResolved() throws IOException {
-        Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
+    @Test
+    void dependenciesBetweenJarsTriggeringReferencesThatCannotBeResolved() throws IOException {
+        assertThrows(UnsolvedSymbolException.class, () -> {
+            Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
         JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
-
         ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
         b.getAncestors();
-    }
+    });
+        
+        }
 
     @Test
-    public void dependenciesBetweenJarsTriggeringReferencesThatCanBeResolved() throws IOException {
+    void dependenciesBetweenJarsTriggeringReferencesThatCanBeResolved() throws IOException {
         Path pathToJar1 = adaptPath("src/test/resources/jar1.jar");
         JarTypeSolver jarTypeSolver1 = new JarTypeSolver(pathToJar1);
 

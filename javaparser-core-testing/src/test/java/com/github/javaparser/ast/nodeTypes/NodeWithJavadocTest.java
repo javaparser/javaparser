@@ -26,21 +26,21 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class NodeWithJavadocTest {
+class NodeWithJavadocTest {
 
     @Test
-    public void removeJavaDocNegativeCaseNoComment() {
+    void removeJavaDocNegativeCaseNoComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         assertEquals(false, decl.removeJavaDocComment());
     }
 
     @Test
-    public void removeJavaDocNegativeCaseCommentNotJavaDoc() {
+    void removeJavaDocNegativeCaseCommentNotJavaDoc() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new LineComment("A comment"));
@@ -49,7 +49,7 @@ public class NodeWithJavadocTest {
     }
 
     @Test
-    public void removeJavaDocPositiveCase() {
+    void removeJavaDocPositiveCase() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
@@ -58,7 +58,7 @@ public class NodeWithJavadocTest {
     }
 
     @Test
-    public void getJavadocOnMethodWithLineCommentShouldReturnEmptyOptional() {
+    void getJavadocOnMethodWithLineCommentShouldReturnEmptyOptional() {
         MethodDeclaration method = new MethodDeclaration();
         method.setLineComment("Lorem Ipsum.");
 

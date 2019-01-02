@@ -1,13 +1,13 @@
 package com.github.javaparser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProblemTest {
+class ProblemTest {
     @Test
-    public void testSimpleGetters() {
+    void testSimpleGetters() {
         Problem problem = new Problem("Parse error", TokenRange.INVALID, new Exception());
 
         assertEquals(TokenRange.INVALID, problem.getLocation().get());
@@ -16,14 +16,14 @@ public class ProblemTest {
     }
 
     @Test
-    public void testVerboseMessage() {
+    void testVerboseMessage() {
         Problem problem = new Problem("Parse error", TokenRange.INVALID, null);
 
         assertEquals("(line ?,col ?) Parse error", problem.getVerboseMessage());
     }
 
     @Test
-    public void testVerboseMessageWithoutLocation() {
+    void testVerboseMessageWithoutLocation() {
         Problem problem = new Problem("Parse error", null, null);
 
         assertEquals("Parse error", problem.getVerboseMessage());

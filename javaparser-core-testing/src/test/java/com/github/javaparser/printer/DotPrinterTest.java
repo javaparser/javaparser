@@ -24,14 +24,14 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DotPrinterTest {
+class DotPrinterTest {
     @Test
-    public void testWithType() {
+    void testWithType() {
         String expectedOutput = "digraph {" + System.lineSeparator();
         expectedOutput += "n0 [label=\"root (MethodCallExpr)\"];" + System.lineSeparator();
         expectedOutput += "n1 [label=\"name (SimpleName)\"];" + System.lineSeparator();
@@ -57,7 +57,7 @@ public class DotPrinterTest {
     }
 
     @Test
-    public void testWithoutType() {
+    void testWithoutType() {
         String expectedOutput = "digraph {" + System.lineSeparator();
         expectedOutput += "n0 [label=\"root\"];" + System.lineSeparator();
         expectedOutput += "n1 [label=\"operator='PLUS'\"];" + System.lineSeparator();
@@ -79,7 +79,7 @@ public class DotPrinterTest {
     }
 
     @Test
-    public void testIssue1871() {
+    void testIssue1871() {
         DotPrinter printer = new DotPrinter(false);
         CompilationUnit cu = JavaParser.parse("//q\"q\nclass X{}");
         String output = printer.output(cu);

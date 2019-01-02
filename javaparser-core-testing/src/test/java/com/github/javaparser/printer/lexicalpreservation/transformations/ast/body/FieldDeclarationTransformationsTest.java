@@ -24,7 +24,7 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -34,7 +34,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 /**
  * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
  */
-public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected FieldDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
@@ -46,28 +46,28 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
     // Modifiers
 
     @Test
-    public void addingModifiers() {
+    void addingModifiers() {
         FieldDeclaration it = consider("int A;");
         it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int A;", it);
     }
 
     @Test
-    public void removingModifiers() {
+    void removingModifiers() {
         FieldDeclaration it = consider("public int A;");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("int A;", it);
     }
 
     @Test
-    public void replacingModifiers() {
+    void replacingModifiers() {
         FieldDeclaration it = consider("int A;");
         it.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected int A;", it);
     }
 
     @Test
-    public void changingTypes() {
+    void changingTypes() {
         FieldDeclaration it = consider("int a, b;");
         assertTransformedToString("int a, b;", it);
         it.getVariable(0).setType("Xyz");
@@ -84,7 +84,7 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
 
     // Annotations
     @Test
-    public void removingAnnotations() {
+    void removingAnnotations() {
         FieldDeclaration it = consider( EOL +
                 "@Annotation" + EOL +
                 "public int A;");
@@ -93,7 +93,7 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
     }
 
     @Test
-    public void removingAnnotationsWithSpaces() {
+    void removingAnnotationsWithSpaces() {
         FieldDeclaration it = consider( EOL +
                 "  @Annotation " + EOL +
                 "public int A;");

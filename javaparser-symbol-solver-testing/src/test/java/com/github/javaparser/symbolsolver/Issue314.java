@@ -11,12 +11,12 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue314 extends AbstractResolutionTest{
+class Issue314 extends AbstractResolutionTest{
 
     private TypeSolver typeResolver;
     private JavaParserFacade javaParserFacade;
@@ -25,14 +25,14 @@ public class Issue314 extends AbstractResolutionTest{
         return JavaParserFacade.get(typeSolver).getType(expression);
     }
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeResolver = new ReflectionTypeSolver();
         javaParserFacade = JavaParserFacade.get(typeResolver);
     }
 
     @Test
-    public void resolveReferenceToFieldInheritedByInterface() {
+    void resolveReferenceToFieldInheritedByInterface() {
         String code = "package foo.bar;\n"+
                 "interface  A {\n" +
                 "        int a = 0;\n" +
