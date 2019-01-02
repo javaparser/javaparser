@@ -1,6 +1,9 @@
 sudo: false
 language: java
-install: mvn install -DskipTests=true
+install: mvn dependency:resolve
+cache:
+  directories:
+    - $HOME/.m2/repository
 script: mvn test -P AlsoSlowTests
 jdk:
   - openjdk11
