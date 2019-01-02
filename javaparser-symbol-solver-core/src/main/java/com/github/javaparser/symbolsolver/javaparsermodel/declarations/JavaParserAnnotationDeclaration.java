@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -28,22 +29,25 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
+        // TODO #1837
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+        // TODO #1838
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
+        // TODO #1836
         throw new UnsupportedOperationException();
     }
 
@@ -53,8 +57,8 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public boolean hasDirectlyAnnotation(String qualifiedName) {
-        throw new UnsupportedOperationException();
+    public boolean hasDirectlyAnnotation(String canonicalName) {
+        return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
     @Override
@@ -82,13 +86,20 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         return wrappedNode.getName().getId();
     }
 
+    /**
+     * Annotation declarations cannot have type parameters and hence this method always returns an empty list.
+     *
+     * @return An empty list.
+     */
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        throw new UnsupportedOperationException();
+        // Annotation declarations cannot have type parameters - i.e. we can always return an empty list.
+        return Collections.emptyList();
     }
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        // TODO #1841
         throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
     }
 
@@ -103,5 +114,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Optional<AnnotationDeclaration> toAst() {
+        return Optional.of(wrappedNode);
     }
 }

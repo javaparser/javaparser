@@ -1,10 +1,80 @@
+Version 3.8.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/117?closed=1)
+
+Version 3.8.2
+------------------
+* slightly breaking: `ObjectCreationExpr` no longer gets a diamond when constructed with the default constructor.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/116?closed=1)
+
+Version 3.8.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/114?closed=1)
+
+Version 3.8.0
+------------------
+* A Unicode preprocessing filter is now available again.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/113?closed=1)
+
+Version 3.7.1
+------------------
+* slightly breaking: the enum constants in JsonToken are now capitalized.
+* slightly breaking: [some obscure methods in the symbol solver changed](https://github.com/javaparser/javaparser/pull/1922) 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/115?closed=1)
+
+Version 3.7.0
+------------------
+* BREAKING: `ForeachStmt` is now correctly capitalized: `ForEachStmt`
+* BREAKING: when using modules, everything that was called `...Statement` is now correctly called `...Directive`
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/112?closed=1)
+
+Version 3.6.27
+------------------
+* The Json serialization now serializes more fields,
+which *should* not impact existing code.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/111?closed=1)
+
+Version 3.6.26
+------------------
+* BREAKING: Node.getData now throws an exception if the data was not set before.
+This can be rewritten by checking with Node.containsData before doing getData.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/110?closed=1)
+
+Version 3.6.25
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/109?closed=1)
+
+Version 3.6.24
+------------------
+* `findAncestor(type, predicate)` is now available
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/108?closed=1)
+
+Version 3.6.23
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/107?closed=1)
+
+Version 3.6.22
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/106?closed=1)
+
+Version 3.6.21
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/105?closed=1)
+
 Version 3.6.20
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/103?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/104?closed=1)
 
 Version 3.6.19
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/102?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/103?closed=1)
 
 Version 3.6.18
 ------------------

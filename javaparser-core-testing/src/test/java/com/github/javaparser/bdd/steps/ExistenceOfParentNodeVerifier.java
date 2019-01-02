@@ -241,7 +241,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(ForeachStmt n, Void arg) {
+        public void visit(ForEachStmt n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }

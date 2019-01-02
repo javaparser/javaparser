@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistClassDeclaration extends AbstractClassDeclaration {
+public class JavassistClassDeclaration extends AbstractClassDeclaration implements MethodUsageResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -120,7 +121,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ctClass.getName().replace('$', '.');
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
@@ -134,14 +135,14 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         }
 
         final String superclassFQN = getSuperclassFQN();
-        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbolForFQN(name, typeSolver, superclassFQN);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbolForFQN(name, superclassFQN);
         if (ref.isSolved()) {
             return ref;
         }
 
         String[] interfaceFQNs = getInterfaceFQNs();
         for (String interfaceFQN : interfaceFQNs) {
-            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, typeSolver, interfaceFQN);
+            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, interfaceFQN);
             if (interfaceRef.isSolved()) {
                 return interfaceRef;
             }
@@ -150,7 +151,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
-    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, String fqn) {
         if (fqn == null) {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }
@@ -168,15 +169,31 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (getSuperClass() != null) {
-            ancestors.add(getSuperClass());
+        try {
+            ResolvedReferenceType superClass = getSuperClass();
+            if (superClass != null) {
+                ancestors.add(superClass);
+            }
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
         }
-        ancestors.addAll(getInterfaces());
+        try {
+            ancestors.addAll(getInterfaces());
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                throw e;
+            }
+        }
         return ancestors;
     }
 
+    @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
@@ -191,15 +208,16 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         // add the method declaration of the superclass to the candidates, if present
         SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic
-                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly);
         if (superClassMethodRef.isSolved()) {
             candidates.add(superClassMethodRef.getCorrespondingDeclaration());
         }
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
-                    staticOnly, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef =
+                    MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
+                                                            staticOnly);
             if (interfaceMethodRef.isSolved()) {
                 candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
             }
@@ -376,5 +394,10 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
     }
 }

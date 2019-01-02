@@ -2,14 +2,18 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.google.common.collect.ImmutableList;
@@ -21,7 +25,8 @@ import java.util.stream.Collectors;
 /**
  * An anonymous class declaration representation.
  */
-public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaration {
+public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaration
+        implements MethodUsageResolutionCapability {
 
   private final TypeSolver typeSolver;
   private final ObjectCreationExpr wrappedNode;
@@ -34,7 +39,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     this.wrappedNode = wrappedNode;
     superTypeDeclaration =
         JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver)
-                         .solveType(wrappedNode.getType().getName().getId(), typeSolver)
+                         .solveType(wrappedNode.getType().getName().getId())
                          .getCorrespondingDeclaration();
   }
 
@@ -61,13 +66,29 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
+  public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
+                                                                boolean staticOnly) {
+    return getContext().solveMethod(name, argumentsTypes, staticOnly);
+  }
+
+  @Override
+  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentTypes,
+                                                  Context invocationContext, List<ResolvedType> typeParameters) {
+    return getContext().solveMethodAsUsage(name, argumentTypes);
+  }
+
+  @Override
   protected ResolvedReferenceType object() {
     return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
   }
 
   @Override
   public ResolvedReferenceType getSuperClass() {
-    return new ReferenceTypeImpl(superTypeDeclaration.asReferenceType(), typeSolver);
+    ResolvedReferenceTypeDeclaration superRRTD = superTypeDeclaration.asReferenceType();
+    if (superRRTD == null) {
+      throw new RuntimeException("The super ResolvedReferenceTypeDeclaration is not expected to be null");
+    }
+    return new ReferenceTypeImpl(superRRTD, typeSolver);
   }
 
   @Override
@@ -95,12 +116,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<ResolvedReferenceType> getAncestors() {
+  public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
     return
         ImmutableList.
             <ResolvedReferenceType>builder()
             .add(getSuperClass())
-            .addAll(superTypeDeclaration.asReferenceType().getAncestors())
+            .addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList))
             .build();
   }
 
@@ -201,5 +222,9 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
 
+  @Override
+  public Optional<Node> toAst() {
+    return Optional.of(wrappedNode);
+  }
 
 }

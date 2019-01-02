@@ -57,7 +57,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, false, typeSolver);
+        return getContext().solveMethod(name, parameterTypes, false);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<ResolvedReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         throw new UnsupportedOperationException();
     }
 

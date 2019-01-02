@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -24,6 +25,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -31,12 +33,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
+public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
     private Method method;
     private TypeSolver typeSolver;
@@ -148,5 +151,10 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
             throw new IllegalArgumentException();
         }
         return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
+    }
+
+    @Override
+    public Optional<MethodDeclaration> toAst() {
+        return Optional.empty();
     }
 }

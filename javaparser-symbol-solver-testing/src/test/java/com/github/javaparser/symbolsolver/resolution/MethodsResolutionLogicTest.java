@@ -24,6 +24,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +43,8 @@ public class MethodsResolutionLogicTest extends AbstractResolutionTest {
         Path srcNewCode = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
         combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
-        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode));
-        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources")));
+        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode, new LeanParserConfiguration()));
+        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources"), new LeanParserConfiguration()));
         typeSolver = combinedTypeSolverNewCode;
     }
 

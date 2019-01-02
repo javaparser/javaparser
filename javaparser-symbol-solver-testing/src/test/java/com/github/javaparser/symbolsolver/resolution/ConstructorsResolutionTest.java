@@ -126,9 +126,12 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 		ExplicitConstructorInvocationStmt stmt =
 				(ExplicitConstructorInvocationStmt) constructorDeclaration.getBody().getStatement(0);
 
-		stmt.resolve();
+		ResolvedConstructorDeclaration cd = stmt.resolve();
 
-		// TODO: check resolved constructor corresponds to the desired one.
+		assertEquals(1, cd.getNumberOfParams());
+		assertEquals(ResolvedPrimitiveType.INT, cd.getParam(0).getType());
+		assertEquals("java.lang.AbstractStringBuilder", cd.declaringType().getQualifiedName());
+
 	}
 
 	@Test

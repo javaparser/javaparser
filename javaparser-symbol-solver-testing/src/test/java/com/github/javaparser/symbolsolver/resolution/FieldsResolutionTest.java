@@ -36,6 +36,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.Test;
 
 import java.nio.file.Path;
@@ -67,7 +68,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) assignExpr.getTarget();
 
         Path src = adaptPath("src/test/resources");
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src), new ReflectionTypeSolver());
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src, new LeanParserConfiguration()), new ReflectionTypeSolver());
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getName().getId(), fieldAccessExpr);
 
@@ -198,6 +199,22 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
 
         // check that the expected field declaration equals the resolved field declaration
         assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+    }
+
+    @Test
+    public void resolveInheritedFieldFromInterface() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("ReflectionTypeSolverFieldFromInterfaceResolution");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        Expression expression = returnStmt.getExpression().get();
+
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+        assertEquals("int", ref.describe());
     }
 
 }

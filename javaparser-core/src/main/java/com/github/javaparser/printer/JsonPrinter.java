@@ -16,7 +16,11 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * Outputs a JSON file containing the AST meant for inspecting it.
+ *
+ * @deprecated this class was mostly used for serialization purposes.
+ * Use JavaParserJsonSerializer in the javaparser-core-serialization module for that.
  */
+@Deprecated
 public class JsonPrinter {
     private final boolean outputNodeType;
 

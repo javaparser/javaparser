@@ -17,10 +17,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.*;
@@ -30,18 +33,18 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.utils.Log;
 
 import java.util.*;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
@@ -53,21 +56,15 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.requirePar
  */
 public class JavaParserFacade {
 
-    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
+    private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
+    };
+    private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
+    };
 
-    static {
-        logger.setLevel(Level.INFO);
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.INFO);
-        logger.addHandler(consoleHandler);
-    }
-
-    private static Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
-    private TypeSolver typeSolver;
-    private SymbolSolver symbolSolver;
-    private Map<Node, ResolvedType> cacheWithLambdasSolved = new IdentityHashMap<>();
-    private Map<Node, ResolvedType> cacheWithoutLambdasSolved = new IdentityHashMap<>();
-    private TypeExtractor typeExtractor;
+    private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    private final TypeSolver typeSolver;
+    private final TypeExtractor typeExtractor;
+    private final SymbolSolver symbolSolver;
 
     private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver.getRoot();
@@ -94,14 +91,14 @@ public class JavaParserFacade {
         instances.clear();
     }
 
-    protected static ResolvedType solveGenericTypes(ResolvedType type, Context context, TypeSolver typeSolver) {
+    protected static ResolvedType solveGenericTypes(ResolvedType type, Context context) {
         if (type.isTypeVariable()) {
-            return context.solveGenericType(type.describe(), typeSolver).orElse(type);
+            return context.solveGenericType(type.describe()).orElse(type);
         }
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends() || type.asWildcard().isSuper()) {
                 ResolvedWildcard wildcardUsage = type.asWildcard();
-                ResolvedType boundResolved = solveGenericTypes(wildcardUsage.getBoundedType(), context, typeSolver);
+                ResolvedType boundResolved = solveGenericTypes(wildcardUsage.getBoundedType(), context);
                 if (wildcardUsage.isExtends()) {
                     return ResolvedWildcard.extendsBound(boundResolved);
                 } else {
@@ -154,7 +151,7 @@ public class JavaParserFacade {
                 typeDecl = classDecl.asReferenceType().getTypeDeclaration();
             }
         } else {
-            SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString(), typeSolver);
+            SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString());
             if (sr.isSolved()) {
                 typeDecl = sr.getCorrespondingDeclaration();
             }
@@ -204,7 +201,7 @@ public class JavaParserFacade {
         if (!classDecl.isReferenceType()) {
             return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
         }
-        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) classDecl.asReferenceType().getTypeDeclaration()).getConstructors(), argumentTypes, typeSolver);
+        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(classDecl.asReferenceType().getTypeDeclaration().getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -242,7 +239,7 @@ public class JavaParserFacade {
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, typeSolver);
+        SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -251,9 +248,9 @@ public class JavaParserFacade {
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
         Context context = JavaParserFactory.getContext(annotationExpr, typeSolver);
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString(), typeSolver);
-        ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
+        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString());
         if (typeDeclarationSymbolReference.isSolved()) {
+            ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
             return SymbolReference.solved(annotationDeclaration);
         } else {
             return SymbolReference.unsolved(ResolvedAnnotationDeclaration.class);
@@ -261,32 +258,32 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
-        return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId(), typeSolver);
+        return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId());
     }
 
     /**
      * Get the type associated with the node.
-     *
+     * <p>
      * This method was originally intended to get the type of a value: any value has a type.
-     *
+     * <p>
      * For example:
-     * <code>
+     * <pre>
      * int foo(int a) {
-     *         return a; // when getType is invoked on "a" it returns the type "int"
-     *     }
-     * </code>
-     *
+     *     return a; // when getType is invoked on "a" it returns the type "int"
+     * }
+     * </pre>
+     * <p>
      * Now, users started using also of names of types itself, which do not have a type.
-     *
+     * <p>
      * For example:
-     * <code>
+     * <pre>
      * class A {
      *     int foo(int a) {
      *         return A.someStaticField; // when getType is invoked on "A", which represents a class, it returns
-     *                                   // the type "A" itself while it used to throw UnsolvedSymbolException
-     *     }
-     * </code>
-     *
+     *             // the type "A" itself while it used to throw UnsolvedSymbolException
+     * }
+     * </pre>
+     * <p>
      * To accomodate this usage and avoid confusion this method return
      * the type itself when used on the name of type.
      */
@@ -295,9 +292,9 @@ public class JavaParserFacade {
             return getType(node, true);
         } catch (UnsolvedSymbolException e) {
             if (node instanceof NameExpr) {
-                NameExpr nameExpr = (NameExpr)node;
+                NameExpr nameExpr = (NameExpr) node;
                 SymbolReference<ResolvedTypeDeclaration> typeDeclaration = JavaParserFactory.getContext(node, typeSolver)
-                        .solveType(nameExpr.getNameAsString(), typeSolver);
+                        .solveType(nameExpr.getNameAsString());
                 if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
                     ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
                     return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration, typeSolver);
@@ -309,66 +306,49 @@ public class JavaParserFacade {
 
     public ResolvedType getType(Node node, boolean solveLambdas) {
         if (solveLambdas) {
-            if (!cacheWithLambdasSolved.containsKey(node)) {
+            if (!node.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
                 ResolvedType res = getTypeConcrete(node, solveLambdas);
 
-                cacheWithLambdasSolved.put(node, res);
+                node.setData(TYPE_WITH_LAMBDAS_RESOLVED, res);
 
                 boolean secondPassNecessary = false;
                 if (node instanceof MethodCallExpr) {
                     MethodCallExpr methodCallExpr = (MethodCallExpr) node;
                     for (Node arg : methodCallExpr.getArguments()) {
-                        if (!cacheWithLambdasSolved.containsKey(arg)) {
+                        if (!arg.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
                             getType(arg, true);
                             secondPassNecessary = true;
                         }
                     }
                 }
                 if (secondPassNecessary) {
-                    cacheWithLambdasSolved.remove(node);
-                    cacheWithLambdasSolved.put(node, getType(node, true));
+                    node.removeData(TYPE_WITH_LAMBDAS_RESOLVED);
+                    ResolvedType type = getType(node, true);
+                    node.setData(TYPE_WITH_LAMBDAS_RESOLVED, type);
+
                 }
-                logger.finer("getType on " + node + " -> " + res);
+                Log.trace("getType on %s  -> %s" ,node, res);
             }
-            return cacheWithLambdasSolved.get(node);
+            return node.getData(TYPE_WITH_LAMBDAS_RESOLVED);
         } else {
-            Optional<ResolvedType> res = find(cacheWithLambdasSolved, node);
+            Optional<ResolvedType> res = find(TYPE_WITH_LAMBDAS_RESOLVED, node);
             if (res.isPresent()) {
                 return res.get();
             }
-            res = find(cacheWithoutLambdasSolved, node);
+            res = find(TYPE_WITHOUT_LAMBDAS_RESOLVED, node);
             if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
-                cacheWithoutLambdasSolved.put(node, resType);
-                logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
+                node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
+                Log.trace("getType on %s (no solveLambdas) -> %s", node, res);
                 return resType;
             }
             return res.get();
         }
     }
 
-    private Optional<ResolvedType> find(Map<Node, ResolvedType> map, Node node) {
-        if (map.containsKey(node)) {
-            return Optional.of(map.get(node));
-        }
-        if (node instanceof LambdaExpr) {
-            return find(map, (LambdaExpr) node);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * For some reasons LambdaExprs are duplicate and the equals method is not implemented correctly.
-     */
-    private Optional<ResolvedType> find(Map<Node, ResolvedType> map, LambdaExpr lambdaExpr) {
-        for (Node key : map.keySet()) {
-            if (key instanceof LambdaExpr) {
-                LambdaExpr keyLambdaExpr = (LambdaExpr) key;
-                if (keyLambdaExpr.toString().equals(lambdaExpr.toString()) && requireParentNode(keyLambdaExpr) == requireParentNode(lambdaExpr)) {
-                    return Optional.of(map.get(keyLambdaExpr));
-                }
-            }
+    private Optional<ResolvedType> find(DataKey<ResolvedType> dataKey, Node node) {
+        if (node.containsData(dataKey)) {
+            return Optional.of(node.getData(dataKey));
         }
         return Optional.empty();
     }
@@ -382,7 +362,7 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId(), typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
@@ -523,7 +503,7 @@ public class JavaParserFacade {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
-            SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name, typeSolver);
+            SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(name);
             }
@@ -600,7 +580,7 @@ public class JavaParserFacade {
             }
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
-        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params, typeSolver);
+        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params);
         if (!methodUsage.isPresent()) {
             throw new RuntimeException("Method '" + call.getName() + "' cannot be resolved in context "
                     + call + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + ". Parameter types: " + params);

@@ -9,6 +9,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.Test;
 
@@ -54,7 +56,7 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public List<ResolvedReferenceType> getAncestors() {
+        public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
             throw new UnsupportedOperationException();
         }
 
@@ -120,6 +122,11 @@ public class DefaultPackageTest {
 
         @Override
         public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
             throw new UnsupportedOperationException();
         }
     }

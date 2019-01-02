@@ -108,4 +108,7 @@ public final class Providers {
         return resourceProvider(pathToResource, UTF8);
     }
 
+    public interface PreProcessor {
+        Provider process(Provider innerProvider);
+    }
 }

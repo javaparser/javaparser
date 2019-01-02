@@ -52,7 +52,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("i", new MemoryTypeSolver());
+        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("i");
         assertEquals(true, ref.isSolved());
         assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
     }
@@ -63,7 +63,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("j", new MemoryTypeSolver());
+        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("j");
         assertEquals(true, ref.isSolved());
         assertEquals("long", ref.getCorrespondingDeclaration().getType().describe());
     }
@@ -72,9 +72,9 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     public void solveSymbolReferringToValue() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
-        Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
+        Context context = new EnumDeclarationContext(enumDeclaration, new MemoryTypeSolver());
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("E1", new MemoryTypeSolver());
+        SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("E1");
         assertEquals(true, ref.isSolved());
         assertEquals("MyEnum", ref.getCorrespondingDeclaration().getType().describe());
     }
@@ -85,7 +85,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
-        Optional<Value> ref = context.solveSymbolAsValue("i", new MemoryTypeSolver());
+        Optional<Value> ref = context.solveSymbolAsValue("i");
         assertEquals(true, ref.isPresent());
         assertEquals("int", ref.get().getType().describe());
     }
@@ -96,7 +96,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
-        Optional<Value> ref = context.solveSymbolAsValue("j", new MemoryTypeSolver());
+        Optional<Value> ref = context.solveSymbolAsValue("j");
         assertEquals(true, ref.isPresent());
         assertEquals("long", ref.get().getType().describe());
     }
@@ -107,7 +107,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
-        Optional<Value> ref = context.solveSymbolAsValue("E1", new MemoryTypeSolver());
+        Optional<Value> ref = context.solveSymbolAsValue("E1");
         assertEquals(true, ref.isPresent());
         assertEquals("MyEnum", ref.get().getType().describe());
     }

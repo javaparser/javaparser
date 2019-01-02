@@ -22,27 +22,17 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
@@ -57,8 +47,8 @@ public class JavaParserFactory {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
-        } else if (node instanceof ForeachStmt) {
-            return new ForechStatementContext((ForeachStmt) node, typeSolver);
+        } else if (node instanceof ForEachStmt) {
+            return new ForEachStatementContext((ForEachStmt) node, typeSolver);
         } else if (node instanceof ForStmt) {
             return new ForStatementContext((ForStmt) node, typeSolver);
         } else if (node instanceof LambdaExpr) {
@@ -129,8 +119,8 @@ public class JavaParserFactory {
             }
         } else if (node instanceof IfStmt) {
             return new NoSymbolDeclarator<>((IfStmt) node, typeSolver);
-        } else if (node instanceof ForeachStmt) {
-            ForeachStmt foreachStmt = (ForeachStmt) node;
+        } else if (node instanceof ForEachStmt) {
+            ForEachStmt foreachStmt = (ForEachStmt) node;
             return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);
         } else {
             return new NoSymbolDeclarator<>(node, typeSolver);

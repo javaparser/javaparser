@@ -3,8 +3,7 @@ language: java
 install: mvn install -DskipTests=true
 script: mvn test -P AlsoSlowTests
 jdk:
-  - oraclejdk8
-  - oraclejdk10
+  - openjdk11
 notifications:
   webhooks:
     urls:

@@ -182,7 +182,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(DoStmt n, A arg);
 
-    R visit(ForeachStmt n, A arg);
+    R visit(ForEachStmt n, A arg);
 
     R visit(ForStmt n, A arg);
 
@@ -210,15 +210,15 @@ public interface GenericVisitor<R, A> {
 
     R visit(ModuleDeclaration n, A arg);
 
-    R visit(ModuleRequiresStmt n, A arg);
+    R visit(ModuleRequiresDirective n, A arg);
 
-    R visit(ModuleExportsStmt n, A arg);
+    R visit(ModuleExportsDirective n, A arg);
 
-    R visit(ModuleProvidesStmt n, A arg);
+    R visit(ModuleProvidesDirective n, A arg);
 
-    R visit(ModuleUsesStmt n, A arg);
+    R visit(ModuleUsesDirective n, A arg);
 
-    R visit(ModuleOpensStmt n, A arg);
+    R visit(ModuleOpensDirective n, A arg);
 
     R visit(UnparsableStmt n, A arg);
 

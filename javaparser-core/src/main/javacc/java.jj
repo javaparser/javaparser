@@ -2311,7 +2311,7 @@ Statement ForStatement():
 
   {
   	if (varExpr != null) {
-  		return new ForeachStmt(range(begin, token()),varExpr, expr, body);
+  		return new ForEachStmt(range(begin, token()),varExpr, expr, body);
   	}
 	return new ForStmt(range(begin, token()),init, expr, update, body);
   }
@@ -2681,40 +2681,40 @@ Expression DefaultValue():
 /* Module syntax follows */
 
 
-ModuleStmt ModuleStmt():
+ModuleDirective ModuleDirective():
 {
     ModifierHolder modifiers;
     Name name;
     Name tmpName;
     NodeList<Name> names=emptyList();
     JavaToken begin;
-    ModuleStmt stmt=new ModuleRequiresStmt();
+    ModuleDirective directive = new ModuleRequiresDirective();
     JavaToken transitiveExceptionalToken;
 }
 {
     (
         // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'" 
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
-        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {stmt=new ModuleRequiresStmt(range(begin, token()), EnumSet.noneOf(Modifier.class), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
+        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), EnumSet.noneOf(Modifier.class), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
     |
-        <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, token()), modifiers.modifiers, name);}
+        <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);}
     |
-        <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, token()), name, names);}
+        <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleExportsDirective(range(begin, token()), name, names);}
     |
-        <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, token()), name, names);}
+        <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleOpensDirective(range(begin, token()), name, names);}
     |
-        <USES> { begin=token();} name=Name() ";" {stmt=new ModuleUsesStmt(range(begin, token()), name);}
+        <USES> { begin=token();} name=Name() ";" {directive=new ModuleUsesDirective(range(begin, token()), name);}
     |
-        <PROVIDES> { begin=token();} name=Name() <WITH> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name() {names.add(tmpName);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), name, names);}
+        <PROVIDES> { begin=token();} name=Name() <WITH> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name() {names.add(tmpName);}  )* ";" {directive=new ModuleProvidesDirective(range(begin, token()), name, names);}
     )
-    { return stmt; }
+    { return directive; }
 }
 
 ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
 {
-    NodeList<ModuleStmt> statements = new NodeList<ModuleStmt>();
+    NodeList<ModuleDirective> directives = new NodeList<ModuleDirective>();
     boolean open=false;
-    ModuleStmt st;
+    ModuleDirective directive;
     Name name;
     JavaToken begin = modifier.begin;
 }
@@ -2722,9 +2722,9 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
     [ <OPEN> {open=true; begin = orIfInvalid(begin, token());} ]
     <MODULE> { begin = orIfInvalid(begin, token()); }
     name = Name() "{"
-    ( st = ModuleStmt() { statements = add(statements, st); } )*
+    ( directive = ModuleDirective() { directives = add(directives, directive); } )*
     "}"
-    { return new ModuleDeclaration(range(begin, token()), modifier.annotations, name, open, statements); }
+    { return new ModuleDeclaration(range(begin, token()), modifier.annotations, name, open, directives); }
 }
 
 /* Rules for matching partial inputs.
@@ -2821,9 +2821,9 @@ ModuleDeclaration ModuleDeclarationParseStart():
 	{ return ret; }
 }
 
-ModuleStmt ModuleDirectiveParseStart():
-{ ModuleStmt ret; }
-{ ret = ModuleStmt() <EOF> { return ret; } }
+ModuleDirective ModuleDirectiveParseStart():
+{ ModuleDirective ret; }
+{ ret = ModuleDirective() <EOF> { return ret; } }
 
 TypeParameter TypeParameterParseStart():
 {

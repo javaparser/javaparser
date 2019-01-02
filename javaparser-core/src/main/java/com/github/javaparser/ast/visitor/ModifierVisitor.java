@@ -454,7 +454,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final ForeachStmt n, final A arg) {
+    public Visitable visit(final ForEachStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
         Expression iterable = (Expression) n.getIterable().accept(this, arg);
         VariableDeclarationExpr variable = (VariableDeclarationExpr) n.getVariable().accept(this, arg);
@@ -1101,19 +1101,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     public Visitable visit(final ModuleDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
-        NodeList<ModuleStmt> moduleStmts = modifyList(n.getModuleStmts(), arg);
+        NodeList<ModuleDirective> directives = modifyList(n.getDirectives(), arg);
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
             return null;
         n.setAnnotations(annotations);
-        n.setModuleStmts(moduleStmts);
+        n.setDirectives(directives);
         n.setName(name);
         n.setComment(comment);
         return n;
     }
 
-    public Visitable visit(final ModuleRequiresStmt n, final A arg) {
+    public Visitable visit(final ModuleRequiresDirective n, final A arg) {
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
@@ -1124,7 +1124,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override()
-    public Visitable visit(final ModuleExportsStmt n, final A arg) {
+    public Visitable visit(final ModuleExportsDirective n, final A arg) {
         NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1137,7 +1137,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override()
-    public Visitable visit(final ModuleProvidesStmt n, final A arg) {
+    public Visitable visit(final ModuleProvidesDirective n, final A arg) {
         Name name = (Name) n.getName().accept(this, arg);
         NodeList<Name> with = modifyList(n.getWith(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1150,7 +1150,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override()
-    public Visitable visit(final ModuleUsesStmt n, final A arg) {
+    public Visitable visit(final ModuleUsesDirective n, final A arg) {
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
@@ -1161,7 +1161,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final ModuleOpensStmt n, final A arg) {
+    public Visitable visit(final ModuleOpensDirective n, final A arg) {
         NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
