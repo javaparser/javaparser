@@ -310,7 +310,7 @@ public final class CompilationUnit extends Node {
         if (clazz.isArray()) {
             return addImport(clazz.getComponentType());
         }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || "java.lang".equals(clazz.getPackage().getName()))
             return this;
         else if (clazz.isMemberClass())
             return addImport(clazz.getName().replace("$", "."));
