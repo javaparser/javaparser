@@ -438,7 +438,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void parseAndPrintAnonymousClassExpression() {
         Expression expression = JavaParser.parseExpression("new Object() {" + EOL +
                 "}");
-        String expected = "new Object() {\n" +
+         String expected = "new Object() {" + EOL +
                 "}";
         assertTransformedToString(expected, expression);
     }
