@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import org.junit.jupiter.api.Test;
 
+import java.lang.annotation.ElementType;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,19 @@ class CompilationUnitBuildersTest {
         assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
         assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
         assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+    }
+
+    @Test
+    void typesInTheJavaLangPackageDoNotNeedExplicitImports() {
+        cu.addImport(String.class);
+        assertEquals(0, cu.getImports().size());
+    }
+
+    @Test
+    void typesInSubPackagesOfTheJavaLangPackageRequireExplicitImports() {
+        cu.addImport(ElementType.class);
+        assertEquals(1, cu.getImports().size());
+        assertEquals("import java.lang.annotation.ElementType;"+ EOL, cu.getImport(0).toString());
     }
 
     @Test
