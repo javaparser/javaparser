@@ -3,6 +3,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;

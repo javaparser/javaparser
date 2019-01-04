@@ -26,6 +26,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 
@@ -61,15 +64,11 @@ public interface NodeWithModifiers<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N removeModifier(Modifier.Keyword... modifiersToRemove) {
-        NodeList<Modifier> existingModifiers = new NodeList<>(getModifiers());
-        for (Modifier.Keyword modifierToRemove : modifiersToRemove) {
-            for (Modifier existingModifier : existingModifiers) {
-                if (existingModifier.getKeyword() == modifierToRemove) {
-                    existingModifiers.remove(existingModifier);
-                }
-            }
-        }
-        setModifiers(existingModifiers);
+        List<Modifier.Keyword> modifiersToRemoveAsList = Arrays.asList(modifiersToRemove);
+        NodeList<Modifier> remaining = getModifiers().stream()
+                .filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword()))
+                .collect(toNodeList());
+        setModifiers(remaining);
         return (N) this;
     }
 

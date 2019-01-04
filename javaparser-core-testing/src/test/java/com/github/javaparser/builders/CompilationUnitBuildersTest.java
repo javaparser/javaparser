@@ -31,6 +31,7 @@ import java.lang.annotation.ElementType;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.javaparser.JavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,6 +64,34 @@ class CompilationUnitBuildersTest {
         cu.addImport(ElementType.class);
         assertEquals(1, cu.getImports().size());
         assertEquals("import java.lang.annotation.ElementType;"+ EOL, cu.getImport(0).toString());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByClass() {
+        cu.addImport(Map.class);
+        cu.addImport(Map.class);
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByString() {
+        cu.addImport(Map.class);
+        cu.addImport("java.util.Map");
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByStringAndFlags() {
+        cu.addImport(Map.class);
+        cu.addImport("java.util.Map", false, false);
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByImportDeclaration() {
+        cu.addImport(Map.class);
+        cu.addImport(parseImport("import java.util.Map;"));
+        assertEquals(1, cu.getImports().size());
     }
 
     @Test
