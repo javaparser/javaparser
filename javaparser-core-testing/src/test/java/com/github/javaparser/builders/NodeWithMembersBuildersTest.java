@@ -24,20 +24,20 @@ package com.github.javaparser.builders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class NodeWithMembersBuildersTest {
+class NodeWithMembersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
     private final ClassOrInterfaceDeclaration classDeclaration = cu.addClass("test");
 
     @Test
-    public void testAddField() {
+    void testAddField() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addField, classDeclaration.getMember(0));
@@ -45,7 +45,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddMethod() {
+    void testAddMethod() {
         MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addMethod, classDeclaration.getMember(0));
@@ -53,7 +53,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddCtor() {
+    void testAddCtor() {
         ConstructorDeclaration addCtor = classDeclaration.addConstructor(PUBLIC);
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(addCtor, classDeclaration.getMember(0));
@@ -61,7 +61,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddInitializers() {
+    void testAddInitializers() {
         classDeclaration.addInitializer();
         assertEquals(1, classDeclaration.getMembers().size());
         assertEquals(InitializerDeclaration.class, classDeclaration.getMember(0).getClass());
@@ -72,7 +72,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testGetMethodsWithName() {
+    void testGetMethodsWithName() {
         MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
         List<MethodDeclaration> methodsByName = classDeclaration.getMethodsByName("foo");
@@ -82,7 +82,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testGetMethods() {
+    void testGetMethods() {
         MethodDeclaration addMethod = classDeclaration.addMethod("foo", PUBLIC);
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
 
@@ -94,7 +94,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testGetMethodsWithParameterTypes() {
+    void testGetMethodsWithParameterTypes() {
         classDeclaration.addMethod("foo", PUBLIC);
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
@@ -112,7 +112,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testGetFieldWithName() {
+    void testGetFieldWithName() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         classDeclaration.addField(float.class, "secondField", PRIVATE);
         FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName").get();
@@ -120,7 +120,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testGetFields() {
+    void testGetFields() {
         FieldDeclaration firstField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         FieldDeclaration secondField = classDeclaration.addField(float.class, "secondField", PRIVATE);
 
@@ -131,7 +131,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddPrivateFieldWithType(){
+    void testAddPrivateFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addPrivateField(parseType("java.lang.String"), "name");
@@ -146,7 +146,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddPublicFieldWithType(){
+    void testAddPublicFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addPublicField(parseType("java.lang.String"), "name");
@@ -161,7 +161,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testAddProtectedFieldWithType(){
+    void testAddProtectedFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addProtectedField(parseType("java.lang.String"), "name");
@@ -176,7 +176,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testClassWithInitializersWithString(){
+    void testClassWithInitializersWithString(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(
@@ -195,7 +195,7 @@ public class NodeWithMembersBuildersTest {
     }
 
     @Test
-    public void testClassWithInitializersWithClass(){
+    void testClassWithInitializersWithClass(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(

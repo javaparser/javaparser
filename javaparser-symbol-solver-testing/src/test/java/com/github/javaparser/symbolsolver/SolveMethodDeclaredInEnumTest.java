@@ -32,18 +32,18 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SolveMethodDeclaredInEnumTest extends AbstractSymbolResolutionTest {
+class SolveMethodDeclaredInEnumTest extends AbstractSymbolResolutionTest {
 
     @Test
-    public void methodDeclaredInEnum_enumFromJar() throws IOException {
+    void methodDeclaredInEnum_enumFromJar() throws IOException {
         String code = "public class A { public void callEnum() { MyEnum.CONST.method(); }}";
         Path jarPath = adaptPath("src/test/resources/solveMethodDeclaredInEnum/MyEnum.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(jarPath), new ReflectionTypeSolver());

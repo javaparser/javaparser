@@ -24,44 +24,44 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConcreteSyntaxModelTest {
+class ConcreteSyntaxModelTest {
 
     private String print(Node node) {
         return ConcreteSyntaxModel.genericPrettyPrint(node);
     }
 
     @Test
-    public void printSimpleClassExpr() {
+    void printSimpleClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
-    public void printArrayClassExpr() {
+    void printArrayClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
-    public void printGenericClassExpr() {
+    void printGenericClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
-    public void printSimplestClass() {
+    void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
         assertEquals("class A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
-    public void printAClassWithField() {
+    void printAClassWithField() {
         Node node = JavaParser.parse("class A { int a; }");
         assertEquals("class A {" + EOL
                 + EOL +
@@ -70,26 +70,26 @@ public class ConcreteSyntaxModelTest {
     }
 
     @Test
-    public void printParameters() {
+    void printParameters() {
         Node node = JavaParser.parseBodyDeclaration("int x(int y, int z) {}");
         assertEquals("int x(int y, int z) {" + EOL + "}", print(node));
     }
 
     @Test
-    public void printReceiverParameter() {
+    void printReceiverParameter() {
         Node node = JavaParser.parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
         assertEquals("int x(X A.B.this, int y, int z) {" + EOL + "}", print(node));
     }
 
     @Test
-    public void printAnEmptyInterface() {
+    void printAnEmptyInterface() {
         Node node = JavaParser.parse("interface A {}");
         assertEquals("interface A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
-    public void printAnEmptyInterfaceWithModifier() {
+    void printAnEmptyInterfaceWithModifier() {
         Node node = JavaParser.parse("public interface A {}");
         assertEquals("public interface A {" + EOL +
                 "}" + EOL, print(node));

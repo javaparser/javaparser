@@ -23,14 +23,14 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 /**
  * Transforming InitializerDeclaration and verifying the LexicalPreservation works as expected.
  */
-public class InitializerDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+class InitializerDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected InitializerDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
@@ -44,14 +44,14 @@ public class InitializerDeclarationTransformationsTest extends AbstractLexicalPr
     // IsStatic
 
     @Test
-    public void instanceToStatic() throws IOException {
+    void instanceToStatic() throws IOException {
         InitializerDeclaration it = consider("{ /*some comment*/ }");
         it.setStatic(true);
         assertTransformedToString("static { /*some comment*/ }", it);
     }
 
     @Test
-    public void staticToInstance() throws IOException {
+    void staticToInstance() throws IOException {
         InitializerDeclaration it = consider("static { /*some comment*/ }");
         it.setStatic(false);
         assertTransformedToString("{ /*some comment*/ }", it);

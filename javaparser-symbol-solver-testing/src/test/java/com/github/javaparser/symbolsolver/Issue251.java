@@ -11,13 +11,13 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class Issue251 extends AbstractResolutionTest{
+class Issue251 extends AbstractResolutionTest{
 
     @Test
-    public void testSolveStaticallyImportedMemberType() {
+    void testSolveStaticallyImportedMemberType() {
         CompilationUnit cu = parseSample("Issue251");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Main");
         TypeSolver typeSolver = new ReflectionTypeSolver();
@@ -25,6 +25,6 @@ public class Issue251 extends AbstractResolutionTest{
         MethodDeclaration m = Navigator.demandMethod(cls, "bar");
         ExpressionStmt stmt = (ExpressionStmt) m.getBody().get().getStatements().get(1);
         MethodCallExpr expression = (MethodCallExpr) stmt.getExpression();
-        Assert.assertNotNull(javaParserFacade.solve(expression));
+        Assertions.assertNotNull(javaParserFacade.solve(expression));
     }
 }

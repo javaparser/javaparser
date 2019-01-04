@@ -15,24 +15,26 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import java.time.Duration;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 /**
  * @author Dominik Hardtke
  * @since 02/02/2018
  */
-public class Issue1364 extends AbstractResolutionTest {
+class Issue1364 extends AbstractResolutionTest {
     private JavaParser javaParser;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         ClassOrInterfaceDeclaration fakeObject = new ClassOrInterfaceDeclaration();
         fakeObject.setName(new SimpleName("java.lang.Object"));
 
@@ -62,30 +64,24 @@ public class Issue1364 extends AbstractResolutionTest {
         javaParser = new JavaParser(config);
     }
 
-    @Test(timeout = 1000)
-    public void resolveSubClassOfObject() {
-        String code = String.join(System.lineSeparator(),
-                "package graph;",
-                "public class Vertex {",
-                "    public static void main(String[] args) {",
-                "        System.out.println();",
-                "    }",
-                "}"
-        );
-
+    @Test
+    void resolveSubClassOfObject() {
+        assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
+            String code = String.join(System.lineSeparator(), "package graph;", "public class Vertex {", "    public static void main(String[] args) {", "        System.out.println();", "    }", "}");
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(parseResult.isSuccessful());
         assertTrue(parseResult.getResult().isPresent());
-
         List<MethodCallExpr> methodCallExprs = parseResult.getResult().get().findAll(MethodCallExpr.class);
         assertEquals(1, methodCallExprs.size());
-
         try {
             methodCallExprs.get(0).calculateResolvedType();
-            fail("An UnsolvedSymbolException should be thrown");
-        } catch (UnsolvedSymbolException ignored) {
-            // all is fine if an UnsolvedSymbolException is thrown
-        }
+        fail("An UnsolvedSymbolException should be thrown");
+    } catch (UnsolvedSymbolException ignored) {
     }
+    });
+
+                        
+                
+}
 }
 

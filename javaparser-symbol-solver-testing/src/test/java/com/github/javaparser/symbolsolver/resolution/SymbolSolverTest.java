@@ -25,24 +25,24 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Federico Tomassetti
  */
-public class SymbolSolverTest extends AbstractSymbolResolutionTest {
+class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolverNewCode;
     private SymbolSolver symbolSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         Path srcNewCode = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
         combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
@@ -54,7 +54,7 @@ public class SymbolSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void testSolveSymbolUnexisting() {
+    void testSolveSymbolUnexisting() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "unexisting");
@@ -62,7 +62,7 @@ public class SymbolSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void testSolveSymbolToDeclaredField() {
+    void testSolveSymbolToDeclaredField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "name");
@@ -71,7 +71,7 @@ public class SymbolSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void testSolveSymbolToInheritedPublicField() {
+    void testSolveSymbolToInheritedPublicField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "NODE_BY_BEGIN_POSITION");
@@ -80,7 +80,7 @@ public class SymbolSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void testSolveSymbolToInheritedPrivateField() {
+    void testSolveSymbolToInheritedPrivateField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "parentNode");
@@ -88,7 +88,7 @@ public class SymbolSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void testSolvePackageLocalClass() {
+    void testSolvePackageLocalClass() {
         assertTrue(typeSolverNewCode.solveType("com.github.javaparser.FooClass").isClass());
     }
 }

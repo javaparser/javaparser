@@ -1,14 +1,14 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.JavaParser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IfElseStmtTest {
+class IfElseStmtTest {
 
     @Test
-    public void issue1247withElseSingleStmt() {
+    void issue1247withElseSingleStmt() {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond) doSomething(); else doSomethingElse();");
         assertEquals(false, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());
@@ -16,7 +16,7 @@ public class IfElseStmtTest {
     }
 
     @Test
-    public void issue1247withElseBlockStmt() {
+    void issue1247withElseBlockStmt() {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond) doSomething(); else { doSomethingElse(); }");
         assertEquals(true, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());
@@ -24,7 +24,7 @@ public class IfElseStmtTest {
     }
 
     @Test
-    public void issue1247withElseSingleStmtWhichIsAnIf() {
+    void issue1247withElseSingleStmtWhichIsAnIf() {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond1) doSomething(); else if (cond2) doSomethingElse();");
         assertEquals(false, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());

@@ -23,14 +23,14 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue84 extends AbstractResolutionTest {
+class Issue84 extends AbstractResolutionTest {
 
     @Test
-    public void variadicIssue() {
+    void variadicIssue() {
         CompilationUnit cu = parseSample("Issue84");
         final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod").get();
 

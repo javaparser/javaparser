@@ -31,7 +31,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -40,13 +40,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Malte Langkabel
  */
-public class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
+class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
     private MethodCallExpr getMethodCallExpr(String methodName, String callingMethodName) {
         CompilationUnit cu = parseSample("MethodCalls");
 
@@ -64,7 +64,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveNestedMethodCallExprContextWithoutScope() {
+    void solveNestedMethodCallExprContextWithoutScope() {
         MethodCallExpr methodCallExpr = getMethodCallExpr("bar1", "foo");
         CombinedTypeSolver typeSolver = createTypeSolver();
 
@@ -76,12 +76,12 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveGenericMethodCallMustUseProvidedTypeArgs() {
+    void solveGenericMethodCallMustUseProvidedTypeArgs() {
         assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("genericMethod0");
     }
 
     @Test
-    public void solveStaticGenericMethodCallMustUseProvidedTypeArgs() {
+    void solveStaticGenericMethodCallMustUseProvidedTypeArgs() {
         assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("staticGenericMethod0");
     }
 
@@ -98,12 +98,12 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
     }
 
     @Test
-    public void solveGenericMethodCallCanInferFromArguments() {
+    void solveGenericMethodCallCanInferFromArguments() {
         assertCanSolveGenericMethodCallCanInferFromArguments("genericMethod1");
     }
 
     @Test
-    public void solveStaticGenericMethodCallCanInferFromArguments() {
+    void solveStaticGenericMethodCallCanInferFromArguments() {
         assertCanSolveGenericMethodCallCanInferFromArguments("staticGenericMethod1");
     }
 

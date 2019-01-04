@@ -31,16 +31,16 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PrettyPrintVisitorTest {
+class PrettyPrintVisitorTest {
 
     @Test
-    public void getMaximumCommonTypeWithoutAnnotations() {
+    void getMaximumCommonTypeWithoutAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
         assertEquals("int[]", vde1.getMaximumCommonType().get().toString());
 
@@ -52,7 +52,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void getMaximumCommonTypeWithAnnotations() {
+    void getMaximumCommonTypeWithAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
         assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
@@ -65,32 +65,32 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printSimpleClassExpr() {
+    void printSimpleClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
-    public void printArrayClassExpr() {
+    void printArrayClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
-    public void printGenericClassExpr() {
+    void printGenericClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
-    public void printSimplestClass() {
+    void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
         assertEquals("class A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
-    public void printAClassWithField() {
+    void printAClassWithField() {
         Node node = JavaParser.parse("class A { int a; }");
         assertEquals("class A {" + EOL
                 + EOL +
@@ -99,13 +99,13 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printAReceiverParameter() {
+    void printAReceiverParameter() {
         Node node = JavaParser.parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
         assertEquals("int x(@O X A.B.this, int y) {" + EOL + "}", print(node));
     }
 
     @Test
-    public void printLambdaIntersectionTypeAssignment() {
+    void printLambdaIntersectionTypeAssignment() {
         String code = "class A {" + EOL +
                 "  void f() {" + EOL +
                 "    Runnable r = (Runnable & Serializable) (() -> {});" + EOL +
@@ -119,7 +119,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printIntersectionType() {
+    void printIntersectionType() {
         String code = "(Runnable & Serializable) (() -> {})";
         Expression expression = JavaParser.parseExpression(code);
         Type type = ((CastExpr) expression).getType();
@@ -128,7 +128,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printLambdaIntersectionTypeReturn() {
+    void printLambdaIntersectionTypeReturn() {
         String code = "class A {" + EOL
                 + "  Object f() {" + EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
@@ -140,7 +140,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printClassWithoutJavaDocButWithComment() {
+    void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
@@ -149,7 +149,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printImportsDefaultOrder() {
+    void printImportsDefaultOrder() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = JavaParser.parse(code);
         String content = cu.toString();
@@ -162,7 +162,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void printImportsOrdered() {
+    void printImportsOrdered() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
@@ -176,7 +176,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void multilineJavadocGetsFormatted() {
+    void multilineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
 
@@ -193,7 +193,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void emptyJavadocGetsFormatted() {
+    void emptyJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("");
 
@@ -207,7 +207,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void multilineJavadocWithLotsOfEmptyLinesGetsFormattedNeatly() {
+    void multilineJavadocWithLotsOfEmptyLinesGetsFormattedNeatly() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\n ab\n\n\n cd\n\n\n");
 
@@ -224,7 +224,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void singlelineJavadocGetsFormatted() {
+    void singlelineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1");
 
@@ -239,7 +239,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void javadocAlwaysGetsASpaceBetweenTheAsteriskAndTheRestOfTheLine() {
+    void javadocAlwaysGetsASpaceBetweenTheAsteriskAndTheRestOfTheLine() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2");
 
@@ -255,7 +255,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void javadocAlwaysGetsAnAdditionalSpaceOrNeverGetsIt() {
+    void javadocAlwaysGetsAnAdditionalSpaceOrNeverGetsIt() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\n" +
                 "line2\n" +
@@ -274,7 +274,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void singlelineCommentGetsFormatted() {
+    void singlelineCommentGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
 
@@ -287,7 +287,7 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
-    public void blockcommentGetsNoFormatting() {
+    void blockcommentGetsNoFormatting() {
         CompilationUnit cu = JavaParser.parse("class A {\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
                 "        //sdfsdfsdf\n" +
