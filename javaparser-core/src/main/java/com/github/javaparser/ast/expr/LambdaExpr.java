@@ -20,31 +20,29 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LambdaExprMetaModel;
 
 import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.DerivedProperty;
-import com.github.javaparser.metamodel.LambdaExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-
 import java.util.function.Consumer;
 
-import com.github.javaparser.ast.Generated;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>A lambda expression</h1>
@@ -58,7 +56,7 @@ import com.github.javaparser.ast.Generated;
  * If a parameter uses type inference (it has no type specified) then its type is set to <code>UnknownType</code>.
  * If they are in ( ), "isEnclosingParameters" is true.
  * <br/>The body is to the right of the ->.
- * The body is either a BlockStatement when it is in { } braces, or an ExpressionStatement when it is not in braces.
+ * The body is either a BlockStmt when it is in { } braces, or an ExpressionStmt when it is not in braces.
  *
  * @author Raquel Pau
  */
@@ -77,15 +75,15 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     /**
      * Creates a single parameter lambda expression.
      */
-    public LambdaExpr(Parameter parameter, Statement body) {
-        this(new NodeList<>(parameter), body, false);
+    public LambdaExpr(Parameter parameter, BlockStmt body) {
+        this(null, new NodeList<>(parameter), body, false);
     }
 
     /**
      * Creates a zero or multi-parameter lambda expression with its parameters wrapped in ( ).
      */
-    public LambdaExpr(NodeList<Parameter> parameters, Statement body) {
-        this(parameters, body, true);
+    public LambdaExpr(NodeList<Parameter> parameters, BlockStmt body) {
+        this(null, parameters, body, true);
     }
 
 
@@ -93,14 +91,14 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
      * Creates a single parameter lambda expression.
      */
     public LambdaExpr(Parameter parameter, Expression body) {
-        this(new NodeList<>(parameter), new ExpressionStmt(body), false);
+        this(null, new NodeList<>(parameter), new ExpressionStmt(body), false);
     }
 
     /**
      * Creates a zero or multi-parameter lambda expression with its parameters wrapped in ( ).
      */
     public LambdaExpr(NodeList<Parameter> parameters, Expression body) {
-        this(parameters, new ExpressionStmt(body), true);
+        this(null, parameters, new ExpressionStmt(body), true);
     }
 
     @AllFieldsConstructor
