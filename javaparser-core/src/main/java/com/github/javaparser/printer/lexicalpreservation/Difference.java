@@ -453,6 +453,9 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 originalIndex++;
                 diffIndex++;
+            } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
+                originalIndex++;
+                diffIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
@@ -466,12 +469,50 @@ public class Difference {
             diffIndex++;
         } else if (kept.isUnindent()) {
             // Nothing to do, beside considering indentation
+            // However we want to consider the case in which the indentation was not applied, like when we have
+            // just a left brace followed by space
+
             diffIndex++;
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
-                nodeText.removeElement(--originalIndex);
+            if (!openBraceWasOnSameLine()) {
+                for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
+                    nodeText.removeElement(--originalIndex);
+                }
             }
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
+        }
+    }
+
+    private boolean openBraceWasOnSameLine() {
+        int index = originalIndex;
+        while (index >= 0 && !nodeText.getTextElement(index).isNewline()) {
+            if (nodeText.getTextElement(index).isToken(LBRACE)) {
+                return true;
+            }
+            index--;
+        }
+        return false;
+    }
+
+    private boolean wasSpaceBetweenBraces() {
+        return nodeText.getTextElement(originalIndex).isToken(RBRACE)
+                && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1)
+                && (diffIndex < 2 || !diffElements.get(diffIndex - 2).isRemoved());
+    }
+
+    private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
+        index = rewindSpace(index);
+        return nodeText.getElements().get(index).isToken(LBRACE);
+    }
+
+    private int rewindSpace(int index) {
+        if (index <= 0) {
+            return index;
+        }
+        if (nodeText.getElements().get(index).isWhiteSpace()) {
+            return rewindSpace(index - 1);
+        } else {
+            return index;
         }
     }
 
@@ -497,7 +538,11 @@ public class Difference {
         boolean used = false;
         if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
             for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                nodeText.addElement(originalIndex++, e);
+                if (e instanceof TokenTextElement && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
+                    originalIndex++;
+                } else {
+                    nodeText.addElement(originalIndex++, e);
+                }
             }
         } else if (isAfterLBrace(nodeText, originalIndex) && !isAReplacement(diffIndex)) {
             if (addedTextElement.isNewline()) {
@@ -505,8 +550,9 @@ public class Difference {
             }
             nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
             // This remove the space in "{ }" when adding a new line
-            while (originalElements.get(originalIndex).isSpaceOrTab()) {
-                originalElements.remove(originalIndex);
+            while (originalIndex >= 2 && originalElements.get(originalIndex - 2).isSpaceOrTab()) {
+                originalElements.remove(originalIndex - 2);
+                originalIndex--;
             }
             for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
                 nodeText.addElement(originalIndex++, e);
@@ -543,11 +589,11 @@ public class Difference {
         List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
         WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
 
-        for (int ni = 0; ni< nextOrderElements.size(); ni++) {
+        for (int ni = 0; ni < nextOrderElements.size(); ni++) {
             boolean found = false;
             CsmElement ne = nextOrderElements.get(ni);
 
-            for (int counter = 0; counter< previousOrderElements.size() && !found; counter++) {
+            for (int counter = 0; counter < previousOrderElements.size() && !found; counter++) {
                 Integer pi = piNext.next();
                 CsmElement pe = previousOrderElements.get(pi);
                 if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
@@ -576,7 +622,7 @@ public class Difference {
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
 
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = startIndex; i< nodeText.getElements().size(); i++){
+            for (int i = startIndex; i < nodeText.getElements().size(); i++){
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
 
@@ -606,6 +652,8 @@ public class Difference {
                         } else {
                             potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
+                    } else if (isAlmostCorrespondingElement(textElement, csmElement, node)) {
+                        potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
                     }
                 }
             }
@@ -625,7 +673,7 @@ public class Difference {
     }
 
     private enum MatchClassification {
-        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4);
+        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
 
         private final int priority;
         MatchClassification(int priority) {
@@ -655,6 +703,13 @@ public class Difference {
         }
 
         return false;
+    }
+
+    private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
+        if (isCorrespondingElement(textElement, csmElement, node)) {
+            return false;
+        }
+        return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken)csmElement).isWhiteSpace();
     }
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
