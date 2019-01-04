@@ -55,4 +55,9 @@ public class Reshuffled implements DifferenceElement {
     public boolean isAdded() {
         return false;
     }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
 }
