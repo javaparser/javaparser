@@ -81,4 +81,9 @@ public class Removed implements DifferenceElement {
 
         return false;
     }
+
+    @Override
+    public boolean isRemoved() {
+        return true;
+    }
 }
