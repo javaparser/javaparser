@@ -21,13 +21,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.javadoc.Javadoc;
@@ -387,7 +390,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         it.addMarkerAnnotation("Override");
         assertTransformedToString(
                 "@Override" + EOL +
-                "void testMethod(){}", it);
+                        "void testMethod(){}", it);
     }
 
     @Test
@@ -429,6 +432,69 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                         "  public void testCase() {\n" +
                         "  }\n" +
                         "}\n", result);
+    }
+
+    @Test
+    public void addingModifiersWithExistingAnnotationsShort() {
+        MethodDeclaration it = consider("@Override void A(){}");
+        it.setModifiers(NodeList.nodeList(Modifier.publicModifier(), Modifier.finalModifier()));
+        assertTransformedToString("@Override public final void A(){}", it);
+    }
+
+    @Test
+    public void addingModifiersWithExistingAnnotations() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).addModifier(Modifier.finalModifier().getKeyword(), Modifier.publicModifier().getKeyword());
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  final public void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+
+    @Test
+    public void parseAndPrintAnonymousClassExpression() {
+        Expression expression = JavaParser.parseExpression("new Object() {" + EOL +
+                "}");
+         String expected = "new Object() {" + EOL +
+                "}";
+        assertTransformedToString(expected, expression);
+    }
+
+    @Test
+    public void parseAndPrintAnonymousClassStatement() {
+        Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
+                "};");
+        String expected = "Object anonymous = new Object() {" + EOL +
+                "};";
+        assertTransformedToString(expected, statement);
+    }
+
+    @Test
+    public void replaceBodyShouldNotBreakAnonymousClasses() {
+        MethodDeclaration it = consider("public void method() { }");
+        it.getBody().ifPresent(body -> {
+            Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
+                    "};");
+            NodeList<Statement> statements = new NodeList<>();
+            statements.add(statement);
+            body.setStatements(statements);
+        });
+
+        String expected = "public void method() {" + EOL +
+                "    Object anonymous = new Object() {" + EOL +
+                "    };" + EOL +
+                "}";
+        assertTransformedToString(expected, it);
     }
 
 }

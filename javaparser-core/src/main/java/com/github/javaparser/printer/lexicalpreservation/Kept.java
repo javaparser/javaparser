@@ -87,4 +87,18 @@ public class Kept implements DifferenceElement {
 
         return false;
     }
+
+    public boolean isNewLine() {
+        if(isToken()) {
+            CsmToken csmToken = (CsmToken) element;
+            return csmToken.isNewLine();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
 }

@@ -27,9 +27,11 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import org.junit.jupiter.api.Test;
 
+import java.lang.annotation.ElementType;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.javaparser.JavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,6 +51,47 @@ class CompilationUnitBuildersTest {
         assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
         assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
         assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+    }
+
+    @Test
+    void typesInTheJavaLangPackageDoNotNeedExplicitImports() {
+        cu.addImport(String.class);
+        assertEquals(0, cu.getImports().size());
+    }
+
+    @Test
+    void typesInSubPackagesOfTheJavaLangPackageRequireExplicitImports() {
+        cu.addImport(ElementType.class);
+        assertEquals(1, cu.getImports().size());
+        assertEquals("import java.lang.annotation.ElementType;"+ EOL, cu.getImport(0).toString());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByClass() {
+        cu.addImport(Map.class);
+        cu.addImport(Map.class);
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByString() {
+        cu.addImport(Map.class);
+        cu.addImport("java.util.Map");
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByStringAndFlags() {
+        cu.addImport(Map.class);
+        cu.addImport("java.util.Map", false, false);
+        assertEquals(1, cu.getImports().size());
+    }
+
+    @Test
+    void doNotAddDuplicateImportsByImportDeclaration() {
+        cu.addImport(Map.class);
+        cu.addImport(parseImport("import java.util.Map;"));
+        assertEquals(1, cu.getImports().size());
     }
 
     @Test

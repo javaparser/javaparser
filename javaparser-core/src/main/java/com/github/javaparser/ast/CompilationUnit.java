@@ -58,8 +58,6 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * <p>
@@ -220,8 +218,10 @@ public final class CompilationUnit extends Node {
         return this;
     }
 
-    public CompilationUnit addImport(ImportDeclaration imports) {
-        getImports().add(imports);
+    public CompilationUnit addImport(ImportDeclaration importDeclaration) {
+        if (getImports().stream().noneMatch(im -> im.toString().equals(importDeclaration.toString()))) {
+            getImports().add(importDeclaration);
+        }
         return this;
     }
 
@@ -310,7 +310,7 @@ public final class CompilationUnit extends Node {
         if (clazz.isArray()) {
             return addImport(clazz.getComponentType());
         }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || "java.lang".equals(clazz.getPackage().getName()))
             return this;
         else if (clazz.isMemberClass())
             return addImport(clazz.getName().replace("$", "."));
@@ -338,13 +338,7 @@ public final class CompilationUnit extends Node {
             i.append(".*");
         }
         i.append(";");
-        ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
-        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
-            return this;
-        else {
-            getImports().add(importDeclaration);
-            return this;
-        }
+        return addImport(JavaParser.parseImport(i.toString()));
     }
 
     /**
