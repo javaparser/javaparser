@@ -21,4 +21,6 @@ public interface DifferenceElement {
     CsmElement getElement();
 
     boolean isAdded();
+
+    boolean isRemoved();
 }
