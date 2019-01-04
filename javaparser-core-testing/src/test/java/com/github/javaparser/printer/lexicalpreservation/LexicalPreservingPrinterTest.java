@@ -138,7 +138,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.addImport("b");
 
-        assertEqualsNoEol("import a;\nimport b;\nclass X{}", LexicalPreservingPrinter.print(cu));
+        assertEqualsNoEol("import a;import b;class X{}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
@@ -504,11 +504,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // Issue 823: setPackageDeclaration on CU starting with a comment
     @Test
     void reactToSetPackageDeclarationOnCuStartingWithComment() {
-        considerCode("// Hey, this is a comment\n" +
-                "\n" +
-                "\n" +
-                "// Another one\n" +
-                "\n" +
+        considerCode("// Hey, this is a comment" +
+                "" +
+                "" +
+                "// Another one" +
+                "" +
                 "class A {}");
         cu.setPackageDeclaration("org.javaparser.lexicalpreservation.examples");
     }
@@ -1012,7 +1012,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void issue1244() {
         String code = "public class Foo {" + EOL + EOL
-                + "// Some comment" + EOL + EOL // does work with only one \n
+                + "// Some comment" + EOL + EOL // does work with only one 
                 + "public void writeExternal() {}" + EOL + "}";
         CompilationUnit originalCu = JavaParser.parse(code);
         CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
@@ -1023,8 +1023,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 c.remove(method);
             }
         });
-        assertEqualsNoEol("public class Foo {\n" +
-                "// Some comment\n\n" +
+        assertEqualsNoEol("public class Foo {" +
+                "// Some comment" +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1084,10 +1084,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .addMethod("mymethod")
                 .setBlockComment("block");
         assertEqualsNoEol("public class Foo {" + EOL +
-                          "    /*block*/" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
-                          "}", LexicalPreservingPrinter.print(cu));
+                "    /*block*/" + EOL +
+                "void mymethod() {" + EOL +
+                "}" + EOL +
+                "}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
@@ -1100,10 +1100,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .addMethod("mymethod")
                 .setLineComment("line");
         assertEqualsNoEol("public class Foo {" + EOL +
-                          "    //line" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
-                          "}", LexicalPreservingPrinter.print(cu));
+                "    //line" + EOL +
+                "void mymethod() {" + EOL +
+                "}" + EOL +
+                "}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
@@ -1114,7 +1114,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();
         type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
 
-        assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
+        assertEqualsNoEol("class X { X() {    testme();} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
     }
 
+    @Test
+    void issue2001() {
+        CompilationUnit compilationUnit = JavaParser.parse("class X {void blubb(){X.p(\"blaubb04\");}}");
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        compilationUnit
+                .findAll(MethodCallExpr.class)
+                .forEach(Node::removeForced);
+        
+        // Hurray! No crash!
+    }
 }
