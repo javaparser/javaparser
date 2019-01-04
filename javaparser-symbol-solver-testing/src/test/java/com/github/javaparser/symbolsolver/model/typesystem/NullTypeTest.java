@@ -26,15 +26,16 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NullTypeTest {
+class NullTypeTest {
 
     private ResolvedArrayType arrayOfBooleans;
     private ResolvedArrayType arrayOfListOfA;
@@ -42,8 +43,8 @@ public class NullTypeTest {
     private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new ReflectionTypeSolver();
         OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
@@ -54,62 +55,68 @@ public class NullTypeTest {
     }
 
     @Test
-    public void testIsArray() {
+    void testIsArray() {
         assertEquals(false, NullType.INSTANCE.isArray());
     }
 
     @Test
-    public void testIsPrimitive() {
+    void testIsPrimitive() {
         assertEquals(false, NullType.INSTANCE.isPrimitive());
     }
 
     @Test
-    public void testIsNull() {
+    void testIsNull() {
         assertEquals(true, NullType.INSTANCE.isNull());
     }
 
     @Test
-    public void testIsReference() {
+    void testIsReference() {
         assertEquals(true, NullType.INSTANCE.isReference());
     }
 
     @Test
-    public void testIsReferenceType() {
+    void testIsReferenceType() {
         assertEquals(false, NullType.INSTANCE.isReferenceType());
     }
 
     @Test
-    public void testIsVoid() {
+    void testIsVoid() {
         assertEquals(false, NullType.INSTANCE.isVoid());
     }
 
     @Test
-    public void testIsTypeVariable() {
+    void testIsTypeVariable() {
         assertEquals(false, NullType.INSTANCE.isTypeVariable());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsReferenceTypeUsage() {
-        NullType.INSTANCE.asReferenceType();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsTypeParameter() {
-        NullType.INSTANCE.asTypeParameter();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsArrayTypeUsage() {
-        NullType.INSTANCE.asArrayType();
+    @Test
+    void testAsReferenceTypeUsage() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            NullType.INSTANCE.asReferenceType();
+    });
     }
 
     @Test
-    public void testAsDescribe() {
+    void testAsTypeParameter() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            NullType.INSTANCE.asTypeParameter();
+    });
+    }
+
+    @Test
+    void testAsArrayTypeUsage() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            NullType.INSTANCE.asArrayType();
+    });
+    }
+
+    @Test
+    void testAsDescribe() {
         assertEquals("null", NullType.INSTANCE.describe());
     }
 
     @Test
-    public void testIsAssignableBy() {
+    void testIsAssignableBy() {
         try {
             assertEquals(false, NullType.INSTANCE.isAssignableBy(NullType.INSTANCE));
             fail();

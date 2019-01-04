@@ -21,25 +21,24 @@
 
 package com.github.javaparser.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 
-public class VisitorListTest {
+class VisitorListTest {
 
     @Test
-    public void visitorAddAll() {
+    void visitorAddAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -51,7 +50,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorAddAllAtIndex() {
+    void visitorAddAllAtIndex() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class Y{}"));
@@ -66,7 +65,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListContains() {
+    void visitorListContains() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
@@ -75,7 +74,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListContainsAll() {
+    void visitorListContainsAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -86,7 +85,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListIterator() {
+    void visitorListIterator() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         CompilationUnit x1 = JavaParser.parse("class X{}");
@@ -103,7 +102,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListListIterator() {
+    void visitorListListIterator() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(JavaParser.parse("class X{}"));
@@ -122,7 +121,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListRemove() {
+    void visitorListRemove() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
@@ -131,7 +130,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListRemoveAll() {
+    void visitorListRemoveAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -143,7 +142,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListRetainAll() {
+    void visitorListRetainAll() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
@@ -156,7 +155,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListSubList() {
+    void visitorListSubList() {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(JavaParser.parse("class X{}"));
@@ -173,7 +172,7 @@ public class VisitorListTest {
     }
 
     @Test
-    public void visitorListToArray() {
+    void visitorListToArray() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));

@@ -26,22 +26,19 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ArrayTypeTest {
+class ArrayTypeTest {
     @Test
-    public void getFieldDeclarationWithArrays() {
+    void getFieldDeclarationWithArrays() {
         FieldDeclaration fieldDeclaration = parseBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];").asFieldDeclaration();
 
         ArrayType arrayType1 = fieldDeclaration.getVariable(0).getType().asArrayType();
@@ -62,7 +59,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void getVariableDeclarationWithArrays() {
+    void getVariableDeclarationWithArrays() {
         ExpressionStmt variableDeclarationStatement = parseStatement("@C int @A[] @B[] a @X[] @Y[];").asExpressionStmt();
         VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
@@ -84,7 +81,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void getMethodDeclarationWithArrays() {
+    void getMethodDeclarationWithArrays() {
         MethodDeclaration methodDeclaration = parseBodyDeclaration("@C int @A[] a() @B[] {}").asMethodDeclaration();
 
         ArrayType arrayType1 = methodDeclaration.getType().asArrayType();
@@ -100,7 +97,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void getParameterWithArrays() {
+    void getParameterWithArrays() {
         MethodDeclaration methodDeclaration = parseBodyDeclaration("void a(@C int @A[] a @B[]) {}").asMethodDeclaration();
 
         Parameter parameter = methodDeclaration.getParameter(0);
@@ -119,7 +116,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void setVariableDeclarationWithArrays() {
+    void setVariableDeclarationWithArrays() {
         ExpressionStmt variableDeclarationStatement = parseStatement("@C int @A[] @B[] a @X[] @Y[];").asExpressionStmt();
         VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
@@ -128,7 +125,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void setFieldDeclarationWithArrays() {
+    void setFieldDeclarationWithArrays() {
         FieldDeclaration fieldDeclaration = parseBodyDeclaration("int[][] a[][];").asFieldDeclaration();
         fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
@@ -136,7 +133,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void setMethodDeclarationWithArrays() {
+    void setMethodDeclarationWithArrays() {
         MethodDeclaration method = parseBodyDeclaration("int[][] a()[][] {}").asMethodDeclaration();
         method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
@@ -144,7 +141,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void fieldDeclarationWithArraysHasCorrectOrigins() {
+    void fieldDeclarationWithArraysHasCorrectOrigins() {
         FieldDeclaration fieldDeclaration = parseBodyDeclaration("int[] a[];").asFieldDeclaration();
 
         Type outerType = fieldDeclaration.getVariables().get(0).getType();
@@ -153,7 +150,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void methodDeclarationWithArraysHasCorrectOrigins() {
+    void methodDeclarationWithArraysHasCorrectOrigins() {
         MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[] a()[] {}");
 
         Type outerType = method.getType();
@@ -162,7 +159,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void setParameterWithArrays() {
+    void setParameterWithArrays() {
         MethodDeclaration method = parseBodyDeclaration("void a(int[][] a[][]) {}").asMethodDeclaration();
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
@@ -170,7 +167,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void getArrayCreationType() {
+    void getArrayCreationType() {
         ArrayCreationExpr expr = parseExpression("new int[]");
         ArrayType outerType = expr.createdType().asArrayType();
         Type innerType = outerType.getComponentType();
@@ -178,7 +175,7 @@ public class ArrayTypeTest {
     }
 
     @Test
-    public void ellipsisCanHaveAnnotationsToo() {
+    void ellipsisCanHaveAnnotationsToo() {
         Parameter p = parseParameter("int[]@X...a[]");
 
         assertThat(p.getVarArgsAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));

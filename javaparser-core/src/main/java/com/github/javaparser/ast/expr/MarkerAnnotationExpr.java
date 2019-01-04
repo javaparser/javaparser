@@ -27,11 +27,11 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import static com.github.javaparser.JavaParser.parseName;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+import static com.github.javaparser.JavaParser.parseName;
 
 /**
  * An annotation that uses only the annotation type name.

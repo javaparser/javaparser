@@ -4,25 +4,22 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-public class Issue1668 {
+class Issue1668 {
 
     private JavaParser javaParser;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
@@ -30,7 +27,7 @@ public class Issue1668 {
     }
 
     @Test
-    public void testResolveArrayDeclaration() {
+    void testResolveArrayDeclaration() {
         String code = String.join(System.lineSeparator(),
                 "public class X {",
                 "   public static void main(String[] args) {",

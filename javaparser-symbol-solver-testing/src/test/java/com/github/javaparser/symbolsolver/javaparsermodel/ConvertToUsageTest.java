@@ -1,24 +1,23 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ConvertToUsageTest extends AbstractResolutionTest {
+class ConvertToUsageTest extends AbstractResolutionTest {
 
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
 
     @Test
-    public void testConvertTypeToUsage() {
+    void testConvertTypeToUsage() {
         CompilationUnit cu = parseSample("LocalTypeDeclarations");
         List<NameExpr> n = cu.findAll(NameExpr.class);
 

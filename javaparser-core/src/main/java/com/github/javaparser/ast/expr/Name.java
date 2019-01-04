@@ -24,11 +24,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -37,7 +34,9 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NameMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -52,7 +51,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
+public final class Name extends Node implements NodeWithIdentifier<Name> {
 
     @NonEmptyProperty
     private String identifier;
@@ -60,34 +59,27 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     @OptionalProperty
     private Name qualifier;
 
-    private NodeList<AnnotationExpr> annotations;
-
     public Name() {
-        this(null, null, "empty", new NodeList<>());
+        this(null, null, "empty");
     }
 
     public Name(final String identifier) {
-        this(null, null, identifier, new NodeList<>());
-    }
-
-    public Name(Name qualifier, final String identifier) {
-        this(null, qualifier, identifier, new NodeList<>());
+        this(null, null, identifier);
     }
 
     @AllFieldsConstructor
-    public Name(Name qualifier, final String identifier, NodeList<AnnotationExpr> annotations) {
-        this(null, qualifier, identifier, annotations);
+    public Name(Name qualifier, final String identifier) {
+        this(null, qualifier, identifier);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Name(TokenRange tokenRange, Name qualifier, String identifier, NodeList<AnnotationExpr> annotations) {
+    public Name(TokenRange tokenRange, Name qualifier, String identifier) {
         super(tokenRange);
         setQualifier(qualifier);
         setIdentifier(identifier);
-        setAnnotations(annotations);
         customInitialization();
     }
 
@@ -166,12 +158,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.remove(i);
-                return true;
-            }
-        }
         if (qualifier != null) {
             if (node == qualifier) {
                 removeQualifier();
@@ -184,25 +170,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Name removeQualifier() {
         return setQualifier((Name) null);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> getAnnotations() {
-        return annotations;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name setAnnotations(final NodeList<AnnotationExpr> annotations) {
-        assertNotNull(annotations);
-        if (annotations == this.annotations) {
-            return (Name) this;
-        }
-        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null)
-            this.annotations.setParentNode(null);
-        this.annotations = annotations;
-        setAsParentNodeOf(annotations);
-        return this;
     }
 
     @Override
@@ -222,12 +189,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.set(i, (AnnotationExpr) replacementNode);
-                return true;
-            }
-        }
         if (qualifier != null) {
             if (node == qualifier) {
                 setQualifier((Name) replacementNode);

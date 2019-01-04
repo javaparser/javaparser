@@ -4,18 +4,18 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class VisitorMapTest {
+class VisitorMapTest {
     @Test
-    public void normalEqualsDoesDeepCompare() {
+    void normalEqualsDoesDeepCompare() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         CompilationUnit x2 = JavaParser.parse("class X{}");
 
@@ -26,7 +26,7 @@ public class VisitorMapTest {
     }
 
     @Test
-    public void objectIdentityEqualsDoesShallowCompare() {
+    void objectIdentityEqualsDoesShallowCompare() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         CompilationUnit x2 = JavaParser.parse("class X{}");
 
@@ -37,7 +37,7 @@ public class VisitorMapTest {
     }
     
     @Test
-    public void visitorMapGet(){
+    void visitorMapGet(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
 
         Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
@@ -46,7 +46,7 @@ public class VisitorMapTest {
     }
     
     @Test
-    public void visitorMapContainsKey(){
+    void visitorMapContainsKey(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
 
         Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
@@ -55,7 +55,7 @@ public class VisitorMapTest {
     }
     
     @Test
-    public void visitorMapPutAll(){
+    void visitorMapPutAll(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
     	CompilationUnit x2 = JavaParser.parse("class Y{}");
     	Map<CompilationUnit, Integer> map = new HashMap<>();
@@ -67,7 +67,7 @@ public class VisitorMapTest {
     }
     
     @Test
-    public void remove(){
+    void remove(){
         CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorMap<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);

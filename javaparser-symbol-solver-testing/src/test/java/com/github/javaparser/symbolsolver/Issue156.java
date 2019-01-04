@@ -8,16 +8,16 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue156 extends AbstractResolutionTest {
+class Issue156 extends AbstractResolutionTest {
 
     @Test
-    public void testFieldAccessThroughClassAndThis() {
+    void testFieldAccessThroughClassAndThis() {
 
         CompilationUnit cu = parseSample("Issue156");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Issue156");

@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseName;
@@ -17,9 +17,9 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ModuleDeclarationTest {
+class ModuleDeclarationTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
 
     private CompilationUnit parse(String code) {
@@ -31,14 +31,14 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void moduleInfoKeywordsAreSeenAsIdentifiers() {
+    void moduleInfoKeywordsAreSeenAsIdentifiers() {
         CompilationUnit cu = parse("class module { }");
         JavaToken moduleToken = cu.getClassByName("module").get().getName().getTokenRange().get().getBegin();
         assertEquals(IDENTIFIER, moduleToken.getKind());
     }
 
     @Test
-    public void issue988RequireTransitiveShouldRequireAModuleCalledTransitive() {
+    void issue988RequireTransitiveShouldRequireAModuleCalledTransitive() {
         CompilationUnit cu = parse("module X { requires transitive; }");
         ModuleRequiresDirective requiresTransitive = (ModuleRequiresDirective) cu.getModule().get().getDirectives().get(0);
         assertEquals("transitive", requiresTransitive.getNameAsString());
@@ -46,7 +46,7 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void jlsExample1() {
+    void jlsExample1() {
         CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
@@ -97,7 +97,7 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void jlsExample2HasAnOpenModule() {
+    void jlsExample2HasAnOpenModule() {
         CompilationUnit cu = parse("open module M.N {}");
 
         ModuleDeclaration module = cu.getModule().get();
@@ -106,7 +106,7 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void testPrettyPrinting() {
+    void testPrettyPrinting() {
         CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
@@ -145,7 +145,7 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void testCsmPrinting() {
+    void testCsmPrinting() {
         CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "open module M.N {" +
@@ -172,7 +172,7 @@ public class ModuleDeclarationTest {
                         "    requires A.B;" + EOL +
                         "    requires transitive C.D;" + EOL +
                         "    requires static E.F;" + EOL +
-                        "    requires static transitive G.H;" + EOL +
+                        "    requires transitive static G.H;" + EOL +
                         "    exports P.Q;" + EOL +
                         "    exports R.S to T1.U1, T2.U2;" + EOL +
                         "    opens P.Q;" + EOL +
@@ -184,7 +184,7 @@ public class ModuleDeclarationTest {
     }
 
     @Test
-    public void fluentInterface() {
+    void fluentInterface() {
         ModuleDeclaration moduleDeclaration = new CompilationUnit()
                 .setModule("com.laamella.base")
                 .addSingleMemberAnnotation(SuppressWarnings.class, "\"module\"")
