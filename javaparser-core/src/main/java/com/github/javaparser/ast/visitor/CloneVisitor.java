@@ -1005,4 +1005,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         r.setComment(comment);
         return r;
     }
+
+    @Override
+    public Visitable visit(final SwitchExpr n, final Object arg) {
+        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        Expression selector = cloneNode(n.getSelector(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SwitchExpr r = new SwitchExpr(n.getTokenRange().orElse(null), selector, entries);
+        r.setComment(comment);
+        return r;
+    }
 }

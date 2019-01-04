@@ -733,4 +733,19 @@ public abstract class Expression extends Node {
     public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
         return Optional.empty();
     }
+
+    public boolean isSwitchExpr() {
+        return false;
+    }
+
+    public SwitchExpr asSwitchExpr() {
+        throw new IllegalStateException(f("%s is not an SwitchExpr", this));
+    }
+
+    public Optional<SwitchExpr> toSwitchExpr() {
+        return Optional.empty();
+    }
+
+    public void ifSwitchExpr(Consumer<SwitchExpr> action) {
+    }
 }

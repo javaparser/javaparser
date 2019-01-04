@@ -429,4 +429,9 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final Modifier n, final Void arg) {
         return (n.getKeyword().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
+    @Override
+    public Integer visit(final SwitchExpr n, final Void arg) {
+        return (n.getEntries().accept(this, arg)) * 31 + (n.getSelector().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
 }

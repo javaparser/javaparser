@@ -1228,4 +1228,17 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final SwitchExpr n, final A arg) {
+        NodeList<SwitchEntryStmt> entries = modifyList(n.getEntries(), arg);
+        Expression selector = (Expression) n.getSelector().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (selector == null)
+            return null;
+        n.setEntries(entries);
+        n.setSelector(selector);
+        n.setComment(comment);
+        return n;
+    }
 }

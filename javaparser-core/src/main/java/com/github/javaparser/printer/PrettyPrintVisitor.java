@@ -29,10 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -1078,6 +1075,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final SwitchStmt n, final Void arg) {
+        printSwitchNode(n, arg);
+    }
+
+    @Override
+    public void visit(SwitchExpr n, Void arg) {
+        printSwitchNode(n, arg);
+    }
+
+    private void printSwitchNode(SwitchNode n, Void arg) {
         printComment(n.getComment(), arg);
         printer.print("switch(");
         n.getSelector().accept(this, arg);

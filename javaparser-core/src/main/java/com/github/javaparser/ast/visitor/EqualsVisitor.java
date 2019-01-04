@@ -1303,4 +1303,16 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final SwitchExpr n, final Visitable arg) {
+        final SwitchExpr n2 = (SwitchExpr) arg;
+        if (!nodesEquals(n.getEntries(), n2.getEntries()))
+            return false;
+        if (!nodeEquals(n.getSelector(), n2.getSelector()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
 }

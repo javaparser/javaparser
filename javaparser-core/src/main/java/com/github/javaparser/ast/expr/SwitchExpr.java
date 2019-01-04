@@ -18,48 +18,49 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.ast.stmt;
+package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.SwitchExprMetaModel;
 
 /**
- * A switch statement.
+ * A switch expression.
  * <br/>In <code>switch(a) { ... }</code> the selector is "a",
  * and the contents of the { ... } are the entries.
  *
  * @author Julio Vilmar Gesser
  * @see SwitchEntryStmt
- * @see com.github.javaparser.ast.expr.SwitchExpr
+ * @see com.github.javaparser.ast.stmt.SwitchStmt
  * @see SwitchNode
  */
-public final class SwitchStmt extends Statement implements SwitchNode {
+public final class SwitchExpr extends Expression implements SwitchNode {
 
     private Expression selector;
 
     private NodeList<SwitchEntryStmt> entries;
 
-    public SwitchStmt() {
+    public SwitchExpr() {
         this(null, new NameExpr(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchStmt(final Expression selector, final NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr(final Expression selector, final NodeList<SwitchEntryStmt> entries) {
         this(null, selector, entries);
     }
 
@@ -67,7 +68,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchStmt(TokenRange tokenRange, Expression selector, NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr(TokenRange tokenRange, Expression selector, NodeList<SwitchEntryStmt> entries) {
         super(tokenRange);
         setSelector(selector);
         setEntries(entries);
@@ -101,10 +102,10 @@ public final class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr setEntries(final NodeList<SwitchEntryStmt> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (SwitchStmt) this;
+            return (SwitchExpr) this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         if (this.entries != null)
@@ -118,7 +119,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * @deprecated use a method on getEntries instead
      */
     @Deprecated
-    public SwitchStmt setEntry(int i, SwitchEntryStmt entry) {
+    public SwitchExpr setEntry(int i, SwitchEntryStmt entry) {
         getEntries().set(i, entry);
         return this;
     }
@@ -127,16 +128,16 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * @deprecated use a method on getEntries instead
      */
     @Deprecated
-    public SwitchStmt addEntry(SwitchEntryStmt entry) {
+    public SwitchExpr addEntry(SwitchEntryStmt entry) {
         getEntries().add(entry);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchStmt setSelector(final Expression selector) {
+    public SwitchExpr setSelector(final Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
-            return (SwitchStmt) this;
+            return (SwitchExpr) this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
         if (this.selector != null)
@@ -162,14 +163,8 @@ public final class SwitchStmt extends Statement implements SwitchNode {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SwitchStmt clone() {
-        return (SwitchStmt) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SwitchStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.switchStmtMetaModel;
+    public SwitchExpr clone() {
+        return (SwitchExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -191,25 +186,26 @@ public final class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isSwitchStmt() {
+    public boolean isSwitchExpr() {
         return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public SwitchStmt asSwitchStmt() {
+    public SwitchExpr asSwitchExpr() {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifSwitchStmt(Consumer<SwitchStmt> action) {
+    @Override
+    public Optional<SwitchExpr> toSwitchExpr() {
+        return Optional.of(this);
+    }
+
+    public void ifSwitchExpr(Consumer<SwitchExpr> action) {
         action.accept(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<SwitchStmt> toSwitchStmt() {
-        return Optional.of(this);
+    public SwitchExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.switchExprMetaModel;
     }
 }

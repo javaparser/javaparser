@@ -1693,17 +1693,19 @@ Expression UnaryExpressionNotPlusMinus():
 	JavaToken begin = INVALID;
 }
 {
-  (
-	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token(); } |
-	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token(); }
-	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, op); }
-	|
-	  LOOKAHEAD( CastExpression() )
-	  ret = CastExpression()
-	|
-      ret = PostfixExpression()
-  )
-  { return ret; }
+	(
+		(
+			"~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token(); } |
+			"!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token(); }
+		) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, op); }
+		| LOOKAHEAD( CastExpression() )
+			ret = CastExpression()
+		|
+			ret = PostfixExpression()
+		|
+			ret = SwitchExpression()
+	)
+	{ return ret; }
 }
 
 Expression PostfixExpression():
@@ -2225,6 +2227,21 @@ SwitchStmt SwitchStatement():
   "}"
 
   { return new SwitchStmt(range(begin, token()), selector, entries); }
+}
+
+SwitchExpr SwitchExpression():
+{
+	Expression selector;
+	SwitchEntryStmt entry;
+	NodeList<SwitchEntryStmt> entries = emptyList();
+	JavaToken begin;
+}
+{
+  "switch" {begin=token();} "(" selector = Expression() ")" "{"
+    ( entry = SwitchEntry() { entries = add(entries, entry); } )*
+  "}"
+
+  { return new SwitchExpr(range(begin, token()), selector, entries); }
 }
 
 SwitchEntryStmt SwitchEntry():
