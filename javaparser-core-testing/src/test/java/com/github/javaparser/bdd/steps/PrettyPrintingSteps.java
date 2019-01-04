@@ -25,7 +25,6 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -38,7 +37,7 @@ import java.net.URL;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrettyPrintingSteps {
 

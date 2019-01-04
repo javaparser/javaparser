@@ -22,30 +22,26 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-import org.junit.Test;
-
-import java.util.EnumSet;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CommentTest {
+class CommentTest {
 
     private static final PrettyPrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new PrettyPrinterConfiguration().setIndentSize(2);
 
     @Test
-    public void removeOrphanComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+    void removeOrphanComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
@@ -54,30 +50,30 @@ public class CommentTest {
     }
 
     @Test
-    public void removeAssociatedComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+    void removeAssociatedComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
         Comment c = new LineComment("A comment");
         decl.setComment(c);
-        assertEquals(true, decl.getComment().isPresent());
+        assertTrue(decl.getComment().isPresent());
         assertTrue(c.remove());
-        assertEquals(false, decl.getComment().isPresent());
+        assertFalse(decl.getComment().isPresent());
     }
 
     @Test
-    public void cannotRemoveCommentNotUsedAnywhere() {
+    void cannotRemoveCommentNotUsedAnywhere() {
         Comment c = new LineComment("A comment");
         assertFalse(c.remove());
     }
 
     @Test
-    public void unicodeEscapesArePreservedInComments() {
+    void unicodeEscapesArePreservedInComments() {
         CompilationUnit cu = parse("// xxx\\u2122xxx");
         Comment comment = cu.getAllContainedComments().get(0);
         assertEquals(" xxx\\u2122xxx", comment.getContent());
     }
 
     @Test
-    public void testReplaceDuplicateJavaDocComment() {
+    void testReplaceDuplicateJavaDocComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +
@@ -118,7 +114,7 @@ public class CommentTest {
     }
 
     @Test
-    public void testRemoveDuplicateComment() {
+    void testRemoveDuplicateComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +
@@ -156,7 +152,7 @@ public class CommentTest {
     }
 
     @Test
-    public void testRemoveDuplicateJavaDocComment() {
+    void testRemoveDuplicateJavaDocComment() {
         // Arrange
         CompilationUnit cu = parse("public class MyClass {" + EOL +
                 EOL +

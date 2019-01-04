@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
@@ -25,19 +24,17 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Category(SlowTest.class)
-public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
+@SlowTest
+class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
 
     private static final Path root = adaptPath("src/test/test_sourcecode/javaparser_src");
     private static final Path properSrc = root.resolve("proper_source");
@@ -79,8 +76,8 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
             System.err.println(output);
         }
 
-        assertEquals("No failures expected when analyzing " + path, 0, sourceFileInfoExtractor.getKo());
-        assertEquals("No UnsupportedOperationException expected when analyzing " + path, 0, sourceFileInfoExtractor.getUnsupported());
+        assertEquals(0, sourceFileInfoExtractor.getKo(), "No failures expected when analyzing " + path);
+        assertEquals(0, sourceFileInfoExtractor.getUnsupported(), "No UnsupportedOperationException expected when analyzing " + path);
 
         String expected = readFile(dstFile);
 
@@ -88,7 +85,7 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
         String[] expectedLines = expected.split("\n");
 
         for (int i = 0; i < Math.min(outputLines.length, expectedLines.length); i++) {
-            assertEquals("Line " + (i + 1) + " of " + path + " is different from what is expected", expectedLines[i].trim(), outputLines[i].trim());
+            assertEquals(expectedLines[i].trim(), outputLines[i].trim(), "Line " + (i + 1) + " of " + path + " is different from what is expected");
         }
 
         assertEquals(expectedLines.length, outputLines.length);
@@ -102,27 +99,27 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parsePositionUtils() throws IOException {
+    void parsePositionUtils() throws IOException {
         parse("com/github/javaparser/PositionUtils");
     }
 
     @Test
-    public void parseJavaParser() throws IOException {
+    void parseJavaParser() throws IOException {
         parse("com/github/javaparser/JavaParser");
     }
 
     @Test
-    public void parseStatement() throws IOException {
+    void parseStatement() throws IOException {
         parse("com/github/javaparser/ast/stmt/Statement");
     }
 
     @Test
-    public void parseCatchClause() throws IOException {
+    void parseCatchClause() throws IOException {
         parse("com/github/javaparser/ast/stmt/CatchClause");
     }
 
     @Test
-    public void parseStatements() throws IOException {
+    void parseStatements() throws IOException {
         parse("com/github/javaparser/ast/stmt/LabeledStmt");
         parse("com/github/javaparser/ast/stmt/BreakStmt");
         parse("com/github/javaparser/ast/stmt/ReturnStmt");
@@ -146,7 +143,7 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parseExpressions() throws IOException {
+    void parseExpressions() throws IOException {
         parse("com/github/javaparser/ast/expr/NameExpr");
         parse("com/github/javaparser/ast/expr/FieldAccessExpr");
         parse("com/github/javaparser/ast/expr/CharLiteralExpr");
@@ -188,7 +185,7 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parseTypes() throws IOException {
+    void parseTypes() throws IOException {
         parse("com/github/javaparser/ast/type/ClassOrInterfaceType");
         parse("com/github/javaparser/ast/type/PrimitiveType");
         parse("com/github/javaparser/ast/type/WildcardType");
@@ -199,7 +196,7 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parseVisitors() throws IOException {
+    void parseVisitors() throws IOException {
         parse("com/github/javaparser/ast/visitor/EqualsVisitor");
         parse("com/github/javaparser/ast/visitor/ModifierVisitorAdapter");
         parse("com/github/javaparser/ast/visitor/DumpVisitor");
@@ -210,17 +207,17 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parseCloneVisitor() throws IOException {
+    void parseCloneVisitor() throws IOException {
         parse("com/github/javaparser/ast/visitor/CloneVisitor");
     }
 
     @Test
-    public void parseSourcesHelper() throws IOException {
+    void parseSourcesHelper() throws IOException {
         parse("com/github/javaparser/SourcesHelper");
     }
 
     @Test
-    public void parseComments() throws IOException {
+    void parseComments() throws IOException {
         parse("com/github/javaparser/ast/comments/LineComment");
         parse("com/github/javaparser/ast/comments/Comment");
         parse("com/github/javaparser/ast/comments/CommentsParser");
@@ -230,7 +227,7 @@ public class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parseTheRest() throws IOException {
+    void parseTheRest() throws IOException {
         parse("com/github/javaparser/ast/internal/Utils");
         parse("com/github/javaparser/ast/body/AnnotationMemberDeclaration");
         parse("com/github/javaparser/ast/body/EnumDeclaration");

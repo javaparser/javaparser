@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -31,18 +30,18 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class Issue300 extends AbstractResolutionTest {
+class Issue300 extends AbstractResolutionTest {
 
     @Test
-    public void fieldAccessIssue() throws IOException {
+    void fieldAccessIssue() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue300/Issue300.java");
         CompilationUnit cu = JavaParser.parse(pathToSourceFile);
 

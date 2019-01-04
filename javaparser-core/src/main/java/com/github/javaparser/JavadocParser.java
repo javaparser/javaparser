@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.Utils.*;
-import static com.github.javaparser.utils.Utils.nextWord;
 
 /**
  * The class responsible for parsing the content of JavadocComments and producing JavadocDocuments.

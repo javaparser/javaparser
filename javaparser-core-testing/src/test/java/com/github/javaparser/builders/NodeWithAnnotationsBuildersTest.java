@@ -26,15 +26,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class NodeWithAnnotationsBuildersTest {
+class NodeWithAnnotationsBuildersTest {
     private CompilationUnit cu = new CompilationUnit();
     private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass");
 
@@ -43,7 +40,7 @@ public class NodeWithAnnotationsBuildersTest {
     }
 
     @Test
-    public void testAddAnnotation() {
+    void testAddAnnotation() {
         NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals("import com.github.javaparser.builders.NodeWithAnnotationsBuildersTest.hey;", cu.getImport(0).toString().trim());
         assertEquals(1, testClass.getAnnotations().size());
@@ -52,39 +49,39 @@ public class NodeWithAnnotationsBuildersTest {
     }
 
     @Test
-    public void testAddMarkerAnnotation() {
+    void testAddMarkerAnnotation() {
         testClass.addMarkerAnnotation("test");
         assertEquals(1, testClass.getAnnotations().size());
     }
 
     @Test
-    public void testAddSingleMemberAnnotation() {
+    void testAddSingleMemberAnnotation() {
         testClass.addSingleMemberAnnotation("test", "value");
         assertEquals(1, testClass.getAnnotations().size());
         assertEquals("value", testClass.getAnnotation(0).asSingleMemberAnnotationExpr().getMemberValue().toString());
     }
 
     @Test
-    public void testAddSingleMemberAnnotation2() {
+    void testAddSingleMemberAnnotation2() {
         testClass.addSingleMemberAnnotation(hey.class, new NameExpr(new SimpleName("value")));
         assertEquals(1, testClass.getAnnotations().size());
         assertEquals("value", testClass.getAnnotation(0).asSingleMemberAnnotationExpr().getMemberValue().toString());
     }
 
     @Test
-    public void testIsAnnotationPresent() {
+    void testIsAnnotationPresent() {
         testClass.addMarkerAnnotation(hey.class);
         assertTrue(testClass.isAnnotationPresent(hey.class));
     }
 
     @Test
-    public void testGetAnnotationByName() {
+    void testGetAnnotationByName() {
         NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals(annotation, testClass.getAnnotationByName("hey").get());
     }
 
     @Test
-    public void testGetAnnotationByClass() {
+    void testGetAnnotationByClass() {
         NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals(annotation, testClass.getAnnotationByClass(hey.class).get());
     }

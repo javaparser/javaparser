@@ -28,15 +28,15 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ModifierVisitorTest {
+class ModifierVisitorTest {
     @Test
-    public void makeSureParentListsCanBeModified() {
+    void makeSureParentListsCanBeModified() {
         NodeList<StringLiteralExpr> list = new NodeList<>();
         list.add(new StringLiteralExpr("t"));
         list.add(new StringLiteralExpr("a"));
@@ -72,7 +72,7 @@ public class ModifierVisitorTest {
     }
 
     @Test
-    public void binaryExprReturnsLeftExpressionWhenRightSideIsRemoved() {
+    void binaryExprReturnsLeftExpressionWhenRightSideIsRemoved() {
         Expression expression = parseExpression("1+2");
         Visitable result = expression.accept(new ModifierVisitor<Void>() {
             public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
@@ -86,7 +86,7 @@ public class ModifierVisitorTest {
     }
 
     @Test
-    public void binaryExprReturnsRightExpressionWhenLeftSideIsRemoved() {
+    void binaryExprReturnsRightExpressionWhenLeftSideIsRemoved() {
         final Expression expression = parseExpression("1+2");
         final Visitable result = expression.accept(new ModifierVisitor<Void>() {
             public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
@@ -100,7 +100,7 @@ public class ModifierVisitorTest {
     }
 
     @Test
-    public void fieldDeclarationCantSurviveWithoutVariables() {
+    void fieldDeclarationCantSurviveWithoutVariables() {
         final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("int x=1;");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
@@ -113,7 +113,7 @@ public class ModifierVisitorTest {
     }
 
     @Test
-    public void variableDeclarationCantSurviveWithoutVariables() {
+    void variableDeclarationCantSurviveWithoutVariables() {
         final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("void x() {int x=1;}");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {

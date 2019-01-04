@@ -17,14 +17,15 @@
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
+class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
     @Test
-    public void byNameValidOptions() {
+    void byNameValidOptions() {
         assertEquals(ResolvedPrimitiveType.BOOLEAN, ResolvedPrimitiveType.byName("boolean"));
         assertEquals(ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.byName("char"));
         assertEquals(ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.byName("byte"));
@@ -35,8 +36,10 @@ public class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
         assertEquals(ResolvedPrimitiveType.DOUBLE, ResolvedPrimitiveType.byName("double"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void byNameInValidOptions() {
-        ResolvedPrimitiveType.byName("unexisting");
+    @Test
+    void byNameInValidOptions() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            ResolvedPrimitiveType.byName("unexisting");
+    });
     }
 }

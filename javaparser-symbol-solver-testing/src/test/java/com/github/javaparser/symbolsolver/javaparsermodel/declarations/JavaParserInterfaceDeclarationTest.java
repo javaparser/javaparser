@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -37,8 +36,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -46,14 +45,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
+class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         Path srcNewCode = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
         combinedtypeSolver.add(new ReflectionTypeSolver());
@@ -67,73 +68,77 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     ///
 
     @Test
-    public void testIsClass() {
+    void testIsClass() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(false, nodeWithAnnotations.isClass());
     }
 
     @Test
-    public void testIsInterface() {
+    void testIsInterface() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(true, nodeWithAnnotations.isInterface());
     }
 
     @Test
-    public void testIsEnum() {
+    void testIsEnum() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(false, nodeWithAnnotations.isEnum());
     }
 
     @Test
-    public void testIsTypeVariable() {
+    void testIsTypeVariable() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(false, nodeWithAnnotations.isTypeParameter());
     }
 
     @Test
-    public void testIsType() {
+    void testIsType() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(true, nodeWithAnnotations.isType());
     }
 
     @Test
-    public void testAsType() {
+    void testAsType() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(nodeWithAnnotations, nodeWithAnnotations.asType());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsClass() {
-        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+    @Test
+    void testAsClass() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(nodeWithAnnotations, nodeWithAnnotations.asClass());
-    }
+    });
+}
 
     @Test
-    public void testAsInterface() {
+    void testAsInterface() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals(nodeWithAnnotations, nodeWithAnnotations.asInterface());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsEnum() {
-        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+    @Test
+    void testAsEnum() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         nodeWithAnnotations.asEnum();
-    }
+    });
+}
 
     @Test
-    public void testGetPackageName() {
+    void testGetPackageName() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("com.github.javaparser.ast.nodeTypes", nodeWithAnnotations.getPackageName());
     }
 
     @Test
-    public void testGetClassName() {
+    void testGetClassName() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("NodeWithAnnotations", nodeWithAnnotations.getClassName());
     }
 
     @Test
-    public void testGetQualifiedName() {
+    void testGetQualifiedName() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", nodeWithAnnotations.getQualifiedName());
     }
@@ -149,20 +154,20 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
 //    }
 
     @Test
-    public void testGetSuperclassWithTypeParameters() {
+    void testGetSuperclassWithTypeParameters() {
         JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals("com.github.javaparser.ast.body.BodyDeclaration", compilationUnit.getSuperClass().getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
     }
 
     @Test
-    public void testGetAllSuperclassesWithoutTypeParameters() {
+    void testGetAllSuperclassesWithoutTypeParameters() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
-    public void testGetAllSuperclassesWithTypeParameters() {
+    void testGetAllSuperclassesWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(3, constructorDeclaration.getAllSuperClasses().size());
 
@@ -189,7 +194,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
 //    }
 
     @Test
-    public void testGetInterfacesWithParameters() {
+    void testGetInterfacesWithParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(7, constructorDeclaration.getInterfaces().size());
 
@@ -233,7 +238,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
 //    }
 
     @Test
-    public void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -275,7 +280,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetAncestorsWithTypeParameters() {
+    void testGetAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(8, constructorDeclaration.getAncestors().size());
 
@@ -314,13 +319,13 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetAllAncestorsWithoutTypeParameters() {
+    void testGetAllAncestorsWithoutTypeParameters() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
-    public void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(12, constructorDeclaration.getAllAncestors().size());
 
@@ -376,7 +381,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     ///
 
     @Test
-    public void testGetFieldForExistingField() {
+    void testGetFieldForExistingField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         ResolvedFieldDeclaration ResolvedFieldDeclaration;
@@ -385,25 +390,27 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
         ResolvedFieldDeclaration = constructorDeclaration.getField("modifiers");
         assertEquals("modifiers", ResolvedFieldDeclaration.getName());
         assertEquals("java.util.EnumSet", ResolvedFieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(AccessSpecifier.PRIVATE, ResolvedFieldDeclaration.accessSpecifier());
+        assertEquals(PRIVATE, ResolvedFieldDeclaration.accessSpecifier());
         assertEquals(false, ResolvedFieldDeclaration.isStatic());
 
         // inherited field
         ResolvedFieldDeclaration = constructorDeclaration.getField("annotations");
         assertEquals("annotations", ResolvedFieldDeclaration.getName());
         assertEquals("java.util.List", ResolvedFieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(AccessSpecifier.PRIVATE, ResolvedFieldDeclaration.accessSpecifier());
-    }
-
-    @Test(expected = UnsolvedSymbolException.class)
-    public void testGetFieldForUnexistingField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-
-        constructorDeclaration.getField("unexisting");
+        assertEquals(PRIVATE, ResolvedFieldDeclaration.accessSpecifier());
     }
 
     @Test
-    public void testGetAllFields() {
+    void testGetFieldForUnexistingField() {
+        assertThrows(UnsolvedSymbolException.class, () -> {
+            JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+        constructorDeclaration.getField("unexisting");
+    });
+
+}
+
+    @Test
+    void testGetAllFields() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         List<ResolvedFieldDeclaration> allFields = constructorDeclaration.getAllFields();
@@ -461,7 +468,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetAllStaticFields() {
+    void testGetAllStaticFields() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         List<ResolvedFieldDeclaration> allFields = constructorDeclaration.getAllStaticFields();
@@ -480,7 +487,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetAllNonStaticFields() {
+    void testGetAllNonStaticFields() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         List<ResolvedFieldDeclaration> allFields = constructorDeclaration.getAllNonStaticFields();
@@ -529,7 +536,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetDeclaredFields() {
+    void testGetDeclaredFields() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         List<ResolvedFieldDeclaration> allFields = constructorDeclaration.getDeclaredFields();
@@ -561,7 +568,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     ///
 
     @Test
-    public void testGetDeclaredMethods() {
+    void testGetDeclaredMethods() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         Set<ResolvedMethodDeclaration> allMethods = constructorDeclaration.getDeclaredMethods();
@@ -594,7 +601,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testGetAllMethods() {
+    void testGetAllMethods() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         Set<MethodUsage> allMethods = constructorDeclaration.getAllMethods();
@@ -713,7 +720,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     ///
 
     @Test
-    public void testGetConstructors() {
+    void testGetConstructors() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         List<ResolvedConstructorDeclaration> constructors = constructorDeclaration.getConstructors();
@@ -731,7 +738,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
 
     //SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes);
     @Test
-    public void testSolveMethodExisting() {
+    void testSolveMethodExisting() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<ResolvedMethodDeclaration> res;
@@ -751,7 +758,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testSolveMethodNotExisting() {
+    void testSolveMethodNotExisting() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<ResolvedMethodDeclaration> res;
@@ -845,7 +852,7 @@ public class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolution
     // Optional<TypeDeclaration> containerType()
 
     @Test
-    public void issue1528() {
+    void issue1528() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);

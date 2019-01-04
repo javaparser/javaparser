@@ -16,14 +16,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConstructorsResolutionTest extends AbstractResolutionTest {
+class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 	@Test
-	public void solveNormalConstructor() {
+	void solveNormalConstructor() {
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testNormalConstructor");
@@ -42,7 +42,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveInnerClassConstructor() {
+	void solveInnerClassConstructor() {
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructor");
@@ -61,7 +61,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveInnerClassConstructorWithNewScope() {
+	void solveInnerClassConstructorWithNewScope() {
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructorWithNewScope");
@@ -80,7 +80,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveInnerInnerClassConstructor() {
+	void solveInnerInnerClassConstructor() {
 		CompilationUnit cu = parseSample("ConstructorCalls");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerInnerClassConstructor");
@@ -99,13 +99,13 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveEnumConstructor() {
+	void solveEnumConstructor() {
 		// configure symbol solver before parsing
 		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
 		CompilationUnit cu = parseSample("ConstructorCallsEnum");
 		EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
-		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(2);
+		ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(3);
 
 		ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
 
@@ -116,7 +116,7 @@ public class ConstructorsResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	public void solveNonPublicParentConstructorReflection() {
+	void solveNonPublicParentConstructorReflection() {
 		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
 		CompilationUnit cu = parseSample("ReflectionTypeSolverConstructorResolution");

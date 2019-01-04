@@ -37,15 +37,15 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MethodsResolutionTest extends AbstractResolutionTest {
+class MethodsResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void solveMethodAccessThroughSuper() {
+    void solveMethodAccessThroughSuper() {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "methodTest");
@@ -57,7 +57,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithClassExpressionAsParameter() {
+    void solveMethodWithClassExpressionAsParameter() {
         CompilationUnit cu = parseSample("ClassExpression");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExpression");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -68,7 +68,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodInInterfaceParent() {
+    void solveMethodInInterfaceParent() {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
@@ -83,7 +83,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToLong() {
+    void solveMethodWithTypePromotionsToLong() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -117,7 +117,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToInt() {
+    void solveMethodWithTypePromotionsToInt() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -150,7 +150,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToShort() {
+    void solveMethodWithTypePromotionsToShort() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -182,7 +182,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToByte() {
+    void solveMethodWithTypePromotionsToByte() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotions");
 
@@ -213,7 +213,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToLongWithExtraParam() {
+    void solveMethodWithTypePromotionsToLongWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -247,7 +247,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToIntWithExtraParam() {
+    void solveMethodWithTypePromotionsToIntWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -280,7 +280,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToShortWithExtraParam() {
+    void solveMethodWithTypePromotionsToShortWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -312,7 +312,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveMethodWithTypePromotionsToByteWithExtraParam() {
+    void solveMethodWithTypePromotionsToByteWithExtraParam() {
         CompilationUnit cu = parseSample("Issue338");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypePromotionsWithExtraParam");
 
@@ -343,7 +343,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void callOnThisInAnonymousClass() {
+    void callOnThisInAnonymousClass() {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 
@@ -354,7 +354,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void thisInAnonymousClass() {
+    void thisInAnonymousClass() {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 
@@ -366,7 +366,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveMethodCallWithScopeDeclarationInSwitchEntryStmt() {
+    void resolveMethodCallWithScopeDeclarationInSwitchEntryStmt() {
         CompilationUnit cu = parseSample("TryInSwitch");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TryInSwitch");
 
@@ -385,7 +385,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void complexTypeSolving() {
+    void complexTypeSolving() {
         CompilationUnit cu = parseSample("ComplexTypeResolving");
         ClassOrInterfaceDeclaration mainClass = Navigator.demandClass(cu, "Main");
 
@@ -401,7 +401,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveMethodCallOfMethodInMemberClassOfAnotherClass() {
+    void resolveMethodCallOfMethodInMemberClassOfAnotherClass() {
         CompilationUnit cu = parseSample("NestedClasses");
         ClassOrInterfaceDeclaration classA = Navigator.demandClass(cu, "A");
 
@@ -418,7 +418,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveMethodCallOfMethodInMemberInterfaceOfAnotherInterface() {
+    void resolveMethodCallOfMethodInMemberInterfaceOfAnotherInterface() {
         CompilationUnit cu = parseSample("NestedInterfaces");
         ClassOrInterfaceDeclaration classA = Navigator.demandInterface(cu, "A");
 
@@ -435,7 +435,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveMethodCallOfMethodInMemberInterfaceWithIdenticalNameOfAnotherInterface() {
+    void resolveMethodCallOfMethodInMemberInterfaceWithIdenticalNameOfAnotherInterface() {
         CompilationUnit cu = parseSample("NestedInterfacesWithIdenticalNames");
         ClassOrInterfaceDeclaration classA = Navigator.demandInterface(cu, "A");
 
@@ -452,7 +452,7 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveLocalMethodInClassExtendingUnknownClass() {
+    void resolveLocalMethodInClassExtendingUnknownClass() {
         // configure symbol solver before parsing
         JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 

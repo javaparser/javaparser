@@ -1,21 +1,21 @@
 package com.github.javaparser.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
-public class ParserCollectionStrategyTest {
+class ParserCollectionStrategyTest {
 
     private final Path root = CodeGenerationUtils.mavenModuleRoot(ParserCollectionStrategyTest.class).resolve("").getParent();
     private final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
 
     @Test
-    public void getSourceRoots() {
+    void getSourceRoots() {
         assertFalse(projectRoot.getSourceRoots().size() == 0);
         assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java")));
         assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve

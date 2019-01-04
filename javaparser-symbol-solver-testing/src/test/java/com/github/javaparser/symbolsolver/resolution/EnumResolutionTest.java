@@ -26,7 +26,6 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -34,15 +33,15 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EnumResolutionTest extends AbstractResolutionTest {
+class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void switchOnEnum() {
+    void switchOnEnum() {
         CompilationUnit cu = parseSample("SwitchOnEnum");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -55,7 +54,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void enumAndStaticInitializer() {
+    void enumAndStaticInitializer() {
         CompilationUnit cu = parseSample("EnumAndStaticInitializer");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodCallExpr call = Navigator.findMethodCall(clazz, "put").get();
@@ -66,7 +65,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
 
     // Related to issue 1699
     @Test
-    public void resolveEnumConstantAccess() {
+    void resolveEnumConstantAccess() {
         // configure symbol solver before parsing
         JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
