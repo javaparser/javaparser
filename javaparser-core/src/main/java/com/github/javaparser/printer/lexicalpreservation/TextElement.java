@@ -63,6 +63,10 @@ public abstract class TextElement implements TextElementMatcher {
      */
     public abstract boolean isChildOfClass(Class<? extends Node> nodeClass);
 
+    public boolean isChild() {
+        return isChildOfClass(Node.class);
+    }
+
     abstract Optional<Range> getRange();
 
     /**
