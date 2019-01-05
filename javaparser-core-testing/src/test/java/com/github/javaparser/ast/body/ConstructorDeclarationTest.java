@@ -1,13 +1,13 @@
 package com.github.javaparser.ast.body;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConstructorDeclarationTest {
+class ConstructorDeclarationTest {
     @Test
-    public void acceptsSuper() {
+    void acceptsSuper() {
         ConstructorDeclaration cons = new ConstructorDeclaration("Cons");
         cons.createBody().addStatement("super();");
 

@@ -21,17 +21,17 @@ import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ReflectionParameterDeclarationTest {
+class ReflectionParameterDeclarationTest {
 
     @Test
-    public void testGetSignature() {
+    void testGetSignature() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
         ResolvedClassDeclaration object = new ReflectionClassDeclaration(Object.class, typeResolver);
@@ -49,7 +49,7 @@ public class ReflectionParameterDeclarationTest {
     }
 
     @Test
-    public void testGetGenericReturnType() {
+    void testGetGenericReturnType() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
         ResolvedInterfaceDeclaration map = new ReflectionInterfaceDeclaration(Map.class, typeResolver);
@@ -61,7 +61,7 @@ public class ReflectionParameterDeclarationTest {
     }
 
     @Test
-    public void testGetGenericParameters() {
+    void testGetGenericParameters() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
         ResolvedInterfaceDeclaration map = new ReflectionInterfaceDeclaration(Map.class, typeResolver);

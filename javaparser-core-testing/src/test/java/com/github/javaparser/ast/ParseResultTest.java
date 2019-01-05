@@ -25,7 +25,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
@@ -34,11 +34,11 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParseResultTest {
+class ParseResultTest {
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration());
 
     @Test
-    public void whenParsingSucceedsThenWeGetResultsAndNoProblems() {
+    void whenParsingSucceedsThenWeGetResultsAndNoProblems() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{}"));
 
         assertThat(result.getResult().isPresent()).isTrue();
@@ -50,7 +50,7 @@ public class ParseResultTest {
     }
 
     @Test
-    public void whenParsingFailsThenWeGetProblemsAndABadResult() {
+    void whenParsingFailsThenWeGetProblemsAndABadResult() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class {"));
 
         assertThat(result.getResult().isPresent()).isTrue();

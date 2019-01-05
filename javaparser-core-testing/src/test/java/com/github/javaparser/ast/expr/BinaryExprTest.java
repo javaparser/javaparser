@@ -1,12 +1,12 @@
 package com.github.javaparser.ast.expr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BinaryExprTest {
+class BinaryExprTest {
     @Test
-    public void convertOperator() {
+    void convertOperator() {
         assertEquals(AssignExpr.Operator.PLUS, BinaryExpr.Operator.PLUS.toAssignOperator().get());
     }
 }

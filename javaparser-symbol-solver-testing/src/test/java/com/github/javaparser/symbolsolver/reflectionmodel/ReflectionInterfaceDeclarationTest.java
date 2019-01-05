@@ -27,19 +27,19 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
+class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
     @Test
-    public void testGetDeclaredMethods() {
+    void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = list.getDeclaredMethods().stream()
@@ -66,7 +66,7 @@ public class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolution
     }
 
     @Test
-    public void testAllAncestors() {
+    void testAllAncestors() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();

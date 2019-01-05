@@ -26,21 +26,21 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
+class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
     @Test
-    public void testIsClass() {
+    void testIsClass() {
         class Foo<E> {
             E field;
         }
@@ -57,7 +57,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassSimpleImplicit() {
+    void testGetSuperclassSimpleImplicit() {
         class Foo<E> {
             E field;
         }
@@ -71,7 +71,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassSimple() {
+    void testGetSuperclassSimple() {
         class Bar {
         }
         class Foo<E> extends Bar {
@@ -87,7 +87,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassWithGenericSimple() {
+    void testGetSuperclassWithGenericSimple() {
         class Foo<E> {
             E field;
         }
@@ -105,7 +105,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassWithGenericInheritanceSameName() {
+    void testGetSuperclassWithGenericInheritanceSameName() {
         class Foo<E> {
             E field;
         }
@@ -127,7 +127,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassWithGenericInheritanceDifferentName() {
+    void testGetSuperclassWithGenericInheritanceDifferentName() {
         class Foo<E> {
             E field;
         }
@@ -144,7 +144,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetFieldDeclarationTypeVariableInheritance() {
+    void testGetFieldDeclarationTypeVariableInheritance() {
         class Foo<E> {
             E field;
         }
@@ -166,7 +166,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetDeclaredMethods() {
+    void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
@@ -200,7 +200,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetInterfaces() {
+    void testGetInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, List<E>, RandomAccess
@@ -212,7 +212,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllInterfaces() {
+    void testGetAllInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
@@ -226,7 +226,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllSuperclasses() {
+    void testGetAllSuperclasses() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of(Object.class.getCanonicalName(),
@@ -239,7 +239,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetPackageName() {
+    void testGetPackageName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("java.util", arraylist.getPackageName());
@@ -248,7 +248,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetClassName() {
+    void testGetClassName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("ArrayList", arraylist.getClassName());
@@ -257,7 +257,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetQualifiedName() {
+    void testGetQualifiedName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("java.util.ArrayList", arraylist.getQualifiedName());
@@ -275,7 +275,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     // getAllMethods
 
     @Test
-    public void testGetAllFields() {
+    void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
@@ -287,7 +287,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     ///    
 
     @Test
-    public void testAllAncestors() {
+    void testAllAncestors() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
@@ -307,26 +307,26 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetSuperclassWithoutTypeParameters() {
+    void testGetSuperclassWithoutTypeParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().getQualifiedName());
     }
 
     @Test
-    public void testGetSuperclassWithTypeParameters() {
+    void testGetSuperclassWithTypeParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", compilationUnit.getSuperClass().getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.CallableDeclaration.T").get().asReferenceType().getQualifiedName());
     }
 
     @Test
-    public void testGetAllSuperclassesWithoutTypeParameters() {
+    void testGetAllSuperclassesWithoutTypeParameters() {
         ReflectionClassDeclaration cu = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
-    public void testGetAllSuperclassesWithTypeParameters() {
+    void testGetAllSuperclassesWithTypeParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(4, constructorDeclaration.getAllSuperClasses().size());
         assertEquals(true, constructorDeclaration.getAllSuperClasses().stream().anyMatch(s -> s.getQualifiedName().equals("com.github.javaparser.ast.body.CallableDeclaration")));
@@ -352,7 +352,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetInterfacesWithoutParameters() {
+    void testGetInterfacesWithoutParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of(), compilationUnit.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
 
@@ -369,7 +369,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetInterfacesWithParameters() {
+    void testGetInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         System.out.println(constructorDeclaration.getInterfaces().stream().map(t -> t.getQualifiedName()).collect(Collectors.toList()));
         assertEquals(8, constructorDeclaration.getInterfaces().size());
@@ -409,7 +409,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllInterfacesWithoutParameters() {
+    void testGetAllInterfacesWithoutParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable",
                 "com.github.javaparser.HasParentNode", "com.github.javaparser.ast.nodeTypes.NodeWithRange",
@@ -444,7 +444,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
         assertEquals(34, interfaces.size());
@@ -585,7 +585,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAncestorsWithTypeParameters() {
+    void testGetAncestorsWithTypeParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAncestors().size());
 
@@ -630,7 +630,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllAncestorsWithoutTypeParameters() {
+    void testGetAllAncestorsWithoutTypeParameters() {
         ReflectionClassDeclaration cu = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable",
                 "com.github.javaparser.ast.observer.Observable", "com.github.javaparser.ast.Node",
@@ -639,7 +639,7 @@ public class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    public void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         ResolvedReferenceType ancestor;

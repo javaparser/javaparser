@@ -23,14 +23,14 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JavaSymbolSolverTest extends AbstractResolutionTest {
+class JavaSymbolSolverTest extends AbstractResolutionTest {
 
     @Test
-    public void resolveMethodDeclaration() {
+    void resolveMethodDeclaration() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = parseSample("SymbolResolverExample");
@@ -45,7 +45,7 @@ public class JavaSymbolSolverTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveArrayType() {
+    void resolveArrayType() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = parseSample("SymbolResolverExample");

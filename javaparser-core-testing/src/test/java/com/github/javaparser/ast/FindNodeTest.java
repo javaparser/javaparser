@@ -3,17 +3,17 @@ package com.github.javaparser.ast;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parse;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Some tests for finding descendant and ancestor nodes.
  */
-public class FindNodeTest {
+class FindNodeTest {
     @Test
-    public void testFindFirst() {
+    void testFindFirst() {
         CompilationUnit cu = parse(
                 "class Foo {\n" +
                         "    void foo() {\n" +
@@ -44,7 +44,7 @@ public class FindNodeTest {
     }
 
     @Test
-    public void testFindAncestralFinallyBlock() {
+    void testFindAncestralFinallyBlock() {
         CompilationUnit cu = parse(
                 "class Foo {\n" +
                         "    void foo() {\n" +

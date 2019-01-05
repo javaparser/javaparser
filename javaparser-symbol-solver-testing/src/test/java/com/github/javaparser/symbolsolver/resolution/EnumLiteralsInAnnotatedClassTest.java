@@ -10,20 +10,20 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EnumLiteralsInAnnotatedClassTest {
+class EnumLiteralsInAnnotatedClassTest {
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedSamePackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedSamePackage() throws IOException {
         File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
@@ -46,7 +46,7 @@ public class EnumLiteralsInAnnotatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedSamePackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfClassQualifiedSamePackage() throws IOException {
         File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "AClass.java");
@@ -69,7 +69,7 @@ public class EnumLiteralsInAnnotatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedDifferentPackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfClassUnqualifiedDifferentPackage() throws IOException {
         File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");
@@ -92,7 +92,7 @@ public class EnumLiteralsInAnnotatedClassTest {
     }
 
     @Test
-    public void resolveFieldOfEnumAsInternalClassOfClassQualifiedDifferentPackage() throws IOException {
+    void resolveFieldOfEnumAsInternalClassOfClassQualifiedDifferentPackage() throws IOException {
         File src = new File("src/test/resources/enumLiteralsInAnnotatedClass");
         File aClass = new File(src.getPath() + File.separator + "foo" + File.separator + "bar"
                 + File.separator + "differentpackage" + File.separator + "AClass2.java");

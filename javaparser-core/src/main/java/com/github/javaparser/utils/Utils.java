@@ -228,6 +228,20 @@ public class Utils {
         return false;
     }
 
+    public static boolean valueIsNullOrEmptyStringOrOptional(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof Optional) {
+            if (((Optional) value).isPresent()) {
+                value = ((Optional) value).get();
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return a set of the items.
      */

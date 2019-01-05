@@ -3,45 +3,45 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CharLiteralExprTest {
+class CharLiteralExprTest {
     @Test
-    public void parseSimpleChar() {
+    void parseSimpleChar() {
         CharLiteralExpr c = parseExpression("'a'");
         assertEquals("a", c.getValue());
     }
 
     @Test
-    public void parseSimpleEscape() {
+    void parseSimpleEscape() {
         CharLiteralExpr c = parseExpression("'\\t'");
         assertEquals("\\t", c.getValue());
     }
 
     @Test
-    public void parseUnicode() {
+    void parseUnicode() {
         CharLiteralExpr c = parseExpression("'Ω'");
         assertEquals("Ω", c.getValue());
     }
 
     @Test
-    public void parseNumericEscape() {
+    void parseNumericEscape() {
         CharLiteralExpr c = parseExpression("'\\177'");
         assertEquals("\\177", c.getValue());
     }
 
     @Test
-    public void parseUnicodeEscape() {
+    void parseUnicodeEscape() {
         CharLiteralExpr c = parseExpression("'\\u03a9'");
         assertEquals("\\u03a9", c.getValue());
     }
 
     @Test
-    public void parseUnicodeEscapedEscape() {
+    void parseUnicodeEscapedEscape() {
         JavaParser javaParser = new JavaParser(new ParserConfiguration()
                 .setPreprocessUnicodeEscapes(true));
 

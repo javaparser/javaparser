@@ -19,17 +19,18 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 enum MyModifier {
 
 }
 
-public class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
+class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver(false);
 
@@ -40,79 +41,83 @@ public class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest 
     ///
 
     @Test
-    public void testIsClass() {
+    void testIsClass() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(false, modifier.isClass());
     }
 
     @Test
-    public void testIsInterface() {
+    void testIsInterface() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(false, modifier.isInterface());
     }
 
     @Test
-    public void testIsEnum() {
+    void testIsEnum() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(true, modifier.isEnum());
     }
 
     @Test
-    public void testIsTypeVariable() {
+    void testIsTypeVariable() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(false, modifier.isTypeParameter());
     }
 
     @Test
-    public void testIsType() {
+    void testIsType() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(true, modifier.isType());
     }
 
     @Test
-    public void testAsType() {
+    void testAsType() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(modifier, modifier.asType());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsClass() {
-        ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
+    @Test
+    void testAsClass() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         modifier.asClass();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testAsInterface() {
-        ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
-        modifier.asInterface();
-    }
+    });
+}
 
     @Test
-    public void testAsEnum() {
+    void testAsInterface() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
+        modifier.asInterface();
+    });
+}
+
+    @Test
+    void testAsEnum() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(modifier, modifier.asEnum());
     }
 
     @Test
-    public void testGetPackageName() {
+    void testGetPackageName() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals("com.github.javaparser.symbolsolver.reflectionmodel", modifier.getPackageName());
     }
 
     @Test
-    public void testGetClassName() {
+    void testGetClassName() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals("MyModifier", modifier.getClassName());
     }
 
     @Test
-    public void testGetQualifiedName() {
+    void testGetQualifiedName() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier", modifier.getQualifiedName());
     }
 
     @Test
-    public void testInternalTypesEmpty() {
+    void testInternalTypesEmpty() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
         assertEquals(Collections.emptySet(), modifier.internalTypes());
     }
