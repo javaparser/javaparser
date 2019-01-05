@@ -45,6 +45,7 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -207,6 +208,29 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("void A(){}", it);
+    }
+
+    @Test
+    void wrapMethodBodyIntoAssertThrows() {
+        MethodDeclaration it = consider("void m(){\n" +
+                "    List<Byte> bytes=new ArrayList<>();\n" +
+                "    bytes.add((byte)'a');\n" +
+                "}");
+
+        it.getBody().ifPresent(body -> {
+            Statement statement = JavaParser.parseStatement("assertThrows(IllegalArgumentException.class, ()->"
+                    + body.toString()
+                    + ");\n");
+            NodeList<Statement> statements = new NodeList<>();
+            statements.add(statement);
+            body.setStatements(statements);
+        });
+        assertTransformedToString("void m(){\n" +
+                "                assertThrows(IllegalArgumentException.class, () -> {\n" +
+                "                    List<Byte> bytes = new ArrayList<>();\n" +
+                "                    bytes.add((byte) 'a');\n" +
+                "                });\n" +
+                "    }", it);
     }
 
     @Test
