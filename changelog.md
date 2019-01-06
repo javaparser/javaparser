@@ -1,3 +1,7 @@
+Version 3.9.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/119?closed=1)
+
 Version 3.9.0
 ------------------
 * MAJOR BREAKAGE: modifiers (like public, static, transient) used to be a special case:
