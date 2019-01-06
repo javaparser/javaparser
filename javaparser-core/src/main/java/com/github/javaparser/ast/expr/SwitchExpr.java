@@ -186,25 +186,30 @@ public final class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isSwitchExpr() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public SwitchExpr asSwitchExpr() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SwitchExpr> toSwitchExpr() {
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchExpr(Consumer<SwitchExpr> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SwitchExprMetaModel getMetaModel() {
         return JavaParserMetaModel.switchExprMetaModel;
     }
