@@ -696,6 +696,19 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.RBRACE)
         ));
 
+        concreteSyntaxModelByClass.put(SwitchExpr.class, sequence(
+                comment(),
+                token(GeneratedJavaParserConstants.SWITCH),
+                token(GeneratedJavaParserConstants.LPAREN),
+                child(ObservableProperty.SELECTOR),
+                token(GeneratedJavaParserConstants.RPAREN),
+                space(),
+                token(GeneratedJavaParserConstants.LBRACE),
+                newline(),
+                list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                token(GeneratedJavaParserConstants.RBRACE)
+        ));
+
         concreteSyntaxModelByClass.put(SynchronizedStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.SYNCHRONIZED),

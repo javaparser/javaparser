@@ -2024,4 +2024,26 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         return result;
     }
+
+    @Override
+    public List<R> visit(final SwitchExpr n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getEntries().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getSelector().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
 }

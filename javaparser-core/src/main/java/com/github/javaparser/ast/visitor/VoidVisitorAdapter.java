@@ -693,4 +693,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final Modifier n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final SwitchExpr n, final A arg) {
+        n.getEntries().forEach(p -> p.accept(this, arg));
+        n.getSelector().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }
