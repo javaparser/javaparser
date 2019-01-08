@@ -639,7 +639,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void localVariablesExposedToChildWithinEnhancedForeachStmt() {
         ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
-                ParseStart.STATEMENT).asForeachStmt();
+                ParseStart.STATEMENT).asForEachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");
