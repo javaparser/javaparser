@@ -181,6 +181,7 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
         return super.replace(node, replacementNode);
     }
 
+    /** @deprecated use {@link isForEachStmt}. */
     @Deprecated
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -188,6 +189,7 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
         return true;
     }
 
+    /** @deprecated use {@link asForEachStmt}. */
     @Deprecated
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -195,12 +197,14 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
         return this;
     }
 
+    /** @deprecated use {@link ifForEachStmt}. */
     @Deprecated
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForeachStmt(Consumer<ForEachStmt> action) {
         action.accept(this);
     }
 
+    /** @deprecated use {@link toForEachStmt}. */
     @Deprecated
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

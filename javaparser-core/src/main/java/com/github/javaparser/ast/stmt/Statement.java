@@ -170,12 +170,14 @@ public abstract class Statement extends Node {
         throw new IllegalStateException(f("%s is not an ForStmt", this));
     }
 
+    /** @deprecated use {@link isForEachStmt}. */
     @Deprecated
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isForeachStmt() {
         return false;
     }
 
+    /** @deprecated use {@link asForEachStmt}. */
     @Deprecated
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ForEachStmt asForeachStmt() {
@@ -328,6 +330,7 @@ public abstract class Statement extends Node {
     public void ifForStmt(Consumer<ForStmt> action) {
     }
 
+    /** @deprecated use {@link ifForEachStmt}. */
     @Deprecated
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForeachStmt(Consumer<ForEachStmt> action) {
@@ -422,6 +425,7 @@ public abstract class Statement extends Node {
         return Optional.empty();
     }
 
+    /** @deprecated use {@link toForEachStmt}. */
     @Deprecated
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ForEachStmt> toForeachStmt() {
