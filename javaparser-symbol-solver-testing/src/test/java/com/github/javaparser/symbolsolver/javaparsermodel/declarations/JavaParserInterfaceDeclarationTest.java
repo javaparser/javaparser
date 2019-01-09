@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -164,6 +165,17 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllSuperclassesWithoutTypeParameters() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    void getGetAncestorsWithTypeParameters() {
+        JavaParserInterfaceDeclaration validator = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.validator.Validator");
+        List<ResolvedReferenceType> ancestors = validator.getAncestors();
+        assertEquals(1, ancestors.size());
+        assertEquals("com.github.javaparser.ast.validator.TypedValidator", ancestors.get(0).getQualifiedName());
+        List<ResolvedType> types = ancestors.get(0).typeParametersMap().getTypes();
+        assertEquals(1, types.size());
+        assertEquals("com.github.javaparser.ast.Node", types.get(0).asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -864,4 +876,5 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
     }
+
 }
