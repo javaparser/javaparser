@@ -355,7 +355,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         SymbolReference<? extends ResolvedTypeDeclaration> ref = null;
         String typeName = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
-            typeName = classOrInterfaceType.getScope().get().toString() + "." + typeName;
+            typeName = classOrInterfaceType.getScope().get().asString() + "." + typeName;
         }
 
         if (typeName.indexOf('.') > -1) {
