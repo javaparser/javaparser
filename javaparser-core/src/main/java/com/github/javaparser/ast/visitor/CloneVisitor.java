@@ -22,11 +22,15 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.Optional;
 
 /**
@@ -709,9 +713,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final BreakStmt n, final Object arg) {
-        SimpleName label = cloneNode(n.getLabel(), arg);
+        Expression value = cloneNode(n.getValue(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
+        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), value);
         r.setComment(comment);
         return r;
     }
