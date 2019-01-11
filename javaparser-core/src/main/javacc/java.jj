@@ -1763,7 +1763,7 @@ Expression PrimaryExpression():
 	Expression ret;
 }
 {
-  ret = PrimaryPrefix() ( LOOKAHEAD(2) ret = PrimarySuffix(ret) )*
+  ret = PrimaryExpression() ( LOOKAHEAD(2) ret = PrimarySuffix(ret) )*
   { return ret; }
 }
 
@@ -1772,11 +1772,11 @@ Expression PrimaryExpressionWithoutSuperSuffix():
 	Expression ret;
 }
 {
-  ret = PrimaryPrefix() ( LOOKAHEAD( PrimarySuffixWithoutSuper(null) ) ret = PrimarySuffixWithoutSuper(ret) )*
+  ret = PrimaryExpression() ( LOOKAHEAD( PrimarySuffixWithoutSuper(null) ) ret = PrimarySuffixWithoutSuper(ret) )*
   { return ret; }
 }
 
-Expression PrimaryPrefix():
+Expression PrimaryExpression():
 {
 	Expression ret = null;
 	SimpleName name;
