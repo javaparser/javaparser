@@ -63,7 +63,6 @@ class SwitchExprTest {
                 "};");
     }
 
-    @Disabled("to be implemented")
     @Test
     void jep325Example6() {
         JavaParser.parseStatement("int result = switch (s) {\n" +

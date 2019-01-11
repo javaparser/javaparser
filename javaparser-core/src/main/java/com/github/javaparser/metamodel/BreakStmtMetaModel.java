@@ -8,5 +8,5 @@ public class BreakStmtMetaModel extends StatementMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.BreakStmt.class, "BreakStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel labelPropertyMetaModel;
+    public PropertyMetaModel valuePropertyMetaModel;
 }

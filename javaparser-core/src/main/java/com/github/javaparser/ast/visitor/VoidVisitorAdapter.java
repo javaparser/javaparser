@@ -117,7 +117,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final BreakStmt n, final A arg) {
-        n.getLabel().ifPresent(l -> l.accept(this, arg));
+        n.getValue().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
