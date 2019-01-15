@@ -20,23 +20,24 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.metamodel.SwitchEntryStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.metamodel.SwitchEntryMetaModel;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * One case in a switch statement.
@@ -50,27 +51,28 @@ import com.github.javaparser.ast.Generated;
  * System.out.println(0);
  * }
  * </pre>
- * This contains three SwitchEntryStmts.
+ * This contains three SwitchEntrys.
  * <br/>The first one has label 1 and no statements.
  * <br/>The second has label 2 and two statements (the println and the break).
  * <br/>The third, the default, has no label and one statement.
  *
  * @author Julio Vilmar Gesser
  * @see SwitchStmt
+ * @see com.github.javaparser.ast.expr.SwitchExpr
  */
-public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
+public final class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
     @OptionalProperty
     private Expression label;
 
     private NodeList<Statement> statements;
 
-    public SwitchEntryStmt() {
+    public SwitchEntry() {
         this(null, null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchEntryStmt(final Expression label, final NodeList<Statement> statements) {
+    public SwitchEntry(final Expression label, final NodeList<Statement> statements) {
         this(null, label, statements);
     }
 
@@ -78,7 +80,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntryStmt(TokenRange tokenRange, Expression label, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, Expression label, NodeList<Statement> statements) {
         super(tokenRange);
         setLabel(label);
         setStatements(statements);
@@ -111,12 +113,12 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
      * Sets the label
      *
      * @param label the label, can be null
-     * @return this, the SwitchEntryStmt
+     * @return this, the SwitchEntry
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntryStmt setLabel(final Expression label) {
+    public SwitchEntry setLabel(final Expression label) {
         if (label == this.label) {
-            return (SwitchEntryStmt) this;
+            return (SwitchEntry) this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
         if (this.label != null)
@@ -127,10 +129,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
+    public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
-            return (SwitchEntryStmt) this;
+            return (SwitchEntry) this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
         if (this.statements != null)
@@ -161,20 +163,20 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public SwitchEntryStmt removeLabel() {
+    public SwitchEntry removeLabel() {
         return setLabel((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SwitchEntryStmt clone() {
-        return (SwitchEntryStmt) accept(new CloneVisitor(), null);
+    public SwitchEntry clone() {
+        return (SwitchEntry) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SwitchEntryStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.switchEntryStmtMetaModel;
+    public SwitchEntryMetaModel getMetaModel() {
+        return JavaParserMetaModel.switchEntryMetaModel;
     }
 
     @Override
@@ -195,28 +197,5 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             }
         }
         return super.replace(node, replacementNode);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isSwitchEntryStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public SwitchEntryStmt asSwitchEntryStmt() {
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
-        action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<SwitchEntryStmt> toSwitchEntryStmt() {
-        return Optional.of(this);
     }
 }

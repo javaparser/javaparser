@@ -17,7 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -36,9 +36,9 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.requirePar
 /**
  * @author Federico Tomassetti
  */
-public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStmt> {
+public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
-    public SwitchEntryContext(SwitchEntryStmt wrappedNode, TypeSolver typeSolver) {
+    public SwitchEntryContext(SwitchEntry wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
@@ -61,7 +61,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
         }
 
         // look for declaration in this and previous switch entry statements
-        for (SwitchEntryStmt seStmt : switchStmt.getEntries()) {
+        for (SwitchEntry seStmt : switchStmt.getEntries()) {
             for (Statement stmt : seStmt.getStatements()) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);

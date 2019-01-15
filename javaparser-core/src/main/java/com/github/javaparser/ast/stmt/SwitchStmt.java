@@ -44,7 +44,7 @@ import com.github.javaparser.ast.Generated;
  * and the contents of the { ... } are the entries.
  *
  * @author Julio Vilmar Gesser
- * @see SwitchEntryStmt
+ * @see SwitchEntry
  * @see com.github.javaparser.ast.expr.SwitchExpr
  * @see SwitchNode
  */
@@ -52,14 +52,14 @@ public final class SwitchStmt extends Statement implements SwitchNode {
 
     private Expression selector;
 
-    private NodeList<SwitchEntryStmt> entries;
+    private NodeList<SwitchEntry> entries;
 
     public SwitchStmt() {
         this(null, new NameExpr(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchStmt(final Expression selector, final NodeList<SwitchEntryStmt> entries) {
+    public SwitchStmt(final Expression selector, final NodeList<SwitchEntry> entries) {
         this(null, selector, entries);
     }
 
@@ -67,7 +67,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchStmt(TokenRange tokenRange, Expression selector, NodeList<SwitchEntryStmt> entries) {
+    public SwitchStmt(TokenRange tokenRange, Expression selector, NodeList<SwitchEntry> entries) {
         super(tokenRange);
         setSelector(selector);
         setEntries(entries);
@@ -87,11 +87,11 @@ public final class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SwitchEntryStmt> getEntries() {
+    public NodeList<SwitchEntry> getEntries() {
         return entries;
     }
 
-    public SwitchEntryStmt getEntry(int i) {
+    public SwitchEntry getEntry(int i) {
         return getEntries().get(i);
     }
 
@@ -101,7 +101,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
+    public SwitchStmt setEntries(final NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return (SwitchStmt) this;
@@ -118,7 +118,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * @deprecated use a method on getEntries instead
      */
     @Deprecated
-    public SwitchStmt setEntry(int i, SwitchEntryStmt entry) {
+    public SwitchStmt setEntry(int i, SwitchEntry entry) {
         getEntries().set(i, entry);
         return this;
     }
@@ -127,7 +127,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
      * @deprecated use a method on getEntries instead
      */
     @Deprecated
-    public SwitchStmt addEntry(SwitchEntryStmt entry) {
+    public SwitchStmt addEntry(SwitchEntry entry) {
         getEntries().add(entry);
         return this;
     }
@@ -179,7 +179,7 @@ public final class SwitchStmt extends Statement implements SwitchNode {
             return false;
         for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i) == node) {
-                entries.set(i, (SwitchEntryStmt) replacementNode);
+                entries.set(i, (SwitchEntry) replacementNode);
                 return true;
             }
         }

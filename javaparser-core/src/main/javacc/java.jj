@@ -2217,8 +2217,8 @@ ExpressionStmt StatementExpression():
 SwitchStmt SwitchStatement():
 {
 	Expression selector;
-	SwitchEntryStmt entry;
-	NodeList<SwitchEntryStmt> entries = emptyList();
+	SwitchEntry entry;
+	NodeList<SwitchEntry> entries = emptyList();
 	JavaToken begin;
 }
 {
@@ -2232,8 +2232,8 @@ SwitchStmt SwitchStatement():
 SwitchExpr SwitchExpression():
 {
 	Expression selector;
-	SwitchEntryStmt entry;
-	NodeList<SwitchEntryStmt> entries = emptyList();
+	SwitchEntry entry;
+	NodeList<SwitchEntry> entries = emptyList();
 	JavaToken begin;
 }
 {
@@ -2244,21 +2244,46 @@ SwitchExpr SwitchExpression():
   { return new SwitchExpr(range(begin, token()), selector, entries); }
 }
 
-SwitchEntryStmt SwitchEntry():
+SwitchEntry SwitchEntry():
 {
 	Expression label = null;
-	NodeList<Statement> stmts;
+	NodeList<Statement> stmts = new NodeList();
 	JavaToken begin;
+	SwitchEntry ret;
+	Expression expression = null;
+	Statement stmt = null;
 }
 {
-  (
-	  "case" {begin=token();} label = Expression()
+	(
+		"case" {begin=token();} label = ConditionalExpression()
 	|
-	  "default" {begin=token();}
-  )
-  ":" stmts = Statements()
-
-  { return new SwitchEntryStmt(range(begin, token()),label, stmts); }
+		"default" {begin=token();}
+	)
+    (
+        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), label, stmts); }
+    |
+        "->"
+        (
+            expression = Expression() ";" {
+                TokenRange r=range(begin, token());
+				stmts.add(new ExpressionStmt(r, expression));
+				ret = new SwitchEntry(r, label, stmts);
+            }
+		|
+			stmt = Block() {
+				TokenRange r=range(begin, token());
+				stmts.add(stmt);
+				ret = new SwitchEntry(r, label, stmts);
+			}
+		|
+			stmt = ThrowStatement() ";" {
+				TokenRange r=range(begin, token());
+				stmts.add(stmt);
+				ret = new SwitchEntry(r, label, stmts);
+			}
+		)
+    )
+	{ return ret; }
 }
 
 IfStmt IfStatement():

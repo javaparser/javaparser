@@ -12,7 +12,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
@@ -79,7 +79,7 @@ public class Java1_0Validator extends Validators {
             ImportDeclaration::isStatic,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
-    protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntryStmt.class,
+    protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntry.class,
             n -> n.getLabel().map(l -> l instanceof StringLiteralExpr).orElse(false),
             (n, reporter) -> reporter.report(n.getLabel().get(), "Strings in switch statements are not supported.")
     );

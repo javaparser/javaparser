@@ -972,8 +972,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final SwitchEntryStmt n, final Visitable arg) {
-        final SwitchEntryStmt n2 = (SwitchEntryStmt) arg;
+    public Boolean visit(final SwitchEntry n, final Visitable arg) {
+        final SwitchEntry n2 = (SwitchEntry) arg;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
             return false;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
