@@ -28,18 +28,14 @@ import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
-
 import java.util.function.Consumer;
 import java.util.Optional;
-
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -54,7 +50,7 @@ import com.github.javaparser.ast.Generated;
  *
  * <h2>Java 5-6</h2>
  * Switching can now also be done on enum constants.
- * 
+ *
  * <h2>Java 7-11</h2>
  * Switching can now also be done on strings.
  *

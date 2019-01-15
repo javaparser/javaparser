@@ -68,6 +68,7 @@ import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -2260,26 +2261,26 @@ SwitchEntry SwitchEntry():
 		"default" {begin=token();}
 	)
     (
-        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), label, stmts); }
+        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), label, STATEMENT_GROUP, stmts); }
     |
         "->"
         (
             expression = Expression() ";" {
                 TokenRange r=range(begin, token());
 				stmts.add(new ExpressionStmt(r, expression));
-				ret = new SwitchEntry(r, label, stmts);
+				ret = new SwitchEntry(r, label, EXPRESSION, stmts);
             }
 		|
 			stmt = Block() {
 				TokenRange r=range(begin, token());
 				stmts.add(stmt);
-				ret = new SwitchEntry(r, label, stmts);
+				ret = new SwitchEntry(r, label, BLOCK, stmts);
 			}
 		|
 			stmt = ThrowStatement() ";" {
 				TokenRange r=range(begin, token());
 				stmts.add(stmt);
-				ret = new SwitchEntry(r, label, stmts);
+				ret = new SwitchEntry(r, label, THROWS_STATEMENT, stmts);
 			}
 		)
     )

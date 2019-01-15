@@ -11,4 +11,6 @@ public class SwitchEntryMetaModel extends NodeMetaModel {
     public PropertyMetaModel labelPropertyMetaModel;
 
     public PropertyMetaModel statementsPropertyMetaModel;
+
+    public PropertyMetaModel typePropertyMetaModel;
 }

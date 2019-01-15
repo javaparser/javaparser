@@ -34,9 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -62,27 +60,35 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
+    public enum Type {
+
+        STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
+    }
+
     @OptionalProperty
     private Expression label;
 
     private NodeList<Statement> statements;
+
+    private Type type;
 
     public SwitchEntry() {
         this(null, null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(final Expression label, final NodeList<Statement> statements) {
-        this(null, label, statements);
+    public SwitchEntry(final Expression label, final Type type, final NodeList<Statement> statements) {
+        this(null, label, type, statements);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, Expression label, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, Expression label, Type type, NodeList<Statement> statements) {
         super(tokenRange);
         setLabel(label);
+        setType(type);
         setStatements(statements);
         customInitialization();
     }
@@ -197,5 +203,21 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SwitchEntry setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return (SwitchEntry) this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.type = type;
+        return this;
     }
 }

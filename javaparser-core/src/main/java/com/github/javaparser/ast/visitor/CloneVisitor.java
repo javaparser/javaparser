@@ -30,7 +30,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 /**
@@ -706,7 +705,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Expression label = cloneNode(n.getLabel(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), label, statements);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), label, n.getType(), statements);
         r.setComment(comment);
         return r;
     }

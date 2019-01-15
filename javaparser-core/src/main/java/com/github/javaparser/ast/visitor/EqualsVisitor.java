@@ -978,6 +978,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
             return false;
+        if (!objEquals(n.getType(), n2.getType()))
+            return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;
