@@ -171,16 +171,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isForeachStmt() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ForEachStmt asForeachStmt() {
-        throw new IllegalStateException(f("%s is not an ForEachStmt", this));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isIfStmt() {
         return false;
     }
@@ -327,10 +317,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifForeachStmt(Consumer<ForEachStmt> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIfStmt(Consumer<IfStmt> action) {
     }
 
@@ -416,11 +402,6 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ForStmt> toForStmt() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ForEachStmt> toForeachStmt() {
         return Optional.empty();
     }
 
