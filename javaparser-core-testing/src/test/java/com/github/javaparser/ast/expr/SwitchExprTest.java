@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class SwitchExprTest {
@@ -58,7 +57,6 @@ class SwitchExprTest {
                 "};");
     }
 
-    @Disabled
     @Test
     void jep325Example6() {
         JavaParser.parseStatement("int result = switch (s) {\n" +

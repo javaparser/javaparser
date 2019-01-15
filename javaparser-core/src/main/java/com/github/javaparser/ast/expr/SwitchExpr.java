@@ -32,16 +32,23 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.SwitchExprMetaModel;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.SwitchExprMetaModel;
 
 /**
- * A switch expression.
- * <br/>In <code>switch(a) { ... }</code> the selector is "a",
- * and the contents of the { ... } are the entries.
+ * <h1>The switch expression</h1>
+ * <h2>Java 1.0-11</h2>
+ * Not available.
+ * <h2>Java 12-</h2>
+ * Like {@link com.github.javaparser.ast.stmt.SwitchStmt},
+ * but can also be used as an expression.
+ * <br/>
+ * <br/><code>int a = switch(x) { case 5,6 -> 20; case 9 -> 30; default -> 40; };</code>
+ * <br/><code>int a = switch(x) { case 5,6: break 20; default: break 5+5; };</code>
  *
  * @author Julio Vilmar Gesser
  * @see SwitchEntry

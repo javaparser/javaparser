@@ -2394,12 +2394,12 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	SimpleName label = null;
+	Expression value = null;
 	JavaToken begin;
 }
 {
-  "break" {begin=token();} [ label = SimpleName() ] ";"
-  { return new BreakStmt(range(begin, token()), label); }
+  "break" {begin=token();} [ value = Expression() ] ";"
+  { return new BreakStmt(range(begin, token()), value); }
 }
 
 ContinueStmt ContinueStatement():

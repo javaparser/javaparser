@@ -1,7 +1,7 @@
 sudo: false
 language: java
-install: mvn install -DskipTests=true
-script: mvn test -P AlsoSlowTests
+install: mvn -B install -DskipTests=true
+script: mvn -B test -P AlsoSlowTests
 jdk:
   - openjdk11
 notifications:
@@ -11,5 +11,5 @@ notifications:
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
 after_success:
-  - mvn test jacoco:report coveralls:report
+  - mvn -B test jacoco:report coveralls:report
 # http://lint.travis-ci.org/ validator
