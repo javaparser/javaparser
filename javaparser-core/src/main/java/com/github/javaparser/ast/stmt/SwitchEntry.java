@@ -34,25 +34,40 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
+
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * One case in a switch statement.
- * <br/><pre>
+ * <h1>One case in a switch statement</h1>
+ * <h2>Java 1.0-11</h2>
+ * <pre>
  * switch (i) {
- * case 1:
- * case 2:
- * System.out.println(444);
- * break;
- * default:
- * System.out.println(0);
+ *   case 1:
+ *   case 2:
+ *     System.out.println(444);
+ *     break;
+ *   default:
+ *     System.out.println(0);
  * }
  * </pre>
  * This contains three SwitchEntrys.
  * <br/>The first one has label 1 and no statements.
  * <br/>The second has label 2 and two statements (the println and the break).
  * <br/>The third, the default, has no label and one statement.
+ * <br/>All of them are of type STATEMENT_GROUP.
+ * <h2>Java 12-</h2>
+ * <pre>
+ *     case 1 -> 15*15;
+ *     case 2 -> { a++; b++; }
+ *     case 3 -> throw new Exception();
+ * </pre>
+ * These are three new variants.
+ * <br/>The first one is of type EXPRESSION and stores its {@link Expression} in an {@link ExpressionStmt}
+ * which is stored as the first and only statement in statements.
+ * <br/>The second one is of type BLOCK and stores its {@link BlockStmt} as the first and only statement in statements.
+ * <br/>The third one is of type THROWS_STATEMENT and stores its {@link ThrowStmt} as the first and only statement in statements.
  *
  * @author Julio Vilmar Gesser
  * @see SwitchStmt
