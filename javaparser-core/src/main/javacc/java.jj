@@ -2277,7 +2277,7 @@ SwitchEntry SwitchEntry():
 				ret = new SwitchEntry(r, label, BLOCK, stmts);
 			}
 		|
-			stmt = ThrowStatement() ";" {
+			stmt = ThrowStatement() {
 				TokenRange r=range(begin, token());
 				stmts.add(stmt);
 				ret = new SwitchEntry(r, label, THROWS_STATEMENT, stmts);

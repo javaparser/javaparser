@@ -211,16 +211,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isSwitchEntryStmt() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public SwitchEntry asSwitchEntryStmt() {
-        throw new IllegalStateException(f("%s is not an SwitchEntry", this));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isSwitchStmt() {
         return false;
     }
@@ -333,10 +323,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifSwitchEntryStmt(Consumer<SwitchEntry> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
     }
 
@@ -422,11 +408,6 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ReturnStmt> toReturnStmt() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<SwitchEntry> toSwitchEntryStmt() {
         return Optional.empty();
     }
 
