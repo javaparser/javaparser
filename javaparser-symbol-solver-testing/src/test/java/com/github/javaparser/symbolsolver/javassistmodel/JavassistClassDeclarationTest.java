@@ -16,7 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
@@ -33,6 +35,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -169,6 +172,43 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertTrue(fields.containsKey("genericField"));
         assertTrue(fields.containsKey("primitiveField"));
         assertTrue(fields.containsKey("objectField"));
+    }
+
+    @Test
+    void testGetDeclaredMethods() {
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.Position");
+        Set<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
+        assertEquals(12, methodsSet.size());
+
+        Map<String, MethodUsage> methods = new HashMap<>();
+        for (ResolvedMethodDeclaration method : methodsSet) {
+            methods.put(method.getName(), new MethodUsage(method));
+        }
+
+        assertTrue(methods.containsKey("pos"));
+        assertEquals(2, methods.get("pos").getNoParams());
+        assertTrue(methods.containsKey("withColumn"));
+        assertEquals(1, methods.get("withColumn").getNoParams());
+        assertTrue(methods.containsKey("withLine"));
+        assertEquals(1, methods.get("withLine").getNoParams());
+        assertTrue(methods.containsKey("valid"));
+        assertEquals(0, methods.get("valid").getNoParams());
+        assertTrue(methods.containsKey("invalid"));
+        assertEquals(0, methods.get("invalid").getNoParams());
+        assertTrue(methods.containsKey("orIfInvalid"));
+        assertEquals(1, methods.get("orIfInvalid").getNoParams());
+        assertTrue(methods.containsKey("isAfter"));
+        assertEquals(1, methods.get("isAfter").getNoParams());
+        assertTrue(methods.containsKey("isBefore"));
+        assertEquals(1, methods.get("isBefore").getNoParams());
+        assertTrue(methods.containsKey("compareTo"));
+        assertEquals(1, methods.get("compareTo").getNoParams());
+        assertTrue(methods.containsKey("equals"));
+        assertEquals(1, methods.get("equals").getNoParams());
+        assertTrue(methods.containsKey("hashCode"));
+        assertEquals(0, methods.get("hashCode").getNoParams());
+        assertTrue(methods.containsKey("toString"));
+        assertEquals(0, methods.get("toString").getNoParams());
     }
 
     ///
