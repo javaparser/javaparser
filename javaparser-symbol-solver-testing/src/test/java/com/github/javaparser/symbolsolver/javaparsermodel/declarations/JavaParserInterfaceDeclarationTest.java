@@ -882,5 +882,4 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
     }
-
 }
