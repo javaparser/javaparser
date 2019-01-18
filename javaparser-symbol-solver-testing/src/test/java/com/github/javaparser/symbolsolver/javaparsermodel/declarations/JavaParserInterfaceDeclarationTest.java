@@ -169,13 +169,19 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
     @Test
     void getGetAncestorsWithTypeParameters() {
-        JavaParserInterfaceDeclaration validator = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.validator.Validator");
+        Path src = adaptPath("src/test/resources/recursion-issue");
+        CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
+        combinedtypeSolver.add(new ReflectionTypeSolver());
+        combinedtypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        JavaParserInterfaceDeclaration validator = (JavaParserInterfaceDeclaration) combinedtypeSolver.solveType("Extends");
         List<ResolvedReferenceType> ancestors = validator.getAncestors();
         assertEquals(1, ancestors.size());
-        assertEquals("com.github.javaparser.ast.validator.TypedValidator", ancestors.get(0).getQualifiedName());
-        List<ResolvedType> types = ancestors.get(0).typeParametersMap().getTypes();
-        assertEquals(1, types.size());
-        assertEquals("com.github.javaparser.ast.Node", types.get(0).asReferenceType().getQualifiedName());
+        assertEquals("Base", ancestors.get(0).getQualifiedName());
+        List<ResolvedType> types = ancestors.get(0).typeParametersValues();
+        assertEquals(2, types.size());
+        assertEquals("java.lang.Integer", types.get(0).asReferenceType().getQualifiedName());
+        assertEquals("Extends", types.get(1).asReferenceType().getQualifiedName());
     }
 
     @Test
