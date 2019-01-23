@@ -534,7 +534,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(BreakStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.BREAK),
-                conditional(ObservableProperty.LABEL, IS_PRESENT, sequence(space(), child(ObservableProperty.LABEL))),
+                conditional(VALUE, IS_PRESENT, sequence(space(), child(VALUE))),
                 semicolon()
         ));
 
@@ -684,6 +684,19 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(SwitchStmt.class, sequence(
+                comment(),
+                token(GeneratedJavaParserConstants.SWITCH),
+                token(GeneratedJavaParserConstants.LPAREN),
+                child(ObservableProperty.SELECTOR),
+                token(GeneratedJavaParserConstants.RPAREN),
+                space(),
+                token(GeneratedJavaParserConstants.LBRACE),
+                newline(),
+                list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                token(GeneratedJavaParserConstants.RBRACE)
+        ));
+
+        concreteSyntaxModelByClass.put(SwitchExpr.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.SWITCH),
                 token(GeneratedJavaParserConstants.LPAREN),

@@ -262,8 +262,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BreakStmt n, final A arg) {
         R result;
-        if (n.getLabel().isPresent()) {
-            result = n.getLabel().get().accept(this, arg);
+        if (n.getValue().isPresent()) {
+            result = n.getValue().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2009,6 +2009,27 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final Modifier n, final A arg) {
         R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final SwitchExpr n, final A arg) {
+        R result;
+        {
+            result = n.getEntries().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getSelector().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
