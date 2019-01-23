@@ -153,6 +153,16 @@ public class InferenceContext {
             } else {
                 registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
             }
+        } else if (actualType.isReferenceType()) {
+            if (formalType.isPrimitive()) {
+                if (formalType.asPrimitive().getBoxTypeQName().equals(actualType.describe())) {
+                    registerCorrespondance(objectProvider.byName(formalType.asPrimitive().getBoxTypeQName()), actualType);
+                } else {
+                    // nothing to do
+                }
+            } else {
+                // nothing to do
+            }
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }
