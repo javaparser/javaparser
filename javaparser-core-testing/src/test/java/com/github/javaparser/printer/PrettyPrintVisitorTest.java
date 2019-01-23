@@ -309,23 +309,66 @@ class PrettyPrintVisitorTest {
                 "    }\n" +
                 "}\n", cu.toString());
     }
-    
+
+    private String expected = "public class SomeClass {\n" +
+            "\n" +
+            "    /**\n" +
+            "     * tester line\n" +
+            "     * multi line comment\n" +
+            "     *   multi line comment\n" +
+            "     * multi line comment\n" +
+            "     *    multi line comment\n" +
+            "     */\n" +
+            "    public void add(int x, int y) {\n" +
+            "    }\n" +
+            "}\n";
+
     @Test
-    public void javadocIssue1907(){
-        CompilationUnit cu = JavaParser.parse(
-                "public class SomeClass{" +
-                        "/**\n" +
-                        " * mutli line comment\n" +
-                        " */\n" +
-                        "public void add(int x, int y){}}");
-        
-        assertEqualsNoEol("public class SomeClass {\n" +
-                "\n" +
-                "    /**\n" +
-                "     * mutli line comment\n" +
-                "     */\n" +
-                "    public void add(int x, int y) {\n" +
-                "    }\n" +
-                "}\n", cu.toString());
+    void javadocIssue1907_allLeadingSpaces() {
+        String input_allLeadingSpaces = "public class SomeClass{" +
+                "/**\n" +
+                " * tester line\n" +
+                " * multi line comment\n" +
+                " *   multi line comment\n" +
+                "   * multi line comment\n" +
+                "    multi line comment\n" +
+                " */\n" +
+                "public void add(int x, int y){}}";
+
+        CompilationUnit cu_allLeadingSpaces = JavaParser.parse(input_allLeadingSpaces);
+        assertEqualsNoEol(expected, cu_allLeadingSpaces.toString());
+    }
+
+    @Test
+    void javadocIssue1907_singleMissingLeadingSpace() {
+        String input_singleMissingLeadingSpace = "public class SomeClass{" +
+                "/**\n" +
+                "* tester line\n" +
+                " * multi line comment\n" +
+                " *   multi line comment\n" +
+                "   * multi line comment\n" +
+                "    multi line comment\n" +
+                " */\n" +
+                "public void add(int x, int y){}}";
+
+        CompilationUnit cu_singleMissingLeadingSpace = JavaParser.parse(input_singleMissingLeadingSpace);
+        assertEqualsNoEol(expected, cu_singleMissingLeadingSpace.toString());
+    }
+
+    @Test
+    void javadocIssue1907_leadingTab() {
+        String input_leadingTab = "public class SomeClass{" +
+                "/**\n" +
+                "\t * tester line\n" +
+                " * multi line comment\n" +
+                " *   multi line comment\n" +
+                "   * multi line comment\n" +
+                "    multi line comment\n" +
+                " */\n" +
+                "public void add(int x, int y){}}";
+
+        CompilationUnit cu_leadingTab = JavaParser.parse(input_leadingTab);
+        assertEqualsNoEol(expected, cu_leadingTab.toString());
+
     }
 }
