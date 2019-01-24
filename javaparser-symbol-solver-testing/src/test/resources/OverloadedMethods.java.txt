@@ -24,4 +24,18 @@ public class OverloadedMethods {
         Object o = null;
         overloaded(o);
     }
+
+    public void complexOverloading1(String s1, String s2) {}
+    public void complexOverloading1(String... s) {}
+
+    public void testComplex1() {
+        complexOverloading1("a", "b");
+    }
+
+    public void complexOverloading2(String s1, String s2, Object s3) {}
+    public void complexOverloading2(String... s) {}
+
+    public void testComplex2() {
+        complexOverloading2("a", "b");
+    }
 }
