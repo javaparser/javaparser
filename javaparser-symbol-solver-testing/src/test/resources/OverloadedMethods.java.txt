@@ -38,4 +38,18 @@ public class OverloadedMethods {
     public void testComplex2() {
         complexOverloading2("a", "b");
     }
+
+    public void complexOverloading3(Integer i) {}
+    public void complexOverloading3(long l) {}
+
+    public void testComplex3() {
+        complexOverloading3(1);
+    }
+
+    public void complexOverloading4(long l, int i) {}
+    public void complexOverloading4(int i, int... is) {}
+
+    public void testComplex4() {
+        complexOverloading4(1, 2);
+    }
 }
