@@ -229,8 +229,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 SymbolReference<ResolvedTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
                 if (!implementedDeclRef.isSolved() && !acceptIncompleteList) {
                     throw new UnsolvedSymbolException(implementedType.getName().getId());
+                } else if (implementedDeclRef.isSolved()) {
+                    ancestors.add(new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration)implementedDeclRef.getCorrespondingDeclaration(),
+                        typeSolver));
                 }
-                ancestors.add(new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
             }
         }
         return ancestors;
