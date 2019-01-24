@@ -463,21 +463,47 @@ public class MethodResolutionLogic {
         int bNumberOfParams = methodB.getNumberOfParams();
         int numberOfArgs = argumentTypes.size();
 
+        // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
+        // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
         if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic || bNumberOfParams != numberOfArgs)) {
             return true;
         } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic || aNumberOfParams != numberOfArgs)) {
             return false;
         }
 
+        // Either both methods are variadic or neither is. So we must compare the parameter types.
         for (int i = 0 ; i < numberOfArgs ; i++) {
             ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
             ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
+            ResolvedType argType = argumentTypes.get(i);
 
+            // Safety: if a type is null it means a signature with too few parameters managed to get to this point.
+            // This should not happen but it also means that this signature is immediately disqualified.
             if (paramTypeA == null) {
                 return false;
             } else if (paramTypeB == null) {
                 return true;
-            } else {
+            }
+            // Widening primitive conversions have priority over boxing/unboxing conversions when finding the most
+            // applicable method. E.g. assume we have method call foo(1) and declarations foo(long) and foo(Integer).
+            // The method call will call foo(long), as it requires a widening primitive conversion from int to long
+            // instead of a boxing conversion from int to Integer.
+            // This is what we check here.
+            else if (paramTypeA.isPrimitive() == argType.isPrimitive() &&
+                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
+                     paramTypeA.isAssignableBy(argType)) {
+
+                return true;
+            } else if (paramTypeB.isPrimitive() == argType.isPrimitive() &&
+                       paramTypeA.isPrimitive() != argType.isPrimitive() &&
+                       paramTypeB.isAssignableBy(argType)) {
+
+                return false;
+            }
+            // If we get to this point then we check whether one of the methods contains a parameter type that is more
+            // specific. If it does, we can assume the entire declaration is more specific as we would otherwise have
+            // a situation where the declarations are ambiguous in the given context.
+            else {
                 boolean aAssignableFromB = paramTypeA.isAssignableBy(paramTypeB);
                 boolean bAssignableFromA = paramTypeB.isAssignableBy(paramTypeA);
 
