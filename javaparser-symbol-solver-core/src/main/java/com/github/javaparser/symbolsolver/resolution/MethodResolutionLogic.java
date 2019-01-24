@@ -487,7 +487,7 @@ public class MethodResolutionLogic {
             // Widening primitive conversions have priority over boxing/unboxing conversions when finding the most
             // applicable method. E.g. assume we have method call foo(1) and declarations foo(long) and foo(Integer).
             // The method call will call foo(long), as it requires a widening primitive conversion from int to long
-            // instead of a boxing conversion from int to Integer.
+            // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
             else if (paramTypeA.isPrimitive() == argType.isPrimitive() &&
                      paramTypeB.isPrimitive() != argType.isPrimitive() &&
