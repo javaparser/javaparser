@@ -1,6 +1,8 @@
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.*;
@@ -10,11 +12,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SwitchExprTest {
     @Test
     void jep325Example2() {
-        parseStatement("int numLetters = switch (day) {\n" +
+        NodeList<Expression> entry2labels = parseStatement("int numLetters = switch (day) {\n" +
                 "    case MONDAY, FRIDAY, SUNDAY -> 6;\n" +
                 "    case TUESDAY                -> 7;\n" +
                 "    case THURSDAY, SATURDAY     -> 8;\n" +
                 "    case WEDNESDAY              -> 9;\n" +
+                "};").findAll(SwitchEntry.class).get(0).getLabels();
+
+        assertEquals(3, entry2labels.size());
+        assertEquals("MONDAY", entry2labels.get(0).toString());
+        assertEquals("FRIDAY", entry2labels.get(1).toString());
+        assertEquals("SUNDAY", entry2labels.get(2).toString());
+    }
+
+    @Test
+    void funkyExpressions() {
+        parseStatement("int numLetters = switch (day) {\n" +
+                "    case 1+1, 2+2 -> 6;\n" +
+                "    case \"Henk\"-> 7;\n" +
+                "    case ((3)+3)+3 -> 8;\n" +
                 "};");
     }
 

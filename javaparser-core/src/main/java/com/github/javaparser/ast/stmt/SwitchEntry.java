@@ -33,10 +33,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>One case in a switch statement</h1>
+ * The main Javadoc is in {@link SwitchStmt}
  * <h2>Java 1.0-11</h2>
  * <pre>
  * switch (i) {
@@ -64,6 +66,14 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * which is stored as the first and only statement in statements.
  * <br/>The second one is of type BLOCK and stores its {@link BlockStmt} as the first and only statement in statements.
  * <br/>The third one is of type THROWS_STATEMENT and stores its {@link ThrowStmt} as the first and only statement in statements.
+ * <pre>
+ *     case MONDAY, FRIDAY, SUNDAY -> 6;
+ * </pre>
+ * Multiple case labels are now allowed.
+ * <pre>
+ *     case 16*16, 10+10 -> 6;
+ * </pre>
+ * Many kinds of expressions are now allowed.
  *
  * @author Julio Vilmar Gesser
  * @see SwitchStmt
