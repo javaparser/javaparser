@@ -457,17 +457,21 @@ public class MethodResolutionLogic {
     private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
                                           List<ResolvedType> argumentTypes) {
 
-        boolean aVariadic = methodA.hasVariadicParameter();
-        boolean bVariadic = methodB.hasVariadicParameter();
-        int aNumberOfParams = methodA.getNumberOfParams();
-        int bNumberOfParams = methodB.getNumberOfParams();
-        int numberOfArgs = argumentTypes.size();
+        final boolean aVariadic = methodA.hasVariadicParameter();
+        final boolean bVariadic = methodB.hasVariadicParameter();
+        final int aNumberOfParams = methodA.getNumberOfParams();
+        final int bNumberOfParams = methodB.getNumberOfParams();
+        final int numberOfArgs = argumentTypes.size();
+        final ResolvedType lastArgType = numberOfArgs > 0 ? argumentTypes.get(numberOfArgs - 1) : null;
+        final boolean isLastArgArray = lastArgType != null && lastArgType.isArray();
 
         // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
         // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
-        if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic || bNumberOfParams != numberOfArgs)) {
+        if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic && (bNumberOfParams != numberOfArgs ||
+                                                                            !isLastArgArray))) {
             return true;
-        } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic || aNumberOfParams != numberOfArgs)) {
+        } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
+                                                                                   !isLastArgArray))) {
             return false;
         }
 
@@ -517,15 +521,13 @@ public class MethodResolutionLogic {
             }
         }
 
-        int lastIndex = numberOfArgs - 1;
-
         if (aVariadic && !bVariadic) {
             // if the last argument is an array then m1 is more specific
-            return argumentTypes.get(lastIndex).isArray();
+            return isLastArgArray;
         } else if (!aVariadic && bVariadic) {
             // if the last argument is an array and m1 is not variadic then
             // it is not more specific
-            return !argumentTypes.get(lastIndex).isArray();
+            return !isLastArgArray;
         }
 
         return false;
