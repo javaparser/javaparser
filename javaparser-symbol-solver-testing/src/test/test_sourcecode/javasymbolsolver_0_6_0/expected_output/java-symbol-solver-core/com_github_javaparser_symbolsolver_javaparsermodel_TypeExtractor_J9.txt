@@ -40,7 +40,7 @@
   Line 146) node.getType() ==> com.github.javaparser.ast.expr.ClassExpr.getType()
   Line 147) facade.convertToUsage(astType, node.getType()) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
   Line 147) node.getType() ==> com.github.javaparser.ast.expr.ClassExpr.getType()
-  Line 148) ImmutableList.of(jssType) ==> com.google.common.collect.ImmutableList.of(E)
+  Line 148) ImmutableList.of(jssType) ==> java.util.List.of(E...)
   Line 153) node.getThenExpr().accept(this, solveLambdas) ==> com.github.javaparser.ast.visitor.Visitable.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
   Line 153) node.getThenExpr() ==> com.github.javaparser.ast.expr.ConditionalExpr.getThenExpr()
   Line 158) node.getInner().accept(this, solveLambdas) ==> com.github.javaparser.ast.visitor.Visitable.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
