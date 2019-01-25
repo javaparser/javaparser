@@ -80,8 +80,8 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
     protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntry.class,
-            n -> n.getLabel().map(l -> l instanceof StringLiteralExpr).orElse(false),
-            (n, reporter) -> reporter.report(n.getLabel().get(), "Strings in switch statements are not supported.")
+            n -> n.getLabels().stream().anyMatch(l -> l instanceof StringLiteralExpr),
+            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Strings in switch statements are not supported.")
     );
     protected final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
     protected final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();

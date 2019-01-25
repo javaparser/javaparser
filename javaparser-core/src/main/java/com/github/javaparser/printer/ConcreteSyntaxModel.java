@@ -674,8 +674,8 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(SwitchEntry.class, sequence(
                 comment(),
-                conditional(ObservableProperty.LABEL, IS_PRESENT,
-                        sequence(token(GeneratedJavaParserConstants.CASE), space(), child(ObservableProperty.LABEL), token(GeneratedJavaParserConstants.COLON)),
+                conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
+                        sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 indent(),

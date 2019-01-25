@@ -11,9 +11,9 @@ class SwitchExprTest {
     @Test
     void jep325Example2() {
         parseStatement("int numLetters = switch (day) {\n" +
-//                "    case MONDAY, FRIDAY, SUNDAY -> 6;\n" +
+                "    case MONDAY, FRIDAY, SUNDAY -> 6;\n" +
                 "    case TUESDAY                -> 7;\n" +
-//                "    case THURSDAY, SATURDAY     -> 8;\n" +
+                "    case THURSDAY, SATURDAY     -> 8;\n" +
                 "    case WEDNESDAY              -> 9;\n" +
                 "};");
     }

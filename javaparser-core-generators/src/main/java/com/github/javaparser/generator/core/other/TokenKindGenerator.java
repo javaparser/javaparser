@@ -38,7 +38,7 @@ public class TokenKindGenerator extends Generator {
         annotateGenerated(kindEnum);
 
         final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
-        valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabel().isPresent()).forEach(Node::remove);
+        valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
 
         final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
         final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
@@ -59,7 +59,7 @@ public class TokenKindGenerator extends Generator {
     }
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
-        final SwitchEntry entry = new SwitchEntry(kind, SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
+        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
         valueOfSwitch.getEntries().addFirst(entry);
     }
 

@@ -32,11 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-
-import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -80,29 +76,28 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
         STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
     }
 
-    @OptionalProperty
-    private Expression label;
+    private NodeList<Expression> labels;
 
     private NodeList<Statement> statements;
 
     private Type type;
 
     public SwitchEntry() {
-        this(null, null, new NodeList<>());
+        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(final Expression label, final Type type, final NodeList<Statement> statements) {
-        this(null, label, type, statements);
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+        this(null, labels, type, statements);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, Expression label, Type type, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements) {
         super(tokenRange);
-        setLabel(label);
+        setLabels(labels);
         setType(type);
         setStatements(statements);
         customInitialization();
@@ -121,8 +116,8 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getLabel() {
-        return Optional.ofNullable(label);
+    public NodeList<Expression> getLabels() {
+        return labels;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -133,19 +128,20 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
     /**
      * Sets the label
      *
-     * @param label the label, can be null
+     * @param labels the label, can be null
      * @return this, the SwitchEntry
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntry setLabel(final Expression label) {
-        if (label == this.label) {
+    public SwitchEntry setLabels(final NodeList<Expression> labels) {
+        assertNotNull(labels);
+        if (labels == this.labels) {
             return (SwitchEntry) this;
         }
-        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
-        this.label = label;
-        setAsParentNodeOf(label);
+        notifyPropertyChange(ObservableProperty.LABELS, this.labels, labels);
+        if (this.labels != null)
+            this.labels.setParentNode(null);
+        this.labels = labels;
+        setAsParentNodeOf(labels);
         return this;
     }
 
@@ -168,9 +164,9 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (label != null) {
-            if (node == label) {
-                removeLabel();
+        for (int i = 0; i < labels.size(); i++) {
+            if (labels.get(i) == node) {
+                labels.remove(i);
                 return true;
             }
         }
@@ -183,11 +179,6 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
         return super.remove(node);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public SwitchEntry removeLabel() {
-        return setLabel((Expression) null);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SwitchEntry clone() {
@@ -198,26 +189,6 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SwitchEntryMetaModel getMetaModel() {
         return JavaParserMetaModel.switchEntryMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        if (label != null) {
-            if (node == label) {
-                setLabel((Expression) replacementNode);
-                return true;
-            }
-        }
-        for (int i = 0; i < statements.size(); i++) {
-            if (statements.get(i) == node) {
-                statements.set(i, (Statement) replacementNode);
-                return true;
-            }
-        }
-        return super.replace(node, replacementNode);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -234,5 +205,24 @@ public final class SwitchEntry extends Node implements NodeWithStatements<Switch
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         return this;
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < labels.size(); i++) {
+            if (labels.get(i) == node) {
+                labels.set(i, (Expression) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.set(i, (Statement) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

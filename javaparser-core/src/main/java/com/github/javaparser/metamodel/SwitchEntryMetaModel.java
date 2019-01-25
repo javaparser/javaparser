@@ -8,7 +8,7 @@ public class SwitchEntryMetaModel extends NodeMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.SwitchEntry.class, "SwitchEntry", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel labelPropertyMetaModel;
+    public PropertyMetaModel labelsPropertyMetaModel;
 
     public PropertyMetaModel statementsPropertyMetaModel;
 

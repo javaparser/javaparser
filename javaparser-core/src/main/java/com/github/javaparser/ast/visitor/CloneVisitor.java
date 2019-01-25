@@ -702,10 +702,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SwitchEntry n, final Object arg) {
-        Expression label = cloneNode(n.getLabel(), arg);
+        NodeList<Expression> labels = cloneList(n.getLabels(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), label, n.getType(), statements);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements);
         r.setComment(comment);
         return r;
     }

@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -21,7 +22,7 @@ class SwitchStmtTest {
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(0).getType());
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(1).getType());
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(2).getType());
-        assertEquals(Optional.empty(), switchStmt.getEntry(2).getLabel());
+        assertEquals(new NodeList<>(), switchStmt.getEntry(2).getLabels());
     }
     @Test
     void jep325Example1() {

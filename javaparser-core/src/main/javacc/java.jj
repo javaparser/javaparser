@@ -2248,7 +2248,8 @@ SwitchExpr SwitchExpression():
 SwitchEntry SwitchEntry():
 {
 	Expression label = null;
-	NodeList<Statement> stmts = new NodeList();
+	NodeList<Expression> labels = emptyList();
+	NodeList<Statement> stmts = emptyList();
 	JavaToken begin;
 	SwitchEntry ret;
 	Expression expression = null;
@@ -2256,31 +2257,32 @@ SwitchEntry SwitchEntry():
 }
 {
 	(
-		"case" {begin=token();} label = ConditionalExpression()
+		"case" {begin=token();} label = ConditionalExpression() { labels = add(labels, label); }
+		( "," label = ConditionalExpression()  { labels = add(labels, label); } )*
 	|
 		"default" {begin=token();}
 	)
     (
-        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), label, STATEMENT_GROUP, stmts); }
+        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts); }
     |
         "->"
         (
             expression = Expression() ";" {
                 TokenRange r=range(begin, token());
 				stmts.add(new ExpressionStmt(r, expression));
-				ret = new SwitchEntry(r, label, EXPRESSION, stmts);
+				ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
             }
 		|
 			stmt = Block() {
 				TokenRange r=range(begin, token());
 				stmts.add(stmt);
-				ret = new SwitchEntry(r, label, BLOCK, stmts);
+				ret = new SwitchEntry(r, labels, BLOCK, stmts);
 			}
 		|
 			stmt = ThrowStatement() {
 				TokenRange r=range(begin, token());
 				stmts.add(stmt);
-				ret = new SwitchEntry(r, label, THROWS_STATEMENT, stmts);
+				ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
 			}
 		)
     )
