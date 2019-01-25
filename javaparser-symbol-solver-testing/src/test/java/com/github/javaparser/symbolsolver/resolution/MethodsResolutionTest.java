@@ -469,4 +469,76 @@ class MethodsResolutionTest extends AbstractResolutionTest {
         // check that the expected method declaration equals the resolved method declaration
         assertEquals("ClassExtendingUnknownClass.bar(java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
+
+    @Test
+    void resolveCorrectMethodWithComplexOverloading1() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method call expression
+        CompilationUnit cu = parseSample("OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        MethodDeclaration testingMethod = Navigator.demandMethod(clazz, "testComplex1");
+        MethodCallExpr methodCallExpr = testingMethod.getBody().get().getStatements().get(0).asExpressionStmt()
+                                                .getExpression().asMethodCallExpr();
+
+        // resolve method call expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+
+        assertEquals("OverloadedMethods.complexOverloading1(java.lang.String, java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void resolveCorrectMethodWithComplexOverloading2() {
+        // configure symbol solver before parsing
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method call expression
+        CompilationUnit cu = parseSample("OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        MethodDeclaration testingMethod = Navigator.demandMethod(clazz, "testComplex2");
+        MethodCallExpr methodCallExpr = testingMethod.getBody().get().getStatements().get(0).asExpressionStmt()
+                                                .getExpression().asMethodCallExpr();
+
+        // resolve method call expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+
+        assertEquals("OverloadedMethods.complexOverloading2(java.lang.String...)", resolvedMethodDeclaration.getQualifiedSignature());
+    }
+
+	@Test
+	void resolveCorrectMethodWithComplexOverloading3() {
+		// configure symbol solver before parsing
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		// parse compilation unit and get method call expression
+		CompilationUnit cu = parseSample("OverloadedMethods");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+		MethodDeclaration testingMethod = Navigator.demandMethod(clazz, "testComplex3");
+		MethodCallExpr methodCallExpr = testingMethod.getBody().get().getStatements().get(0).asExpressionStmt()
+				                                .getExpression().asMethodCallExpr();
+
+		// resolve method call expression
+		ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+
+		assertEquals("OverloadedMethods.complexOverloading3(long)", resolvedMethodDeclaration.getQualifiedSignature());
+	}
+
+	@Test
+	void resolveCorrectMethodWithComplexOverloading4() {
+		// configure symbol solver before parsing
+		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+		// parse compilation unit and get method call expression
+		CompilationUnit cu = parseSample("OverloadedMethods");
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+		MethodDeclaration testingMethod = Navigator.demandMethod(clazz, "testComplex4");
+		MethodCallExpr methodCallExpr = testingMethod.getBody().get().getStatements().get(0).asExpressionStmt()
+				                                .getExpression().asMethodCallExpr();
+
+		// resolve method call expression
+		ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+
+		assertEquals("OverloadedMethods.complexOverloading4(long, int)", resolvedMethodDeclaration.getQualifiedSignature());
+	}
 }
