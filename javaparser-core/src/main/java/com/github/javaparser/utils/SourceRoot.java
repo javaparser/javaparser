@@ -587,7 +587,7 @@ public class SourceRoot {
                         if (!SourceRoot.isSensibleDirectoryToEnter(dir)) {
                             return SKIP_SUBTREE;
                         }
-                        if (!dir.equals(ParallelParse.this.path)) {
+                        if (Files.isSameFile(dir, ParallelParse.this.path)) {
                             ParallelParse w = new ParallelParse(dir, callback);
                             w.fork();
                             walks.add(w);
