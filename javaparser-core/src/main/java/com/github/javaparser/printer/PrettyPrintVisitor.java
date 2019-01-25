@@ -37,12 +37,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -64,7 +64,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     private void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
-            printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(Collectors.joining(" ")) + " ");
+            printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(joining(" ")) + " ");
         }
     }
 
@@ -310,15 +310,20 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.println("/**");
             final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
             String[] lines = commentContent.split("\\R");
-            boolean skippingLeadingEmptyLines = true;
-            boolean prependEmptyLine = false;
-            boolean prependSpace = Arrays.stream(lines).anyMatch(line -> !line.isEmpty() && !line.startsWith(" "));
+            List<String> strippedLines = new ArrayList<>();
             for (String line : lines) {
                 final String trimmedLine = line.trim();
                 if (trimmedLine.startsWith("*")) {
                     line = trimmedLine.substring(1);
                 }
                 line = trimTrailingSpaces(line);
+                strippedLines.add(line);
+            }
+
+            boolean skippingLeadingEmptyLines = true;
+            boolean prependEmptyLine = false;
+            boolean prependSpace = strippedLines.stream().anyMatch(line -> !line.isEmpty() && !line.startsWith(" "));
+            for (String line : strippedLines) {
                 if (line.isEmpty()) {
                     if (!skippingLeadingEmptyLines) {
                         prependEmptyLine = true;
