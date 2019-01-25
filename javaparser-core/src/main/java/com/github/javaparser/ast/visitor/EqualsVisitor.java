@@ -986,7 +986,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final BreakStmt n, final Visitable arg) {
         final BreakStmt n2 = (BreakStmt) arg;
-        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+        if (!nodeEquals(n.getValue(), n2.getValue()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
@@ -1298,6 +1298,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final Modifier n, final Visitable arg) {
         final Modifier n2 = (Modifier) arg;
         if (!objEquals(n.getKeyword(), n2.getKeyword()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final SwitchExpr n, final Visitable arg) {
+        final SwitchExpr n2 = (SwitchExpr) arg;
+        if (!nodesEquals(n.getEntries(), n2.getEntries()))
+            return false;
+        if (!nodeEquals(n.getSelector(), n2.getSelector()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
