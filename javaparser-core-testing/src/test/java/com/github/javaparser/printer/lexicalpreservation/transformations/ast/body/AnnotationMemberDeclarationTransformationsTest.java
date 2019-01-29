@@ -21,25 +21,24 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.EnumSet;
-
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Transforming AnnotationMemberDeclaration and verifying the LexicalPreservation works as expected.
  */
-public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     protected AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
@@ -49,7 +48,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Name
 
     @Test
-    public void changingName() {
+    void changingName() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setName("bar");
         assertTransformedToString("int bar();", md);
@@ -58,7 +57,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Type
 
     @Test
-    public void changingType() {
+    void changingType() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setType("String");
         assertTransformedToString("String foo();", md);
@@ -67,44 +66,44 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Modifiers
 
     @Test
-    public void addingModifiers() {
+    void addingModifiers() {
         AnnotationMemberDeclaration md = consider("int foo();");
-        md.setModifiers(EnumSet.of(Modifier.PUBLIC));
+        md.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int foo();", md);
     }
 
     @Test
-    public void removingModifiers() {
+    void removingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
-        md.setModifiers(EnumSet.noneOf(Modifier.class));
+        md.setModifiers(new NodeList<>());
         assertTransformedToString("int foo();", md);
     }
 
     @Test
-    public void replacingModifiers() {
+    void replacingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
-        md.setModifiers(EnumSet.of(Modifier.PROTECTED));
+        md.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected int foo();", md);
     }
 
     // Default value
 
     @Test
-    public void addingDefaultValue() {
+    void addingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setDefaultValue(new IntegerLiteralExpr("10"));
         assertTransformedToString("int foo() default 10;", md);
     }
 
     @Test
-    public void removingDefaultValue() {
+    void removingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo() default 10;");
-        assertEquals(true, md.getDefaultValue().get().remove());
+        assertTrue(md.getDefaultValue().get().remove());
         assertTransformedToString("int foo();", md);
     }
 
     @Test
-    public void replacingDefaultValue() {
+    void replacingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo() default 10;");
         md.setDefaultValue(new IntegerLiteralExpr("11"));
         assertTransformedToString("int foo() default 11;", md);
@@ -113,14 +112,14 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Annotations
 
     @Test
-    public void addingAnnotation() {
+    void addingAnnotation() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         assertTransformedToString("@myAnno()" + EOL + "int foo();", it);
     }
 
     @Test
-    public void addingTwoAnnotations() {
+    void addingTwoAnnotations() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         it.addAnnotation("myAnno2");
@@ -128,21 +127,21 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     }
 
     @Test
-    public void removingAnnotationOnSomeLine() {
+    void removingAnnotationOnSomeLine() {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
 
     @Test
-    public void removingAnnotationOnPrevLine() {
+    void removingAnnotationOnPrevLine() {
         AnnotationMemberDeclaration it = consider("@myAnno" + EOL + "int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
 
     @Test
-    public void replacingAnnotation() {
+    void replacingAnnotation() {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
         assertTransformedToString("@myOtherAnno() int foo();", it);
@@ -151,7 +150,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Javadoc
 
     @Test
-    public void addingJavadoc() {
+    void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
         assertTransformedToString("@interface AD { /**Cool this annotation!*/" + EOL +
@@ -159,14 +158,14 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     }
 
     @Test
-    public void removingJavadoc() {
+    void removingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         assertTrue(it.getJavadocComment().get().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 
     @Test
-    public void replacingJavadoc() {
+    void replacingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         it.setJavadocComment("Super extra cool this annotation!!!");
         assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());

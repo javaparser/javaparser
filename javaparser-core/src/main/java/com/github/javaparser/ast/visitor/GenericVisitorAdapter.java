@@ -48,6 +48,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -70,6 +75,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         if (n.getDefaultValue().isPresent()) {
             result = n.getDefaultValue().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -252,8 +262,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BreakStmt n, final A arg) {
         R result;
-        if (n.getLabel().isPresent()) {
-            result = n.getLabel().get().accept(this, arg);
+        if (n.getValue().isPresent()) {
+            result = n.getValue().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -354,6 +364,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getMembers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -468,6 +483,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getBody().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -634,6 +654,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -722,6 +747,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final FieldDeclaration n, final A arg) {
         R result;
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getVariables().accept(this, arg);
             if (result != null)
@@ -1001,6 +1031,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -1152,6 +1187,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -1193,11 +1233,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final Name n, final A arg) {
         R result;
-        {
-            result = n.getAnnotations().accept(this, arg);
-            if (result != null)
-                return result;
-        }
         if (n.getQualifier().isPresent()) {
             result = n.getQualifier().get().accept(this, arg);
             if (result != null)
@@ -1579,6 +1614,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getVariables().accept(this, arg);
             if (result != null)
                 return result;
@@ -1817,6 +1857,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final ModuleRequiresDirective n, final A arg) {
         R result;
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -1950,6 +1995,38 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final Modifier n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final SwitchExpr n, final A arg) {
+        R result;
+        {
+            result = n.getEntries().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getSelector().accept(this, arg);
             if (result != null)
                 return result;
         }

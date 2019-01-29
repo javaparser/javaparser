@@ -442,54 +442,95 @@ public class MethodResolutionLogic {
         return true;
     }
 
+    private static ResolvedType getMethodsExplicitAndVariadicParameterType(ResolvedMethodDeclaration method, int i) {
+        int numberOfParams = method.getNumberOfParams();
+
+        if (i < numberOfParams) {
+            return method.getParam(i).getType();
+        } else if (method.hasVariadicParameter()) {
+            return method.getParam(numberOfParams - 1).getType();
+        } else {
+            return null;
+        }
+    }
+
     private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
                                           List<ResolvedType> argumentTypes) {
-        boolean oneMoreSpecificFound = false;
-        if (methodA.getNumberOfParams() < methodB.getNumberOfParams()) {
+
+        final boolean aVariadic = methodA.hasVariadicParameter();
+        final boolean bVariadic = methodB.hasVariadicParameter();
+        final int aNumberOfParams = methodA.getNumberOfParams();
+        final int bNumberOfParams = methodB.getNumberOfParams();
+        final int numberOfArgs = argumentTypes.size();
+        final ResolvedType lastArgType = numberOfArgs > 0 ? argumentTypes.get(numberOfArgs - 1) : null;
+        final boolean isLastArgArray = lastArgType != null && lastArgType.isArray();
+
+        // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
+        // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
+        if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic && (bNumberOfParams != numberOfArgs ||
+                                                                            !isLastArgArray))) {
             return true;
-        }
-        if (methodA.getNumberOfParams() > methodB.getNumberOfParams()) {
+        } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
+                                                                                   !isLastArgArray))) {
             return false;
         }
-        for (int i = 0; i < methodA.getNumberOfParams(); i++) {
-            ResolvedType tdA = methodA.getParam(i).getType();
-            ResolvedType tdB = methodB.getParam(i).getType();
-            // B is more specific
-            if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
-                oneMoreSpecificFound = true;
+
+        // Either both methods are variadic or neither is. So we must compare the parameter types.
+        for (int i = 0 ; i < numberOfArgs ; i++) {
+            ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
+            ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
+            ResolvedType argType = argumentTypes.get(i);
+
+            // Safety: if a type is null it means a signature with too few parameters managed to get to this point.
+            // This should not happen but it also means that this signature is immediately disqualified.
+            if (paramTypeA == null) {
+                return false;
+            } else if (paramTypeB == null) {
+                return true;
             }
-            // A is more specific
-            if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
+            // Widening primitive conversions have priority over boxing/unboxing conversions when finding the most
+            // applicable method. E.g. assume we have method call foo(1) and declarations foo(long) and foo(Integer).
+            // The method call will call foo(long), as it requires a widening primitive conversion from int to long
+            // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
+            // This is what we check here.
+            else if (paramTypeA.isPrimitive() == argType.isPrimitive() &&
+                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
+                     paramTypeA.isAssignableBy(argType)) {
+
+                return true;
+            } else if (paramTypeB.isPrimitive() == argType.isPrimitive() &&
+                       paramTypeA.isPrimitive() != argType.isPrimitive() &&
+                       paramTypeB.isAssignableBy(argType)) {
+
                 return false;
             }
-        }
+            // If we get to this point then we check whether one of the methods contains a parameter type that is more
+            // specific. If it does, we can assume the entire declaration is more specific as we would otherwise have
+            // a situation where the declarations are ambiguous in the given context.
+            else {
+                boolean aAssignableFromB = paramTypeA.isAssignableBy(paramTypeB);
+                boolean bAssignableFromA = paramTypeB.isAssignableBy(paramTypeA);
 
-        if (!oneMoreSpecificFound) {
-            int lastIndex = argumentTypes.size() - 1;
-
-            if (methodA.hasVariadicParameter() && !methodB.hasVariadicParameter()) {
-                // if the last argument is an array then m1 is more specific
-                if (argumentTypes.get(lastIndex).isArray()) {
+                if (bAssignableFromA && !aAssignableFromB){
+                    // A's parameter is more specific
                     return true;
-                }
-
-                if (!argumentTypes.get(lastIndex).isArray()) {
+                } else if (aAssignableFromB && !bAssignableFromA) {
+                    // B's parameter is more specific
                     return false;
                 }
             }
-            if (!methodA.hasVariadicParameter() && methodB.hasVariadicParameter()) {
-                // if the last argument is an array and m1 is not variadic then
-                // it is not more specific
-                if (argumentTypes.get(lastIndex).isArray()) {
-                    return false;
-                }
-
-                if (!argumentTypes.get(lastIndex).isArray()) {
-                    return true;
-                }
-            }
         }
-        return oneMoreSpecificFound;
+
+        if (aVariadic && !bVariadic) {
+            // if the last argument is an array then m1 is more specific
+            return isLastArgArray;
+        } else if (!aVariadic && bVariadic) {
+            // if the last argument is an array and m1 is not variadic then
+            // it is not more specific
+            return !isLastArgArray;
+        }
+
+        return false;
     }
 
     private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB) {

@@ -509,4 +509,14 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final VarType n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    public R visit(final Modifier n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final SwitchExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }

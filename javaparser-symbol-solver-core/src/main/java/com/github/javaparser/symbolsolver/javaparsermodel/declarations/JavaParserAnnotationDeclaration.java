@@ -2,7 +2,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -86,10 +85,15 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         return wrappedNode.getName().getId();
     }
 
+    /**
+     * Annotation declarations cannot have type parameters and hence this method always returns an empty list.
+     *
+     * @return An empty list.
+     */
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        // TODO #1840
-        throw new UnsupportedOperationException();
+        // Annotation declarations cannot have type parameters - i.e. we can always return an empty list.
+        return Collections.emptyList();
     }
 
     @Override

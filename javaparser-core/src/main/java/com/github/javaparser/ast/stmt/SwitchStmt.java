@@ -24,28 +24,57 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+
 import java.util.function.Consumer;
 import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
 
 /**
- * A switch statement.
+ * <h1>The switch statement</h1>
+ *
+ * <h2>Java 1.0-1.4</h2>
+ * The basic C-like switch statement.
+ * It can switch only on integers.
+ * <br/><code>switch(x) { case 5: case 6: a=100; break; case 9: a=33; break; default: throw new IllegalStateException(); };</code>
  * <br/>In <code>switch(a) { ... }</code> the selector is "a",
  * and the contents of the { ... } are the entries.
  *
+ * <h2>Java 5-6</h2>
+ * Switching can now also be done on enum constants.
+ * 
+ * <h2>Java 7-11</h2>
+ * Switching can now also be done on strings.
+ *
+ * <h2>Java 12-</h2>
+ * In preparation for pattern matching, lots of changes are made:
+ * <ul>
+ * <li>multiple labels per case
+ * <li>a -> syntax that does not fall through.
+ * <li>break can take any expression (usable in the {@link com.github.javaparser.ast.expr.SwitchExpr})
+ * <li>switch can be used as an expression (it becomes a {@link com.github.javaparser.ast.expr.SwitchExpr})
+ * </ul>
+ * <code>switch(x) { case BANANA,PEAR: b=10; break; default: b=5; };</code>
+ * <br/><code>switch(x) { case 5,6 -> println("uhuh"); default -> println("nope"); };</code>
+ *
  * @author Julio Vilmar Gesser
  * @see SwitchEntryStmt
+ * @see com.github.javaparser.ast.expr.SwitchExpr
+ * @see SwitchNode
  */
-public final class SwitchStmt extends Statement {
+public final class SwitchStmt extends Statement implements SwitchNode {
 
     private Expression selector;
 

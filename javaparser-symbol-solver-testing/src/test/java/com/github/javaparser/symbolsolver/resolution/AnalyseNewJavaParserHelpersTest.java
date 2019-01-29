@@ -17,30 +17,27 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * We analize a more recent version of JavaParser, after the project moved to Java 8.
  */
-public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
+class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 
     private static final Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
 
@@ -82,7 +79,7 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 //    }
 
     @Test
-    public void nodesTypeIsCorrect() throws IOException {
+    void nodesTypeIsCorrect() throws IOException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
         NameExpr nodes = cu.findAll(NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
         ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();

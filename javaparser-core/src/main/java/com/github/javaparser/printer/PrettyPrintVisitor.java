@@ -29,10 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -40,12 +37,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -65,9 +62,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         return printer.getSource();
     }
 
-    private void printModifiers(final EnumSet<Modifier> modifiers) {
+    private void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
-            printer.print(modifiers.stream().map(Modifier::asString).collect(Collectors.joining(" ")) + " ");
+            printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(joining(" ")) + " ");
         }
     }
 
@@ -247,7 +244,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getQualifier().get().accept(this, arg);
             printer.print(".");
         }
-        printAnnotations(n.getAnnotations(), false, arg);
         printer.print(n.getIdentifier());
 
         printOrphanCommentsEnding(n);
@@ -314,15 +310,20 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.println("/**");
             final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
             String[] lines = commentContent.split("\\R");
-            boolean skippingLeadingEmptyLines = true;
-            boolean prependEmptyLine = false;
-            boolean prependSpace = Arrays.stream(lines).anyMatch(line -> !line.isEmpty() && !line.startsWith(" "));
+            List<String> strippedLines = new ArrayList<>();
             for (String line : lines) {
                 final String trimmedLine = line.trim();
                 if (trimmedLine.startsWith("*")) {
                     line = trimmedLine.substring(1);
                 }
                 line = trimTrailingSpaces(line);
+                strippedLines.add(line);
+            }
+
+            boolean skippingLeadingEmptyLines = true;
+            boolean prependEmptyLine = false;
+            boolean prependSpace = strippedLines.stream().anyMatch(line -> !line.isEmpty() && !line.startsWith(" "));
+            for (String line : strippedLines) {
                 if (line.isEmpty()) {
                     if (!skippingLeadingEmptyLines) {
                         prependEmptyLine = true;
@@ -551,6 +552,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printer.print("var");
+    }
+
+    @Override
+    public void visit(Modifier n, Void arg) {
+        printer.print(n.getKeyword().asString());
+        printer.print(" ");
     }
 
     @Override
@@ -1073,6 +1080,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final SwitchStmt n, final Void arg) {
+        printSwitchNode(n, arg);
+    }
+
+    @Override
+    public void visit(SwitchExpr n, Void arg) {
+        printSwitchNode(n, arg);
+    }
+
+    private void printSwitchNode(SwitchNode n, Void arg) {
         printComment(n.getComment(), arg);
         printer.print("switch(");
         n.getSelector().accept(this, arg);
@@ -1112,7 +1128,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final BreakStmt n, final Void arg) {
         printComment(n.getComment(), arg);
         printer.print("break");
-        n.getLabel().ifPresent(l -> printer.print(" ").print(l.getIdentifier()));
+        n.getValue().ifPresent(value -> {
+            printer.print(" ");
+            value.accept(this, arg);
+        });
         printer.print(";");
     }
 

@@ -502,7 +502,17 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
+    public void visit(final Modifier n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
     public void visit(final VarType n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final SwitchExpr n, final A arg) {
         defaultAction(n, arg);
     }
 }

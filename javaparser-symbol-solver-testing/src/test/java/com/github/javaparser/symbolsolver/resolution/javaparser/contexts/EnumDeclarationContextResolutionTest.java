@@ -27,27 +27,27 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Federico Tomassetti
  */
-public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
+class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         typeSolver = new ReflectionTypeSolver();
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredInstanceField() {
+    void solveSymbolReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -58,7 +58,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredStaticField() {
+    void solveSymbolReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -69,7 +69,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolReferringToValue() {
+    void solveSymbolReferringToValue() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, new MemoryTypeSolver());
@@ -80,7 +80,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredInstanceField() {
+    void solveSymbolAsValueReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -91,7 +91,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredStaticField() {
+    void solveSymbolAsValueReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -102,7 +102,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToValue() {
+    void solveSymbolAsValueReferringToValue() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);

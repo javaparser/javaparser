@@ -23,8 +23,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.annotation.Annotation;
 
 import java.util.Collections;
 import java.util.List;
@@ -117,10 +115,15 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
         return getClassName();
     }
 
+    /**
+     * Annotation declarations cannot have type parameters and hence this method always returns an empty list.
+     *
+     * @return An empty list.
+     */
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        // TODO #1840
-        throw new UnsupportedOperationException();
+        // Annotation declarations cannot have type parameters - i.e. we can always return an empty list.
+        return Collections.emptyList();
     }
 
     @Override

@@ -24,16 +24,15 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AnnotationMemberDeclarationTest {
+class AnnotationMemberDeclarationTest {
 
     @Test
-    public void whenSettingNameTheParentOfNameIsAssigned() {
+    void whenSettingNameTheParentOfNameIsAssigned() {
         AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
         SimpleName name = new SimpleName("foo");
         decl.setName(name);
@@ -42,7 +41,7 @@ public class AnnotationMemberDeclarationTest {
     }
 
     @Test
-    public void removeDefaultValueWhenNoDefaultValueIsPresent() {
+    void removeDefaultValueWhenNoDefaultValueIsPresent() {
         AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
         SimpleName name = new SimpleName("foo");
         decl.setName(name);
@@ -53,7 +52,7 @@ public class AnnotationMemberDeclarationTest {
     }
 
     @Test
-    public void removeDefaultValueWhenDefaultValueIsPresent() {
+    void removeDefaultValueWhenDefaultValueIsPresent() {
         AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
         SimpleName name = new SimpleName("foo");
         decl.setName(name);

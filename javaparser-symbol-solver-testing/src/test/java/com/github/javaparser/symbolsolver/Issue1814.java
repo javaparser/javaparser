@@ -5,7 +5,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -14,28 +13,30 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.time.Duration;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 /**
  * @author Dominik Hardtke
  * @since 01/09/2018
  */
-public class Issue1814 extends AbstractResolutionTest {
+class Issue1814 extends AbstractResolutionTest {
     private JavaParser javaParser;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         final CompilationUnit compilationUnit = new CompilationUnit();
         compilationUnit.setPackageDeclaration("java.lang");
         // construct a fake java.lang.Object class with only one method (java.lang.Object#equals(java.lang.Object)
-        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.PUBLIC);
-        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.PUBLIC);
+        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.Keyword.PUBLIC);
+        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.Keyword.PUBLIC);
         equals.addParameter("Object", "obj");
         final BlockStmt body = new BlockStmt();
         body.addStatement("return this == obj;");
@@ -67,22 +68,21 @@ public class Issue1814 extends AbstractResolutionTest {
         javaParser = new JavaParser(config);
     }
 
-    @Test(timeout = 1000)
-    public void getAllMethodsVisibleToInheritors() {
-        String code = String.join(System.lineSeparator(),
-                "public class AbstractExercise extends java.lang.Object {",
-                "}"
-        );
-
+    @Test
+    void getAllMethodsVisibleToInheritors() {
+        assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
+            String code = String.join(System.lineSeparator(), "public class AbstractExercise extends java.lang.Object {", "}");
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
-
         assertTrue(parseResult.isSuccessful());
         assertTrue(parseResult.getResult().isPresent());
-
         List<ClassOrInterfaceType> referenceTypes = parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
         assertTrue(referenceTypes.size() > 0);
-
         final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().getAllMethodsVisibleToInheritors();
         assertEquals(1, methods.size());
-    }
+    });
+
+        
+                
+                
+        }
 }

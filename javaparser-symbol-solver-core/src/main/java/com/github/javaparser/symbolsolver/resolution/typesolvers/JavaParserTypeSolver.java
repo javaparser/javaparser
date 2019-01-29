@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Predicate;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
@@ -113,7 +111,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         try {
             return parsedFiles.get(srcFile.toAbsolutePath(), () -> {
                 try {
-                    if (!Files.exists(srcFile)) {
+                    if (!Files.exists(srcFile) || !Files.isRegularFile(srcFile)) {
                         return Optional.empty();
                     }
                     return javaParser.parse(COMPILATION_UNIT, provider(srcFile))

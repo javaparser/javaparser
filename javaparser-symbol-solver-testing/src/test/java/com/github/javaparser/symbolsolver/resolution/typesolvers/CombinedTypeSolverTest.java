@@ -16,30 +16,24 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver.ExceptionHandlers;
 
-@RunWith(Parameterized.class)
-public class CombinedTypeSolverTest {
+class CombinedTypeSolverTest {
 
-    @Parameters
-    public static List<Object[]> parameters() {
+    static List<Object[]> parameters() {
         // Why these classes? NFE is a subclass, IOOBE is a superclass and ISE is a class without children (by default)
         Predicate<Exception> whitelistTestFilter = ExceptionHandlers.getTypeBasedWhitelist(NumberFormatException.class,
                 IndexOutOfBoundsException.class, IllegalStateException.class);
@@ -71,17 +65,9 @@ public class CombinedTypeSolverTest {
         });
     }
 
-    @Parameter(0)
-    public Exception toBeThrownException;
-
-    @Parameter(1)
-    public Predicate<Exception> filter;
-
-    @Parameter(2)
-    public boolean expectForward;
-
-    @Test
-    public void testExceptionFilter() {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void testExceptionFilter(Exception toBeThrownException, Predicate<Exception> filter, boolean expectForward) {
         TypeSolver erroringTypeSolver = mock(TypeSolver.class);
         doThrow(toBeThrownException).when(erroringTypeSolver).tryToSolveType(any(String.class));
 
@@ -92,11 +78,11 @@ public class CombinedTypeSolverTest {
         try {
             new CombinedTypeSolver(filter, erroringTypeSolver, secondaryTypeSolver)
                     .tryToSolveType("an uninteresting string");
-            assertTrue("Forwarded, but we expected an exception", expectForward);
+            assertTrue(expectForward, "Forwarded, but we expected an exception");
         } catch (Exception e) {
-            assertFalse("Exception, but we expected forwarding", expectForward); // if we expected the error to be
-                                                                                 // forwarded there shouldn't be an
-                                                                                 // exception
+            assertFalse(expectForward, "Exception, but we expected forwarding"); // if we expected the error to be
+            // forwarded there shouldn't be an
+            // exception
         }
 
         verify(secondaryTypeSolver, times(expectForward ? 1 : 0)).tryToSolveType(any(String.class));

@@ -7,44 +7,43 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.validator.Java9Validator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TryStmtTest {
+class TryStmtTest {
     @Test
-    public void simpleTest() {
+    void simpleTest() {
         TryStmt tryStmt = parse9("try(Reader x = new FileReader()){}");
         assertInstanceOf(VariableDeclarationExpr.class, tryStmt.getResources().get(0));
     }
 
     @Test
-    public void multipleTest() {
+    void multipleTest() {
         TryStmt tryStmt = parse9("try(Reader x = new FileReader(); Reader x = new FileReader()){}");
         assertInstanceOf(VariableDeclarationExpr.class, tryStmt.getResources().get(0));
 
     }
 
     @Test
-    public void modifiersTest() {
+    void modifiersTest() {
         TryStmt tryStmt = parse9("try(final @A Reader x = new FileReader()){}");
         assertInstanceOf(VariableDeclarationExpr.class, tryStmt.getResources().get(0));
 
     }
 
     @Test
-    public void simpleVariable() {
+    void simpleVariable() {
         TryStmt tryStmt = parse9("try(a){}");
         assertInstanceOf(NameExpr.class, tryStmt.getResources().get(0));
 
     }
 
     @Test
-    public void twoSimpleVariables() {
+    void twoSimpleVariables() {
         TryStmt tryStmt = parse9("try(a;b){}");
         assertInstanceOf(NameExpr.class, tryStmt.getResources().get(0));
         assertInstanceOf(NameExpr.class, tryStmt.getResources().get(1));
@@ -52,21 +51,21 @@ public class TryStmtTest {
     }
 
     @Test
-    public void complexVariable() {
+    void complexVariable() {
         TryStmt tryStmt = parse9("try(a.b.c){}");
         assertInstanceOf(FieldAccessExpr.class, tryStmt.getResources().get(0));
 
     }
 
     @Test
-    public void superAccess() {
+    void superAccess() {
         TryStmt tryStmt = parse9("try(super.a){}");
         assertInstanceOf(FieldAccessExpr.class, tryStmt.getResources().get(0));
 
     }
 
     @Test
-    public void outerClassAccess() {
+    void outerClassAccess() {
         TryStmt tryStmt = parse9("try(X.this.a){}");
         assertInstanceOf(FieldAccessExpr.class, tryStmt.getResources().get(0));
 
@@ -75,7 +74,7 @@ public class TryStmtTest {
     private <T> T parse9(String code) {
         JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
         ParseResult<Statement> result = parser.parse(ParseStart.STATEMENT, provider(code));
-        assertTrue(result.toString(), result.isSuccessful());
+        assertTrue(result.isSuccessful(), result.toString());
         return (T) result.getResult().get();
     }
 }

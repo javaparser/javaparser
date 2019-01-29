@@ -225,4 +225,8 @@ public interface GenericVisitor<R, A> {
     R visit(ReceiverParameter n, A arg);
 
     R visit(VarType n, A arg);
+
+    R visit(Modifier n, A arg);
+
+    R visit(SwitchExpr n, A arg);
 }

@@ -1,8 +1,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
@@ -111,8 +110,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public AccessSpecifier accessSpecifier() {
-    return AccessSpecifier.PRIVATE;
+  public Modifier.Keyword accessSpecifier() {
+    return Modifier.Keyword.PRIVATE;
   }
 
   @Override

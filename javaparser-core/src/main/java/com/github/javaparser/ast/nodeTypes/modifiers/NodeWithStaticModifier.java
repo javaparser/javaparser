@@ -3,7 +3,7 @@ package com.github.javaparser.ast.nodeTypes.modifiers;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
-import static com.github.javaparser.ast.Modifier.STATIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 
 /**
  * A node that can be static.
@@ -11,7 +11,7 @@ import static com.github.javaparser.ast.Modifier.STATIC;
 public interface NodeWithStaticModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isStatic() {
-        return getModifiers().contains(STATIC);
+        return hasModifier(STATIC);
     }
 
     @SuppressWarnings("unchecked")

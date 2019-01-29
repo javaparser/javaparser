@@ -22,12 +22,15 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.Generated;
+
 import java.util.Optional;
 
 /**
@@ -92,10 +95,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
+        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
         r.setComment(comment);
         return r;
     }
@@ -105,10 +109,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<EnumConstantDeclaration> entries = cloneList(n.getEntries(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        EnumDeclaration r = new EnumDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, name, implementedTypes, entries, members);
+        EnumDeclaration r = new EnumDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, implementedTypes, entries, members);
         r.setComment(comment);
         return r;
     }
@@ -128,10 +133,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final AnnotationDeclaration n, final Object arg) {
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        AnnotationDeclaration r = new AnnotationDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, name, members);
+        AnnotationDeclaration r = new AnnotationDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, members);
         r.setComment(comment);
         return r;
     }
@@ -139,21 +145,23 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final AnnotationMemberDeclaration n, final Object arg) {
         Expression defaultValue = cloneNode(n.getDefaultValue(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Type type = cloneNode(n.getType(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, type, name, defaultValue);
+        AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, type, name, defaultValue);
         r.setComment(comment);
         return r;
     }
 
     @Override
     public Visitable visit(final FieldDeclaration n, final Object arg) {
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        FieldDeclaration r = new FieldDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, variables);
+        FieldDeclaration r = new FieldDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, variables);
         r.setComment(comment);
         return r;
     }
@@ -172,6 +180,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ConstructorDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
         ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
@@ -179,7 +188,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter);
+        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter);
         r.setComment(comment);
         return r;
     }
@@ -188,6 +197,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Type type = cloneNode(n.getType(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
         ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
@@ -195,7 +205,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        MethodDeclaration r = new MethodDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
+        MethodDeclaration r = new MethodDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
         r.setComment(comment);
         return r;
     }
@@ -203,11 +213,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final Parameter n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Type type = cloneNode(n.getType(), arg);
         NodeList<AnnotationExpr> varArgsAnnotations = cloneList(n.getVarArgsAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        Parameter r = new Parameter(n.getTokenRange().orElse(null), n.getModifiers(), annotations, type, n.isVarArgs(), varArgsAnnotations, name);
+        Parameter r = new Parameter(n.getTokenRange().orElse(null), modifiers, annotations, type, n.isVarArgs(), varArgsAnnotations, name);
         r.setComment(comment);
         return r;
     }
@@ -522,10 +533,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final Name n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name qualifier = cloneNode(n.getQualifier(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier(), annotations);
+        Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier());
         r.setComment(comment);
         return r;
     }
@@ -568,9 +578,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final VariableDeclarationExpr n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        VariableDeclarationExpr r = new VariableDeclarationExpr(n.getTokenRange().orElse(null), n.getModifiers(), annotations, variables);
+        VariableDeclarationExpr r = new VariableDeclarationExpr(n.getTokenRange().orElse(null), modifiers, annotations, variables);
         r.setComment(comment);
         return r;
     }
@@ -702,9 +713,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final BreakStmt n, final Object arg) {
-        SimpleName label = cloneNode(n.getLabel(), arg);
+        Expression value = cloneNode(n.getValue(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
+        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), value);
         r.setComment(comment);
         return r;
     }
@@ -885,9 +896,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final ModuleRequiresDirective n, final Object arg) {
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ModuleRequiresDirective r = new ModuleRequiresDirective(n.getTokenRange().orElse(null), n.getModifiers(), name);
+        ModuleRequiresDirective r = new ModuleRequiresDirective(n.getTokenRange().orElse(null), modifiers, name);
         r.setComment(comment);
         return r;
     }
@@ -986,6 +998,24 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         VarType r = new VarType(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final Modifier n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        Modifier r = new Modifier(n.getTokenRange().orElse(null), n.getKeyword());
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final SwitchExpr n, final Object arg) {
+        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        Expression selector = cloneNode(n.getSelector(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SwitchExpr r = new SwitchExpr(n.getTokenRange().orElse(null), selector, entries);
         r.setComment(comment);
         return r;
     }

@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -191,7 +191,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             fields.add(new ResolvedFieldDeclaration() {
                 
                 @Override
-                public AccessSpecifier accessSpecifier() {
+                public Modifier.Keyword accessSpecifier() {
                     return f.accessSpecifier();
                 }
                 
@@ -317,8 +317,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public AccessSpecifier accessSpecifier() {
-        return AstResolutionUtils.toAccessLevel(wrappedNode.getModifiers());
+    public Modifier.Keyword accessSpecifier() {
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override
@@ -353,14 +353,18 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = null;
-        String typeName = classOrInterfaceType.asString();
+        String typeName = classOrInterfaceType.getName().getId();
+        if (classOrInterfaceType.getScope().isPresent()) {
+            typeName = classOrInterfaceType.getScope().get().asString() + "." + typeName;
+        }
+
         if (typeName.indexOf('.') > -1) {
             ref = typeSolver.tryToSolveType(typeName);
         }
         if (ref == null || !ref.isSolved()) {
             ref = solveType(typeName);
         }
-        if (!ref.isSolved()) {
+        if (!ref.isSolved() && classOrInterfaceType.getScope().isPresent()) {
             ref = solveType(classOrInterfaceType.getName().getId());
         }
         if (!ref.isSolved()) {

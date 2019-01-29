@@ -1,3 +1,38 @@
+Version 3.10.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/122?closed=1)
+
+Version 3.10.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/121?closed=1)
+
+Version 3.10.0
+------------------
+* slightly breaking: besides `break;` and `break [label];` there is now `break [expression];` like
+`break 1+2;` or `break "bye!";` . That means that `BreakStmt` no longer has a `label`,
+it has a `value` which is of type `Expression`.
+This is to prepare for Java 12 switch expressions.
+You can find the details in the Javadoc.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/120?closed=1)
+
+Version 3.9.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/119?closed=1)
+
+Version 3.9.0
+------------------
+* MAJOR BREAKAGE: modifiers (like public, static, transient) used to be a special case:
+they were enums stored in an EnumSet.
+This meant they were not true `Node`s, had to be treated in a special way, and missed some information.
+This has now been corrected in [PR 1975](https://github.com/javaparser/javaparser/pull/1975). 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/118?closed=1)
+
+Version 3.8.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/117?closed=1)
+
 Version 3.8.2
 ------------------
 * slightly breaking: `ObjectCreationExpr` no longer gets a diamond when constructed with the default constructor.

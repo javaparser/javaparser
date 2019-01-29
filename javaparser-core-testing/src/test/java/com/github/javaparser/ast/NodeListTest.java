@@ -29,19 +29,17 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class NodeListTest {
+class NodeListTest {
 
     private AstObserver createObserver(List<String> changes) {
         return new AstObserver() {
@@ -69,11 +67,11 @@ public class NodeListTest {
     }
 
     private FieldDeclaration createIntField(String name) {
-        return new FieldDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), name);
+        return new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), name);
     }
 
     @Test
-    public void addAllWithoutIndex() {
+    void addAllWithoutIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
         CompilationUnit cu = JavaParser.parse(code);
@@ -87,7 +85,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addAllWithIndex() {
+    void addAllWithIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
         CompilationUnit cu = JavaParser.parse(code);
@@ -101,7 +99,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void clear() {
+    void clear() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -115,7 +113,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void set() {
+    void set() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -128,7 +126,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeNode() {
+    void removeNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -140,7 +138,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeFirstNode() {
+    void removeFirstNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -160,7 +158,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeLastNode() {
+    void removeLastNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -180,7 +178,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeObject() {
+    void removeObject() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -192,7 +190,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeAll() {
+    void removeAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -205,7 +203,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void retainAll() {
+    void retainAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -219,7 +217,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void replaceAll() {
+    void replaceAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -238,7 +236,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void removeIf() {
+    void removeIf() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int longName; int c; }";
         CompilationUnit cu = JavaParser.parse(code);
@@ -250,7 +248,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void replace() {
+    void replace() {
         final NodeList<Name> list = nodeList(new Name("a"), new Name("b"), new Name("c"));
 
         final boolean replaced = list.replace(new Name("b"), new Name("z"));
@@ -263,14 +261,14 @@ public class NodeListTest {
     }
 
     @Test
-    public void toStringTest() {
+    void toStringTest() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         assertEquals("[abc, bcd, cde]", list.toString());
     }
 
     @Test
-    public void addFirst() {
+    void addFirst() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addFirst(new Name("xxx"));
@@ -279,7 +277,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addLast() {
+    void addLast() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addLast(new Name("xxx"));
@@ -288,7 +286,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addBefore() {
+    void addBefore() {
         Name n = new Name("bcd");
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
@@ -298,7 +296,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addAfter() {
+    void addAfter() {
         Name n = new Name("bcd");
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
@@ -308,7 +306,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addBeforeFirst() {
+    void addBeforeFirst() {
         Name abc = new Name("abc");
         final NodeList<Name> list = nodeList(abc, new Name("bcd"), new Name("cde"));
 
@@ -318,7 +316,7 @@ public class NodeListTest {
     }
 
     @Test
-    public void addAfterLast() {
+    void addAfterLast() {
         Name cde = new Name("cde");
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), cde);
 

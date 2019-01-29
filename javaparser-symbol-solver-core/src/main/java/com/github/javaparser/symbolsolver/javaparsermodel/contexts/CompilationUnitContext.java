@@ -23,7 +23,6 @@ import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.declarations.*;
@@ -40,7 +39,6 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -197,6 +195,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref != null && ref.isSolved()) {
                             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                        } else {
+                            return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
                         }
                     }
                 }
@@ -260,8 +260,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if(importDecl.isStatic()){
-                if(importDecl.isAsterisk()){
+            if (importDecl.isStatic()) {
+                if (importDecl.isAsterisk()) {
                     String importString = importDecl.getNameAsString();
 
                     if (this.wrappedNode.getPackageDeclaration().isPresent()
@@ -278,7 +278,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (method.isSolved()) {
                         return method;
                     }
-                } else{
+                } else {
                     String qName = importDecl.getNameAsString();
 
                     if (qName.equals(name) || qName.endsWith("." + name)) {
@@ -287,6 +287,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
                         if (method.isSolved()) {
                             return method;
+                        } else {
+                            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
                         }
                     }
                 }

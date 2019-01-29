@@ -23,34 +23,36 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.Keyword.SYNCHRONIZED;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NodeWithModifiersTest {
+class NodeWithModifiersTest {
 
     @Test
-    public void addModifierWorks() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+    void addModifierWorks() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
-        decl.addModifier(Modifier.PUBLIC);
-        assertEquals(EnumSet.of(Modifier.PUBLIC), decl.getModifiers());
+        decl.addModifier(PUBLIC);
+        assertEquals(createModifierList(PUBLIC), decl.getModifiers());
     }
 
     @Test
-    public void addModifierTriggerNotification() {
+    void addModifierTriggerNotification() {
         List<String> changes = new LinkedList<>();
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.register(new AstObserverAdapter() {
             @Override
@@ -58,9 +60,37 @@ public class NodeWithModifiersTest {
                 changes.add("property " + property.name() + " is changed to " + newValue);
             }
         });
-        decl.addModifier(Modifier.PUBLIC);
+        decl.addModifier(PUBLIC);
         assertEquals(1, changes.size());
-        assertEquals("property MODIFIERS is changed to [PUBLIC]", changes.get(0));
+        assertEquals("property MODIFIERS is changed to [public ]", changes.get(0));
     }
 
+    @Test
+    void removeExistingModifier() {
+        NodeWithModifiers node = anythingWithModifiers(PUBLIC);
+        node.removeModifier(PUBLIC);
+        assertEquals(0, node.getModifiers().size());
+    }
+
+    @Test
+    void ignoreNotExistingModifiersOnRemove() {
+        NodeWithModifiers node = anythingWithModifiers(PUBLIC);
+        node.removeModifier(PRIVATE);
+
+        assertEquals(createModifierList(PUBLIC), node.getModifiers());
+    }
+
+    @Test
+    void keepModifiersThatShouldNotBeRemoved() {
+        NodeWithModifiers node = anythingWithModifiers(PUBLIC, STATIC, SYNCHRONIZED);
+        node.removeModifier(PUBLIC, PRIVATE, STATIC);
+
+        assertEquals(createModifierList(SYNCHRONIZED), node.getModifiers());
+    }
+
+    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword ... keywords) {
+        ClassOrInterfaceDeclaration foo = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
+        foo.addModifier(keywords);
+        return foo;
+    }
 }

@@ -17,18 +17,13 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -152,10 +147,15 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
     }
 
+    /**
+     * Annotation declarations cannot have type parameters and hence this method always returns an empty list.
+     *
+     * @return An empty list.
+     */
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        // TODO #1840
-        throw new UnsupportedOperationException();
+        // Annotation declarations cannot have type parameters - i.e. we can always return an empty list.
+        return Collections.emptyList();
     }
 
     @Override

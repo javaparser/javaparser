@@ -18,7 +18,6 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +33,11 @@ public class InferenceContext {
     private int nextInferenceVariableId = 0;
     private ObjectProvider objectProvider;
     private List<InferenceVariableType> inferenceVariableTypes = new ArrayList<>();
+    private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
     public InferenceContext(ObjectProvider objectProvider) {
         this.objectProvider = objectProvider;
     }
-
-    private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
     private InferenceVariableType inferenceVariableTypeForTp(ResolvedTypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
@@ -52,7 +50,6 @@ public class InferenceContext {
     }
 
     /**
-     *
      * @return the actual with the inference variable inserted
      */
     public ResolvedType addPair(ResolvedType target, ResolvedType actual) {
@@ -79,7 +76,7 @@ public class InferenceContext {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
                     List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
-                    if (correspondingActualType.isEmpty()){
+                    if (correspondingActualType.isEmpty()) {
                         throw new ConfilictingGenericTypesException(formalType, actualType);
                     }
                     correspondingFormalType = correspondingActualType;
@@ -132,20 +129,20 @@ public class InferenceContext {
                 }
             }
 
-            if (actualType.isReferenceType()){
-                if (formalType.asWildcard().isBounded()){
+            if (actualType.isReferenceType()) {
+                if (formalType.asWildcard().isBounded()) {
                     registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
                 }
             }
-        } else if (actualType instanceof InferenceVariableType){
-            if (formalType instanceof ResolvedReferenceType){
+        } else if (actualType instanceof InferenceVariableType) {
+            if (formalType instanceof ResolvedReferenceType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
-            } else if (formalType instanceof InferenceVariableType){
+            } else if (formalType instanceof InferenceVariableType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
-        } else if (actualType.isConstraint()){
+        } else if (actualType.isConstraint()) {
             ResolvedLambdaConstraintType constraintType = actualType.asConstraintType();
-            if (constraintType.getBound() instanceof InferenceVariableType){
+            if (constraintType.getBound() instanceof InferenceVariableType) {
                 ((InferenceVariableType) constraintType.getBound()).registerEquivalentType(formalType);
             }
         } else if (actualType.isPrimitive()) {
@@ -153,6 +150,16 @@ public class InferenceContext {
                 // nothing to do
             } else {
                 registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
+            }
+        } else if (actualType.isReferenceType()) {
+            if (formalType.isPrimitive()) {
+                if (formalType.asPrimitive().getBoxTypeQName().equals(actualType.describe())) {
+                    registerCorrespondance(objectProvider.byName(formalType.asPrimitive().getBoxTypeQName()), actualType);
+                } else {
+                    // nothing to do
+                }
+            } else {
+                // nothing to do
             }
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
@@ -176,7 +183,7 @@ public class InferenceContext {
             return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
-        } else if (type.isConstraint()){
+        } else if (type.isConstraint()) {
             return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
         } else if (type instanceof InferenceVariableType) {
             return type;

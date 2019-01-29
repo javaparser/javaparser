@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -40,7 +41,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,12 +49,12 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ContextTest extends AbstractSymbolResolutionTest {
+class ContextTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
 
@@ -63,7 +64,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveDeclaredFieldReference() {
+    void resolveDeclaredFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
@@ -79,7 +80,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveInheritedFieldReference() {
+    void resolveInheritedFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
@@ -95,7 +96,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveParameterReference() {
+    void resolveParameterReference() {
         CompilationUnit cu = parseSample("ReferencesToParameter");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
@@ -110,7 +111,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToImportedType() {
+    void resolveReferenceToImportedType() {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -133,7 +134,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceUsingQualifiedName() {
+    void resolveReferenceUsingQualifiedName() {
         CompilationUnit cu = parseSample("Navigator2");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -157,7 +158,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToClassesInTheSamePackage() {
+    void resolveReferenceToClassesInTheSamePackage() {
         CompilationUnit cu = parseSample("Navigator3");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -180,7 +181,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToClassInJavaLang() {
+    void resolveReferenceToClassInJavaLang() {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -204,7 +205,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToMethod() throws IOException {
+    void resolveReferenceToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -223,7 +224,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveCascadeOfReferencesToMethod() throws IOException {
+    void resolveCascadeOfReferencesToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -239,7 +240,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToMethodCalledOnArrayAccess() {
+    void resolveReferenceToMethodCalledOnArrayAccess() {
         CompilationUnit cu = parseSample("ArrayAccess");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
@@ -255,7 +256,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToJreType() {
+    void resolveReferenceToJreType() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -268,7 +269,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToMethodWithLambda() {
+    void resolveReferenceToMethodWithLambda() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -283,7 +284,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamBase() {
+    void resolveReferenceToLambdaParamBase() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -297,7 +298,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamSimplified() {
+    void resolveReferenceToLambdaParamSimplified() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -312,7 +313,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveGenericReturnTypeOfMethodInJar() throws IOException {
+    void resolveGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -329,7 +330,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
+    void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -345,7 +346,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveTypeUsageOfMethodInGenericClass() throws IOException {
+    void resolveTypeUsageOfMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -359,7 +360,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveTypeUsageOfCascadeMethodInGenericClass() throws IOException {
+    void resolveTypeUsageOfCascadeMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -373,7 +374,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveLambdaType() throws IOException {
+    void resolveLambdaType() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -388,7 +389,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParam() throws IOException {
+    void resolveReferenceToLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -403,7 +404,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToCallOnLambdaParam() throws IOException {
+    void resolveReferenceToCallOnLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -418,7 +419,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodWithNullParam() {
+    void resolveReferenceToOverloadMethodWithNullParam() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
@@ -433,7 +434,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindStricter() {
+    void resolveReferenceToOverloadMethodFindStricter() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
@@ -448,7 +449,22 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveInheritedMethodFromInterface() {
+    void resolveReferenceToMethodWithGenericArrayTypeParam() {
+        CompilationUnit cu = parseSample("GenericArrayMethodArgument");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericArrayMethodArgument");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr call = Navigator.findMethodCall(method, "foo").get();
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("foo", ref.getName());
+        assertEquals(1, ref.getNoParams());
+        assertEquals("java.lang.String[]", ref.getParamType(0).describe());
+    }
+
+    @Test
+    void resolveInheritedMethodFromInterface() {
         CompilationUnit cu = parseSample("InterfaceInheritance");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
         MethodDeclaration method = Navigator.demandMethod(clazz, "test");
@@ -462,7 +478,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindOnlyCompatible() {
+    void resolveReferenceToOverloadMethodFindOnlyCompatible() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
@@ -489,7 +505,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void localVariableDeclarationInScope() {
+    void localVariableDeclarationInScope() {
         String name = "a";
         CompilationUnit cu = parse("class A { void foo() {\n" +
                 "SomeClass a; a.aField;" + "\n" +
@@ -522,8 +538,8 @@ public class ContextTest extends AbstractSymbolResolutionTest {
 
     private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
                                                                   int expectedNumber, String message) {
-        assertEquals(message, expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
-                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+        assertEquals(expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
+                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
     }
 
     private void assertNoVarsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
@@ -538,11 +554,11 @@ public class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .localVariablesExposedToChild(child);
-        assertEquals(message, expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count());
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
     }
 
     @Test
-    public void parametersExposedToChildForMethod() {
+    void parametersExposedToChildForMethod() {
         MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
                 ParseStart.CLASS_BODY).asMethodDeclaration();
         assertOneParamExposedToChildInContextNamed(method, method.getBody().get(), "myParam");
@@ -551,7 +567,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parametersExposedToChildForConstructor() {
+    void parametersExposedToChildForConstructor() {
         ConstructorDeclaration constructor = parse("Foo(int myParam) { aCall(); }",
                 ParseStart.CLASS_BODY).asConstructorDeclaration();
         assertOneParamExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
@@ -559,7 +575,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    public void parametersExposedToChildForLambda() {
+    void parametersExposedToChildForLambda() {
         LambdaExpr lambda = (LambdaExpr)parse("Object myLambda = (myParam) -> myParam * 2;",
                 ParseStart.STATEMENT).asExpressionStmt().getExpression().asVariableDeclarationExpr()
                 .getVariables().get(0).getInitializer().get();
@@ -572,7 +588,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     // variable declaration statement.
 
     @Test
-    public void localVariablesExposedToChildWithinABlock() {
+    void localVariablesExposedToChildWithinABlock() {
         BlockStmt blockStmt = parse("{ preStatement(); int a = 1, b = 2; otherStatement(); }",
                 ParseStart.STATEMENT).asBlockStmt();
         assertNoVarsExposedToChildInContextNamed(blockStmt, blockStmt.getStatement(0), "a");
@@ -599,7 +615,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     // * The contained Statement
 
     @Test
-    public void localVariablesExposedToChildWithinForStmt() {
+    void localVariablesExposedToChildWithinForStmt() {
         ForStmt forStmt = parse("for (int i=0, j=1;i<10;i++) { body(); }",
                 ParseStart.STATEMENT).asForStmt();
         VariableDeclarationExpr initializations = forStmt.getInitialization().get(0).asVariableDeclarationExpr();
@@ -621,7 +637,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     // the contained Statement.
 
     @Test
-    public void localVariablesExposedToChildWithinEnhancedForeachStmt() {
+    void localVariablesExposedToChildWithinEnhancedForeachStmt() {
         ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
                 ParseStart.STATEMENT).asForeachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
@@ -633,7 +649,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     // is the entire block associated with the catch.
 
     @Test
-    public void parametersExposedToChildWithinTryStatement() {
+    void parametersExposedToChildWithinTryStatement() {
         CatchClause catchClause = parse("try {  } catch(Exception e) { body(); }",
                 ParseStart.STATEMENT).asTryStmt().getCatchClauses().get(0);
         assertOneParamExposedToChildInContextNamed(catchClause, catchClause.getBody(), "e");
@@ -645,7 +661,7 @@ public class ContextTest extends AbstractSymbolResolutionTest {
     // associated with the try-with-resources statement.
 
     @Test
-    public void localVariablesExposedToChildWithinTryWithResourcesStatement() {
+    void localVariablesExposedToChildWithinTryWithResourcesStatement() {
         TryStmt stmt = parse("try (Object res1 = foo(); Object res2 = foo()) { body(); }",
                 ParseStart.STATEMENT).asTryStmt();
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
