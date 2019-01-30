@@ -150,7 +150,8 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
             (variable.getModifiers().size() == 1 &&
              variable.getModifiers().get(0).getKeyword() != Modifier.Keyword.FINAL)) {
             throw new IllegalArgumentException("A foreach statement's variable declaration may have at most one " +
-                                               "'final' modifier. Given: " + variable.getVariables() + ".");
+                                               "'final' modifier, and no other modifiers. Given: " +
+                                               variable.getVariables() + ".");
         }
         if (variable == this.variable) {
             return (ForEachStmt) this;
@@ -183,8 +184,8 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
      * has either no modifiers, or a single {@code final} modifier.
      * <p>
      * Calling this method on a foreach statement {@code forEachStmt} is equivalent to calling
-     * {@code getVariable().getModifiers().isNonEmpty() &&
-     * getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL}.
+     * {@code forEachStmt.getVariable().getModifiers().isNonEmpty() &&
+     * forEachStmt.getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL}.
      *
      * @return {@code true} if this foreach statement's variable is {@code final}, and {@code false} otherwise.
      */
