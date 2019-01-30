@@ -151,7 +151,7 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
              variable.getModifiers().get(0).getKeyword() != Modifier.Keyword.FINAL)) {
             throw new IllegalArgumentException("A foreach statement's variable declaration may have at most one " +
                                                "'final' modifier, and no other modifiers. Given: " +
-                                               variable.getVariables() + ".");
+                                               variable.getModifiers() + ".");
         }
         if (variable == this.variable) {
             return (ForEachStmt) this;
