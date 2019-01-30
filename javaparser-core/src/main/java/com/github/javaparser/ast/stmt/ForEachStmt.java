@@ -140,6 +140,18 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForEachStmt setVariable(final VariableDeclarationExpr variable) {
         assertNotNull(variable);
+        // assert that the variable has exactly one variable declarator
+        if (variable.getVariables().size() != 1) {
+            throw new AssertionError("A foreach statement's variable declaration must have exactly one variable " +
+                                     "declarator. Given: " + variable.getVariables().size() + ".");
+        }
+        // assert that there is at most one modifier, and if so, that it is the FINAL modifier
+        if (variable.getModifiers().size() > 1 ||
+            (variable.getModifiers().size() == 1 &&
+             variable.getModifiers().get(0).getKeyword() != Modifier.Keyword.FINAL)) {
+            throw new AssertionError("A foreach statement's variable declaration may have at most one 'final' " +
+                                     "modifier. Given: " + variable.getVariables() + ".");
+        }
         if (variable == this.variable) {
             return (ForEachStmt) this;
         }
