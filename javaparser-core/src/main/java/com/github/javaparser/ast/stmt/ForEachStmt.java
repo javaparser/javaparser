@@ -20,8 +20,12 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -30,13 +34,13 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.ForEachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A for-each statement.
@@ -145,6 +149,36 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
         this.variable = variable;
         setAsParentNodeOf(variable);
         return this;
+    }
+
+    /**
+     * Convenience method that directly returns this foreach statement's single variable declarator.
+     * Note that any foreach statement's variable declaration expression (as returned by {@link #getVariable()}) always
+     * has exactly one variable declarator.
+     * <p>
+     * Calling this method on a foreach statement {@code forEachStmt} is equivalent to calling
+     * {@code forEachStmt.getVariable().getVariable(0)}.
+     *
+     * @return this foreach statement's single variable declarator.
+     */
+    public VariableDeclarator getVariableDeclarator() {
+        return getVariable().getVariable(0);
+    }
+
+    /**
+     * Convenience method that decides whether this foreach statement's variable is {@code final}.
+     * Note that any foreach statement's variable declaration expression (as returned by {@link #getVariable()}) always
+     * has either no modifiers, or a single {@code final} modifier.
+     * <p>
+     * Calling this method on a foreach statement {@code forEachStmt} is equivalent to calling
+     * {@code getVariable().getModifiers().isNonEmpty() &&
+     * getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL}.
+     *
+     * @return {@code true} if this foreach statement's variable is {@code final}, and {@code false} otherwise.
+     */
+    public boolean hasFinalVariable() {
+        return getVariable().getModifiers().isNonEmpty() &&
+               getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
     }
 
     @Override
