@@ -68,7 +68,7 @@ class JavassistUtils {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethodAsUsage(name, argumentsTypes, invokationContext, null);
+                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(superClass, name, argumentsTypes, typeSolver, invokationContext);
                 if (ref.isPresent()) {
                     return ref;
                 }
@@ -79,7 +79,7 @@ class JavassistUtils {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethodAsUsage(name, argumentsTypes, invokationContext, null);
+                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(interfaze, name, argumentsTypes, typeSolver, invokationContext);
                 if (ref.isPresent()) {
                     return ref;
                 }

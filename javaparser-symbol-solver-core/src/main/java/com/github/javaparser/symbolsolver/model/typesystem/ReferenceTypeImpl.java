@@ -232,8 +232,6 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        Set<ResolvedFieldDeclaration> res = new HashSet<>();
-        res.addAll(getTypeDeclaration().getDeclaredFields());
-        return res;
+        return new HashSet<>(getTypeDeclaration().getDeclaredFields());
     }
 }
