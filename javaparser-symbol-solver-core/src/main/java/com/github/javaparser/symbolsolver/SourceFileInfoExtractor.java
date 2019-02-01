@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -25,8 +26,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -118,7 +119,9 @@ public class SourceFileInfoExtractor {
                     || (requireParentNode(node) instanceof MethodDeclaration)
                     || (requireParentNode(node) instanceof PackageDeclaration)) {
                 // skip
-            } else if ((requireParentNode(node) instanceof Statement) || (requireParentNode(node) instanceof VariableDeclarator)) {
+            } else if ((requireParentNode(node) instanceof Statement) || 
+                    (requireParentNode(node) instanceof VariableDeclarator) ||
+                    (requireParentNode(node) instanceof SwitchEntry)) {
                 try {
                     ResolvedType ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().get().begin.line + ") " + node + " ==> " + ref.describe());
