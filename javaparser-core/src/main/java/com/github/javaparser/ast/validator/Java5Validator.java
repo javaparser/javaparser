@@ -44,13 +44,6 @@ public class Java5Validator extends Java1_4Validator {
             reporter.report(node, "A foreach statement's variable declaration must have exactly one variable " +
                                   "declarator. Given: " + declaration.getVariables().size() + ".");
         }
-        // assert that there is at most one modifier, and if so, that it is the FINAL modifier
-        if (declaration.getModifiers().size() > 1 ||
-            (declaration.getModifiers().size() == 1 &&
-             declaration.getModifiers().get(0).getKeyword() != Modifier.Keyword.FINAL)) {
-            reporter.report(node, "A foreach statement's variable declaration may have at most one 'final' modifier, " +
-                                  "and no other modifiers. Given: " + declaration.getModifiers() + ".");
-        }
     });
 
     protected final Validator enumNotAllowed = new ReservedKeywordValidator("enum");

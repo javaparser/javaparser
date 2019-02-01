@@ -144,9 +144,7 @@ class Java5ValidatorTest {
     void noModifiersInForEachBesideFinal() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(static transient int i : nums){}"));
         assertProblems(result,
-                "(line 1,col 5) 'static' is not allowed here.",
-                "(line 1,col 5) 'transient' is not allowed here.",
-                "(line 1,col 1) A foreach statement's variable declaration may have at most one 'final' modifier, and no other modifiers. Given: [static , transient ].");
+                "(line 1,col 5) 'static' is not allowed here.", "(line 1,col 5) 'transient' is not allowed here.");
     }
 
     @Test
