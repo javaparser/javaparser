@@ -437,7 +437,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(SwitchEntryStmt n, Void arg) {
+        public void visit(SwitchEntry n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }

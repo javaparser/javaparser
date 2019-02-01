@@ -672,10 +672,10 @@ public class ConcreteSyntaxModel {
                 conditional(ObservableProperty.EXPRESSION, IS_PRESENT, sequence(space(), child(ObservableProperty.EXPRESSION))),
                 semicolon()));
 
-        concreteSyntaxModelByClass.put(SwitchEntryStmt.class, sequence(
+        concreteSyntaxModelByClass.put(SwitchEntry.class, sequence(
                 comment(),
-                conditional(ObservableProperty.LABEL, IS_PRESENT,
-                        sequence(token(GeneratedJavaParserConstants.CASE), space(), child(ObservableProperty.LABEL), token(GeneratedJavaParserConstants.COLON)),
+                conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
+                        sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 indent(),
