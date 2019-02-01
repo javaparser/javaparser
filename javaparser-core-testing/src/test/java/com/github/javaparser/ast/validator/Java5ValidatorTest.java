@@ -134,6 +134,13 @@ class Java5ValidatorTest {
     }
 
     @Test
+    void noMultipleVariablesInForEach() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(int i, j : nums){}"));
+        assertProblems(result,
+                "(line 1,col 1) A foreach statement's variable declaration must have exactly one variable declarator. Given: 2.");
+    }
+
+    @Test
     void noModifiersInForEachBesideFinal() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(static transient int i : nums){}"));
         assertProblems(result,
