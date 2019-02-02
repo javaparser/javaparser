@@ -125,7 +125,7 @@ public class MetaModelGenerator {
         add(IfStmt.class);
         add(LabeledStmt.class);
         add(ReturnStmt.class);
-        add(SwitchEntryStmt.class);
+        add(SwitchEntry.class);
         add(SwitchStmt.class);
         add(SynchronizedStmt.class);
         add(ThrowStmt.class);

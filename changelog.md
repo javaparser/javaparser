@@ -1,3 +1,11 @@
+Version 3.10.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/122?closed=1)
+
+Version 3.10.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/121?closed=1)
+
 Version 3.10.0
 ------------------
 * slightly breaking: besides `break;` and `break [label];` there is now `break [expression];` like

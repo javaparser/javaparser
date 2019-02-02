@@ -790,11 +790,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final SwitchEntryStmt n, final Visitable arg) {
-        final SwitchEntryStmt n2 = (SwitchEntryStmt) arg;
-        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+    public Boolean visit(final SwitchEntry n, final Visitable arg) {
+        final SwitchEntry n2 = (SwitchEntry) arg;
+        if (!nodesEquals(n.getLabels(), n2.getLabels()))
             return false;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
+            return false;
+        if (!objEquals(n.getType(), n2.getType()))
             return false;
         return true;
     }

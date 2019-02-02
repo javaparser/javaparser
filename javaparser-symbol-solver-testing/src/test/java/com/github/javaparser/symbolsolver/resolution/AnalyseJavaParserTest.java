@@ -40,12 +40,11 @@ class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     private static final Path properSrc = root.resolve("proper_source");
 
     private SourceFileInfoExtractor getSourceFileInfoExtractor() {
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(properSrc, new LeanParserConfiguration()));
-        combinedTypeSolver.add(new JavaParserTypeSolver(root.resolve("generated"), new LeanParserConfiguration()));
-        SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
-        sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(properSrc, new LeanParserConfiguration()),
+                new JavaParserTypeSolver(root.resolve("generated"), new LeanParserConfiguration()));
+        SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
         return sourceFileInfoExtractor;
     }
@@ -72,11 +71,11 @@ class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
         String path = "expected_output/" + fileName.replaceAll("/", "_") + ".txt";
         Path dstFile = adaptPath(root.resolve(path));
 
-        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
+        if (DEBUG && (sourceFileInfoExtractor.getFailures() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
         }
 
-        assertEquals(0, sourceFileInfoExtractor.getKo(), "No failures expected when analyzing " + path);
+        assertEquals(0, sourceFileInfoExtractor.getFailures(), "No failures expected when analyzing " + path);
         assertEquals(0, sourceFileInfoExtractor.getUnsupported(), "No UnsupportedOperationException expected when analyzing " + path);
 
         String expected = readFile(dstFile);
