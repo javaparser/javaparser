@@ -22,7 +22,10 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -689,7 +692,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SwitchStmt n, final Object arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SwitchStmt r = new SwitchStmt(n.getTokenRange().orElse(null), selector, entries);
@@ -698,20 +701,20 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final SwitchEntryStmt n, final Object arg) {
-        Expression label = cloneNode(n.getLabel(), arg);
+    public Visitable visit(final SwitchEntry n, final Object arg) {
+        NodeList<Expression> labels = cloneList(n.getLabels(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntryStmt r = new SwitchEntryStmt(n.getTokenRange().orElse(null), label, statements);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements);
         r.setComment(comment);
         return r;
     }
 
     @Override
     public Visitable visit(final BreakStmt n, final Object arg) {
-        SimpleName label = cloneNode(n.getLabel(), arg);
+        Expression value = cloneNode(n.getValue(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
+        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), value);
         r.setComment(comment);
         return r;
     }
@@ -1002,6 +1005,16 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final Modifier n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         Modifier r = new Modifier(n.getTokenRange().orElse(null), n.getKeyword());
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final SwitchExpr n, final Object arg) {
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
+        Expression selector = cloneNode(n.getSelector(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SwitchExpr r = new SwitchExpr(n.getTokenRange().orElse(null), selector, entries);
         r.setComment(comment);
         return r;
     }

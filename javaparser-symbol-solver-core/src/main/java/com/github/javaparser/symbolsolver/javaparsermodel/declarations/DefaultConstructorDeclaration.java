@@ -51,7 +51,7 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
 
     @Override
     public ResolvedParameterDeclaration getParam(int i) {
-        throw new UnsupportedOperationException("The default constructor has not parameters");
+        throw new UnsupportedOperationException("The default constructor has no parameters");
     }
 
     @Override

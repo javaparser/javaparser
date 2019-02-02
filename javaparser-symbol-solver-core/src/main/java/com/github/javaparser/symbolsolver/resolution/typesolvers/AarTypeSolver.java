@@ -32,7 +32,6 @@ import java.util.zip.ZipEntry;
  */
 public class AarTypeSolver implements TypeSolver {
 
-    private TypeSolver parent;
     private JarTypeSolver delegate;
 
     public AarTypeSolver(String aarFile) throws IOException {
@@ -54,12 +53,12 @@ public class AarTypeSolver implements TypeSolver {
 
     @Override
     public TypeSolver getParent() {
-        return parent;
+        return delegate.getParent();
     }
 
     @Override
     public void setParent(TypeSolver parent) {
-        this.parent = parent;
+        delegate.setParent(parent);
     }
 
     @Override

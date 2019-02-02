@@ -9,7 +9,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_5;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
@@ -131,6 +131,20 @@ class Java5ValidatorTest {
     void foreach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){}"));
         assertNoProblems(result);
+    }
+
+    @Test
+    void noMultipleVariablesInForEach() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(int i, j : nums){}"));
+        assertProblems(result,
+                "(line 1,col 1) A foreach statement's variable declaration must have exactly one variable declarator. Given: 2.");
+    }
+
+    @Test
+    void noModifiersInForEachBesideFinal() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(static transient int i : nums){}"));
+        assertProblems(result,
+                "(line 1,col 5) 'static' is not allowed here.", "(line 1,col 5) 'transient' is not allowed here.");
     }
 
     @Test

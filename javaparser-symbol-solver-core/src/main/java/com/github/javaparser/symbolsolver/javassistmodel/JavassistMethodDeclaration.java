@@ -141,10 +141,8 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
                 return new JavassistParameterDeclaration(ctMethod.getParameterTypes()[i], typeSolver, variadic,
                         paramName.orElse(null));
             }
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | BadBytecode e) {
             throw new RuntimeException(e);
-        } catch (BadBytecode badBytecode) {
-            throw new RuntimeException(badBytecode);
         }
     }
 

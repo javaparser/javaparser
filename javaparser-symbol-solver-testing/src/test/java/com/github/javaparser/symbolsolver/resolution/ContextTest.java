@@ -74,9 +74,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
     }
 
     @Test
@@ -90,9 +90,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
     }
 
     @Test
@@ -105,9 +105,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("foo", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
     }
 
     @Test
@@ -128,7 +128,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -152,7 +152,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -175,7 +175,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -199,7 +199,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("String", ref.getCorrespondingDeclaration().getName());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -518,7 +518,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Node nameNode = cu.findAll(NameExpr.class).get(0);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
-        assertEquals(true, context.localVariableDeclarationInScope(name).isPresent());
+        assertTrue(context.localVariableDeclarationInScope(name).isPresent());
     }
 
     //
@@ -639,7 +639,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void localVariablesExposedToChildWithinEnhancedForeachStmt() {
         ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
-                ParseStart.STATEMENT).asForeachStmt();
+                ParseStart.STATEMENT).asForEachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");

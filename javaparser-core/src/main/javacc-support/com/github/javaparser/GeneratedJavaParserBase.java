@@ -321,8 +321,6 @@ abstract class GeneratedJavaParserBase {
             expected.append(" ").append(option);
         }
 
-        sb.append("");
-
         Token token = exception.currentToken.next;
         for (int i = 0; i < maxExpectedTokenSequenceLength; i++) {
             String tokenText = token.image;

@@ -23,6 +23,7 @@ package com.github.javaparser.utils;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Function;
@@ -37,11 +38,10 @@ import static java.util.Arrays.*;
 public class Utils {
     public static final String EOL = System.getProperty("line.separator");
 
-    public static final Predicate<String> STRING_NOT_EMPTY = s -> !s.isEmpty();
-
     /**
      * @deprecated This is no longer in use by JavaParser, please write your own replacement.
      */
+    @Deprecated
     public static <T> List<T> ensureNotNull(List<T> list) {
         return list == null ? new ArrayList<>() : list;
     }
