@@ -6,7 +6,7 @@ import java.io.IOException;
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (with java-like unicode escape processing).
  */
-public class UnicodeEscapeProcessingProvider implements Provider {
+class UnicodeEscapeProcessingProvider implements Provider {
     private static int hexval(char c) throws java.io.IOException {
         switch (c) {
             case '0':

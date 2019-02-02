@@ -56,8 +56,8 @@ public class ParserCollectionStrategy implements CollectionStrategy {
                 }
 
                 @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e) {
-                    if (dir.equals(current_root)) {
+                public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+                    if (current_root != null && Files.isSameFile(dir, current_root)) {
                         projectRoot.addSourceRoot(dir);
                         current_root = null;
                     }

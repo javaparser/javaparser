@@ -534,7 +534,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(BreakStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.BREAK),
-                conditional(ObservableProperty.LABEL, IS_PRESENT, sequence(space(), child(ObservableProperty.LABEL))),
+                conditional(VALUE, IS_PRESENT, sequence(space(), child(VALUE))),
                 semicolon()
         ));
 
@@ -672,10 +672,10 @@ public class ConcreteSyntaxModel {
                 conditional(ObservableProperty.EXPRESSION, IS_PRESENT, sequence(space(), child(ObservableProperty.EXPRESSION))),
                 semicolon()));
 
-        concreteSyntaxModelByClass.put(SwitchEntryStmt.class, sequence(
+        concreteSyntaxModelByClass.put(SwitchEntry.class, sequence(
                 comment(),
-                conditional(ObservableProperty.LABEL, IS_PRESENT,
-                        sequence(token(GeneratedJavaParserConstants.CASE), space(), child(ObservableProperty.LABEL), token(GeneratedJavaParserConstants.COLON)),
+                conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
+                        sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 indent(),
@@ -684,6 +684,19 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(SwitchStmt.class, sequence(
+                comment(),
+                token(GeneratedJavaParserConstants.SWITCH),
+                token(GeneratedJavaParserConstants.LPAREN),
+                child(ObservableProperty.SELECTOR),
+                token(GeneratedJavaParserConstants.RPAREN),
+                space(),
+                token(GeneratedJavaParserConstants.LBRACE),
+                newline(),
+                list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                token(GeneratedJavaParserConstants.RBRACE)
+        ));
+
+        concreteSyntaxModelByClass.put(SwitchExpr.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.SWITCH),
                 token(GeneratedJavaParserConstants.LPAREN),
