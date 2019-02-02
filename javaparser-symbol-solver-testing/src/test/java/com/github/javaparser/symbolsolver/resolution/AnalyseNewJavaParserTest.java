@@ -42,12 +42,11 @@ class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     private static final Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
 
     private static SourceFileInfoExtractor getSourceFileInfoExtractor() {
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
-        combinedTypeSolver.add(new JavaParserTypeSolver(root.resolve("javaparser-generated-sources"), new LeanParserConfiguration()));
-        SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
-        sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(src, new LeanParserConfiguration()),
+                new JavaParserTypeSolver(root.resolve("javaparser-generated-sources"), new LeanParserConfiguration()));
+        SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
         sourceFileInfoExtractor.setVerbose(true);
         return sourceFileInfoExtractor;
@@ -86,11 +85,11 @@ class AnalyseNewJavaParserTest extends AbstractResolutionTest {
             }
         }
 
-        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
+        if (DEBUG && (sourceFileInfoExtractor.getFailures() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
         }
 
-        assertEquals(0, sourceFileInfoExtractor.getKo(), "No failures expected when analyzing " + path);
+        assertEquals(0, sourceFileInfoExtractor.getFailures(), "No failures expected when analyzing " + path);
         assertEquals(0, sourceFileInfoExtractor.getUnsupported(), "No UnsupportedOperationException expected when analyzing " + path);
 
         if (!Files.exists(dstFile)) {
