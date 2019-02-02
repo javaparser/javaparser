@@ -171,7 +171,7 @@ public interface VoidVisitor<A> {
 
     void visit(SuperExpr n, A arg);
 
-    void visit(SwitchEntryStmt n, A arg);
+    void visit(SwitchEntry n, A arg);
 
     void visit(SwitchStmt n, A arg);
 
@@ -222,4 +222,6 @@ public interface VoidVisitor<A> {
     void visit(VarType n, A arg);
 
     void visit(Modifier n, A arg);
+
+    void visit(SwitchExpr switchExpr, A arg);
 }

@@ -231,7 +231,7 @@ class JavaParserTest {
         Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class).resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
         CompilationUnit tokenTypesCu = JavaParser.parse(tokenTypesPath);
         // -1 to take off the default: case.
-        int switchEntries = tokenTypesCu.findAll(SwitchEntryStmt.class).size() - 1;
+        int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
         assertEquals(tokenCount, switchEntries);
     }

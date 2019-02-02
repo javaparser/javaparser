@@ -733,4 +733,23 @@ public abstract class Expression extends Node {
     public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
         return Optional.empty();
     }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSwitchExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SwitchExpr asSwitchExpr() {
+        throw new IllegalStateException(f("%s is not an SwitchExpr", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<SwitchExpr> toSwitchExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSwitchExpr(Consumer<SwitchExpr> action) {
+    }
 }
