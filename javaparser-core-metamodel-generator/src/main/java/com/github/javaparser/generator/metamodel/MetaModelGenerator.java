@@ -107,6 +107,7 @@ public class MetaModelGenerator {
         add(TypeExpr.class);
         add(UnaryExpr.class);
         add(VariableDeclarationExpr.class);
+        add(SwitchExpr.class);
 
         add(ImportDeclaration.class);
 
@@ -124,7 +125,7 @@ public class MetaModelGenerator {
         add(IfStmt.class);
         add(LabeledStmt.class);
         add(ReturnStmt.class);
-        add(SwitchEntryStmt.class);
+        add(SwitchEntry.class);
         add(SwitchStmt.class);
         add(SynchronizedStmt.class);
         add(ThrowStmt.class);

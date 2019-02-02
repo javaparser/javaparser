@@ -49,9 +49,7 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
             } else {
                 return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (BadBytecode e) {
+        } catch (NotFoundException | BadBytecode e) {
             throw new RuntimeException(e);
         }
     }

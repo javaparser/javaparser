@@ -180,9 +180,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final BreakStmt n, final A arg) {
-        SimpleName label = n.getLabel().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        Expression value = n.getValue().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setLabel(label);
+        n.setValue(value);
         n.setComment(comment);
         return n;
     }
@@ -836,11 +836,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final SwitchEntryStmt n, final A arg) {
-        Expression label = n.getLabel().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+    public Visitable visit(final SwitchEntry n, final A arg) {
+        NodeList<Expression> labels = modifyList(n.getLabels(), arg);
         NodeList<Statement> statements = modifyList(n.getStatements(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setLabel(label);
+        n.setLabels(labels);
         n.setStatements(statements);
         n.setComment(comment);
         return n;
@@ -848,7 +848,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final SwitchStmt n, final A arg) {
-        NodeList<SwitchEntryStmt> entries = modifyList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = modifyList(n.getEntries(), arg);
         Expression selector = (Expression) n.getSelector().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (selector == null)
@@ -1225,6 +1225,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final Modifier n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final SwitchExpr n, final A arg) {
+        NodeList<SwitchEntry> entries = modifyList(n.getEntries(), arg);
+        Expression selector = (Expression) n.getSelector().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (selector == null)
+            return null;
+        n.setEntries(entries);
+        n.setSelector(selector);
         n.setComment(comment);
         return n;
     }

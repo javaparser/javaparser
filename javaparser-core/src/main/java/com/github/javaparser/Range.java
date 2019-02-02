@@ -117,4 +117,8 @@ public class Range {
     public String toString() {
         return begin + "-" + end;
     }
+
+    public int getLineCount() {
+        return end.line - begin.line + 1;
+    }
 }

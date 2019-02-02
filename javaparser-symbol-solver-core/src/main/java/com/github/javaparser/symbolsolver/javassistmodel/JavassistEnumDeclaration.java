@@ -282,4 +282,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return javassistTypeDeclarationAdapter.getConstructors();
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "ctClass=" + ctClass.getName() +
+                ", typeSolver=" + typeSolver +
+                '}';
+    }
 }

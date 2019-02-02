@@ -442,7 +442,7 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(final SwitchEntryStmt n, final Object arg) {
+    public void visit(final SwitchEntry n, final Object arg) {
         doTest(n);
         super.visit(n, arg);
     }

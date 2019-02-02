@@ -65,8 +65,8 @@ public class JavaParserFactory {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
-        } else if (node instanceof SwitchEntryStmt) {
-            return new SwitchEntryContext((SwitchEntryStmt) node, typeSolver);
+        } else if (node instanceof SwitchEntry) {
+            return new SwitchEntryContext((SwitchEntry) node, typeSolver);
         } else if (node instanceof TryStmt) {
             return new TryWithResourceContext((TryStmt) node, typeSolver);
         } else if (node instanceof Statement) {
