@@ -53,11 +53,7 @@ public enum NameCategory {
      * Is the given name acceptable for the given category?
      */
     public boolean isNameAcceptable(String name) {
-        if (this == TYPE_NAME && name.equals("var")) {
-            return false;
-        } else {
-            return true;
-        }
+        return this != TYPE_NAME || !name.equals("var");
     }
 
     public boolean isValid() {

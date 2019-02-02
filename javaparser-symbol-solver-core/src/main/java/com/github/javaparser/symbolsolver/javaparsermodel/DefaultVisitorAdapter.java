@@ -329,7 +329,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(SwitchEntryStmt node, Boolean aBoolean) {
+    public ResolvedType visit(SwitchEntry node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 

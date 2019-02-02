@@ -110,7 +110,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     public String getClassName() {
         String className = ctClass.getName().replace('$', '.');
         if (getPackageName() != null) {
-            return className.substring(getPackageName().length() + 1, className.length());
+            return className.substring(getPackageName().length() + 1);
         }
         return className;
     }
@@ -120,6 +120,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         return ctClass.getName().replace('$', '.');
     }
 
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);

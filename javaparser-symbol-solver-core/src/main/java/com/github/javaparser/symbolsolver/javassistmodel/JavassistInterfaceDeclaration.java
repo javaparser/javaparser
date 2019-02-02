@@ -85,7 +85,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     public String getClassName() {
         String className = ctClass.getName().replace('$', '.');
         if (getPackageName() != null) {
-            return className.substring(getPackageName().length() + 1, className.length());
+            return className.substring(getPackageName().length() + 1);
         }
         return className;
     }
@@ -174,7 +174,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
-        ancestors = ancestors.stream().filter(a -> a.getQualifiedName() != Object.class.getCanonicalName())
+        ancestors = ancestors.stream().filter(a -> !a.getQualifiedName().equals(Object.class.getCanonicalName()))
                 .collect(Collectors.toList());
         ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
         return ancestors;
