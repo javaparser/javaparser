@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_0;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
@@ -91,8 +91,14 @@ class Java1_0ValidatorTest {
     @Test
     void nonEmptyList() {
         ArrayCreationExpr expr = new ArrayCreationExpr(PrimitiveType.booleanType());
-        List<Problem> problems= new ArrayList<>();
+        List<Problem> problems = new ArrayList<>();
         new Java1_0Validator().accept(expr, new ProblemReporter(problems::add));
         assertEquals("ArrayCreationExpr.levels can not be empty.", problems.get(0).getMessage());
+    }
+
+    @Test
+    void noForEach() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x : xs){}"));
+        assertProblems(result, "(line 1,col 1) For-each loops are not supported.");
     }
 }

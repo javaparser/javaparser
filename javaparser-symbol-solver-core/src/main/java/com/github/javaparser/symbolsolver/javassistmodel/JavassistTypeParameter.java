@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
@@ -96,10 +97,10 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
     public List<ResolvedTypeParameterDeclaration.Bound> getBounds() {
         List<Bound> bounds = new ArrayList<>();
         if (wrapped.getClassBound() != null && !wrapped.getClassBound().toString().equals(Object.class.getCanonicalName())) {
-            throw new UnsupportedOperationException(wrapped.getClassBound().toString());
+            bounds.add(Bound.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(wrapped.getClassBound().toString()), typeSolver)));
         }
         for (SignatureAttribute.ObjectType ot : wrapped.getInterfaceBound()) {
-            throw new UnsupportedOperationException(ot.toString());
+            bounds.add(Bound.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(ot.toString()), typeSolver)));
         }
         return bounds;
     }

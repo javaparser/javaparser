@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
  * @author Fred Lefévère-Laoide
  */
 public class JavassistConstructorDeclaration implements ResolvedConstructorDeclaration {
-    private CtConstructor ctConstructor;
-    private TypeSolver typeSolver;
+    private final CtConstructor ctConstructor;
+    private final TypeSolver typeSolver;
 
     public JavassistConstructorDeclaration(CtConstructor ctConstructor, TypeSolver typeSolver) {
         this.ctConstructor = ctConstructor;
@@ -45,8 +45,9 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
 
     @Override
     public String toString() {
-        return "JavassistMethodDeclaration{" +
-                "CtConstructor=" + ctConstructor +
+        return getClass().getSimpleName() + "{" +
+                "ctConstructor=" + ctConstructor.getName() +
+                ", typeSolver=" + typeSolver +
                 '}';
     }
 

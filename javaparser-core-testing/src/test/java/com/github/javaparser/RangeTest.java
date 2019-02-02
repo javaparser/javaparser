@@ -21,11 +21,11 @@
 
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class RangeTest {
 
@@ -95,6 +95,14 @@ class RangeTest {
         Range r2 = Range.range(26, 19, 26, 28);
         assertEquals(false, r1.contains(r2));
         assertEquals(false, r2.contains(r1));
+    }
+
+    @Test
+    void lineCountIsReturned() {
+        Range r1 = Range.range(1, 1, 5, 2);
+        Range r2 = Range.range(26, 5, 57, 6);
+        assertEquals(5, r1.getLineCount());
+        assertEquals(32, r2.getLineCount());
     }
 
 }
