@@ -51,14 +51,6 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) requireParentNode(variableDeclarator);
     }
 
-    /**
-     * @deprecated Use JavaParserEnumConstantDeclaration instead.
-     */
-    @Deprecated
-    public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public ResolvedType getType() {
         return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), wrappedNode);

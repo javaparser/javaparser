@@ -89,21 +89,6 @@ public class SourceRoot {
      * might want to use the parse method with a callback.
      *
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
-     * @deprecated pass ParserConfiguration instead of JavaParser
-     */
-    @Deprecated
-    public ParseResult<CompilationUnit> tryToParse(String startPackage, String filename, JavaParser javaParser)
-            throws IOException {
-        return tryToParse(startPackage, filename, javaParser.getParserConfiguration());
-    }
-
-    /**
-     * Tries to parse a .java files under the source root and returns the ParseResult. It keeps track of the parsed file
-     * so you can write it out with the saveAll() call. Note that the cache grows with every file parsed, so if you
-     * don't need saveAll(), or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you
-     * might want to use the parse method with a callback.
-     *
-     * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
     public ParseResult<CompilationUnit> tryToParse(String startPackage, String filename, ParserConfiguration configuration) throws IOException {
         assertNotNull(startPackage);
@@ -304,18 +289,6 @@ public class SourceRoot {
      * to the other parse methods, this is much more memory efficient, but saveAll() won't work.
      *
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
-     * @deprecated pass ParserConfiguration instead of JavaParser
-     */
-    @Deprecated
-    public SourceRoot parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
-        return parse(startPackage, javaParser.getParserConfiguration(), callback);
-    }
-
-    /**
-     * Tries to parse all .java files in a package recursively and passes them one by one to the callback. In comparison
-     * to the other parse methods, this is much more memory efficient, but saveAll() won't work.
-     *
-     * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
     public SourceRoot parse(String startPackage, ParserConfiguration configuration, Callback callback) throws IOException {
         assertNotNull(startPackage);
@@ -509,26 +482,6 @@ public class SourceRoot {
      */
     public Path getRoot() {
         return root;
-    }
-
-    /**
-     * @deprecated store ParserConfiguration now
-     */
-    @Deprecated
-    public JavaParser getJavaParser() {
-        return new JavaParser(parserConfiguration);
-    }
-
-    /**
-     * Set the parser that is used for parsing by default.
-     *
-     * @deprecated store ParserConfiguration now
-     */
-    @Deprecated
-    public SourceRoot setJavaParser(JavaParser javaParser) {
-        assertNotNull(javaParser);
-        this.parserConfiguration = javaParser.getParserConfiguration();
-        return this;
     }
 
     public ParserConfiguration getParserConfiguration() {

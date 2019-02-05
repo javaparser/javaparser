@@ -112,20 +112,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name> {
     }
 
     /**
-     * Creates a new {@link Name} from a qualified name.<br>
-     * The qualified name can contains "." (dot) characters.
-     *
-     * @param qualifiedName qualified name
-     * @return instanceof {@link Name}
-     * @deprecated use JavaParser.parseName instead
-     */
-    @Deprecated
-    public static Name parse(String qualifiedName) {
-        assertNonEmpty(qualifiedName);
-        return JavaParser.parseName(qualifiedName);
-    }
-
-    /**
      * @return the complete qualified name. Only the identifiers and the dots, so no comments or whitespace.
      */
     public String asString() {

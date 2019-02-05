@@ -119,24 +119,6 @@ public final class SwitchExpr extends Expression implements SwitchNode {
         return this;
     }
 
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr setEntry(int i, SwitchEntry entry) {
-        getEntries().set(i, entry);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr addEntry(SwitchEntry entry) {
-        getEntries().add(entry);
-        return this;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchExpr setSelector(final Expression selector) {
         assertNotNull(selector);

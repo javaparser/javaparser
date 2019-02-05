@@ -209,14 +209,12 @@ class JavaParserTest {
     void testNotStoringTokens() {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
-        assertFalse(result.getTokens().isPresent());
+        assertFalse(result.getResult().get().getTokenRange().isPresent());
     }
 
     @Test
     void trailingCodeIsAnError() {
-        assertThrows(ParseProblemException.class, () -> {
-            JavaParser.parseBlock("{} efijqoifjqefj");
-    });
+        assertThrows(ParseProblemException.class, () -> JavaParser.parseBlock("{} efijqoifjqefj"));
     }
 
     @Test

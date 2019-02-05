@@ -291,14 +291,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 
-    /**
-     * @deprecated Call {@link #resolve()} instead.
-     */
-    @Deprecated
-    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
-        return resolve();
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {

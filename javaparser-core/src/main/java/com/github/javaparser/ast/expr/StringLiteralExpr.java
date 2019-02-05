@@ -61,16 +61,6 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
-     *
-     * @deprecated Use {@link #StringLiteralExpr(String)} instead.
-     */
-    @Deprecated
-    public static StringLiteralExpr escape(String string) {
-        return new StringLiteralExpr(Utils.escapeEndOfLines(string));
-    }
-
-    /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")

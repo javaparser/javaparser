@@ -77,22 +77,6 @@ public class LexicalPreservingPrinter {
     //
 
     /**
-     * Parse the code and setup the LexicalPreservingPrinter.
-     *
-     * @deprecated use setup(Node) and the static methods on this class.
-     */
-    public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart,
-                                                                                        Provider provider) {
-        ParseResult<N> parseResult = new JavaParser().parse(parseStart, provider);
-        if (!parseResult.isSuccessful()) {
-            throw new RuntimeException("Parsing failed, unable to setup the lexical preservation printer: "
-                    + parseResult.getProblems());
-        }
-        LexicalPreservingPrinter lexicalPreservingPrinter = new LexicalPreservingPrinter(parseResult.getResult().get());
-        return new Pair<>(parseResult, lexicalPreservingPrinter);
-    }
-
-    /**
      * Prepares the node so it can be used in the print methods.
      * The correct order is:
      * <ol>
@@ -121,15 +105,6 @@ public class LexicalPreservingPrinter {
     //
     // Constructor and setup
     //
-
-    /**
-     * @deprecated use setup(Node) to prepare a node for lexical preservation,
-     * then use the static methods on this class to print it.
-     */
-    @Deprecated
-    public LexicalPreservingPrinter(Node node) {
-        setup(node);
-    }
 
     private static AstObserver createObserver() {
         return new LexicalPreservingPrinter.Observer();
