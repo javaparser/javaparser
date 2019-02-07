@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.QuickJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -33,13 +34,13 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
                 cd);
 
         typeSolver.add(memoryTypeSolver);
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        QuickJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
     @AfterAll
     static void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        JavaParser.getStaticConfiguration().setSymbolResolver(null);
+        QuickJavaParser.getConfiguration().setSymbolResolver(null);
     }
 
     // See #1703

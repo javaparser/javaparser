@@ -192,9 +192,9 @@ public class JavaParserJsonDeserializer {
      * @see com.github.javaparser.ParserConfiguration#ParserConfiguration()
      */
     private void setSymbolResolverIfCompilationUnit(Node node) {
-        if (node instanceof CompilationUnit && JavaParser.getStaticConfiguration().getSymbolResolver().isPresent()) {
+        if (node instanceof CompilationUnit && QuickJavaParser.getConfiguration().getSymbolResolver().isPresent()) {
             CompilationUnit cu = (CompilationUnit)node;
-            cu.setData(Node.SYMBOL_RESOLVER_KEY, JavaParser.getStaticConfiguration().getSymbolResolver().get());
+            cu.setData(Node.SYMBOL_RESOLVER_KEY, QuickJavaParser.getConfiguration().getSymbolResolver().get());
         }
     }
 

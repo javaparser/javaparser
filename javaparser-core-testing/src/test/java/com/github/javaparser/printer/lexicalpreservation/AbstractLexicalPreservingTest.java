@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.Expression;
 
 import java.io.IOException;
 
+import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.readResource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,11 +39,11 @@ public abstract class AbstractLexicalPreservingTest {
     protected Expression expression;
 
     protected void considerCode(String code) {
-        cu = LexicalPreservingPrinter.setup(JavaParser.parse(code));
+        cu = LexicalPreservingPrinter.setup(parse(code));
     }
 
     protected void considerExpression(String code) {
-        expression = LexicalPreservingPrinter.setup(JavaParser.parseExpression(code));
+        expression = LexicalPreservingPrinter.setup(parseExpression(code));
     }
 
     protected String considerExample(String resourceName) throws IOException {

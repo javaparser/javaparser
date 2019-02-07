@@ -523,7 +523,7 @@ private final JavaParser parser = new JavaParser(new ParserConfiguration().setVa
 ```
 and like this for the static parse methods:
 ```java
-JavaParser.getStaticConfiguration().setValidator(new Java9Validator());
+QuickJavaParser.getConfiguration().setValidator(new Java9Validator());
 ```
 
 * 862 552 "_" is an illegal identifier on source level 9.

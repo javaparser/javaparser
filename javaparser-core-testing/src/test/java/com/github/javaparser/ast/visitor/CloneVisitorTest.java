@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.QuickJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CloneVisitorTest {

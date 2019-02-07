@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -43,7 +44,7 @@ class Issue300 extends AbstractResolutionTest {
     @Test
     void fieldAccessIssue() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue300/Issue300.java");
-        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
+        CompilationUnit cu = parse(pathToSourceFile);
 
         final FieldAccessExpr fieldAccess = Navigator.findNodeOfGivenClass(cu, FieldAccessExpr.class);
         assertNotNull(fieldAccess);

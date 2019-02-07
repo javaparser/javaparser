@@ -33,6 +33,8 @@ import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+
+import static com.github.javaparser.QuickJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NameMetaModel;
@@ -122,7 +124,7 @@ public final class Name extends Node implements NodeWithIdentifier<Name> {
     @Deprecated
     public static Name parse(String qualifiedName) {
         assertNonEmpty(qualifiedName);
-        return JavaParser.parseName(qualifiedName);
+        return parseName(qualifiedName);
     }
 
     /**

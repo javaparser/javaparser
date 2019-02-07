@@ -33,7 +33,8 @@ import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import java.util.Optional;
-import static com.github.javaparser.JavaParser.parseType;
+
+import static com.github.javaparser.QuickJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
