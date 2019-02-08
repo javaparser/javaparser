@@ -23,8 +23,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -43,6 +42,55 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MethodsResolutionTest extends AbstractResolutionTest {
+
+    @Test
+    void testConsistentMethodResultion() {
+        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("PlatformTestUtil");
+        ClassOrInterfaceDeclaration classDeclaration = Navigator.demandClass(cu, "PlatformTestUtil");
+        MethodDeclaration methodDeclaration =
+                Navigator.demandMethod(classDeclaration, "assertComparisonContractNotViolated");
+
+        ForStmt outerFor = (ForStmt) methodDeclaration.getBody().get().getStatement(0);
+        ForStmt innerFor = (ForStmt) ((BlockStmt) outerFor.getBody()).getStatement(0);
+        IfStmt ifStmt = (IfStmt) ((BlockStmt) innerFor.getBody()).getStatement(4);
+        MethodCallExpr assertCall = (MethodCallExpr) ((ExpressionStmt) ((BlockStmt) ifStmt.getThenStmt()).getStatement(0)).getExpression();
+        MethodCallExpr formatCall = (MethodCallExpr) assertCall.getArguments().get(0);
+
+        boolean exception1, exception2, exception3, exception4;
+        try {
+            formatCall.resolve();
+            exception1 = false;
+        } catch (Exception e) {
+            exception1 = true;
+        }
+
+        try {
+            formatCall.resolve();
+            exception2 = false;
+        } catch (Exception e) {
+            exception2 = true;
+        }
+
+        try {
+            formatCall.resolve();
+            exception3 = false;
+        } catch (Exception e) {
+            exception3 = true;
+        }
+
+        try {
+            formatCall.resolve();
+            exception4 = false;
+        } catch (Exception e) {
+            exception4 = true;
+        }
+
+        assertEquals(exception1, exception2);
+        assertEquals(exception1, exception3);
+        assertEquals(exception1, exception4);
+    }
 
     @Test
     void solveMethodAccessThroughSuper() {
