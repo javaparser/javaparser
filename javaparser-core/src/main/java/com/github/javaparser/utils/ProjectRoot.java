@@ -43,14 +43,6 @@ public class ProjectRoot {
         cache.put(path, new SourceRoot(path).setParserConfiguration(parserConfiguration));
     }
 
-    /**
-     * @deprecated use getRoot()
-     */
-    @Deprecated
-    public Path getProjectRoot() {
-        return root;
-    }
-
     public Path getRoot() {
         return root;
     }

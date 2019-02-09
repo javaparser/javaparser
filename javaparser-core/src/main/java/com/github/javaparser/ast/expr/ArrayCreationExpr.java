@@ -73,15 +73,6 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     /**
-     * @deprecated range shouldn't be in utility constructors.
-     */
-    @Deprecated
-    public ArrayCreationExpr(Range range, Type elementType) {
-        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
-        setRange(range);
-    }
-
-    /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")

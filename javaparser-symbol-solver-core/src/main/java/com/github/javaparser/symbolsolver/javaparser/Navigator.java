@@ -39,14 +39,6 @@ public final class Navigator {
         // prevent instantiation
     }
 
-    /**
-     * @deprecated use Node.getParentNode
-     */
-    @Deprecated
-    public static Node getParentNode(Node node) {
-        return node.getParentNode().orElse(null);
-    }
-
     public static Node requireParentNode(Node node) {
         return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
     }
@@ -213,25 +205,9 @@ public final class Navigator {
         return node.findFirst(clazz).orElseThrow(IllegalArgumentException::new);
     }
 
-    /**
-     * @deprecated use Node.findAll instead
-     */
-    @Deprecated
-    public static <N extends Node> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
-        return node.findAll(clazz);
-    }
-
     // TODO should be demand or require...
     public static ReturnStmt findReturnStmt(MethodDeclaration method) {
         return findNodeOfGivenClass(method, ReturnStmt.class);
-    }
-
-    /**
-     * @deprecated use Node.findAncestor instead
-     */
-    @Deprecated
-    public static <N extends Node> Optional<N> findAncestor(Node node, Class<N> clazz) {
-        return node.findAncestor(clazz);
     }
 
     ///
