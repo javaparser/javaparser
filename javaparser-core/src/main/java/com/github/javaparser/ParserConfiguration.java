@@ -162,22 +162,6 @@ public class ParserConfiguration {
         return this;
     }
 
-    /**
-     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
-     */
-    @Deprecated
-    public boolean isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution() {
-        return isIgnoreAnnotationsWhenAttributingComments();
-    }
-
-    /**
-     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
-     */
-    @Deprecated
-    public ParserConfiguration setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
-        return setIgnoreAnnotationsWhenAttributingComments(doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
-    }
-
     public boolean isIgnoreAnnotationsWhenAttributingComments() {
         return ignoreAnnotationsWhenAttributingComments;
     }
@@ -209,48 +193,6 @@ public class ParserConfiguration {
      */
     public ParserConfiguration setTabSize(int tabSize) {
         this.tabSize = tabSize;
-        return this;
-    }
-
-    /**
-     * @deprecated use getLanguageLevel
-     */
-    @Deprecated
-    public Optional<Validator> getValidator() {
-        throw new IllegalStateException("method is deprecated");
-    }
-
-    /**
-     * @deprecated use setLanguageLevel, or getPostProcessors if you use a custom validator.
-     */
-    @Deprecated
-    public ParserConfiguration setValidator(Validator validator) {
-        // This whole method is a backwards compatability hack.
-        if (validator instanceof Java10Validator) {
-            setLanguageLevel(JAVA_10);
-        } else if (validator instanceof Java9Validator) {
-            setLanguageLevel(JAVA_9);
-        } else if (validator instanceof Java8Validator) {
-            setLanguageLevel(JAVA_8);
-        } else if (validator instanceof Java7Validator) {
-            setLanguageLevel(JAVA_7);
-        } else if (validator instanceof Java6Validator) {
-            setLanguageLevel(JAVA_6);
-        } else if (validator instanceof Java5Validator) {
-            setLanguageLevel(JAVA_5);
-        } else if (validator instanceof Java1_4Validator) {
-            setLanguageLevel(JAVA_1_4);
-        } else if (validator instanceof Java1_3Validator) {
-            setLanguageLevel(JAVA_1_3);
-        } else if (validator instanceof Java1_2Validator) {
-            setLanguageLevel(JAVA_1_2);
-        } else if (validator instanceof Java1_1Validator) {
-            setLanguageLevel(JAVA_1_1);
-        } else if (validator instanceof Java1_0Validator) {
-            setLanguageLevel(JAVA_1_0);
-        } else if (validator instanceof NoProblemsValidator) {
-            setLanguageLevel(RAW);
-        }
         return this;
     }
 

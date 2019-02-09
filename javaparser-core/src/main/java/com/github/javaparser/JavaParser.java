@@ -369,34 +369,6 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a Java class body declaration(e.g fields or methods) and returns a
-     * {@link BodyDeclaration} that represents it.
-     *
-     * @param body the body of a class
-     * @return BodyDeclaration representing the Java class body
-     * @throws ParseProblemException if the source code has parser errors
-     * @deprecated just use parseBodyDeclaration now.
-     */
-    @Deprecated
-    public ParseResult<BodyDeclaration<?>> parseClassBodyDeclaration(String body) {
-        return parseBodyDeclaration(body);
-    }
-
-    /**
-     * Parses a Java interface body declaration(e.g fields or methods) and returns a
-     * {@link BodyDeclaration} that represents it.
-     *
-     * @param body the body of an interface
-     * @return BodyDeclaration representing the Java interface body
-     * @throws ParseProblemException if the source code has parser errors
-     * @deprecated just use parseBodyDeclaration now.
-     */
-    @Deprecated
-    public ParseResult<BodyDeclaration<?>> parseInterfaceBodyDeclaration(String body) {
-        return parseBodyDeclaration(body);
-    }
-
-    /**
      * Parses a Java class or interface body declaration(e.g fields or methods) and returns a
      * {@link BodyDeclaration} that represents it.
      *

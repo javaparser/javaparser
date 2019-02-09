@@ -136,24 +136,6 @@ public final class SwitchStmt extends Statement implements SwitchNode {
         return this;
     }
 
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchStmt setEntry(int i, SwitchEntry entry) {
-        getEntries().set(i, entry);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchStmt addEntry(SwitchEntry entry) {
-        getEntries().add(entry);
-        return this;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchStmt setSelector(final Expression selector) {
         assertNotNull(selector);
