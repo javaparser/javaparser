@@ -209,14 +209,12 @@ class JavaParserTest {
     void testNotStoringTokens() {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
-        assertFalse(result.getTokens().isPresent());
+        assertFalse(result.getResult().get().getTokenRange().isPresent());
     }
 
     @Test
     void trailingCodeIsAnError() {
-        assertThrows(ParseProblemException.class, () -> {
-            JavaParser.parseBlock("{} efijqoifjqefj");
-    });
+        assertThrows(ParseProblemException.class, () -> JavaParser.parseBlock("{} efijqoifjqefj"));
     }
 
     @Test
@@ -231,7 +229,7 @@ class JavaParserTest {
         Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class).resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
         CompilationUnit tokenTypesCu = JavaParser.parse(tokenTypesPath);
         // -1 to take off the default: case.
-        int switchEntries = tokenTypesCu.findAll(SwitchEntryStmt.class).size() - 1;
+        int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
         assertEquals(tokenCount, switchEntries);
     }

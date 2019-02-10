@@ -84,16 +84,6 @@ public class ParseResult<T> {
     }
 
     /**
-     * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
-     * @deprecated lists of tokens are now kept in every node.
-     * Calling this method is comparable to calling getResult().get().getTokenRange().get()
-     */
-    @Deprecated
-    public Optional<List<JavaToken>> getTokens() {
-        return Optional.ofNullable(tokens);
-    }
-
-    /**
      * @return the complete collection of comments encountered while parsing.
      */
     public Optional<CommentsCollection> getCommentsCollection() {

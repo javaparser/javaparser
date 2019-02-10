@@ -369,7 +369,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final SwitchEntryStmt n, final Visitable arg) {
+    public Boolean visit(final SwitchEntry n, final Visitable arg) {
         return n == arg;
     }
 

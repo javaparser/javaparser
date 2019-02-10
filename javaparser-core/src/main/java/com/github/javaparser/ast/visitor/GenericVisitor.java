@@ -168,7 +168,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(SwitchStmt n, A arg);
 
-    R visit(SwitchEntryStmt n, A arg);
+    R visit(SwitchEntry n, A arg);
 
     R visit(BreakStmt n, A arg);
 

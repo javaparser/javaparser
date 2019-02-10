@@ -8,6 +8,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * To avoid dependencies on logging frameworks, we have invented yet another logging framework :-)
+ * <p>
+ * See <a href="http://javaparser.org/javaparsers-logging-framework-in-one-file/">a blog about this</a>
  */
 public class Log {
     /**

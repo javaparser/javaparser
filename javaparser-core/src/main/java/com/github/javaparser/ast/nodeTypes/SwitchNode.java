@@ -4,7 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 
 import java.util.Optional;
 
@@ -12,13 +12,13 @@ import java.util.Optional;
  * The common interface of {@link com.github.javaparser.ast.expr.SwitchExpr} and {@link com.github.javaparser.ast.stmt.SwitchStmt}
  */
 public interface SwitchNode {
-    NodeList<SwitchEntryStmt> getEntries();
+    NodeList<SwitchEntry> getEntries();
 
-    SwitchEntryStmt getEntry(int i);
+    SwitchEntry getEntry(int i);
 
     Expression getSelector();
 
-    SwitchNode setEntries(NodeList<SwitchEntryStmt> entries);
+    SwitchNode setEntries(NodeList<SwitchEntry> entries);
 
     SwitchNode setSelector(Expression selector);
 

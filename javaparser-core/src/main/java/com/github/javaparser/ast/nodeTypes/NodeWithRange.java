@@ -35,20 +35,4 @@ public interface NodeWithRange<N> {
         }
         return false;
     }
-
-    /**
-     * @deprecated use isAfter() on range
-     */
-    @Deprecated
-    default boolean isPositionedAfter(Position position) {
-        return getRange().map(r -> r.isAfter(position)).orElse(false);
-    }
-
-    /**
-     * @deprecated use isBefore() on range
-     */
-    @Deprecated
-    default boolean isPositionedBefore(Position position) {
-        return getRange().map(r -> r.isBefore(position)).orElse(false);
-    }
 }

@@ -30,7 +30,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 /**
@@ -693,7 +692,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SwitchStmt n, final Object arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SwitchStmt r = new SwitchStmt(n.getTokenRange().orElse(null), selector, entries);
@@ -702,11 +701,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final SwitchEntryStmt n, final Object arg) {
-        Expression label = cloneNode(n.getLabel(), arg);
+    public Visitable visit(final SwitchEntry n, final Object arg) {
+        NodeList<Expression> labels = cloneList(n.getLabels(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntryStmt r = new SwitchEntryStmt(n.getTokenRange().orElse(null), label, statements);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements);
         r.setComment(comment);
         return r;
     }
@@ -1012,7 +1011,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SwitchExpr n, final Object arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SwitchExpr r = new SwitchExpr(n.getTokenRange().orElse(null), selector, entries);

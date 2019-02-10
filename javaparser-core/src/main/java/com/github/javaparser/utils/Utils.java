@@ -23,6 +23,7 @@ package com.github.javaparser.utils;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Function;
@@ -36,15 +37,6 @@ import static java.util.Arrays.*;
  */
 public class Utils {
     public static final String EOL = System.getProperty("line.separator");
-
-    public static final Predicate<String> STRING_NOT_EMPTY = s -> !s.isEmpty();
-
-    /**
-     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
-     */
-    public static <T> List<T> ensureNotNull(List<T> list) {
-        return list == null ? new ArrayList<>() : list;
-    }
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -108,19 +100,6 @@ public class Utils {
         }
 
         return result.toString();
-    }
-
-    /**
-     * Puts varargs in a mutable list.
-     * This does not have the disadvantage of Arrays#asList that it has a static size.
-     *
-     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
-     */
-    @Deprecated
-    public static <T> List<T> arrayToList(T[] array) {
-        List<T> list = new LinkedList<>();
-        Collections.addAll(list, array);
-        return list;
     }
 
     /**

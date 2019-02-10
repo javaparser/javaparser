@@ -27,16 +27,14 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchExprMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -51,7 +49,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <br/><code>int a = switch(x) { case 5,6: break 20; default: break 5+5; };</code>
  *
  * @author Julio Vilmar Gesser
- * @see SwitchEntryStmt
+ * @see SwitchEntry
  * @see com.github.javaparser.ast.stmt.SwitchStmt
  * @see SwitchNode
  */
@@ -59,14 +57,14 @@ public final class SwitchExpr extends Expression implements SwitchNode {
 
     private Expression selector;
 
-    private NodeList<SwitchEntryStmt> entries;
+    private NodeList<SwitchEntry> entries;
 
     public SwitchExpr() {
         this(null, new NameExpr(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public SwitchExpr(final Expression selector, final NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr(final Expression selector, final NodeList<SwitchEntry> entries) {
         this(null, selector, entries);
     }
 
@@ -74,7 +72,7 @@ public final class SwitchExpr extends Expression implements SwitchNode {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchExpr(TokenRange tokenRange, Expression selector, NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr(TokenRange tokenRange, Expression selector, NodeList<SwitchEntry> entries) {
         super(tokenRange);
         setSelector(selector);
         setEntries(entries);
@@ -94,11 +92,11 @@ public final class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SwitchEntryStmt> getEntries() {
+    public NodeList<SwitchEntry> getEntries() {
         return entries;
     }
 
-    public SwitchEntryStmt getEntry(int i) {
+    public SwitchEntry getEntry(int i) {
         return getEntries().get(i);
     }
 
@@ -108,7 +106,7 @@ public final class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchExpr setEntries(final NodeList<SwitchEntryStmt> entries) {
+    public SwitchExpr setEntries(final NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return (SwitchExpr) this;
@@ -118,24 +116,6 @@ public final class SwitchExpr extends Expression implements SwitchNode {
             this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr setEntry(int i, SwitchEntryStmt entry) {
-        getEntries().set(i, entry);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr addEntry(SwitchEntryStmt entry) {
-        getEntries().add(entry);
         return this;
     }
 
@@ -180,7 +160,7 @@ public final class SwitchExpr extends Expression implements SwitchNode {
             return false;
         for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i) == node) {
-                entries.set(i, (SwitchEntryStmt) replacementNode);
+                entries.set(i, (SwitchEntry) replacementNode);
                 return true;
             }
         }
