@@ -1105,6 +1105,46 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
+    
+    @Test
+    void removedLineCommentsPrinted() {
+        String code = "public class Foo {" + EOL +
+                          "//line" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}";
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));        
+    }
+    
+    @Test
+    void removedBlockCommentsPrinted() {
+        String code = "public class Foo {" + EOL +
+                          "/*" + EOL +
+                          "Block comment coming through" + EOL +
+                          "*/" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}";
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));        
+        
+        /*
+        
+        */
+    }
 
     @Test
     void issue1321() {
