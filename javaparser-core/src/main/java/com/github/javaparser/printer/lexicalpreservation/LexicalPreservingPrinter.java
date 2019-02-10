@@ -156,9 +156,7 @@ public class LexicalPreservingPrinter {
                         JavadocComment newJavadocComment = (JavadocComment) newValue;
                         TokenTextElement matchingElement = matchingTokens.get(0);
                         nodeText.replace(matchingElement.and(matchingElement.matchByRange()), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
-                    }
-                    
-                    else {
+                    } else {
                         throw new UnsupportedOperationException();
                     }
                 }
