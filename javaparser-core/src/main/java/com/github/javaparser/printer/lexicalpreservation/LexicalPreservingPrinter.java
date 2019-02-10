@@ -149,7 +149,9 @@ public class LexicalPreservingPrinter {
                 if (!observedNode.getParentNode().isPresent()) {
                     throw new IllegalStateException();
                 }
+                
                 NodeText nodeText = getOrCreateNodeText(observedNode.getParentNode().get());
+                
                 if (oldValue == null) {
                     // Find the position of the comment node and put in front of it the comment and a newline
                     int index = nodeText.findChild(observedNode);
@@ -157,8 +159,12 @@ public class LexicalPreservingPrinter {
                     nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                 } else if (newValue == null) {
                     if (oldValue instanceof Comment) {
+                        if (((Comment) oldValue).isOrphan()){
+                            nodeText = getOrCreateNodeText(observedNode);
+                        }
+                        
                         List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((Comment) oldValue, nodeText);
-
+                        
                         TokenTextElement matchingElement = matchingTokens.get(0);
                         int index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
                         nodeText.removeElement(index);

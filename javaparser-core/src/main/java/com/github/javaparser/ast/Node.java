@@ -324,6 +324,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public boolean removeOrphanComment(Comment comment) {
         boolean removed = orphanComments.remove(comment);
         if (removed) {
+            notifyPropertyChange(ObservableProperty.COMMENT, comment, null);
             comment.setParentNode(null);
         }
         return removed;
