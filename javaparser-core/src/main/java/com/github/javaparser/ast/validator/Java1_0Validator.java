@@ -3,10 +3,7 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
@@ -79,9 +76,13 @@ public class Java1_0Validator extends Validators {
             ImportDeclaration::isStatic,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
-    final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntry.class,
-            n -> n.getLabels().stream().anyMatch(l -> l instanceof StringLiteralExpr),
-            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Strings in switch statements are not supported.")
+    final Validator intOnlySwitch = new SimpleValidator<>(SwitchEntry.class,
+            n -> !n.getLabels().stream().allMatch(l -> l instanceof IntegerLiteralExpr),
+            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's in switch statements are supported.")
+    );
+    final Validator onlyOneLabelInSwitchCase = new SimpleValidator<>(SwitchEntry.class,
+            n -> n.getLabels().size() != 1,
+            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only one label allowed in a switch-case.")
     );
     final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
     final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
@@ -97,6 +98,10 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Modules are not supported.")
     );
+    final Validator noSwitchExpressions= new SimpleValidator<>(SwitchExpr.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Switch expressions are not supported.")
+    );
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -111,11 +116,13 @@ public class Java1_0Validator extends Validators {
         add(noVarargs);
         add(noForEach);
         add(noStaticImports);
-        add(noStringsInSwitch);
+        add(intOnlySwitch);
+        add(onlyOneLabelInSwitchCase);
         add(noBinaryIntegerLiterals);
         add(noUnderscoresInIntegerLiterals);
         add(noMultiCatch);
         add(noLambdas);
         add(noModules);
+        add(noSwitchExpressions);
     }
 }

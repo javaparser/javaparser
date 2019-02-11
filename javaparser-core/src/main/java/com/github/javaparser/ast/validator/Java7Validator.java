@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.UnionType;
 
@@ -27,11 +28,16 @@ public class Java7Validator extends Java6Validator {
         }
     });
 
+    final Validator intAndEnumAndStringSwitch = new SimpleValidator<>(SwitchEntry.class,
+            n -> !n.getLabels().stream().allMatch(l -> l.isIntegerLiteralExpr() || l.isNameExpr() || l.isStringLiteralExpr()),
+            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's, enums, and strings in switch statements are supported.")
+    );
+
     public Java7Validator() {
         super();
         remove(genericsWithoutDiamondOperator);
         replace(tryWithoutResources, tryWithLimitedResources);
-        remove(noStringsInSwitch);
+        replace(intAndEnumSwitch, intAndEnumAndStringSwitch);
         remove(noBinaryIntegerLiterals);
         remove(noUnderscoresInIntegerLiterals);
         replace(noMultiCatch, multiCatch);

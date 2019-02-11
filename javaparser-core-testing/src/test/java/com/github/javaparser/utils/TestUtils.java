@@ -58,25 +58,6 @@ public class TestUtils {
             fail(e);
             return null;
         }
-//        try () {
-//            if (resourceAsStream == null) {
-//                fail("not found: " + relativeClass.getPackage().getName().replace(".", "/") + "/" + resourceName);
-//            }
-//
-//
-//            try (final InputStreamReader reader = new InputStreamReader(resourceAsStream, UTF_8);
-//                 final BufferedReader br = new BufferedReader(reader)) {
-//                final StringBuilder builder = new StringBuilder();
-//                String line;
-//                while ((line = br.readLine()) != null) {
-//                    builder.append(line).append(EOL);
-//                }
-//                return builder.toString();
-//            }
-//        } catch (IOException e) {
-//            fail(e);
-//            return null;
-//        }
     }
 
     public static void assertInstanceOf(Class<?> expectedType, Object instance) {
