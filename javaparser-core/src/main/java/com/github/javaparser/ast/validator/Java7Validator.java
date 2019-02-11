@@ -8,7 +8,7 @@ import com.github.javaparser.ast.type.UnionType;
  * This validator validates according to Java 7 syntax rules.
  */
 public class Java7Validator extends Java6Validator {
-    protected final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+    final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
         if (n.getCatchClauses().isEmpty()
                 && n.getResources().isEmpty()
                 && !n.getFinallyBlock().isPresent()) {
@@ -20,7 +20,7 @@ public class Java7Validator extends Java6Validator {
             }
         }
     });
-    protected final SingleNodeTypeValidator<UnionType> multiCatch = new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
+    private final SingleNodeTypeValidator<UnionType> multiCatch = new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
         // Case "0 elements" is caught elsewhere.
         if (n.getElements().size() == 1) {
             reporter.report(n, "Union type (multi catch) must have at least two elements.");

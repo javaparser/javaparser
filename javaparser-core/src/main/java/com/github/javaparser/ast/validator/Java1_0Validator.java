@@ -24,21 +24,21 @@ import com.github.javaparser.ast.validator.chunks.NoUnderscoresInIntegerLiterals
  * This validator validates according to Java 1.0 syntax rules.
  */
 public class Java1_0Validator extends Validators {
-    protected final Validator modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods
+    final Validator modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods
             = new ModifierValidator(false, false, false);
-    protected final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class,
+    final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "'assert' keyword is not supported.")
     );
-    protected final Validator noInnerClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
+    final Validator noInnerClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
             n -> !n.isTopLevelType(),
             (n, reporter) -> reporter.report(n, "inner classes or interfaces are not supported.")
     );
-    protected final Validator noReflection = new SimpleValidator<>(ClassExpr.class,
+    final Validator noReflection = new SimpleValidator<>(ClassExpr.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Reflection is not supported.")
     );
-    protected final Validator noGenerics = new TreeVisitorValidator((node, reporter) -> {
+    final Validator noGenerics = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
             if (((NodeWithTypeArguments<? extends Node>) node).getTypeArguments().isPresent()) {
                 reporter.report(node, "Generics are not supported.");
@@ -50,7 +50,7 @@ public class Java1_0Validator extends Validators {
             }
         }
     });
-    protected final SingleNodeTypeValidator<TryStmt> tryWithoutResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+    final SingleNodeTypeValidator<TryStmt> tryWithoutResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
         if (n.getCatchClauses().isEmpty() && !n.getFinallyBlock().isPresent()) {
             reporter.report(n, "Try has no finally and no catch.");
         }
@@ -58,42 +58,42 @@ public class Java1_0Validator extends Validators {
             reporter.report(n, "Catch with resource is not supported.");
         }
     });
-    protected final Validator noAnnotations = new TreeVisitorValidator((node, reporter) -> {
+    final Validator noAnnotations = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof AnnotationExpr || node instanceof AnnotationDeclaration) {
             reporter.report(node, "Annotations are not supported.");
         }
     });
-    protected final Validator noEnums = new SimpleValidator<>(EnumDeclaration.class,
+    final Validator noEnums = new SimpleValidator<>(EnumDeclaration.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Enumerations are not supported.")
     );
-    protected final Validator noVarargs = new SimpleValidator<>(Parameter.class,
+    final Validator noVarargs = new SimpleValidator<>(Parameter.class,
             Parameter::isVarArgs,
             (n, reporter) -> reporter.report(n, "Varargs are not supported.")
     );
-    protected final Validator noForEach = new SimpleValidator<>(ForEachStmt.class,
+    final Validator noForEach = new SimpleValidator<>(ForEachStmt.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "For-each loops are not supported.")
     );
-    protected final Validator noStaticImports = new SimpleValidator<>(ImportDeclaration.class,
+    final Validator noStaticImports = new SimpleValidator<>(ImportDeclaration.class,
             ImportDeclaration::isStatic,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
-    protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntry.class,
+    final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntry.class,
             n -> n.getLabels().stream().anyMatch(l -> l instanceof StringLiteralExpr),
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Strings in switch statements are not supported.")
     );
-    protected final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
-    protected final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
-    protected final Validator noMultiCatch = new SimpleValidator<>(UnionType.class,
+    final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
+    final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
+    final Validator noMultiCatch = new SimpleValidator<>(UnionType.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Multi-catch is not supported.")
     );
-    protected final Validator noLambdas = new SimpleValidator<>(LambdaExpr.class,
+    final Validator noLambdas = new SimpleValidator<>(LambdaExpr.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Lambdas are not supported.")
     );
-    protected final Validator noModules = new SimpleValidator<>(ModuleDeclaration.class,
+    final Validator noModules = new SimpleValidator<>(ModuleDeclaration.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Modules are not supported.")
     );
