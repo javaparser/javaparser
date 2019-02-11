@@ -1140,10 +1140,6 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "void mymethod() {" + EOL +
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));        
-        
-        /*
-        
-        */
     }
 
     @Test
