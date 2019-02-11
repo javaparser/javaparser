@@ -2,15 +2,15 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
@@ -84,6 +84,10 @@ public class Java1_0Validator extends Validators {
             n -> n.getLabels().size() != 1,
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only one label allowed in a switch-case.")
     );
+    final Validator noValueBreak = new SimpleValidator<>(BreakStmt.class,
+            n -> n.getValue().map(expression -> !expression.isNameExpr()).orElse(false),
+            (n, reporter) -> reporter.report(n, "Only labels allowed in break statements.")
+    );
     final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
     final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
     final Validator noMultiCatch = new SimpleValidator<>(UnionType.class,
@@ -117,6 +121,7 @@ public class Java1_0Validator extends Validators {
         add(noForEach);
         add(noStaticImports);
         add(intOnlySwitch);
+        add(noValueBreak);
         add(onlyOneLabelInSwitchCase);
         add(noBinaryIntegerLiterals);
         add(noUnderscoresInIntegerLiterals);

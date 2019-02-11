@@ -10,7 +10,6 @@ import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_12;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java12ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_12));
@@ -30,6 +29,12 @@ class Java12ValidatorTest {
     @Test
     void multiLabelCaseAllowed() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3,4,5: ;}"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void valueBreakAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break 6;}"));
         assertNoProblems(result);
     }
 }

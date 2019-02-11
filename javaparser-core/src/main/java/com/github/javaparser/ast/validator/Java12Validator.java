@@ -10,5 +10,6 @@ public class Java12Validator extends Java11Validator {
         remove(intAndEnumAndStringSwitch);
         remove(noSwitchExpressions);
         remove(onlyOneLabelInSwitchCase);
+        remove(noValueBreak);
     }
 }
