@@ -29,7 +29,7 @@ public class Java7Validator extends Java6Validator {
     });
 
     final Validator intAndEnumAndStringSwitch = new SimpleValidator<>(SwitchEntry.class,
-            n -> !n.getLabels().stream().allMatch(l -> l.isIntegerLiteralExpr() || l.isNameExpr() || l.isStringLiteralExpr()),
+            n -> !n.getLabels().stream().allMatch(l -> l.isIntegerLiteralExpr() || l.isNameExpr() || l.isStringLiteralExpr() || l.isCharLiteralExpr()),
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's, enums, and strings in switch statements are supported.")
     );
 

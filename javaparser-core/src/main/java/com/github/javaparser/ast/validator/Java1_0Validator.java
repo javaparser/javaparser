@@ -81,7 +81,7 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's in switch statements are supported.")
     );
     final Validator onlyOneLabelInSwitchCase = new SimpleValidator<>(SwitchEntry.class,
-            n -> n.getLabels().size() != 1,
+            n -> n.getLabels().size() > 1,
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only one label allowed in a switch-case.")
     );
     final Validator noValueBreak = new SimpleValidator<>(BreakStmt.class,
@@ -102,7 +102,7 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Modules are not supported.")
     );
-    final Validator noSwitchExpressions= new SimpleValidator<>(SwitchExpr.class,
+    final Validator noSwitchExpressions = new SimpleValidator<>(SwitchExpr.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Switch expressions are not supported.")
     );

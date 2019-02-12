@@ -36,7 +36,6 @@ import static com.github.javaparser.utils.Utils.EOL;
 public class ParseResult<T> {
     private final T result;
     private final List<Problem> problems;
-    private final List<JavaToken> tokens;
     private final CommentsCollection commentsCollection;
 
     /**
@@ -44,13 +43,11 @@ public class ParseResult<T> {
      *
      * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
-     * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    public ParseResult(T result, List<Problem> problems, List<JavaToken> tokens, CommentsCollection commentsCollection) {
+    public ParseResult(T result, List<Problem> problems, CommentsCollection commentsCollection) {
         this.commentsCollection = commentsCollection;
         this.result = result;
         this.problems = problems;
-        this.tokens = tokens;
     }
 
     /**
