@@ -138,7 +138,7 @@ public class LexicalPreservingPrinter {
                             nodeText = getOrCreateNodeText(observedNode);
                         }
                         
-                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((Comment) oldValue, nodeText);
+                        List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
                         
                         TokenTextElement matchingElement = matchingTokens.get(0);
                         int index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
@@ -151,7 +151,7 @@ public class LexicalPreservingPrinter {
                     }
                 } else {
                     if (oldValue instanceof JavadocComment) {
-                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((JavadocComment) oldValue, nodeText);
+                        List<TokenTextElement> matchingTokens = findTokenTextElementForComment((JavadocComment) oldValue, nodeText);
 
                         JavadocComment newJavadocComment = (JavadocComment) newValue;
                         TokenTextElement matchingElement = matchingTokens.get(0);
@@ -170,7 +170,7 @@ public class LexicalPreservingPrinter {
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
         }
 
-        private List<TokenTextElement> getMatchingTokenTextElements(Comment oldValue, NodeText nodeText) {
+        private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
             
             if (oldValue instanceof JavadocComment) {
