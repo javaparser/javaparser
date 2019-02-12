@@ -21,7 +21,6 @@
 
 package com.github.javaparser.javadoc;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -32,6 +31,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 
+import static com.github.javaparser.QuickJavaParser.parse;
+
 class JavadocExtractorTest {
 
     @Test
@@ -41,7 +42,7 @@ class JavadocExtractorTest {
 
     private void processFile(File file) throws FileNotFoundException {
         try {
-            CompilationUnit cu = JavaParser.parse(file, StandardCharsets.UTF_8);
+            CompilationUnit cu = parse(file, StandardCharsets.UTF_8);
             new VoidVisitorAdapter<Object>() {
                 @Override
                 public void visit(JavadocComment n, Object arg) {

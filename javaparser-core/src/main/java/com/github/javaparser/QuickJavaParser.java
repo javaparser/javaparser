@@ -37,103 +37,36 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
-import static com.github.javaparser.Providers.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
- * Parse Java source code and creates Abstract Syntax Trees.
- *
- * @author Júlio Vilmar Gesser
- * @see QuickJavaParser
+ * A simpler, static API than {@link JavaParser}.
  */
-public final class JavaParser {
-    private final ParserConfiguration configuration;
+public final class QuickJavaParser {
+    private static ParserConfiguration configuration = new ParserConfiguration();
+    private static JavaParser parser = new JavaParser(configuration);
 
-    private GeneratedJavaParser astParser = null;
-
-    /**
-     * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
-     * this class.
-     * Creating an instance will reduce setup time between parsing files.
-     */
-    public JavaParser() {
-        this(new ParserConfiguration());
+    private QuickJavaParser() {
     }
 
     /**
-     * Instantiate the parser. Note that parsing can also be done with the static methods on this class.
-     * Creating an instance will reduce setup time between parsing files.
+     * Get the configuration for the parse... methods.
      */
-    public JavaParser(ParserConfiguration configuration) {
-        this.configuration = configuration;
+    public static ParserConfiguration getConfiguration() {
+        return configuration;
     }
 
     /**
-     * @return The configuration for this parser.
+     * Set the configuration for the static parse... methods.
+     * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
      */
-    public ParserConfiguration getParserConfiguration() {
-        return this.configuration;
-    }
-
-    private GeneratedJavaParser getParserForProvider(Provider provider) {
-        if (astParser == null) {
-            astParser = new GeneratedJavaParser(provider);
-        } else {
-            astParser.reset(provider);
-        }
-        astParser.setTabSize(configuration.getTabSize());
-        astParser.setStoreTokens(configuration.isStoreTokens());
-        return astParser;
-    }
-
-    /**
-     * Parses source code.
-     * It takes the source code from a Provider.
-     * The start indicates what can be found in the source code (compilation unit, block, import...)
-     *
-     * @param start refer to the constants in ParseStart to see what can be parsed.
-     * @param provider refer to Providers to see how you can read source. The provider will be closed after parsing.
-     * @param <N> the subclass of Node that is the result of parsing in the start.
-     * @return the parse result, a collection of encountered problems, and some extra data.
-     */
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        assertNotNull(start);
-        assertNotNull(provider);
-
-        for (PreProcessor preProcessor : configuration.getPreProcessors()) {
-            provider = preProcessor.process(provider);
-        }
-
-        final GeneratedJavaParser parser = getParserForProvider(provider);
-        try {
-            N resultNode = start.parse(parser);
-            ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
-                    parser.getCommentsCollection());
-
-            configuration.getPostProcessors().forEach(postProcessor ->
-                    postProcessor.process(result, configuration));
-
-            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
-
-            return result;
-        } catch (Exception e) {
-            final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
-            parser.problems.add(new Problem(message, null, e));
-            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
-        } finally {
-            try {
-                provider.close();
-            } catch (IOException e) {
-                // Since we're done parsing and have our result, we don't care about any errors.
-            }
-        }
+    public static void setConfiguration(ParserConfiguration configuration) {
+        QuickJavaParser.configuration = configuration;
+        parser = new JavaParser(configuration);
     }
 
     /**
@@ -145,8 +78,8 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<CompilationUnit> parse(final InputStream in, Charset encoding) {
-        return parse(COMPILATION_UNIT, provider(in, encoding));
+    public static CompilationUnit parse(final InputStream in, Charset encoding) {
+        return handleResult(parser.parse(in, encoding));
     }
 
     /**
@@ -158,8 +91,8 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<CompilationUnit> parse(final InputStream in) {
-        return parse(in, UTF8);
+    public static CompilationUnit parse(final InputStream in) {
+        return handleResult(parser.parse(in));
     }
 
     /**
@@ -172,10 +105,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
      */
-    public ParseResult<CompilationUnit> parse(final File file, final Charset encoding) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
-        return result;
+    public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
+        return handleResult(parser.parse(file, encoding));
     }
 
     /**
@@ -188,10 +119,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
      */
-    public ParseResult<CompilationUnit> parse(final File file) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
-        return result;
+    public static CompilationUnit parse(final File file) throws FileNotFoundException {
+        return handleResult(parser.parse(file));
     }
 
     /**
@@ -204,10 +133,8 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<CompilationUnit> parse(final Path path, final Charset encoding) throws IOException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
-        return result;
+    public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
+        return handleResult(parser.parse(path, encoding));
     }
 
     /**
@@ -220,10 +147,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
      */
-    public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
-        return result;
+    public static CompilationUnit parse(final Path path) throws IOException {
+        return handleResult(parser.parse(path));
     }
 
     /**
@@ -237,8 +162,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
      */
-    public ParseResult<CompilationUnit> parseResource(final String path) throws IOException {
-        return parse(COMPILATION_UNIT, resourceProvider(path));
+    public static CompilationUnit parseResource(final String path) throws IOException {
+        return handleResult(parser.parseResource(path));
     }
 
     /**
@@ -252,8 +177,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
      */
-    public ParseResult<CompilationUnit> parseResource(final String path, Charset encoding) throws IOException {
-        return parse(COMPILATION_UNIT, resourceProvider(path, encoding));
+    public static CompilationUnit parseResource(final String path, Charset encoding) throws IOException {
+        return handleResult(parser.parseResource(path, encoding));
     }
 
     /**
@@ -267,8 +192,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
      */
-    public ParseResult<CompilationUnit> parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
-        return parse(COMPILATION_UNIT, resourceProvider(classLoader, path, encoding));
+    public static CompilationUnit parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+        return handleResult(parser.parseResource(classLoader, path, encoding));
     }
 
     /**
@@ -279,8 +204,8 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<CompilationUnit> parse(final Reader reader) {
-        return parse(COMPILATION_UNIT, provider(reader));
+    public static CompilationUnit parse(final Reader reader) {
+        return handleResult(parser.parse(reader));
     }
 
     /**
@@ -291,8 +216,8 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<CompilationUnit> parse(String code) {
-        return parse(COMPILATION_UNIT, provider(code));
+    public static CompilationUnit parse(String code) {
+        return handleResult(parser.parse(code));
     }
 
     /**
@@ -303,8 +228,8 @@ public final class JavaParser {
      * @return BlockStmt representing the Java block
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BlockStmt> parseBlock(final String blockStatement) {
-        return parse(BLOCK, provider(blockStatement));
+    public static BlockStmt parseBlock(final String blockStatement) {
+        return handleResult(parser.parseBlock(blockStatement));
     }
 
     /**
@@ -315,8 +240,15 @@ public final class JavaParser {
      * @return Statement representing the Java statement
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<Statement> parseStatement(final String statement) {
-        return parse(STATEMENT, provider(statement));
+    public static Statement parseStatement(final String statement) {
+        return handleResult(parser.parseStatement(statement));
+    }
+
+    private static <T extends Node> T handleResult(ParseResult<T> result) {
+        if (result.isSuccessful()) {
+            return result.getResult().get();
+        }
+        throw new ParseProblemException(result.getProblems());
     }
 
     /**
@@ -327,8 +259,8 @@ public final class JavaParser {
      * @return ImportDeclaration representing the Java import declaration
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<ImportDeclaration> parseImport(final String importDeclaration) {
-        return parse(IMPORT_DECLARATION, provider(importDeclaration));
+    public static ImportDeclaration parseImport(final String importDeclaration) {
+        return handleResult(parser.parseImport(importDeclaration));
     }
 
     /**
@@ -339,9 +271,8 @@ public final class JavaParser {
      * @return Expression representing the Java expression
      * @throws ParseProblemException if the source code has parser errors
      */
-    @SuppressWarnings("unchecked")
-    public <T extends Expression> ParseResult<T> parseExpression(final String expression) {
-        return (ParseResult<T>) parse(EXPRESSION, provider(expression));
+    public static <T extends Expression> T parseExpression(final String expression) {
+        return handleResult(parser.parseExpression(expression));
     }
 
     /**
@@ -352,8 +283,8 @@ public final class JavaParser {
      * @return AnnotationExpr representing the Java annotation
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<AnnotationExpr> parseAnnotation(final String annotation) {
-        return parse(ANNOTATION, provider(annotation));
+    public static AnnotationExpr parseAnnotation(final String annotation) {
+        return handleResult(parser.parseAnnotation(annotation));
     }
 
     /**
@@ -364,8 +295,8 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java annotation
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseAnnotationBodyDeclaration(final String body) {
-        return parse(ANNOTATION_BODY, provider(body));
+    public static BodyDeclaration<?> parseAnnotationBodyDeclaration(final String body) {
+        return handleResult(parser.parseAnnotationBodyDeclaration(body));
     }
 
     /**
@@ -376,8 +307,8 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseBodyDeclaration(String body) {
-        return parse(CLASS_BODY, provider(body));
+    public static BodyDeclaration<?> parseBodyDeclaration(String body) {
+        return handleResult(parser.parseBodyDeclaration(body));
     }
 
     /**
@@ -387,8 +318,8 @@ public final class JavaParser {
      * @return ClassOrInterfaceType representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<ClassOrInterfaceType> parseClassOrInterfaceType(String type) {
-        return parse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
+        return handleResult(parser.parseClassOrInterfaceType(type));
     }
 
     /**
@@ -398,20 +329,32 @@ public final class JavaParser {
      * @return ClassOrInterfaceType representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<Type> parseType(String type) {
-        return parse(TYPE, provider(type));
+    public static Type parseType(String type) {
+        return handleResult(parser.parseType(type));
     }
 
     /**
-     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr}
+     * Parses a variable declaration expression and returns a {@link VariableDeclarationExpr}
      * that represents it.
      *
      * @param declaration a variable declaration like <code>int x=2;</code>
      * @return VariableDeclarationExpr representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<VariableDeclarationExpr> parseVariableDeclarationExpr(String declaration) {
-        return parse(VARIABLE_DECLARATION_EXPR, provider(declaration));
+    public static VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
+        return handleResult(parser.parseVariableDeclarationExpr(declaration));
+    }
+
+    /**
+     * Parses the content of a JavadocComment and returns a {@link Javadoc} that
+     * represents it.
+     *
+     * @param content a variable declaration like <code>content of my javadoc\n * second line\n * third line</code>
+     * @return Javadoc representing the content of the comment
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Javadoc parseJavadoc(String content) {
+        return JavadocParser.parse(content);
     }
 
     /**
@@ -421,8 +364,8 @@ public final class JavaParser {
      * @return the AST for the statement.
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<ExplicitConstructorInvocationStmt> parseExplicitConstructorInvocationStmt(String statement) {
-        return parse(EXPLICIT_CONSTRUCTOR_INVOCATION_STMT, provider(statement));
+    public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
+        return handleResult(parser.parseExplicitConstructorInvocationStmt(statement));
     }
 
     /**
@@ -432,8 +375,8 @@ public final class JavaParser {
      * @return the AST for the name
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<Name> parseName(String qualifiedName) {
-        return parse(NAME, provider(qualifiedName));
+    public static Name parseName(String qualifiedName) {
+        return handleResult(parser.parseName(qualifiedName));
     }
 
     /**
@@ -443,8 +386,8 @@ public final class JavaParser {
      * @return the AST for the name
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<SimpleName> parseSimpleName(String name) {
-        return parse(SIMPLE_NAME, provider(name));
+    public static SimpleName parseSimpleName(String name) {
+        return handleResult(parser.parseSimpleName(name));
     }
 
     /**
@@ -454,8 +397,8 @@ public final class JavaParser {
      * @return the AST for the parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<Parameter> parseParameter(String parameter) {
-        return parse(PARAMETER, provider(parameter));
+    public static Parameter parseParameter(String parameter) {
+        return handleResult(parser.parseParameter(parameter));
     }
 
     /**
@@ -465,8 +408,8 @@ public final class JavaParser {
      * @return the AST for the parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<PackageDeclaration> parsePackageDeclaration(String packageDeclaration) {
-        return parse(PACKAGE_DECLARATION, provider(packageDeclaration));
+    public static PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
+        return handleResult(parser.parsePackageDeclaration(packageDeclaration));
     }
 
     /**
@@ -476,8 +419,8 @@ public final class JavaParser {
      * @return the AST for the type declaration
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<TypeDeclaration<?>> parseTypeDeclaration(String typeDeclaration) {
-        return parse(TYPE_DECLARATION, provider(typeDeclaration));
+    public static TypeDeclaration<?> parseTypeDeclaration(String typeDeclaration) {
+        return handleResult(parser.parseTypeDeclaration(typeDeclaration));
     }
 
     /**
@@ -488,8 +431,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @see ModuleDeclaration
      */
-    public ParseResult<ModuleDeclaration> parseModuleDeclaration(String moduleDeclaration) {
-        return parse(MODULE_DECLARATION, provider(moduleDeclaration));
+    public static ModuleDeclaration parseModuleDeclaration(String moduleDeclaration) {
+        return handleResult(parser.parseModuleDeclaration(moduleDeclaration));
     }
 
     /**
@@ -500,8 +443,8 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @see ModuleDirective
      */
-    public ParseResult<ModuleDirective> parseModuleDirective(String moduleDirective) {
-        return parse(MODULE_DIRECTIVE, provider(moduleDirective));
+    public static ModuleDirective parseModuleDirective(String moduleDirective) {
+        return handleResult(parser.parseModuleDirective(moduleDirective));
     }
 
 
@@ -512,8 +455,8 @@ public final class JavaParser {
      * @return the AST for the type parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<TypeParameter> parseTypeParameter(String typeParameter) {
-        return parse(TYPE_PARAMETER, provider(typeParameter));
+    public static TypeParameter parseTypeParameter(String typeParameter) {
+        return handleResult(parser.parseTypeParameter(typeParameter));
     }
 
 }

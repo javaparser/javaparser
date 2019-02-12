@@ -14,6 +14,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
+
+import static com.github.javaparser.QuickJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
@@ -201,7 +203,7 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
      * Add a directive to the module, like "exports R.S to T1.U1, T2.U2;"
      */
     public ModuleDeclaration addDirective(String directive) {
-        return addDirective(JavaParser.parseModuleDirective(directive));
+        return addDirective(parseModuleDirective(directive));
     }
 
     public ModuleDeclaration addDirective(ModuleDirective directive) {

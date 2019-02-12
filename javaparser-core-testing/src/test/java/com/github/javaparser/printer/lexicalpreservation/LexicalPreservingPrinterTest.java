@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -548,7 +550,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -794,7 +796,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         methodDeclaration.getBody().get().getStatements().add(new ExpressionStmt(
                 new VariableDeclarationExpr(
                         new VariableDeclarator(
-                                JavaParser.parseClassOrInterfaceType("String"),
+                                parseClassOrInterfaceType("String"),
                                 "test2",
                                 new StringLiteralExpr("")))
         ));
@@ -814,26 +816,22 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected @Override void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
-                .forEach(type -> {
-                    type.getMembers()
-                            .forEach(member -> {
-                                member.ifMethodDeclaration(methodDeclaration -> {
-                                    if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                .forEach(type -> type.getMembers()
+                        .forEach(member -> member.ifMethodDeclaration(methodDeclaration -> {
+                                if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
 
-                                        while (methodDeclaration.getAnnotations().isNonEmpty()) {
-                                            AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
-                                            annotationExpr.remove();
-                                        }
-
-                                        methodDeclaration.addMarkerAnnotation("Override");
+                                    while (methodDeclaration.getAnnotations().isNonEmpty()) {
+                                        AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
+                                        annotationExpr.remove();
                                     }
-                                });
-                            });
-                });
+
+                                    methodDeclaration.addMarkerAnnotation("Override");
+                                }
+                            })));
         assertEquals("public class TestPage extends Page {" + EOL +
                 EOL +
                 "   protected void test() {}" + EOL +
@@ -853,26 +851,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected @Override void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
-                .forEach(type -> {
-                    type.getMembers()
-                            .forEach(member -> {
-                                if (member instanceof MethodDeclaration) {
-                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
-                                    if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                .forEach(type -> type.getMembers()
+                        .forEach(member -> {
+                            if (member instanceof MethodDeclaration) {
+                                MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
 
-                                        while (methodDeclaration.getAnnotations().isNonEmpty()) {
-                                            AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
-                                            annotationExpr.remove();
-                                        }
+                                    while (methodDeclaration.getAnnotations().isNonEmpty()) {
+                                        AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
+                                        annotationExpr.remove();
                                     }
-                                    methodDeclaration.addMarkerAnnotation("Override");
                                 }
-                            });
-                });
+                                methodDeclaration.addMarkerAnnotation("Override");
+                            }
+                        }));
         assertEquals("public class TestPage extends Page {" + EOL +
                 EOL +
                 "   @Override" + EOL +
@@ -894,7 +890,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -927,7 +923,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -955,7 +951,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   protected void initializePage() {}" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes()
@@ -977,7 +973,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 + "  Object f() {" + EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new ModifierVisitor<>(), null);
     }
@@ -986,7 +982,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     void handleDeprecatedAnnotationFinalClass() {
         String code = "public final class A {}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
@@ -1000,7 +996,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     void handleDeprecatedAnnotationAbstractClass() {
         String code = "public abstract class A {}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
@@ -1014,7 +1010,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String code = "public class Foo {" + EOL + EOL
                 + "// Some comment" + EOL + EOL // does work with only one \n
                 + "public void writeExternal() {}" + EOL + "}";
-        CompilationUnit originalCu = JavaParser.parse(code);
+        CompilationUnit originalCu = parse(code);
         CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
 
         cu.findAll(ClassOrInterfaceDeclaration.class).forEach(c -> {
@@ -1046,7 +1042,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   }" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new AddFooCallModifierVisitor(), null);
     }
@@ -1069,7 +1065,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "   }" + EOL +
                 "}";
 
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.accept(new CallModifierVisitor(), null);
     }
@@ -1077,7 +1073,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void addedBlockCommentsPrinted() {
         String code = "public class Foo { }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getClassByName("Foo").get()
@@ -1093,7 +1089,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void addedLineCommentsPrinted() {
         String code = "public class Foo { }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
 
         cu.getClassByName("Foo").get()
@@ -1108,7 +1104,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue1321() {
-        CompilationUnit compilationUnit = JavaParser.parse("class X { X() {} private void testme() {} }");
+        CompilationUnit compilationUnit = parse("class X { X() {} private void testme() {} }");
         LexicalPreservingPrinter.setup(compilationUnit);
 
         ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();

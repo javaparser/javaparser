@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.QuickJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -53,7 +54,7 @@ class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 
     private CompilationUnit parse(String fileName) throws IOException {
         Path sourceFile = src.resolve(fileName + ".java");
-        return JavaParser.parse(sourceFile);
+        return QuickJavaParser.parse(sourceFile);
     }
 
 //    @Test

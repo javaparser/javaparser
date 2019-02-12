@@ -10,6 +10,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -40,17 +41,13 @@ class Issue343 extends AbstractResolutionTest{
 
     @Test
     void toResolveDoubleWeNeedTheAST() {
-        assertThrows(IllegalStateException.class, () -> {
-            getExpressionType(typeResolver, JavaParser.parseExpression("new Double[]{2.0d, 3.0d}[1]"));
-    });
+        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]")));
     }
 
 
     @Test
     void toResolveFloatWeNeedTheAST() {
-        assertThrows(IllegalStateException.class, () -> {
-            getExpressionType(typeResolver, JavaParser.parseExpression("new Float[]{2.0d, 3.0d}"));
-    });
+        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}")));
     }
 
     @Test
@@ -60,8 +57,6 @@ class Issue343 extends AbstractResolutionTest{
 
     @Test
     void resolveLocaleOutsideAST() {
-        assertThrows(IllegalStateException.class, () -> {
-            getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US"));
-    });
+        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US")));
     }
 }

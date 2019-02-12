@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
+import static com.github.javaparser.QuickJavaParser.parseJavadoc;
+
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
  *
@@ -72,7 +74,7 @@ public final class JavadocComment extends Comment {
     }
 
     public Javadoc parse() {
-        return JavaParser.parseJavadoc(getContent());
+        return parseJavadoc(getContent());
     }
 
     @Override

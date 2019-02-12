@@ -5,8 +5,8 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.QuickJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CharLiteralExprTest {

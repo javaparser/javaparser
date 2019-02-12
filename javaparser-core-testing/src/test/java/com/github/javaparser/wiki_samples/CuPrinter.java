@@ -22,6 +22,7 @@
 package com.github.javaparser.wiki_samples;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.QuickJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.io.FileInputStream;
@@ -33,7 +34,7 @@ public class CuPrinter {
         FileInputStream in = new FileInputStream("test.java");
 
         // parse the file
-        CompilationUnit cu = JavaParser.parse(in);
+        CompilationUnit cu = QuickJavaParser.parse(in);
 
         // prints the resulting compilation unit to default system output
         System.out.println(cu.toString());

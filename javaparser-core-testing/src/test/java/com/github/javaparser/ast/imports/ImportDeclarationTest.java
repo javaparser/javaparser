@@ -25,32 +25,33 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parseImport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ImportDeclarationTest {
     @Test
     void singleTypeImportDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import a.b.c.X;");
+        ImportDeclaration i = parseImport("import a.b.c.X;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 
     @Test
     void typeImportOnDemandDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import a.b.c.D.*;");
+        ImportDeclaration i = parseImport("import a.b.c.D.*;");
         assertEquals("a.b.c.D", i.getName().toString());
         assertEquals("D", i.getName().getIdentifier());
     }
 
     @Test
     void singleStaticImportDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import static a.b.c.X.def;");
+        ImportDeclaration i = parseImport("import static a.b.c.X.def;");
         assertEquals("a.b.c.X", i.getName().getQualifier().get().asString());
         assertEquals("def", i.getName().getIdentifier());
     }
 
     @Test
     void staticImportOnDemandDeclaration() {
-        ImportDeclaration i = JavaParser.parseImport("import static a.b.c.X.*;");
+        ImportDeclaration i = parseImport("import static a.b.c.X.*;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 

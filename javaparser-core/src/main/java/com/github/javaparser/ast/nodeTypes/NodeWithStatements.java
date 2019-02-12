@@ -29,7 +29,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.QuickJavaParser.parseStatement;
 
 /**
  * A node that contains a list of statements.

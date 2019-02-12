@@ -4,7 +4,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.QuickJavaParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ForEachStmtTest {

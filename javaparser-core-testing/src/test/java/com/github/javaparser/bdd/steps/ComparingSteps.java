@@ -21,11 +21,11 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,12 +41,12 @@ public class ComparingSteps {
 
     @Given("the first class:$classSrc")
     public void givenTheFirstClass(String classSrc) {
-        this.first = JavaParser.parse(classSrc.trim());
+        this.first = parse(classSrc.trim());
     }
 
     @Given("the second class:$classSrc")
     public void givenTheSecondClass(String classSrc) {
-        this.second = JavaParser.parse(classSrc.trim());
+        this.second = parse(classSrc.trim());
     }
 
     /*

@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -72,7 +73,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(methodCallExpr);
         assertEquals("java.lang.Throwable.getMessage()", methodUsage.getQualifiedSignature());
     }
@@ -94,11 +95,11 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
-        assertEquals(true, symbolReference.isSolved());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
+        assertTrue(symbolReference.isSolved());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
         assertEquals("e", symbolReference.getCorrespondingDeclaration().asParameter().getName());
         assertEquals("java.lang.UnsupportedOperationException", symbolReference.getCorrespondingDeclaration().asParameter().getType().asReferenceType().getQualifiedName());
     }
@@ -116,7 +117,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        public X x = null;\n" +
                 "    }\n" +
                 "}";
-        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(JavaParser.parse(code), FieldDeclaration.class);
+        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(parse(code), FieldDeclaration.class);
         Type jpType = fieldDeclaration.getCommonType();
         ResolvedType jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
         assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
@@ -128,11 +129,11 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         String code = "import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {\n" +
                 "    sc.nextLine();\n" +
                 "} } }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine").get();
         Expression scope = methodCallExpr.getScope().get();
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
-        assertEquals(true, type.isReferenceType());
+        assertTrue(type.isReferenceType());
         assertEquals("java.util.Scanner", type.asReferenceType().getQualifiedName());
     }
 
@@ -159,7 +160,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         CatchClause catchClause = Navigator.findNodeOfGivenClass(cu, CatchClause.class);
         Type jpType = catchClause.getParameter().getType();
         ResolvedType jssType = jpType.resolve();
-        assertEquals(true, jssType instanceof ResolvedUnionType);
+        assertTrue(jssType instanceof ResolvedUnionType);
     }
 
     @Test
