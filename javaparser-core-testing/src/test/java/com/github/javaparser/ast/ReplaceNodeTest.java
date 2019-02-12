@@ -2,8 +2,8 @@ package com.github.javaparser.ast;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parse;
-import static com.github.javaparser.JavaParser.parsePackageDeclaration;
+import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parsePackageDeclaration;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

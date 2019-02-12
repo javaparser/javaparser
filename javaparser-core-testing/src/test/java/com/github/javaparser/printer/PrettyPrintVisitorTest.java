@@ -2,7 +2,7 @@
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
- * This file is part of JavaParser.
+ * This file is part of 
  *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
@@ -33,6 +33,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,22 +42,22 @@ class PrettyPrintVisitorTest {
 
     @Test
     void getMaximumCommonTypeWithoutAnnotations() {
-        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
+        VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a[], b[]");
         assertEquals("int[]", vde1.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
+        VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[][] a[], b[]");
         assertEquals("int[][][]", vde2.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
+        VariableDeclarationExpr vde3 = parseVariableDeclarationExpr("int[][] a, b[]");
         assertEquals("int[][]", vde3.getMaximumCommonType().get().toString());
     }
 
     @Test
     void getMaximumCommonTypeWithAnnotations() {
-        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
+        VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a @Foo [], b[]");
         assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
-        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
+        VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
         assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().get().toString());
     }
 
@@ -66,32 +67,32 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printSimpleClassExpr() {
-        ClassExpr expr = JavaParser.parseExpression("Foo.class");
+        ClassExpr expr = parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
     void printArrayClassExpr() {
-        ClassExpr expr = JavaParser.parseExpression("Foo[].class");
+        ClassExpr expr = parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
     void printGenericClassExpr() {
-        ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
+        ClassExpr expr = parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
     void printSimplestClass() {
-        Node node = JavaParser.parse("class A {}");
+        Node node = parse("class A {}");
         assertEquals("class A {" + EOL +
                 "}" + EOL, print(node));
     }
 
     @Test
     void printAClassWithField() {
-        Node node = JavaParser.parse("class A { int a; }");
+        Node node = parse("class A { int a; }");
         assertEquals("class A {" + EOL
                 + EOL +
                 "    int a;" + EOL +
@@ -100,7 +101,7 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printAReceiverParameter() {
-        Node node = JavaParser.parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
+        Node node = parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
         assertEquals("int x(@O X A.B.this, int y) {" + EOL + "}", print(node));
     }
 
@@ -112,7 +113,7 @@ class PrettyPrintVisitorTest {
                 "    r = (Runnable & Serializable)() -> {};" + EOL +
                 "    r = (Runnable & I)() -> {};" + EOL +
                 "  }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + EOL + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
@@ -121,7 +122,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printIntersectionType() {
         String code = "(Runnable & Serializable) (() -> {})";
-        Expression expression = JavaParser.parseExpression(code);
+        Expression expression = parseExpression(code);
         Type type = ((CastExpr) expression).getType();
 
         assertEquals("Runnable & Serializable", print(type));
@@ -133,7 +134,7 @@ class PrettyPrintVisitorTest {
                 + "  Object f() {" + EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("return (Comparator<Map.Entry<K, V>> & Serializable) (c1, c2) -> c1.getKey().compareTo(c2.getKey());", print(methodDeclaration.getBody().get().getStatements().get(0)));
@@ -142,7 +143,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
@@ -151,7 +152,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printImportsDefaultOrder() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         String content = cu.toString();
         assertEqualsNoEol("import x.y.z;\n" +
                 "import a.b.c;\n" +
@@ -164,7 +165,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printImportsOrdered() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
         String content = cu.toString(orderImports);
         assertEqualsNoEol("import static b.c.d;\n" +
@@ -288,7 +289,7 @@ class PrettyPrintVisitorTest {
 
     @Test
     void blockcommentGetsNoFormatting() {
-        CompilationUnit cu = JavaParser.parse("class A {\n" +
+        CompilationUnit cu = parse("class A {\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
                 "        //sdfsdfsdf\n" +
                 "            //sdfds\n" +
@@ -335,7 +336,7 @@ class PrettyPrintVisitorTest {
                 " */\n" +
                 "public void add(int x, int y){}}";
 
-        CompilationUnit cu_allLeadingSpaces = JavaParser.parse(input_allLeadingSpaces);
+        CompilationUnit cu_allLeadingSpaces = parse(input_allLeadingSpaces);
         assertEqualsNoEol(expected, cu_allLeadingSpaces.toString());
     }
 
@@ -351,7 +352,7 @@ class PrettyPrintVisitorTest {
                 " */\n" +
                 "public void add(int x, int y){}}";
 
-        CompilationUnit cu_singleMissingLeadingSpace = JavaParser.parse(input_singleMissingLeadingSpace);
+        CompilationUnit cu_singleMissingLeadingSpace = parse(input_singleMissingLeadingSpace);
         assertEqualsNoEol(expected, cu_singleMissingLeadingSpace.toString());
     }
 
@@ -367,7 +368,7 @@ class PrettyPrintVisitorTest {
                 " */\n" +
                 "public void add(int x, int y){}}";
 
-        CompilationUnit cu_leadingTab = JavaParser.parse(input_leadingTab);
+        CompilationUnit cu_leadingTab = parse(input_leadingTab);
         assertEqualsNoEol(expected, cu_leadingTab.toString());
 
     }

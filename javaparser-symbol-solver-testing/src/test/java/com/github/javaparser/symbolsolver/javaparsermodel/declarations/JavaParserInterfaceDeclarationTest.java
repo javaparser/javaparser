@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.QuickJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -108,9 +110,9 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
-        assertEquals(nodeWithAnnotations, nodeWithAnnotations.asClass());
-    });
-}
+            assertEquals(nodeWithAnnotations, nodeWithAnnotations.asClass());
+        });
+    }
 
     @Test
     void testAsInterface() {
@@ -122,9 +124,9 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
-        nodeWithAnnotations.asEnum();
-    });
-}
+            nodeWithAnnotations.asEnum();
+        });
+    }
 
     @Test
     void testGetPackageName() {
@@ -422,10 +424,10 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetFieldForUnexistingField() {
         assertThrows(UnsolvedSymbolException.class, () -> {
             JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        constructorDeclaration.getField("unexisting");
-    });
+            constructorDeclaration.getField("unexisting");
+        });
 
-}
+    }
 
     @Test
     void testGetAllFields() {
@@ -871,15 +873,19 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
     @Test
     void issue1528() {
-        TypeSolver typeSolver = new ReflectionTypeSolver();
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        CompilationUnit compilationUnit = JavaParser.parse("public interface Foo extends Comparable { }");
-        ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
-        ResolvedInterfaceDeclaration interfaceDeclaration = javaParserFacade.getTypeDeclaration(foo).asInterface();
+        try {
+            TypeSolver typeSolver = new ReflectionTypeSolver();
+            QuickJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+            JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+            CompilationUnit compilationUnit = QuickJavaParser.parse("public interface Foo extends Comparable { }");
+            ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
+            ResolvedInterfaceDeclaration interfaceDeclaration = javaParserFacade.getTypeDeclaration(foo).asInterface();
 
-        ResolvedReferenceType extendedInterface = interfaceDeclaration.getAllInterfacesExtended().get(0);
+            ResolvedReferenceType extendedInterface = interfaceDeclaration.getAllInterfacesExtended().get(0);
 
-        assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
+            assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
+        } finally {
+            QuickJavaParser.setConfiguration(new ParserConfiguration());
+        }
     }
 }

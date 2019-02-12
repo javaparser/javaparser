@@ -32,12 +32,13 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavaParserJsonSerializerTest {
     @Test
     void test() {
-        CompilationUnit cu = JavaParser.parse("class X{java.util.Y y;}");
+        CompilationUnit cu = parse("class X{java.util.Y y;}");
 
         String serialized = serialize(cu, false);
 

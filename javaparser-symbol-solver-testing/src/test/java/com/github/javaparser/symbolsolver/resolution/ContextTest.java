@@ -60,7 +60,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
     private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
+        return QuickJavaParser.parse(is);
     }
 
     @Test

@@ -26,6 +26,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,7 +53,7 @@ class DotPrinterTest {
         expectedOutput += "}";
 
         DotPrinter dotPrinter = new DotPrinter(true);
-        Expression expression = JavaParser.parseExpression("x(1,1)");
+        Expression expression = parseExpression("x(1,1)");
         String output = dotPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -73,7 +75,7 @@ class DotPrinterTest {
         expectedOutput += "}";
 
         DotPrinter dotPrinter = new DotPrinter(false);
-        Expression expression = JavaParser.parseExpression("1+1");
+        Expression expression = parseExpression("1+1");
         String output = dotPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
@@ -81,7 +83,7 @@ class DotPrinterTest {
     @Test
     void testIssue1871() {
         DotPrinter printer = new DotPrinter(false);
-        CompilationUnit cu = JavaParser.parse("//q\"q\nclass X{}");
+        CompilationUnit cu = parse("//q\"q\nclass X{}");
         String output = printer.output(cu);
         assertEqualsNoEol("digraph {\n" +
                 "n0 [label=\"root\"];\n" +

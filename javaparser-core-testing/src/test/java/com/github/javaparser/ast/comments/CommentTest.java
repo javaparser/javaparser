@@ -30,7 +30,7 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;

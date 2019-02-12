@@ -14,6 +14,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Issue314 extends AbstractResolutionTest{
@@ -43,7 +44,7 @@ class Issue314 extends AbstractResolutionTest{
                 "            return a;\n" +
                 "        }\n" +
                 "    }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a").get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = javaParserFacade.solve(refToA);
         assertEquals(true, symbolReference.isSolved());

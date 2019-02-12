@@ -72,15 +72,11 @@ class SourceZipTest {
 
     @Test
     void dirAsZipIsNotAllowed() throws IOException {
-        assertThrows(IOException.class, () -> {
-            new SourceZip(testDir.resolve("test")).parse();
-    });
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test")).parse());
     }
 
     @Test
     void fileAsZipIsNotAllowed() throws IOException {
-        assertThrows(IOException.class, () -> {
-            new SourceZip(testDir.resolve("test.txt")).parse();
-    });
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test.txt")).parse());
     }
 }

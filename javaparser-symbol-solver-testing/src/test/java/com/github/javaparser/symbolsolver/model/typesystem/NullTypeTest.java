@@ -91,23 +91,17 @@ class NullTypeTest {
 
     @Test
     void testAsReferenceTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            NullType.INSTANCE.asReferenceType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> NullType.INSTANCE.asReferenceType());
     }
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            NullType.INSTANCE.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> NullType.INSTANCE.asTypeParameter());
     }
 
     @Test
     void testAsArrayTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            NullType.INSTANCE.asArrayType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> NullType.INSTANCE.asArrayType());
     }
 
     @Test
