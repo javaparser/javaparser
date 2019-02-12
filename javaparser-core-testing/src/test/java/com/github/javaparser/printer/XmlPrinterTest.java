@@ -1,15 +1,15 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.QuickJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class XmlPrinterTest {
     @Test
     void testWithType() {
-        Expression expression = JavaParser.parseExpression("1+1");
+        Expression expression = parseExpression("1+1");
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(expression);
@@ -19,7 +19,7 @@ class XmlPrinterTest {
 
     @Test
     void testWithoutType() {
-        Expression expression = JavaParser.parseExpression("1+1");
+        Expression expression = parseExpression("1+1");
 
         XmlPrinter xmlOutput = new XmlPrinter(false);
 
@@ -30,7 +30,7 @@ class XmlPrinterTest {
 
     @Test
     void testList() {
-        Expression expression = JavaParser.parseExpression("a(1,2)");
+        Expression expression = parseExpression("a(1,2)");
 
         XmlPrinter xmlOutput = new XmlPrinter(true);
 

@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -46,6 +45,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 import static java.util.Comparator.comparing;
 
@@ -188,7 +188,7 @@ public class SourceFileInfoExtractor {
                     if (printFileName) {
                         out.println("- parsing " + file.toAbsolutePath());
                     }
-                    CompilationUnit cu = JavaParser.parse(file);
+                    CompilationUnit cu = parse(file);
                     List<Node> nodes = collectAllNodes(cu);
                     nodes.forEach(n -> solve(n));
                 }
@@ -205,7 +205,7 @@ public class SourceFileInfoExtractor {
                     if (printFileName) {
                         out.println("- parsing " + file.toAbsolutePath());
                     }
-                    CompilationUnit cu = JavaParser.parse(file);
+                    CompilationUnit cu = parse(file);
                     solveMethodCalls(cu);
                 }
                 return FileVisitResult.CONTINUE;

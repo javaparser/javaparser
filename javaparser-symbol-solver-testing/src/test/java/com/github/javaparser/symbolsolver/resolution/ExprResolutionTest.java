@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.QuickJavaParser.parse;
 import static com.github.javaparser.resolution.types.ResolvedPrimitiveType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -55,7 +56,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsDoubleAndByte() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -72,7 +73,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsByteAndDouble() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -89,7 +90,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsDoubleAndChar() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  char c = 'a'; "
@@ -106,7 +107,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsCharAndDouble() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  char c = 'a'; "
@@ -123,7 +124,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsDoubleAndInt() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  int i = 0; "
@@ -140,7 +141,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsIntAndDouble() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  int i = 0; "
@@ -157,7 +158,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsfloatAndByte() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -174,7 +175,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsByteAndfloat() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -191,7 +192,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsfloatAndChar() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  char c = 'a'; "
@@ -208,7 +209,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsCharAndfloat() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  char c = 'a'; "
@@ -225,7 +226,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsfloatAndInt() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  int i = 0; "
@@ -242,7 +243,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsIntAndfloat() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  int i = 0; "
@@ -259,7 +260,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsDoubleAndFloat() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  float f = 0.0f; "
@@ -276,7 +277,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsFloatAndDouble() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  float f = 0.0f; "
@@ -293,7 +294,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1589
     @Test
     void typeOfPlusExpressionsByteAndChar() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -309,7 +310,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
 
     @Test
     void typeOfPlusExpressionsCharAndByte() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  byte b = (byte)0; "
@@ -326,7 +327,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsDoubleAndString() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"
@@ -342,7 +343,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsIntAndString() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"
@@ -358,7 +359,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsCharAndString() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"
@@ -374,7 +375,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsStringAndDouble() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"
@@ -390,7 +391,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsStringAndInt() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"
@@ -406,7 +407,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     // Related to issue 1731
     @Test
     void typeOfPlusExpressionsStringAndChar() {
-        CompilationUnit compilationUnit = JavaParser.parse(
+        CompilationUnit compilationUnit = parse(
                 "public class Class1 {"
                         + " public void method1() {"
                         + "  String s1 = \"string1\";"

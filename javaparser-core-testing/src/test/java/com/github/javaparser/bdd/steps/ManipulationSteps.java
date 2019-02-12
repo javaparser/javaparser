@@ -43,7 +43,7 @@ import org.jbehave.core.annotations.When;
 
 import java.util.Map;
 
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.QuickJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.staticModifier;
@@ -105,12 +105,12 @@ public class ManipulationSteps {
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
     public void whenIsTheStringIsParsedByTheJavaParser(String value) {
-        blockStmt = JavaParser.parseBlock(value);
+        blockStmt = parseBlock(value);
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
     public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) {
-        statement = JavaParser.parseStatement(value);
+        statement = parseStatement(value);
     }
 
     @When("the List of VariableDeclarations are set as the resources on TryStmt")

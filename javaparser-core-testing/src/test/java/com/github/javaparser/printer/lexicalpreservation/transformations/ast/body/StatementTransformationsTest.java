@@ -32,13 +32,15 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
+import static com.github.javaparser.QuickJavaParser.parseStatement;
+
 /**
  * Transforming Statement and verifying the LexicalPreservation works as expected.
  */
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     Statement consider(String code) {
-        Statement statement = JavaParser.parseStatement(code);
+        Statement statement = parseStatement(code);
         LexicalPreservingPrinter.setup(statement);
         return statement;
     }

@@ -32,6 +32,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.QuickJavaParser.parseJavadoc;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -78,7 +80,7 @@ class JavadocTest {
 
     @Test
     void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = JavaParser.parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
+        Javadoc javadoc = parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
         assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
         assertEquals(2, javadoc.getBlockTags().size());
     }
@@ -92,7 +94,7 @@ class JavadocTest {
                         "@param versionID the id of the {@link TOVersion}." + EOL +
                         "@return the filenames" + EOL +
                         "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
-        String javadoc = JavaParser.parseJavadoc(docText).toText();
+        String javadoc = parseJavadoc(docText).toText();
         assertTrue(javadoc.contains("{@link TOVersion}"));
     }
 
@@ -105,7 +107,7 @@ class JavadocTest {
                 " * @author censored" + EOL +
                 " * " + EOL +
                 " * @param <T>" + EOL;
-        Javadoc javadoc = JavaParser.parseJavadoc(comment);
+        Javadoc javadoc = parseJavadoc(comment);
         assertEquals(2, javadoc.getBlockTags().size());
     }
 
@@ -142,7 +144,7 @@ class JavadocTest {
 
     @Test
     void issue1533() {
-        CompilationUnit compilationUnit = JavaParser.parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
+        CompilationUnit compilationUnit = parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
         List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
         assertEquals(3, elements.size());
         assertEquals(new JavadocSnippet("hallo "), elements.get(0));

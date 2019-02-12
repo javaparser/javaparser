@@ -52,9 +52,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.QuickJavaParser.parseImport;
+import static com.github.javaparser.QuickJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -340,7 +341,7 @@ public final class CompilationUnit extends Node {
             i.append(".*");
         }
         i.append(";");
-        return addImport(JavaParser.parseImport(i.toString()));
+        return addImport(parseImport(i.toString()));
     }
 
     /**
