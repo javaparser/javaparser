@@ -1109,7 +1109,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "void mymethod() {" + EOL +
                           "}" + EOL +
                           "}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
@@ -1128,7 +1128,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "void mymethod() {" + EOL +
                           "}" + EOL +
                           "}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
