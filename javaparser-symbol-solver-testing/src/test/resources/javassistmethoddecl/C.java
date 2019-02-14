@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class C {
+public class C<S> {
 
     public void methodWithRawParameter(List l) {
     }
@@ -8,4 +8,9 @@ public class C {
     public void methodWithGenericParameter(List<String> l) {
     }
 
+    public <T> void genericMethodWithTypeParameter(List<T> l) {
+    }
+
+    public void methodWithTypeParameter(List<S> l) {
+    }
 }

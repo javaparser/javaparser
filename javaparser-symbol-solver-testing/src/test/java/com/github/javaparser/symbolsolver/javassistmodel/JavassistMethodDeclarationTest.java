@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -27,26 +26,47 @@ public class JavassistMethodDeclarationTest extends AbstractSymbolResolutionTest
     }
 
     @Test
-    void getParameterDeclaration_forMethodParameterWithRawType() {
+    void getParam_forMethodParameterWithRawType() {
         JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
-        ResolvedMethodDeclaration methodWithRawParameter = findMethodWithNAme(classDecl, "methodWithRawParameter");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "methodWithRawParameter");
 
-        ResolvedParameterDeclaration rawParam = methodWithRawParameter.getParam(0);
+        ResolvedParameterDeclaration param = method.getParam(0);
 
-        assertThat(rawParam.describeType(), is("java.util.List"));
+        assertThat(param.describeType(), is("java.util.List"));
     }
 
     @Test
-    void getParameterDeclaration_forMethodParameterWithGenericType() {
+    void getParam_forMethodParameterWithGenericType() {
         JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
-        ResolvedMethodDeclaration methodWithRawParameter = findMethodWithNAme(classDecl, "methodWithGenericParameter");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "methodWithGenericParameter");
 
-        ResolvedParameterDeclaration genericParam = methodWithRawParameter.getParam(0);
+        ResolvedParameterDeclaration param = method.getParam(0);
 
-        assertThat(genericParam.describeType(), is("java.util.List<java.lang.String>"));
+        assertThat(param.describeType(), is("java.util.List<java.lang.String>"));
     }
 
-    private ResolvedMethodDeclaration findMethodWithNAme(JavassistClassDeclaration classDecl, String name) {
-        return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name)).findAny().get();
+    @Test
+    void getParam_forMethodParameterWithTypeParameter() {
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "methodWithTypeParameter");
+
+        ResolvedParameterDeclaration param = method.getParam(0);
+
+        assertThat(param.describeType(), is("java.util.List<S>"));
+    }
+
+    @Test
+    void getParam_forGenericMethodWithTypeParameter() {
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "genericMethodWithTypeParameter");
+
+        ResolvedParameterDeclaration param = method.getParam(0);
+
+        assertThat(param.describeType(), is("java.util.List<T>"));
+    }
+
+    private JavassistMethodDeclaration findMethodWithName(JavassistClassDeclaration classDecl, String name) {
+        return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name))
+                .map(m -> (JavassistMethodDeclaration) m).findAny().get();
     }
 }
