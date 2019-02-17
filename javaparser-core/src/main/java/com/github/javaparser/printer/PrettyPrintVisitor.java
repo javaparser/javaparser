@@ -496,24 +496,22 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        n.findAncestor(NodeWithVariables.class).ifPresent(ancestor -> {
-            ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
+        n.findAncestor(NodeWithVariables.class).ifPresent(ancestor -> ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
-                final Type type = n.getType();
+            final Type type = n.getType();
 
-                ArrayType arrayType = null;
+            ArrayType arrayType = null;
 
-                for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-                    if (arrayType == null) {
-                        arrayType = (ArrayType) type;
-                    } else {
-                        arrayType = (ArrayType) arrayType.getComponentType();
-                    }
-                    printAnnotations(arrayType.getAnnotations(), true, arg);
-                    printer.print("[]");
+            for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
+                if (arrayType == null) {
+                    arrayType = (ArrayType) type;
+                } else {
+                    arrayType = (ArrayType) arrayType.getComponentType();
                 }
-            });
-        });
+                printAnnotations(arrayType.getAnnotations(), true, arg);
+                printer.print("[]");
+            }
+        }));
 
         if (n.getInitializer().isPresent()) {
             printer.print(" = ");
@@ -1095,7 +1093,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(") {");
         if (n.getEntries() != null) {
             printer.indent();
-            for (final SwitchEntryStmt e : n.getEntries()) {
+            for (final SwitchEntry e : n.getEntries()) {
                 e.accept(this, arg);
             }
             printer.unindent();
@@ -1104,14 +1102,21 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final SwitchEntryStmt n, final Void arg) {
+    public void visit(final SwitchEntry n, final Void arg) {
         printComment(n.getComment(), arg);
-        if (n.getLabel().isPresent()) {
-            printer.print("case ");
-            n.getLabel().get().accept(this, arg);
-            printer.print(":");
-        } else {
+
+        if (isNullOrEmpty(n.getLabels())) {
             printer.print("default:");
+        } else {
+            printer.print("case ");
+            for (final Iterator<Expression> i = n.getLabels().iterator(); i.hasNext(); ) {
+                final Expression label = i.next();
+                label.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+            printer.print(":");
         }
         printer.println();
         printer.indent();
@@ -1647,8 +1652,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         Node parent = node.getParentNode().orElse(null);
         if (parent == null) return;
-        List<Node> everything = new LinkedList<>();
-        everything.addAll(parent.getChildNodes());
+        List<Node> everything = new LinkedList<>(parent.getChildNodes());
         sortByBeginPosition(everything);
         int positionOfTheChild = -1;
         for (int i = 0; i < everything.size(); i++) {
@@ -1674,8 +1678,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     private void printOrphanCommentsEnding(final Node node) {
         if (configuration.isIgnoreComments()) return;
 
-        List<Node> everything = new LinkedList<>();
-        everything.addAll(node.getChildNodes());
+        List<Node> everything = new ArrayList<>(node.getChildNodes());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
             return;

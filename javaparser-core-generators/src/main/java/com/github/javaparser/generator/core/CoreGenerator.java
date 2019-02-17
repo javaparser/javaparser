@@ -1,7 +1,7 @@
 package com.github.javaparser.generator.core;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
@@ -35,7 +35,7 @@ public class CoreGenerator {
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)

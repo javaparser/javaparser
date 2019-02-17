@@ -23,7 +23,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -33,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * We analyze JavaParser version 0.6.0.
@@ -46,24 +46,24 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     private static final Path expectedOutput = root.resolve("expected_output");
 
     private static SourceFileInfoExtractor getSourceFileInfoExtractor() {
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-core")));
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-logic")));
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-model")));
         try {
-			combinedTypeSolver.add(new JarTypeSolver(lib + "/guava-21.0.jar"));
-			combinedTypeSolver.add(new JarTypeSolver(lib + "/javaparser-core-3.3.0.jar"));
-			combinedTypeSolver.add(new JarTypeSolver(lib + "/javaslang-2.0.3.jar"));
-			combinedTypeSolver.add(new JarTypeSolver(lib + "/javassist-3.19.0-GA.jar"));
-		} catch (IOException e) {
-			Assertions.fail("one or more jar dependencies could not be found.");
-		}
-        SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
-        sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
-        sourceFileInfoExtractor.setPrintFileName(false);
-        sourceFileInfoExtractor.setVerbose(true);
-        return sourceFileInfoExtractor;
+            CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
+                    new ReflectionTypeSolver(),
+                    new JavaParserTypeSolver(new File(src + "/java-symbol-solver-core")),
+                    new JavaParserTypeSolver(new File(src + "/java-symbol-solver-logic")),
+                    new JavaParserTypeSolver(new File(src + "/java-symbol-solver-model")),
+                    new JarTypeSolver(lib + "/guava-21.0.jar"),
+                    new JarTypeSolver(lib + "/javaparser-core-3.3.0.jar"),
+                    new JarTypeSolver(lib + "/javaslang-2.0.3.jar"),
+                    new JarTypeSolver(lib + "/javassist-3.19.0-GA.jar"));
+            SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor(combinedTypeSolver);
+            sourceFileInfoExtractor.setPrintFileName(false);
+            sourceFileInfoExtractor.setVerbose(true);
+            return sourceFileInfoExtractor;
+        } catch (IOException e) {
+            fail("one or more jar dependencies could not be found.");
+            return null;
+        }
     }
 
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
@@ -91,7 +91,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         String output = outErrStream.toString();
 
         String path = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
-        File dstFile = new File(path);
+        File dstFile = new File(path);  
 
         if (isJavaVersion9OrAbove()) {
             String path9 = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + "_J9.txt";
@@ -102,11 +102,11 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
             }
         }
 
-        if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
+        if (DEBUG && (sourceFileInfoExtractor.getFailures() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
         }
 
-        assertEquals(0, sourceFileInfoExtractor.getKo(), "No failures expected when analyzing " + path);
+        assertEquals(0, sourceFileInfoExtractor.getFailures(), "No failures expected when analyzing " + path);
         assertEquals(0, sourceFileInfoExtractor.getUnsupported(), "No UnsupportedOperationException expected when analyzing " + path);
 
         // If we need to update the file uncomment these lines
@@ -300,13 +300,13 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     @Test
     void parseLogic() throws IOException {
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractClassDeclaration");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractTypeDeclaration");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ConfilictingGenericTypesException");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/FunctionalInterfaceLogic");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceContext");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceVariableType");
-		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ObjectProvider");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractClassDeclaration");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractTypeDeclaration");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ConfilictingGenericTypesException");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/FunctionalInterfaceLogic");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceContext");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceVariableType");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ObjectProvider");
     }
 
     @Test

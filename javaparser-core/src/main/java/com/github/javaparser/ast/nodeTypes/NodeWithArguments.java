@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 
 /**
  * A node with arguments.

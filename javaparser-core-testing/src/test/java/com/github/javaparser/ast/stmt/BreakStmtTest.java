@@ -3,7 +3,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 

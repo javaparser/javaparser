@@ -85,26 +85,6 @@ public class PrettyPrinterConfiguration {
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
     /**
-     * Set the string to use for indenting. For example: "\t", "    ", "".
-     *
-     * @deprecated use {@link #setIndentSize(int)}, {@link #setIndentType(IndentType)} and {@link #setTabWidth(int)}.
-     */
-    @Deprecated
-    public PrettyPrinterConfiguration setIndent(String indent) {
-        System.err.println("PrettyPrinterConfiguration.setIndent is deprecated, please review the changes.");
-        if (indent.matches(" *")) {
-            indentSize = indent.length();
-            indentType = SPACES;
-        } else if (indent.matches("\\t+")) {
-            indentSize = indent.length();
-            indentType = TABS;
-        } else {
-            throw new UnsupportedOperationException("This type of indentation is not yet supported: '" + indent + "'");
-        }
-        return this;
-    }
-
-    /**
      * @return the string that will be used to indent.
      */
     public String getIndent() {
@@ -173,22 +153,6 @@ public class PrettyPrinterConfiguration {
 
     public boolean isOrderImports() {
         return orderImports;
-    }
-
-    /**
-     * @deprecated this is always on.
-     */
-    @Deprecated
-    public boolean isNormalizeEolInComment() {
-        return true;
-    }
-
-    /**
-     * @deprecated this is always on.
-     */
-    @Deprecated
-    public PrettyPrinterConfiguration setNormalizeEolInComment(boolean normalizeEolInComment) {
-        return this;
     }
 
     public boolean isPrintComments() {

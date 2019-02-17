@@ -1,3 +1,23 @@
+Version 3.12.0
+------------------
+* "BREAKING": all deprecated code was removed.
+If you don't know what to do, try version 3.11.0 and read the Javadoc for the deprecated methods.
+It tells you what to use instead.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/124?closed=1)
+
+
+Version 3.11.0
+------------------
+* BREAKING: `SwitchEntryStmt` is now `SwitchEntry`, because it was never a statement.
+* BREAKING: a case in a switch can now have multiple labels,
+so `SwitchEntry` no longer has an `Expression label`,
+but a `NodeList<Expression> label`.
+* This completes *parsing* support for Java 12.
+Symbol resolution is still to be done.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/123?closed=1)
+
 Version 3.10.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/122?closed=1)
@@ -512,7 +532,7 @@ private final JavaParser parser = new JavaParser(new ParserConfiguration().setVa
 ```
 and like this for the static parse methods:
 ```java
-JavaParser.getStaticConfiguration().setValidator(new Java9Validator());
+QuickJavaParser.getConfiguration().setValidator(new Java9Validator());
 ```
 
 * 862 552 "_" is an illegal identifier on source level 9.

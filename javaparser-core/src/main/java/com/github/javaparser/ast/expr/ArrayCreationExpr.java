@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
@@ -33,7 +32,8 @@ import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import java.util.Optional;
-import static com.github.javaparser.JavaParser.parseType;
+
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
@@ -70,15 +70,6 @@ public final class ArrayCreationExpr extends Expression {
 
     public ArrayCreationExpr(Type elementType) {
         this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
-    }
-
-    /**
-     * @deprecated range shouldn't be in utility constructors.
-     */
-    @Deprecated
-    public ArrayCreationExpr(Range range, Type elementType) {
-        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
-        setRange(range);
     }
 
     /**

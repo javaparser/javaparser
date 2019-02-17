@@ -1406,10 +1406,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final SwitchEntryStmt n, final A arg) {
+    public R visit(final SwitchEntry n, final A arg) {
         R result;
-        if (n.getLabel().isPresent()) {
-            result = n.getLabel().get().accept(this, arg);
+        {
+            result = n.getLabels().accept(this, arg);
             if (result != null)
                 return result;
         }

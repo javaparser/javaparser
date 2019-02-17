@@ -29,7 +29,7 @@ import com.github.javaparser.ast.type.Type;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static java.util.stream.Collectors.toSet;
 
 public interface NodeWithParameters<N extends Node> {

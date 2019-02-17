@@ -39,8 +39,7 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     private Constructor<?> constructor;
     private TypeSolver typeSolver;
 
-    public ReflectionConstructorDeclaration(Constructor<?> constructor,
-                                            TypeSolver typeSolver) {
+    public ReflectionConstructorDeclaration(Constructor<?> constructor, TypeSolver typeSolver) {
         this.constructor = constructor;
         this.typeSolver = typeSolver;
     }

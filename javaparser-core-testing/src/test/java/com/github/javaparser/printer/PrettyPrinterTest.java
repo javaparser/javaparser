@@ -33,11 +33,10 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parse;
-import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -216,7 +215,7 @@ class PrettyPrinterTest {
     @Test
     void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
+        CompilationUnit cu = parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
                 .print(cu);
 
@@ -257,7 +256,7 @@ class PrettyPrinterTest {
 
     @Test
     void noChainsIndentsInIf() {
-        Statement cu = JavaParser.parseStatement("if (x.y().z()) { boo().baa().bee(); }");
+        Statement cu = parseStatement("if (x.y().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -270,7 +269,7 @@ class PrettyPrinterTest {
 
     @Test
     void noChainsIndentsInFor() {
-        Statement cu = JavaParser.parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
+        Statement cu = parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -283,7 +282,7 @@ class PrettyPrinterTest {
 
     @Test
     void noChainsIndentsInWhile() {
-        Statement cu = JavaParser.parseStatement("while(x.y().z()) { boo().baa().bee(); }");
+        Statement cu = parseStatement("while(x.y().z()) { boo().baa().bee(); }");
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
@@ -297,7 +296,7 @@ class PrettyPrinterTest {
     @Test
     void indentWithTabsAsFarAsPossible() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
@@ -323,7 +322,7 @@ class PrettyPrinterTest {
     @Test
     void indentWithTabsAlignWithSpaces() {
 
-        CompilationUnit cu = JavaParser.parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
+        CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)

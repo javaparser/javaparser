@@ -1,7 +1,7 @@
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -125,7 +125,7 @@ public class MetaModelGenerator {
         add(IfStmt.class);
         add(LabeledStmt.class);
         add(ReturnStmt.class);
-        add(SwitchEntryStmt.class);
+        add(SwitchEntry.class);
         add(SwitchStmt.class);
         add(SynchronizedStmt.class);
         add(ThrowStmt.class);
@@ -164,7 +164,7 @@ public class MetaModelGenerator {
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
         sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
         new MetaModelGenerator().run(sourceRoot);
 

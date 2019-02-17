@@ -15,7 +15,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * See issue #17
@@ -25,10 +27,10 @@ class ArrayExprTest {
     @Test
     void verifyAnArrayAccessExprTypeIsCalculatedProperly() {
         String code = "class A { String[] arrSQL; String toExamine = arrSQL[1]; }";
-        FieldDeclaration field = JavaParser.parse(code).getClassByName("A").get().getFieldByName("toExamine").get();
+        FieldDeclaration field = parse(code).getClassByName("A").get().getFieldByName("toExamine").get();
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(field.getVariables().get(0).getInitializer().get());
-        assertEquals(true, type.isReferenceType());
+        assertTrue(type.isReferenceType());
         assertEquals("java.lang.String", type.asReferenceType().getQualifiedName());
     }
 

@@ -72,15 +72,6 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
         this(null, new SimpleName(name), typeBound, new NodeList<>());
     }
 
-    /**
-     * @deprecated range shouldn't be in utility constructors.
-     */
-    @Deprecated
-    public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
-        this(null, name, typeBound, new NodeList<>());
-        setRange(range);
-    }
-
     @AllFieldsConstructor
     public TypeParameter(SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
         this(null, name, typeBound, annotations);

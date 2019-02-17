@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelFieldName;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.propertyMetaModelFieldName;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;

@@ -2,7 +2,7 @@ package com.github.javaparser.ast.expr;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

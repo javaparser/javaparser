@@ -6,7 +6,7 @@
 [![Join the chat at https://gitter.im/javaparser/javaparser](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/javaparser/javaparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![License LGPL-3/Apache-2.0](https://img.shields.io/badge/license-LGPL--3%2FApache--2.0-blue.svg)](LICENSE)
 
-This project contains a set of libraries implementing a Java 1.0 - Java 11 Parser with advanced analysis functionalities.
+This project contains a set of libraries implementing a Java 1.0 - Java 12 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
@@ -29,14 +29,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.10.2</version>
+    <version>3.12.0</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-symbol-solver-core:3.10.2'
+compile 'com.github.javaparser:javaparser-symbol-solver-core:3.12.0'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. 
@@ -51,14 +51,14 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.10.2</version>
+    <version>3.12.0</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.10.2'
+compile 'com.github.javaparser:javaparser-core:3.12.0'
 ```
 
 Since version 3.6.17 the AST can be serialized to JSON.
@@ -70,14 +70,14 @@ There is a separate module for this:
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core-serialization</artifactId>
-    <version>3.10.2</version>
+    <version>3.12.0</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-compile 'com.github.javaparser:javaparser-core-serialization:3.10.2'
+compile 'com.github.javaparser:javaparser-core-serialization:3.12.0'
 ```
 
 ## How To Compile Sources
