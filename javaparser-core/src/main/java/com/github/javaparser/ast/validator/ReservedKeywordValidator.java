@@ -13,7 +13,7 @@ public class ReservedKeywordValidator extends VisitorValidator {
     private final String keyword;
     private final String error;
 
-    public ReservedKeywordValidator(String keyword) {
+    ReservedKeywordValidator(String keyword) {
         this.keyword = keyword;
         error = f("'%s' cannot be used as an identifier as it is a keyword.", keyword);
     }

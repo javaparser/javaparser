@@ -19,7 +19,7 @@ class Java6ValidatorTest {
     @Test
     void noStringsInSwitch() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case \"abc\": ;}"));
-        assertProblems(result, "(line 1,col 11) Strings in switch statements are not supported.");
+        assertProblems(result, "(line 1,col 11) Only 'int's and enums in switch statements are supported.");
     }
 
     @Test
