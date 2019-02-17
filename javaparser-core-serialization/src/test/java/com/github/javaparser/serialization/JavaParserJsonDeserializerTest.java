@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 import javax.json.Json;
 import java.io.StringReader;
 
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
@@ -197,7 +197,7 @@ class JavaParserJsonDeserializerTest {
                 return null;
             }
         };
-        QuickJavaParser.getConfiguration().setSymbolResolver(stubResolver);
+        StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
         CompilationUnit cu = parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
@@ -208,7 +208,7 @@ class JavaParserJsonDeserializerTest {
 
     @AfterAll
     static void clearConfiguration() {
-        QuickJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
     /**

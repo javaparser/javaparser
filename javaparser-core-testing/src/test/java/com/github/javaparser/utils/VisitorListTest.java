@@ -21,7 +21,7 @@
 
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

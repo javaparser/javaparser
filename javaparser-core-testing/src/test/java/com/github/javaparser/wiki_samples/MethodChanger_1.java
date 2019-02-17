@@ -27,7 +27,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.File;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 
 public class MethodChanger_1 {
 

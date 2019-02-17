@@ -3,9 +3,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
-import static com.github.javaparser.QuickJavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
 import static org.junit.jupiter.api.Assertions.*;

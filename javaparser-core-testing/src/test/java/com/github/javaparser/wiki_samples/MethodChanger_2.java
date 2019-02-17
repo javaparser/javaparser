@@ -21,7 +21,6 @@
 
 package com.github.javaparser.wiki_samples;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -30,7 +29,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 
 import java.io.FileInputStream;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
 
 public class MethodChanger_2 {

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -43,7 +42,7 @@ import org.jbehave.core.annotations.When;
 
 import java.util.Map;
 
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.staticModifier;

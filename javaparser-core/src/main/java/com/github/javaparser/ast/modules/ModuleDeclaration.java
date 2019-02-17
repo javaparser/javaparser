@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.modules;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -15,7 +14,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 
-import static com.github.javaparser.QuickJavaParser.parseModuleDirective;
+import static com.github.javaparser.StaticJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;

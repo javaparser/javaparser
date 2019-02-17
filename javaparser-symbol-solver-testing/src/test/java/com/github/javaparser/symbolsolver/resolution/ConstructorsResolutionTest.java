@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.QuickJavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -26,7 +26,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
     @AfterEach
     void resetConfiguration() {
-        QuickJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
     @Test
@@ -108,7 +108,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
     @Test
     void solveEnumConstructor() {
         // configure symbol solver before parsing
-        QuickJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ConstructorCallsEnum");
         EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
@@ -124,7 +124,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveNonPublicParentConstructorReflection() {
-        QuickJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ReflectionTypeSolverConstructorResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ReflectionTypeSolverConstructionResolution");

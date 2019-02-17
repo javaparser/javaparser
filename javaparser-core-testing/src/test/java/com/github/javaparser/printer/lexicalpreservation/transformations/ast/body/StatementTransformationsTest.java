@@ -25,14 +25,13 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
-import static com.github.javaparser.QuickJavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 /**
  * Transforming Statement and verifying the LexicalPreservation works as expected.

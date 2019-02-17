@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -14,7 +13,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Issue314 extends AbstractResolutionTest{

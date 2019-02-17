@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Name;
@@ -35,7 +34,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

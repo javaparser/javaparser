@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 
 class JavadocExtractorTest {
 

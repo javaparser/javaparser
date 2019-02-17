@@ -2,7 +2,7 @@ package com.github.javaparser.ast.stmt;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
