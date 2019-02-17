@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.QuickJavaParser.parse;
-import static com.github.javaparser.QuickJavaParser.parseResource;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.QuickJavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 
 class Issue1491 {
 
@@ -34,7 +34,7 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        QuickJavaParser.setConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
         CompilationUnit cu = parse(aJava);
         cu.accept(new VoidVisitorAdapter() {
@@ -58,7 +58,7 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        QuickJavaParser.setConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
         CompilationUnit cu = parse(aJava);
         cu.accept(new VoidVisitorAdapter() {
@@ -82,7 +82,7 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        QuickJavaParser.setConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
         CompilationUnit cu = parse(aJava);
         cu.accept(new VoidVisitorAdapter<Void>() {

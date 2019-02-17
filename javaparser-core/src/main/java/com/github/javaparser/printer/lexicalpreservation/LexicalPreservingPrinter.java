@@ -124,16 +124,22 @@ public class LexicalPreservingPrinter {
                 if (!observedNode.getParentNode().isPresent()) {
                     throw new IllegalStateException();
                 }
+                
                 NodeText nodeText = getOrCreateNodeText(observedNode.getParentNode().get());
+                
                 if (oldValue == null) {
                     // Find the position of the comment node and put in front of it the comment and a newline
                     int index = nodeText.findChild(observedNode);
                     nodeText.addChild(index, (Comment) newValue);
                     nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                 } else if (newValue == null) {
-                    if (oldValue instanceof JavadocComment) {
-                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((JavadocComment) oldValue, nodeText);
-
+                    if (oldValue instanceof Comment) {
+                        if (((Comment) oldValue).isOrphan()){
+                            nodeText = getOrCreateNodeText(observedNode);
+                        }
+                        
+                        List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
+                        
                         TokenTextElement matchingElement = matchingTokens.get(0);
                         int index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
                         nodeText.removeElement(index);
@@ -145,7 +151,7 @@ public class LexicalPreservingPrinter {
                     }
                 } else {
                     if (oldValue instanceof JavadocComment) {
-                        List<TokenTextElement> matchingTokens = getMatchingTokenTextElements((JavadocComment) oldValue, nodeText);
+                        List<TokenTextElement> matchingTokens = findTokenTextElementForComment((JavadocComment) oldValue, nodeText);
 
                         JavadocComment newJavadocComment = (JavadocComment) newValue;
                         TokenTextElement matchingElement = matchingTokens.get(0);
@@ -164,26 +170,42 @@ public class LexicalPreservingPrinter {
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
         }
 
-        private List<TokenTextElement> getMatchingTokenTextElements(JavadocComment oldValue, NodeText nodeText) {
-            JavadocComment javadocComment = oldValue;
-            List<TokenTextElement> matchingTokens = nodeText.getElements().stream()
+        private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
+            List<TokenTextElement> matchingTokens;
+            
+            if (oldValue instanceof JavadocComment) {
+                matchingTokens = nodeText.getElements().stream()
                     .filter(e -> e.isToken(JAVADOC_COMMENT))
                     .map(e -> (TokenTextElement) e)
-                    .filter(t -> t.getText().equals("/**" + javadocComment.getContent() + "*/"))
+                    .filter(t -> t.getText().equals("/**" + oldValue.getContent() + "*/"))
                     .collect(Collectors.toList());
+            } else if (oldValue instanceof BlockComment) {
+                matchingTokens = nodeText.getElements().stream()
+                    .filter(e -> e.isToken(MULTI_LINE_COMMENT))
+                    .map(e -> (TokenTextElement) e)
+                    .filter(t -> t.getText().equals("/*" + oldValue.getContent() + "*/"))
+                    .collect(Collectors.toList());
+            } else {
+                matchingTokens = nodeText.getElements().stream()
+                    .filter(e -> e.isToken(SINGLE_LINE_COMMENT))
+                    .map(e -> (TokenTextElement) e)
+                    .filter(t -> t.getText().equals("//" + oldValue.getContent() + System.lineSeparator()))
+                    .collect(Collectors.toList());
+            }
 
             if (matchingTokens.size() > 1) {
                 // Duplicate comments found, refine the result
                 matchingTokens = matchingTokens.stream()
-                        .filter(t -> isEqualRange(t.getToken().getRange(), javadocComment.getRange()))
+                        .filter(t -> isEqualRange(t.getToken().getRange(), oldValue.getRange()))
                         .collect(Collectors.toList());
             }
 
             if (matchingTokens.size() != 1) {
-                throw new IllegalStateException("The matching JavadocComment to be removed / replaced could not be found");
+                throw new IllegalStateException("The matching comment to be removed / replaced could not be found");
             }
             return matchingTokens;
         }
+
 
         private boolean isEqualRange(Optional<Range> range1, Optional<Range> range2) {
             if (range1.isPresent() && range2.isPresent()) {

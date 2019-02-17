@@ -21,11 +21,10 @@
 
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.parseImport;
+import static com.github.javaparser.StaticJavaParser.parseImport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ImportDeclarationTest {

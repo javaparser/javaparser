@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.QuickJavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;

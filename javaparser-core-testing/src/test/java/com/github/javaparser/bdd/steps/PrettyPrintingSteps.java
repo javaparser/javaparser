@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

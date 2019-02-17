@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.QuickJavaParser.parseType;
-import static com.github.javaparser.QuickJavaParser.parseVariableDeclarationExpr;
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

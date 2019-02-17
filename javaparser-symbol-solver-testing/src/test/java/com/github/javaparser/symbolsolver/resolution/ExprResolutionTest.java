@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -29,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.resolution.types.ResolvedPrimitiveType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.QuickJavaParser.parse;
-import static com.github.javaparser.QuickJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -1100,6 +1100,42 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "void mymethod() {" + EOL +
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
+    }
+    
+    @Test
+    void removedLineCommentsPrinted() {
+        String code = "public class Foo {" + EOL +
+                          "//line" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));        
+    }
+    
+    @Test
+    void removedBlockCommentsPrinted() {
+        String code = "public class Foo {" + EOL +
+                          "/*" + EOL +
+                          "Block comment coming through" + EOL +
+                          "*/" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsNoEol("public class Foo {" + EOL +
+                          "void mymethod() {" + EOL +
+                          "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));        
     }
 
     @Test

@@ -51,7 +51,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Parse Java source code and creates Abstract Syntax Trees.
  *
  * @author Júlio Vilmar Gesser
- * @see QuickJavaParser
+ * @see StaticJavaParser
  */
 public final class JavaParser {
     private final ParserConfiguration configuration;
