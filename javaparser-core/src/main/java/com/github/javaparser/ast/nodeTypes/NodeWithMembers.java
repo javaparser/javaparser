@@ -32,7 +32,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.QuickJavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;

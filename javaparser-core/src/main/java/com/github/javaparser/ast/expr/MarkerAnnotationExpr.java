@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
-import static com.github.javaparser.QuickJavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseName;
 
 /**
  * An annotation that uses only the annotation type name.

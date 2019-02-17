@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
 
-import static com.github.javaparser.QuickJavaParser.parseTypeParameter;
+import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
 
 /**
  * A node that can have type parameters.

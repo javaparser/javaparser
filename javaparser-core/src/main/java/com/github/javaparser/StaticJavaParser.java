@@ -46,11 +46,11 @@ import java.nio.file.Path;
 /**
  * A simpler, static API than {@link JavaParser}.
  */
-public final class QuickJavaParser {
+public final class StaticJavaParser {
     private static ParserConfiguration configuration = new ParserConfiguration();
     private static JavaParser parser = new JavaParser(configuration);
 
-    private QuickJavaParser() {
+    private StaticJavaParser() {
     }
 
     /**
@@ -65,7 +65,7 @@ public final class QuickJavaParser {
      * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
      */
     public static void setConfiguration(ParserConfiguration configuration) {
-        QuickJavaParser.configuration = configuration;
+        StaticJavaParser.configuration = configuration;
         parser = new JavaParser(configuration);
     }
 

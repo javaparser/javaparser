@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.comments;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -34,7 +33,7 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
-import static com.github.javaparser.QuickJavaParser.parseJavadoc;
+import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>

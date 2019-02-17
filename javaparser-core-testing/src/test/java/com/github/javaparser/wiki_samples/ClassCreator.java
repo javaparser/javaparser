@@ -35,8 +35,8 @@ import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.VoidType;
 
-import static com.github.javaparser.QuickJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.QuickJavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;

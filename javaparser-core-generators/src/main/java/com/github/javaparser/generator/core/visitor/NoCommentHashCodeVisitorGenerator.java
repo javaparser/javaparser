@@ -33,7 +33,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.QuickJavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
 
