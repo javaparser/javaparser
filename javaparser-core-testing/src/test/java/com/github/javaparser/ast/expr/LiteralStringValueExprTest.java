@@ -23,7 +23,7 @@ package com.github.javaparser.ast.expr;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("OctalInteger")

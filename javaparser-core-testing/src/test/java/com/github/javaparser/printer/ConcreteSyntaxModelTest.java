@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

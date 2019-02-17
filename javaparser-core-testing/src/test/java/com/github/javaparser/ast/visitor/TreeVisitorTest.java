@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ArrayInitializerExpr;
@@ -30,8 +29,8 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.parse;
-import static com.github.javaparser.QuickJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

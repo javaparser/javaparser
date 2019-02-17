@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.QuickJavaParser.parseResource;
+import static com.github.javaparser.StaticJavaParser.parseResource;
 
 class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {

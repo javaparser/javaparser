@@ -16,9 +16,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.QuickJavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -875,9 +874,9 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void issue1528() {
         try {
             TypeSolver typeSolver = new ReflectionTypeSolver();
-            QuickJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
             JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-            CompilationUnit compilationUnit = QuickJavaParser.parse("public interface Foo extends Comparable { }");
+            CompilationUnit compilationUnit = StaticJavaParser.parse("public interface Foo extends Comparable { }");
             ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
             ResolvedInterfaceDeclaration interfaceDeclaration = javaParserFacade.getTypeDeclaration(foo).asInterface();
 
@@ -885,7 +884,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
             assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
         } finally {
-            QuickJavaParser.setConfiguration(new ParserConfiguration());
+            StaticJavaParser.setConfiguration(new ParserConfiguration());
         }
     }
 }

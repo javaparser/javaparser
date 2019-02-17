@@ -21,7 +21,6 @@
 
 package com.github.javaparser.javadoc;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
@@ -32,8 +31,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.github.javaparser.QuickJavaParser.parse;
-import static com.github.javaparser.QuickJavaParser.parseJavadoc;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

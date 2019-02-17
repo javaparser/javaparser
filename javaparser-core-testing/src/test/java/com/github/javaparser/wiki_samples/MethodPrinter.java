@@ -21,8 +21,7 @@
 
 package com.github.javaparser.wiki_samples;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.QuickJavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -36,7 +35,7 @@ public class MethodPrinter {
         FileInputStream in = new FileInputStream("test.java");
 
         // parse it
-        CompilationUnit cu = QuickJavaParser.parse(in);
+        CompilationUnit cu = StaticJavaParser.parse(in);
 
         // visit and print the methods names
         cu.accept(new MethodVisitor(), null);

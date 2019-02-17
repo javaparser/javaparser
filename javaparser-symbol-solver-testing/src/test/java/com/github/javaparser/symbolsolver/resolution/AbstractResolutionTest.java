@@ -16,8 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.QuickJavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 
@@ -41,6 +40,6 @@ public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTes
         if (is == null) {
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
-        return QuickJavaParser.parse(is);
+        return StaticJavaParser.parse(is);
     }
 }

@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 
 /**
  * A strategy for discovering the structure of a project.

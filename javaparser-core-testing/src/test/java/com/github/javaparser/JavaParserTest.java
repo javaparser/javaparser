@@ -42,7 +42,7 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
@@ -54,12 +54,12 @@ class JavaParserTest {
 
     @BeforeEach
     void setToLatestJava() {
-        QuickJavaParser.getConfiguration().setLanguageLevel(BLEEDING_EDGE);
+        StaticJavaParser.getConfiguration().setLanguageLevel(BLEEDING_EDGE);
     }
 
     @AfterEach
     void resetJavaLevel() {
-        QuickJavaParser.getConfiguration().setLanguageLevel(CURRENT);
+        StaticJavaParser.getConfiguration().setLanguageLevel(CURRENT);
     }
 
     @Test
@@ -271,21 +271,21 @@ class JavaParserTest {
 
     @Test
     void parseModuleDeclaration() {
-        QuickJavaParser.parseModuleDeclaration("module X {}");
+        StaticJavaParser.parseModuleDeclaration("module X {}");
     }
 
     @Test
     void parseModuleDirective() {
-        QuickJavaParser.parseModuleDirective("opens C;");
+        StaticJavaParser.parseModuleDirective("opens C;");
     }
 
     @Test
     void parseTypeParameter() {
-        QuickJavaParser.parseTypeParameter("T extends Serializable & AttachableListener");
+        StaticJavaParser.parseTypeParameter("T extends Serializable & AttachableListener");
     }
 
     @Test
     void parseTypeDeclaration() {
-        QuickJavaParser.parseTypeDeclaration("enum Z {A, B}");
+        StaticJavaParser.parseTypeDeclaration("enum Z {A, B}");
     }
 }

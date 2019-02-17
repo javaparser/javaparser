@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.QuickJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -5,7 +5,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.QuickJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

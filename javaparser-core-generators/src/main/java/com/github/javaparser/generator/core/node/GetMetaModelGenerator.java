@@ -8,7 +8,7 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.QuickJavaParser.parseBodyDeclaration;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetMetaModelGenerator extends NodeGenerator {
