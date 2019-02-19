@@ -1,6 +1,6 @@
 Version 3.13.0
 ------------------
-* "BREAKING": The static `JavaParser.parse...` methods have moved to `QuickJavaParser.parse...`!
+* "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/125?closed=1)
 
