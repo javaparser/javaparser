@@ -175,8 +175,9 @@ public class SourceRoot {
      * Tries to parse all .java files in a package recursively using multiple threads, and returns all files ever parsed
      * with this source root. A new thread is forked each time a new directory is visited and is responsible for parsing
      * all .java files in that directory. <b>Note that</b> to ensure thread safety, a new parser instance is created for
-     * every file with the internal parser's (i.e. {@link #setJavaParser}) configuration. It keeps track of all parsed
-     * files so you can write them out with a single saveAll() call. Note that the cache grows with every file parsed,
+     * every file with the internal parser's (i.e. {@link #setParserConfiguration(ParserConfiguration)}) configuration.
+     * It keeps track of all parsed files so you can write them out with a single saveAll() call.
+     * Note that the cache grows with every file parsed,
      * so if you don't need saveAll(), or you don't ask SourceRoot to parse files multiple times (where the cache is
      * useful) you might want to use the parse method with a callback.
      *
@@ -398,7 +399,6 @@ public class SourceRoot {
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(
                 compilationUnit,
                 new ArrayList<>(),
-                null,
                 null);
         cache.put(path, parseResult);
         return this;
@@ -416,7 +416,6 @@ public class SourceRoot {
             final ParseResult<CompilationUnit> parseResult = new ParseResult<>(
                     compilationUnit,
                     new ArrayList<>(),
-                    null,
                     null);
             cache.put(path, parseResult);
         } else {

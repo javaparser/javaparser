@@ -51,7 +51,7 @@ public class ParserConfiguration {
         /** The latest Java version that is available. */
         CURRENT(new Java8Validator(), null),
         /** The newest Java features supported. */
-        BLEEDING_EDGE(new Java11Validator(), new Java11PostProcessor()),
+        BLEEDING_EDGE(new Java12Validator(), new Java12PostProcessor()),
         /** Java 1.0 */
         JAVA_1_0(new Java1_0Validator(), null),
         /** Java 1.1 */

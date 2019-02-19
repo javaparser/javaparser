@@ -1,3 +1,9 @@
+Version 3.13.0
+------------------
+* "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/125?closed=1)
+
 Version 3.12.0
 ------------------
 * "BREAKING": all deprecated code was removed.
@@ -5,7 +11,6 @@ If you don't know what to do, try version 3.11.0 and read the Javadoc for the de
 It tells you what to use instead.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/124?closed=1)
-
 
 Version 3.11.0
 ------------------
