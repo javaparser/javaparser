@@ -41,7 +41,11 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
         text = text.substring(2, text.length() - 1);
         String tagName = nextWord(text);
         Type type = Type.fromName(tagName);
-        String content = text.substring(tagName.length());
+        int contentStart = tagName.length();
+        while (contentStart < text.length() && text.charAt(contentStart) == ' ') {
+            contentStart++;
+        }
+        String content = text.substring(contentStart);
         return new JavadocInlineTag(tagName, type, content);
     }
 
@@ -101,7 +105,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toText() {
-        return "{@" + tagName + this.content +"}";
+        return "{@" + tagName + " " + content + "}";
     }
 
     @Override
