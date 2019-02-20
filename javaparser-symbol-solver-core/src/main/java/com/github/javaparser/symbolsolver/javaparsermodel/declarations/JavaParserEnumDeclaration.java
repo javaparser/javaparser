@@ -37,9 +37,9 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.io.Serializable;
 import java.util.*;
@@ -226,14 +226,63 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         ancestors.add(enumClass);
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
-                SymbolReference<ResolvedTypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
-                if (!implementedDeclRef.isSolved() && !acceptIncompleteList) {
-                    throw new UnsolvedSymbolException(implementedType.getName().getId());
+                ResolvedReferenceType ancestor;
+                try {
+                    ancestor = toReferenceType(implementedType);
+                } catch (UnsolvedSymbolException e) {
+                    if (acceptIncompleteList) {
+                        ancestor = null;
+                    } else {
+                        throw e;
+                    }
                 }
-                ancestors.add(new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) implementedDeclRef.getCorrespondingDeclaration(), typeSolver));
+
+                if (ancestor != null) {
+                    ancestors.add(ancestor);
+                }
             }
         }
         return ancestors;
+    }
+
+    private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
+        String className = classOrInterfaceType.getName().getId();
+        if (classOrInterfaceType.getScope().isPresent()) {
+            // look for the qualified name (for example class of type Rectangle2D.Double)
+            className = classOrInterfaceType.getScope().get().toString() + "." + className;
+        }
+        SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+        if (!ref.isSolved()) {
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
+        }
+        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+        }
+        List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
+                .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
+                .collect(Collectors.toList());
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
+    }
+
+    /**
+     * This method is deprecated because it receives the TypesSolver as a parameter.
+     * Eventually we would like to remove all usages of TypeSolver as a parameter.
+     *
+     * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
+     * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
+     * implementations.
+     */
+    @Deprecated
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        if (this.wrappedNode.getName().getId().equals(name)) {
+            return SymbolReference.solved(this);
+        }
+        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
+        if (ref.isSolved()) {
+            return ref;
+        }
+
+        return getContext().getParent().solveType(name);
     }
 
     @Override
