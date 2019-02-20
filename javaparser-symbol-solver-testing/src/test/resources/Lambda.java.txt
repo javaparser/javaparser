@@ -6,6 +6,10 @@ public interface Lambda {
 	String process(String value);
 }
 
+public interface Processor {
+	void process(String value);
+}
+
 public class Agenda {
 	
 	Lambda functional = p -> p.toLowerCase();
@@ -27,6 +31,14 @@ public class Agenda {
 
     double test(BiFunction<Integer,List,String> func){
         return 0;
+    }
+
+    public void print(String value) {
+        return process(value, v -> System.out.println(v));
+    }
+
+    private void process(String value, Processor a) {
+        a.process(value);
     }
 
     public double bifunc(){

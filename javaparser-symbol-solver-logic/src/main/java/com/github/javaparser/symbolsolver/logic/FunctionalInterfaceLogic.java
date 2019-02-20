@@ -68,6 +68,9 @@ public final class FunctionalInterfaceLogic {
     }
 
     public static boolean isFunctionalInterfaceType(ResolvedType type) {
+        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName())) {
+            return true;
+        }
         return getFunctionalMethod(type).isPresent();
     }
 
