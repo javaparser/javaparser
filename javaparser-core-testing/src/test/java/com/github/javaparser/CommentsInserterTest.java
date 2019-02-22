@@ -101,4 +101,26 @@ class CommentsInserterTest {
                 "}\n", cu.toString());
     }
 
+    @Test
+    void issue263LostComments() {
+        CompilationUnit cu = parse(
+                "public class Test {\n" +
+                "            // one line of comment\n" +
+                "            // another line of comment\n" +
+                "\n" +
+                "            static {\n" +
+                "                System.out.println(\"Hello\");\n" +
+                "            }\n" +
+                "}");
+        
+        assertEqualsNoEol(
+                "public class Test {\n" +
+                "    // one line of comment\n" +
+                "    // another line of comment\n" +
+                "\n" +
+                "    static {\n" +
+                "        System.out.println(\"Hello\");\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
 }
