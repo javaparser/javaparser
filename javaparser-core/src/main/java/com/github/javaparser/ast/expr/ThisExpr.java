@@ -49,7 +49,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
  * @see SuperExpr
  */
-public final class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
+public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
     @OptionalProperty
     private Expression classExpr;

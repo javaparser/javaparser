@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class EnclosedExpr extends Expression {
+public class EnclosedExpr extends Expression {
 
     private Expression inner;
 

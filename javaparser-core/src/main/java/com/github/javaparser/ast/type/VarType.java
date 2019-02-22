@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  * <li><b>var</b> a = new ArrayList&lt;String>();</li>
  * </ol>
  */
-public final class VarType extends Type {
+public class VarType extends Type {
 
     @AllFieldsConstructor
     public VarType() {

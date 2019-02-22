@@ -31,7 +31,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 import static com.github.javaparser.StaticJavaParser.parseName;
 
 /**
@@ -40,7 +39,7 @@ import static com.github.javaparser.StaticJavaParser.parseName;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MarkerAnnotationExpr extends AnnotationExpr {
+public class MarkerAnnotationExpr extends AnnotationExpr {
 
     public MarkerAnnotationExpr() {
         this(null, new Name());

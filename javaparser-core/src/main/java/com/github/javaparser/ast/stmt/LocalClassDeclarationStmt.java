@@ -46,7 +46,7 @@ import com.github.javaparser.ast.Generated;
  * @see ClassOrInterfaceDeclaration
  * @author Julio Vilmar Gesser
  */
-public final class LocalClassDeclarationStmt extends Statement {
+public class LocalClassDeclarationStmt extends Statement {
 
     private ClassOrInterfaceDeclaration classDeclaration;
 

@@ -17,7 +17,7 @@ import com.github.javaparser.ast.Generated;
  * A statement that had parse errors.
  * Nothing is known about it except the tokens it covers.
  */
-public final class UnparsableStmt extends Statement {
+public class UnparsableStmt extends Statement {
 
     @AllFieldsConstructor
     public UnparsableStmt() {

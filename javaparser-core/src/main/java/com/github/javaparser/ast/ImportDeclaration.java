@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.Generated;
 
 /**
  * An import declaration.
@@ -43,7 +45,7 @@ import com.github.javaparser.TokenRange;
  * <p>The name does not include the asterisk or the static keyword.</p>
  * @author Julio Vilmar Gesser
  */
-public final class ImportDeclaration extends Node implements NodeWithName<ImportDeclaration> {
+public class ImportDeclaration extends Node implements NodeWithName<ImportDeclaration> {
 
     private Name name;
 
