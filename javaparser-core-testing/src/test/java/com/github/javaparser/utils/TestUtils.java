@@ -68,7 +68,7 @@ public class TestUtils {
      * Unzip a zip file into a directory.
      */
     public static void unzip(Path zipFile, Path outputFolder) throws IOException {
-        Log.info("Unzipping %s to %s", zipFile, outputFolder);
+        Log.info("Unzipping %s to %s", () -> zipFile, () -> outputFolder);
 
         final byte[] buffer = new byte[1024 * 1024];
 
@@ -81,10 +81,10 @@ public class TestUtils {
                 final Path newFile = outputFolder.resolve(ze.getName());
 
                 if (ze.isDirectory()) {
-                    Log.trace("mkdir %s", newFile.toAbsolutePath());
+                    Log.trace("mkdir %s", newFile::toAbsolutePath);
                     newFile.toFile().mkdirs();
                 } else {
-                    Log.info("unzip %s", newFile.toAbsolutePath());
+                    Log.info("unzip %s", newFile::toAbsolutePath);
                     try (FileOutputStream fos = new FileOutputStream(newFile.toFile())) {
                         int len;
                         while ((len = zis.read(buffer)) > 0) {
@@ -97,7 +97,7 @@ public class TestUtils {
             }
 
         }
-        Log.info("Unzipped %s to %s", zipFile, outputFolder);
+        Log.info("Unzipped %s to %s", () -> zipFile, () -> outputFolder);
     }
 
     /**
