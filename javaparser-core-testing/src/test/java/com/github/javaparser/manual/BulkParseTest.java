@@ -139,6 +139,7 @@ class BulkParseTest {
             writer.write(f("%s problems in %s files", problemTotal, results.size()));
         }
 
-        Log.info("Results are in %s", testResults);
+        Path finalTestResults = testResults;
+        Log.info("Results are in %s", () -> finalTestResults);
     }
 }

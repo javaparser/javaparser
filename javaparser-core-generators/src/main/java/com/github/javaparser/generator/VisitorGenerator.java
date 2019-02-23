@@ -36,7 +36,7 @@ public abstract class VisitorGenerator extends Generator {
     }
 
     public final void generate() throws Exception {
-        Log.info("Running %s", getClass().getSimpleName());
+        Log.info("Running %s", () -> getClass().getSimpleName());
 
         final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java").getResult().get();
 
