@@ -58,8 +58,17 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer = new SourcePrinter(configuration);
     }
 
+    /**
+     * @deprecated use toString()
+     */
+    @Deprecated
     public String getSource() {
-        return printer.getSource();
+        return printer.toString();
+    }
+
+    @Override
+    public String toString() {
+        return printer.toString();
     }
 
     private void printModifiers(final NodeList<Modifier> modifiers) {

@@ -30,6 +30,9 @@ import java.util.LinkedList;
 
 import static com.github.javaparser.Position.*;
 
+/**
+ * A support class for code that outputs formatted source code.
+ */
 public class SourcePrinter {
     private final String endOfLineCharacter;
     private final String indentation;
@@ -216,9 +219,11 @@ public class SourcePrinter {
 
     /**
      * @return the currently printed source code.
+     * @deprecated use toString()
      */
+    @Deprecated
     public String getSource() {
-        return buf.toString();
+        return toString();
     }
 
     /**
@@ -226,7 +231,7 @@ public class SourcePrinter {
      */
     @Override
     public String toString() {
-        return getSource();
+        return buf.toString();
     }
 
     /**
