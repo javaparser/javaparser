@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -26,7 +26,7 @@ class Issue185 extends AbstractResolutionTest {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        CompilationUnit agendaCu = JavaParser.parse(adaptPath("src/test/resources/recursion-issue/Usage.java"));
+        CompilationUnit agendaCu = parse(adaptPath("src/test/resources/recursion-issue/Usage.java"));
         MethodCallExpr foo = Navigator.findMethodCall(agendaCu, "foo").get();
         assertNotNull(foo);
         JavaParserFacade.get(combinedTypeSolver).getType(foo);

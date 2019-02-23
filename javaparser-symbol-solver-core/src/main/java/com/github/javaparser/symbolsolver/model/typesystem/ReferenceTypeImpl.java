@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
+import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -106,7 +107,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             }
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
-            return this.getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName());
+            return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
         } else if (other instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
             if (compareConsideringTypeParameters(otherRef)) {

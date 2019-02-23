@@ -389,7 +389,7 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void identifyNamesInSimpleExamples() {
         String code = "package a.b.c; class A { void foo(int param) { return a.b.c.D.e; } }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = StaticJavaParser.parse(code);
 
         assertEquals(false, NameLogic.isAName(cu));
         assertEquals(false, NameLogic.isAName(cu.getPackageDeclaration().get()));
@@ -434,7 +434,7 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void identifyNameRolesInSimpleExamples() {
         String code = "package a.b.c; class A { void foo(int param) { return a.b.c.D.e; } }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = StaticJavaParser.parse(code);
 
         Name packageName = cu.getPackageDeclaration().get().getName();
         assertEquals(DECLARATION, NameLogic.classifyRole(packageName));

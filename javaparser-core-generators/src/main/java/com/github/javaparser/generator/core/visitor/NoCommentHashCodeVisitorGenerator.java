@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import static com.github.javaparser.JavaParser.parseStatement;
-
 import java.util.List;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -34,6 +32,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
+
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
 

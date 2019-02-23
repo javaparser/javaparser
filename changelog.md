@@ -1,3 +1,17 @@
+Version 3.13.0
+------------------
+* "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/125?closed=1)
+
+Version 3.12.0
+------------------
+* "BREAKING": all deprecated code was removed.
+If you don't know what to do, try version 3.11.0 and read the Javadoc for the deprecated methods.
+It tells you what to use instead.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/124?closed=1)
+
 Version 3.11.0
 ------------------
 * BREAKING: `SwitchEntryStmt` is now `SwitchEntry`, because it was never a statement.
@@ -523,7 +537,7 @@ private final JavaParser parser = new JavaParser(new ParserConfiguration().setVa
 ```
 and like this for the static parse methods:
 ```java
-JavaParser.getStaticConfiguration().setValidator(new Java9Validator());
+QuickJavaParser.getConfiguration().setValidator(new Java9Validator());
 ```
 
 * 862 552 "_" is an illegal identifier on source level 9.

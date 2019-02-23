@@ -101,4 +101,16 @@ class Java1_0ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x : xs){}"));
         assertProblems(result, "(line 1,col 1) For-each loops are not supported.");
     }
+
+    @Test
+    void labelBreakAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break bla;}"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void emptyBreakAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break;}"));
+        assertNoProblems(result);
+    }
 }

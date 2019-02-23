@@ -21,7 +21,6 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -37,6 +36,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -72,23 +72,23 @@ public class SharedSteps {
 
     @When("the following source is parsed:$classSrc")
     public void whenTheFollowingSourceIsParsed(String classSrc) {
-        state.put("cu1", JavaParser.parse(classSrc.trim()));
+        state.put("cu1", parse(classSrc.trim()));
     }
 
     @When("the following source is parsed (trimming space):$classSrc")
     public void whenTheFollowingSourceIsParsedTrimmingSpace(String classSrc) {
-        state.put("cu1", JavaParser.parse(classSrc.trim()));
+        state.put("cu1", parse(classSrc.trim()));
     }
 
     @When("the following sources is parsed by the second CompilationUnit:$classSrc")
     public void whenTheFollowingSourcesIsParsedBytTheSecondCompilationUnit(String classSrc) {
-        state.put("cu2", JavaParser.parse(classSrc.trim()));
+        state.put("cu2", parse(classSrc.trim()));
     }
 
     @When("file \"$fileName\" is parsed")
     public void whenTheJavaFileIsParsed(String fileName) throws IOException, URISyntaxException {
         URL url = getClass().getResource("../samples/" + fileName);
-        CompilationUnit compilationUnit = JavaParser.parse(new File(url.toURI()));
+        CompilationUnit compilationUnit = parse(new File(url.toURI()));
         state.put("cu1", compilationUnit);
     }
 

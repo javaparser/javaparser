@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -502,7 +502,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveLocalMethodInClassExtendingUnknownClass() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
@@ -521,7 +521,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveCorrectMethodWithComplexOverloading1() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get method call expression
         CompilationUnit cu = parseSample("OverloadedMethods");
@@ -539,7 +539,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveCorrectMethodWithComplexOverloading2() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get method call expression
         CompilationUnit cu = parseSample("OverloadedMethods");
@@ -557,7 +557,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 	@Test
 	void resolveCorrectMethodWithComplexOverloading3() {
 		// configure symbol solver before parsing
-		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+		StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
 		// parse compilation unit and get method call expression
 		CompilationUnit cu = parseSample("OverloadedMethods");
@@ -575,7 +575,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 	@Test
 	void resolveCorrectMethodWithComplexOverloading4() {
 		// configure symbol solver before parsing
-		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+		StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
 		// parse compilation unit and get method call expression
 		CompilationUnit cu = parseSample("OverloadedMethods");

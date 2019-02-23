@@ -100,9 +100,7 @@ class Issue2035 {
             final List<MethodCallExpr> matches = compilationUnit
                     .findAll(MethodCallExpr.class)
                     .stream()
-                    .filter(methodCallExpr -> {
-                        return methodCallExpr.getNameAsString().equals("get");
-                    })
+                    .filter(methodCallExpr -> methodCallExpr.getNameAsString().equals("get"))
                     .collect(Collectors.toList());
 
             assumeFalse(matches.isEmpty(), "Cannot attempt resolving types if no matches.");
@@ -142,9 +140,7 @@ class Issue2035 {
             final List<MethodCallExpr> matches = compilationUnit
                     .findAll(MethodCallExpr.class)
                     .stream()
-                    .filter(methodCallExpr -> {
-                        return methodCallExpr.getNameAsString().equals("get");
-                    })
+                    .filter(methodCallExpr -> methodCallExpr.getNameAsString().equals("get"))
                     .collect(Collectors.toList());
 
             assumeFalse(matches.isEmpty(), "Cannot attempt resolving types if no matches.");

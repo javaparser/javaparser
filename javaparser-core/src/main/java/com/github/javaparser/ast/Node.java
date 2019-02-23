@@ -324,6 +324,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public boolean removeOrphanComment(Comment comment) {
         boolean removed = orphanComments.remove(comment);
         if (removed) {
+            notifyPropertyChange(ObservableProperty.COMMENT, comment, null);
             comment.setParentNode(null);
         }
         return removed;
@@ -402,14 +403,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final int ABSOLUTE_BEGIN_LINE = -1;
 
     public static final int ABSOLUTE_END_LINE = -2;
-
-    /**
-     * @deprecated use getComment().isPresent()
-     */
-    @Deprecated
-    public boolean hasComment() {
-        return comment != null;
-    }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
         findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.wiki_samples;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -30,6 +29,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 
 import java.io.FileInputStream;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
 
 public class MethodChanger_2 {
@@ -39,7 +39,7 @@ public class MethodChanger_2 {
         FileInputStream in = new FileInputStream("test.java");
         
         // parse the file
-        CompilationUnit cu = JavaParser.parse(in);
+        CompilationUnit cu = parse(in);
 
         // change the methods names and parameters
         changeMethods(cu);
