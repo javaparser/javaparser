@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @see Name
  */
-public final class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
+public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @NonEmptyProperty
     private String identifier;

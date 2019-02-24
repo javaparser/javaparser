@@ -52,7 +52,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @since 3.0.0
  */
-public final class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
+public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;

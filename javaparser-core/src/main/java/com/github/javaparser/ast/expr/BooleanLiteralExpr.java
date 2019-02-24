@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class BooleanLiteralExpr extends LiteralExpr {
+public class BooleanLiteralExpr extends LiteralExpr {
 
     private boolean value;
 

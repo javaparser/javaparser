@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -79,7 +78,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see SwitchStmt
  * @see com.github.javaparser.ast.expr.SwitchExpr
  */
-public final class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
+public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
     public enum Type {
 

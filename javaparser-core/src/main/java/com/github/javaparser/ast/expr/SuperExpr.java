@@ -47,7 +47,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
  * @see ThisExpr
  */
-public final class SuperExpr extends Expression {
+public class SuperExpr extends Expression {
 
     @OptionalProperty
     private Expression classExpr;

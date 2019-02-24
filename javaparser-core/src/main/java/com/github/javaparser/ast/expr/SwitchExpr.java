@@ -53,7 +53,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see com.github.javaparser.ast.stmt.SwitchStmt
  * @see SwitchNode
  */
-public final class SwitchExpr extends Expression implements SwitchNode {
+public class SwitchExpr extends Expression implements SwitchNode {
 
     private Expression selector;
 

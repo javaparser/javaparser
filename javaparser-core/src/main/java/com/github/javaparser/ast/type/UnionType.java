@@ -57,7 +57,7 @@ import com.github.javaparser.ast.Generated;
  *
  * The types that make up the union type are its "elements"
  */
-public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {
+public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;
