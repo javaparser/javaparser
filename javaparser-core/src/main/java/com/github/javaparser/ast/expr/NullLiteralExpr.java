@@ -38,7 +38,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class NullLiteralExpr extends LiteralExpr {
+public class NullLiteralExpr extends LiteralExpr {
 
     @AllFieldsConstructor
     public NullLiteralExpr() {

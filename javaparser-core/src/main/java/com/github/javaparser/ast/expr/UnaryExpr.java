@@ -47,7 +47,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
+public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
     public enum Operator implements Printable {
 

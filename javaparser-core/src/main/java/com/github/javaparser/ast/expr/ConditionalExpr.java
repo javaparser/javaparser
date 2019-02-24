@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConditionalExpr extends Expression implements NodeWithCondition<ConditionalExpr> {
+public class ConditionalExpr extends Expression implements NodeWithCondition<ConditionalExpr> {
 
     private Expression condition;
 

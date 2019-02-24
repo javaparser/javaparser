@@ -32,7 +32,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
@@ -40,7 +39,7 @@ import static com.github.javaparser.StaticJavaParser.parseJavadoc;
  *
  * @author Julio Vilmar Gesser
  */
-public final class JavadocComment extends Comment {
+public class JavadocComment extends Comment {
 
     public JavadocComment() {
         this(null, "empty");

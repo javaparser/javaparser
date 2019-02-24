@@ -46,7 +46,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
+public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     private Expression condition;
 
