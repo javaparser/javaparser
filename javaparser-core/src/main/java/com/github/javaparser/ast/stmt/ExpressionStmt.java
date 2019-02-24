@@ -42,7 +42,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ExpressionStmt extends Statement implements NodeWithExpression<ExpressionStmt> {
+public class ExpressionStmt extends Statement implements NodeWithExpression<ExpressionStmt> {
 
     private Expression expression;
 

@@ -70,7 +70,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.expr.SwitchExpr
  * @see SwitchNode
  */
-public final class SwitchStmt extends Statement implements SwitchNode {
+public class SwitchStmt extends Statement implements SwitchNode {
 
     private Expression selector;
 

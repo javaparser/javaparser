@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
+public class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
 
     @OptionalProperty
     private SimpleName label;
