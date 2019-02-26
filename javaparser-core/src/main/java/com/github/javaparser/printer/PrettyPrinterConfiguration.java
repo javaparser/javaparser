@@ -21,10 +21,11 @@
 
 package com.github.javaparser.printer;
 
+import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.function.Function;
 
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.SPACES;
-import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNonNegative;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -81,7 +82,7 @@ public class PrettyPrinterConfiguration {
     private int tabWidth = 4;
     private int indentSize = 4;
     private String endOfLineCharacter = EOL;
-    private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
+    private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
     /**
@@ -202,7 +203,7 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
-    public Function<PrettyPrinterConfiguration, PrettyPrintVisitor> getVisitorFactory() {
+    public Function<PrettyPrinterConfiguration, VoidVisitor<Void>> getVisitorFactory() {
         return visitorFactory;
     }
 
@@ -210,7 +211,7 @@ public class PrettyPrinterConfiguration {
      * Set the factory that creates the PrettyPrintVisitor. By changing this you can make the PrettyPrinter use a custom
      * PrettyPrinterVisitor.
      */
-    public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory) {
+    public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
         this.visitorFactory = assertNotNull(visitorFactory);
         return this;
     }
