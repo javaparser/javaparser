@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class BlockComment extends Comment {
+public class BlockComment extends Comment {
 
     public BlockComment() {
         this(null, "empty");

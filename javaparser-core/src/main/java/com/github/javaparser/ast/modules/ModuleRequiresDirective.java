@@ -23,7 +23,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * A require directive in module-info.java. <code>require a.b.C;</code>
  */
-public final class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
+public class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
     private NodeList<Modifier> modifiers;
 

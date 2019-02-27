@@ -53,7 +53,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.expr.SwitchExpr
  */
-public final class BreakStmt extends Statement {
+public class BreakStmt extends Statement {
 
     @OptionalProperty
     private Expression value;
