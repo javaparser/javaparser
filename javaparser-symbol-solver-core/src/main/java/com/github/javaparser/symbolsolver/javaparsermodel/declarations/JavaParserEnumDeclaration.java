@@ -226,19 +226,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         ancestors.add(enumClass);
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
-                ResolvedReferenceType ancestor;
                 try {
-                    ancestor = toReferenceType(implementedType);
+                    ancestors.add(toReferenceType(implementedType));
                 } catch (UnsolvedSymbolException e) {
-                    if (acceptIncompleteList) {
-                        ancestor = null;
-                    } else {
+                    if (!acceptIncompleteList) {
                         throw e;
                     }
-                }
-
-                if (ancestor != null) {
-                    ancestors.add(ancestor);
                 }
             }
         }
