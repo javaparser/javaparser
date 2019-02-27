@@ -143,7 +143,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+    private static PrettyPrinterConfiguration toStringPrettyPrinterConfiguration = new PrettyPrinterConfiguration();
 
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
@@ -275,15 +275,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Return the String representation of this node.
-     *
-     * @return the String representation of this node
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
      */
     @Override
     public final String toString() {
-        return toStringPrinter.print(this);
+        return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
 
+    /**
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with parameter prettyPrinterConfiguration.
+     */
     public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         return new PrettyPrinter(prettyPrinterConfiguration).print(this);
     }
@@ -650,6 +653,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public Node setParsed(Parsedness parsed) {
         this.parsed = parsed;
         return this;
+    }
+
+    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
+        return toStringPrettyPrinterConfiguration;
+    }
+
+    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
+        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")

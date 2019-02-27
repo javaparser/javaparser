@@ -949,7 +949,7 @@ public class ConcreteSyntaxModel {
     public static String genericPrettyPrint(Node node) {
         SourcePrinter sourcePrinter = new SourcePrinter();
         forClass(node.getClass()).prettyPrint(node, sourcePrinter);
-        return sourcePrinter.getSource();
+        return sourcePrinter.toString();
     }
 
     public static CsmElement forClass(Class<? extends Node> nodeClazz) {
