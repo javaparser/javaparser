@@ -25,7 +25,6 @@ import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.*;
 import javassist.bytecode.*;
 
@@ -47,21 +46,7 @@ class JavassistUtils {
                     // this method cannot be a good candidate (except if variadic ?)
                     continue;
                 }
-                try {
-                    if (method.getGenericSignature() != null) {
-                        SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                        List<ResolvedType> parametersOfReturnType = parseTypeParameters(methodSignature.getReturnType().toString(), typeSolver, invokationContext);
-                        ResolvedType newReturnType = methodUsage.returnType();
-                        // consume one parametersOfReturnType at the time
-                        if (newReturnType.isReferenceType() && parametersOfReturnType.size() > 0) {
-                            newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
-                        }
-                        methodUsage = methodUsage.replaceReturnType(newReturnType);
-                    }
-                    return Optional.of(methodUsage);
-                } catch (BadBytecode e) {
-                    throw new RuntimeException(e);
-                }
+                return Optional.of(methodUsage);
             }
         }
 
@@ -89,43 +74,6 @@ class JavassistUtils {
         }
 
         return Optional.empty();
-    }
-
-    private static List<ResolvedType> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
-        if (signature.contains("<")) {
-            signature = signature.substring(signature.indexOf('<') + 1);
-            if (!signature.endsWith(">")) {
-                throw new IllegalArgumentException();
-            }
-            signature = signature.substring(0, signature.length() - 1);
-            if (signature.contains(",")) {
-                throw new UnsupportedOperationException();
-            }
-            if (signature.startsWith("?")) {
-                // TODO: check bounds
-                List<ResolvedType> types = new ArrayList<>();
-                types.add(ResolvedWildcard.UNBOUNDED);
-                return types;
-            }
-            List<ResolvedType> typeParameters = parseTypeParameters(signature, typeSolver, invokationContext);
-            if (signature.contains("<")) {
-                signature = signature.substring(0, signature.indexOf('<'));
-            }
-            if (signature.contains(">")) {
-                throw new UnsupportedOperationException();
-            }
-
-            ResolvedType type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
-
-            if (type.isReferenceType() && typeParameters.size() > 0) {
-                type = type.asReferenceType().transformTypeParameters(tp -> typeParameters.remove(0));
-            }
-            List<ResolvedType> types = new ArrayList<>();
-            types.add(type);
-            return types;
-        } else {
-            return Collections.emptyList();
-        }
     }
 
     static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
@@ -175,7 +123,9 @@ class JavassistUtils {
     }
 
     private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
-        if(typeArgument instanceof SignatureAttribute.ArrayType){
+        if (typeArgument instanceof SignatureAttribute.ClassType) {
+            return signatureTypeToType(typeArgument, typeSolver, typeParametrizable);
+        } else if (typeArgument instanceof SignatureAttribute.ArrayType) {
             return signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable);
         } else {
             String typeName = typeArgument.jvmTypeName();

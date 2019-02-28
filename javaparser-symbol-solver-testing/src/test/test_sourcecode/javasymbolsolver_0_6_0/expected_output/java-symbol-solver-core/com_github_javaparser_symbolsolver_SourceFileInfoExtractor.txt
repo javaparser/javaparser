@@ -46,10 +46,10 @@
   Line 161) methodDeclarationSymbolReference.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 169) collectAllNodes(node, nodes) ==> com.github.javaparser.symbolsolver.SourceFileInfoExtractor.collectAllNodes(com.github.javaparser.ast.Node, java.util.List<com.github.javaparser.ast.Node>)
   Line 170) nodes.sort((n1, n2) -> n1.getBegin().get().compareTo(n2.getBegin().get())) ==> java.util.List.sort(java.util.Comparator<? super E>)
-  Line 170) n1.getBegin().get().compareTo(n2.getBegin().get()) ==> ERROR
-  Line 170) n1.getBegin().get() ==> ERROR
+  Line 170) n1.getBegin().get().compareTo(n2.getBegin().get()) ==> com.github.javaparser.Position.compareTo(com.github.javaparser.Position)
+  Line 170) n1.getBegin().get() ==> java.util.Optional.get()
   Line 170) n1.getBegin() ==> com.github.javaparser.ast.nodeTypes.NodeWithRange.getBegin()
-  Line 170) n2.getBegin().get() ==> ERROR
+  Line 170) n2.getBegin().get() ==> java.util.Optional.get()
   Line 170) n2.getBegin() ==> com.github.javaparser.ast.nodeTypes.NodeWithRange.getBegin()
   Line 175) nodes.add(node) ==> java.util.List.add(E)
   Line 176) node.getChildNodes().forEach(c -> collectAllNodes(c, nodes)) ==> java.lang.Iterable.forEach(java.util.function.Consumer<? super T>)

@@ -105,12 +105,12 @@
   Line 234) this.wrappedNode.getPackageDeclaration().get() ==> java.util.Optional.get()
   Line 234) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
   Line 234) packageName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.packageName(java.lang.String)
-  Line 235) this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString))) ==> ERROR
+  Line 235) this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString))) ==> java.util.stream.Stream.anyMatch(java.util.function.Predicate<? super T>)
   Line 235) this.wrappedNode.getTypes().stream() ==> java.util.Collection.stream()
   Line 235) this.wrappedNode.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
-  Line 235) it.getName().getIdentifier().equals(toSimpleName(importString)) ==> ERROR
-  Line 235) it.getName().getIdentifier() ==> ERROR
-  Line 235) it.getName() ==> ERROR
+  Line 235) it.getName().getIdentifier().equals(toSimpleName(importString)) ==> java.lang.String.equals(java.lang.Object)
+  Line 235) it.getName().getIdentifier() ==> com.github.javaparser.ast.expr.SimpleName.getIdentifier()
+  Line 235) it.getName() ==> com.github.javaparser.ast.body.TypeDeclaration.getName()
   Line 235) toSimpleName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.toSimpleName(java.lang.String)
   Line 238) SymbolReference.unsolved(MethodDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 241) typeSolver.solveType(importString) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
