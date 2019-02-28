@@ -330,6 +330,81 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void resolveCompoundGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "doubleTyped");
+        MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithDoubleTypedReturnType").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("genericMethodWithDoubleTypedReturnType", methodUsage.getName());
+        assertEquals("java.util.Map<T, V>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveNestedGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTyped");
+        MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithNestedReturnType").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("genericMethodWithNestedReturnType", methodUsage.getName());
+        assertEquals("java.util.List<java.util.List<T>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveSimpleGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "simple");
+        MethodCallExpr call = Navigator.findMethodCall(method, "get").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("get", methodUsage.getName());
+        assertEquals("java.util.List<java.util.List<java.lang.String>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveGenericReturnTypeFromInputParam() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "input");
+        MethodCallExpr call = Navigator.findMethodCall(method, "copy").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("copy", methodUsage.getName());
+        assertEquals("javaparser.GenericClass<java.util.List<java.lang.String>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveComplexGenericReturnType() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "complex");
+        MethodCallExpr call = Navigator.findMethodCall(method, "complexGenerics").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("complexGenerics", methodUsage.getName());
+        assertEquals("T", methodUsage.returnType().describe());
+    }
+
+    @Test
     void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
