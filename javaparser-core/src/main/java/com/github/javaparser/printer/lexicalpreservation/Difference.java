@@ -574,6 +574,10 @@ public class Difference {
         if (!used) {
             if(nodeText.numberOfElements() > originalIndex + 1 &&
                 nodeText.getTextElement(originalIndex).isComment()) {
+                String expanded = nodeText.getTextElement(originalIndex).expand();
+                if(expanded.startsWith("/*")) {
+                    originalIndex++;
+                }
                 originalIndex++;
                 for (TextElement e : indentationBlock()) {
                     nodeText.addElement(originalIndex++, e);

@@ -147,7 +147,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
     @Test
-    void issue2099AddingAddingStatementAfterTraillingComment() {
+    void issue2099AddingAddingStatementAfterTraillingComment1() {
         Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
                 "    if(value != null) {" + EOL +
                         "        value.value();" + EOL +
@@ -169,5 +169,30 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "}";
         assertEqualsNoEol(expected, s);
     }
+
+    @Test
+    void issue2099AddingAddingStatementAfterTraillingComment2() {
+        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+                "    if(value != null) {" + EOL +
+                        "        value.value();" + EOL +
+                        "    }"));
+
+        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + EOL +
+                "       value1();" + EOL +
+                "    value2(); /* test */" + EOL +
+                "}"));
+
+        blockStmt.addStatement(statement);
+        String s = LexicalPreservingPrinter.print(blockStmt);
+        String expected = "{\n" +
+                "       value1();\n" +
+                "    value2(); /* test */\n" +
+                "    if(value != null) {\n" +
+                "        value.value();\n" +
+                "    }\n" +
+                "}";
+        assertEqualsNoEol(expected, s);
+    }
+
 
 }
