@@ -572,6 +572,13 @@ public class Difference {
         }
 
         if (!used) {
+            if(nodeText.numberOfElements() > originalIndex + 1 &&
+                nodeText.getTextElement(originalIndex).isComment()) {
+                originalIndex++;
+                for (TextElement e : indentationBlock()) {
+                    nodeText.addElement(originalIndex++, e);
+                }
+            }
             nodeText.addElement(originalIndex, addedTextElement);
             originalIndex++;
         }

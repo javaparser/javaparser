@@ -1,12 +1,15 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.
@@ -140,4 +145,29 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
         md.getBody().get().getStatements().add(new ReturnStmt(new NameExpr("p1")));
         assertTransformed("Example_param5", cu);
     }
+
+    @Test
+    void issue2099AddingAddingStatementAfterTraillingComment() {
+        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+                "    if(value != null) {" + EOL +
+                        "        value.value();" + EOL +
+                        "    }"));
+
+        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + EOL +
+                "       value1();" + EOL +
+                "    value2(); // Test" + EOL +
+                "}"));
+
+        blockStmt.addStatement(statement);
+        String s = LexicalPreservingPrinter.print(blockStmt);
+        String expected = "{\n" +
+                "       value1();\n" +
+                "    value2(); // Test\n" +
+                "    if(value != null) {\n" +
+                "        value.value();\n" +
+                "    }\n" +
+                "}";
+        assertEqualsNoEol(expected, s);
+    }
+
 }
