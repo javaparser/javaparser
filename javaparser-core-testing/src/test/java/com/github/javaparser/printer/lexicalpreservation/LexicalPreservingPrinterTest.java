@@ -803,7 +803,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals("public void someMethod() {" + EOL
                 + "        String test = \"\";" + EOL
                 + "        String test2 = \"\";" + EOL
-                + "}", LexicalPreservingPrinter.print(methodDeclaration));
+                + "    }", LexicalPreservingPrinter.print(methodDeclaration));
     }
 
     // See issue #866

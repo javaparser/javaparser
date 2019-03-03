@@ -518,6 +518,16 @@ public class Difference {
         }
     }
 
+    private boolean nextIsRightBrace() {
+        List<TextElement> elements = originalElements.subList(originalIndex, originalElements.size());
+        for(TextElement element : elements) {
+            if (!element.isSpaceOrTab()) {
+                return element.isToken(RBRACE);
+            }
+        }
+        return false;
+    }
+
     private void applyAddedDiffElement(Added added) {
         if (added.isIndent()) {
             for (int i=0;i<STANDARD_INDENTATION_SIZE;i++){
@@ -539,8 +549,12 @@ public class Difference {
         TextElement addedTextElement = added.toTextElement();
         boolean used = false;
         if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
-            for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                if (e instanceof TokenTextElement && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
+            List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
+            boolean nextIsRightBrace = nextIsRightBrace();
+            for (TextElement e : elements) {
+                if (!nextIsRightBrace
+                        && e instanceof TokenTextElement
+                        && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
                     originalIndex++;
                 } else {
                     nodeText.addElement(originalIndex++, e);
@@ -572,24 +586,27 @@ public class Difference {
         }
 
         if (!used) {
+            // Handling trailing comments
             if(nodeText.numberOfElements() > originalIndex + 1 &&
-                nodeText.getTextElement(originalIndex).isComment()) {
+                    nodeText.getTextElement(originalIndex).isComment()) {
                 String expanded = nodeText.getTextElement(originalIndex).expand();
                 if(expanded.startsWith("/*")) {
-                    originalIndex++;
+                    originalIndex++; // "/*" comments need an extra increment
                 }
+                originalIndex++; // Any trailing comment requires increment of the originalIndex
+                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+                // We want to adjust the indentation while considering the new element that we added
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
+                originalIndex++; // Now we can increment
+            } else {
+                nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
-                for (TextElement e : indentationBlock()) {
-                    nodeText.addElement(originalIndex++, e);
-                }
             }
-            nodeText.addElement(originalIndex, addedTextElement);
-            originalIndex++;
         }
 
         if (addedTextElement.isNewline()) {
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
-            originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent/* && !addedIndentation*/);
+            originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
         }
 
         diffIndex++;
