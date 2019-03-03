@@ -76,10 +76,6 @@ public class Java1_0Validator extends Validators {
             ImportDeclaration::isStatic,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
-    final Validator intOnlySwitch = new SimpleValidator<>(SwitchEntry.class,
-            n -> !n.getLabels().stream().allMatch(l -> l instanceof IntegerLiteralExpr),
-            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's in switch statements are supported.")
-    );
     final Validator onlyOneLabelInSwitchCase = new SimpleValidator<>(SwitchEntry.class,
             n -> n.getLabels().size() > 1,
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only one label allowed in a switch-case.")
@@ -120,7 +116,6 @@ public class Java1_0Validator extends Validators {
         add(noVarargs);
         add(noForEach);
         add(noStaticImports);
-        add(intOnlySwitch);
         add(noValueBreak);
         add(onlyOneLabelInSwitchCase);
         add(noBinaryIntegerLiterals);
