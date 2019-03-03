@@ -518,8 +518,8 @@ public class Difference {
         }
     }
 
-    private boolean nextIsRightBrace() {
-        List<TextElement> elements = originalElements.subList(originalIndex, originalElements.size());
+    private boolean nextIsRightBrace(int index) {
+        List<TextElement> elements = originalElements.subList(index, originalElements.size());
         for(TextElement element : elements) {
             if (!element.isSpaceOrTab()) {
                 return element.isToken(RBRACE);
@@ -550,7 +550,7 @@ public class Difference {
         boolean used = false;
         if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
             List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
-            boolean nextIsRightBrace = nextIsRightBrace();
+            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             for (TextElement e : elements) {
                 if (!nextIsRightBrace
                         && e instanceof TokenTextElement
@@ -606,7 +606,11 @@ public class Difference {
 
         if (addedTextElement.isNewline()) {
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
-            originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
+            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
+            boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
+            if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
+            }
         }
 
         diffIndex++;
