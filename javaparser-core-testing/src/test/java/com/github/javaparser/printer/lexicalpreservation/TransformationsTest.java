@@ -1,6 +1,8 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -11,10 +13,12 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
@@ -147,11 +151,11 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
     @Test
-    void issue2099AddingAddingStatementAfterTraillingComment1() {
+    void issue2099AddingStatementAfterTraillingComment1() {
         Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
                 "    if(value != null) {" + EOL +
-                        "        value.value();" + EOL +
-                        "    }"));
+                "        value.value();" + EOL +
+                "    }"));
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + EOL +
                 "       value1();" + EOL +
@@ -171,11 +175,11 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
     @Test
-    void issue2099AddingAddingStatementAfterTraillingComment2() {
+    void issue2099AddingStatementAfterTraillingComment2() {
         Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
                 "    if(value != null) {" + EOL +
-                        "        value.value();" + EOL +
-                        "    }"));
+                "        value.value();" + EOL +
+                "    }"));
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + EOL +
                 "       value1();" + EOL +
@@ -195,4 +199,63 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
 
+    @Test
+    void AddingStatement1() {
+        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+                "        if(value != null) {" + EOL +
+                        "            value.value();" + EOL +
+                        "        }"));
+
+        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + EOL +
+                "    public void method() {" + EOL +
+                "           value1();" + EOL +
+                "        value2(); // Test" + EOL +
+                "    }" + EOL +
+                "}"));
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
+        methodDeclaration.getBody().get().addStatement(statement);
+
+        String s = LexicalPreservingPrinter.print(compilationUnit);
+        String expected = "public class Test {\n" +
+                "    public void method() {\n" +
+                "           value1();\n" +
+                "        value2(); // Test\n" +
+                "        if(value != null) {\n" +
+                "            value.value();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        assertEqualsNoEol(expected, s);
+    }
+
+    @Test
+    void AddingStatement2() {
+        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+                "        if(value != null) {" + EOL +
+                        "            value.value();" + EOL +
+                        "        }"));
+
+        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + EOL +
+                "    public void method() {" + EOL +
+                "           value1();" + EOL +
+                "        value2();" + EOL +
+                "    }" + EOL +
+                "}"));
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
+        methodDeclaration.getBody().get().addStatement(statement);
+
+        String s = LexicalPreservingPrinter.print(compilationUnit);
+        String expected = "public class Test {\n" +
+                "    public void method() {\n" +
+                "           value1();\n" +
+                "        value2();\n" +
+                "        if(value != null) {\n" +
+                "            value.value();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        assertEqualsNoEol(expected, s);
+    }
 }
