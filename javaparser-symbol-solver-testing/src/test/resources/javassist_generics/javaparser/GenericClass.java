@@ -25,8 +25,18 @@ public class GenericClass<S> {
         return null;
     }
 
+    public static <T> List<T> asList(T element) {
+        return null;
+    }
+
     public interface Foo<T> {
     }
 
+    public interface Bar {
+        public static List<NestedBar> CONSTANT = null;
+
+        public interface NestedBar {
+        }
+    }
 
 }

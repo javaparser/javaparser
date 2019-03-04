@@ -80,12 +80,8 @@ class JavassistUtils {
         if (signatureType instanceof SignatureAttribute.ClassType) {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
             List<ResolvedType> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
-            final String typeName =
-                    classType.getDeclaringClass() != null ?
-                            classType.getDeclaringClass().getName() + "." + classType.getName() :
-                            classType.getName();
             ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
-                    removeTypeArguments(internalNameToCanonicalName(typeName)));
+                    removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
@@ -108,6 +104,11 @@ class JavassistUtils {
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
+    }
+
+    private static String getTypeName(SignatureAttribute.ClassType classType) {
+        SignatureAttribute.ClassType declaringClass = classType.getDeclaringClass();
+        return declaringClass == null ? classType.getName() : getTypeName(declaringClass) + "." + classType.getName();
     }
 
     private static String removeTypeArguments(String typeName) {

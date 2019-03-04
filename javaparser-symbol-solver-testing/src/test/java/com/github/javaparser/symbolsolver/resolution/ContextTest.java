@@ -405,6 +405,21 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void resolveDoubleNestedClassType() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTypes");
+        MethodCallExpr call = Navigator.findMethodCall(method, "asList").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("asList", methodUsage.getName());
+        assertEquals("java.util.List<javaparser.GenericClass.Bar.NestedBar>", methodUsage.getParamType(0).describe());
+    }
+
+    @Test
     void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
