@@ -155,16 +155,12 @@ class ReferenceTypeTest {
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            object.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> object.asTypeParameter());
     }
 
     @Test
     void testAsArrayTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            object.asArrayType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> object.asArrayType());
     }
 
     @Test

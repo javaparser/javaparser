@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -16,6 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+
+import static com.github.javaparser.StaticJavaParser.parse;
 
 class Issue257 extends AbstractSymbolResolutionTest {
 
@@ -35,7 +36,7 @@ class Issue257 extends AbstractSymbolResolutionTest {
     @Test
     void issue257() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
-        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
+        CompilationUnit cu = parse(pathToSourceFile);
         Statement statement = cu.getClassByName("A").get().getMethodsByName("run").get(0).getBody().get().getStatement(0);
         ExpressionStmt expressionStmt = (ExpressionStmt)statement;
         Expression expression = expressionStmt.getExpression();

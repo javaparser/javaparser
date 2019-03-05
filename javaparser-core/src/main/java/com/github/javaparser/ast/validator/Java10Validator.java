@@ -8,7 +8,7 @@ import com.github.javaparser.ast.validator.chunks.VarValidator;
  */
 public class Java10Validator extends Java9Validator {
 
-    protected final Validator varOnlyOnLocalVariableDefinitionAndFor = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
+    final Validator varOnlyOnLocalVariableDefinitionAndFor = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
 
     public Java10Validator() {
         super();

@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;

@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
  * A node that implements other types.

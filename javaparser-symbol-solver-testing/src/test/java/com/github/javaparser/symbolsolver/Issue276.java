@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -11,19 +10,20 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.StaticJavaParser.parse;
 
 class Issue276 extends AbstractResolutionTest{
 
     @Test
     void testSolveStaticallyImportedMemberType() throws IOException {
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/issue276/foo/C.java"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/issue276/foo/C.java"));
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "C");
         TypeSolver typeSolver = new CombinedTypeSolver(
         		new ReflectionTypeSolver(), 

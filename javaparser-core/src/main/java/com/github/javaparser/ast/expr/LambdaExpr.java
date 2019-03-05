@@ -58,7 +58,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Raquel Pau
  */
-public final class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
+public class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
 
     private NodeList<Parameter> parameters;
 

@@ -2,7 +2,7 @@
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
- * This file is part of JavaParser.
+ * This file is part of 
  *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -40,6 +39,8 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
@@ -463,7 +464,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     public void parseAndPrintAnonymousClassExpression() {
-        Expression expression = JavaParser.parseExpression("new Object() {" + EOL +
+        Expression expression = parseExpression("new Object() {" + EOL +
                 "}");
          String expected = "new Object() {" + EOL +
                 "}";
@@ -472,7 +473,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     public void parseAndPrintAnonymousClassStatement() {
-        Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
+        Statement statement = parseStatement("Object anonymous = new Object() {" + EOL +
                 "};");
         String expected = "Object anonymous = new Object() {" + EOL +
                 "};";
@@ -483,7 +484,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = JavaParser.parseStatement("Object anonymous = new Object() {" + EOL +
+            Statement statement = parseStatement("Object anonymous = new Object() {" + EOL +
                     "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);

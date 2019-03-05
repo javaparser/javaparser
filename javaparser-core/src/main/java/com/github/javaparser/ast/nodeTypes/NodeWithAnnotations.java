@@ -28,8 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.parseExpression;
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseName;
 
 /**
  * A node that can be annotated.

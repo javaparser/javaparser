@@ -40,16 +40,12 @@ class FieldDeclarationBuildersTest {
 
     @Test
     void testOrphanFieldGetter() {
-        assertThrows(IllegalStateException.class, () -> {
-            new FieldDeclaration().createGetter();
-    });
+        assertThrows(IllegalStateException.class, () -> new FieldDeclaration().createGetter());
     }
 
     @Test
     void testOrphanFieldSetter() {
-        assertThrows(IllegalStateException.class, () -> {
-            new FieldDeclaration().createSetter();
-    });
+        assertThrows(IllegalStateException.class, () -> new FieldDeclaration().createSetter());
     }
 
     @Test
