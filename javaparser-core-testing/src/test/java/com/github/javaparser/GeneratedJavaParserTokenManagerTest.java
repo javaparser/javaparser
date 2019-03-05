@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.github.javaparser.StaticJavaParser.parseResource;
+
 class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
@@ -32,6 +34,6 @@ class GeneratedJavaParserTokenManagerTest {
 
     @Test
     void issue1003() throws IOException {
-        JavaParser.parseResource(makeFilename("issue1003"));
+        parseResource(makeFilename("issue1003"));
     }
 }

@@ -45,7 +45,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class AssignExpr extends Expression {
+public class AssignExpr extends Expression {
 
     public enum Operator implements Printable {
 

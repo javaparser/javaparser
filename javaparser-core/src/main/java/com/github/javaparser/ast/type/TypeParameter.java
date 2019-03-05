@@ -54,7 +54,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
+public class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
 
@@ -70,15 +70,6 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
 
     public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
         this(null, new SimpleName(name), typeBound, new NodeList<>());
-    }
-
-    /**
-     * @deprecated range shouldn't be in utility constructors.
-     */
-    @Deprecated
-    public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
-        this(null, name, typeBound, new NodeList<>());
-        setRange(range);
     }
 
     @AllFieldsConstructor

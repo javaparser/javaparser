@@ -46,9 +46,7 @@ class UtilsTest {
 
     @Test
     void capitalizeOnEmptyString() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            capitalize("");
-    });
+        assertThrows(IllegalArgumentException.class, () -> capitalize(""));
     }
 
     @Test
@@ -63,9 +61,7 @@ class UtilsTest {
 
     @Test
     void decapitalizeOnEmptyString() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            decapitalize("");
-    });
+        assertThrows(IllegalArgumentException.class, () -> decapitalize(""));
     }
 
     @Test

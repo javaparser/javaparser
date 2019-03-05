@@ -9,7 +9,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static com.github.javaparser.JavaParser.parseStatement;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;

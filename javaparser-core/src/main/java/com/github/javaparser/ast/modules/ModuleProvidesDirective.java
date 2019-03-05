@@ -20,7 +20,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * A provides directive in module-info.java. <code>provides X.Y with Z1.Z2, Z3.Z4;</code>
  */
-public final class ModuleProvidesDirective extends ModuleDirective implements NodeWithName<ModuleProvidesDirective> {
+public class ModuleProvidesDirective extends ModuleDirective implements NodeWithName<ModuleProvidesDirective> {
 
     private Name name;
 

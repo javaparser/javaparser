@@ -17,12 +17,6 @@ class Java6ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_6));
 
     @Test
-    void noStringsInSwitch() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case \"abc\": ;}"));
-        assertProblems(result, "(line 1,col 11) Strings in switch statements are not supported.");
-    }
-
-    @Test
     void nobinaryIntegerLiterals() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("0b01"));
         assertProblems(result, "(line 1,col 1) Binary literal values are not supported.");

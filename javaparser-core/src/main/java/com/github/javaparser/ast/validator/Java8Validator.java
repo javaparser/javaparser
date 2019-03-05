@@ -7,8 +7,8 @@ import com.github.javaparser.ast.validator.chunks.ModifierValidator;
  * This validator validates according to Java 7 syntax rules.
  */
 public class Java8Validator extends Java7Validator {
-    protected final Validator modifiersWithoutPrivateInterfaceMethods = new ModifierValidator(true, true, false);
-    protected final Validator defaultMethodsInInterface = new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
+    final Validator modifiersWithoutPrivateInterfaceMethods = new ModifierValidator(true, true, false);
+    final Validator defaultMethodsInInterface = new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
             (n, reporter) -> {
                 if (n.isInterface()) {
                     n.getMethods().forEach(m -> {

@@ -164,4 +164,10 @@ class Java5ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
         assertProblems(result, "(line 1,col 5) 'enum' cannot be used as an identifier as it is a keyword.");
     }
+
+    @Test
+    void enumAllowedInSwitch() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case GREEN: ;}"));
+        assertNoProblems(result);
+    }
 }

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.javadoc;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
@@ -32,7 +31,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseJavadoc;
+import static com.github.javaparser.javadoc.description.JavadocInlineTag.Type.*;
 import static com.github.javaparser.utils.Utils.EOL;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -78,7 +81,7 @@ class JavadocTest {
 
     @Test
     void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = JavaParser.parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
+        Javadoc javadoc = parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
         assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
         assertEquals(2, javadoc.getBlockTags().size());
     }
@@ -87,13 +90,30 @@ class JavadocTest {
     void inlineTagsAreParsable() {
         String docText =
                 "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
-                        "{@link TOVersion}." + EOL +
+                        "{@link TOVersion}. Set {@systemProperty JAVA_HOME} correctly." + EOL +
                         "" + EOL +
                         "@param versionID the id of the {@link TOVersion}." + EOL +
                         "@return the filenames" + EOL +
                         "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
-        String javadoc = JavaParser.parseJavadoc(docText).toText();
-        assertTrue(javadoc.contains("{@link TOVersion}"));
+        Javadoc javadoc = parseJavadoc(docText);
+
+        List<JavadocInlineTag> inlineTags = javadoc.getDescription().getElements().stream()
+                .filter(element -> element instanceof JavadocInlineTag)
+                .map(element -> (JavadocInlineTag) element)
+                .collect(toList());
+
+        assertEquals("link", inlineTags.get(0).getName());
+        assertEquals(" TOFilename", inlineTags.get(0).getContent());
+        assertEquals(LINK, inlineTags.get(0).getType());
+        assertEquals("link", inlineTags.get(1).getName());
+        assertEquals(" TOVersion", inlineTags.get(1).getContent());
+        assertEquals(LINK, inlineTags.get(1).getType());
+        assertEquals("systemProperty", inlineTags.get(2).getName());
+        assertEquals(" JAVA_HOME", inlineTags.get(2).getContent());
+        assertEquals(SYSTEM_PROPERTY, inlineTags.get(2).getType());
+        
+        String javadocText = javadoc.toText();
+        assertTrue(javadocText.contains("{@link TOVersion}"));
     }
 
     @Test
@@ -105,7 +125,7 @@ class JavadocTest {
                 " * @author censored" + EOL +
                 " * " + EOL +
                 " * @param <T>" + EOL;
-        Javadoc javadoc = JavaParser.parseJavadoc(comment);
+        Javadoc javadoc = parseJavadoc(comment);
         assertEquals(2, javadoc.getBlockTags().size());
     }
 
@@ -130,7 +150,7 @@ class JavadocTest {
 
         assertEquals(0, description.getElements().size());
 
-        JavadocDescriptionElement inlineTag = new JavadocInlineTag("inheritDoc", JavadocInlineTag.Type.INHERIT_DOC, "");
+        JavadocDescriptionElement inlineTag = new JavadocInlineTag("inheritDoc", INHERIT_DOC, "");
         assertTrue(description.addElement(inlineTag));
 
         assertEquals(1, description.getElements().size());
@@ -142,11 +162,11 @@ class JavadocTest {
 
     @Test
     void issue1533() {
-        CompilationUnit compilationUnit = JavaParser.parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
+        CompilationUnit compilationUnit = parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
         List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
         assertEquals(3, elements.size());
         assertEquals(new JavadocSnippet("hallo "), elements.get(0));
-        assertEquals(new JavadocInlineTag("link", JavadocInlineTag.Type.LINK, " Foo"), elements.get(1));
+        assertEquals(new JavadocInlineTag("link", LINK, " Foo"), elements.get(1));
         assertEquals(new JavadocSnippet(" welt"), elements.get(2));
     }
 }

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.utils.CodeGenerationUtils;
@@ -31,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConcreteSyntaxModelAcceptanceTest {
@@ -46,13 +46,13 @@ class ConcreteSyntaxModelAcceptanceTest {
 
     @Test
     void printingExamplePrettyPrintVisitor() throws IOException {
-        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
+        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
         assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
     @Test
     void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
+        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
         assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
     }
 

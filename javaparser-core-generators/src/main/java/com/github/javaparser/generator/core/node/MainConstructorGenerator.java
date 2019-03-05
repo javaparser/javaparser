@@ -12,7 +12,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.JavaParser.parseExplicitConstructorInvocationStmt;
+import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInvocationStmt;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class MainConstructorGenerator extends NodeGenerator {

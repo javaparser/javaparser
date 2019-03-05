@@ -44,7 +44,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class StringLiteralExpr extends LiteralStringValueExpr {
+public class StringLiteralExpr extends LiteralStringValueExpr {
 
     public StringLiteralExpr() {
         this(null, "empty");
@@ -58,16 +58,6 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
     @AllFieldsConstructor
     public StringLiteralExpr(final String value) {
         this(null, Utils.escapeEndOfLines(value));
-    }
-
-    /**
-     * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
-     *
-     * @deprecated Use {@link #StringLiteralExpr(String)} instead.
-     */
-    @Deprecated
-    public static StringLiteralExpr escape(String string) {
-        return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
 
     /**

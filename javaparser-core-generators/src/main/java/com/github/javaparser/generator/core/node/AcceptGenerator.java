@@ -9,7 +9,7 @@ import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.JavaParser.parseBodyDeclaration;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 
 public class AcceptGenerator extends NodeGenerator {
     private final MethodDeclaration genericAccept;

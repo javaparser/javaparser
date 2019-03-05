@@ -327,7 +327,7 @@ public class JavaParserFacade {
                     node.setData(TYPE_WITH_LAMBDAS_RESOLVED, type);
 
                 }
-                Log.trace("getType on %s  -> %s" ,node, res);
+                Log.trace("getType on %s  -> %s" ,()-> node, ()-> res);
             }
             return node.getData(TYPE_WITH_LAMBDAS_RESOLVED);
         } else {
@@ -339,7 +339,8 @@ public class JavaParserFacade {
             if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
                 node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
-                Log.trace("getType on %s (no solveLambdas) -> %s", node, res);
+                Optional<ResolvedType> finalRes = res;
+                Log.trace("getType on %s (no solveLambdas) -> %s", ()-> node, ()-> finalRes);
                 return resType;
             }
             return res.get();

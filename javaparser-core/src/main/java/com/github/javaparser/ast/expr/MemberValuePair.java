@@ -39,7 +39,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MemberValuePair extends Node implements NodeWithSimpleName<MemberValuePair> {
+public class MemberValuePair extends Node implements NodeWithSimpleName<MemberValuePair> {
 
     private SimpleName name;
 

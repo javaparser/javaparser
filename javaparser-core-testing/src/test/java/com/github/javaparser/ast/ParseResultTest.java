@@ -44,7 +44,6 @@ class ParseResultTest {
         assertThat(result.getResult().isPresent()).isTrue();
         assertThat(result.getResult().get().getParsed()).isEqualTo(PARSED);
         assertThat(result.getProblems()).isEmpty();
-        assertThat(result.getTokens().isPresent()).isTrue();
 
         assertThat(result.toString()).isEqualTo("Parsing successful");
     }
@@ -59,7 +58,6 @@ class ParseResultTest {
 
         Problem problem = result.getProblem(0);
         assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"provides\" \"requires\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"with\" <IDENTIFIER>");
-        assertThat(result.getTokens().isPresent()).isTrue();
 
         assertThat(result.toString()).startsWith("Parsing failed:" + EOL + "(line 1,col 1) Parse error.");
     }

@@ -150,6 +150,20 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
     /// Test ancestors
     ///
 
+    @Test
+    void getGetAncestors() {
+        Path src = adaptPath("src/test/resources/enums");
+        CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
+        combinedtypeSolver.add(new ReflectionTypeSolver());
+        combinedtypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        JavaParserEnumDeclaration enum1 = (JavaParserEnumDeclaration) combinedtypeSolver.solveType("EnumWithAncestor");
+        List<ResolvedReferenceType> ancestors = enum1.getAncestors();
+        assertEquals(2, ancestors.size());
+        assertEquals("java.lang.Enum", ancestors.get(0).getQualifiedName());
+        assertEquals("java.lang.Cloneable", ancestors.get(1).getQualifiedName());
+    }
+
 //    @Test
 //    public void testGetSuperclassWithoutTypeParameters() {
 //        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
