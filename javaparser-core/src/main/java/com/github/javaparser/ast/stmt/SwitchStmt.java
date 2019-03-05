@@ -70,7 +70,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.expr.SwitchExpr
  * @see SwitchNode
  */
-public final class SwitchStmt extends Statement implements SwitchNode {
+public class SwitchStmt extends Statement implements SwitchNode {
 
     private Expression selector;
 
@@ -133,24 +133,6 @@ public final class SwitchStmt extends Statement implements SwitchNode {
             this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchStmt setEntry(int i, SwitchEntry entry) {
-        getEntries().set(i, entry);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchStmt addEntry(SwitchEntry entry) {
-        getEntries().add(entry);
         return this;
     }
 

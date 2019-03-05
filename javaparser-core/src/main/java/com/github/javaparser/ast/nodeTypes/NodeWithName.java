@@ -24,7 +24,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**

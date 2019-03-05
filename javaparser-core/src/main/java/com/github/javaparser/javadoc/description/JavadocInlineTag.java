@@ -57,6 +57,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
         LINKPLAIN,
         LITERAL,
         VALUE,
+        SYSTEM_PROPERTY,
         UNKNOWN;
 
         Type() {

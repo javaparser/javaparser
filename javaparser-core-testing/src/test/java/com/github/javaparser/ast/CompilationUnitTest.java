@@ -21,14 +21,13 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -79,14 +78,14 @@ class CompilationUnitTest {
     void testGetPrimaryTypeName() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
-        CompilationUnit cu = JavaParser.parse(testFile);
+        CompilationUnit cu = parse(testFile);
         
         assertEquals("PrimaryType", cu.getPrimaryTypeName().get());
     }
 
     @Test
     void testNoPrimaryTypeName() {
-        CompilationUnit cu = JavaParser.parse("class PrimaryType{}");
+        CompilationUnit cu = parse("class PrimaryType{}");
 
         assertEquals(false, cu.getPrimaryTypeName().isPresent());
     }
@@ -94,7 +93,7 @@ class CompilationUnitTest {
     void testGetPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
-        CompilationUnit cu = JavaParser.parse(testFile);
+        CompilationUnit cu = parse(testFile);
 
         assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
     }
@@ -103,7 +102,7 @@ class CompilationUnitTest {
     void testNoPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType2.java"));
-        CompilationUnit cu = JavaParser.parse(testFile);
+        CompilationUnit cu = parse(testFile);
 
         assertEquals(false, cu.getPrimaryType().isPresent());
     }

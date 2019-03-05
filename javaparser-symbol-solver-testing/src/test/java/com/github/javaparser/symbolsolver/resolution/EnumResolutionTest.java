@@ -16,7 +16,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -35,15 +36,14 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     void switchOnEnum() {
         CompilationUnit cu = parseSample("SwitchOnEnum");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         SwitchStmt switchStmt = Navigator.findSwitch(method);
         Expression expression = switchStmt.getEntries().get(0).getLabels().get(0);
@@ -56,7 +56,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
     @Test
     void enumAndStaticInitializer() {
         CompilationUnit cu = parseSample("EnumAndStaticInitializer");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodCallExpr call = Navigator.findMethodCall(clazz, "put").get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
@@ -66,26 +66,30 @@ class EnumResolutionTest extends AbstractResolutionTest {
     // Related to issue 1699
     @Test
     void resolveEnumConstantAccess() {
-        // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        try {
+            // configure symbol solver before parsing
+            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
-        // parse compilation unit and get field access expression
-        CompilationUnit cu = parseSample("EnumFieldAccess");
-        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
-        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+            // parse compilation unit and get field access expression
+            CompilationUnit cu = parseSample("EnumFieldAccess");
+            ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
+            MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
+            ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+            FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
-        // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+            // resolve field access expression
+            ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
 
-        assertEquals(resolvedValueDeclaration.isField(), false);
-        assertEquals(resolvedValueDeclaration.isEnumConstant(), true);
+            assertFalse(resolvedValueDeclaration.isField());
+            assertTrue(resolvedValueDeclaration.isEnumConstant());
 
-        ResolvedEnumConstantDeclaration resolvedEnumConstantDeclaration = resolvedValueDeclaration.asEnumConstant();
-        assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
-        assertEquals(true, resolvedEnumConstantDeclaration.isEnumConstant());
-        assertEquals(true, resolvedEnumConstantDeclaration.hasName());
+            ResolvedEnumConstantDeclaration resolvedEnumConstantDeclaration = resolvedValueDeclaration.asEnumConstant();
+            assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
+            assertTrue(resolvedEnumConstantDeclaration.isEnumConstant());
+            assertTrue(resolvedEnumConstantDeclaration.hasName());
+        } finally {
+            StaticJavaParser.setConfiguration(new ParserConfiguration());
+        }
     }
 
 }

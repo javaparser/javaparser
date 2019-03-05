@@ -38,8 +38,6 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
     @Test
     void byNameInValidOptions() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            ResolvedPrimitiveType.byName("unexisting");
-    });
+        assertThrows(IllegalArgumentException.class, () -> ResolvedPrimitiveType.byName("unexisting"));
     }
 }

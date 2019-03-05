@@ -18,7 +18,7 @@ public abstract class NodeGenerator extends Generator {
     }
 
     public final void generate() throws Exception {
-        Log.info("Running %s", getClass().getSimpleName());
+        Log.info("Running %s", () -> getClass().getSimpleName());
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
             Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = parseNode(nodeMetaModel);
             generateNode(nodeMetaModel, result.a, result.b);

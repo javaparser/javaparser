@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class BinaryExpr extends Expression {
+public class BinaryExpr extends Expression {
 
     public enum Operator implements Printable {
 

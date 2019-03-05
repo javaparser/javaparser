@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt> {
+public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt> {
 
     private Expression expression;
 

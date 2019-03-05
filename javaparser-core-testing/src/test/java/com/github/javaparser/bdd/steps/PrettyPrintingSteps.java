@@ -21,7 +21,6 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
@@ -35,7 +34,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,7 +49,7 @@ public class PrettyPrintingSteps {
     }
 
     @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
-    public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException, ParseException {
+    public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException {
         URL url = getClass().getResource("../samples/" + classFile);
         sourceUnderTest = readerToString(new FileReader(new File(url.toURI()))).trim();
     }

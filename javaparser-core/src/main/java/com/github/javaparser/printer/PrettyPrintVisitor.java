@@ -58,8 +58,17 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer = new SourcePrinter(configuration);
     }
 
+    /**
+     * @deprecated use toString()
+     */
+    @Deprecated
     public String getSource() {
-        return printer.getSource();
+        return printer.toString();
+    }
+
+    @Override
+    public String toString() {
+        return printer.toString();
     }
 
     private void printModifiers(final NodeList<Modifier> modifiers) {
@@ -496,24 +505,22 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        n.findAncestor(NodeWithVariables.class).ifPresent(ancestor -> {
-            ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
+        n.findAncestor(NodeWithVariables.class).ifPresent(ancestor -> ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
-                final Type type = n.getType();
+            final Type type = n.getType();
 
-                ArrayType arrayType = null;
+            ArrayType arrayType = null;
 
-                for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-                    if (arrayType == null) {
-                        arrayType = (ArrayType) type;
-                    } else {
-                        arrayType = (ArrayType) arrayType.getComponentType();
-                    }
-                    printAnnotations(arrayType.getAnnotations(), true, arg);
-                    printer.print("[]");
+            for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
+                if (arrayType == null) {
+                    arrayType = (ArrayType) type;
+                } else {
+                    arrayType = (ArrayType) arrayType.getComponentType();
                 }
-            });
-        });
+                printAnnotations(arrayType.getAnnotations(), true, arg);
+                printer.print("[]");
+            }
+        }));
 
         if (n.getInitializer().isPresent()) {
             printer.print(" = ");
