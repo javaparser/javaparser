@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class LabeledStmt extends Statement {
+public class LabeledStmt extends Statement {
 
     private SimpleName label;
 

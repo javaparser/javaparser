@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class DoubleLiteralExpr extends LiteralStringValueExpr {
+public class DoubleLiteralExpr extends LiteralStringValueExpr {
 
     public DoubleLiteralExpr() {
         this(null, "0");

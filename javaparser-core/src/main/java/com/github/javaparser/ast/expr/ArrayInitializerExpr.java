@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ArrayInitializerExpr extends Expression {
+public class ArrayInitializerExpr extends Expression {
 
     private NodeList<Expression> values;
 

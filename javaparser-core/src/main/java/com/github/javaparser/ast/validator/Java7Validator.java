@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.UnionType;
 
@@ -8,7 +9,7 @@ import com.github.javaparser.ast.type.UnionType;
  * This validator validates according to Java 7 syntax rules.
  */
 public class Java7Validator extends Java6Validator {
-    protected final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+    final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
         if (n.getCatchClauses().isEmpty()
                 && n.getResources().isEmpty()
                 && !n.getFinallyBlock().isPresent()) {
@@ -20,7 +21,7 @@ public class Java7Validator extends Java6Validator {
             }
         }
     });
-    protected final SingleNodeTypeValidator<UnionType> multiCatch = new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
+    private final SingleNodeTypeValidator<UnionType> multiCatch = new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
         // Case "0 elements" is caught elsewhere.
         if (n.getElements().size() == 1) {
             reporter.report(n, "Union type (multi catch) must have at least two elements.");
@@ -31,7 +32,6 @@ public class Java7Validator extends Java6Validator {
         super();
         remove(genericsWithoutDiamondOperator);
         replace(tryWithoutResources, tryWithLimitedResources);
-        remove(noStringsInSwitch);
         remove(noBinaryIntegerLiterals);
         remove(noUnderscoresInIntegerLiterals);
         replace(noMultiCatch, multiCatch);

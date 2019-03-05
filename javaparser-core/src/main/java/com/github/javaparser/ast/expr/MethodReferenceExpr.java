@@ -52,7 +52,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Raquel Pau
  */
-public final class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr> {
+public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 

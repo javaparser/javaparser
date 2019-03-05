@@ -52,7 +52,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.expr.SuperExpr
  * @see com.github.javaparser.ast.expr.ThisExpr
  */
-public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt>, NodeWithArguments<ExplicitConstructorInvocationStmt>, Resolvable<ResolvedConstructorDeclaration> {
+public class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt>, NodeWithArguments<ExplicitConstructorInvocationStmt>, Resolvable<ResolvedConstructorDeclaration> {
 
     @OptionalProperty
     private NodeList<Type> typeArguments;
@@ -289,14 +289,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      */
     public ResolvedConstructorDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
-    }
-
-    /**
-     * @deprecated Call {@link #resolve()} instead.
-     */
-    @Deprecated
-    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
-        return resolve();
     }
 
     @Override

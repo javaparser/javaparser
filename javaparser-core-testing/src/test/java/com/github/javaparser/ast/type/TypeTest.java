@@ -8,11 +8,11 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseType;
-import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -27,9 +27,7 @@ class TypeTest {
 
     @Test
     void primitiveTypeArgumentDefaultValidator() {
-        assertThrows(ParseProblemException.class, () -> {
-            typeAsString("List<long> x;");
-    });
+        assertThrows(ParseProblemException.class, () -> typeAsString("List<long> x;"));
     }
 
     @Test

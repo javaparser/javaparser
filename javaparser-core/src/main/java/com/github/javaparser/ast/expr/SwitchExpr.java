@@ -53,7 +53,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see com.github.javaparser.ast.stmt.SwitchStmt
  * @see SwitchNode
  */
-public final class SwitchExpr extends Expression implements SwitchNode {
+public class SwitchExpr extends Expression implements SwitchNode {
 
     private Expression selector;
 
@@ -116,24 +116,6 @@ public final class SwitchExpr extends Expression implements SwitchNode {
             this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr setEntry(int i, SwitchEntry entry) {
-        getEntries().set(i, entry);
-        return this;
-    }
-
-    /**
-     * @deprecated use a method on getEntries instead
-     */
-    @Deprecated
-    public SwitchExpr addEntry(SwitchEntry entry) {
-        getEntries().add(entry);
         return this;
     }
 

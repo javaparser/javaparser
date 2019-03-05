@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
  * <br/><code>return 5 * 5;</code>
  * @author Julio Vilmar Gesser
  */
-public final class ReturnStmt extends Statement {
+public class ReturnStmt extends Statement {
 
     @OptionalProperty
     private Expression expression;

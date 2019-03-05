@@ -9,7 +9,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
@@ -21,7 +21,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * An exports directive in module-info.java. <code>exports R.S to T1.U1, T2.U2;</code>
  */
-public final class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
+public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
 
     private Name name;
 

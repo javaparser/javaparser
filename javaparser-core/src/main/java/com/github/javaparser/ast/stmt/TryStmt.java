@@ -92,7 +92,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.expr.FieldAccessExpr
  * @see com.github.javaparser.ast.expr.NameExpr
  */
-public final class TryStmt extends Statement {
+public class TryStmt extends Statement {
 
     private NodeList<Expression> resources;
 

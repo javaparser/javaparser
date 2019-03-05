@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type> {
+public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type> {
 
     private Type type;
 

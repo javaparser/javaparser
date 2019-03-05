@@ -8,8 +8,8 @@
   Line 61) this.classDeclaration.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
   Line 75) Helper.toAccessLevel(wrappedNode.getModifiers()) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.Helper.toAccessLevel(java.util.EnumSet<com.github.javaparser.ast.Modifier>)
   Line 75) wrappedNode.getModifiers() ==> com.github.javaparser.ast.body.CallableDeclaration.getModifiers()
-  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList()) ==> ERROR
-  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)) ==> ERROR
+  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 80) this.wrappedNode.getTypeParameters().stream() ==> java.util.Collection.stream()
   Line 80) this.wrappedNode.getTypeParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getTypeParameters()
   Line 80) Collectors.toList() ==> java.util.stream.Collectors.toList()

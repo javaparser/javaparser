@@ -27,10 +27,9 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
 
@@ -48,9 +47,7 @@ class NameTest {
 
     @Test
     void parsingEmptyNameThrowsException() {
-        assertThrows(ParseProblemException.class, () -> {
-            parseName("");
-    });
+        assertThrows(ParseProblemException.class, () -> parseName(""));
     }
 
     @Test
@@ -72,15 +69,15 @@ class NameTest {
     @Test
     void isInternalNegative() {
         Name name = parseName("a.b.c");
-        assertEquals(false, name.isInternal());
+        assertFalse(name.isInternal());
     }
 
     @Test
     void isInternalPositive() {
         Name name = parseName("a.b.c");
-        assertEquals(true, name
+        assertTrue(name
                 .getQualifier().get().isInternal());
-        assertEquals(true, name
+        assertTrue(name
                 .getQualifier().get()
                 .getQualifier().get().isInternal());
     }
@@ -88,9 +85,9 @@ class NameTest {
     @Test
     void isTopLevelNegative() {
         Name name = parseName("a.b.c");
-        assertEquals(false, name
+        assertFalse(name
                 .getQualifier().get().isTopLevel());
-        assertEquals(false, name
+        assertFalse(name
                 .getQualifier().get()
                 .getQualifier().get().isTopLevel());
     }
@@ -98,7 +95,7 @@ class NameTest {
     @Test
     void isTopLevelPositive() {
         Name name = parseName("a.b.c");
-        assertEquals(true, name.isTopLevel());
+        assertTrue(name.isTopLevel());
     }
 
 }

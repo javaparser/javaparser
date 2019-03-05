@@ -32,9 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayTypeTest {
 
@@ -107,30 +105,24 @@ class ArrayTypeTest {
 
     @Test
     void testAsReferenceTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            arrayOfBooleans.asReferenceType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> arrayOfBooleans.asReferenceType());
     }
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            arrayOfBooleans.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> arrayOfBooleans.asTypeParameter());
     }
 
     @Test
     void testAsPrimitive() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            arrayOfBooleans.asPrimitive();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> arrayOfBooleans.asPrimitive());
     }
 
     @Test
     void testAsArrayTypeUsage() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.asArrayType());
-        assertTrue(arrayOfStrings == arrayOfStrings.asArrayType());
-        assertTrue(arrayOfListOfA == arrayOfListOfA.asArrayType());
+        assertSame(arrayOfBooleans, arrayOfBooleans.asArrayType());
+        assertSame(arrayOfStrings, arrayOfStrings.asArrayType());
+        assertSame(arrayOfListOfA, arrayOfListOfA.asArrayType());
     }
 
     @Test
@@ -141,13 +133,13 @@ class ArrayTypeTest {
 
     @Test
     void testReplaceParam() {
-        assertTrue(arrayOfBooleans == arrayOfBooleans.replaceTypeVariables(tpA, OBJECT));
-        assertTrue(arrayOfStrings == arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
+        assertSame(arrayOfBooleans, arrayOfBooleans.replaceTypeVariables(tpA, OBJECT));
+        assertSame(arrayOfStrings, arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
         ResolvedArrayType arrayOfListOfObjects = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));
-        assertEquals(true, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
+        assertTrue(arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
                         .asReferenceType().typeParametersValues());
@@ -160,7 +152,7 @@ class ArrayTypeTest {
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType());
         assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceTypeVariables(tpA, STRING));
-        assertTrue(arrayOfListOfA != arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
+        assertNotSame(arrayOfListOfA, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
     }
 
     @Test

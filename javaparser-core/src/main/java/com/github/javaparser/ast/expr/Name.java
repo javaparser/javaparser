@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
@@ -35,8 +34,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.NameMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -51,7 +48,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public final class Name extends Node implements NodeWithIdentifier<Name> {
+public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @NonEmptyProperty
     private String identifier;
@@ -109,20 +106,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name> {
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
-    }
-
-    /**
-     * Creates a new {@link Name} from a qualified name.<br>
-     * The qualified name can contains "." (dot) characters.
-     *
-     * @param qualifiedName qualified name
-     * @return instanceof {@link Name}
-     * @deprecated use JavaParser.parseName instead
-     */
-    @Deprecated
-    public static Name parse(String qualifiedName) {
-        assertNonEmpty(qualifiedName);
-        return JavaParser.parseName(qualifiedName);
     }
 
     /**

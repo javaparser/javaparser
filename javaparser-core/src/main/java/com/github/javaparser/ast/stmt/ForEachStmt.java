@@ -36,10 +36,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForEachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -49,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
+public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
 
     private VariableDeclarationExpr variable;
 
@@ -177,8 +175,7 @@ public final class ForEachStmt extends Statement implements NodeWithBody<ForEach
      * @return {@code true} if this foreach statement's variable is {@code final}, and {@code false} otherwise.
      */
     public boolean hasFinalVariable() {
-        return getVariable().getModifiers().isNonEmpty() &&
-               getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
+        return getVariable().getModifiers().isNonEmpty() && getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
     }
 
     @Override

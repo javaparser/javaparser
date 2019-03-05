@@ -42,7 +42,7 @@ import com.github.javaparser.ast.Generated;
  * <br/>In <code>assert dead : "Wasn't expecting to be dead here";</code> the check is "dead" and the message is the string.
  * @author Julio Vilmar Gesser
  */
-public final class AssertStmt extends Statement {
+public class AssertStmt extends Statement {
 
     private Expression check;
 
