@@ -36,7 +36,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * A modifier, like private, public, or volatile.
  */
-public final class Modifier extends Node {
+public class Modifier extends Node {
 
     public static Modifier publicModifier() {
         return new Modifier(Keyword.PUBLIC);

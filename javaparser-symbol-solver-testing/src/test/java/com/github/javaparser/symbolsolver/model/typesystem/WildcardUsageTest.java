@@ -147,30 +147,22 @@ class WildcardUsageTest {
 
     @Test
     void testAsArrayTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            unbounded.asArrayType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> unbounded.asArrayType());
     }
 
     @Test
     void testAsReferenceTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            unbounded.asReferenceType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> unbounded.asReferenceType());
     }
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            unbounded.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> unbounded.asTypeParameter());
     }
 
     @Test
     void testAsPrimitive() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            unbounded.asPrimitive();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> unbounded.asPrimitive());
     }
 
     @Test

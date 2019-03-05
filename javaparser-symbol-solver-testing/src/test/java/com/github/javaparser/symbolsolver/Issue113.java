@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Issue113 extends AbstractSymbolResolutionTest {
@@ -32,7 +32,7 @@ class Issue113 extends AbstractSymbolResolutionTest {
     @Test
     void issue113providedCodeDoesNotCrash() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
+        CompilationUnit cu = parse(pathToSourceFile);
 
         JavaParserFacade parserFacade = JavaParserFacade.get(typeSolver);
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).stream()
@@ -43,7 +43,7 @@ class Issue113 extends AbstractSymbolResolutionTest {
     @Test
     void issue113superClassIsResolvedCorrectly() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue113/com/foo/Widget.java");
-        CompilationUnit cu = JavaParser.parse(pathToSourceFile);
+        CompilationUnit cu = parse(pathToSourceFile);
 
         JavaParserClassDeclaration jssExtendedWidget = new JavaParserClassDeclaration(cu.getClassByName("Widget").get(), typeSolver);
         ResolvedReferenceType superClass = jssExtendedWidget.getSuperClass();

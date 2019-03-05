@@ -143,7 +143,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+    private static PrettyPrinterConfiguration toStringPrettyPrinterConfiguration = new PrettyPrinterConfiguration();
 
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
@@ -275,15 +275,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Return the String representation of this node.
-     *
-     * @return the String representation of this node
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
      */
     @Override
     public final String toString() {
-        return toStringPrinter.print(this);
+        return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
 
+    /**
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with parameter prettyPrinterConfiguration.
+     */
     public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         return new PrettyPrinter(prettyPrinterConfiguration).print(this);
     }
@@ -324,6 +327,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public boolean removeOrphanComment(Comment comment) {
         boolean removed = orphanComments.remove(comment);
         if (removed) {
+            notifyPropertyChange(ObservableProperty.COMMENT, comment, null);
             comment.setParentNode(null);
         }
         return removed;
@@ -402,14 +406,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final int ABSOLUTE_BEGIN_LINE = -1;
 
     public static final int ABSOLUTE_END_LINE = -2;
-
-    /**
-     * @deprecated use getComment().isPresent()
-     */
-    @Deprecated
-    public boolean hasComment() {
-        return comment != null;
-    }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
         findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
@@ -657,6 +653,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public Node setParsed(Parsedness parsed) {
         this.parsed = parsed;
         return this;
+    }
+
+    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
+        return toStringPrettyPrinterConfiguration;
+    }
+
+    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
+        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")

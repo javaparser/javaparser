@@ -20,7 +20,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * An opens directive in module-info.java. <code>opens R.S to T1.U1, T2.U2;</code>
  */
-public final class ModuleOpensDirective extends ModuleDirective implements NodeWithName<ModuleOpensDirective> {
+public class ModuleOpensDirective extends ModuleDirective implements NodeWithName<ModuleOpensDirective> {
 
     private Name name;
 

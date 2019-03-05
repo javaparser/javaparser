@@ -2,7 +2,7 @@
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
- * This file is part of JavaParser.
+ * This file is part of 
  *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
@@ -21,11 +21,12 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.TestUtils.readTextResource;
 
@@ -38,7 +39,7 @@ class YamlPrinterTest {
     @Test
     void testWithType() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("x(1,1)");
+        Expression expression = parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
         assertEqualsNoEol(read("yamlWithType.yaml"), output);
     }
@@ -46,7 +47,7 @@ class YamlPrinterTest {
     @Test
     void testWithoutType() {
         YamlPrinter yamlPrinter = new YamlPrinter(false);
-        Expression expression = JavaParser.parseExpression("1+1");
+        Expression expression = parseExpression("1+1");
         String output = yamlPrinter.output(expression);
         assertEqualsNoEol(read("yamlWithoutType.yaml"), output);
     }
@@ -54,7 +55,7 @@ class YamlPrinterTest {
     @Test
     void testWithColonFollowedBySpaceInValue() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
+        Expression expression = parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
         assertEqualsNoEol(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
     }
@@ -62,7 +63,7 @@ class YamlPrinterTest {
     @Test
     void testWithColonFollowedByLineSeparatorInValue() {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
+        Expression expression = parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
         assertEqualsNoEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
     }
@@ -75,7 +76,7 @@ class YamlPrinterTest {
                 "public class Dog {}";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);
-        CompilationUnit computationUnit = JavaParser.parse(code);
+        CompilationUnit computationUnit = parse(code);
         String output = yamlPrinter.output(computationUnit);
         assertEqualsNoEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
     }

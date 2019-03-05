@@ -50,7 +50,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr>, Resolvable<ResolvedValueDeclaration> {
+public class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr>, Resolvable<ResolvedValueDeclaration> {
 
     private Expression scope;
 
@@ -115,34 +115,9 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return this;
     }
 
-    /**
-     * Use {@link #getName} instead.
-     */
-    @Deprecated
-    public SimpleName getField() {
-        return name;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getScope() {
         return scope;
-    }
-
-    /**
-     * Use {@link #setName} with new SimpleName(field) instead.
-     */
-    @Deprecated
-    public FieldAccessExpr setField(final String field) {
-        setName(new SimpleName(field));
-        return this;
-    }
-
-    /**
-     * Use {@link #setName} instead.
-     */
-    @Deprecated
-    public FieldAccessExpr setFieldExpr(SimpleName inner) {
-        return setName(inner);
     }
 
     /**

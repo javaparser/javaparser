@@ -1,10 +1,7 @@
 package com.github.javaparser.symbolsolver;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -12,12 +9,16 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import static com.github.javaparser.StaticJavaParser.parse;
 
 class Issue1491 {
 
@@ -33,13 +34,13 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
-        CompilationUnit cu = JavaParser.parse(aJava);
+        CompilationUnit cu = parse(aJava);
         cu.accept(new VoidVisitorAdapter() {
             public void visit(NameExpr n, Object arg) {
                 ResolvedType type = JavaParserFacade.get(localCts)
-                            .getType(n);
+                        .getType(n);
                 super.visit(n, arg);
             }
         }, null);
@@ -57,9 +58,9 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
-        CompilationUnit cu = JavaParser.parse(aJava);
+        CompilationUnit cu = parse(aJava);
         cu.accept(new VoidVisitorAdapter() {
 
             public void visit(MethodCallExpr n, Object arg) {
@@ -81,11 +82,11 @@ class Issue1491 {
         localCts.add(new JavaParserTypeSolver(aJava.getAbsoluteFile().getParentFile()));
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
-        JavaParser.setStaticConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(parserConfiguration);
 
-        CompilationUnit cu = JavaParser.parse(aJava);
-        cu.accept(new VoidVisitorAdapter() {
-            public void visit(NameExpr n, Object arg) {
+        CompilationUnit cu = parse(aJava);
+        cu.accept(new VoidVisitorAdapter<Void>() {
+            public void visit(NameExpr n, Void arg) {
                 try {
                     ResolvedType type = JavaParserFacade.get(localCts).getType(n);
                 } catch (UnsolvedSymbolException e) {
@@ -94,7 +95,7 @@ class Issue1491 {
                 super.visit(n, arg);
             }
 
-            public void visit(MethodCallExpr n, Object arg) {
+            public void visit(MethodCallExpr n, Void arg) {
                 ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration();
                 super.visit(n, arg);
             }

@@ -21,7 +21,7 @@
 
 package com.github.javaparser.wiki_samples.removenode;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -35,7 +35,7 @@ public class ModifierVisitorTest {
 
     public static void main(String... args) throws Exception {
         // parse the file
-        CompilationUnit cu = JavaParser.parse(new FileInputStream("forGitHubTest.java"));
+        CompilationUnit cu = StaticJavaParser.parse(new FileInputStream("forGitHubTest.java"));
 
         // The visitor should remove all a=20 variable declarations.
         cu.accept(new MyVisitor(), null);

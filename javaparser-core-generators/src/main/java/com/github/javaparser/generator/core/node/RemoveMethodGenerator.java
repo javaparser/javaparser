@@ -10,7 +10,7 @@ import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.capitalize;
 

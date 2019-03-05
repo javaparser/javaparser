@@ -55,22 +55,6 @@ public interface HasParentNode<T> extends Observable {
     Node getParentNodeForChildren();
 
     /**
-     * @deprecated use {@link #findAncestor(Class)}.
-     */
-    @Deprecated
-    default <N> Optional<N> getAncestorOfType(Class<N> classType) {
-        return findAncestor(classType);
-    }
-
-    /**
-     * @deprecated use {@link #findAncestor(Class)}.
-     */
-    @Deprecated
-    default <N> Optional<N> findParent(Class<N> type) {
-        return findAncestor(type);
-    }
-
-    /**
      * Walks the parents of this node and returns the first node of type {@code type}, or {@code empty()} if none is
      * found. The given type may also be an interface type, such as one of the {@code NodeWith...} interface types.
      */
