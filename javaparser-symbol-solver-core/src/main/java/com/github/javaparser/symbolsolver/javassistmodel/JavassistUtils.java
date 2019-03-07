@@ -22,9 +22,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javassist.*;
 import javassist.bytecode.*;
 
@@ -36,26 +36,29 @@ import java.util.stream.Collectors;
  */
 class JavassistUtils {
 
-    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
-        // TODO avoid bridge and synthetic methods
+    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+                                                List<ResolvedTypeParameterDeclaration> typeParameters, List<ResolvedType> typeParameterValues) {
+        List<MethodUsage> methods = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)) {
-                // TODO check typeParametersValues
+            if (method.getName().equals(name)
+                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
+                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)) {
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
-                if (argumentsTypes.size() < methodUsage.getNoParams()) {
-                    // this method cannot be a good candidate (except if variadic ?)
-                    continue;
+                for (int i = 0; i < typeParameters.size() && i < typeParameterValues.size(); i++) {
+                    ResolvedTypeParameterDeclaration tpToReplace = typeParameters.get(i);
+                    ResolvedType newValue = typeParameterValues.get(i);
+                    methodUsage = methodUsage.replaceTypeParameter(tpToReplace, newValue);
                 }
-                return Optional.of(methodUsage);
+                methods.add(methodUsage);
             }
         }
 
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(superClass, name, argumentsTypes, typeSolver, invokationContext);
+                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(superClass, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
                 if (ref.isPresent()) {
-                    return ref;
+                    methods.add(ref.get());
                 }
             }
         } catch (NotFoundException e) {
@@ -64,16 +67,16 @@ class JavassistUtils {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(interfaze, name, argumentsTypes, typeSolver, invokationContext);
+                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(interfaze, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
                 if (ref.isPresent()) {
-                    return ref;
+                    methods.add(ref.get());
                 }
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        return Optional.empty();
+        return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
     }
 
     static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
