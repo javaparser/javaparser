@@ -70,7 +70,7 @@ public class JavassistTypeDeclarationAdapter {
 
   public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
     if (null == ctClass.getGenericSignature()) {
-      return new ArrayList<>();
+      return Collections.emptyList();
     } else {
       try {
         SignatureAttribute.ClassSignature classSignature =
