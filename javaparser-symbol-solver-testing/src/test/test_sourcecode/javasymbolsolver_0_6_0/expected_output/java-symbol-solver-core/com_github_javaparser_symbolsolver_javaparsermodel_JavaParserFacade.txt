@@ -40,7 +40,7 @@
   Line 161) SymbolReference.unsolved(ConstructorDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 163) optAncestor.get() ==> java.util.Optional.get()
   Line 165) explicitConstructorInvocationStmt.isThis() ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt.isThis()
-  Line 166) JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode) ==> UNSOLVED
+  Line 166) JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convert(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
   Line 166) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 166) classNode.getExtendedTypes(0) ==> com.github.javaparser.ast.nodeTypes.NodeWithExtends.getExtendedTypes(int)
   Line 167) classDecl.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
