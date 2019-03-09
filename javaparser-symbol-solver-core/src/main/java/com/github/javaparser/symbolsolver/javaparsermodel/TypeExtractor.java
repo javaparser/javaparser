@@ -1,14 +1,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -34,12 +33,14 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.google.common.collect.ImmutableList;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
+import static java.util.stream.Collectors.toList;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -262,18 +263,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodCallExpr node, Boolean solveLambdas) {
-        Log.trace("getType on method call %s", ()-> node);
+        Log.trace("getType on method call %s", () -> node);
         // first solve the method
         MethodUsage ref = facade.solveMethodAsUsage(node);
-        Log.trace("getType on method call %s resolved to %s", ()-> node, ()-> ref);
-        Log.trace("getType on method call %s return type is %s", ()-> node, ref::returnType);
+        Log.trace("getType on method call %s resolved to %s", () -> node, () -> ref);
+        Log.trace("getType on method call %s return type is %s", () -> node, ref::returnType);
         return ref.returnType();
         // the type is the return type of the method
     }
 
     @Override
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
-        Log.trace("getType on name expr %s", ()-> node);
+        Log.trace("getType on name expr %s", () -> node);
         Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, node.getName().getId());
@@ -357,7 +358,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on lambda expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
 
                 // The type parameter referred here should be the java.util.stream.Stream.T
@@ -468,7 +469,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on method reference expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
                 ResolvedType result = usage.getParamType(pos);
@@ -503,5 +504,46 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return node.getVariables().get(0).accept(this, solveLambdas);
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
+    }
+
+    @Override
+    public ResolvedType visit(SwitchExpr switchExpr, Boolean solveLambdas) {
+        List<ResolvedType> allSwitchEntiesResolved = switchExpr.getEntries().stream()
+                .map(entry -> entry.accept(this, solveLambdas))
+                .collect(toList());
+        // TODO find common type of all switch entries
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public ResolvedType visit(SwitchEntry entry, Boolean solveLambdas) {
+        switch (entry.getType()) {
+            case STATEMENT_GROUP:
+                return findCommonTypeOfAllBreakStatements(entry, solveLambdas);
+            case EXPRESSION:
+                return entry.getStatement(0).asExpressionStmt().getExpression().accept(this, solveLambdas);
+            case BLOCK:
+                return findCommonTypeOfAllBreakStatements(entry, solveLambdas);
+            case THROWS_STATEMENT:
+                // TODO is this correct?
+                return ResolvedVoidType.INSTANCE;
+            default:
+                throw new IllegalStateException("This kind of switch entry is not supported yet.");
+        }
+    }
+
+    private ResolvedType findCommonTypeOfAllBreakStatements(Node node, Boolean solveLambdas) {
+        List<ResolvedType> allBreakStmtsResolved = node.findAll(BreakStmt.class).stream()
+                .map(bs -> bs.accept(this, solveLambdas))
+                .collect(toList());
+        // TODO find common type of all break statements
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public ResolvedType visit(BreakStmt breakStmt, Boolean solveLambdas) {
+        return breakStmt.getValue()
+                .map(v -> v.accept(this, solveLambdas))
+                .orElse(ResolvedVoidType.INSTANCE);
     }
 }
