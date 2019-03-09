@@ -519,11 +519,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(SwitchEntry entry, Boolean solveLambdas) {
         switch (entry.getType()) {
             case STATEMENT_GROUP:
+            case BLOCK:
                 return findCommonTypeOfAllBreakStatements(entry, solveLambdas);
             case EXPRESSION:
                 return entry.getStatement(0).asExpressionStmt().getExpression().accept(this, solveLambdas);
-            case BLOCK:
-                return findCommonTypeOfAllBreakStatements(entry, solveLambdas);
             case THROWS_STATEMENT:
                 // TODO is this correct?
                 return ResolvedVoidType.INSTANCE;
