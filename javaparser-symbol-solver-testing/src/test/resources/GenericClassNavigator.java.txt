@@ -24,4 +24,8 @@ public class GenericClassNavigator {
         new GenericClass().complexGenerics();
     }
 
+    public void nestedTypes() {
+        GenericClass.asList(GenericClass.Bar.CONSTANT);
+    }
+
 }
