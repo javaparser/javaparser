@@ -1,3 +1,7 @@
+Version 3.13.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/129?closed=1)
+
 Version 3.13.2
 ------------------
 * Version 3.13.0 and 3.13.1 contain rather bad bugs that have been fixed here.
