@@ -8,13 +8,13 @@ Version 3.13.2
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/128?closed=1)
 
-Version 3.13.1
+Version 3.13.1 (buggy!)
 ------------------
 * Slightly breaking: most parameters to Log methods now take consumers to avoid evaluating them when not necessary. 
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/127?closed=1)
 
-Version 3.13.0
+Version 3.13.0 (buggy!)
 ------------------
 * "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
 
