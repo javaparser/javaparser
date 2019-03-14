@@ -1121,6 +1121,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "}", LexicalPreservingPrinter.print(cu));        
     }
     
+    // Checks if comments get removed properly with Unix style line endings
+    @Test
+    void removedLineCommentsPrintedUnix() {
+        String code = "public class Foo {" + "\n" +
+                          "//line" + "\n" +
+                          "void mymethod() {" + "\n" +
+                          "}" + "\n" +
+                          "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+        
+        assertEquals("public class Foo {" + "\n" +
+                          "void mymethod() {" + "\n" +
+                          "}" + "\n" +
+                          "}", LexicalPreservingPrinter.print(cu));        
+    }
+    
     @Test
     void removedBlockCommentsPrinted() {
         String code = "public class Foo {" + EOL +
