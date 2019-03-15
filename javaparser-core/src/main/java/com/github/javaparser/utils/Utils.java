@@ -222,6 +222,41 @@ public class Utils {
     }
 
     /**
+     * Like {@link List#set(int, Object)} at {@link List#indexOf(Object)}, but using ==, not equals.
+     */
+    public static <E> void replaceElementByObjectIdentity(List<E> list, E oldObject, E newObject) {
+        int index = indexOfElementByObjectIdentity(list, oldObject);
+        if (index == -1) {
+            return;
+        }
+        list.set(index, newObject);
+    }
+
+    /**
+     * Like {@link List#remove(Object)}, but using ==, not equals.
+     */
+    public static <E> void removeElementByObjectIdentity(List<E> list, E o) {
+        int index = indexOfElementByObjectIdentity(list, o);
+        if (index == -1) {
+            return;
+        }
+        list.remove(index);
+    }
+
+    /**
+     * Like {@link List#indexOf(Object)}, but using ==, not equals.
+     */
+    public static <E> int indexOfElementByObjectIdentity(List<E> list, E o) {
+        for (int i = 0; i < list.size(); i++) {
+            Object listO = list.get(i);
+            if (o == listO) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * @return a set of the items.
      */
     public static <T> Set<T> set(T... items) {
