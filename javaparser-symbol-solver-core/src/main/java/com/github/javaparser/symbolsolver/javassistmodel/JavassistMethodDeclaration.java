@@ -145,7 +145,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
-        return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
+        return new MethodDeclarationCommonLogic(this).resolveTypeVariables(context, parameterTypes);
     }
 
     @Override

@@ -36,11 +36,9 @@ import java.util.Optional;
 public class MethodDeclarationCommonLogic {
 
     private ResolvedMethodDeclaration methodDeclaration;
-    private TypeSolver typeSolver;
 
-    public MethodDeclarationCommonLogic(ResolvedMethodDeclaration methodDeclaration, TypeSolver typeSolver) {
+    public MethodDeclarationCommonLogic(ResolvedMethodDeclaration methodDeclaration) {
         this.methodDeclaration = methodDeclaration;
-        this.typeSolver = typeSolver;
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
@@ -84,11 +82,11 @@ public class MethodDeclarationCommonLogic {
         return type;
     }
 
-    protected Optional<ResolvedType> typeParamByName(String name, Context context) {
+    private Optional<ResolvedType> typeParamByName(String name, Context context) {
         return methodDeclaration.getTypeParameters().stream().filter(tp -> tp.getName().equals(name)).map(tp -> toType(tp)).findFirst();
     }
 
-    protected ResolvedType toType(ResolvedTypeParameterDeclaration typeParameterDeclaration) {
+    private ResolvedType toType(ResolvedTypeParameterDeclaration typeParameterDeclaration) {
         return new ResolvedTypeVariable(typeParameterDeclaration);
     }
 }

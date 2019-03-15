@@ -189,7 +189,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     public List<ResolvedReferenceType> getAllAncestors() {
-        // We need to go through the inheritance line and propagate the type parametes
+        // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
 

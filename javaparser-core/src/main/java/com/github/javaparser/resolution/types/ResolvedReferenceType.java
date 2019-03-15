@@ -32,9 +32,9 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -145,7 +145,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             sb.append("<");
             sb.append(String.join(", ", typeDeclaration.getTypeParameters().stream()
                     .map(tp -> typeParametersMap().getValue(tp).describe())
-                    .collect(Collectors.toList())));
+                    .collect(toList())));
             sb.append(">");
         }
         return sb.toString();
@@ -231,16 +231,40 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public abstract List<ResolvedReferenceType> getDirectAncestors();
 
+    /**
+     * Like getAllAncestors, but only the interfaces.
+     */
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isInterface())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
+    /**
+     * Like getAllAncestors, but only the classes.
+     */
     public final List<ResolvedReferenceType> getAllClassesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isClass())
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    /**
+     * Like getDirectAncestors, but only the interfaces.
+     */
+    public final List<ResolvedReferenceType> getDirectInterfacesAncestors() {
+        return getDirectAncestors().stream()
+                .filter(it -> it.getTypeDeclaration().isInterface())
+                .collect(toList());
+    }
+
+    /**
+     * Like getAllAncestors, but only the classes.
+     */
+    public final Optional<ResolvedReferenceType> getDirectClassAncestor() {
+        return getDirectAncestors().stream()
+                .filter(it -> it.getTypeDeclaration().isClass())
+                .findAny();
     }
 
     ///
@@ -265,7 +289,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * The list can be empty for raw types.
      */
     public List<ResolvedType> typeParametersValues() {
-        return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(Collectors.toList());
+        return this.typeParametersMap.isEmpty() ? Collections.emptyList() : typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap.getValue(tp)).collect(toList());
     }
 
     /**
@@ -395,7 +419,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
         List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
                 .filter(f -> f.accessSpecifier() != PRIVATE)
-                .collect(Collectors.toList()));
+                .collect(toList()));
 
         getDirectAncestors().forEach(a ->
                 res.addAll(a.getAllFieldsVisibleToInheritors()));
@@ -406,7 +430,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public List<ResolvedMethodDeclaration> getAllMethodsVisibleToInheritors() {
         return this.getAllMethods().stream()
                 .filter(m -> m.accessSpecifier() != PRIVATE)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     //
@@ -418,7 +442,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, ResolvedTypeParametersMap typeParametersMap) {
         return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
                 .map(typeParametersMap::getValue)
-                .collect(Collectors.toList()));
+                .collect(toList()));
     }
 
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
@@ -474,8 +498,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                         }
                     } else {
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
-                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
+                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(toList());
+                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
                         }
                         return false;
@@ -499,7 +523,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameters == null) {
             throw new RuntimeException("Type parameters are not expected to be null");
         }
-        return typeParameters.stream().map(ResolvedTypeVariable::new).collect(Collectors.toList());
+        return typeParameters.stream().map(ResolvedTypeVariable::new).collect(toList());
     }
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FunctionInterfaceLogicTest {
 
@@ -35,17 +35,17 @@ class FunctionInterfaceLogicTest {
     void testGetFunctionalMethodNegativeCaseOnClass() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        assertEquals(false, FunctionalInterfaceLogic.getFunctionalMethod(string).isPresent());
+        assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(string).isPresent());
     }
 
     @Test
     void testGetFunctionalMethodPositiveCasesOnInterfaces() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Function.class, typeSolver), typeSolver);
-        assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
+        assertTrue(FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
         assertEquals("apply", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
         ResolvedType consumer = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Consumer.class, typeSolver), typeSolver);
-        assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
+        assertTrue(FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
         assertEquals("accept", FunctionalInterfaceLogic.getFunctionalMethod(consumer).get().getName());
     }
 }

@@ -92,7 +92,7 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
-        return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
+        return new MethodDeclarationCommonLogic(this).resolveTypeVariables(context, parameterTypes);
     }
 
     private Context getContext() {

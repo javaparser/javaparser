@@ -31,13 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Federico Tomassetti
  */
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
-                                                                  ResolvedTypeParametrizable {
+        ResolvedTypeParametrizable {
 
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
@@ -165,22 +166,22 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != Modifier.Keyword.PRIVATE)
-                       .collect(Collectors.toList());
+                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != Modifier.Keyword.PRIVATE)
+                .collect(toList());
     }
 
     /**
      * Return a list of all the non static fields, either declared or inherited.
      */
     default List<ResolvedFieldDeclaration> getAllNonStaticFields() {
-        return getAllFields().stream().filter(it -> !it.isStatic()).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> !it.isStatic()).collect(toList());
     }
 
     /**
      * Return a list of all the static fields, either declared or inherited.
      */
     default List<ResolvedFieldDeclaration> getAllStaticFields() {
-        return getAllFields().stream().filter(it -> it.isStatic()).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> it.isStatic()).collect(toList());
     }
 
     /**
@@ -188,7 +189,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
         return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
-                                                            .equals(getQualifiedName())).collect(Collectors.toList());
+                .equals(getQualifiedName())).collect(toList());
     }
 
     ///
