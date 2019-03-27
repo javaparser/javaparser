@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.SwitchExpr;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -15,6 +16,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
@@ -37,7 +39,11 @@ class SwitchExprTest {
     void switchEntryBreaksWithIntAndString() {
         CompilationUnit ast = javaParser.parse("class X{void x(){Object a=switch(a){case 1-> {if(x){break 3+4;}else{break \"oops\";}}};}}").getResult().get();
         ResolvedType resolvedType = ast.findFirst(SwitchExpr.class).get().calculateResolvedType();
-        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), resolvedType);
+        assertEquals(
+                new ResolvedUnionType(Arrays.asList(
+                        new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver),
+                        ResolvedPrimitiveType.INT)),
+                resolvedType);
     }
 
     @Test
@@ -51,7 +57,12 @@ class SwitchExprTest {
     void multipleSwitchEntriesReturnDifferentTypes() {
         CompilationUnit ast = javaParser.parse("class X{void x(){Object a=switch(a){case 1-> 1; case 2->\"\"; default->1.0; };}}").getResult().get();
         ResolvedType resolvedType = ast.findFirst(SwitchExpr.class).get().calculateResolvedType();
-        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), resolvedType);
+        assertEquals(
+                new ResolvedUnionType(Arrays.asList(
+                        new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver),
+                        ResolvedPrimitiveType.DOUBLE,
+                        ResolvedPrimitiveType.INT)),
+                resolvedType);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -23,6 +22,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
+import com.github.javaparser.symbolsolver.logic.MultipleResultTypesLogic;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -33,19 +33,20 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.google.common.collect.ImmutableList;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
-import static java.util.stream.Collectors.toList;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
+
+    private final MultipleResultTypesLogic multipleResultTypesLogic = new MultipleResultTypesLogic();
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
@@ -508,11 +509,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(SwitchExpr switchExpr, Boolean solveLambdas) {
-        List<ResolvedType> allSwitchEntiesResolved = switchExpr.getEntries().stream()
-                .map(entry -> entry.accept(this, solveLambdas))
-                .collect(toList());
-        // TODO find common type of all switch entries
-        throw new NotImplementedException();
+        Stream<ResolvedType> allSwitchEntriesResolved = switchExpr.getEntries().stream()
+                .map(entry -> entry.accept(this, solveLambdas));
+        return multipleResultTypesLogic.findResultType(allSwitchEntriesResolved);
     }
 
     @Override
@@ -520,23 +519,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         switch (entry.getType()) {
             case STATEMENT_GROUP:
             case BLOCK:
-                return findCommonTypeOfAllBreakStatements(entry, solveLambdas);
+                return multipleResultTypesLogic.findResultType(entry, BreakStmt.class, bs -> bs.accept(this, solveLambdas));
             case EXPRESSION:
                 return entry.getStatement(0).asExpressionStmt().getExpression().accept(this, solveLambdas);
             case THROWS_STATEMENT:
-                // TODO is this correct?
+                // TODO this is not correct, but what else should it be?
                 return ResolvedVoidType.INSTANCE;
             default:
                 throw new IllegalStateException("This kind of switch entry is not supported yet.");
         }
-    }
-
-    private ResolvedType findCommonTypeOfAllBreakStatements(Node node, Boolean solveLambdas) {
-        List<ResolvedType> allBreakStmtsResolved = node.findAll(BreakStmt.class).stream()
-                .map(bs -> bs.accept(this, solveLambdas))
-                .collect(toList());
-        // TODO find common type of all break statements
-        throw new NotImplementedException();
     }
 
     @Override

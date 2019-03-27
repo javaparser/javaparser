@@ -22,7 +22,8 @@
 package com.github.javaparser.resolution.types;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * A union type is defined in java as list of types separates by pipes.
@@ -30,15 +31,18 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ResolvedUnionType implements ResolvedType {
-    private List<ResolvedType> elements;
+    private final List<ResolvedType> elements;
 
-    public ResolvedUnionType(List<ResolvedType> elements) {
+    public ResolvedUnionType(Collection<ResolvedType> elements) {
         if (elements.size() < 2) {
             throw new IllegalArgumentException("An union type should have at least two elements. This has " + elements.size());
         }
         this.elements = new LinkedList<>(elements);
     }
 
+    /**
+     * Note: this algorithm doesn't seem to work as it should, nor is it in the right module.
+     */
     public Optional<ResolvedReferenceType> getCommonAncestor() {
         Optional<List<ResolvedReferenceType>> reduce = elements.stream()
                 .map(ResolvedType::asReferenceType)
@@ -68,7 +72,7 @@ public class ResolvedUnionType implements ResolvedType {
 
     @Override
     public String describe() {
-        return String.join(" | ", elements.stream().map(ResolvedType::describe).collect(Collectors.toList()));
+        return elements.stream().map(ResolvedType::describe).collect(joining(" | "));
     }
 
     @Override
@@ -84,5 +88,11 @@ public class ResolvedUnionType implements ResolvedType {
     @Override
     public ResolvedUnionType asUnionType() {
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return elements.stream().map(rt -> rt.toString()).collect(joining(" | ", "UnionType{", "}"));
     }
 }
