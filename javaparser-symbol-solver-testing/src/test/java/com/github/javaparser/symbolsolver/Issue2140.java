@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dominik Hardtke
- * @since 01/09/2018
+ * @since 03/27/2019
  */
 class Issue2140 extends AbstractResolutionTest {
     private JavaParser javaParser;
