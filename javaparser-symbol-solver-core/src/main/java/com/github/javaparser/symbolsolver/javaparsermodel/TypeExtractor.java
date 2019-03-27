@@ -523,7 +523,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case EXPRESSION:
                 return entry.getStatement(0).asExpressionStmt().getExpression().accept(this, solveLambdas);
             case THROWS_STATEMENT:
-                // TODO this is not correct, but what else should it be?
                 return ResolvedVoidType.INSTANCE;
             default:
                 throw new IllegalStateException("This kind of switch entry is not supported yet.");
