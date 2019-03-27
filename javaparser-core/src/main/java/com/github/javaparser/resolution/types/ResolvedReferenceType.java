@@ -383,8 +383,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
         List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(this.getTypeDeclaration().getDeclaredMethods());
-        getDirectAncestors().forEach(a ->
-                allMethods.addAll(a.getAllMethods()));
+        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+            getDirectAncestors().forEach(a ->
+                    allMethods.addAll(a.getAllMethods()));
+        }
         return allMethods;
     }
 
@@ -397,8 +400,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 .filter(f -> f.accessSpecifier() != PRIVATE)
                 .collect(Collectors.toList()));
 
-        getDirectAncestors().forEach(a ->
-                res.addAll(a.getAllFieldsVisibleToInheritors()));
+        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+            getDirectAncestors().forEach(a ->
+                    res.addAll(a.getAllFieldsVisibleToInheritors()));
+        }
 
         return res;
     }
