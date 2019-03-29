@@ -1169,4 +1169,15 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
     }
 
+    @Test
+    void issue2001() {
+        CompilationUnit compilationUnit = parse("class X {void blubb(){X.p(\"blaubb04\");}}");
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        compilationUnit
+                .findAll(MethodCallExpr.class)
+                .forEach(Node::removeForced);
+
+        assertEqualsNoEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+    }
 }
