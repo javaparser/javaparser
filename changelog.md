@@ -1,3 +1,11 @@
+Version 3.13.5
+------------------
+* "BREAKING": `ReferenceType.getDirectAncestors()` no longer returns `java.lang.Object` when called on a `ReferenceType` of `java.lang.Object`.
+This remedies infinite recursions in certain edge cases. If you relied on the old behavior, you have to add a `ReferenceType` instance of `java.lang.Object`
+to the List returned by `ReferenceType.getDirectAncestors()` yourself.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/131?closed=1)
+
 Version 3.13.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/130?closed=1)
