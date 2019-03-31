@@ -69,7 +69,6 @@ class Issue1814 extends AbstractResolutionTest {
 
     @Test
     void getAllMethodsVisibleToInheritors() {
-        fail();
         assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
             String code = String.join(System.lineSeparator(), "public class AbstractExercise extends java.lang.Object {", "}");
             ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
