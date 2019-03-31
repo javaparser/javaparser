@@ -643,6 +643,14 @@ class ReferenceTypeTest {
     }
 
     @Test
+    void testDirectAncestorsOfObjectClass() {
+        ResolvedReferenceType object = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        Set<String> ancestors = object.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        assertEquals(new HashSet<>(), ancestors);
+    }
+
+    @Test
     void testDirectAncestorsOfClassWithSuperClass() {
         ResolvedReferenceType charbuffer = new ReferenceTypeImpl(
                 new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
