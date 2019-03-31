@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
  * @author Dominik Hardtke
  * @since 01/09/2018
  */
-class Issue1814 extends AbstractResolutionTest {
+class Issue1814Test extends AbstractResolutionTest {
     private JavaParser javaParser;
 
     @BeforeEach
