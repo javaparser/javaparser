@@ -18,10 +18,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dominik Hardtke
@@ -70,19 +69,16 @@ class Issue1814 extends AbstractResolutionTest {
 
     @Test
     void getAllMethodsVisibleToInheritors() {
+        fail();
         assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
             String code = String.join(System.lineSeparator(), "public class AbstractExercise extends java.lang.Object {", "}");
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
-        assertTrue(parseResult.isSuccessful());
-        assertTrue(parseResult.getResult().isPresent());
-        List<ClassOrInterfaceType> referenceTypes = parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
-        assertTrue(referenceTypes.size() > 0);
-        final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().getAllMethodsVisibleToInheritors();
-        assertEquals(1, methods.size());
-    });
-
-        
-                
-                
-        }
+            ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+            assertTrue(parseResult.isSuccessful());
+            assertTrue(parseResult.getResult().isPresent());
+            List<ClassOrInterfaceType> referenceTypes = parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
+            assertTrue(referenceTypes.size() > 0);
+            final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().getAllMethodsVisibleToInheritors();
+            assertEquals(1, methods.size());
+        });
+    }
 }

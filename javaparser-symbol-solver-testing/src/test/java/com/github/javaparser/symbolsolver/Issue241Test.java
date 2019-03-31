@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue241 extends AbstractResolutionTest{
+class Issue241Test extends AbstractResolutionTest{
 
     @Test
     void testSolveStaticallyImportedMemberType() {

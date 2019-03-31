@@ -17,30 +17,25 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue18 extends AbstractResolutionTest {
+class Issue84Test extends AbstractResolutionTest {
 
     @Test
-    void typeDeclarationSuperClassImplicitlyIncludeObject() {
-        CompilationUnit cu = parseSample("Issue18");
-        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
-        MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
-        ExpressionStmt expr = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(1);
-        TypeSolver typeSolver = new ReflectionTypeSolver();
-        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        ResolvedType type = javaParserFacade.getType(expr.getExpression());
-        assertEquals("java.lang.Object", type.describe());
+    void variadicIssue() {
+        CompilationUnit cu = parseSample("Issue84");
+        final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod").get();
+
+        final JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        final ResolvedType type = javaParserFacade.getType(methodCall);
+        assertEquals(String.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
     }
 }

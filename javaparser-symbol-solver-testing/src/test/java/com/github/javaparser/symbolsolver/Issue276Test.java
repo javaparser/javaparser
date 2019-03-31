@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 
-class Issue276 extends AbstractResolutionTest{
+class Issue276Test extends AbstractResolutionTest{
 
     @Test
     void testSolveStaticallyImportedMemberType() throws IOException {

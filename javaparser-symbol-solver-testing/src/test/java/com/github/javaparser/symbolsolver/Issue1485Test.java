@@ -18,7 +18,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue1485 extends AbstractSymbolResolutionTest {
+class Issue1485Test extends AbstractSymbolResolutionTest {
 
     @Test
     void issue1485withoutSpecifyingJARs() throws IOException {

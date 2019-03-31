@@ -13,7 +13,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-class Issue232 extends AbstractResolutionTest {
+class Issue232Test extends AbstractResolutionTest {
     @Test
     void issue232() {
         CompilationUnit cu = parseSample("Issue232");

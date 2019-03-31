@@ -18,7 +18,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-class Issue185 extends AbstractResolutionTest {
+class Issue185Test extends AbstractResolutionTest {
 
     @Test
     void testIssue() throws IOException {

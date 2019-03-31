@@ -15,7 +15,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class Issue347 extends AbstractResolutionTest{
+class Issue347Test extends AbstractResolutionTest{
 
     private TypeSolver typeSolver;
     private JavaParserFacade javaParserFacade;

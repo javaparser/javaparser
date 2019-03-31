@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.resolution.types;
+package com.github.javaparser.symbolsolver.resolution.types;
 
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import org.junit.jupiter.api.Test;
 

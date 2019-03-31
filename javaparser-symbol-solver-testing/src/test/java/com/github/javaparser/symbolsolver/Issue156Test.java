@@ -2,29 +2,29 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class Issue251 extends AbstractResolutionTest{
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class Issue156Test extends AbstractResolutionTest {
 
     @Test
-    void testSolveStaticallyImportedMemberType() {
-        CompilationUnit cu = parseSample("Issue251");
-        ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Main");
+    void testFieldAccessThroughClassAndThis() {
+
+        CompilationUnit cu = parseSample("Issue156");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Issue156");
+          List<MethodCallExpr> methods = clazz.getChildNodes().get(3).getChildNodes().get(1).findAll(MethodCallExpr.class);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        MethodDeclaration m = Navigator.demandMethod(cls, "bar");
-        ExpressionStmt stmt = (ExpressionStmt) m.getBody().get().getStatements().get(1);
-        MethodCallExpr expression = (MethodCallExpr) stmt.getExpression();
-        Assertions.assertNotNull(javaParserFacade.solve(expression));
+
+        assertEquals("char", javaParserFacade.getType(methods.get(0)).describe());
     }
 }

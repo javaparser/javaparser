@@ -18,7 +18,7 @@ import java.nio.file.Path;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 
-class Issue257 extends AbstractSymbolResolutionTest {
+class Issue257Test extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 

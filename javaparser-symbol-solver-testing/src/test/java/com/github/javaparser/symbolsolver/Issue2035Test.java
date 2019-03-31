@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class Issue2035 {
+class Issue2035Test {
 
     private JavaParser javaParser;
 
