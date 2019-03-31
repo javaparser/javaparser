@@ -190,16 +190,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return (T) this;
     }
 
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
-        return getDeclarationAsString(includingModifiers, includingThrows, true);
-    }
-
-    public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true, true);
-    }
-
-    public abstract String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName);
-
     protected String appendThrowsIfRequested(boolean includingThrows) {
         StringBuilder sb = new StringBuilder();
         if (includingThrows) {

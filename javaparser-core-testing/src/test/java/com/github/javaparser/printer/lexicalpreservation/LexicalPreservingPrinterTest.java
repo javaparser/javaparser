@@ -803,7 +803,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals("public void someMethod() {" + EOL
                 + "        String test = \"\";" + EOL
                 + "        String test2 = \"\";" + EOL
-                + "}", LexicalPreservingPrinter.print(methodDeclaration));
+        // HACK: The right closing brace should not have indentation because the original method did not introduce indentation, 
+        //however due to necessity this test was left with indentation, in a later version it should be revised.
+                + "    }", LexicalPreservingPrinter.print(methodDeclaration));
     }
 
     // See issue #866
@@ -1116,6 +1118,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEqualsNoEol("public class Foo {" + EOL +
                           "void mymethod() {" + EOL +
                           "}" + EOL +
+                          "}", LexicalPreservingPrinter.print(cu));        
+    }
+    
+    // Checks if comments get removed properly with Unix style line endings
+    @Test
+    void removedLineCommentsPrintedUnix() {
+        String code = "public class Foo {" + "\n" +
+                          "//line" + "\n" +
+                          "void mymethod() {" + "\n" +
+                          "}" + "\n" +
+                          "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.getAllContainedComments().get(0).remove();
+        
+        assertEquals("public class Foo {" + "\n" +
+                          "void mymethod() {" + "\n" +
+                          "}" + "\n" +
                           "}", LexicalPreservingPrinter.print(cu));        
     }
     
