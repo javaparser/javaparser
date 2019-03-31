@@ -22,7 +22,6 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.logic.MultipleResultTypesLogic;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -45,8 +44,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
-
-    private final MultipleResultTypesLogic multipleResultTypesLogic = new MultipleResultTypesLogic();
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
@@ -505,28 +502,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return node.getVariables().get(0).accept(this, solveLambdas);
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
-    }
-
-    @Override
-    public ResolvedType visit(SwitchExpr switchExpr, Boolean solveLambdas) {
-        Stream<ResolvedType> allSwitchEntriesResolved = switchExpr.getEntries().stream()
-                .map(entry -> entry.accept(this, solveLambdas));
-        return multipleResultTypesLogic.findResultType(allSwitchEntriesResolved);
-    }
-
-    @Override
-    public ResolvedType visit(SwitchEntry entry, Boolean solveLambdas) {
-        switch (entry.getType()) {
-            case STATEMENT_GROUP:
-            case BLOCK:
-                return multipleResultTypesLogic.findResultType(entry, BreakStmt.class, bs -> bs.accept(this, solveLambdas));
-            case EXPRESSION:
-                return entry.getStatement(0).asExpressionStmt().getExpression().accept(this, solveLambdas);
-            case THROWS_STATEMENT:
-                return ResolvedVoidType.INSTANCE;
-            default:
-                throw new IllegalStateException("This kind of switch entry is not supported yet.");
-        }
     }
 
     @Override
