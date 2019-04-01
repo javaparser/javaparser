@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 
-class Issue1491 {
+class Issue1491Test {
 
     @Test
     void verifyIssue1491SolvingClassInSameFile() throws FileNotFoundException {

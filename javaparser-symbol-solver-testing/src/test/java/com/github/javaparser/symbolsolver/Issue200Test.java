@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue200 extends AbstractResolutionTest {
+class Issue200Test extends AbstractResolutionTest {
 
     @Test
     void issue200() {

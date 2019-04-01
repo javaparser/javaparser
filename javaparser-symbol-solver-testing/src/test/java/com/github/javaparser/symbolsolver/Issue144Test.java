@@ -20,7 +20,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue144 extends AbstractResolutionTest {
+class Issue144Test extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 

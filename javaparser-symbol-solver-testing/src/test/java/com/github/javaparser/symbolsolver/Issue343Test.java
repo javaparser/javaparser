@@ -13,7 +13,7 @@ import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class Issue343 extends AbstractResolutionTest{
+class Issue343Test extends AbstractResolutionTest{
 
     private TypeSolver typeResolver;
     private JavaParserFacade javaParserFacade;

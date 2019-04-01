@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FindingAllFields extends AbstractResolutionTest {
+class FindingAllFieldsTest extends AbstractResolutionTest {
 
     @Test
     void findAllInheritedFields() {

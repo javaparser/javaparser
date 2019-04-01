@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue228 extends AbstractResolutionTest{
+class Issue228Test extends AbstractResolutionTest{
 
     @Test
     void testSolvingMethodWitPrimitiveParameterTypeAsUsage() {

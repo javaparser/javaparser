@@ -38,7 +38,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class Issue300 extends AbstractResolutionTest {
+class Issue300Test extends AbstractResolutionTest {
 
     @Test
     void fieldAccessIssue() throws IOException {

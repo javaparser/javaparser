@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue113 extends AbstractSymbolResolutionTest {
+class Issue113Test extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolver;
 
