@@ -276,7 +276,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typeParametersMap = new ArrayList<>();
         if (!isRawType()) {
             for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-                typeParametersMap.add(new Pair<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+                typeParametersMap.add(new Pair<>(typeDeclaration.getTypeParameters().get(i), typeParametersValues().get(i)));
             }
         }
         return typeParametersMap;
