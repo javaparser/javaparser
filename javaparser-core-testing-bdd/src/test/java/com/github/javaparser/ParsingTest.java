@@ -19,10 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser;
 
-import com.github.javaparser.bdd.steps.ComparingSteps;
-import com.github.javaparser.bdd.steps.SharedSteps;
+import com.github.javaparser.steps.ParsingSteps;
+import com.github.javaparser.steps.SharedSteps;
 import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnitReportingRunner.class)
-public class ComparingTest extends BasicJBehaveTest {
+public class ParsingTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
@@ -40,11 +40,11 @@ public class ComparingTest extends BasicJBehaveTest {
 
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
-                new ComparingSteps());
+                new ParsingSteps(state));
     }
 
-    public ComparingTest() {
-        super("**/bdd/comparing*.story");
+    public ParsingTest() {
+        super("**/parsing*.story");
     }
 }
 

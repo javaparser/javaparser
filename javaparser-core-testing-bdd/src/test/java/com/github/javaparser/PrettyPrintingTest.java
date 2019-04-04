@@ -19,31 +19,24 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser;
 
-import com.github.javaparser.bdd.steps.ManipulationSteps;
-import com.github.javaparser.bdd.steps.SharedSteps;
+import com.github.javaparser.steps.PrettyPrintingSteps;
 import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RunWith(JUnitReportingRunner.class)
-public class ManipulationTest extends BasicJBehaveTest {
+public class PrettyPrintingTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        Map<String, Object> state = new HashMap<>();
-
-        return new InstanceStepsFactory(configuration(),
-                new SharedSteps(state),
-                new ManipulationSteps(state));
+        return new InstanceStepsFactory(configuration(), new PrettyPrintingSteps());
     }
 
-    public ManipulationTest() {
-        super("**/bdd/manipulation*.story");
+    public PrettyPrintingTest() {
+        super("**/pretty_printing*.story");
     }
 }
+

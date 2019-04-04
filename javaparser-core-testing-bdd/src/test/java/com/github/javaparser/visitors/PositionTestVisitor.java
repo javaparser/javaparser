@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.visitors;
+package com.github.javaparser.visitors;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.*;

@@ -19,12 +19,9 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.steps;
+package com.github.javaparser.steps;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Range;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -48,10 +45,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.bdd.TestUtils.getSampleStream;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
+import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,14 +69,18 @@ public class CommentParsingSteps {
     }
 
     @When("read sample \"$sampleName\" using encoding \"$encoding\"")
-    public void givenTheClassWithEncoding(String sampleName, String encoding) throws IOException {
+    public void givenTheClassWithEncoding(String sampleName, String encoding) {
         sourceUnderTest = null;
-        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(getSampleStream(sampleName), Charset.forName(encoding)));
+        ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(
+                COMPILATION_UNIT,
+                provider(
+                        TestUtils.getSampleStream(sampleName),
+                        Charset.forName(encoding)));
         commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }
 
     @When("the class is parsed by the comment parser")
-    public void whenTheClassIsParsedByTheCommentParser() throws IOException {
+    public void whenTheClassIsParsedByTheCommentParser() {
         ParseResult<CompilationUnit> parseResult = new JavaParser(new ParserConfiguration()).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         commentsCollection = parseResult.getCommentsCollection().orElse(new CommentsCollection());
     }

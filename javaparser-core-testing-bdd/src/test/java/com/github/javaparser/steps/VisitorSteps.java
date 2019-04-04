@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.steps;
+package com.github.javaparser.steps;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
@@ -28,7 +28,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericListVisitorAdapter;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.bdd.visitors.PositionTestVisitor;
+import com.github.javaparser.visitors.PositionTestVisitor;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;

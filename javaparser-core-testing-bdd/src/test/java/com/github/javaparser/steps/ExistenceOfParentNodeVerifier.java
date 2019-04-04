@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.steps;
+package com.github.javaparser.steps;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.*;

@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.steps;
+package com.github.javaparser.steps;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -48,7 +48,7 @@ import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.staticModifier;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.hamcrest.MatcherAssert.assertThat;

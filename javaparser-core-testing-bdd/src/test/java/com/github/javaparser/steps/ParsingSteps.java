@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd.steps;
+package com.github.javaparser.steps;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -41,8 +41,8 @@ import java.util.Map;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMemberByTypeAndPosition;
-import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
+import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static java.lang.String.format;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;

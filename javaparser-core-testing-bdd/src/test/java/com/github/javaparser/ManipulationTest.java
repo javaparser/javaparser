@@ -19,10 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser;
 
-import com.github.javaparser.bdd.steps.SharedSteps;
-import com.github.javaparser.bdd.steps.VisitorSteps;
+import com.github.javaparser.steps.ManipulationSteps;
+import com.github.javaparser.steps.SharedSteps;
 import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
@@ -32,20 +32,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(JUnitReportingRunner.class)
-public class VisitorTest extends BasicJBehaveTest {
+public class ManipulationTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
         Map<String, Object> state = new HashMap<>();
+
         return new InstanceStepsFactory(configuration(),
                 new SharedSteps(state),
-                new VisitorSteps(state));
+                new ManipulationSteps(state));
     }
 
-    public VisitorTest() {
-        super("**/bdd/visitor*.story");
+    public ManipulationTest() {
+        super("**/manipulation*.story");
     }
 }
-
-
-

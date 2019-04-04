@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser;
 
 
 import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
@@ -40,7 +40,7 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     private final String storiesPath;
 
-    public BasicJBehaveTest(String storiesPath) {
+    BasicJBehaveTest(String storiesPath) {
         this.storiesPath = storiesPath;
         JUnitReportingRunner.recommendedControls(configuredEmbedder());
     }

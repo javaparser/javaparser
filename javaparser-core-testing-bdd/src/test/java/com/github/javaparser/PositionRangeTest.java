@@ -19,10 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.bdd;
+package com.github.javaparser;
 
-import com.github.javaparser.bdd.steps.PositionRangeSteps;
-import com.github.javaparser.bdd.steps.SharedSteps;
+import com.github.javaparser.steps.PositionRangeSteps;
+import com.github.javaparser.steps.SharedSteps;
 import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
@@ -44,7 +44,7 @@ public class PositionRangeTest extends BasicJBehaveTest {
     }
 
     public PositionRangeTest() {
-        super("**/bdd/position_range*.story");
+        super("**/position_range*.story");
     }
 }
 
