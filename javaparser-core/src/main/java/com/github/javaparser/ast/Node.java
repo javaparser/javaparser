@@ -48,12 +48,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -457,6 +458,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
         }
         return value;
+    }
+
+    /**
+     * This method was added to support the clone method.
+     *
+     * @return all known data keys.
+     */
+    public Set<DataKey<?>> getDataKeys() {
+        if (data == null) {
+            return emptySet();
+        }
+        return data.keySet();
     }
 
     /**
