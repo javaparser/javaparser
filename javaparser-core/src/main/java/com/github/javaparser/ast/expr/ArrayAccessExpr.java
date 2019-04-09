@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ArrayAccessExpr extends Expression {
+public class ArrayAccessExpr extends Expression {
 
     private Expression name;
 

@@ -42,7 +42,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class IntegerLiteralExpr extends LiteralStringValueExpr {
+public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public IntegerLiteralExpr() {
         this(null, "0");

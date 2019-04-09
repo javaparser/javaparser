@@ -32,7 +32,6 @@ import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.Generated;
@@ -49,7 +48,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public final class Name extends Node implements NodeWithIdentifier<Name> {
+public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @NonEmptyProperty
     private String identifier;

@@ -74,7 +74,7 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                 }
             });
         } catch (IOException e) {
-            Log.error(e, "Unable to walk %s", path);
+            Log.error(e, "Unable to walk %s", () -> path);
         }
         return projectRoot;
     }

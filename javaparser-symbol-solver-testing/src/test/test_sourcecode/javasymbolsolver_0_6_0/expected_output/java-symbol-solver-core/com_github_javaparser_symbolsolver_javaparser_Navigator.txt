@@ -4,13 +4,13 @@
   Line 49) cu.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
   Line 50) Optional.empty() ==> java.util.Optional.empty()
   Line 53) getOuterTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getOuterTypeName(java.lang.String)
-  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst() ==> ERROR
-  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)) ==> ERROR
+  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst() ==> java.util.stream.Stream.findFirst()
+  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 54) cu.getTypes().stream() ==> java.util.Collection.stream()
   Line 54) cu.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
-  Line 54) t.getName().getId().equals(typeName) ==> ERROR
-  Line 54) t.getName().getId() ==> ERROR
-  Line 54) t.getName() ==> ERROR
+  Line 54) t.getName().getId().equals(typeName) ==> java.lang.String.equals(java.lang.Object)
+  Line 54) t.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 54) t.getName() ==> com.github.javaparser.ast.body.TypeDeclaration.getName()
   Line 56) getInnerTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getInnerTypeName(java.lang.String)
   Line 57) type.isPresent() ==> java.util.Optional.isPresent()
   Line 57) innerTypeName.isEmpty() ==> java.lang.String.isEmpty()

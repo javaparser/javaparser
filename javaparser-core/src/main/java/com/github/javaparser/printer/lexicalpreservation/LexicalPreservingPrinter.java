@@ -137,11 +137,7 @@ public class LexicalPreservingPrinter {
                         if (((Comment) oldValue).isOrphan()){
                             nodeText = getOrCreateNodeText(observedNode);
                         }
-                        
-                        List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
-                        
-                        TokenTextElement matchingElement = matchingTokens.get(0);
-                        int index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
+                        int index = getIndexOfComment ((Comment) oldValue, nodeText);
                         nodeText.removeElement(index);
                         if (nodeText.getElements().get(index).isNewline()) {
                             nodeText.removeElement(index);
@@ -153,6 +149,10 @@ public class LexicalPreservingPrinter {
                     if (oldValue instanceof JavadocComment) {
                         List<TokenTextElement> matchingTokens = findTokenTextElementForComment((JavadocComment) oldValue, nodeText);
 
+                        if (matchingTokens.size() != 1) {
+                            throw new IllegalStateException("The matching comment to be replaced could not be found");
+                        }
+                        
                         JavadocComment newJavadocComment = (JavadocComment) newValue;
                         TokenTextElement matchingElement = matchingTokens.get(0);
                         nodeText.replace(matchingElement.and(matchingElement.matchByRange()), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
@@ -168,6 +168,47 @@ public class LexicalPreservingPrinter {
             }
 
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
+        }
+        
+        private int getIndexOfComment (Comment oldValue, NodeText nodeText) {
+            int index;
+            List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
+            
+            if (!matchingTokens.isEmpty()){
+                TextElement matchingElement = matchingTokens.get(0);
+                index = nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
+            } else {
+                // If no matching TokenTextElements were found, we try searching through ChildTextElements as well
+                List<ChildTextElement> matchingChilds = findChildTextElementForComment (oldValue, nodeText);
+                ChildTextElement matchingChild = matchingChilds.get(0);
+                index = nodeText.findElement(matchingChild.and(matchingChild.matchByRange()));
+            }
+            
+            return index;
+        }
+        
+        private List<ChildTextElement> findChildTextElementForComment (Comment oldValue, NodeText nodeText) {
+            List<ChildTextElement> matchingChildElements;
+            
+            matchingChildElements = nodeText.getElements().stream()
+                    .filter(e -> e.isChild())
+                    .map(c -> (ChildTextElement) c)
+                    .filter(c -> c.isComment())
+                    .filter(c -> ((Comment)c.getChild()).getContent().equals(oldValue.getContent()))
+                    .collect(Collectors.toList());
+            
+            if (matchingChildElements.size() > 1) {           
+                // Duplicate child nodes found, refine the result
+                matchingChildElements = matchingChildElements.stream()
+                    .filter(t -> isEqualRange(t.getChild().getRange(), oldValue.getRange()))
+                    .collect(Collectors.toList());
+            }
+            
+            if (matchingChildElements.size() != 1) {
+                throw new IllegalStateException("The matching child text element for the comment to be removed could not be found.");
+            }
+            
+            return matchingChildElements;
         }
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
@@ -189,7 +230,7 @@ public class LexicalPreservingPrinter {
                 matchingTokens = nodeText.getElements().stream()
                     .filter(e -> e.isToken(SINGLE_LINE_COMMENT))
                     .map(e -> (TokenTextElement) e)
-                    .filter(t -> t.getText().equals("//" + oldValue.getContent() + System.lineSeparator()))
+                    .filter(t -> t.getText().trim().equals(("//" + oldValue.getContent()).trim()))
                     .collect(Collectors.toList());
             }
 
@@ -199,10 +240,7 @@ public class LexicalPreservingPrinter {
                         .filter(t -> isEqualRange(t.getToken().getRange(), oldValue.getRange()))
                         .collect(Collectors.toList());
             }
-
-            if (matchingTokens.size() != 1) {
-                throw new IllegalStateException("The matching comment to be removed / replaced could not be found");
-            }
+            
             return matchingTokens;
         }
 

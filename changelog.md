@@ -1,8 +1,40 @@
-Version 3.13.0
+Version 3.13.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/132?closed=1)
+
+Version 3.13.5
+------------------
+* "BREAKING": `ReferenceType.getDirectAncestors()` no longer returns `java.lang.Object` when called on a `ReferenceType` of `java.lang.Object`.
+This remedies infinite recursions in certain edge cases. If you relied on the old behavior, you have to add a `ReferenceType` instance of `java.lang.Object`
+to the List returned by `ReferenceType.getDirectAncestors()` yourself.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/131?closed=1)
+
+Version 3.13.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/130?closed=1)
+
+Version 3.13.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/129?closed=1)
+
+Version 3.13.2
+------------------
+* Version 3.13.0 and 3.13.1 contain rather bad bugs that have been fixed here.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/128?closed=1)
+
+Version 3.13.1 (buggy!)
+------------------
+* Slightly breaking: most parameters to Log methods now take consumers to avoid evaluating them when not necessary. 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/127?closed=1)
+
+Version 3.13.0 (buggy!)
 ------------------
 * "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
 
-[issues resolved](https://github.com/javaparser/javaparser/milestone/125?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/126?closed=1)
 
 Version 3.12.0
 ------------------

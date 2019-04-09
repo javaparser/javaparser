@@ -66,7 +66,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.expr.VariableDeclarationExpr
  */
-public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
+public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     private NodeList<Expression> initialization;
 
