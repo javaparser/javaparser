@@ -12,4 +12,9 @@ class TokenRangeTest {
         CompilationUnit cu = parse("class X {\n\tX(){\n// hello\n}\n}");
         assertEquals("X(){\n// hello\n}", cu.getClassByName("X").get().getDefaultConstructor().get().getTokenRange().get().toString());
     }
+    
+    @Test
+    void testRangeRecalculation() {
+        
+    }
 }
