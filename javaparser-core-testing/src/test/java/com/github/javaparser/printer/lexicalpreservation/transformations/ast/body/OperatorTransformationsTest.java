@@ -35,21 +35,21 @@ import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservi
 class OperatorTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
-    void binaryExpressionOperator() throws IOException {
+    void binaryExpressionOperator() {
         considerExpression("a && b");
         expression.asBinaryExpr().setRight(new NameExpr("c"));
         assertTransformedToString("a && c", expression);
     }
     
     @Test
-    void unaryExpressionOperator() throws IOException {
+    void unaryExpressionOperator() {
         considerExpression("!a");
         expression.asUnaryExpr().setExpression(new NameExpr("b"));
         assertTransformedToString("!b", expression);
     }
     
     @Test
-    void assignExpressionOperator() throws IOException {
+    void assignExpressionOperator() {
         considerExpression("a <<= 1");
         expression.asAssignExpr().setValue(new IntegerLiteralExpr(2));
         assertTransformedToString("a <<= 2", expression);
