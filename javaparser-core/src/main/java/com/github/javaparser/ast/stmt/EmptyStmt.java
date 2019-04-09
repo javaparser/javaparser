@@ -36,7 +36,7 @@ import com.github.javaparser.ast.Generated;
  * An empty statement is a ";" where a statement is expected.
  * @author Julio Vilmar Gesser
  */
-public final class EmptyStmt extends Statement {
+public class EmptyStmt extends Statement {
 
     @AllFieldsConstructor
     public EmptyStmt() {

@@ -6,6 +6,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.TempDirectory;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserTypeSolverTest {
 
+    @Disabled
     @Test
     void containsLocationInStorage() {
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(CodeGenerationUtils.mavenModuleRoot(JavaParserTypeSolver.class).resolve("src/main/java"), new LeanParserConfiguration());

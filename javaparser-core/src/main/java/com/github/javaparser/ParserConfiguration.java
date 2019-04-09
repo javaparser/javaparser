@@ -30,6 +30,7 @@ import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,39 +45,73 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ParserConfiguration {
     public enum LanguageLevel {
-        /** Does no post processing or validation. Only for people wanting the fastest parsing. */
+        /**
+         * Does no post processing or validation. Only for people wanting the fastest parsing.
+         */
         RAW(null, null),
-        /** The most used Java version. */
+        /**
+         * The most used Java version.
+         */
         POPULAR(new Java8Validator(), null),
-        /** The latest Java version that is available. */
+        /**
+         * The latest Java version that is available.
+         */
         CURRENT(new Java8Validator(), null),
-        /** The newest Java features supported. */
+        /**
+         * The newest Java features supported.
+         */
         BLEEDING_EDGE(new Java12Validator(), new Java12PostProcessor()),
-        /** Java 1.0 */
+        /**
+         * Java 1.0
+         */
         JAVA_1_0(new Java1_0Validator(), null),
-        /** Java 1.1 */
+        /**
+         * Java 1.1
+         */
         JAVA_1_1(new Java1_1Validator(), null),
-        /** Java 1.2 */
+        /**
+         * Java 1.2
+         */
         JAVA_1_2(new Java1_2Validator(), null),
-        /** Java 1.3 */
+        /**
+         * Java 1.3
+         */
         JAVA_1_3(new Java1_3Validator(), null),
-        /** Java 1.4 */
+        /**
+         * Java 1.4
+         */
         JAVA_1_4(new Java1_4Validator(), null),
-        /** Java 5 */
+        /**
+         * Java 5
+         */
         JAVA_5(new Java5Validator(), null),
-        /** Java 6 */
+        /**
+         * Java 6
+         */
         JAVA_6(new Java6Validator(), null),
-        /** Java 7 */
+        /**
+         * Java 7
+         */
         JAVA_7(new Java7Validator(), null),
-        /** Java 8 */
+        /**
+         * Java 8
+         */
         JAVA_8(new Java8Validator(), null),
-        /** Java 9 */
+        /**
+         * Java 9
+         */
         JAVA_9(new Java9Validator(), null),
-        /** Java 10 */
+        /**
+         * Java 10
+         */
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
-        /** Java 11 */
+        /**
+         * Java 11
+         */
         JAVA_11(new Java11Validator(), new Java11PostProcessor()),
-        /** Java 12 */
+        /**
+         * Java 12
+         */
         JAVA_12(new Java12Validator(), new Java12PostProcessor());
 
         final Validator validator;
@@ -97,6 +132,7 @@ public class ParserConfiguration {
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private LanguageLevel languageLevel = CURRENT;
+    private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
@@ -110,9 +146,7 @@ public class ParserConfiguration {
         });
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
-                if (configuration.isLexicalPreservationEnabled()) {
-                    result.ifSuccessful(LexicalPreservingPrinter::setup);
-                }
+                result.ifSuccessful(LexicalPreservingPrinter::setup);
             }
         });
         postProcessors.add((result, configuration) -> {
@@ -262,4 +296,17 @@ public class ParserConfiguration {
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
     }
+
+    public Charset getCharacterEncoding() {
+        return characterEncoding;
+    }
+
+    /**
+     * The character encoding used for reading input from files and streams. By default UTF8 is used.
+     */
+    public ParserConfiguration setCharacterEncoding(Charset characterEncoding) {
+        this.characterEncoding = characterEncoding;
+        return this;
+    }
+
 }

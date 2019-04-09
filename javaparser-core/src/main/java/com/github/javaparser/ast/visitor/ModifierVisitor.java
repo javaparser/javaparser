@@ -34,13 +34,15 @@ import com.github.javaparser.utils.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
+import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
  * Returning null will remove the node.
- *
+ * <p>
  * If a node is removed that was required in its parent node,
  * the parent node will be removed too.
  *
@@ -1070,13 +1072,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         }
         for (Pair<Node, Node> change : changeList) {
             if (change.b == null) {
-                n.remove(change.a);
+                removeElementByObjectIdentity(n, change.a);
             } else {
-                final int i = n.indexOf(change.a);
-                // If the user removed this item by hand, ignore the change.
-                if (i != -1) {
-                    n.set(i, change.b);
-                }
+                replaceElementByObjectIdentity(n, change.a, change.b);
             }
         }
         return n;

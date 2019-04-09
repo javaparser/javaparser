@@ -42,7 +42,7 @@ import com.github.javaparser.ast.Generated;
  * the first one contains the expression "1",
  * the second the expression "2".
  */
-public final class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
+public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
 
     @OptionalProperty
     private Expression dimension;

@@ -19,7 +19,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * A uses directive in module-info.java. <code>uses V.W;</code>
  */
-public final class ModuleUsesDirective extends ModuleDirective implements NodeWithName<ModuleUsesDirective> {
+public class ModuleUsesDirective extends ModuleDirective implements NodeWithName<ModuleUsesDirective> {
 
     private Name name;
 

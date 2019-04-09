@@ -54,6 +54,7 @@ public class CloneVisitorGenerator extends VisitorGenerator {
 
         body.addStatement(builder.toString());
         body.addStatement("r.setComment(comment);");
+        body.addStatement("copyData(n, r);");
         body.addStatement("return r;");
     }
 }

@@ -59,6 +59,8 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <p>
@@ -75,7 +77,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see TypeDeclaration
  * @see Storage
  */
-public final class CompilationUnit extends Node {
+public class CompilationUnit extends Node {
 
     @OptionalProperty
     private PackageDeclaration packageDeclaration;

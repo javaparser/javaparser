@@ -1,0 +1,29 @@
+@startuml
+node core {
+    [Java parser] <-- [AST]
+    [Javadoc parser]
+    [AST] <-- [lexical preserving printer]
+    [AST] <-- [concrete syntax model]
+    [concrete syntax model] <-- [lexical preserving printer]
+    events <-- [lexical preserving printer]
+    [AST] <-- [comments inserter]
+    [AST] <-- [visitors]
+    [AST] <-- [meta model]
+    [AST] <-- [pretty printer]
+    [visitors] <-- [pretty printer]
+    [AST] - symbol_resolution
+    [AST] - events
+    [visitors] <-- [code generators]
+    [AST] <-- [code generators]
+    [meta model] <-- [code generators]
+    [AST] <-- [JSON (de)serializer]
+    [Java parser] <- [source root]
+}
+node symbol-solver {
+    [AST] <- [model]
+    symbol_resolution <- [model]
+    [model] <-- [core]
+    [model] <-- [logic]
+    [logic] <-- [core]
+}
+@enduml

@@ -48,12 +48,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -143,7 +144,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+    private static PrettyPrinterConfiguration toStringPrettyPrinterConfiguration = new PrettyPrinterConfiguration();
 
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
@@ -275,15 +276,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Return the String representation of this node.
-     *
-     * @return the String representation of this node
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
      */
     @Override
     public final String toString() {
-        return toStringPrinter.print(this);
+        return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
 
+    /**
+     * @return pretty printed source code for this node and its children.
+     * Formatting can be configured with parameter prettyPrinterConfiguration.
+     */
     public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         return new PrettyPrinter(prettyPrinterConfiguration).print(this);
     }
@@ -454,6 +458,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             throw new IllegalStateException("No data of this type found. Use containsData to check for this first.");
         }
         return value;
+    }
+
+    /**
+     * This method was added to support the clone method.
+     *
+     * @return all known data keys.
+     */
+    public Set<DataKey<?>> getDataKeys() {
+        if (data == null) {
+            return emptySet();
+        }
+        return data.keySet();
     }
 
     /**
@@ -650,6 +666,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public Node setParsed(Parsedness parsed) {
         this.parsed = parsed;
         return this;
+    }
+
+    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
+        return toStringPrettyPrinterConfiguration;
+    }
+
+    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
+        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")

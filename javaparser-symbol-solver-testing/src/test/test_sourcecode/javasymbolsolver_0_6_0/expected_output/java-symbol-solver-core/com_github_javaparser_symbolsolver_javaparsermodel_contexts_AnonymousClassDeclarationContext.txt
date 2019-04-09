@@ -60,19 +60,19 @@
   Line 127) internalType.getName() ==> com.github.javaparser.ast.body.TypeDeclaration.getName()
   Line 130) recursiveMatch.isPresent() ==> java.util.Optional.isPresent()
   Line 131) recursiveMatch.get() ==> java.util.Optional.get()
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst().map(matchingType -> SymbolReference.solved(new JavaParserTypeParameter(new TypeParameter(matchingType.toString()), typeSolver))) ==> ERROR
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst() ==> ERROR
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)) ==> ERROR
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst().map(matchingType -> SymbolReference.solved(new JavaParserTypeParameter(new TypeParameter(matchingType.toString()), typeSolver))) ==> java.util.Optional.map(java.util.function.Function<? super T, ? extends U>)
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst() ==> java.util.stream.Stream.findFirst()
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream() ==> java.util.Collection.stream()
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()) ==> java.util.Optional.orElse(T)
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())) ==> java.util.Optional.map(java.util.function.Function<? super T, ? extends U>)
   Line 135) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getTypeArguments()
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>()) ==> java.util.Optional.orElse(T)
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.getTypeArguments()
-  Line 142) type.toString().equals(name) ==> ERROR
-  Line 142) type.toString() ==> ERROR
+  Line 142) type.toString().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 142) type.toString() ==> com.github.javaparser.ast.Node.toString()
   Line 145) SymbolReference.solved(new JavaParserTypeParameter(new TypeParameter(matchingType.toString()), typeSolver)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
-  Line 146) matchingType.toString() ==> ERROR
+  Line 146) matchingType.toString() ==> com.github.javaparser.ast.Node.toString()
   Line 149) typeArgumentsMatch.isPresent() ==> java.util.Optional.isPresent()
   Line 150) typeArgumentsMatch.get() ==> java.util.Optional.get()
   Line 154) myDeclaration.getAncestors() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getAncestors()

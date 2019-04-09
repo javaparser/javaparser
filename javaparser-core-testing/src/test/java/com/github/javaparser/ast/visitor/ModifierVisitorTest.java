@@ -21,12 +21,15 @@
 
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
@@ -123,5 +126,19 @@ class ModifierVisitorTest {
         }, null);
 
         assertEquals("void x() {" + EOL + "}", result.toString());
+    }
+
+    @Test
+    void issue2124() {
+        ModifierVisitor<Void> modifier = new ModifierVisitor<>();
+        CompilationUnit cu = StaticJavaParser.parse("\n" +
+                "public class ModifierVisitorTest {\n" +
+                "    private void causesException() {\n" +
+                "        String[] listWithExtraCommaAndEqualElements = {\"a\", \"a\",};\n" +
+                "    }\n" +
+                "}");
+        LexicalPreservingPrinter.setup(cu);
+        cu.accept(modifier, null);
+        System.out.println(LexicalPreservingPrinter.print(cu));
     }
 }

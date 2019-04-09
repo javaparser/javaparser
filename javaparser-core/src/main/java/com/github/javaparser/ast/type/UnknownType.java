@@ -45,7 +45,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Didier Villevalois
  */
-public final class UnknownType extends Type {
+public class UnknownType extends Type {
 
     @AllFieldsConstructor
     public UnknownType() {
