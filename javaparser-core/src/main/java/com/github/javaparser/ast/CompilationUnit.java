@@ -577,27 +577,23 @@ public class CompilationUnit extends Node {
         return module;
     }
 
+    /**
+     * Recalculates the ranges of all nodes by looking at the sizes of the tokens.
+     * This is useful when you have manually inserted or deleted tokens and still want to use the ranges.
+     */
     public void recalculatePositions() {
         if (!getTokenRange().isPresent()) {
             throw new IllegalStateException("Can't recalculate positions without tokens.");
         }
         Position cursor = Position.HOME;
         for (JavaToken t : getTokenRange().get()) {
-            final Position begin = cursor;
-            final Position end;
-            if (t.getKind() == EOF.getKind()) {
-                // EOF is the only token with empty text.
-                end = begin;
-            } else {
-                end = cursor.right(t.getText().length() - 1);
-            }
+            int tokenLength = t.getKind() == EOF.getKind() ? 0 : t.getText().length() - 1;
+            t.setRange(range(cursor, cursor.right(tokenLength)));
             if (t.getCategory().isEndOfLine()) {
                 cursor = cursor.nextLine();
             } else {
-                cursor = cursor.right(t.getText().length());
+                cursor = cursor.right(tokenLength + 1);
             }
-            System.out.println(t);
-            t.setRange(range(begin, end));
         }
     }
 
