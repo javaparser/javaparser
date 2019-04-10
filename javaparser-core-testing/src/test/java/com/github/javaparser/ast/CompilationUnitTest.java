@@ -29,8 +29,7 @@ import java.nio.file.Paths;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CompilationUnitTest {
     @Test
@@ -54,7 +53,7 @@ class CompilationUnitTest {
     }
 
     @Test
-    void testGetSourceRootWithBadPackageDeclaration() throws IOException {
+    void testGetSourceRootWithBadPackageDeclaration() {
         assertThrows(RuntimeException.class, () -> {
             Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
@@ -87,7 +86,7 @@ class CompilationUnitTest {
     void testNoPrimaryTypeName() {
         CompilationUnit cu = parse("class PrimaryType{}");
 
-        assertEquals(false, cu.getPrimaryTypeName().isPresent());
+        assertFalse(cu.getPrimaryTypeName().isPresent());
     }
     @Test
     void testGetPrimaryType() throws IOException {
@@ -104,7 +103,7 @@ class CompilationUnitTest {
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType2.java"));
         CompilationUnit cu = parse(testFile);
 
-        assertEquals(false, cu.getPrimaryType().isPresent());
+        assertFalse(cu.getPrimaryType().isPresent());
     }
 
 }

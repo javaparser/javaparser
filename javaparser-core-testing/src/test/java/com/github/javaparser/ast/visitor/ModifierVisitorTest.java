@@ -36,6 +36,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ModifierVisitorTest {
     @Test
@@ -112,7 +113,7 @@ class ModifierVisitorTest {
             }
         }, null);
 
-        assertEquals(null, result);
+        assertNull(result);
     }
 
     @Test

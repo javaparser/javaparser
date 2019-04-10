@@ -13,3 +13,9 @@ notifications:
 after_success:
   - mvn -B test jacoco:report coveralls:report
 # http://lint.travis-ci.org/ validator
+env:
+  global:
+    - secure: ORUzol/BaGhDxYAH2bd4X+pHVT0/R9CugN3n7mY14CjD1EVBcQahUYtmSg9DlXNUUAb7zrCDPB7vsDXkU8eTttAt/GD74C3mNmG9VUvwWeTIaY2JOcwLmcJkP7cOm3O6c+E2AMa8hXtOUuHkXd0da/vIl+FA4i64IgONdk4AZE8=
+
+after_script:
+  - ./fixup.sh
