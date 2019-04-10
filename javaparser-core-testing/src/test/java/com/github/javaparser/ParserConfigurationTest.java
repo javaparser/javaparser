@@ -26,7 +26,7 @@ class ParserConfigurationTest {
         ParseResult<Statement> result =
                 new JavaParser(new ParserConfiguration().setLanguageLevel(RAW))
                         .parse(STATEMENT, provider("try{}"));
-        assertEquals(true, result.isSuccessful());
+        assertTrue(result.isSuccessful());
     }
 
 

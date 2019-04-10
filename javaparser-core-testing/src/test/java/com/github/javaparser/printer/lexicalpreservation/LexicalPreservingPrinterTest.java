@@ -42,7 +42,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // CU
         assertEquals(1, getTextForNode(cu).numberOfElements());
-        assertEquals(true, getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
+        assertTrue(getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
         assertEquals(cu.getClassByName("A").get(), ((ChildTextElement) getTextForNode(cu).getTextElement(0)).getChild());
 
         // Class
@@ -55,7 +55,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals("{", getTextForNode(classA).getTextElement(4).expand());
         assertEquals("}", getTextForNode(classA).getTextElement(5).expand());
         assertEquals("", getTextForNode(classA).getTextElement(6).expand());
-        assertEquals(true, getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
+        assertTrue(getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
         assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement) getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
 

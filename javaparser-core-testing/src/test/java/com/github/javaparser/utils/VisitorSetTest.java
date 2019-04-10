@@ -87,10 +87,10 @@ class VisitorSetTest {
         Iterator<CompilationUnit> itr = set.iterator();
         assertEquals(x1, itr.next());
         itr.remove();
-        assertTrue(set.size() == 1);
+        assertEquals(1, set.size());
         assertEquals(x2, itr.next());
         itr.remove();
-        assertTrue(set.size() == 0);
+        assertEquals(0, set.size());
     }
 
     @Test
@@ -111,7 +111,7 @@ class VisitorSetTest {
                 new ObjectIdentityEqualsVisitor());
         set.addAll(list);
         set.removeAll(list);
-        assertTrue(set.size() == 0);
+        assertEquals(0, set.size());
     }
 
     @Test
@@ -124,7 +124,7 @@ class VisitorSetTest {
         set.addAll(list);
         set.add(parse("class X{}"));
         set.retainAll(list);
-        assertTrue(set.size() == 2);
+        assertEquals(2, set.size());
     }
 
     @Test

@@ -49,7 +49,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
     // Name
 
     @Test
-    void settingName() throws IOException {
+    void settingName() {
         ConstructorDeclaration cd = consider("A(){}");
         cd.setName("B");
         assertTransformedToString("B(){}", cd);
@@ -67,7 +67,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
     }
 
     @Test
-    void removingModifiers() throws IOException {
+    void removingModifiers() {
         ConstructorDeclaration cd = consider("public A(){}");
         cd.setModifiers(new NodeList<>());
         assertTransformedToString("A(){}", cd);

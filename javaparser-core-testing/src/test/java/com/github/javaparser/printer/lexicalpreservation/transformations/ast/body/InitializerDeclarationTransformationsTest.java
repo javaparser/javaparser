@@ -44,14 +44,14 @@ class InitializerDeclarationTransformationsTest extends AbstractLexicalPreservin
     // IsStatic
 
     @Test
-    void instanceToStatic() throws IOException {
+    void instanceToStatic() {
         InitializerDeclaration it = consider("{ /*some comment*/ }");
         it.setStatic(true);
         assertTransformedToString("static { /*some comment*/ }", it);
     }
 
     @Test
-    void staticToInstance() throws IOException {
+    void staticToInstance() {
         InitializerDeclaration it = consider("static { /*some comment*/ }");
         it.setStatic(false);
         assertTransformedToString("{ /*some comment*/ }", it);

@@ -75,7 +75,7 @@ class NodePositionTest {
       ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
     }
 
-    private void ensureAllNodesHaveValidBeginPosition(final String code) throws IOException {
+    private void ensureAllNodesHaveValidBeginPosition(final String code) {
         ParseResult<CompilationUnit> res = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(res.getProblems().isEmpty());
 
