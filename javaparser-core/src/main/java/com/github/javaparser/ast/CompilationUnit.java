@@ -20,10 +20,7 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -45,6 +42,7 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,13 +50,17 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static com.github.javaparser.JavaToken.Kind.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.*;
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
@@ -573,6 +575,30 @@ public class CompilationUnit extends Node {
         final ModuleDeclaration module = new ModuleDeclaration(parseName(name), false);
         setModule(module);
         return module;
+    }
+
+    public void recalculatePositions() {
+        if (!getTokenRange().isPresent()) {
+            throw new IllegalStateException("Can't recalculate positions without tokens.");
+        }
+        Position cursor = Position.HOME;
+        for (JavaToken t : getTokenRange().get()) {
+            final Position begin = cursor;
+            final Position end;
+            if (t.getKind() == EOF.getKind()) {
+                // EOF is the only token with empty text.
+                end = begin;
+            } else {
+                end = cursor.right(t.getText().length() - 1);
+            }
+            if (t.getCategory().isEndOfLine()) {
+                cursor = cursor.nextLine();
+            } else {
+                cursor = cursor.right(t.getText().length());
+            }
+            System.out.println(t);
+            t.setRange(range(begin, end));
+        }
     }
 
     /**
