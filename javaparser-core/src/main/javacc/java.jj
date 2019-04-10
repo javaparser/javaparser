@@ -169,7 +169,7 @@ TOKEN_MGR_DECLS :
 
 SPECIAL_TOKEN :
 {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
 }
 
 MORE :
