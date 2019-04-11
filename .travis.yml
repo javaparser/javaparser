@@ -2,6 +2,9 @@ sudo: false
 language: java
 install: mvn -B install -DskipTests=true
 script: mvn -B test -P AlsoSlowTests
+cache:
+  directories:
+    - $HOME/.ivy2
 jdk:
   - openjdk11
 notifications:
@@ -18,4 +21,4 @@ env:
     - secure: ORUzol/BaGhDxYAH2bd4X+pHVT0/R9CugN3n7mY14CjD1EVBcQahUYtmSg9DlXNUUAb7zrCDPB7vsDXkU8eTttAt/GD74C3mNmG9VUvwWeTIaY2JOcwLmcJkP7cOm3O6c+E2AMa8hXtOUuHkXd0da/vIl+FA4i64IgONdk4AZE8=
 
 after_script:
-  - ./fixup.sh
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./fixup.sh fi

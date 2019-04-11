@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+mvn org.walkmod.maven.plugins:walkmod-maven-plugin:apply -Dchains=pmd -Dproperties="configurationFile=ruleset.xml" -Dpath=src/main/java
+git diff > walkmod.patch
+
 if [ "$TRAVIS_PULL_REQUEST" = false ] ; then
     echo 'Skipped build. This is not a pull request'
     exit 0
