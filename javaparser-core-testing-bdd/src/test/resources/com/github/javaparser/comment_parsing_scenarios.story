@@ -20,10 +20,10 @@ Then line comment 3 is " third comment"
 Then line comment 4 is " fourth comment"
 Then the line comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|6|9|6|25|
-|7|18|7|35|
-|8|9|8|25|
-|9|9|9|26|
+|6|9|6|24|
+|7|18|7|34|
+|8|9|8|24|
+|9|9|9|25|
 
 Scenario: A Class With Block Comments is processed by the Comments Parser
 
@@ -139,10 +139,10 @@ When the class is parsed by the comment parser
 Then the total number of comments is 7
 Then the line comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
-|5|5|5|20|
-|7|5|7|28|
-|9|5|9|20|
-|19|5|19|21|
+|5|5|5|19|
+|7|5|7|27|
+|9|5|9|19|
+|19|5|19|20|
 Then the block comments have the following positions:
 |beginLine|beginColumn|endLine|endColumn|
 |1|1|1|26|
