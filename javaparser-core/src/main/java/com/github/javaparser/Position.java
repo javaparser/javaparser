@@ -64,6 +64,20 @@ public class Position implements Comparable<Position> {
     }
 
     /**
+     * @return a position that is "characters" characters more to the right than this position.
+     */
+    public Position right(int characters) {
+        return new Position(line, this.column + characters);
+    }
+
+    /**
+     * @return a position that is on the start of the next line from this position.
+     */
+    public Position nextLine() {
+        return new Position(line + 1, HOME.column);
+    }
+
+    /**
      * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
      * the end of the source.
      */
