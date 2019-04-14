@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset  name="Default Maven PMD Plugin Ruleset">
+  <description>
+The default ruleset used by the Maven PMD Plugin, when no other ruleset is specified. It contains the rules of the old (pre PMD 6.0.0) rulesets java-basic, java-empty, java-imports, java-unnecessary, java-unusedcode. This ruleset might be used as a starting point for an own customized ruleset [0]. [0] https://pmd.github.io/latest/pmd_userdocs_understanding_rulesets.html
+</description>
+    <rule ref="rulesets/java/imports.xml/DontImportJavaLang">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/strings.xml/StringToString">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/BigIntegerInstantiation">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/migrating.xml/IntegerInstantiation">
+       <priority>3</priority>
+   </rule>
+   <rule ref="rulesets/java/imports.xml/DuplicateImports">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/SimplifyBooleanExpressions">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/EmptyFinalizer">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/migrating.xml/ByteInstantiation">
+       <priority>3</priority>
+   </rule>
+   <rule ref="rulesets/java/imports.xml/TooManyStaticImports">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/AvoidUsingOctalValues">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/EqualsNull">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/ClassCastExceptionWithToArray">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/AvoidMultipleUnaryOperators">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/naming.xml/AvoidDollarSigns">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/BooleanInstantiation">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/naming.xml/NoPackage">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/CompareObjectsWithEquals">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/FinalizeOnlyCallsSuperFinalize">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/JumbledIncrementer">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/PositionLiteralsFirstInComparisons">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/strings.xml/UseStringBufferLength">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/controversial.xml/DontImportSun">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/FinalizeOverloaded">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/AvoidProtectedFieldInFinalClass">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/ReturnFromFinallyBlock">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/strings.xml/UnnecessaryCaseChange">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/FinalizeShouldBeProtected">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/controversial.xml/SuspiciousOctalEscape">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/AvoidThreadGroup">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/naming.xml/ClassNamingConventions">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/controversial.xml/AvoidUsingNativeCode">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/FinalizeDoesNotCallSuperFinalize">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/migrating.xml/ShortInstantiation">
+       <priority>3</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/UnconditionalIfStatement">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/AvoidDecimalLiteralsInBigDecimalConstructor">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/MisplacedNullCheck">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/naming.xml/SuspiciousEqualsMethodName">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/IdempotentOperations">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/migrating.xml/LongInstantiation">
+       <priority>3</priority>
+   </rule>
+   <rule ref="rulesets/java/imports.xml/ImportFromSamePackage">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/SimplifyConditional">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/finalizers.xml/AvoidCallingFinalize">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/design.xml/UseCollectionIsEmpty">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/naming.xml/SuspiciousHashcodeMethodName">
+       <priority>2</priority>
+   </rule>
+   <rule ref="rulesets/java/basic.xml/BrokenNullCheck">
+       <priority>2</priority>
+   </rule>
+</ruleset>
