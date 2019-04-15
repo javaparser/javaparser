@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -12,14 +13,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.reflectionmodel.*;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**
  * @author Federico Tomassetti
@@ -87,7 +86,7 @@ public class JavaParserTypeDeclarationAdapter {
                     if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
                         ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = internalTypeDeclaration.asReferenceType();
                         if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
-                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier() != PRIVATE;
+                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier() != AccessSpecifier.PRIVATE;
                         }
                     }
                     if (internalTypeDeclaration.getName().equals(name)) {

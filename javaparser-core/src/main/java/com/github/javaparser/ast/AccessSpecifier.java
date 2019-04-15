@@ -19,21 +19,29 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.declarations;
-
-import com.github.javaparser.ast.AccessSpecifier;
+package com.github.javaparser.ast;
 
 /**
- * Anything which can have an AccessSpecifier.
+ * Access specifier. Represents one of the possible levels of
+ * access permitted by the language.
  *
  * @author Federico Tomassetti
- * @see AccessSpecifier
+ * @since July 2014
  */
-public interface HasAccessSpecifier {
+public enum AccessSpecifier {
 
-    /**
-     * The access specifier of this element.
-     */
-    AccessSpecifier accessSpecifier();
+    PUBLIC("public"),
+    PRIVATE("private"),
+    PROTECTED("protected"),
+    PACKAGE_PRIVATE("");
 
+    private String codeRepresenation;
+
+    AccessSpecifier(String codeRepresentation) {
+        this.codeRepresenation = codeRepresentation;
+    }
+
+    public String asString() {
+        return this.codeRepresenation;
+    }
 }
