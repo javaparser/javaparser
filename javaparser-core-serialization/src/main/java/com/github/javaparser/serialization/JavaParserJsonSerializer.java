@@ -50,7 +50,11 @@ public class JavaParserJsonSerializer {
     public void serialize(Node node, JsonGenerator generator) {
         requireNonNull(node);
         Log.info("Serializing Node to JSON.");
-        serialize(null, node, generator);
+        try {
+            serialize(null, node, generator);
+        } finally {
+            generator.close();
+        }
     }
 
     /**
