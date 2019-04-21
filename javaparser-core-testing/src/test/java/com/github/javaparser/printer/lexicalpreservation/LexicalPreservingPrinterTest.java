@@ -1169,4 +1169,36 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
     }
 
+    @Test
+    void issue2137() {
+        String code = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        String expected = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod3() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+
+        ClassOrInterfaceDeclaration type = cu.getClassByName("Foo").get();
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName("mymethod3");
+        methodDeclaration.setType(new VoidType());
+        type.getMembers().add(1, methodDeclaration);
+
+        assertEqualsNoEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+
 }
