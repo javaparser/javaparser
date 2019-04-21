@@ -48,11 +48,10 @@ public class Difference {
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
-        List<TextElement> res = new LinkedList<>();
-        res.addAll(indentation);
+        List<TextElement> res = new LinkedList<>(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isNewline() || e.isToken(SINGLE_LINE_COMMENT)) {
+            if (e.isNewline()) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -388,7 +387,7 @@ public class Difference {
             } else {
                 throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
             }
-        } else if (removed.isWhiteSpace()) {
+        } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
             diffIndex++;
         } else if (originalElement.isWhiteSpace()) {
             originalIndex++;
@@ -589,11 +588,8 @@ public class Difference {
             // Handling trailing comments
             if(nodeText.numberOfElements() > originalIndex + 1 &&
                     nodeText.getTextElement(originalIndex).isComment()) {
-                String expanded = nodeText.getTextElement(originalIndex).expand();
-                if(expanded.startsWith("/*")) {
-                    originalIndex++; // "/*" comments need an extra increment
-                }
-                originalIndex++; // Any trailing comment requires increment of the originalIndex
+                // Need to get behind the comment:
+                originalIndex += 2;
                 nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);

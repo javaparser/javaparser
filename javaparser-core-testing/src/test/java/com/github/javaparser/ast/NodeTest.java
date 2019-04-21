@@ -215,7 +215,7 @@ class NodeTest {
         cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
 
         // I cannot remove the name of a type
-        assertEquals(false, cu.getClassByName("A").get().getName().remove());
+        assertFalse(cu.getClassByName("A").get().getName().remove());
         assertEquals(Arrays.asList(), changes);
     }
 
@@ -238,7 +238,7 @@ class NodeTest {
         };
         cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
 
-        assertEquals(true, cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().remove());
+        assertTrue(cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().remove());
         assertEquals(Arrays.asList("setting [BODY] to null"), changes);
     }
 
@@ -248,7 +248,7 @@ class NodeTest {
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
-        assertTrue(decl == c.getParentNode().get());
+        assertSame(decl, c.getParentNode().get());
         assertTrue(decl.removeOrphanComment(c));
         assertEquals(0, decl.getOrphanComments().size());
         assertFalse(c.getParentNode().isPresent());
@@ -272,7 +272,7 @@ class NodeTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setJavadocComment("A comment");
-        assertEquals(true, decl.hasJavaDocComment());
+        assertTrue(decl.hasJavaDocComment());
     }
 
     @Test
@@ -280,14 +280,14 @@ class NodeTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
-        assertEquals(true, decl.hasJavaDocComment());
+        assertTrue(decl.hasJavaDocComment());
     }
 
     @Test
     void hasJavaDocCommentNegativeCaseNoComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
-        assertEquals(false, decl.hasJavaDocComment());
+        assertFalse(decl.hasJavaDocComment());
     }
 
     @Test
@@ -295,7 +295,7 @@ class NodeTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new LineComment("foo"));
-        assertEquals(false, decl.hasJavaDocComment());
+        assertFalse(decl.hasJavaDocComment());
     }
 
     @Test
@@ -303,7 +303,7 @@ class NodeTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new BlockComment("foo"));
-        assertEquals(false, decl.hasJavaDocComment());
+        assertFalse(decl.hasJavaDocComment());
     }
 
     @Test

@@ -30,6 +30,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NodeRemovalTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -39,7 +40,7 @@ class NodeRemovalTest {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         assertEquals(1, cu.getTypes().size());
         boolean remove = testClass.remove();
-        assertEquals(true, remove);
+        assertTrue(remove);
         assertEquals(0, cu.getTypes().size());
     }
 
@@ -50,7 +51,7 @@ class NodeRemovalTest {
         FieldDeclaration addField = testClass.addField(String.class, "test");
         assertEquals(1, testClass.getMembers().size());
         boolean remove = addField.remove();
-        assertEquals(true, remove);
+        assertTrue(remove);
         assertEquals(0, testClass.getMembers().size());
     }
 
@@ -63,7 +64,7 @@ class NodeRemovalTest {
         Statement addStatement = methodBody.addAndGetStatement("test");
         assertEquals(1, methodBody.getStatements().size());
         boolean remove = addStatement.remove();
-        assertEquals(true, remove);
+        assertTrue(remove);
         assertEquals(0, methodBody.getStatements().size());
     }
 }

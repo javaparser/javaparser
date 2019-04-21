@@ -45,14 +45,14 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
-    void ifStmtTransformation() throws IOException {
+    void ifStmtTransformation() {
         Statement stmt = consider("if (a) {} else {}");
         stmt.asIfStmt().setCondition(new NameExpr("b"));
         assertTransformedToString("if (b) {} else {}", stmt);
     }
 
     @Test
-    void switchEntryCsmHasTrailingUnindent() throws IOException {
+    void switchEntryCsmHasTrailingUnindent() {
         Statement stmt = consider("switch (a) { case 1: a; a; }");
         NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
         statements.set(1, statements.get(1).clone()); // clone() to force replacement
