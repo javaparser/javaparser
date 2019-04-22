@@ -1,5 +1,9 @@
-Version 3.13.8
+Version 3.13.9
 ------------------
+
+Version 3.13.8 (failed)
+------------------
+(release failed)
 [issues resolved](https://github.com/javaparser/javaparser/milestone/134?closed=1)
 
 Version 3.13.7
