@@ -1,3 +1,19 @@
+Version 3.13.9
+------------------
+
+Version 3.13.8 (failed)
+------------------
+(release failed)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/134?closed=1)
+
+Version 3.13.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/133?closed=1)
+
+Version 3.13.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/132?closed=1)
+
 Version 3.13.5
 ------------------
 * "BREAKING": `ReferenceType.getDirectAncestors()` no longer returns `java.lang.Object` when called on a `ReferenceType` of `java.lang.Object`.

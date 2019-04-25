@@ -29,7 +29,15 @@ public interface SwitchNode {
     boolean replace(Node node, Node replacementNode);
 
     Optional<Comment> getComment();
-    
+
+    /**
+     * @return true if there are no labels or anything contained in this switch.
+     */
+    default boolean isEmpty() {
+        return getEntries().isEmpty();
+    }
+
+
     // Too bad Node isn't an interface, or this could have easily inherited all of its methods.
     // Add more when required.
 }

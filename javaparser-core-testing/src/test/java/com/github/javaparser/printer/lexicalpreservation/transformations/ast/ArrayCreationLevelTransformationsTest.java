@@ -47,21 +47,21 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     // Dimension
 
     @Test
-    void addingDimension() throws IOException {
+    void addingDimension() {
         ArrayCreationLevel it = consider("[]");
         it.setDimension(new IntegerLiteralExpr("10"));
         assertTransformedToString("[10]", it);
     }
 
     @Test
-    void removingDimension() throws IOException {
+    void removingDimension() {
         ArrayCreationLevel it = consider("[10]");
         it.removeDimension();
         assertTransformedToString("[]", it);
     }
 
     @Test
-    void replacingDimension() throws IOException {
+    void replacingDimension() {
         ArrayCreationLevel it = consider("[10]");
         it.setDimension(new IntegerLiteralExpr("12"));
         assertTransformedToString("[12]", it);
@@ -70,21 +70,21 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     // Annotations
 
     @Test
-    void addingAnnotation() throws IOException {
+    void addingAnnotation() {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
         assertTransformedToString("@myAnno()"+ Utils.EOL+"[]", it);
     }
 
     @Test
-    void removingAnnotation() throws IOException {
+    void removingAnnotation() {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().remove(0);
         assertTransformedToString("[]", it);
     }
 
     @Test
-    void replacingAnnotation() throws IOException {
+    void replacingAnnotation() {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
         assertTransformedToString("@myOtherAnno() []", it);
