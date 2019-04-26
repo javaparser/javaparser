@@ -21,15 +21,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.utils.Utils.EOL;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
@@ -51,12 +52,19 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
         it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int A;", it);
     }
-
+    
     @Test
     void removingModifiers() {
         FieldDeclaration it = consider("public int A;");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("int A;", it);
+    }
+    
+    @Test
+    void removingModifiersFromNonPrimitiveType() {
+        FieldDeclaration it = consider("public String A;");
+        it.setModifiers(new NodeList<>());
+        assertTransformedToString("String A;", it);
     }
 
     @Test
@@ -80,6 +88,7 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
     public void changingNonePrimitiveTypes() {
         FieldDeclaration it = consider("String a;");
         it.getVariable(0).setType("Xyz");
+        assertTransformedToString("Xyz a", it);
     }
 
     // Annotations
