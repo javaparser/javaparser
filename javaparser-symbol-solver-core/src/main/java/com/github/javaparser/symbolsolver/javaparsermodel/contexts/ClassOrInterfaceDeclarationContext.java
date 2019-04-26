@@ -18,10 +18,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -88,6 +90,13 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        // First attempt to resolve against implemented classes - cf. issue #2195
+        for (ClassOrInterfaceType classOrInterfaceType : wrappedNode.getImplementedTypes()) {
+            if (classOrInterfaceType.getName().getId().equals(name)) {
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver).solveType(name);
+            }
+        }
+
         return javaParserTypeDeclarationAdapter.solveType(name);
     }
 
