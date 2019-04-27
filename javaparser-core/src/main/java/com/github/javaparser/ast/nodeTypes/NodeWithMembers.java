@@ -390,4 +390,11 @@ public interface NodeWithMembers<N extends Node> {
                 .map(m -> (FieldDeclaration) m)
                 .collect(toList()));
     }
+
+    /**
+     * @return true if there are no members contained in this node.
+     */
+    default boolean isEmpty() {
+        return getMembers().isEmpty();
+    }
 }

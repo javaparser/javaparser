@@ -19,31 +19,29 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.nodeTypes;
+package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.Statement;
+/**
+ * Access specifier. Represents one of the possible levels of
+ * access permitted by the language.
+ *
+ * @author Federico Tomassetti
+ * @since July 2014
+ */
+public enum AccessSpecifier {
 
-public interface NodeWithBody<N extends Node> {
-    Statement getBody();
+    PUBLIC("public"),
+    PRIVATE("private"),
+    PROTECTED("protected"),
+    PACKAGE_PRIVATE("");
 
-    N setBody(final Statement body);
+    private String codeRepresenation;
 
-    default BlockStmt createBlockStatementAsBody() {
-        BlockStmt b = new BlockStmt();
-        setBody(b);
-        return b;
+    AccessSpecifier(String codeRepresentation) {
+        this.codeRepresenation = codeRepresentation;
     }
 
-    /**
-     * @return true if the body is an {@link EmptyStmt} or an empty {@link BlockStmt}
-     */
-    default boolean hasEmptyBody() {
-        Statement body = getBody();
-        return body.toBlockStmt().map(bs -> bs.isEmpty())
-                .orElse(body.isEmptyStmt());
+    public String asString() {
+        return this.codeRepresenation;
     }
-
 }
