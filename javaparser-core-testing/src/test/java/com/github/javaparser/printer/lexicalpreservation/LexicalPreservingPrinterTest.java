@@ -42,7 +42,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // CU
         assertEquals(1, getTextForNode(cu).numberOfElements());
-        assertEquals(true, getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
+        assertTrue(getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
         assertEquals(cu.getClassByName("A").get(), ((ChildTextElement) getTextForNode(cu).getTextElement(0)).getChild());
 
         // Class
@@ -55,7 +55,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals("{", getTextForNode(classA).getTextElement(4).expand());
         assertEquals("}", getTextForNode(classA).getTextElement(5).expand());
         assertEquals("", getTextForNode(classA).getTextElement(6).expand());
-        assertEquals(true, getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
+        assertTrue(getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
         assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement) getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
 
@@ -1169,4 +1169,15 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }", LexicalPreservingPrinter.print(compilationUnit));
     }
 
+    @Test
+    void issue2001() {
+        CompilationUnit compilationUnit = parse("class X {void blubb(){X.p(\"blaubb04\");}}");
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        compilationUnit
+                .findAll(MethodCallExpr.class)
+                .forEach(Node::removeForced);
+
+        assertEqualsNoEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+    }
 }

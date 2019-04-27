@@ -21,80 +21,78 @@
 
 package com.github.javaparser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class RangeTest {
 
     @Test
-    void aRangeContainsItself() throws IOException {
+    void aRangeContainsItself() {
         Range r = Range.range(1, 1, 3, 10);
-        assertEquals(true, r.contains(r));
+        assertTrue(r.contains(r));
     }
 
     @Test
-    void aRangeDoesNotStrictlyContainsItself() throws IOException {
+    void aRangeDoesNotStrictlyContainsItself() {
         Range r = Range.range(1, 1, 3, 10);
-        assertEquals(false, r.strictlyContains(r));
+        assertFalse(r.strictlyContains(r));
     }
 
     @Test
-    void overlappingButNotContainedRangesAreNotOnContains() throws IOException {
+    void overlappingButNotContainedRangesAreNotOnContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 7, 10);
-        assertEquals(false, r1.contains(r2));
-        assertEquals(false, r2.contains(r1));
+        assertFalse(r1.contains(r2));
+        assertFalse(r2.contains(r1));
     }
 
     @Test
-    void overlappingButNotContainedRangesAreNotOnStrictlyContains() throws IOException {
+    void overlappingButNotContainedRangesAreNotOnStrictlyContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 7, 10);
-        assertEquals(false, r1.strictlyContains(r2));
-        assertEquals(false, r2.strictlyContains(r1));
+        assertFalse(r1.strictlyContains(r2));
+        assertFalse(r2.strictlyContains(r1));
     }
 
     @Test
-    void unrelatedRangesAreNotOnContains() throws IOException {
+    void unrelatedRangesAreNotOnContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(5, 1, 7, 10);
-        assertEquals(false, r1.contains(r2));
-        assertEquals(false, r2.contains(r1));
+        assertFalse(r1.contains(r2));
+        assertFalse(r2.contains(r1));
     }
 
     @Test
-    void unrelatedRangesAreNotOnStrictlyContains() throws IOException {
+    void unrelatedRangesAreNotOnStrictlyContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(5, 1, 7, 10);
-        assertEquals(false, r1.strictlyContains(r2));
-        assertEquals(false, r2.strictlyContains(r1));
+        assertFalse(r1.strictlyContains(r2));
+        assertFalse(r2.strictlyContains(r1));
     }
 
     @Test
-    void strictlyContainedRangesOnContains() throws IOException {
+    void strictlyContainedRangesOnContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 3, 4);
-        assertEquals(true, r1.contains(r2));
-        assertEquals(false, r2.contains(r1));
+        assertTrue(r1.contains(r2));
+        assertFalse(r2.contains(r1));
     }
 
     @Test
-    void strictlyContainedRangesOnStrictlyContains() throws IOException {
+    void strictlyContainedRangesOnStrictlyContains() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(2, 1, 3, 4);
-        assertEquals(true, r1.strictlyContains(r2));
-        assertEquals(false, r2.strictlyContains(r1));
+        assertTrue(r1.strictlyContains(r2));
+        assertFalse(r2.strictlyContains(r1));
     }
 
     @Test
     void containsConsiderLines() {
         Range r1 = Range.range(22, 9, 22, 29);
         Range r2 = Range.range(26, 19, 26, 28);
-        assertEquals(false, r1.contains(r2));
-        assertEquals(false, r2.contains(r1));
+        assertFalse(r1.contains(r2));
+        assertFalse(r2.contains(r1));
     }
 
     @Test
