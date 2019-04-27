@@ -70,6 +70,13 @@ public interface NodeWithMembers<N extends Node> {
         return (N) this;
     }
 
+    @SuppressWarnings("unchecked")
+    default N addMember(BodyDeclaration<?> member, int index) {
+        getMembers().add(index, member);
+        return (N) this;
+    }
+
+
     N setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
