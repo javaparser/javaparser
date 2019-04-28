@@ -6,7 +6,7 @@ cache:
   directories:
     - $HOME/.ivy2
 jdk:
-  - openjdk12
+  - openjdk11
 notifications:
   webhooks:
     urls:
