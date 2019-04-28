@@ -481,7 +481,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void register(AstObserver observer) {
-        this.observers.add(observer);
+        if(!this.observers.contains(observer)) {
+            this.observers.add(observer);
+        }
     }
 
     @Override
