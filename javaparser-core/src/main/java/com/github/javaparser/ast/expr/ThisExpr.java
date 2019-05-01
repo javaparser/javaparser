@@ -39,11 +39,9 @@ import com.github.javaparser.ast.Generated;
 /**
  * An occurrence of the "this" keyword. <br/>
  * <code>World.this.greet()</code> is a MethodCallExpr of method name greet,
- * and scope "World.this" which is a ThisExpr with classExpr "World". <br/>
+ * and scope "World.this" which is a ThisExpr with typeName "World". <br/>
  * <code>this.name</code> is a FieldAccessExpr of field greet, and a ThisExpr as its scope.
- * This ThisExpr has no classExpr.
- * <br>If classExpr is a single identifier (a.this) then it is of type NameExpr.
- * If classExpr has multiple identifiers (a.b.c.this) then it is of type FieldAccessExpr.
+ * This ThisExpr has no typeName.
  *
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
@@ -52,24 +50,24 @@ import com.github.javaparser.ast.Generated;
 public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
     @OptionalProperty
-    private Name className;
+    private Name typeName;
 
     public ThisExpr() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public ThisExpr(final Name className) {
-        this(null, className);
+    public ThisExpr(final Name typeName) {
+        this(null, typeName);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ThisExpr(TokenRange tokenRange, Name className) {
+    public ThisExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        setClassName(className);
+        setTypeName(typeName);
         customInitialization();
     }
 
@@ -86,20 +84,20 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Name> getClassName() {
-        return Optional.ofNullable(className);
+    public Optional<Name> getTypeName() {
+        return Optional.ofNullable(typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ThisExpr setClassName(final Name className) {
-        if (className == this.className) {
+    public ThisExpr setTypeName(final Name typeName) {
+        if (typeName == this.typeName) {
             return (ThisExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.className, className);
-        if (this.className != null)
-            this.className.setParentNode(null);
-        this.className = className;
-        setAsParentNodeOf(className);
+        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.typeName, typeName);
+        if (this.typeName != null)
+            this.typeName.setParentNode(null);
+        this.typeName = typeName;
+        setAsParentNodeOf(typeName);
         return this;
     }
 
@@ -108,8 +106,8 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (className != null) {
-            if (node == className) {
+        if (typeName != null) {
+            if (node == typeName) {
                 removeClassName();
                 return true;
             }
@@ -119,7 +117,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassName() {
-        return setClassName((Name) null);
+        return setTypeName((Name) null);
     }
 
     @Override
@@ -139,9 +137,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (className != null) {
-            if (node == className) {
-                setClassName((Name) replacementNode);
+        if (typeName != null) {
+            if (node == typeName) {
+                setTypeName((Name) replacementNode);
                 return true;
             }
         }

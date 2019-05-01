@@ -37,11 +37,9 @@ import com.github.javaparser.ast.Generated;
 /**
  * An occurrence of the "super" keyword. <br/>
  * <code>World.super.greet()</code> is a MethodCallExpr of method name greet,
- * and scope "World.super" which is a SuperExpr with classExpr "World". <br/>
+ * and scope "World.super" which is a SuperExpr with typeName "World". <br/>
  * <code>super.name</code> is a FieldAccessExpr of field greet, and a SuperExpr as its scope.
- * This SuperExpr has no classExpr.
- * <br>If classExpr is a single identifier (a.this) then it is of type NameExpr.
- * If classExpr has multiple identifiers (a.b.c.this) then it is of type FieldAccessExpr.
+ * This SuperExpr has no typeName.
  *
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
@@ -50,24 +48,24 @@ import com.github.javaparser.ast.Generated;
 public class SuperExpr extends Expression {
 
     @OptionalProperty
-    private Name className;
+    private Name typeName;
 
     public SuperExpr() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public SuperExpr(final Name className) {
-        this(null, className);
+    public SuperExpr(final Name typeName) {
+        this(null, typeName);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SuperExpr(TokenRange tokenRange, Name className) {
+    public SuperExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        setClassName(className);
+        setTypeName(typeName);
         customInitialization();
     }
 
@@ -84,20 +82,20 @@ public class SuperExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Name> getClassName() {
-        return Optional.ofNullable(className);
+    public Optional<Name> getTypeName() {
+        return Optional.ofNullable(typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SuperExpr setClassName(final Name className) {
-        if (className == this.className) {
+    public SuperExpr setTypeName(final Name typeName) {
+        if (typeName == this.typeName) {
             return (SuperExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.className, className);
-        if (this.className != null)
-            this.className.setParentNode(null);
-        this.className = className;
-        setAsParentNodeOf(className);
+        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.typeName, typeName);
+        if (this.typeName != null)
+            this.typeName.setParentNode(null);
+        this.typeName = typeName;
+        setAsParentNodeOf(typeName);
         return this;
     }
 
@@ -106,8 +104,8 @@ public class SuperExpr extends Expression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (className != null) {
-            if (node == className) {
+        if (typeName != null) {
+            if (node == typeName) {
                 removeClassName();
                 return true;
             }
@@ -152,7 +150,7 @@ public class SuperExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeClassName() {
-        return setClassName((Name) null);
+        return setTypeName((Name) null);
     }
 
     @Override
@@ -160,9 +158,9 @@ public class SuperExpr extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (className != null) {
-            if (node == className) {
-                setClassName((Name) replacementNode);
+        if (typeName != null) {
+            if (node == typeName) {
+                setTypeName((Name) replacementNode);
                 return true;
             }
         }

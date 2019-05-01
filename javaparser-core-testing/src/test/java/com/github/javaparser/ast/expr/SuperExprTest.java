@@ -17,7 +17,7 @@ class SuperExprTest {
     void singleScopeSuper() {
         Expression expr = parseExpression("A.super");
 
-        Name className = expr.asSuperExpr().getClassName().get();
+        Name className = expr.asSuperExpr().getTypeName().get();
 
         assertEquals("A", className.asString());
     }
@@ -26,7 +26,7 @@ class SuperExprTest {
     void multiScopeSuper() {
         Expression expr = parseExpression("a.B.super");
 
-        Name className = expr.asSuperExpr().getClassName().get();
+        Name className = expr.asSuperExpr().getTypeName().get();
 
         assertEquals("a.B", className.asString());
     }

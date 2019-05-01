@@ -215,10 +215,10 @@ public class NameLogic {
         if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassName().isPresent() && p.getClassName().get() == c)) {
+        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getTypeName().isPresent() && p.getTypeName().get() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassName().isPresent() && p.getClassName().get() == c)) {
+        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getTypeName().isPresent() && p.getTypeName().get() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
@@ -692,14 +692,14 @@ public class NameLogic {
         // 8. To the left of .this in a qualified this expression (§15.8.4)
 
         if (whenParentIs(ThisExpr.class, name, (ne, c2) ->
-                ne.getClassName().isPresent() && ne.getClassName().get() == c2)) {
+                ne.getTypeName().isPresent() && ne.getTypeName().get() == c2)) {
             return true;
         }
 
         // 9. To the left of .super in a qualified superclass field access expression (§15.11.2)
 
         if (whenParentIs(SuperExpr.class, name, (ne, c2) ->
-                ne.getClassName().isPresent() && ne.getClassName().get() == c2)) {
+                ne.getTypeName().isPresent() && ne.getTypeName().get() == c2)) {
             return true;
         }
 

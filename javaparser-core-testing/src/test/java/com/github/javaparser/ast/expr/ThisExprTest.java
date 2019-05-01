@@ -18,7 +18,7 @@ class ThisExprTest {
     void singleScopeThis() {
         Expression expr = parseExpression("A.this");
 
-        Name className = expr.asThisExpr().getClassName().get();
+        Name className = expr.asThisExpr().getTypeName().get();
 
         assertEquals("A", className.asString());
     }
@@ -27,7 +27,7 @@ class ThisExprTest {
     void multiScopeThis() {
         Expression expr = parseExpression("a.B.this");
 
-        Name className = expr.asThisExpr().getClassName().get();
+        Name className = expr.asThisExpr().getTypeName().get();
 
         assertEquals("a.B", className.asString());
     }

@@ -598,7 +598,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final ThisExpr n, final Object arg) {
-        Name className = cloneNode(n.getClassName(), arg);
+        Name className = cloneNode(n.getTypeName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ThisExpr r = new ThisExpr(n.getTokenRange().orElse(null), className);
         r.setComment(comment);
@@ -608,7 +608,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SuperExpr n, final Object arg) {
-        Name className = cloneNode(n.getClassName(), arg);
+        Name className = cloneNode(n.getTypeName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SuperExpr r = new SuperExpr(n.getTokenRange().orElse(null), className);
         r.setComment(comment);
