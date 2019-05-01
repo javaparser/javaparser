@@ -215,7 +215,7 @@ public class NameLogic {
         if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassName().isPresent() && p.getClassName().get() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
@@ -691,14 +691,8 @@ public class NameLogic {
 
         // 8. To the left of .this in a qualified this expression (§15.8.4)
 
-        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
-                nameExpr.getName() == c && whenParentIs(ThisExpr.class, nameExpr, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
-        )) {
-            return true;
-        }
         if (whenParentIs(ThisExpr.class, name, (ne, c2) ->
-                ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
+                ne.getClassName().isPresent() && ne.getClassName().get() == c2)) {
             return true;
         }
 

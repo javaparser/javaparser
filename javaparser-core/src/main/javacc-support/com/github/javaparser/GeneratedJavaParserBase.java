@@ -353,4 +353,20 @@ abstract class GeneratedJavaParserBase {
         }
         return sb.toString();
     }
+
+    /**
+     * Converts a NameExpr or a FieldAccessExpr scope to a Name. 
+     */
+    Name scopeToName(Expression scope) {
+        if (scope.isNameExpr()) {
+            SimpleName simpleName = scope.asNameExpr().getName();
+            return new Name(simpleName.getTokenRange().get(), null, simpleName.getIdentifier());
+        }
+        if (scope.isFieldAccessExpr()) {
+            FieldAccessExpr fieldAccessExpr = scope.asFieldAccessExpr();
+            return new Name(fieldAccessExpr.getTokenRange().get(), scopeToName(fieldAccessExpr.getScope()), fieldAccessExpr.getName().getIdentifier());
+
+        }
+        throw new IllegalStateException("Unexpected expression type: " + scope.getClass().getSimpleName());
+    }
 }

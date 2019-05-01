@@ -479,7 +479,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ThisExpr.class, sequence(
                 comment(),
-                conditional(ObservableProperty.CLASS_EXPR, IS_PRESENT, sequence(child(CLASS_EXPR), token(GeneratedJavaParserConstants.DOT))),
+                conditional(CLASS_NAME, IS_PRESENT, sequence(child(CLASS_NAME), token(GeneratedJavaParserConstants.DOT))),
                 token(GeneratedJavaParserConstants.THIS)
         ));
 
