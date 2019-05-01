@@ -91,7 +91,7 @@ public class SuperExpr extends Expression {
         if (typeName == this.typeName) {
             return (SuperExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.typeName, typeName);
+        notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
         if (this.typeName != null)
             this.typeName.setParentNode(null);
         this.typeName = typeName;
@@ -106,7 +106,7 @@ public class SuperExpr extends Expression {
             return false;
         if (typeName != null) {
             if (node == typeName) {
-                removeClassName();
+                removeTypeName();
                 return true;
             }
         }
@@ -165,5 +165,9 @@ public class SuperExpr extends Expression {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    public SuperExpr removeTypeName() {
+        return setTypeName((Name) null);
     }
 }

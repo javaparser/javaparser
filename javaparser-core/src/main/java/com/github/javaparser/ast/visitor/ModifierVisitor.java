@@ -830,9 +830,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final SuperExpr n, final A arg) {
-        Name className = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
+        Name typeName = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setTypeName(className);
+        n.setTypeName(typeName);
         n.setComment(comment);
         return n;
     }
@@ -876,9 +876,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final ThisExpr n, final A arg) {
-        Name className = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
+        Name typeName = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setTypeName(className);
+        n.setTypeName(typeName);
         n.setComment(comment);
         return n;
     }

@@ -93,7 +93,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         if (typeName == this.typeName) {
             return (ThisExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.typeName, typeName);
+        notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
         if (this.typeName != null)
             this.typeName.setParentNode(null);
         this.typeName = typeName;
@@ -108,7 +108,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
             return false;
         if (typeName != null) {
             if (node == typeName) {
-                removeClassName();
+                removeTypeName();
                 return true;
             }
         }
@@ -172,5 +172,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThisExpr> toThisExpr() {
         return Optional.of(this);
+    }
+
+    public ThisExpr removeTypeName() {
+        return setTypeName((Name) null);
     }
 }
