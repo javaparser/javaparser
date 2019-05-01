@@ -1864,7 +1864,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(range(scope, token()), scope); }
+  	"." "super" { ret = new SuperExpr(range(scope, token()), scopeToName(scope)); }
   )
   { return ret; }
 }

@@ -218,7 +218,7 @@ public class NameLogic {
         if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassName().isPresent() && p.getClassName().get() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassName().isPresent() && p.getClassName().get() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
@@ -698,14 +698,8 @@ public class NameLogic {
 
         // 9. To the left of .super in a qualified superclass field access expression (§15.11.2)
 
-        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
-                nameExpr.getName() == c && whenParentIs(SuperExpr.class, nameExpr, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
-        )) {
-            return true;
-        }
         if (whenParentIs(SuperExpr.class, name, (ne, c2) ->
-                ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
+                ne.getClassName().isPresent() && ne.getClassName().get() == c2)) {
             return true;
         }
 
@@ -987,9 +981,10 @@ public class NameLogic {
         return whenParentIs(parentClass, child, (p, c) -> true);
     }
 
-    private static <P extends Node, C extends Node> boolean whenParentIs(Class<P> parentClass,
-                                                                         C child,
-                                                                         PredicateOnParentAndChild<P, C> predicate) {
+    private static <P extends Node, C extends Node> boolean whenParentIs(
+            Class<P> parentClass,
+            C child,
+            PredicateOnParentAndChild<P, C> predicate) {
         if (child.getParentNode().isPresent()) {
             Node parent = child.getParentNode().get();
             return parentClass.isInstance(parent) && predicate.isSatisfied(parentClass.cast(parent), child);

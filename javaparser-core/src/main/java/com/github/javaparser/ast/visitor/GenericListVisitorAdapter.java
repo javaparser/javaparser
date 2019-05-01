@@ -1471,8 +1471,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final SuperExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getClassExpr().isPresent()) {
-            tmp = n.getClassExpr().get().accept(this, arg);
+        if (n.getClassName().isPresent()) {
+            tmp = n.getClassName().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

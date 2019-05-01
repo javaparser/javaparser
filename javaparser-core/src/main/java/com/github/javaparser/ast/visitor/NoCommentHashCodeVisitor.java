@@ -307,7 +307,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final SuperExpr n, final Void arg) {
-        return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0);
+        return (n.getClassName().isPresent() ? n.getClassName().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final SwitchEntry n, final Void arg) {

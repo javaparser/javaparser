@@ -50,24 +50,24 @@ import com.github.javaparser.ast.Generated;
 public class SuperExpr extends Expression {
 
     @OptionalProperty
-    private Expression classExpr;
+    private Name className;
 
     public SuperExpr() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public SuperExpr(final Expression classExpr) {
-        this(null, classExpr);
+    public SuperExpr(final Name className) {
+        this(null, className);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SuperExpr(TokenRange tokenRange, Expression classExpr) {
+    public SuperExpr(TokenRange tokenRange, Name className) {
         super(tokenRange);
-        setClassExpr(classExpr);
+        setClassName(className);
         customInitialization();
     }
 
@@ -84,26 +84,20 @@ public class SuperExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getClassExpr() {
-        return Optional.ofNullable(classExpr);
+    public Optional<Name> getClassName() {
+        return Optional.ofNullable(className);
     }
 
-    /**
-     * Sets the classExpr
-     *
-     * @param classExpr the classExpr, can be null
-     * @return this, the SuperExpr
-     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SuperExpr setClassExpr(final Expression classExpr) {
-        if (classExpr == this.classExpr) {
+    public SuperExpr setClassName(final Name className) {
+        if (className == this.className) {
             return (SuperExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
-        if (this.classExpr != null)
-            this.classExpr.setParentNode(null);
-        this.classExpr = classExpr;
-        setAsParentNodeOf(classExpr);
+        notifyPropertyChange(ObservableProperty.CLASS_NAME, this.className, className);
+        if (this.className != null)
+            this.className.setParentNode(null);
+        this.className = className;
+        setAsParentNodeOf(className);
         return this;
     }
 
@@ -112,18 +106,13 @@ public class SuperExpr extends Expression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (classExpr != null) {
-            if (node == classExpr) {
-                removeClassExpr();
+        if (className != null) {
+            if (node == className) {
+                removeClassName();
                 return true;
             }
         }
         return super.remove(node);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public SuperExpr removeClassExpr() {
-        return setClassExpr((Expression) null);
     }
 
     @Override
@@ -136,20 +125,6 @@ public class SuperExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SuperExprMetaModel getMetaModel() {
         return JavaParserMetaModel.superExprMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        if (classExpr != null) {
-            if (node == classExpr) {
-                setClassExpr((Expression) replacementNode);
-                return true;
-            }
-        }
-        return super.replace(node, replacementNode);
     }
 
     @Override
@@ -173,5 +148,24 @@ public class SuperExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SuperExpr> toSuperExpr() {
         return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public SuperExpr removeClassName() {
+        return setClassName((Name) null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (className != null) {
+            if (node == className) {
+                setClassName((Name) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

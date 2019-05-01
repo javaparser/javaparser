@@ -651,7 +651,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final SuperExpr n, final Visitable arg) {
         final SuperExpr n2 = (SuperExpr) arg;
-        if (!nodeEquals(n.getClassExpr(), n2.getClassExpr()))
+        if (!nodeEquals(n.getClassName(), n2.getClassName()))
             return false;
         return true;
     }

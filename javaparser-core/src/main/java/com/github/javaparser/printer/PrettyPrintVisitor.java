@@ -719,8 +719,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final SuperExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        if (n.getClassExpr().isPresent()) {
-            n.getClassExpr().get().accept(this, arg);
+        if (n.getClassName().isPresent()) {
+            n.getClassName().get().accept(this, arg);
             printer.print(".");
         }
         printer.print("super");
