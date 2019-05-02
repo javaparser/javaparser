@@ -45,7 +45,8 @@ import java.nio.file.Path;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;import org.apache.log4j.Logger;
+
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -54,6 +55,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see StaticJavaParser
  */
 public final class JavaParser {
+    protected static Logger LOG = Logger.getLogger(JavaParser.class.getName());
+    
+
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
@@ -128,7 +132,7 @@ public final class JavaParser {
         } finally {
             try {
                 provider.close();
-            } catch (IOException e) {
+            } catch (@SuppressWarnings("squid:S1166") IOException e) {
                 // Since we're done parsing and have our result, we don't care about any errors.
             }
         }

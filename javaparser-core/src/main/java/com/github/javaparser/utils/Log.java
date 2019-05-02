@@ -47,7 +47,7 @@ public class Log {
                 throwable.printStackTrace(pw);
                 trace(sw::toString);
             } catch (IOException e) {
-                throw new AssertionError("Error in logging library");
+                throw new AssertionError("Error in logging library", e);
             }
         }
     }

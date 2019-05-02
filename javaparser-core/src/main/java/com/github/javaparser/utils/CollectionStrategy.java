@@ -9,13 +9,17 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
 
-import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parse;import org.apache.log4j.Logger;
+
 
 /**
  * A strategy for discovering the structure of a project.
  * Implementations could read a pom.xml, a Gradle build file, a makefile...
  */
 public interface CollectionStrategy {
+    protected static Logger LOG = Logger.getLogger(CollectionStrategy.class.getName());
+    
+
 
     ProjectRoot collect(Path path);
 
@@ -24,9 +28,9 @@ public interface CollectionStrategy {
             return parse(file.toFile()).getStorage()
                     .map(CompilationUnit.Storage::getSourceRoot);
         } catch (ParseProblemException e) {
-            Log.info("Problem parsing file %s", () -> file);
+            Log.info("Problem parsing file %s", () -> file, e);
         } catch (RuntimeException e) {
-            Log.info("Could not parse file %s", () -> file);
+            Log.info("Could not parse file %s", () -> file, e);
         }
         return Optional.empty();
     }

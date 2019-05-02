@@ -27,7 +27,8 @@ import com.github.javaparser.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Arrays;
+import java.util.Arrays;import org.apache.log4j.Logger;
+
 
 /**
  * Properties considered by the AstObserver

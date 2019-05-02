@@ -27,7 +27,8 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.nio.file.FileVisitResult.*;
+import static java.nio.file.FileVisitResult.*;import org.apache.log4j.Logger;
+
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory
@@ -40,6 +41,9 @@ import static java.nio.file.FileVisitResult.*;
  * </ul>
  */
 public class SourceRoot {
+    protected static Logger LOG = Logger.getLogger(SourceRoot.class.getName());
+    
+
     @FunctionalInterface
     public interface Callback {
         enum Result {

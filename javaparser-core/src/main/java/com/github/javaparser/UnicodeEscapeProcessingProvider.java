@@ -1,12 +1,16 @@
 package com.github.javaparser;
 
-import java.io.IOException;
+import java.io.IOException;import org.apache.log4j.Logger;
+
 
 /**
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (with java-like unicode escape processing).
  */
 class UnicodeEscapeProcessingProvider implements Provider {
+    protected static Logger LOG = Logger.getLogger(UnicodeEscapeProcessingProvider.class.getName());
+    
+
     private static int hexval(char c) throws java.io.IOException {
         switch (c) {
             case '0':
@@ -110,7 +114,7 @@ class UnicodeEscapeProcessingProvider implements Provider {
                 bufpos -= tokenBegin;
             }
         } catch (Exception t) {
-            throw new RuntimeException(t.getMessage());
+            throw new RuntimeException(t.getMessage(), t);
         }
 
         available = (bufsize += 2048);
@@ -263,7 +267,7 @@ class UnicodeEscapeProcessingProvider implements Provider {
                 column += 4;
             } catch (java.io.IOException e) {
                 throw new RuntimeException("Invalid escape character at line " + line +
-                        " column " + column + ".");
+                        " column " + column + ".", e);
             }
 
             if (backSlashCnt == 1)

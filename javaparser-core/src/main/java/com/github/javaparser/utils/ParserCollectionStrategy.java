@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static java.nio.file.FileVisitResult.*;
+import static java.nio.file.FileVisitResult.*;import org.apache.log4j.Logger;
+
 
 /**
  * A brute force {@link CollectionStrategy} for discovering a project structure.
@@ -17,6 +18,9 @@ import static java.nio.file.FileVisitResult.*;
  * Note that any build artifacts will also be detected: jar files in target directories and so on.
  */
 public class ParserCollectionStrategy implements CollectionStrategy {
+    protected static Logger LOG = Logger.getLogger(ParserCollectionStrategy.class.getName());
+    
+
 
     private final ParserConfiguration parserConfiguration;
 
