@@ -1,22 +1,5 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -25,6 +8,51 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -390,7 +418,51 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "    10 + 2;" + EOL +
                 "}", LexicalPreservingPrinter.print(m));
     }
-
+    
+    @Test
+    void printASimpleMethodRemovingAStatement() {
+    	String code = "class A {" 						+ EOL
+    			+ "\t"		+  "foo(int a, int b) {"	+ EOL
+    			+ "\t\t" 	+ "int result = a * b;"		+ EOL
+    			+ "\t\t" 	+ "return a * b;"			+ EOL
+    			+ "\t"		+ "}"						+ EOL
+    			+ "}";
+    			
+    	
+    	CompilationUnit cu = parse(code);
+    	LexicalPreservingPrinter.setup(cu);    	
+    	ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
+    	stmt.remove();
+    	
+        assertEqualsNoEol("class A {" 					+ EOL
+    			+ "\t"		+  "foo(int a, int b) {"	+ EOL
+    			+ "\t\t" 	+ "return a * b;"			+ EOL
+    			+ "\t"		+ "}"						+ EOL
+    			+ "}", LexicalPreservingPrinter.print(cu)); 
+    }
+    
+    @Test
+    void printASimpleMethodRemovingAStatementUnix() {
+    	String code = "class A {" 						+ "\n"
+    			+ "\t"		+  "foo(int a, int b) {"	+ "\n"
+    			+ "\t\t" 	+ "int result = a * b;"		+ "\n"
+    			+ "\t\t" 	+ "return a * b;"			+ "\n"
+    			+ "\t"		+ "}"						+ "\n"
+    			+ "}";
+    			
+    	
+    	CompilationUnit cu = parse(code);
+    	LexicalPreservingPrinter.setup(cu);
+    	ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
+    	stmt.remove();
+    	
+        assertEquals("class A {"						+ "\n"
+    			+ "\t"		+  "foo(int a, int b) {"	+ "\n"
+    			+ "\t\t" 	+ "return a * b;"			+ "\n"
+    			+ "\t"		+ "}"						+ "\n"
+    			+ "}", LexicalPreservingPrinter.print(cu)); 
+    }
+    
     @Test
     void printASimpleImport() {
         String code = "import a.b.c.D;";
