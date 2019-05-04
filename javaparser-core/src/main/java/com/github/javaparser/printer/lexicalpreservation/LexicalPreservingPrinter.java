@@ -64,6 +64,8 @@ import static java.util.Comparator.*;
  */
 public class LexicalPreservingPrinter {
 
+    private static AstObserver observer;
+
     /**
      * The nodetext for a node is stored in the node's data field. This is the key to set and retrieve it.
      */
@@ -91,13 +93,16 @@ public class LexicalPreservingPrinter {
     public static <N extends Node> N setup(N node) {
         assertNotNull(node);
 
+        if(observer == null) {
+            observer = createObserver();
+        }
+
         node.getTokenRange().ifPresent(r -> {
             storeInitialText(node);
-
             // Setup observer
-            AstObserver observer = createObserver();
-
-            node.registerForSubtree(observer);
+            if(!node.isRegistered(observer)) {
+                node.registerForSubtree(observer);
+            }
         });
         return node;
     }
