@@ -1392,8 +1392,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final SuperExpr n, final A arg) {
         R result;
-        if (n.getClassExpr().isPresent()) {
-            result = n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            result = n.getTypeName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1471,8 +1471,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ThisExpr n, final A arg) {
         R result;
-        if (n.getClassExpr().isPresent()) {
-            result = n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            result = n.getTypeName().get().accept(this, arg);
             if (result != null)
                 return result;
         }

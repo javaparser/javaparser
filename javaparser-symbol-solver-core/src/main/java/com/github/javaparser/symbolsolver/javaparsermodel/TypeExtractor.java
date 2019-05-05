@@ -290,9 +290,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(ThisExpr node, Boolean solveLambdas) {
         // If 'this' is prefixed by a class eg. MyClass.this
-        if (node.getClassExpr().isPresent()) {
+        if (node.getTypeName().isPresent()) {
             // Get the class name
-            String className = node.getClassExpr().get().toString();
+            String className = node.getTypeName().get().asString();
             // Attempt to resolve using a typeSolver
             SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
             if (clazz.isSolved()) {
