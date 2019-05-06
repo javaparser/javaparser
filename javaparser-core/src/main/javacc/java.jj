@@ -2484,7 +2484,7 @@ TryStmt TryStatement():
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+				Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
