@@ -42,7 +42,6 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,7 +49,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
 import static com.github.javaparser.JavaToken.Kind.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
@@ -60,9 +58,9 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * <p>

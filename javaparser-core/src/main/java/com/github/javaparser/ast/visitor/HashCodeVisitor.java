@@ -315,7 +315,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final SuperExpr n, final Void arg) {
-        return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getTypeName().isPresent() ? n.getTypeName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final SwitchEntry n, final Void arg) {
@@ -331,7 +331,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ThisExpr n, final Void arg) {
-        return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getTypeName().isPresent() ? n.getTypeName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final ThrowStmt n, final Void arg) {
