@@ -420,34 +420,26 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
     
     @Test
-    void printASimpleMethodRemovingAStatement() {
-    	String code = "class A {" 						+ EOL
-    			+ "\t"		+  "foo(int a, int b) {"	+ EOL
-    			+ "\t\t" 	+ "int result = a * b;"		+ EOL
-    			+ "\t\t" 	+ "return a * b;"			+ EOL
-    			+ "\t"		+ "}"						+ EOL
-    			+ "}";
-    			
-    	
-    	CompilationUnit cu = parse(code);
-    	LexicalPreservingPrinter.setup(cu);    	
-    	ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
-    	stmt.remove();
-    	
-        assertEqualsNoEol("class A {" 					+ EOL
-    			+ "\t"		+  "foo(int a, int b) {"	+ EOL
-    			+ "\t\t" 	+ "return a * b;"			+ EOL
-    			+ "\t"		+ "}"						+ EOL
-    			+ "}", LexicalPreservingPrinter.print(cu)); 
+    void printASimpleMethodRemovingAStatementCRLF() {
+    	printASimpleMethodRemovingAStatement("\r\n");
     }
     
     @Test
-    void printASimpleMethodRemovingAStatementUnix() {
-    	String code = "class A {" 						+ "\n"
-    			+ "\t"		+  "foo(int a, int b) {"	+ "\n"
-    			+ "\t\t" 	+ "int result = a * b;"		+ "\n"
-    			+ "\t\t" 	+ "return a * b;"			+ "\n"
-    			+ "\t"		+ "}"						+ "\n"
+    void printASimpleMethodRemovingAStatementLF() {
+    	printASimpleMethodRemovingAStatement("\n");
+    }
+    
+    @Test
+    void printASimpleMethodRemovingAStatementCR() {
+    	printASimpleMethodRemovingAStatement("\r");
+    }
+    
+    private void printASimpleMethodRemovingAStatement(String eol) {
+    	String code = "class A {" 						+ eol
+    			+ "\t"		+  "foo(int a, int b) {"	+ eol
+    			+ "\t\t" 	+ "int result = a * b;"		+ eol
+    			+ "\t\t" 	+ "return a * b;"			+ eol
+    			+ "\t"		+ "}"						+ eol
     			+ "}";
     			
     	
@@ -456,10 +448,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     	ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
     	stmt.remove();
     	
-        assertEquals("class A {"						+ "\n"
-    			+ "\t"		+  "foo(int a, int b) {"	+ "\n"
-    			+ "\t\t" 	+ "return a * b;"			+ "\n"
-    			+ "\t"		+ "}"						+ "\n"
+        assertEquals("class A {"						+ eol
+    			+ "\t"		+  "foo(int a, int b) {"	+ eol
+    			+ "\t\t" 	+ "return a * b;"			+ eol
+    			+ "\t"		+ "}"						+ eol
     			+ "}", LexicalPreservingPrinter.print(cu)); 
     }
     
