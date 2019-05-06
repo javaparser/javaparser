@@ -2471,8 +2471,8 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {catchBegin=token();}
-  			"(" { typesBegin=token(); }
-  			exceptModifier = Modifiers() exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); }
+  			"(" exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+            exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
   			( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
