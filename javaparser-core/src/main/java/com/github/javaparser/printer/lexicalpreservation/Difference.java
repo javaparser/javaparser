@@ -1,17 +1,36 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.BYTE;
+import static com.github.javaparser.GeneratedJavaParserConstants.CHAR;
+import static com.github.javaparser.GeneratedJavaParserConstants.DOUBLE;
+import static com.github.javaparser.GeneratedJavaParserConstants.FLOAT;
+import static com.github.javaparser.GeneratedJavaParserConstants.INT;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.LONG;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.SHORT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-
-import java.util.*;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -374,8 +393,10 @@ public class Difference {
 
                 diffIndex++;
             }
-        } else if (removed.isToken() && originalElementIsToken
-                && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind())) {
+        } else if (removed.isToken() && originalElementIsToken &&
+                (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
+                        || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
+                                && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
