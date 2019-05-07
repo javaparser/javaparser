@@ -2471,8 +2471,8 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {catchBegin=token();}
-  			"(" { typesBegin=token(); }
-  			exceptModifier = Modifiers() exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); }
+  			"(" exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+            exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
   			( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
@@ -2484,7 +2484,7 @@ TryStmt TryStatement():
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+				Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
