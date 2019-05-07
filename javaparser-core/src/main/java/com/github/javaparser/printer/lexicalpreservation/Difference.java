@@ -1,25 +1,8 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.BYTE;
-import static com.github.javaparser.GeneratedJavaParserConstants.CHAR;
-import static com.github.javaparser.GeneratedJavaParserConstants.DOUBLE;
-import static com.github.javaparser.GeneratedJavaParserConstants.FLOAT;
-import static com.github.javaparser.GeneratedJavaParserConstants.INT;
-import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
-import static com.github.javaparser.GeneratedJavaParserConstants.LONG;
-import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
-import static com.github.javaparser.GeneratedJavaParserConstants.SHORT;
-import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
