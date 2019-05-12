@@ -1994,7 +1994,7 @@ Expression AllocationExpression(Expression scope):
         ret = ArrayCreation(begin, type)
     |
         [ typeArgs = TypeArguments() ]
-        type = AnnotatedClassOrInterfaceType()
+        type = ClassOrInterfaceType(annotations)
         (
             ret = ArrayCreation(begin, type)
         |
