@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
@@ -430,6 +431,40 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     			+ "\t\t" 	+ "return a * b;"			+ eol
     			+ "\t"		+ "}"						+ eol
     			+ "}", LexicalPreservingPrinter.print(cu)); 
+    }
+    
+    @Test
+    void printASimpleMethodRemovingAStatementWithLineEndComment() {
+        String code = "class A {" + EOL
+                + "\t"      +  "foo() {" + EOL
+                + "\t\t"    + "int result = 53; // comment" + EOL
+                + "\t\t"    + "return 53;" + EOL
+                + "\t"      + "}" + EOL
+                + "}";
+        
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
+        stmt.remove();
+        
+        assertEquals("class A {" + EOL
+                + "\t"      +  "foo() {" + EOL
+                + "\t\t"    + "// comment" + EOL
+                + "\t\t"    + "return 53;" + EOL
+                + "\t"      + "}" + EOL
+                + "}", LexicalPreservingPrinter.print(cu));
+    }
+    
+    @Test
+    void printASimpleMethodRemovingALineComment() {
+        String code = "class A { foo() { int result = 0; // comment" + EOL + "return 0; }}";
+        
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        Comment comment = cu.findFirst(ExpressionStmt.class).get().getComment().get();
+        comment.remove();
+        
+        assertEquals("class A { foo() { int result = 0;" + EOL + "return 0; }}", LexicalPreservingPrinter.print(cu));
     }
     
     @Test
