@@ -55,7 +55,8 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpleName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
+public class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType>
+        implements NodeWithSimpleName<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
 
     @OptionalProperty
     private ClassOrInterfaceType scope;
