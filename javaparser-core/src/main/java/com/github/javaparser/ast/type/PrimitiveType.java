@@ -48,7 +48,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
+public class PrimitiveType extends Type<PrimitiveType>{
 
     public static PrimitiveType booleanType() {
         return new PrimitiveType(Primitive.BOOLEAN);
