@@ -37,12 +37,12 @@ import static com.github.javaparser.StaticJavaParser.parseName;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface NodeWithAnnotations<N extends Node> {
+public interface NodeWithAnnotations<N extends Node & NodeWithAnnotations> {
     NodeList<AnnotationExpr> getAnnotations();
 
     N setAnnotations(NodeList<AnnotationExpr> annotations);
 
-    void tryAddImportToParentCompilationUnit(Class<?> clazz);
+    //void tryAddImportToParentCompilationUnit(Class<?> clazz);
 
     default AnnotationExpr getAnnotation(int i) {
         return getAnnotations().get(i);
@@ -95,7 +95,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
+        ((Node)this).tryAddImportToParentCompilationUnit(clazz);
         return addAnnotation(clazz.getSimpleName());
     }
 
@@ -106,7 +106,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return the {@link NormalAnnotationExpr} added
      */
     default NormalAnnotationExpr addAndGetAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
+        ((Node)this).tryAddImportToParentCompilationUnit(clazz);
         return addAndGetAnnotation(clazz.getSimpleName());
     }
 
@@ -131,7 +131,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        tryAddImportToParentCompilationUnit(clazz);
+        ((Node)this).tryAddImportToParentCompilationUnit(clazz);
         return addMarkerAnnotation(clazz.getSimpleName());
     }
 
@@ -157,7 +157,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addSingleMemberAnnotation(Class<? extends Annotation> clazz, Expression expression) {
-        tryAddImportToParentCompilationUnit(clazz);
+        ((Node)this).tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), expression);
     }
 
@@ -181,7 +181,7 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     default N addSingleMemberAnnotation(Class<? extends Annotation> clazz,
                                         String value) {
-        tryAddImportToParentCompilationUnit(clazz);
+        ((Node)this).tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }
 
