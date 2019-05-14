@@ -46,7 +46,7 @@ import com.github.javaparser.ast.Generated;
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
  */
-public class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
+public class ArrayType extends ReferenceType<ArrayType> {
 
     @Override
     public ResolvedArrayType resolve() {
