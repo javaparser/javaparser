@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
+public class VoidType extends Type<VoidType> {
 
     @AllFieldsConstructor
     public VoidType() {
