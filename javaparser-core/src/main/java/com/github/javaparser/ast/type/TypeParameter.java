@@ -54,7 +54,7 @@ import com.github.javaparser.ast.Generated;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
+public class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter>  {
 
     private SimpleName name;
 
