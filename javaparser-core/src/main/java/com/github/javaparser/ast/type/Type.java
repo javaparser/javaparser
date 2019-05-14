@@ -24,6 +24,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -42,7 +43,8 @@ import java.util.Optional;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node implements Resolvable<ResolvedType> {
+public abstract class Type<T extends Type> extends Node
+        implements Resolvable<ResolvedType>, NodeWithAnnotations<T> {
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -79,17 +81,17 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public T setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (Type) this;
+            return (T) this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
-        return this;
+        return (T)this;
     }
 
     /**
