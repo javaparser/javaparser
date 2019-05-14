@@ -46,7 +46,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
+public class WildcardType extends Type<WildcardType> {
 
     @OptionalProperty
     private ReferenceType extendedType;
