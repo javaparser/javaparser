@@ -37,7 +37,7 @@ import java.util.Optional;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class ReferenceType extends Type {
+public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
 
     public ReferenceType() {
         this(null, new NodeList<>());
