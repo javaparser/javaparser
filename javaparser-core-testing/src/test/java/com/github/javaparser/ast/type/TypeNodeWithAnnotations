@@ -1,0 +1,27 @@
+package com.github.javaparser.ast.type;
+
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import org.junit.jupiter.api.Test;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.ast.type.PrimitiveType.Primitive.BOOLEAN;
+
+public class TypeNodeWithAnnotations {
+
+    @Test
+    public void testPrimitive(){
+        PrimitiveType pt = new PrimitiveType()
+            .setAnnotations(nodeList())
+            .setType(BOOLEAN);
+        System.out.println( pt );
+
+        PrimitiveType pt2 = new PrimitiveType(PrimitiveType.Primitive.BOOLEAN);
+        NodeList<AnnotationExpr> as = new NodeList<>();
+        //as.add(Ast.anno("@A"));
+        PrimitiveType anotherPrimitive = null;
+        anotherPrimitive = pt2.setAnnotations(as); //works, its a
+        Type t = pt2;
+        PrimitiveType pt3 = t.asPrimitiveType();
+    }
+}
