@@ -101,11 +101,9 @@ public class Range {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+		
         Range range = (Range) o;
-
         return begin.equals(range.begin) && end.equals(range.end);
-
     }
 
     @Override
