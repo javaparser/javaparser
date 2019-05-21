@@ -8,6 +8,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -102,7 +103,7 @@ public class SourceRoot {
         Log.trace("Parsing %s", () -> path);
         final ParseResult<CompilationUnit> result = new JavaParser(configuration)
                 .parse(COMPILATION_UNIT, provider(path));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         cache.put(relativePath, result);
         return result;
     }
@@ -246,7 +247,7 @@ public class SourceRoot {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath));
-        result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
+        result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
                 result.getResult().ifPresent(cu -> save(cu, absolutePath));
@@ -426,29 +427,51 @@ public class SourceRoot {
 
     /**
      * Save the given compilation unit to the given path.
+     * @param cu the compilation unit
+     * @param path the path of the java file
      */
     private SourceRoot save(CompilationUnit cu, Path path) {
+        return save(cu, path, parserConfiguration.getCharacterEncoding());
+    }
+
+    /**
+     * Save the given compilation unit to the given path.
+     * @param cu the compilation unit
+     * @param path the path of the java file
+     * @param encoding  the encoding to use while saving the file
+     */
+    private SourceRoot save(CompilationUnit cu, Path path, Charset encoding) {
         assertNotNull(cu);
         assertNotNull(path);
-        cu.setStorage(path);
+        cu.setStorage(path, encoding);
         cu.getStorage().get().save(printer);
         return this;
     }
 
     /**
      * Save all previously parsed files back to a new path.
+     * @param root the root of the java packages
+     * @param encoding the encoding to use while saving the file
      */
-    public SourceRoot saveAll(Path root) {
+    public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
             final Path path = root.resolve(cu.getKey());
             if (cu.getValue().getResult().isPresent()) {
                 Log.trace("Saving %s", () -> path);
-                save(cu.getValue().getResult().get(), path);
+                save(cu.getValue().getResult().get(), path, encoding);
             }
         }
         return this;
+    }
+
+    /**
+     * Save all previously parsed files back to a new path.
+     * @param root the root of the java packages
+     */
+    public SourceRoot saveAll(Path root) {
+        return saveAll(root, parserConfiguration.getCharacterEncoding());
     }
 
     /**
@@ -456,6 +479,14 @@ public class SourceRoot {
      */
     public SourceRoot saveAll() {
         return saveAll(root);
+    }
+
+    /**
+     * Save all previously parsed files back to where they were found, with the given encoding.
+     * @param encoding the encoding to use.
+     */
+    public SourceRoot saveAll(Charset encoding) {
+        return saveAll(root, encoding);
     }
 
     /**
