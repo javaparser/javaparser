@@ -201,6 +201,13 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void testGetConstructors() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ResolvedReferenceTypeDeclaration locale = new ReflectionClassDeclaration(ClassWithSyntheticConstructor.class, typeResolver);
+        assertEquals(1, locale.getConstructors().size());
+    }
+
+    @Test
     void testGetInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
@@ -778,4 +785,20 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertTrue(ancestors.isEmpty());
     }
+
+    public static class ClassWithSyntheticConstructor {
+
+        private ClassWithSyntheticConstructor() {}
+
+        public static ClassWithSyntheticConstructor newInstance() {
+            return ClassWithSyntheticConstructorHelper.create();
+        }
+
+        private static class ClassWithSyntheticConstructorHelper {
+            public static ClassWithSyntheticConstructor create() {
+                return new ClassWithSyntheticConstructor();
+            }
+        }
+    }
+
 }
