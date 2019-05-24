@@ -144,6 +144,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
             if (method.isBridge() || method.isSynthetic()) continue;
             ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
+
+            // no need to search for overloaded/inherited methods if the method has no parameters
+            if (argumentsTypes.isEmpty() && methodDeclaration.getNumberOfParams() == 0) {
+                return SymbolReference.solved(methodDeclaration);
+            }
         }
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
