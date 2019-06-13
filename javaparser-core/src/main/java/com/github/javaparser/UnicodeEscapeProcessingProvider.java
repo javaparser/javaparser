@@ -20,12 +20,19 @@
 package com.github.javaparser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.
  */
 public class UnicodeEscapeProcessingProvider implements Provider {
 	
+	private static final char LF = '\n';
+
+	private static final char CR = '\r';
+
 	private static final char BACKSLASH = '\\';
 
 	private static final int EOF = -1;
@@ -43,7 +50,13 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 	private int _pos = 0;
 
 	private boolean _backslashSeen;
+	
+	private final LineCounter _inputLine = new LineCounter();
 
+	private final LineCounter _outputLine = new LineCounter();
+	
+	private final PositionMappingBuilder _mappingBuilder = new PositionMappingBuilder(_outputLine, _inputLine);
+	
 	private Provider _input;
 
 	/** 
@@ -60,13 +73,27 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 		_input = input;
 		_data = new char[bufferSize];
 	}
+	
+	/**
+	 * The {@link LineCounter} of the input file.
+	 */
+	public LineCounter getInputCounter() {
+		return _inputLine;
+	}
+	
+	/**
+	 * The {@link LineCounter} of the output file.
+	 */
+	public LineCounter getOutputCounter() {
+		return _outputLine;
+	}
 
 	@Override
 	public int read(char[] buffer, final int offset, int len) throws IOException {
 		int pos = offset;
 		int stop = offset + len;
 		while (pos < stop) {
-			int ch = nextOutputChar();
+			int ch = _outputLine.process(nextOutputChar());
 			if (ch < 0) {
 				if (pos == offset) {
 					// Nothing read yet, this is the end of the stream.
@@ -75,6 +102,7 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 					break;
 				}
 			} else {
+				_mappingBuilder.update();
 				buffer[pos++] = (char) ch;
 			}
 		}
@@ -98,19 +126,21 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 				return EOF;
 			case BACKSLASH: {
 				if (_backslashSeen) {
-					// This is a backslash in an odd position. It is not eligible to form an unicode escape sequence.
-					_backslashSeen = false;
-					return next;
+					return clearBackSlashSeen(next);
 				} else {
 					return backSlashSeen();
 				}
 			}
 			default: {
 				// An arbitrary character.
-				_backslashSeen = false;
-				return next;
+				return clearBackSlashSeen(next);
 			}
 		}
+	}
+
+	private int clearBackSlashSeen(int next) {
+		_backslashSeen = false;
+		return next;
 	}
 
 	private int backSlashSeen() throws IOException {
@@ -190,8 +220,7 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 		}
 
 		int ch = digit3 << 12 | digit2 << 8 | digit1 << 4 | digit0;
-		_backslashSeen = false;
-		return ch;
+		return clearBackSlashSeen(ch);
 	}
 
 	private void pushBackUs(int cnt) {
@@ -214,11 +243,21 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 	}
 
 	/** 
-	 * Retrieves the next un-escaped character from the buffered {@link #_input}.
+	 * Processes column/line information from the input file.
 	 * 
-	 * @return The next character to output or <code>-1</code> if no more input is available.
+	 * @return The next character or <code>-1</code> if no more input is available.
 	 */
 	private int nextInputChar() throws IOException {
+		int result = nextBufferedChar();
+		return _inputLine.process(result);
+	}
+
+	/** 
+	 * Retrieves the next un-escaped character from the buffered {@link #_input}.
+	 * 
+	 * @return The next character or <code>-1</code> if no more input is available.
+	 */
+	private int nextBufferedChar() throws IOException {
 		while (isBufferEmpty()) {
 			int direct = fillBuffer();
 			if (direct < 0) {
@@ -266,6 +305,340 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 			}
 		}
 		_data[--_pos] = (char) ch;
+	}
+	
+	/**
+	 * The {@link PositionMapping} being built during processing the file.
+	 */
+	public PositionMapping getPositionMapping() {
+		return _mappingBuilder.getMapping();
+	}
+	
+	/**
+	 * An algorithm mapping {@link Position} form two corresponding files.
+	 */
+	public static final class PositionMapping {
+		
+		private final List<DeltaInfo> _deltas = new ArrayList<>();
+		
+		/** 
+		 * Creates a {@link UnicodeEscapeProcessingProvider.PositionMapping}.
+		 */
+		public PositionMapping() {
+			super();
+		}
+
+		void add(int line, int column, int lineDelta, int columnDelta) {
+			_deltas.add(new DeltaInfo(line, column, lineDelta, columnDelta));
+		}
+		
+		/**
+		 * Looks up the {@link PositionUpdate} for the given Position.
+		 */
+		public PositionUpdate lookup(Pos position) {
+			int result = Collections.binarySearch(_deltas, position);
+			if (result >= 0) {
+				return _deltas.get(result);
+			} else {
+				int insertIndex = -result - 1;
+				if (insertIndex == 0) {
+					// Before the first delta info, identity mapping.
+					return PositionUpdate.NONE;
+				} else {
+					// The relevant update is the one with the position smaller
+					// than the requested position.
+					return _deltas.get(insertIndex - 1);
+				}
+			}
+		}
+		
+		/**
+		 * Algorithm updating a {@link Position} from one file to a
+		 * {@link Position} in a corresponding file.
+		 */
+		public static interface PositionUpdate {
+			
+			/**
+			 * The identity position mapping.
+			 */
+			PositionUpdate NONE = new PositionUpdate() {
+				@Override
+				public int transformLine(int line) {
+					return line;
+				}
+				
+				@Override
+				public int transformColumn(int column) {
+					return column;
+				}
+			};
+
+			/** 
+			 * Maps the given line to an original line.
+			 */
+			int transformLine(int line);
+
+			/** 
+			 * Maps the given column to an original column.
+			 */
+			int transformColumn(int column);
+
+			/**
+			 * The transformed position.
+			 */
+			default Pos transform(Pos pos) {
+				return new Pos(transformLine(pos.getLine()), transformColumn(pos.getColumn()));
+			}
+			
+		}
+		
+		private static final class DeltaInfo extends Pos implements PositionUpdate {
+
+			/**
+			 * The offset to add to the {@link #getLine()} and all following source
+			 * positions up to the next {@link PositionUpdate}.
+			 */
+			private final int _lineDelta;
+			
+			/**
+			 * The offset to add to the {@link #getColumn()} and all following
+			 * source positions up to the next {@link PositionUpdate}.
+			 */
+			private final int _columnDelta;
+
+			/** 
+			 * Creates a {@link PositionUpdate}.
+			 */
+			public DeltaInfo(int line, int column, int lineDelta,
+					int columnDelta) {
+				super(line, column);
+				_lineDelta = lineDelta;
+				_columnDelta = columnDelta;
+			}
+			
+			@Override
+			public int transformLine(int line) {
+				return line + _lineDelta;
+			}
+			
+			@Override
+			public int transformColumn(int column) {
+				return column + _columnDelta;
+			}
+			
+			@Override
+			public String toString() {
+				return "(" + getLine() + ", " + getColumn() + ": " + _lineDelta + ", " + _columnDelta + ")";
+			}
+
+		}
+
+		/** 
+		 * The transformed position.
+		 */
+		public Pos transform(Pos pos) {
+			return lookup(pos).transform(pos);
+		}
+	}
+	
+	private static final class PositionMappingBuilder {
+		
+		private LineCounter _left;
+		
+		private LineCounter _right;
+		
+		private final PositionMapping _mapping = new PositionMapping();
+		
+		private int _lineDelta = 0;
+		private int _columnDelta = 0;
+		
+		/** 
+		 * Creates a {@link PositionMappingBuilder}.
+		 *
+		 * @param left The source {@link LineCounter}.
+		 * @param right The target {@link LineCounter}.
+		 */
+		public PositionMappingBuilder(LineCounter left, LineCounter right) {
+			_left = left;
+			_right = right;
+			update();
+		}
+		
+		/**
+		 * The built {@link PositionMapping}.
+		 */
+		public PositionMapping getMapping() {
+			return _mapping;
+		}
+		
+		public void update() {
+			int lineDelta = _right.getLine() - _left.getLine();
+			int columnDelta = _right.getColumn() - _left.getColumn();
+			
+			if (lineDelta != _lineDelta || columnDelta != _columnDelta) {
+				_mapping.add(_left.getLine(), _left.getColumn(), lineDelta, columnDelta);
+				
+				_lineDelta = lineDelta;
+				_columnDelta = columnDelta;
+			}
+		}
+		
+	}
+	
+	/**
+	 * A position in a file (consisting of line and column).
+	 */
+	public static class Pos implements Comparable<Pos> {
+		
+		private final int _line;
+		private final int _column;
+		
+		/** 
+		 * Creates a {@link Position}.
+		 *
+		 * @param line See {@link #getLine()}.
+		 * @param column See {@link #getColumn()}.
+		 */
+		public Pos(int line, int column) {
+			_line = line;
+			_column = column;
+		}
+		
+		/**
+		 * Line in a file.
+		 */
+		public int getLine() {
+			return _line;
+		}
+
+		/**
+		 * Column in a file.
+		 */
+		public int getColumn() {
+			return _column;
+		}
+
+		@Override
+		public int compareTo(Pos other) {
+			int lineCompare = Integer.compare(getLine(), other.getLine());
+			if (lineCompare != 0) {
+				return lineCompare;
+			}
+			return Integer.compare(getColumn(), other.getColumn());
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + _column;
+			result = prime * result + _line;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pos other = (Pos) obj;
+			if (_column != other._column)
+				return false;
+			if (_line != other._line)
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "(" + getLine() + ", " + getColumn() + ")";
+		}
+	
+	}
+	
+	/**
+	 * Processor keeping track of the current line and column in a stream of
+	 * incoming characters.
+	 * 
+	 * @see #process(int)
+	 */
+	public static final class LineCounter {
+		
+		/**
+		 * Whether {@link #CR} has been seen on the input as last character.
+		 */
+		private boolean _crSeen;
+
+		private int _line = 1;
+
+		private int _column = 1;
+
+		/** 
+		 * Creates a {@link UnicodeEscapeProcessingProvider.LineCounter}.
+		 */
+		public LineCounter() {
+			super();
+		}
+		
+		/**
+		 * The line of the currently processed input character.
+		 */
+		public int getLine() {
+			return _line;
+		}
+		
+		/**
+		 * The column of the currently processed input character.
+		 */
+		public int getColumn() {
+			return _column;
+		}
+		
+		/** 
+		 * The current position.
+		 */
+		public Pos getPosition() {
+			return new Pos(getLine(), getColumn());
+		}
+
+		/** 
+		 * Analyzes the given character for line feed.
+		 */
+		public int process(int ch) {
+			switch (ch) {
+				case EOF: {
+					break;
+				}
+				case CR: {
+					incLine();
+					_crSeen = true;
+					break;
+				}
+				case LF: {
+					// CR LF does only count as a single line terminator.
+					if (_crSeen) {
+						_crSeen = false;
+					} else {
+						incLine();
+					}
+					break;
+				}
+				default: {
+					_crSeen = false;
+					_column++;
+				}
+			}
+			return ch;
+		}
+
+		private void incLine() {
+			_line++;
+			_column = 1;
+		}
+
 	}
 	
 }
