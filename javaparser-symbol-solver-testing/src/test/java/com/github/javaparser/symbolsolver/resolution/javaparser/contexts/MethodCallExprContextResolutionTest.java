@@ -16,12 +16,17 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
@@ -40,6 +45,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -123,4 +130,21 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
         assertEquals(Collections.singletonList("java.lang.String"), ref.get().typeParametersMap().getTypes().stream().map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
     }
+	
+	@Test
+	public void test() {
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+		JavaParser parser = new JavaParser(config);
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("Issue2258");
+		List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+		assertTrue(expressions.size() == 2);
+		try {
+		ResolvedType r = expressions.get(1).calculateResolvedType();
+		assertNotNull(r);
+		} catch (Throwable t) {
+			fail();
+		}
+	}
 }
