@@ -50,6 +50,11 @@ class JavassistUtils {
                     methodUsage = methodUsage.replaceTypeParameter(tpToReplace, newValue);
                 }
                 methods.add(methodUsage);
+
+                // no need to search for overloaded/inherited methods if the method has no parameters
+                if (argumentsTypes.isEmpty() && methodUsage.getNoParams() == 0) {
+                    return Optional.of(methodUsage);
+                }
             }
         }
 

@@ -82,8 +82,8 @@ public class Range {
     }
 
     /**
-     * Do this strictly contains other? It means that this has to be larger than other and it has to start as other
-     * or before and end as other or after.
+     * Does this strictly contain other? It means that this has to be larger than other and it has to start before
+     * other and end after other.
      */
     public boolean strictlyContains(Range other) {
         return begin.isBefore(other.begin) && end.isAfter(other.end);
@@ -101,11 +101,9 @@ public class Range {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+		
         Range range = (Range) o;
-
         return begin.equals(range.begin) && end.equals(range.end);
-
     }
 
     @Override
