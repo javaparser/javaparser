@@ -170,24 +170,15 @@ public class ParserConfiguration {
 			@Override
 			public void process(ParseResult<? extends Node> result,
 					ParserConfiguration configuration) {
-				if (configuration.isPreprocessUnicodeEscapes()) {
-					Optional<? extends Node> nodeHandle = result.getResult();
-					if (nodeHandle.isPresent()) {
-						PositionMapping positionMapping = _unicodeDecoder.getPositionMapping();
-						adjustPositions(positionMapping, result.getResult().get());
-					}
-				}
-			}
-
-			private void adjustPositions(PositionMapping positionMapping, Node node) {
-				Optional<Range> rangeHandle = node.getRange();
-				if (rangeHandle.isPresent()) {
-					Range range = rangeHandle.get();
-					node.setRange(positionMapping.transform(range));
-				}
-				
-				for (Node child : node.getChildNodes()) {
-					adjustPositions(positionMapping, child);
+				if (isPreprocessUnicodeEscapes()) {
+					result.getResult().ifPresent(
+						root -> {
+							PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+							root.walk(
+								node -> node.getRange().ifPresent(
+									range -> node.setRange(mapping.transform(range))));
+						}
+					);
 				}
 			}
     	}
