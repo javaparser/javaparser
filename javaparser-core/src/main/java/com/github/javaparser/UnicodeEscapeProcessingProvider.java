@@ -335,7 +335,7 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 		/**
 		 * Looks up the {@link PositionUpdate} for the given Position.
 		 */
-		public PositionUpdate lookup(Pos position) {
+		public PositionUpdate lookup(Position position) {
 			int result = Collections.binarySearch(_deltas, position);
 			if (result >= 0) {
 				return _deltas.get(result);
@@ -371,6 +371,11 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 				public int transformColumn(int column) {
 					return column;
 				}
+				
+				@Override
+				public Position transform(Position pos) {
+					return pos;
+				}
 			};
 
 			/** 
@@ -386,22 +391,26 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 			/**
 			 * The transformed position.
 			 */
-			default Pos transform(Pos pos) {
-				return new Pos(transformLine(pos.getLine()), transformColumn(pos.getColumn()));
+			default Position transform(Position pos) {
+				int line = pos.line;
+				int column = pos.column;
+				int transformedLine = transformLine(line);
+				int transformedColumn = transformColumn(column);
+				return new Position(transformedLine, transformedColumn);
 			}
 			
 		}
 		
-		private static final class DeltaInfo extends Pos implements PositionUpdate {
+		private static final class DeltaInfo extends Position implements PositionUpdate {
 
 			/**
-			 * The offset to add to the {@link #getLine()} and all following source
+			 * The offset to add to the {@link #line} and all following source
 			 * positions up to the next {@link PositionUpdate}.
 			 */
 			private final int _lineDelta;
 			
 			/**
-			 * The offset to add to the {@link #getColumn()} and all following
+			 * The offset to add to the {@link #column} and all following
 			 * source positions up to the next {@link PositionUpdate}.
 			 */
 			private final int _columnDelta;
@@ -417,27 +426,40 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 			}
 			
 			@Override
-			public int transformLine(int line) {
-				return line + _lineDelta;
+			public int transformLine(int sourceLine) {
+				return sourceLine + _lineDelta;
 			}
 			
 			@Override
-			public int transformColumn(int column) {
-				return column + _columnDelta;
+			public int transformColumn(int sourceColumn) {
+				return sourceColumn + _columnDelta;
 			}
 			
 			@Override
 			public String toString() {
-				return "(" + getLine() + ", " + getColumn() + ": " + _lineDelta + ", " + _columnDelta + ")";
+				return "(" + line + ", " + column + ": " + _lineDelta + ", " + _columnDelta + ")";
 			}
 
 		}
 
 		/** 
-		 * The transformed position.
+		 * Transforms the given {@link Position}.
 		 */
-		public Pos transform(Pos pos) {
+		public Position transform(Position pos) {
 			return lookup(pos).transform(pos);
+		}
+
+		/** 
+		 * Transforms the given {@link Range}.
+		 */
+		public Range transform(Range range) {
+			Position begin = transform(range.begin);
+			Position end = transform(range.end);
+			if (begin == range.begin && end == range.end) {
+				// No change.
+				return range;
+			}
+			return new Range(begin, end);
 		}
 	}
 	
@@ -486,80 +508,6 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 	}
 	
 	/**
-	 * A position in a file (consisting of line and column).
-	 */
-	public static class Pos implements Comparable<Pos> {
-		
-		private final int _line;
-		private final int _column;
-		
-		/** 
-		 * Creates a {@link Position}.
-		 *
-		 * @param line See {@link #getLine()}.
-		 * @param column See {@link #getColumn()}.
-		 */
-		public Pos(int line, int column) {
-			_line = line;
-			_column = column;
-		}
-		
-		/**
-		 * Line in a file.
-		 */
-		public int getLine() {
-			return _line;
-		}
-
-		/**
-		 * Column in a file.
-		 */
-		public int getColumn() {
-			return _column;
-		}
-
-		@Override
-		public int compareTo(Pos other) {
-			int lineCompare = Integer.compare(getLine(), other.getLine());
-			if (lineCompare != 0) {
-				return lineCompare;
-			}
-			return Integer.compare(getColumn(), other.getColumn());
-		}
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + _column;
-			result = prime * result + _line;
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Pos other = (Pos) obj;
-			if (_column != other._column)
-				return false;
-			if (_line != other._line)
-				return false;
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return "(" + getLine() + ", " + getColumn() + ")";
-		}
-	
-	}
-	
-	/**
 	 * Processor keeping track of the current line and column in a stream of
 	 * incoming characters.
 	 * 
@@ -600,8 +548,8 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 		/** 
 		 * The current position.
 		 */
-		public Pos getPosition() {
-			return new Pos(getLine(), getColumn());
+		public Position getPosition() {
+			return new Position(getLine(), getColumn());
 		}
 
 		/** 

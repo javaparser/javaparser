@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.UnicodeEscapeProcessingProvider.Pos;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 
 /**
@@ -54,7 +53,7 @@ public class PositionMappingTest {
 		PositionMapping mapping = provider.getPositionMapping();
 		assertEquals(4, provider.getInputCounter().getLine());
 		assertEquals(4, provider.getOutputCounter().getLine());
-		assertSame(PositionMapping.PositionUpdate.NONE, mapping.lookup(new Pos(10000, 1)));
+		assertSame(PositionMapping.PositionUpdate.NONE, mapping.lookup(new Position(10000, 1)));
 	}
 
 	@Test
@@ -111,9 +110,9 @@ public class PositionMappingTest {
 			for (String inPart : inLine) {
 				assertFalse(outFinished);
 				
-				Pos inPos = new Pos(inPosLine, inPosColumn);
-				Pos outPos = new Pos(outPosLine, outPosColumn);
-				Pos transfomedOutPos = mapping.transform(outPos);
+				Position inPos = new Position(inPosLine, inPosColumn);
+				Position outPos = new Position(outPosLine, outPosColumn);
+				Position transfomedOutPos = mapping.transform(outPos);
 
 				assertEquals(inPos, transfomedOutPos, 
 					"Position mismatch at '" + outPart + "' " + outPos + " -> '" + inPart + "' " + inPos + ".");
