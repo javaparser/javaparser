@@ -329,14 +329,9 @@ public class ParserConfiguration {
     /**
      * When set to true, unicode escape handling is done by preprocessing the whole input,
      * meaning that all unicode escapes are turned into unicode characters before parsing.
-     * That means the AST will never contain literal unicode escapes,
-     * and that positions will point to where a token was found in the *processed input*, not in the original input,
-     * which is mostly not what you want.
-     * That's why the default is false, which is not the correct way to parse a Java file according to the Java Language Specification,
-     * but it works for almost any input, since unicode escapes are mostly used in comments, strings and characters,
-     * and the parser will understand them in those locations.
-     * The unicode escapes will not be processed and are transfered intact to the AST,
-     * and the locations will point to the original stream.
+     * That means the AST will never contain literal unicode escapes. However,
+     * positions in the AST will point to the original input, which is exactly the same as without this option.
+     * Without this option enabled, the unicode escapes will not be processed and are transfered intact to the AST.
      */
     public ParserConfiguration setPreprocessUnicodeEscapes(boolean preprocessUnicodeEscapes) {
         this.preprocessUnicodeEscapes = preprocessUnicodeEscapes;
