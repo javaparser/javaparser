@@ -46,8 +46,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -138,16 +136,11 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 	public void test() {
 		ParserConfiguration config = new ParserConfiguration()
 				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
-		JavaParser parser = new JavaParser(config);
 		StaticJavaParser.setConfiguration(config);
 		CompilationUnit cu = parseSample("Issue2258");
 		List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
 		assertTrue(expressions.size() == 2);
-		try {
-			ResolvedType r = expressions.get(1).calculateResolvedType();
-			assertTrue(ResolvedVoidType.class.isAssignableFrom(r.getClass()));
-		} catch (Throwable t) {
-			fail();
-		}
+		ResolvedType r = expressions.get(1).calculateResolvedType();
+		assertTrue(ResolvedVoidType.class.isAssignableFrom(r.getClass()));
 	}
 }
