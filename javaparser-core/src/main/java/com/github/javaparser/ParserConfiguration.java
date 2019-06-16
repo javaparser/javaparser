@@ -174,9 +174,11 @@ public class ParserConfiguration {
 					result.getResult().ifPresent(
 						root -> {
 							PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-							root.walk(
-								node -> node.getRange().ifPresent(
-									range -> node.setRange(mapping.transform(range))));
+							if (!mapping.isEmpty()) {
+								root.walk(
+									node -> node.getRange().ifPresent(
+										range -> node.setRange(mapping.transform(range))));
+							}
 						}
 					);
 				}

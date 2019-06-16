@@ -327,6 +327,13 @@ public class UnicodeEscapeProcessingProvider implements Provider {
 		public PositionMapping() {
 			super();
 		}
+		
+		/**
+		 * Whether this is the identity transformation.
+		 */
+		public boolean isEmpty() {
+			return _deltas.isEmpty();
+		}
 
 		void add(int line, int column, int lineDelta, int columnDelta) {
 			_deltas.add(new DeltaInfo(line, column, lineDelta, columnDelta));

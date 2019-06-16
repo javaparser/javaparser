@@ -51,6 +51,7 @@ public class PositionMappingTest {
 		String outputText = process(provider);
 		assertEquals(inputText, outputText);
 		PositionMapping mapping = provider.getPositionMapping();
+		assertTrue(mapping.isEmpty());
 		assertEquals(4, provider.getInputCounter().getLine());
 		assertEquals(4, provider.getOutputCounter().getLine());
 		assertSame(PositionMapping.PositionUpdate.NONE, mapping.lookup(new Position(10000, 1)));
