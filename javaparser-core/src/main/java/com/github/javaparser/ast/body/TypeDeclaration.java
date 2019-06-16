@@ -35,11 +35,14 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.ast.Node;
 
 /**
@@ -189,6 +192,24 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      */
     public List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
         return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration<?>) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
+    }
+
+    /**
+     * Returns the fully qualified name of this type, derived only from information available in this compilation unit. (So no symbol solving happens.)
+     * If the declared type is a local class declaration, it will return Optional.empty().
+     * If the declared type is not contained in a compilation unit, it will return Optional.empty().
+     * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
+     */
+    public Optional<String> getFullyQualifiedName() {
+        if (isTopLevelType()) {
+            return findCompilationUnit()
+                    .map(cu -> cu.getPackageDeclaration()
+                            .map(pd -> pd.getNameAsString())
+                            .map(pkg -> pkg + "." + getNameAsString()).orElse(getNameAsString()));
+        }
+        return findAncestor(TypeDeclaration.class)
+                .map(td -> (TypeDeclaration<?>) td)
+                .flatMap(td -> td.getFullyQualifiedName().map(fqn -> fqn + "." + getNameAsString()));
     }
 
     /**
