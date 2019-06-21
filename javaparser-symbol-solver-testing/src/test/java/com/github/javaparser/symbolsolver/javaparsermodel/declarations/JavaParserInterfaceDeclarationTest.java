@@ -630,9 +630,13 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                 .sorted(Comparator.comparing(MethodUsage::getQualifiedSignature))
                 .collect(Collectors.toList());
 
-        List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
+        /** MED changed */
+        //List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
+        Set<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toSet());
 
-        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        /** MED changed */
+//        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
                 "com.github.javaparser.ast.Node.equals(java.lang.Object)",

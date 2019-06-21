@@ -24,6 +24,8 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** MED deal with pulling in "src/test/resources/aars/support-compat-24.2.0.aar"
+ * */
 class AarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test

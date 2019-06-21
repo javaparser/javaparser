@@ -652,7 +652,20 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         ResolvedReferenceType ancestor;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
+        /** MED when we change the name from com.github to org.javaparser, these will be
+         * the first methods found, so lets just remove them now and verify they existed
+         * so (when the name change occurs) itll work both ways */
+        int sizeBefore = ancestors.size();
+        boolean removed = ancestors.removeIf( r-> r.getQualifiedName().equals("java.lang.Cloneable") ||
+                r.getQualifiedName().equals("java.lang.Object"));
+        int sizeAfter = ancestors.size();
+        assertTrue( removed );
+        assertTrue( sizeBefore - sizeAfter == 2);
+        /** MED look below for removals */
+
         ancestors.sort(comparing(ResolvedReferenceType::getQualifiedName));
+
+
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.HasParentNode", ancestor.getQualifiedName());
@@ -777,11 +790,22 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.resolution.Resolvable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.remove(0);
-        assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
+        /**
+         * MED I removed these because of name change
+         * i.e. BEFORE name change they are LAST:
+         *
+         * com.github.javaparser.*
+         * java.lang.*
+         *
+         * i.e. AFTER name change they are LAST
+         * java.lang.*
+         * org.javaparser.*
+         */
+        //ancestor = ancestors.remove(0);
+        //assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.remove(0);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        //ancestor = ancestors.remove(0);
+        //assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         assertTrue(ancestors.isEmpty());
     }

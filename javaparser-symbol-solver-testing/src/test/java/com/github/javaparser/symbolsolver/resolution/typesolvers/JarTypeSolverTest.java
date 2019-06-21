@@ -29,7 +29,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+/** MED
+ * deal with "src/test/resources/javaparser-core-2.1.0.jar"
+ */
 class JarTypeSolverTest extends AbstractSymbolResolutionTest {
 
     @Test

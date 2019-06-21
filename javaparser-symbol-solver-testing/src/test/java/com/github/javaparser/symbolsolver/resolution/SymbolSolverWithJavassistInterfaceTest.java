@@ -17,6 +17,9 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** MED deal with pulling in javaparser-core-2.1.0.jar, javaparser-core-3.0.0-alpha.2.jar
+ * src/test/resources/javassist_symbols/main_jar/main_jar.jar"
+ * */
 class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;

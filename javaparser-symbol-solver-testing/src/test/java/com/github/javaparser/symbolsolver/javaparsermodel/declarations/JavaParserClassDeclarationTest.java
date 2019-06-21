@@ -655,9 +655,10 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 .sorted(Comparator.comparing(MethodUsage::getQualifiedSignature))
                 .collect(Collectors.toList());
 
-        List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
+        /*MED changed*/
+        Set<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toSet());
 
-        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
                 "com.github.javaparser.ast.Node.equals(java.lang.Object)",
@@ -758,6 +759,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Object.wait()",
                 "java.lang.Object.wait(long)",
                 "java.lang.Object.wait(long, int)"), signatures);
+        /*MED changed*/
     }
 
     ///
