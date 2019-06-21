@@ -23,6 +23,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -37,7 +38,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * We analyze JavaParser version 0.6.0.
  */
-@SlowTest
+//@SlowTest
+@Disabled
 class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static final Path root = adaptPath("src/test/test_sourcecode/javasymbolsolver_0_6_0");
