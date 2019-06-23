@@ -120,10 +120,18 @@ public class UnicodeEscapeProcessingProviderTest {
 		assertEquals("12345678\\uuxx", new String(read("12345678\\uuxx")));
 	}
 	
-	private String read(String source) throws IOException {
+	static String read(String source) throws IOException {
+		return process(provider(source));
+	}
+
+	static UnicodeEscapeProcessingProvider provider(String source) {
 		UnicodeEscapeProcessingProvider provider = new UnicodeEscapeProcessingProvider(10, 
 				new StringProvider(source));
-	
+		return provider;
+	}
+
+	static String process(UnicodeEscapeProcessingProvider provider)
+			throws IOException {
 		StringBuilder result = new StringBuilder();
 		char[] buffer = new char[10];
 		while (true) {
