@@ -113,8 +113,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveReferenceToImportedType() {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
@@ -123,18 +123,25 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         ResolvedClassDeclaration compilationUnitDecl = mock(ResolvedClassDeclaration.class);
         when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
-        when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
+        /** MED CHANGED */
+        //when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
+        when(compilationUnitDecl.getQualifiedName()).thenReturn(CompilationUnit.class.getCanonicalName());
         TypeSolver typeSolver = mock(TypeSolver.class);
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
-        when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
+        /** MED CHANGED */
+        //when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
+        when(typeSolver.tryToSolveType(CompilationUnit.class.getCanonicalName())).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
-        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+        //assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+        /** MED CHnaged */
+        assertEquals(CompilationUnit.class.getCanonicalName(), ref.getCorrespondingDeclaration().getQualifiedName());
+
     }
 
     @Test
@@ -208,8 +215,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getQualifiedName());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveReferenceToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
@@ -226,12 +233,19 @@ class ContextTest extends AbstractSymbolResolutionTest {
         /** MED changed */
         //assertEquals("com.github.javaparser.ast.CompilationUnit", ref.declaringType().getQualifiedName());
         assertEquals(CompilationUnit.class.getCanonicalName(), ref.declaringType().getQualifiedName());
-
+        /**
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol in cu.getTypes() : cu
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToMethod(ContextTest.java:230)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToMethod(ContextTest.java:230)
+         *
+         *  Again with parse "Navigator"
+         */
         //verify(typeSolver);
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveCascadeOfReferencesToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
@@ -243,7 +257,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
-
+        /** MED
+         * [ERROR] resolveCascadeOfReferencesToMethod  Time elapsed: 0.004 s  <<< ERROR!
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol in cu.getTypes().stream() : cu.getTypes()
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveCascadeOfReferencesToMethod(ContextTest.java:252)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveCascadeOfReferencesToMethod(ContextTest.java:252)
+         */
         assertEquals("stream", ref.getName());
         assertEquals("java.util.Collection", ref.declaringType().getQualifiedName());
     }
@@ -321,8 +341,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -333,6 +353,19 @@ class ContextTest extends AbstractSymbolResolutionTest {
         /** MED ??? Problems with CombinedTypeSolver (Reflection and JartypeSolver) */
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+        /** MED
+         * [ERROR] resolveGenericReturnTypeOfMethodInJar  Time elapsed: 0.003 s  <<< ERROR!
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveGenericReturnTypeOfMethodInJar(ContextTest.java:342)
+         *
+         *  NOTE: this MAY have something to do with loading Navigator.java above on line 334 ... because the
+         *  Navigator.java source code read in is using
+         *  the old "com.github...", but I also believe it may reference things like generated code
+         *
+         *  if I change the file to use the new package... "org.javaparser..." it fails
+         *  if I use the old "com.github..." it fails
+         *  I believe there are fails found by the Reflection
+         */
 
         assertEquals("getTypes", methodUsage.getName());
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", methodUsage.returnType().describe());
@@ -430,8 +463,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("java.util.List<javaparser.GenericClass.Bar.NestedBar>", methodUsage.getParamType(0).describe());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -442,14 +475,18 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         /** MED ??? there seems to be an issue with the CombinedTypeSolver using ReflectionTypeSolver & JarTypeSolver */
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetTypes);
+        /** MED
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveTypeUsageOfFirstMethodInGenericClass(ContextTest.java:451)
+         */
 
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
         assertEquals(1, filterUsage.returnType().asReferenceType().typeParametersValues().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", filterUsage.returnType().asReferenceType().typeParametersValues().get(0).describe());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveTypeUsageOfMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -461,11 +498,17 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToStream);
 
+        /** MED
+         * [ERROR] resolveTypeUsageOfMethodInGenericClass  Time elapsed: 0.003 s  <<< ERROR!
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveTypeUsageOfMethodInGenericClass(ContextTest.java:469)
+         * again using parseSample("Navigator") has code with the old references "com.github..."
+         */
         assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveTypeUsageOfCascadeMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -476,12 +519,18 @@ class ContextTest extends AbstractSymbolResolutionTest {
         /** MED ??? Problems with CombinedTypeSolver (Reflection and JartypeSolver) */
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         MethodUsage filterUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToFilter);
-
+        /** MED
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol in cu.getTypes().stream().filter((t) -> t.getName().equals(name)) : cu.getTypes().stream()
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveLambdaType(ContextTest.java:502)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveLambdaType(ContextTest.java:502)
+         *
+         */
         assertEquals("java.util.stream.Stream<com.github.javaparser.ast.body.TypeDeclaration>", filterUsage.returnType().describe());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveLambdaType() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -497,8 +546,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("java.util.function.Predicate<? super com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveReferenceToLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -510,14 +559,20 @@ class ContextTest extends AbstractSymbolResolutionTest {
         /** MED ??? Problem with the CombinedTypeSolver (Reflection JarTypeSolver) */
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         ResolvedType typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
-
+        /** MED stacktrace
+         * resolveReferenceToLambdaParam  Time elapsed: 0.003 s  <<< ERROR!
+         * java.lang.RuntimeException: Error calculating the type of parameter (t) -> t.getName().equals(name) of method call cu.getTypes().stream().filter((t) -> t.getName().equals(name))
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToLambdaParam(ContextTest.java:519)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol in cu.getTypes().stream().filter((t) -> t.getName().equals(name)) : cu.getTypes().stream()
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToLambdaParam(ContextTest.java:519)
+         */
         assertEquals("? super com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
 
 
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void resolveReferenceToCallOnLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
@@ -526,9 +581,18 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         /** MED ??? there seems to be an issue with the CombinedTypeSolver using ReflectionTypeSolver & JarTypeSolver */
-        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        //TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(callToGetName);
 
+        /**
+         * java.lang.RuntimeException: Error calculating the type of parameter (t) -> t.getName( ).equals(name) of method call cu.getTypes().stream().filter((t) -> t.getName().equals(name))
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToCallOnLambdaParam(ContextTest.java:537)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol in cu.getTypes().stream().filter((t) -> t.getName().equals(name)) : cu.getTypes().stream()
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToCallOnLambdaParam(ContextTest.java:537)
+         * Caused by: org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : CompilationUnit
+         *         at org.javaparser.symbolsolver.resolution.ContextTest.resolveReferenceToCallOnLambdaParam(ContextTest.java:537)
+         */
         assertEquals("getName", methodUsage.getName());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.declaringType().getQualifiedName());
     }

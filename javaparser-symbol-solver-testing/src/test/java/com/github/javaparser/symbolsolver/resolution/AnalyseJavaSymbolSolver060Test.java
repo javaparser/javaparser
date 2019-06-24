@@ -38,8 +38,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * We analyze JavaParser version 0.6.0.
  */
-//@SlowTest
-@Disabled
+/** MED Not sure what's going on here */
+@SlowTest
 class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static final Path root = adaptPath("src/test/test_sourcecode/javasymbolsolver_0_6_0");
@@ -53,7 +53,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
                     new ReflectionTypeSolver(),
                     new JavaParserTypeSolver(new File(src + "/java-symbol-solver-core")),
                     new JavaParserTypeSolver(new File(src + "/java-symbol-solver-logic")),
-                    new JavaParserTypeSolver(new File(src + "/java-symbol-solver-model")),
+                    new JavaParserTypeSolver(new File( src + "/java-symbol-solver-model")),
                     new JarTypeSolver(lib + "/guava-21.0.jar"),
                     new JarTypeSolver(lib + "/javaparser-core-3.3.0.jar"),
                     new JarTypeSolver(lib + "/javaslang-2.0.3.jar"),

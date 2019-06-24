@@ -249,26 +249,38 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void testGetInterfaces() {
         /** MED CHANGED */
-        //JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType(CompilationUnit.class.getCanonicalName());
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        //JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType(CompilationUnit.class.getCanonicalName());
         assertEquals(ImmutableSet.of(), compilationUnit.getInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
-
+        /**
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : org.javaparser.ast.CompilationUnit
+         *         at org.javaparser.symbolsolver.javassistmodel.JavassistClassDeclarationTest.testGetInterfaces(JavassistClassDeclarationTest.java:257)
+         */
         JavassistClassDeclaration coid = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.DocumentableNode"), coid.getInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void testGetAllInterfaces() {
+        /** MED changed */
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        //JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType(CompilationUnit.class.getCanonicalName());
+
         assertEquals(ImmutableSet.of(), compilationUnit.getAllInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
-        /* MED CHANGED */
-        //JavassistClassDeclaration coid = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
-        JavassistClassDeclaration coid = (JavassistClassDeclaration) typeSolver.solveType(ClassOrInterfaceDeclaration.class.getCanonicalName());
+        /** MED CHANGED */
+        JavassistClassDeclaration coid = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
+        //JavassistClassDeclaration coid = (JavassistClassDeclaration) typeSolver.solveType(ClassOrInterfaceDeclaration.class.getCanonicalName());
+
+        /** MED
+         *
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : org.javaparser.ast.body.ClassOrInterfaceDeclaration
+         *         at org.javaparser.symbolsolver.javassistmodel.JavassistClassDeclarationTest.testGetAllInterfaces(JavassistClassDeclarationTest.java:271)
+         */
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.NamedNode", "com.github.javaparser.ast.body.AnnotableNode", "com.github.javaparser.ast.DocumentableNode"), coid.getAllInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
 
@@ -299,13 +311,17 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("java.lang.Object", ancestor.getQualifiedName());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void testGetInterfacesWithoutParameters() {
         /** MED CHANGED */
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of(), compilationUnit.getInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
 
+        /**
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : org.javaparser.ast.body.ClassOrInterfaceDeclaration
+         *         at org.javaparser.symbolsolver.javassistmodel.JavassistClassDeclarationTest.testGetInterfacesWithoutParameters(JavassistClassDeclarationTest.java:309)
+         */
         JavassistClassDeclaration coid = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends", "com.github.javaparser.ast.nodeTypes.NodeWithImplements"), coid.getInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
@@ -345,14 +361,18 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.T").get().asReferenceType().getQualifiedName());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     void testGetAllInterfacesWithoutParameters() {
         /** MED CHANGED */
         //JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType(CompilationUnit.class.getCanonicalName());
         assertEquals(ImmutableSet.of("java.lang.Cloneable"), compilationUnit.getAllInterfaces().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
 
+        /**
+         * org.javaparser.resolution.UnsolvedSymbolException: Unsolved symbol : org.javaparser.ast.CompilationUnit
+         *         at org.javaparser.symbolsolver.javassistmodel.JavassistClassDeclarationTest.testGetAllInterfacesWithoutParameters(JavassistClassDeclarationTest.java:353)
+         */
         JavassistClassDeclaration coid = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations",

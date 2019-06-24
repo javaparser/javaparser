@@ -32,8 +32,8 @@ public class MethodsResolutionWithJavassistTest extends AbstractResolutionTest {
         Log.setAdapter(new Log.SilentAdapter());
     }
 
-    //@Test
-    @Disabled
+    @Test
+    //@Disabled
     public void testOverloadedMethods() throws Exception {
         CompilationUnit cu = parseSample("OverloadedMethodCall");
 
