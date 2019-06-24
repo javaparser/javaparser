@@ -1,0 +1,2 @@
+I'm adding this file to discuss the 
+issues with changing the package name
