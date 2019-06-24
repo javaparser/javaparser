@@ -45,7 +45,7 @@ class CompilationUnitTest {
 
     /** MED added ...AFTER we move from com.github.javaparser the class location will change, and
      * the path will change, and this should point to the right place */
-    Path JAVAPARSER_PATH = Paths.get(HasParentNode.class.getPackage().getName().replace(".", "\\"));
+    Path JAVAPARSER_PATH = Paths.get(HasParentNode.class.getPackage().getName().replace(".", "/"));
 
     @Test
     void testGetSourceRoot() throws IOException {
