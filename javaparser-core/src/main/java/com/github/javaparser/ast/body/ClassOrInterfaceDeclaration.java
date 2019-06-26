@@ -44,9 +44,12 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.function.Consumer;
 import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -206,6 +209,14 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      */
     public boolean isLocalClassDeclaration() {
         return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
+    }
+
+    @Override
+    public Optional<String> getFullyQualifiedName() {
+        if (isLocalClassDeclaration()) {
+            return Optional.empty();
+        }
+        return super.getFullyQualifiedName();
     }
 
     /**

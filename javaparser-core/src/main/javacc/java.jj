@@ -1988,12 +1988,12 @@ Expression AllocationExpression(Expression scope):
 {
     "new" { if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);} }
     
+    [ typeArgs = TypeArguments() ]
     annotations = Annotations() 
     (
         type = PrimitiveType(annotations)
         ret = ArrayCreation(begin, type)
     |
-        [ typeArgs = TypeArguments() ]
         type = ClassOrInterfaceType(annotations)
         (
             ret = ArrayCreation(begin, type)

@@ -42,25 +42,25 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
+
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import static com.github.javaparser.JavaToken.Kind.*;
+
+import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Range.*;
+import static com.github.javaparser.Range.range;
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -564,6 +564,11 @@ public class CompilationUnit extends Node {
         return this;
     }
 
+    public CompilationUnit setStorage(Path path, Charset charset) {
+        this.storage = new Storage(this, path, charset);
+        return this;
+    }
+
     /**
      * Create (or overwrite) a module declaration in this compilation unit with name "name".
      *
@@ -606,9 +611,18 @@ public class CompilationUnit extends Node {
 
         private final Path path;
 
+        private final Charset encoding;
+
         private Storage(CompilationUnit compilationUnit, Path path) {
             this.compilationUnit = compilationUnit;
             this.path = path.toAbsolutePath();
+            this.encoding = UTF8;
+        }
+
+        private Storage(CompilationUnit compilationUnit, Path path, Charset encoding) {
+            this.compilationUnit = compilationUnit;
+            this.path = path.toAbsolutePath();
+            this.encoding = encoding;
         }
 
         /**
@@ -623,6 +637,13 @@ public class CompilationUnit extends Node {
          */
         public CompilationUnit getCompilationUnit() {
             return compilationUnit;
+        }
+
+        /**
+         * @return the encoding used to read the file.
+         */
+        public Charset getEncoding() {
+            return encoding;
         }
 
         /**
@@ -651,16 +672,27 @@ public class CompilationUnit extends Node {
         }
 
         /**
-         * Saves a compilation unit to its original location with formatting according to the function
-         * passed as a parameter.
+         * Saves a compilation unit to its original location with formatting according to the function passed as a
+         * parameter.
          *
          * @param makeOutput a function that formats the compilation unit
          */
         public void save(Function<CompilationUnit, String> makeOutput) {
+            save(makeOutput, encoding);
+        }
+
+        /**
+         * Saves a compilation unit to its original location with formatting and encoding according to the function and
+         * encoding passed as a parameter.
+         *
+         * @param makeOutput a function that formats the compilation unit
+         * @param encoding the encoding to use for the saved file
+         */
+        public void save(Function<CompilationUnit, String> makeOutput, Charset encoding) {
             try {
                 Files.createDirectories(path.getParent());
                 final String code = makeOutput.apply(getCompilationUnit());
-                Files.write(path, code.getBytes(UTF8));
+                Files.write(path, code.getBytes(encoding));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
