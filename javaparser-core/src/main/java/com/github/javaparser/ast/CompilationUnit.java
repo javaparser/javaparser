@@ -640,6 +640,13 @@ public class CompilationUnit extends Node {
         }
 
         /**
+         * @return the encoding used to read the file.
+         */
+        public Charset getEncoding() {
+            return encoding;
+        }
+
+        /**
          * @return the source root directory, calculated from the path of this compiation unit, and the package
          * declaration of this compilation unit. If the package declaration is invalid (when it does not match the end
          * of the path) a RuntimeException is thrown.
