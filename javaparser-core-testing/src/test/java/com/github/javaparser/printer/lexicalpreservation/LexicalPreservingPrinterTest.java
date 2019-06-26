@@ -456,7 +456,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
     
     @Test
-    void printASimpleMethodRemovingALineComment() {
+    void printASimpleMethodRemovingALineEndComment() {
         String code = "class A { foo() { int result = 0; // comment" + EOL + "return 0; }}";
         
         CompilationUnit cu = parse(code);
@@ -464,7 +464,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         Comment comment = cu.findFirst(ExpressionStmt.class).get().getComment().get();
         comment.remove();
         
-        assertEquals("class A { foo() { int result = 0;" + EOL + "return 0; }}", LexicalPreservingPrinter.print(cu));
+        assertEquals("class A { foo() { int result = 0; " + EOL + "return 0; }}", LexicalPreservingPrinter.print(cu));
     }
     
     @Test
