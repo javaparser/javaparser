@@ -21,34 +21,41 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.Type;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Range.*;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.utils.TestUtils.*;
+import static com.github.javaparser.utils.Utils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
-import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.Type;
 
 class JavaParserTest {
 
@@ -70,6 +77,32 @@ class JavaParserTest {
         assertTrue(memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
+
+    @Test
+    void testSourcePositionsWithUnicodeEscapes() {
+        String code = "@interface AD \\u007B String foo(); \\u007D";
+        CompilationUnit cu = parseWithUnicodeEscapes(code).getResult().get();
+        AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
+        assertTrue(memberDeclaration.getRange().isPresent());
+        assertEquals(new Range(new Position(1, 22), new Position(1, 34)), memberDeclaration.getRange().get());
+    }
+
+    @Test
+    void testSourcePositionsWithBrokenUnicodeEscapes() {
+    	// Source positions
+    	//                      111111111122222222 2 22333 3333
+    	//             123456789012345678901234567 8 90123 4567
+    	String code = "@interface AD { String X = \"\\uABC\"; }";
+    	ParseResult<CompilationUnit> cu = parseWithUnicodeEscapes(code);
+    	assertFalse(cu.getResult().isPresent());
+    	assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
+    }
+    
+	private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
+		ParserConfiguration config = new ParserConfiguration();
+        config.setPreprocessUnicodeEscapes(true);
+		return new JavaParser(config).parse(code);
+	}
 
     @Test
     void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
