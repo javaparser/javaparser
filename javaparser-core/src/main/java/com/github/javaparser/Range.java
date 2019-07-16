@@ -104,10 +104,10 @@ public class Range {
     }
     
     /**
-     * Checks whether this Range overlaps with another Range. If two ranges overlap, this range strictlyContains either the begin or the end of the other range.
+     * Checks whether this Range overlaps with another Range. If two ranges overlap, this range or the other range strictlyContains the begin or the end of the other range.
      */
     public boolean overlapsWith(Range other) {
-		return strictlyContains(other.begin) || strictlyContains(other.end);
+		return strictlyContains(other.begin) || strictlyContains(other.end) || other.strictlyContains(begin) || other.strictlyContains(end);
 	}
     
     public boolean isBefore(Position position) {
