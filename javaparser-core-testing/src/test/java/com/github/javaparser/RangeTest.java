@@ -142,5 +142,13 @@ class RangeTest {
         assertFalse(r1.overlapsWith(r2));
         assertFalse(r2.overlapsWith(r1));
     }
+    
+    @Test
+    void strictlyContainedRangesOverlap() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(2, 1, 3, 4);
+        assertTrue(r1.overlapsWith(r2));
+        assertTrue(r2.overlapsWith(r1));
+    }
 
 }
