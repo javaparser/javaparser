@@ -82,6 +82,13 @@ public class Range {
     }
     
     /**
+     * As strictlyContains, but a position that matches the begin or the end of this range is also considered contained one in each other.
+     */
+    public boolean contains(Position position) {
+        return strictlyContains(position) || begin.equals(position) || end.equals(position);
+    }
+    
+    /**
      * Does this strictly contain other? It means that this has to be larger than other and it has to start before
      * other and end after other.
      */
