@@ -128,10 +128,11 @@ class RangeTest {
     }
     
     @Test
-    void rangesOverlapBegin() {
+    void rangesOverlap() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(3, 5, 5, 10);
-        assertFalse(r1.overlapsWith(r2));
+        assertTrue(r1.overlapsWith(r2));
+        assertTrue(r2.overlapsWith(r1));
     }
 
 }
