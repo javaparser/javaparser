@@ -102,5 +102,12 @@ class RangeTest {
         assertEquals(5, r1.getLineCount());
         assertEquals(32, r2.getLineCount());
     }
+    
+    @Test
+    void aRangeContainsItsBegin() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertTrue(r.contains(r.begin));
+    }
+
 
 }
