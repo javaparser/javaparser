@@ -126,5 +126,12 @@ class RangeTest {
         Range r = Range.range(1, 1, 3, 10);
         assertFalse(r.strictlyContains(r.end));
     }
+    
+    @Test
+    void rangesOverlapBegin() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(3, 5, 5, 10);
+        assertFalse(r1.overlapsWith(r2));
+    }
 
 }
