@@ -116,13 +116,13 @@ class RangeTest {
     }
     
     @Test
-    void aRangeStrictlyContainsItsBegin() {
+    void aRangeDoesntStrictlyContainItsBegin() {
         Range r = Range.range(1, 1, 3, 10);
         assertFalse(r.strictlyContains(r.begin));
     }
 
     @Test
-    void aRangeStrictlyContainsItsEnd() {
+    void aRangeDoesntStrictlyContainItsEnd() {
         Range r = Range.range(1, 1, 3, 10);
         assertFalse(r.strictlyContains(r.end));
     }
