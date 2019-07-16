@@ -80,7 +80,7 @@ public class Range {
         return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
                 (end.isAfter(other.end) || end.equals(other.end));
     }
-
+    
     /**
      * Does this strictly contain other? It means that this has to be larger than other and it has to start before
      * other and end after other.
@@ -88,7 +88,14 @@ public class Range {
     public boolean strictlyContains(Range other) {
         return begin.isBefore(other.begin) && end.isAfter(other.end);
     }
-
+    
+    /**
+     * Does this strictly contain position. It means that the position is after the begin of this range and before the end of this range.
+     */
+    public boolean strictlyContains(Position position) {
+        return position.isAfter(begin) && position.isBefore(end);
+    }
+    
     public boolean isBefore(Position position) {
         return end.isBefore(position);
     }
