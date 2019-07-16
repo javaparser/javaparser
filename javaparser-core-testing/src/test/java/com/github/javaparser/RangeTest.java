@@ -114,5 +114,17 @@ class RangeTest {
         Range r = Range.range(1, 1, 3, 10);
         assertTrue(r.contains(r.end));
     }
+    
+    @Test
+    void aRangeStrictlyContainsItsBegin() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertFalse(r.strictlyContains(r.begin));
+    }
+
+    @Test
+    void aRangeStrictlyContainsItsEnd() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertFalse(r.strictlyContains(r.end));
+    }
 
 }
