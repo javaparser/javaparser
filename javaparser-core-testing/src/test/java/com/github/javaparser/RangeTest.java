@@ -109,5 +109,10 @@ class RangeTest {
         assertTrue(r.contains(r.begin));
     }
 
+    @Test
+    void aRangeContainsItsEnd() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertTrue(r.contains(r.end));
+    }
 
 }
