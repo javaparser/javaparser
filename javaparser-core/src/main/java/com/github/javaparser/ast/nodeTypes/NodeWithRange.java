@@ -2,18 +2,20 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
 /**
  * A node that has a Range, which is every Node.
- * 
  */
 public interface NodeWithRange<N> {
     Optional<Range> getRange();
 
     N setRange(Range range);
+
+    Optional<CompilationUnit> findCompilationUnit();
 
     /**
      * The begin position of this node in the source file.
@@ -30,7 +32,8 @@ public interface NodeWithRange<N> {
     }
 
     default boolean containsWithin(Node other) {
-        if (getRange().isPresent() && other.getRange().isPresent()) {
+        if (findCompilationUnit().orElse(null) == other.findCompilationUnit().orElse(null) &&
+                getRange().isPresent() && other.getRange().isPresent()) {
             return getRange().get().contains(other.getRange().get());
         }
         return false;
