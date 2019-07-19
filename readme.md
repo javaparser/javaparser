@@ -100,6 +100,8 @@ The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
 
+**Note**: for Eclipse IDE follow the steps described in the wiki: https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide
+
 ## More information
 
 #### [JavaParser.org](https://javaparser.org) is the main information site.
