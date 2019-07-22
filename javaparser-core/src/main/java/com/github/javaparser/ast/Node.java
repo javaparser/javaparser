@@ -40,21 +40,20 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -223,7 +222,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
-     * no range information is known, or that it is not of interest.
+     *              no range information is known, or that it is not of interest.
      */
     public Node setRange(Range range) {
         if (this.range == range) {
@@ -476,8 +475,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Sets data for this node using the given key.
      * For information on creating DataKey, see {@link DataKey}.
      *
-     * @param <M> The type of data
-     * @param key The singleton key for the data
+     * @param <M>    The type of data
+     * @param key    The singleton key for the data
      * @param object The data object
      * @see DataKey
      */
@@ -585,7 +584,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch(mode) {
+        switch (mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -731,7 +730,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch(traversal) {
+        switch (traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:
@@ -856,6 +855,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
             return Optional.empty();
         });
+    }
+
+    /**
+     * Determines whether this node is an ancestor of the given node. Any node is an ancestor of itself.
+     *
+     * @param descendant the node for which to determine whether it has this node as an ancestor.
+     * @return {@code true} if this node is an ancestor of the given node, and {@code false} otherwise.
+     * @see HasParentNode#isDescendantOf(Node)
+     */
+    public boolean isAncestorOf(Node descendant) {
+        return findFirst(Node.class, n -> n == descendant).isPresent();
     }
 
     /**
