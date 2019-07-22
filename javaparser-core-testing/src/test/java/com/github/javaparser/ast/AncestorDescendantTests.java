@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AncestorDescendantTests {
 
     @Test
-    void nodeIsAncestorOfItself() throws IOException {
+    void nodeIsNotAncestorOfItself() throws IOException {
         JavaParser parser = new JavaParser();
 
         Provider provider = Providers.resourceProvider("com/github/javaparser/range/A.java");
@@ -26,11 +26,11 @@ public class AncestorDescendantTests {
                 .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
                 .getExpression().asVariableDeclarationExpr(); // a = 42
 
-        assertTrue(node.isAncestorOf(node));
+        assertFalse(node.isAncestorOf(node));
     }
 
     @Test
-    void nodeIsDescendantOfItself() throws IOException {
+    void nodeIsNotDescendantOfItself() throws IOException {
         JavaParser parser = new JavaParser();
 
         Provider provider = Providers.resourceProvider("com/github/javaparser/range/A.java");
@@ -44,7 +44,7 @@ public class AncestorDescendantTests {
                 .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
                 .getExpression().asVariableDeclarationExpr(); // a = 42
 
-        assertTrue(node.isDescendantOf(node));
+        assertFalse(node.isDescendantOf(node));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class AncestorDescendantTests {
 
         assertTrue(superNode.isAncestorOf(subNode));
         assertFalse(subNode.isAncestorOf(superNode));
-        assertTrue(subNode.isDescendantOf(subNode));
+        assertTrue(subNode.isDescendantOf(superNode));
         assertFalse(superNode.isDescendantOf(subNode));
     }
 

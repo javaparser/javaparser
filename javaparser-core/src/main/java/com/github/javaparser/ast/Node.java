@@ -858,14 +858,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Determines whether this node is an ancestor of the given node. Any node is an ancestor of itself.
+     * Determines whether this node is an ancestor of the given node. A node is <i>not</i> an ancestor of itself.
      *
      * @param descendant the node for which to determine whether it has this node as an ancestor.
      * @return {@code true} if this node is an ancestor of the given node, and {@code false} otherwise.
      * @see HasParentNode#isDescendantOf(Node)
      */
     public boolean isAncestorOf(Node descendant) {
-        return findFirst(Node.class, n -> n == descendant).isPresent();
+        return this != descendant && findFirst(Node.class, n -> n == descendant).isPresent();
     }
 
     /**
