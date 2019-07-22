@@ -694,10 +694,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     public Node findRootNode() {
         Node n = this;
-        // (Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
-        if (this instanceof Comment && ((Comment) this).getCommentedNode().isPresent()) {
-            n = ((Comment) this).getCommentedNode().get();
-        }
         while (n.getParentNode().isPresent()) {
             n = n.getParentNode().get();
         }

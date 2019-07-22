@@ -143,6 +143,16 @@ public abstract class Comment extends Node {
         }
     }
 
+   @Override
+    public Node findRootNode() {
+       // (Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
+        Node n = getCommentedNode().orElse(this);
+        while (n.getParentNode().isPresent()) {
+            n = n.getParentNode().get();
+        }
+        return n;
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
