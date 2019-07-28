@@ -238,12 +238,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @param comment to be set
      */
-    public final Node setComment(final Comment comment) {
+    public Node setComment(final Comment comment) {
         if (this.comment == comment) {
             return this;
-        }
-        if (comment != null && (this instanceof Comment)) {
-            throw new RuntimeException("A comment can not be commented");
         }
         notifyPropertyChange(ObservableProperty.COMMENT, this.comment, comment);
         if (this.comment != null) {
