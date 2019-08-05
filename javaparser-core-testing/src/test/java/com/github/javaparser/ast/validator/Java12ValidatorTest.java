@@ -33,8 +33,8 @@ class Java12ValidatorTest {
     }
 
     @Test
-    void valueBreakAllowed() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break 6;}"));
+    void yieldAllowed() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: yield 6;}"));
         assertNoProblems(result);
     }
 }

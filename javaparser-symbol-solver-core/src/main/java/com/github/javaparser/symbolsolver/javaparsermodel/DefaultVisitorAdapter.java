@@ -482,4 +482,9 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     public ResolvedType visit(SwitchExpr node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
+
+    @Override
+    public ResolvedType visit(YieldStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
 }

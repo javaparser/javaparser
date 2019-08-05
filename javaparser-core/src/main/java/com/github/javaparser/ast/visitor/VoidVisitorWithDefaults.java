@@ -515,4 +515,9 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     public void visit(final SwitchExpr n, final A arg) {
         defaultAction(n, arg);
     }
+
+    @Override
+    public void visit(final YieldStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
 }

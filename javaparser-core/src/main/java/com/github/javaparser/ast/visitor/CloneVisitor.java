@@ -22,10 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -845,9 +842,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final BreakStmt n, final Object arg) {
-        Expression value = cloneNode(n.getValue(), arg);
+        SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), value);
+        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1210,5 +1207,16 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         for (DataKey dataKey : source.getDataKeys()) {
             destination.setData(dataKey, source.getData(dataKey));
         }
+    }
+
+    @Override
+    public Visitable visit(final YieldStmt n, final Object arg) {
+        Expression value = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        YieldStmt r = new YieldStmt(n.getTokenRange().orElse(null), value);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
     }
 }

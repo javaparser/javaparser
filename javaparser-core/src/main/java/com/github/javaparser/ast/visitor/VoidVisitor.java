@@ -224,4 +224,6 @@ public interface VoidVisitor<A> {
     void visit(Modifier n, A arg);
 
     void visit(SwitchExpr switchExpr, A arg);
+
+    void visit(YieldStmt n, A arg);
 }

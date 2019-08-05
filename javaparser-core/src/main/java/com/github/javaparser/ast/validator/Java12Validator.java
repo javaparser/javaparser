@@ -9,6 +9,6 @@ public class Java12Validator extends Java11Validator {
         super();
         remove(noSwitchExpressions);
         remove(onlyOneLabelInSwitchCase);
-        remove(noValueBreak);
+        remove(noYield);
     }
 }
