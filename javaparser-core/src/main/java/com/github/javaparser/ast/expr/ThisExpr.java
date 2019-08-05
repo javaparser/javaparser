@@ -174,6 +174,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeTypeName() {
         return setTypeName((Name) null);
     }

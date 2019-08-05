@@ -79,4 +79,16 @@ public interface HasParentNode<T> extends Observable {
         return Optional.empty();
     }
 
+    /**
+     * Determines whether this {@code HasParentNode} node is a descendant of the given node. A node is <i>not</i> a
+     * descendant of itself.
+     *
+     * @param ancestor the node for which to determine whether it has this node as an ancestor.
+     * @return {@code true} if this node is a descendant of the given node, and {@code false} otherwise.
+     * @see Node#isAncestorOf(Node)
+     */
+    default boolean isDescendantOf(Node ancestor) {
+        return findAncestor(Node.class, n -> n == ancestor).isPresent();
+    }
+
 }
