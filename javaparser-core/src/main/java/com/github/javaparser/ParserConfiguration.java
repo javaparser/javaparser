@@ -21,22 +21,39 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.*;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.version.Java10PostProcessor;
-import com.github.javaparser.version.Java11PostProcessor;
-import com.github.javaparser.version.Java12PostProcessor;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.utils.Utils.*;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ParseResult.PostProcessor;
+import com.github.javaparser.Providers.PreProcessor;
+import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.validator.Java10Validator;
+import com.github.javaparser.ast.validator.Java11Validator;
+import com.github.javaparser.ast.validator.Java12Validator;
+import com.github.javaparser.ast.validator.Java1_0Validator;
+import com.github.javaparser.ast.validator.Java1_1Validator;
+import com.github.javaparser.ast.validator.Java1_2Validator;
+import com.github.javaparser.ast.validator.Java1_3Validator;
+import com.github.javaparser.ast.validator.Java1_4Validator;
+import com.github.javaparser.ast.validator.Java5Validator;
+import com.github.javaparser.ast.validator.Java6Validator;
+import com.github.javaparser.ast.validator.Java7Validator;
+import com.github.javaparser.ast.validator.Java8Validator;
+import com.github.javaparser.ast.validator.Java9Validator;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.version.Java10PostProcessor;
+import com.github.javaparser.version.Java11PostProcessor;
+import com.github.javaparser.version.Java12PostProcessor;
 
 /**
  * The configuration that is used by the parser.
@@ -138,12 +155,38 @@ public class ParserConfiguration {
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
-        preProcessors.add(innerProvider -> {
-            if (preprocessUnicodeEscapes) {
-                return new UnicodeEscapeProcessingProvider(innerProvider);
-            }
-            return innerProvider;
-        });
+    	class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
+    		private UnicodeEscapeProcessingProvider _unicodeDecoder;
+
+			@Override
+    		public Provider process(Provider innerProvider) {
+	            if (isPreprocessUnicodeEscapes()) {
+	                _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+					return _unicodeDecoder;
+	            }
+	            return innerProvider;
+    		}
+    		
+			@Override
+			public void process(ParseResult<? extends Node> result,
+					ParserConfiguration configuration) {
+				if (isPreprocessUnicodeEscapes()) {
+					result.getResult().ifPresent(
+						root -> {
+							PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+							if (!mapping.isEmpty()) {
+								root.walk(
+									node -> node.getRange().ifPresent(
+										range -> node.setRange(mapping.transform(range))));
+							}
+						}
+					);
+				}
+			}
+    	}
+    	UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
+    	preProcessors.add(unicodeProcessor);
+		postProcessors.add(unicodeProcessor);
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
@@ -279,14 +322,9 @@ public class ParserConfiguration {
     /**
      * When set to true, unicode escape handling is done by preprocessing the whole input,
      * meaning that all unicode escapes are turned into unicode characters before parsing.
-     * That means the AST will never contain literal unicode escapes,
-     * and that positions will point to where a token was found in the *processed input*, not in the original input,
-     * which is mostly not what you want.
-     * That's why the default is false, which is not the correct way to parse a Java file according to the Java Language Specification,
-     * but it works for almost any input, since unicode escapes are mostly used in comments, strings and characters,
-     * and the parser will understand them in those locations.
-     * The unicode escapes will not be processed and are transfered intact to the AST,
-     * and the locations will point to the original stream.
+     * That means the AST will never contain literal unicode escapes. However,
+     * positions in the AST will point to the original input, which is exactly the same as without this option.
+     * Without this option enabled, the unicode escapes will not be processed and are transfered intact to the AST.
      */
     public ParserConfiguration setPreprocessUnicodeEscapes(boolean preprocessUnicodeEscapes) {
         this.preprocessUnicodeEscapes = preprocessUnicodeEscapes;

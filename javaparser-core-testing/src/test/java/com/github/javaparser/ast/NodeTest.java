@@ -307,6 +307,37 @@ class NodeTest {
     }
 
     @Test
+    void findCompilationUnitOfCommentNode() {
+        CompilationUnit cu = parse("class X {\n" +
+                "  void x() {\n" +
+                "    // this is a comment\n" +
+                "    foo();\n" +
+                "  }\n" +
+                "}\n");
+
+        Comment comment = cu.getType(0).getMember(0)
+                .asMethodDeclaration().getBody().get()
+                .getStatement(0).getComment().get();
+
+        assertTrue(comment.findCompilationUnit().isPresent());
+    }
+
+    @Test
+    void findCompilationUnitOfOrphanCommentNode() {
+        CompilationUnit cu = parse("class X {\n" +
+                "  void x() {\n" +
+                "    // this is a comment\n" +
+                "  }\n" +
+                "}\n");
+
+        Comment comment = cu.getType(0).getMember(0)
+                .asMethodDeclaration().getBody().get()
+                .getOrphanComments().get(0);
+
+        assertTrue(comment.findCompilationUnit().isPresent());
+    }
+
+    @Test
     void removeAllOnRequiredProperty() {
         CompilationUnit cu = parse("class X{ void x(){}}");
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
@@ -401,7 +432,7 @@ class NodeTest {
         Optional<IntegerLiteralExpr> ints = e.findFirst(IntegerLiteralExpr.class);
         assertEquals("Optional[1]", ints.toString());
     }
-    
+
     @Test
     void stream() {
         Expression e = parseExpression("1+2+3");

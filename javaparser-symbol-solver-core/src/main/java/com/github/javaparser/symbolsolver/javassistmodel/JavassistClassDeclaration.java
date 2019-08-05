@@ -203,7 +203,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
             boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
             if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
+                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
+                candidates.add(candidate);
+
+                // no need to search for overloaded/inherited methods if the method has no parameters
+                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
+                    return SymbolReference.solved(candidate);
+                }
             }
         }
 

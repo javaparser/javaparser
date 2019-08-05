@@ -364,9 +364,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         if (ref == null || !ref.isSolved()) {
             ref = solveType(typeName);
         }
-        if (!ref.isSolved() && classOrInterfaceType.getScope().isPresent()) {
-            ref = solveType(classOrInterfaceType.getName().getId());
-        }
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }

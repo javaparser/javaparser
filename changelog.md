@@ -1,10 +1,58 @@
+Version 3.14.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/145?closed=1)
+
+Version 3.14.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/144?closed=1)
+
+Version 3.14.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/143?closed=1)
+
+Version 3.14.6 (oops, failed)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/142?closed=1)
+
+Version 3.14.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/141?closed=1)
+
+Version 3.14.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/140?closed=1)
+
+Version 3.14.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/139?closed=1)
+
+Version 3.14.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/138?closed=1)
+
+Version 3.14.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/137?closed=1)
+
+Version 3.14.0
+------------------
+* BREAKING: `SuperExpr` and `ThisExpr` used to have an `Expression classExpr`.
+this has been tightened to `Name typeName` which is more specific and easier to use.
+Checking if the expression is a `FieldAccessExpr` or `NameExpr` is no longer needed. 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/136?closed=1)
+
+Version 3.13.10
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/135?closed=1)
+
 Version 3.13.9
 ------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/134?closed=1)
 
 Version 3.13.8 (failed)
 ------------------
 (release failed)
-[issues resolved](https://github.com/javaparser/javaparser/milestone/134?closed=1)
 
 Version 3.13.7
 ------------------

@@ -473,13 +473,13 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(SuperExpr.class, sequence(
                 comment(),
-                conditional(ObservableProperty.CLASS_EXPR, IS_PRESENT, sequence(child(ObservableProperty.CLASS_EXPR), token(GeneratedJavaParserConstants.DOT))),
+                conditional(TYPE_NAME, IS_PRESENT, sequence(child(TYPE_NAME), token(GeneratedJavaParserConstants.DOT))),
                 token(GeneratedJavaParserConstants.SUPER)
         ));
 
         concreteSyntaxModelByClass.put(ThisExpr.class, sequence(
                 comment(),
-                conditional(ObservableProperty.CLASS_EXPR, IS_PRESENT, sequence(child(CLASS_EXPR), token(GeneratedJavaParserConstants.DOT))),
+                conditional(TYPE_NAME, IS_PRESENT, sequence(child(TYPE_NAME), token(GeneratedJavaParserConstants.DOT))),
                 token(GeneratedJavaParserConstants.THIS)
         ));
 

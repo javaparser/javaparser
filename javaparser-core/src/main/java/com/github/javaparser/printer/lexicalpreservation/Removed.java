@@ -86,4 +86,13 @@ public class Removed implements DifferenceElement {
     public boolean isRemoved() {
         return true;
     }
+    
+    public boolean isNewLine() {
+        if(isToken()) {
+            CsmToken csmToken = (CsmToken) element;
+            return csmToken.isNewLine();
+        }
+
+        return false;
+    }
 }

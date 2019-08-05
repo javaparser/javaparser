@@ -102,5 +102,53 @@ class RangeTest {
         assertEquals(5, r1.getLineCount());
         assertEquals(32, r2.getLineCount());
     }
+    
+    @Test
+    void aRangeContainsItsBegin() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertTrue(r.contains(r.begin));
+    }
+
+    @Test
+    void aRangeContainsItsEnd() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertTrue(r.contains(r.end));
+    }
+    
+    @Test
+    void aRangeDoesntStrictlyContainItsBegin() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertFalse(r.strictlyContains(r.begin));
+    }
+
+    @Test
+    void aRangeDoesntStrictlyContainItsEnd() {
+        Range r = Range.range(1, 1, 3, 10);
+        assertFalse(r.strictlyContains(r.end));
+    }
+    
+    @Test
+    void rangesOverlap() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(3, 5, 5, 10);
+        assertTrue(r1.overlapsWith(r2));
+        assertTrue(r2.overlapsWith(r1));
+    }
+    
+    @Test
+    void rangesDoNotOverlap() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(4, 11, 5, 10);
+        assertFalse(r1.overlapsWith(r2));
+        assertFalse(r2.overlapsWith(r1));
+    }
+    
+    @Test
+    void strictlyContainedRangesOverlap() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(2, 1, 3, 4);
+        assertTrue(r1.overlapsWith(r2));
+        assertTrue(r2.overlapsWith(r1));
+    }
 
 }

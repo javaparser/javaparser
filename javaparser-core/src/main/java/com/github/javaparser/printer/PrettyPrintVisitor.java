@@ -709,8 +709,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ThisExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        if (n.getClassExpr().isPresent()) {
-            n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            n.getTypeName().get().accept(this, arg);
             printer.print(".");
         }
         printer.print("this");
@@ -719,8 +719,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final SuperExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        if (n.getClassExpr().isPresent()) {
-            n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            n.getTypeName().get().accept(this, arg);
             printer.print(".");
         }
         printer.print("super");
@@ -1661,11 +1661,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         Node parent = node.getParentNode().orElse(null);
         if (parent == null) return;
-        List<Node> everything = new LinkedList<>(parent.getChildNodes());
+        List<Node> everything = new ArrayList<>(parent.getChildNodes());
         sortByBeginPosition(everything);
         int positionOfTheChild = -1;
-        for (int i = 0; i < everything.size(); i++) {
-            if (everything.get(i) == node) positionOfTheChild = i;
+        for (int i = 0; i < everything.size(); ++i) { // indexOf is by equality, so this is used to index by identity
+            if (everything.get(i) == node) {
+                positionOfTheChild = i;
+                break;
+            }
         }
         if (positionOfTheChild == -1) {
             throw new AssertionError("I am not a child of my parent.");
