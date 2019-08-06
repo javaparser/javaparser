@@ -539,7 +539,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(BreakStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.BREAK),
-                conditional(VALUE, IS_PRESENT, sequence(space(), child(VALUE))),
+                conditional(ObservableProperty.LABEL, IS_PRESENT, sequence(space(), child(ObservableProperty.LABEL))),
                 semicolon()
         ));
 
@@ -673,7 +673,15 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.CLASS_DECLARATION)
         ));
 
-        concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(comment(), token(GeneratedJavaParserConstants.RETURN),
+        concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(
+                comment(),
+                token(GeneratedJavaParserConstants.RETURN),
+                conditional(ObservableProperty.EXPRESSION, IS_PRESENT, sequence(space(), child(ObservableProperty.EXPRESSION))),
+                semicolon()));
+
+        concreteSyntaxModelByClass.put(YieldStmt.class, sequence(
+                comment(),
+                token(YIELD),
                 conditional(ObservableProperty.EXPRESSION, IS_PRESENT, sequence(space(), child(ObservableProperty.EXPRESSION))),
                 semicolon()));
 
@@ -939,7 +947,7 @@ public class ConcreteSyntaxModel {
         if (unsupportedNodeClassNames.isEmpty()) {
             initializationError = Optional.empty();
         } else {
-            initializationError = Optional.of("The CSM should include support for these classes: " + String.join(", ", unsupportedNodeClassNames));
+            initializationError = Optional.of("The " + ConcreteSyntaxModel.class.getSimpleName() + " should include support for these classes: " + String.join(", ", unsupportedNodeClassNames));
         }
     }
 

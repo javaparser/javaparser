@@ -29,10 +29,12 @@ import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.utils.TestParser.*;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -367,8 +369,13 @@ class PrettyPrintVisitorTest {
                 " */\n" +
                 "public void add(int x, int y){}}";
 
-        CompilationUnit cu_leadingTab = parse(input_leadingTab);
+        CompilationUnit cu_leadingTab = parseCompilationUnit(input_leadingTab);
         assertEqualsNoEol(expected, cu_leadingTab.toString());
-
+    }
+    
+    @Test
+    void printYield(){
+        Statement statement = parseStatement("yield 5*5;");
+        assertEqualsNoEol("yield 5 * 5;", statement.toString());
     }
 }

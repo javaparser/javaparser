@@ -1,1 +1,4 @@
-0 problems in 0 files
+com/github/javaparser/ast/stmt/YieldStmtTest.java
+(line 7,col 5) Parse error. Found "yield", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
+
+1 problems in 1 files

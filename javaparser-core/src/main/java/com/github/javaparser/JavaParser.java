@@ -378,8 +378,9 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseBodyDeclaration(String body) {
-        return parse(CLASS_BODY, provider(body));
+    @SuppressWarnings("unchecked")
+    public <T extends BodyDeclaration<?>> ParseResult<T> parseBodyDeclaration(String body) {
+        return (ParseResult<T>) parse(CLASS_BODY, provider(body));
     }
 
     /**
