@@ -254,6 +254,7 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
+| < YIELD: "yield" >
 | < REQUIRES: "requires" >
 | < TO: "to" >
 | < WITH: "with" >
@@ -2061,6 +2062,8 @@ Statement Statement():
         |
             ret = BreakStatement()
         |
+            ret = YieldStatement()
+        |
             ret = ContinueStatement()
         |
             ret = ReturnStatement()
@@ -2397,12 +2400,22 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	Expression value = null;
+	SimpleName label = null;
 	JavaToken begin;
 }
 {
-  "break" {begin=token();} [ value = Expression() ] ";"
-  { return new BreakStmt(range(begin, token()), value); }
+  "break" {begin=token();} [ label = SimpleName() ] ";"
+  { return new BreakStmt(range(begin, token()), label); }
+}
+
+YieldStmt YieldStatement():
+{
+	Expression value;
+	JavaToken begin;
+}
+{
+  "yield" {begin=token();} value = Expression() ";"
+  { return new YieldStmt(range(begin, token()), value); }
 }
 
 ContinueStmt ContinueStatement():

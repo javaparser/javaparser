@@ -121,6 +121,7 @@ public class TokenTypes {
             case VOID:
             case VOLATILE:
             case WHILE:
+            case YIELD:
             case REQUIRES:
             case TO:
             case WITH:

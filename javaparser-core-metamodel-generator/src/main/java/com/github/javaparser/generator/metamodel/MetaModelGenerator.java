@@ -132,6 +132,7 @@ public class MetaModelGenerator {
         add(TryStmt.class);
         add(LocalClassDeclarationStmt.class);
         add(WhileStmt.class);
+        add(YieldStmt.class);
         add(UnparsableStmt.class);
 
         add(ArrayType.class);
