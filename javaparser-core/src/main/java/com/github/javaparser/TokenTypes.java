@@ -145,6 +145,7 @@ public class TokenTypes {
             case HEXADECIMAL_EXPONENT:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
+            case TEXT_BLOCK_LITERAL:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
@@ -200,6 +201,8 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
+            case UNKNOWN:
+                return JavaToken.Category.UNKNOWN;
             // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
             case ENTER_MULTILINE_COMMENT:
@@ -208,6 +211,8 @@ public class TokenTypes {
             case LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
+            case TEXT_BLOCK_CONTENT:
+            case ENTER_TEXT_BLOCK:
             default:
                 throw new AssertionError("Invalid token kind " + kind);
         }

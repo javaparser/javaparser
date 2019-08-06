@@ -753,18 +753,22 @@ public abstract class Expression extends Node {
     public void ifSwitchExpr(Consumer<SwitchExpr> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isTextBlockLiteralExpr() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TextBlockLiteralExpr asTextBlockLiteralExpr() {
         throw new IllegalStateException(f("%s is not an TextBlockLiteralExpr", this));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TextBlockLiteralExpr> toTextBlockLiteralExpr() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
     }
 }

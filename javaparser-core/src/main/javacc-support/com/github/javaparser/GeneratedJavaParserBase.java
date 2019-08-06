@@ -355,7 +355,7 @@ abstract class GeneratedJavaParserBase {
     }
 
     /**
-     * Converts a NameExpr or a FieldAccessExpr scope to a Name. 
+     * Converts a NameExpr or a FieldAccessExpr scope to a Name.
      */
     Name scopeToName(Expression scope) {
         if (scope.isNameExpr()) {
@@ -368,5 +368,21 @@ abstract class GeneratedJavaParserBase {
 
         }
         throw new IllegalStateException("Unexpected expression type: " + scope.getClass().getSimpleName());
+    }
+
+    String unquote(String s) {
+        return s.substring(1, s.length() - 1);
+    }
+
+    String unTripleQuote(String s) {
+        int start = 3;
+        // Skip over the first end of line too:
+        if (s.charAt(start) == '\r') {
+            start++;
+        }
+        if (s.charAt(start) == '\n') {
+            start++;
+        }
+        return s.substring(start, s.length() - 3);
     }
 }
