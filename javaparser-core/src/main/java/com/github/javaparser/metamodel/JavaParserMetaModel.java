@@ -163,6 +163,7 @@ public final class JavaParserMetaModel {
         singleMemberAnnotationExprMetaModel.getConstructorParameters().add(annotationExprMetaModel.namePropertyMetaModel);
         singleMemberAnnotationExprMetaModel.getConstructorParameters().add(singleMemberAnnotationExprMetaModel.memberValuePropertyMetaModel);
         superExprMetaModel.getConstructorParameters().add(superExprMetaModel.typeNamePropertyMetaModel);
+        textBlockLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         thisExprMetaModel.getConstructorParameters().add(thisExprMetaModel.typeNamePropertyMetaModel);
         typeExprMetaModel.getConstructorParameters().add(typeExprMetaModel.typePropertyMetaModel);
         unaryExprMetaModel.getConstructorParameters().add(unaryExprMetaModel.expressionPropertyMetaModel);
@@ -339,6 +340,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(switchExprMetaModel);
         nodeMetaModels.add(switchStmtMetaModel);
         nodeMetaModels.add(synchronizedStmtMetaModel);
+        nodeMetaModels.add(textBlockLiteralExprMetaModel);
         nodeMetaModels.add(thisExprMetaModel);
         nodeMetaModels.add(throwStmtMetaModel);
         nodeMetaModels.add(tryStmtMetaModel);
@@ -893,6 +895,8 @@ public final class JavaParserMetaModel {
     public static final SingleMemberAnnotationExprMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 
     public static final SuperExprMetaModel superExprMetaModel = new SuperExprMetaModel(Optional.of(expressionMetaModel));
+
+    public static final TextBlockLiteralExprMetaModel textBlockLiteralExprMetaModel = new TextBlockLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final ThisExprMetaModel thisExprMetaModel = new ThisExprMetaModel(Optional.of(expressionMetaModel));
 

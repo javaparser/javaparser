@@ -512,4 +512,9 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     public Boolean visit(final SwitchExpr n, final Visitable arg) {
         return n == arg;
     }
+
+    @Override
+    public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
+        return n == arg;
+    }
 }

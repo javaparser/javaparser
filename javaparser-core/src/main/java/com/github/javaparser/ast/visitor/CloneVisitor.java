@@ -1211,4 +1211,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
             destination.setData(dataKey, source.getData(dataKey));
         }
     }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        TextBlockLiteralExpr r = new TextBlockLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
 }

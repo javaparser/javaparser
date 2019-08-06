@@ -700,4 +700,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getSelector().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final TextBlockLiteralExpr n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }

@@ -695,6 +695,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final TextBlockLiteralExpr n, final Void arg) {
+        printComment(n.getComment(), arg);
+        printer.print("\"\"\"\n");
+        printer.print(n.getValue());
+        printer.print("\"\"\"");
+    }
+
+    @Override
     public void visit(final BooleanLiteralExpr n, final Void arg) {
         printComment(n.getComment(), arg);
         printer.print(String.valueOf(n.getValue()));
