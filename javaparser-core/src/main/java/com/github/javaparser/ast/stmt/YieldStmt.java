@@ -5,6 +5,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -27,7 +28,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <br/><code>yield 123+456;</code>
  * <br/><code>yield "more or less";</code>
  */
-public class YieldStmt extends Statement {
+public class YieldStmt extends Statement implements NodeWithExpression {
 
     private Expression expression;
 
@@ -50,6 +51,7 @@ public class YieldStmt extends Statement {
         customInitialization();
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
@@ -59,8 +61,9 @@ public class YieldStmt extends Statement {
      * Sets the label
      *
      * @param expression the label or the expression, can be null
-     * @return this, the BreakStmt
+     * @return this, the YieldStmt
      */
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public YieldStmt setExpression(final Expression expression) {
         assertNotNull(expression);

@@ -1147,9 +1147,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(YieldStmt n, Void arg) {
+    public void visit(final YieldStmt n, final Void arg) {
         printComment(n.getComment(), arg);
-        printer.print("yield");
+        printer.print("yield ");
         n.getExpression().accept(this, arg);
         printer.print(";");
     }

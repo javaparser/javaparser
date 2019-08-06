@@ -1,3 +1,13 @@
+Version ???
+------------------
+- BREAKING: Java 13: `break` no longer has an expression, this was part of a language preview in Java 12
+and has been removed in Java 13.
+- BREAKING: Java 13: `YieldStatement` and the keyword `yield` have been added.
+This means the token numbers have changed, and this affects serialization.
+If you rely on serialized tokens, be sure to deserialize with your current version and serialize with this version.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/146?closed=1)
+
 Version 3.14.9
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/145?closed=1)
