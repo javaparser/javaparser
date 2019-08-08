@@ -202,8 +202,7 @@ public class JavaToken {
         KEYWORD,
         LITERAL,
         SEPARATOR,
-        OPERATOR,
-        UNKNOWN;
+        OPERATOR;
 
         public boolean isWhitespaceOrComment() {
             return isWhitespace() || this == COMMENT;
@@ -395,8 +394,7 @@ public class JavaToken {
         RUNSIGNEDSHIFT(143),
         RSIGNEDSHIFT(144),
         GT(145),
-        CTRL_Z(146),
-        UNKNOWN(147);
+        CTRL_Z(146);
 
         private final int kind;
 
@@ -406,8 +404,6 @@ public class JavaToken {
 
         public static Kind valueOf(int kind) {
             switch(kind) {
-                case 147:
-                    return UNKNOWN;
                 case 146:
                     return CTRL_Z;
                 case 145:

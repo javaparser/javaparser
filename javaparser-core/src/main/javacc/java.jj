@@ -605,7 +605,6 @@ TOKEN :
 }
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
-<*> TOKEN : { <UNKNOWN: ~[]> }
 
 /*****************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE *

@@ -202,8 +202,6 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
-            case UNKNOWN:
-                return JavaToken.Category.UNKNOWN;
             // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
             case ENTER_MULTILINE_COMMENT:
