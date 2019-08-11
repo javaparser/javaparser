@@ -138,7 +138,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * Most of the algorithm for stripIndent, stopping just before concatenating all the lines into a single string.
      * Useful for tools.
      */
-    public Stream<String> asLines() {
+    public Stream<String> stripIndentOfLines() {
         /* Split the content of the text block at every LF, producing a list of individual lines. 
         Note that any line in the content which was just an LF will become an empty line in the list of individual lines. */
         String[] rawLines = getValue().split("\\R", -1);
@@ -173,7 +173,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     public String stripIndent() {
         /* Construct the result string by joining all the lines in the modified list of individual lines from step 6, using LF as the separator between lines. 
         If the final line in the list from step 6 is empty, then the joining LF from the previous line will be the last character in the result string. */
-        return asLines().collect(joining("\n"));
+        return stripIndentOfLines().collect(joining("\n"));
     }
 
     /**

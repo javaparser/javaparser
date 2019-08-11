@@ -697,9 +697,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final TextBlockLiteralExpr n, final Void arg) {
         printComment(n.getComment(), arg);
-        printer.print("\"\"\"\n");
-        printer.print(n.getValue());
         printer.print("\"\"\"");
+        printer.indent();
+        n.stripIndentOfLines().forEach(line -> {
+            printer.println();
+            printer.print(line);
+        });
+        printer.print("\"\"\"");
+        printer.unindent();
     }
 
     @Override

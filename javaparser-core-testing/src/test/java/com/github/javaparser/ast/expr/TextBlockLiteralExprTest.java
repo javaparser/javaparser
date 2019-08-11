@@ -32,7 +32,7 @@ class TextBlockLiteralExprTest {
                 "    </body>",
                 "</html>",
                 ""
-        ), textBlock.asLines().collect(toList()));
+        ), textBlock.stripIndentOfLines().collect(toList()));
 
         assertEquals("<html>\n" +
                 "    <body>\n" +
