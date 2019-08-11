@@ -28,12 +28,17 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
-import com.github.javaparser.utils.StringEscapeUtils;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.metamodel.TextBlockLiteralExprMetaModel;
+import com.github.javaparser.utils.Pair;
+
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.metamodel.TextBlockLiteralExprMetaModel;
+import java.util.stream.Stream;
+
+import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.IntStream.range;
 
 /**
  * <h1>A text block</h1>
@@ -127,5 +132,98 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TextBlockLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.textBlockLiteralExprMetaModel;
+    }
+
+    /**
+     * Most of the algorithm for stripIndent, stopping just before concatenating all the lines into a single string.
+     * Useful for tools.
+     */
+    public Stream<String> asLines() {
+        /* Split the content of the text block at every LF, producing a list of individual lines. 
+        Note that any line in the content which was just an LF will become an empty line in the list of individual lines. */
+        String[] rawLines = getValue().split("\\R", -1);
+        
+        /* Add all non-blank lines from the list of individual lines into a set of determining lines. 
+        (Blank lines -- lines that are empty or are composed wholly of white space -- have no visible influence on the indentation. 
+        Excluding blank lines from the set of determining lines avoids throwing off step 4 of the algorithm.) */
+
+        /* If the last line in the list of individual lines (i.e., the line with the closing delimiter) is blank, then add it to the set of determining lines. 
+        (The indentation of the closing delimiter should influence the indentation of the content as a whole -- a "significant trailing line" policy.) */
+
+        /* Compute the common white space prefix of the set of determining lines, by counting the number of leading white space characters on each line and taking the minimum count. */
+        int commonWhiteSpacePrefixSize = range(0, rawLines.length)
+                .mapToObj(nr -> new Pair<>(nr, rawLines[nr]))
+                .filter(l -> !emptyOrWhitespace(l.b) || isLastLine(rawLines, l.a))
+                .map(l -> indentSize(l.b))
+                .min(Integer::compare)
+                .orElse(0);
+
+        /* Remove the common white space prefix from each non-blank line in the list of individual lines. */
+
+        /* Remove all trailing white space from all lines in the modified list of individual lines from step 5. 
+        This step collapses wholly-whitespace lines in the modified list so that they are empty, but does not discard them. */
+        return Arrays.stream(rawLines)
+                .map(l -> l.substring(commonWhiteSpacePrefixSize))
+                .map(this::trimTrailing);
+    }
+
+    /**
+     * @return The algorithm from String::stripIndent in JDK 13.
+     */
+    public String stripIndent() {
+        /* Construct the result string by joining all the lines in the modified list of individual lines from step 6, using LF as the separator between lines. 
+        If the final line in the list from step 6 is empty, then the joining LF from the previous line will be the last character in the result string. */
+        return asLines().collect(joining("\n"));
+    }
+
+    /**
+     * @return The algorithm ffrom String::translateEscapes in JDK 13.
+     */
+    public String translateEscapes() {
+        return unescapeJava(stripIndent());
+    }
+
+    /**
+     * @return the final string value of this text block after all processing.
+     */
+    public String asString() {
+        return translateEscapes();
+    }
+
+    /**
+     * @return is the line with index lineNr the last line in rawLines?
+     */
+    private boolean isLastLine(String[] rawLines, Integer lineNr) {
+        return lineNr == rawLines.length - 1;
+    }
+
+    /**
+     * @return is this string empty or filled only with whitespace?
+     */
+    private boolean emptyOrWhitespace(String rawLine) {
+        return rawLine.trim().isEmpty();
+    }
+
+    /**
+     * @return the amount of leading whitespaces.
+     */
+    private int indentSize(String s) {
+        String content = s.trim();
+        if (content.isEmpty()) {
+            return s.length();
+        }
+        return s.indexOf(content);
+    }
+
+    /**
+     * Can be replaced when moving to JDK 11
+     */
+    private String trimTrailing(String source) {
+        int pos = source.length() - 1;
+        while ((pos >= 0) && Character.isWhitespace(source.charAt(pos))) {
+            pos--;
+        }
+        pos++;
+        return (pos < source.length()) ? source.substring(0, pos) : source;
     }
 }

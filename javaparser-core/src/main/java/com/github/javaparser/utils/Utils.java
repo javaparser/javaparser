@@ -259,6 +259,7 @@ public class Utils {
     /**
      * @return a set of the items.
      */
+    @SafeVarargs
     public static <T> Set<T> set(T... items) {
         return new HashSet<>(asList(items));
     }

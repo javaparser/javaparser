@@ -359,7 +359,9 @@ TOKEN :
 /* TEXT BLOCK LITERAL */
 MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 <IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
-<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT: ~[]> }
+// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" - 
+// which might match that doublequote with following doublequotes.
+<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
 /* IDENTIFIERS */
 
