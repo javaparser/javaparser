@@ -460,18 +460,22 @@ public abstract class Statement extends Node {
     public void ifForEachStmt(Consumer<ForEachStmt> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isYieldStmt() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public YieldStmt asYieldStmt() {
         throw new IllegalStateException(f("%s is not an YieldStmt", this));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<YieldStmt> toYieldStmt() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
     }
 }

@@ -431,4 +431,9 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final YieldStmt n, final Void arg) {
         return (n.getExpression().accept(this, arg));
     }
+
+    @Override
+    public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
+        return (n.getValue().hashCode());
+    }
 }

@@ -1242,11 +1242,18 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final YieldStmt n, final A arg) {
-        Expression value = (Expression) n.getExpression().accept(this, arg);
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (value == null)
+        if (expression == null)
             return null;
-        n.setExpression(value);
+        n.setExpression(expression);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }

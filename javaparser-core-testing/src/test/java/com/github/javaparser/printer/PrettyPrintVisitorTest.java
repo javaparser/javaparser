@@ -2,7 +2,7 @@
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
- * This file is part of 
+ * This file is part of JavaParser.
  *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
@@ -25,10 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
@@ -372,10 +369,40 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu_leadingTab = parseCompilationUnit(input_leadingTab);
         assertEqualsNoEol(expected, cu_leadingTab.toString());
     }
-    
+
     @Test
-    void printYield(){
+    void printYield() {
         Statement statement = parseStatement("yield 5*5;");
         assertEqualsNoEol("yield 5 * 5;", statement.toString());
+    }
+
+    @Test
+    void printTextBlock() {
+        CompilationUnit cu = parse("class X{String html = \"\"\"\n" +
+                "              <html>\n" +
+                "                  <body>\n" +
+                "                      <p>Hello, world</p>\n" +
+                "                  </body>\n" +
+                "              </html>\n" +
+                "              \"\"\";}");
+
+        assertEqualsNoEol("String html = \"\"\"\n" +
+                "    <html>\n" +
+                "        <body>\n" +
+                "            <p>Hello, world</p>\n" +
+                "        </body>\n" +
+                "    </html>\n" +
+                "    \"\"\";", cu.getClassByName("X").get().getFieldByName("html").get().toString());
+    }
+
+    @Test
+    void printTextBlock2() {
+        CompilationUnit cu = parse("class X{String html = \"\"\"\n" +
+                "              <html>\n" +
+                "              </html>\"\"\";}");
+
+        assertEqualsNoEol("String html = \"\"\"\n" +
+                "    <html>\n" +
+                "    </html>\"\"\";", cu.getClassByName("X").get().getFieldByName("html").get().toString());
     }
 }

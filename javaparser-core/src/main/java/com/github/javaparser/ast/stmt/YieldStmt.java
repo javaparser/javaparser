@@ -9,14 +9,12 @@ import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.YieldStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -51,7 +49,6 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         customInitialization();
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
@@ -63,14 +60,13 @@ public class YieldStmt extends Statement implements NodeWithExpression {
      * @param expression the label or the expression, can be null
      * @return this, the YieldStmt
      */
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public YieldStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return (YieldStmt) this;
         }
-        notifyPropertyChange(ObservableProperty.VALUE, this.expression, expression);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
         this.expression = expression;
@@ -91,25 +87,30 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isYieldStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public YieldStmt asYieldStmt() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<YieldStmt> toYieldStmt() {
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -117,6 +118,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -128,11 +130,13 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public YieldStmt clone() {
         return (YieldStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public YieldStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.yieldStmtMetaModel;
     }

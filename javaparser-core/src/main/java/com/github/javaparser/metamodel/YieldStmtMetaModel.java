@@ -8,5 +8,5 @@ public class YieldStmtMetaModel extends StatementMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.YieldStmt.class, "YieldStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel valuePropertyMetaModel;
+    public PropertyMetaModel expressionPropertyMetaModel;
 }

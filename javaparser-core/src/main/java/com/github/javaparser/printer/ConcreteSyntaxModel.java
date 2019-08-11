@@ -471,6 +471,11 @@ public class ConcreteSyntaxModel {
                 stringToken(ObservableProperty.VALUE)
         ));
 
+        concreteSyntaxModelByClass.put(TextBlockLiteralExpr.class, sequence(
+                comment(),
+                textBlockToken(ObservableProperty.VALUE)
+        ));
+
         concreteSyntaxModelByClass.put(SuperExpr.class, sequence(
                 comment(),
                 conditional(TYPE_NAME, IS_PRESENT, sequence(child(TYPE_NAME), token(GeneratedJavaParserConstants.DOT))),

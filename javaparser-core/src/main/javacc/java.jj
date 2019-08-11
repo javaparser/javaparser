@@ -356,6 +356,12 @@ TOKEN :
       "\""
   >
 }
+/* TEXT BLOCK LITERAL */
+MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
+<IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
+// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" - 
+// which might match that doublequote with following doublequotes.
+<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
 /* IDENTIFIERS */
 
@@ -1923,11 +1929,15 @@ Expression Literal():
 	  }
 	|
 	  <CHARACTER_LITERAL> {
-	  	ret = new CharLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new CharLiteralExpr(tokenRange(), unquote(token.image));
 	  }
 	|
 	  <STRING_LITERAL> {
-	  	ret = new StringLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new StringLiteralExpr(tokenRange(), unquote(token.image));
+	  }
+	|
+	  <TEXT_BLOCK_LITERAL> {
+	  	ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image));
 	  }
 	|
 	  ret = BooleanLiteral()

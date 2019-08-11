@@ -1211,9 +1211,19 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final YieldStmt n, final Object arg) {
-        Expression value = cloneNode(n.getExpression(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        YieldStmt r = new YieldStmt(n.getTokenRange().orElse(null), value);
+        YieldStmt r = new YieldStmt(n.getTokenRange().orElse(null), expression);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        TextBlockLiteralExpr r = new TextBlockLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

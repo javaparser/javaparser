@@ -1327,4 +1327,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
+        final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
+        if (!objEquals(n.getValue(), n2.getValue()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
 }

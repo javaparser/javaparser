@@ -338,60 +338,63 @@ public class JavaToken {
         UNICODE_ESCAPE(87),
         CHARACTER_LITERAL(88),
         STRING_LITERAL(89),
-        IDENTIFIER(90),
-        LETTER(91),
-        PART_LETTER(92),
-        LPAREN(93),
-        RPAREN(94),
-        LBRACE(95),
-        RBRACE(96),
-        LBRACKET(97),
-        RBRACKET(98),
-        SEMICOLON(99),
-        COMMA(100),
-        DOT(101),
-        AT(102),
-        ASSIGN(103),
-        LT(104),
-        BANG(105),
-        TILDE(106),
-        HOOK(107),
-        COLON(108),
-        EQ(109),
-        LE(110),
-        GE(111),
-        NE(112),
-        SC_OR(113),
-        SC_AND(114),
-        INCR(115),
-        DECR(116),
-        PLUS(117),
-        MINUS(118),
-        STAR(119),
-        SLASH(120),
-        BIT_AND(121),
-        BIT_OR(122),
-        XOR(123),
-        REM(124),
-        LSHIFT(125),
-        PLUSASSIGN(126),
-        MINUSASSIGN(127),
-        STARASSIGN(128),
-        SLASHASSIGN(129),
-        ANDASSIGN(130),
-        ORASSIGN(131),
-        XORASSIGN(132),
-        REMASSIGN(133),
-        LSHIFTASSIGN(134),
-        RSIGNEDSHIFTASSIGN(135),
-        RUNSIGNEDSHIFTASSIGN(136),
-        ELLIPSIS(137),
-        ARROW(138),
-        DOUBLECOLON(139),
-        RUNSIGNEDSHIFT(140),
-        RSIGNEDSHIFT(141),
-        GT(142),
-        CTRL_Z(143);
+        ENTER_TEXT_BLOCK(90),
+        TEXT_BLOCK_LITERAL(91),
+        TEXT_BLOCK_CONTENT(92),
+        IDENTIFIER(93),
+        LETTER(94),
+        PART_LETTER(95),
+        LPAREN(96),
+        RPAREN(97),
+        LBRACE(98),
+        RBRACE(99),
+        LBRACKET(100),
+        RBRACKET(101),
+        SEMICOLON(102),
+        COMMA(103),
+        DOT(104),
+        AT(105),
+        ASSIGN(106),
+        LT(107),
+        BANG(108),
+        TILDE(109),
+        HOOK(110),
+        COLON(111),
+        EQ(112),
+        LE(113),
+        GE(114),
+        NE(115),
+        SC_OR(116),
+        SC_AND(117),
+        INCR(118),
+        DECR(119),
+        PLUS(120),
+        MINUS(121),
+        STAR(122),
+        SLASH(123),
+        BIT_AND(124),
+        BIT_OR(125),
+        XOR(126),
+        REM(127),
+        LSHIFT(128),
+        PLUSASSIGN(129),
+        MINUSASSIGN(130),
+        STARASSIGN(131),
+        SLASHASSIGN(132),
+        ANDASSIGN(133),
+        ORASSIGN(134),
+        XORASSIGN(135),
+        REMASSIGN(136),
+        LSHIFTASSIGN(137),
+        RSIGNEDSHIFTASSIGN(138),
+        RUNSIGNEDSHIFTASSIGN(139),
+        ELLIPSIS(140),
+        ARROW(141),
+        DOUBLECOLON(142),
+        RUNSIGNEDSHIFT(143),
+        RSIGNEDSHIFT(144),
+        GT(145),
+        CTRL_Z(146);
 
         private final int kind;
 
@@ -401,114 +404,120 @@ public class JavaToken {
 
         public static Kind valueOf(int kind) {
             switch(kind) {
-                case 143:
+                case 146:
                     return CTRL_Z;
-                case 142:
+                case 145:
                     return GT;
-                case 141:
+                case 144:
                     return RSIGNEDSHIFT;
-                case 140:
+                case 143:
                     return RUNSIGNEDSHIFT;
-                case 139:
+                case 142:
                     return DOUBLECOLON;
-                case 138:
+                case 141:
                     return ARROW;
-                case 137:
+                case 140:
                     return ELLIPSIS;
-                case 136:
+                case 139:
                     return RUNSIGNEDSHIFTASSIGN;
-                case 135:
+                case 138:
                     return RSIGNEDSHIFTASSIGN;
-                case 134:
+                case 137:
                     return LSHIFTASSIGN;
-                case 133:
+                case 136:
                     return REMASSIGN;
-                case 132:
+                case 135:
                     return XORASSIGN;
-                case 131:
+                case 134:
                     return ORASSIGN;
-                case 130:
+                case 133:
                     return ANDASSIGN;
-                case 129:
+                case 132:
                     return SLASHASSIGN;
-                case 128:
+                case 131:
                     return STARASSIGN;
-                case 127:
+                case 130:
                     return MINUSASSIGN;
-                case 126:
+                case 129:
                     return PLUSASSIGN;
-                case 125:
+                case 128:
                     return LSHIFT;
-                case 124:
+                case 127:
                     return REM;
-                case 123:
+                case 126:
                     return XOR;
-                case 122:
+                case 125:
                     return BIT_OR;
-                case 121:
+                case 124:
                     return BIT_AND;
-                case 120:
+                case 123:
                     return SLASH;
-                case 119:
+                case 122:
                     return STAR;
-                case 118:
+                case 121:
                     return MINUS;
-                case 117:
+                case 120:
                     return PLUS;
-                case 116:
+                case 119:
                     return DECR;
-                case 115:
+                case 118:
                     return INCR;
-                case 114:
+                case 117:
                     return SC_AND;
-                case 113:
+                case 116:
                     return SC_OR;
-                case 112:
+                case 115:
                     return NE;
-                case 111:
+                case 114:
                     return GE;
-                case 110:
+                case 113:
                     return LE;
-                case 109:
+                case 112:
                     return EQ;
-                case 108:
+                case 111:
                     return COLON;
-                case 107:
+                case 110:
                     return HOOK;
-                case 106:
+                case 109:
                     return TILDE;
-                case 105:
+                case 108:
                     return BANG;
-                case 104:
+                case 107:
                     return LT;
-                case 103:
+                case 106:
                     return ASSIGN;
-                case 102:
+                case 105:
                     return AT;
-                case 101:
+                case 104:
                     return DOT;
-                case 100:
+                case 103:
                     return COMMA;
-                case 99:
+                case 102:
                     return SEMICOLON;
-                case 98:
+                case 101:
                     return RBRACKET;
-                case 97:
+                case 100:
                     return LBRACKET;
-                case 96:
+                case 99:
                     return RBRACE;
-                case 95:
+                case 98:
                     return LBRACE;
-                case 94:
+                case 97:
                     return RPAREN;
-                case 93:
+                case 96:
                     return LPAREN;
-                case 92:
+                case 95:
                     return PART_LETTER;
-                case 91:
+                case 94:
                     return LETTER;
-                case 90:
+                case 93:
                     return IDENTIFIER;
+                case 92:
+                    return TEXT_BLOCK_CONTENT;
+                case 91:
+                    return TEXT_BLOCK_LITERAL;
+                case 90:
+                    return ENTER_TEXT_BLOCK;
                 case 89:
                     return STRING_LITERAL;
                 case 88:
