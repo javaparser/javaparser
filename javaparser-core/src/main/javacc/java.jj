@@ -109,6 +109,7 @@ TOKEN_MGR_DECLS :
     private JavaToken homeToken;
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
+    private boolean yieldSupported = false;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -135,6 +136,10 @@ TOKEN_MGR_DECLS :
     /* Makes the parser keep a list of tokens */
     public void setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
+    }
+    
+    public void setYieldSupported() {
+        yieldSupported = true;
     }
 
     private void CommonTokenAction(Token token) {
@@ -254,7 +259,7 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
-| < YIELD: "yield" >
+| < YIELD: "yield" > {if(!yieldSupported)matchedToken.kind=IDENTIFIER;}
 | < REQUIRES: "requires" >
 | < TO: "to" >
 | < WITH: "with" >
@@ -1416,7 +1421,7 @@ String Identifier():
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
     (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
     // Make sure older Java versions parse
-    <ENUM> | <STRICTFP> |
+    <ENUM> | <STRICTFP> | <YIELD> |
     // An actual plain old identifier
     <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -2054,6 +2059,8 @@ Statement Statement():
         |
             ret = AssertStatement()
         |
+            ret = YieldStatement()
+        |
             ret = Block()
         |
             ret = EmptyStatement()
@@ -2071,8 +2078,6 @@ Statement Statement():
             ret = ForStatement()
         |
             ret = BreakStatement()
-        |
-            ret = YieldStatement()
         |
             ret = ContinueStatement()
         |
