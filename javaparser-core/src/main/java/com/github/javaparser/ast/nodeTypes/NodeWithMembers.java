@@ -358,6 +358,44 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
+     * Find all constructors in the members of this node.
+     *
+     * @return the constructors found. This list is immutable.
+     */
+    default List<ConstructorDeclaration> getConstructors() {
+        return unmodifiableList(getMembers().stream()
+                .filter(m -> m instanceof ConstructorDeclaration)
+                .map(m -> (ConstructorDeclaration) m)
+                .collect(toList()));
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} by its parameters types.
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match {@code void
+     * Foo(Map&lt;Integer,String&gt; myMap, int number)}.
+     * @return the constructors found (multiple in case of overloading)
+     */
+    default List<ConstructorDeclaration> getConstructorsByParameterTypes(String... paramTypes) {
+        return unmodifiableList(getConstructors().stream()
+                .filter(c -> c.hasParametersOfType(paramTypes))
+                .collect(toList()));
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} by its parameters types.
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match {@code void
+     * Foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the constructors found (multiple in case of overloading)
+     */
+    default List<ConstructorDeclaration> getConstructorsByParameterTypes(Class<?>... paramTypes) {
+        return unmodifiableList(getConstructors().stream()
+                .filter(c -> c.hasParametersOfType(paramTypes))
+                .collect(toList()));
+    }
+
+    /**
      * Try to find a {@link FieldDeclaration} by its name
      *
      * @param name the name of the field
