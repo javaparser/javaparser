@@ -112,6 +112,36 @@ class NodeWithMembersBuildersTest {
     }
 
     @Test
+    void testGetConstructors() {
+        ConstructorDeclaration addConstructor = classDeclaration.addConstructor(PUBLIC);
+        ConstructorDeclaration addConstructor2 = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
+
+        List<ConstructorDeclaration> constructors = classDeclaration.getConstructors();
+
+        assertEquals(2, constructors.size());
+        assertTrue(constructors.contains(addConstructor));
+        assertTrue(constructors.contains(addConstructor2));
+    }
+
+    @Test
+    void testGetConstructorsWithParameterTypes() {
+        classDeclaration.addConstructor(PUBLIC);
+        ConstructorDeclaration addConstructor2 = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
+        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
+        type.setTypeArguments(parseClassOrInterfaceType("String"));
+        ConstructorDeclaration constructorWithListParam = classDeclaration.addConstructor(PUBLIC).addParameter(type, "overload");
+        ConstructorDeclaration addConstructor3 = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
+
+        List<ConstructorDeclaration> constructorsByParam = classDeclaration.getConstructorsByParameterTypes(int.class);
+        assertEquals(2, constructorsByParam.size());
+        assertTrue(constructorsByParam.contains(addConstructor2));
+        assertTrue(constructorsByParam.contains(addConstructor3));
+        List<ConstructorDeclaration> constructorsByParam2 = classDeclaration.getConstructorsByParameterTypes("List<String>");
+        assertEquals(1, constructorsByParam2.size());
+        assertTrue(constructorsByParam2.contains(constructorWithListParam));
+    }
+
+    @Test
     void testGetFieldWithName() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         classDeclaration.addField(float.class, "secondField", PRIVATE);
