@@ -1,5 +1,8 @@
 Version 3.14.11
 ------------------
+- BREAKING: the pseudo-language levels have been turned into constants with the same name in the same place.
+With a little luck everything will keep compiling.
+
 [issues resolved](https://github.com/javaparser/javaparser/milestone/147?closed=1)
 
 Version 3.14.10 (buggy!)
