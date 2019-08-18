@@ -385,4 +385,8 @@ abstract class GeneratedJavaParserBase {
         }
         return s.substring(start, s.length() - 3);
     }
+
+    void setYieldSupported() {
+        getTokenSource().setYieldSupported();
+    }
 }

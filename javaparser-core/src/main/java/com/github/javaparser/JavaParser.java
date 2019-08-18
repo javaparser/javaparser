@@ -89,6 +89,12 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
+        if (configuration.getLanguageLevel() != null) {
+            switch (configuration.getLanguageLevel()) {
+                case JAVA_13:
+                    astParser.setYieldSupported();
+            }
+        }
         return astParser;
     }
 
