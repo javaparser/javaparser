@@ -11,6 +11,6 @@ public class Java11Validator extends Java10Validator {
 
     public Java11Validator() {
         super();
-        replace(varOnlyOnLocalVariableDefinitionAndFor, varAlsoInLambdaParameters);
+        replace(varOnlyOnLocalVariableDefinitionAndForAndTry, varAlsoInLambdaParameters);
     }
 }

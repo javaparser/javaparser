@@ -109,6 +109,7 @@ TOKEN_MGR_DECLS :
     private JavaToken homeToken;
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
+    private boolean yieldSupported = false;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -135,6 +136,10 @@ TOKEN_MGR_DECLS :
     /* Makes the parser keep a list of tokens */
     public void setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
+    }
+    
+    public void setYieldSupported() {
+        yieldSupported = true;
     }
 
     private void CommonTokenAction(Token token) {
@@ -254,6 +259,7 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
+| < YIELD: "yield" > {if(!yieldSupported)matchedToken.kind=IDENTIFIER;}
 | < REQUIRES: "requires" >
 | < TO: "to" >
 | < WITH: "with" >
@@ -355,6 +361,12 @@ TOKEN :
       "\""
   >
 }
+/* TEXT BLOCK LITERAL */
+MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
+<IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
+// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" - 
+// which might match that doublequote with following doublequotes.
+<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
 /* IDENTIFIERS */
 
@@ -1409,7 +1421,7 @@ String Identifier():
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
     (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
     // Make sure older Java versions parse
-    <ENUM> | <STRICTFP> |
+    <ENUM> | <STRICTFP> | <YIELD> |
     // An actual plain old identifier
     <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -1922,11 +1934,15 @@ Expression Literal():
 	  }
 	|
 	  <CHARACTER_LITERAL> {
-	  	ret = new CharLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new CharLiteralExpr(tokenRange(), unquote(token.image));
 	  }
 	|
 	  <STRING_LITERAL> {
-	  	ret = new StringLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new StringLiteralExpr(tokenRange(), unquote(token.image));
+	  }
+	|
+	  <TEXT_BLOCK_LITERAL> {
+	  	ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image));
 	  }
 	|
 	  ret = BooleanLiteral()
@@ -2042,6 +2058,8 @@ Statement Statement():
             ret = LabeledStatement()
         |
             ret = AssertStatement()
+        |
+            ret = YieldStatement()
         |
             ret = Block()
         |
@@ -2397,12 +2415,22 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	Expression value = null;
+	SimpleName label = null;
 	JavaToken begin;
 }
 {
-  "break" {begin=token();} [ value = Expression() ] ";"
-  { return new BreakStmt(range(begin, token()), value); }
+  "break" {begin=token();} [ label = SimpleName() ] ";"
+  { return new BreakStmt(range(begin, token()), label); }
+}
+
+YieldStmt YieldStatement():
+{
+	Expression value;
+	JavaToken begin;
+}
+{
+  "yield" {begin=token();} value = Expression() ";"
+  { return new YieldStmt(range(begin, token()), value); }
 }
 
 ContinueStmt ContinueStatement():

@@ -34,26 +34,13 @@ import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.Java10Validator;
-import com.github.javaparser.ast.validator.Java11Validator;
-import com.github.javaparser.ast.validator.Java12Validator;
-import com.github.javaparser.ast.validator.Java1_0Validator;
-import com.github.javaparser.ast.validator.Java1_1Validator;
-import com.github.javaparser.ast.validator.Java1_2Validator;
-import com.github.javaparser.ast.validator.Java1_3Validator;
-import com.github.javaparser.ast.validator.Java1_4Validator;
-import com.github.javaparser.ast.validator.Java5Validator;
-import com.github.javaparser.ast.validator.Java6Validator;
-import com.github.javaparser.ast.validator.Java7Validator;
-import com.github.javaparser.ast.validator.Java8Validator;
-import com.github.javaparser.ast.validator.Java9Validator;
-import com.github.javaparser.ast.validator.ProblemReporter;
-import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
+import com.github.javaparser.version.Java13PostProcessor;
 
 /**
  * The configuration that is used by the parser.
@@ -62,22 +49,6 @@ import com.github.javaparser.version.Java12PostProcessor;
  */
 public class ParserConfiguration {
     public enum LanguageLevel {
-        /**
-         * Does no post processing or validation. Only for people wanting the fastest parsing.
-         */
-        RAW(null, null),
-        /**
-         * The most used Java version.
-         */
-        POPULAR(new Java8Validator(), null),
-        /**
-         * The latest Java version that is available.
-         */
-        CURRENT(new Java8Validator(), null),
-        /**
-         * The newest Java features supported.
-         */
-        BLEEDING_EDGE(new Java12Validator(), new Java12PostProcessor()),
         /**
          * Java 1.0
          */
@@ -129,7 +100,28 @@ public class ParserConfiguration {
         /**
          * Java 12
          */
-        JAVA_12(new Java12Validator(), new Java12PostProcessor());
+        JAVA_12(new Java12Validator(), new Java12PostProcessor()),
+        /**
+         * Java 12
+         */
+        JAVA_13(new Java13Validator(), new Java13PostProcessor());
+
+        /**
+         * Does no post processing or validation. Only for people wanting the fastest parsing.
+         */
+        public static LanguageLevel RAW = null;
+        /**
+         * The most used Java version.
+         */
+        public static LanguageLevel POPULAR = JAVA_8;
+        /**
+         * The latest Java version that is available.
+         */
+        public static LanguageLevel CURRENT = JAVA_12;
+        /**
+         * The newest Java features supported.
+         */
+        public static LanguageLevel BLEEDING_EDGE = JAVA_13;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
@@ -148,45 +140,45 @@ public class ParserConfiguration {
     private boolean preprocessUnicodeEscapes = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel = CURRENT;
+    private LanguageLevel languageLevel = JAVA_8;
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
-    	class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
-    		private UnicodeEscapeProcessingProvider _unicodeDecoder;
+        class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
+            private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
-			@Override
-    		public Provider process(Provider innerProvider) {
-	            if (isPreprocessUnicodeEscapes()) {
-	                _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
-					return _unicodeDecoder;
-	            }
-	            return innerProvider;
-    		}
-    		
-			@Override
-			public void process(ParseResult<? extends Node> result,
-					ParserConfiguration configuration) {
-				if (isPreprocessUnicodeEscapes()) {
-					result.getResult().ifPresent(
-						root -> {
-							PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-							if (!mapping.isEmpty()) {
-								root.walk(
-									node -> node.getRange().ifPresent(
-										range -> node.setRange(mapping.transform(range))));
-							}
-						}
-					);
-				}
-			}
-    	}
-    	UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
-    	preProcessors.add(unicodeProcessor);
-		postProcessors.add(unicodeProcessor);
+            @Override
+            public Provider process(Provider innerProvider) {
+                if (isPreprocessUnicodeEscapes()) {
+                    _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+                    return _unicodeDecoder;
+                }
+                return innerProvider;
+            }
+
+            @Override
+            public void process(ParseResult<? extends Node> result,
+                                ParserConfiguration configuration) {
+                if (isPreprocessUnicodeEscapes()) {
+                    result.getResult().ifPresent(
+                            root -> {
+                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                                if (!mapping.isEmpty()) {
+                                    root.walk(
+                                            node -> node.getRange().ifPresent(
+                                                    range -> node.setRange(mapping.transform(range))));
+                                }
+                            }
+                    );
+                }
+            }
+        }
+        UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
+        preProcessors.add(unicodeProcessor);
+        postProcessors.add(unicodeProcessor);
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
@@ -201,11 +193,13 @@ public class ParserConfiguration {
         });
         postProcessors.add((result, configuration) -> {
             LanguageLevel languageLevel = getLanguageLevel();
-            if (languageLevel.postProcessor != null) {
-                languageLevel.postProcessor.process(result, configuration);
-            }
-            if (languageLevel.validator != null) {
-                languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+            if (languageLevel != null) {
+                if (languageLevel.postProcessor != null) {
+                    languageLevel.postProcessor.process(result, configuration);
+                }
+                if (languageLevel.validator != null) {
+                    languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+                }
             }
         });
         postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
@@ -311,7 +305,7 @@ public class ParserConfiguration {
     }
 
     public ParserConfiguration setLanguageLevel(LanguageLevel languageLevel) {
-        this.languageLevel = assertNotNull(languageLevel);
+        this.languageLevel = languageLevel;
         return this;
     }
 

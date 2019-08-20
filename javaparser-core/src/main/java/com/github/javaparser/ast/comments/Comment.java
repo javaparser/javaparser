@@ -131,6 +131,15 @@ public abstract class Comment extends Node {
     }
 
     @Override
+    public Node setComment(final Comment comment) {
+        // comments on comments are not allowed, so we override setComment(Comment) here
+        if (comment != null) {
+            throw new IllegalArgumentException("A comment cannot be commented.");
+        }
+        return super.setComment(comment);
+    }
+
+    @Override
     public boolean remove() {
         // the other are orphan comments and remove should work with them
         if (this.commentedNode != null) {
@@ -141,6 +150,16 @@ public abstract class Comment extends Node {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Node findRootNode() {
+        // (Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
+        Node n = getCommentedNode().orElse(this);
+        while (n.getParentNode().isPresent()) {
+            n = n.getParentNode().get();
+        }
+        return n;
     }
 
     @Override
