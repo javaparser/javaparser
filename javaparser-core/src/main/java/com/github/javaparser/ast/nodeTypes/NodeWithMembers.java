@@ -333,7 +333,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
-     * Try to find a {@link MethodDeclaration} by its parameters types. The given parameter types must <i>literally</i>
+     * Try to find a {@link MethodDeclaration} by its parameter types. The given parameter types must <i>literally</i>
      * match the declared types of this node's parameters, so passing the string {@code "List"} to this method will find
      * all methods that have exactly one parameter whose type is declared as {@code List}, but not methods with exactly
      * one parameter whose type is declared as {@code java.util.List} or {@code java.awt.List}. Conversely, passing the
@@ -354,7 +354,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
-     * Try to find {@link MethodDeclaration}s by their name and parameters types. Parameter types are matched exactly as
+     * Try to find {@link MethodDeclaration}s by their name and parameter types. Parameter types are matched exactly as
      * in the case of {@link #getMethodsByParameterTypes(String...)}.
      *
      * @param paramTypes the types of parameters like {@code "Map&lt;Integer, String&gt;", "int"} to match
@@ -368,7 +368,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
-     * Try to find a {@link MethodDeclaration} by its parameters types. Note that this is a match in SimpleName, so
+     * Try to find a {@link MethodDeclaration} by its parameter types. Note that this is a match in SimpleName, so
      * {@code java.awt.List} and {@code java.util.List} are identical to this algorithm. In addition, note that it is
      * the erasure of each type which is considered, so passing {@code List.class} to this method will return all
      * methods that have exactly one parameter whose type is named {@code List}, regardless of whether the parameter
@@ -433,7 +433,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
-     * Try to find a {@link ConstructorDeclaration} by its parameters types.  Note that this is a match in SimpleName,
+     * Try to find a {@link ConstructorDeclaration} by its parameter types.  Note that this is a match in SimpleName,
      * so {@code java.awt.List} and {@code java.util.List} are identical to this algorithm. In addition, note that it is
      * the erasure of each type which is considered, so passing {@code List.class} to this method will search for a
      * constructor that has exactly one parameter whose type is named {@code List}, regardless of whether the parameter
