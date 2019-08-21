@@ -264,7 +264,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(SimpleName n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getIdentifier());
     }
 
@@ -408,7 +407,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final ArrayType n, final Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
         Type type = n;
         while (type instanceof ArrayType) {
@@ -426,7 +424,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final ArrayCreationLevel n, final Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printAnnotations(n.getAnnotations(), true, arg);
         printer.print("[");
         if (n.getDimension().isPresent()) {
@@ -582,7 +579,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(Modifier n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKeyword().asString());
         printer.print(" ");
     }
@@ -1699,7 +1695,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleDeclaration n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printMemberAnnotations(n.getAnnotations(), arg);
         if (n.isOpen()) {
             printer.print("open ");
@@ -1713,7 +1708,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleRequiresDirective n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("requires ");
         printModifiers(n.getModifiers());
         n.getName().accept(this, arg);
@@ -1722,7 +1716,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleExportsDirective n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("exports ");
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
@@ -1731,7 +1724,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleProvidesDirective n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("provides ");
         n.getName().accept(this, arg);
         printPrePostFixRequiredList(n.getWith(), arg, " with ", ", ", "");
@@ -1740,7 +1732,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleUsesDirective n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("uses ");
         n.getName().accept(this, arg);
         printer.println(";");
@@ -1748,7 +1739,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ModuleOpensDirective n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("opens ");
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
@@ -1757,7 +1747,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(UnparsableStmt n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
         printer.print("???;");
     }
 
