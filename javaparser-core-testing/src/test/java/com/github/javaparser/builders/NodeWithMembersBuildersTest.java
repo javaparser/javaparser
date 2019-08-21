@@ -141,6 +141,7 @@ class NodeWithMembersBuildersTest {
         assertTrue(constructors.contains(addConstructor2));
     }
 
+    /*
     @Test
     void testGetConstructorsWithParameterTypes() {
         classDeclaration.addConstructor(PUBLIC);
@@ -158,6 +159,7 @@ class NodeWithMembersBuildersTest {
         assertEquals(1, constructorsByParam2.size());
         assertTrue(constructorsByParam2.contains(constructorWithListParam));
     }
+     */
 
     @Test
     void testGetFieldWithName() {

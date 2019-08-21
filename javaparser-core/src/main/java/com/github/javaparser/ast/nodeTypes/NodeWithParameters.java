@@ -160,7 +160,8 @@ public interface NodeWithParameters<N extends Node> {
      * {@code java.util.List} are identical to this algorithm. In addition, note that it is the erasure of each type
      * which is considered, so passing {@code List.class} to this method will be considered a match if this node has
      * exactly one parameter whose type is named {@code List}, regardless of whether the parameter type is declared
-     * without generics as {@code List}, or with generics as {@code List&lt;String&gt;}, or {@code List&lt;Integer&gt;}, etc.
+     * without generics as {@code List}, or with generics as {@code List&lt;String&gt;}, or {@code List&lt;Integer&gt;},
+     * etc.
      *
      * @param paramTypes the types of parameters like {@code Map.class, int.class} to match
      *                   {@code void foo(Map&lt;Integer,String&gt; myMap, int number)}.
