@@ -95,20 +95,38 @@ class NodeWithMembersBuildersTest {
 
     @Test
     void testGetMethodsWithParameterTypes() {
-        classDeclaration.addMethod("foo", PUBLIC);
-        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration mFoo = classDeclaration.addMethod("foo", PUBLIC); // foo()
+        MethodDeclaration mFooInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i"); // foo(int)
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
         type.setTypeArguments(parseClassOrInterfaceType("String"));
-        MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", PUBLIC).addParameter(type, "overload");
-        MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration mFooIntList = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // foo(int, List)
+        MethodDeclaration mFooListInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // foo(List, int)
+        MethodDeclaration mFoo2Int = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i"); // foo2(int)
+        MethodDeclaration mFoo2IntInt = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // foo2(int, int)
 
-        List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypes(int.class);
-        assertEquals(2, methodsByParam.size());
-        assertTrue(methodsByParam.contains(addMethod2));
-        assertTrue(methodsByParam.contains(addMethod3));
-        List<MethodDeclaration> methodsByParam2 = classDeclaration.getMethodsByParameterTypes("List<String>");
-        assertEquals(1, methodsByParam2.size());
-        assertTrue(methodsByParam2.contains(methodWithListParam));
+        List<MethodDeclaration> methodsWithNoArgs = classDeclaration.getMethodsByParameterTypes(new Class[0]); // should return foo()
+        assertEquals(1, methodsWithNoArgs.size());
+        assertTrue(methodsWithNoArgs.contains(mFoo));
+
+        List<MethodDeclaration> methodsWithIntParam = classDeclaration.getMethodsByParameterTypes(int.class); // should return foo(int) and foo2(int)
+        assertEquals(2, methodsWithIntParam.size());
+        assertTrue(methodsWithIntParam.contains(mFooInt));
+        assertTrue(methodsWithIntParam.contains(mFoo2Int));
+
+        List<MethodDeclaration> methodsWithListParam = classDeclaration.getMethodsByParameterTypes("List<String>");
+        assertEquals(0, methodsWithListParam.size());
+
+        List<MethodDeclaration> methodsWithIntAndListParams = classDeclaration.getMethodsByParameterTypes("int", "List<String>");
+        assertEquals(1, methodsWithIntAndListParams.size());
+        assertTrue(methodsWithIntAndListParams.contains(mFooIntList));
+
+        List<MethodDeclaration> methodsWithListAndIntParams = classDeclaration.getMethodsByParameterTypes(List.class, int.class);
+        assertEquals(1, methodsWithListAndIntParams.size());
+        assertTrue(methodsWithListAndIntParams.contains(mFooListInt));
+
+        List<MethodDeclaration> methodsWithIntAndIntParams = classDeclaration.getMethodsByParameterTypes(int.class, int.class);
+        assertEquals(1, methodsWithListAndIntParams.size());
+        assertTrue(methodsWithIntAndIntParams.contains(mFoo2IntInt));
     }
 
     @Test
