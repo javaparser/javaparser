@@ -42,6 +42,13 @@ public abstract class AbstractSymbolResolutionTest {
 
     protected boolean isJavaVersion9OrAbove() {
         String jdkVersion = System.getProperty("java.version");
-        return Integer.parseInt(jdkVersion.substring(0, jdkVersion.indexOf('.'))) >= 9;
+        if (jdkVersion.indexOf('.') >= 0) {
+            jdkVersion = jdkVersion.substring(0, jdkVersion.indexOf('.'));
+        }
+        try {
+            return Integer.parseInt(jdkVersion) >= 9;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
