@@ -24,9 +24,9 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -152,7 +152,7 @@ public interface NodeWithParameters<N extends Node> {
         return getParameters().stream()
                 .map(p -> p.getType().asString())
                 .collect(toList())
-                .equals(Stream.of(paramTypes).collect(toList()));
+                .equals(Arrays.asList(paramTypes));
     }
 
     /**
@@ -171,9 +171,9 @@ public interface NodeWithParameters<N extends Node> {
         return getParameters().stream()
                 // if p.getType() is a class or interface type, we want to consider its erasure, i.e., if the parameter
                 // is "List<String>", we want to consider it as "List", so we need to call getName()
-                .map(p -> p.getType() instanceof ClassOrInterfaceType
-                        ? ((ClassOrInterfaceType) p.getType()).getName().asString()
-                        : p.getType().asString())
+                .map(p -> p.getType().toClassOrInterfaceType()
+                        .map(NodeWithSimpleName::getNameAsString)
+                        .orElse(p.getType().asString()))
                 .collect(toList())
                 .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toList()));
     }
