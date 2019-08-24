@@ -21,7 +21,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
+import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -99,9 +99,10 @@ class AstResolutionUtils {
         return false;
     }
 
-    static <N extends ResolvedReferenceTypeDeclaration> List<ResolvedConstructorDeclaration> getConstructors(NodeWithConstructors<?> wrappedNode,
-                                                                TypeSolver typeSolver,
-                                                                N container) {
+    static <N extends ResolvedReferenceTypeDeclaration> List<ResolvedConstructorDeclaration> getConstructors(
+            NodeWithMembers<?> wrappedNode,
+            TypeSolver typeSolver,
+            N container) {
         List<ResolvedConstructorDeclaration> declared = wrappedNode.getConstructors().stream()
                 .map(c -> new JavaParserConstructorDeclaration<N>(container, c, typeSolver))
                 .collect(Collectors.toList());
