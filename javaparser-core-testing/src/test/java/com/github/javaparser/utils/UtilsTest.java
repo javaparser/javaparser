@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UtilsTest {
 
     @Test
-    public void testIsNullOrEmpty() {
+    void testIsNullOrEmpty() {
         assertTrue(isNullOrEmpty(null));
         assertTrue(isNullOrEmpty(new ArrayList<>()));
 
@@ -48,13 +48,13 @@ class UtilsTest {
     }
 
     @Test
-    public void testAssertNotNull() {
+    void testAssertNotNull() {
         assertEquals("foo", assertNotNull("foo"));
         assertThrows(AssertionError.class, () -> assertNotNull(null));
     }
 
     @Test
-    public void testAssertNonEmpty() {
+    void testAssertNonEmpty() {
         assertEquals("foo", assertNonEmpty("foo"));
         assertThrows(AssertionError.class, () -> assertNonEmpty(""));
         assertThrows(AssertionError.class, () -> assertNonEmpty(null));
@@ -62,24 +62,24 @@ class UtilsTest {
     }
 
     @Test
-    public void testAssertNonNegative() {
+    void testAssertNonNegative() {
         assertEquals((Number) 2, assertNonNegative(2));
         assertThrows(AssertionError.class, () -> assertNonNegative(-2));
     }
 
     @Test
-    public void testAssertPositive() {
+    void testAssertPositive() {
         assertEquals((Number) 2, assertPositive(2));
         assertThrows(AssertionError.class, () -> assertPositive(-2));
     }
 
     @Test
-    public void testEscapeEndOfLines() {
+    void testEscapeEndOfLines() {
         assertEquals("f\\no\\ro", escapeEndOfLines("f\no\ro"));
     }
 
     @Test
-    public void testReaderToString() throws IOException {
+    void testReaderToString() throws IOException {
         Reader reader = new Reader() {
             @Override
             public int read(char[] chars, int i, int i1) throws IOException {
@@ -94,7 +94,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testToCamelCase() {
+    void testToCamelCase() {
         assertEquals("foo", toCamelCase("foo"));
         assertEquals("foo", toCamelCase("Foo"));
         assertEquals("foo", toCamelCase("FOO"));
@@ -117,14 +117,14 @@ class UtilsTest {
     }
 
     @Test
-    public void testNextWord() {
+    void testNextWord() {
         assertEquals("foo", nextWord("foo"));
         assertEquals("foo", nextWord("foo bar"));
         assertEquals("foo", nextWord("foo bar Baz"));
     }
 
     @Test
-    public void testIndent() {
+    void testIndent() {
         assertEquals("foo",
                 indent(new StringBuilder("foo"), 0).toString());
         assertEquals("foo\t",
@@ -166,7 +166,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testValueIsNullOrEmpty() {
+    void testValueIsNullOrEmpty() {
         assertTrue(valueIsNullOrEmpty(null));
         assertTrue(valueIsNullOrEmpty(Optional.empty()));
         assertTrue(valueIsNullOrEmpty(new ArrayList<>()));
@@ -178,7 +178,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testValueIsNullOrEmptyStringOrOptional() {
+    void testValueIsNullOrEmptyStringOrOptional() {
         assertTrue(valueIsNullOrEmptyStringOrOptional(null));
         assertTrue(valueIsNullOrEmptyStringOrOptional(
                 Optional.empty()));
@@ -189,7 +189,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testIndexOfElementByObjectIdentity() {
+    void testIndexOfElementByObjectIdentity() {
         assertEquals(-1, indexOfElementByObjectIdentity(
                 new ArrayList<>(), "bar"));
         assertEquals(1, indexOfElementByObjectIdentity(
@@ -197,7 +197,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testSet() {
+    void testSet() {
         assertEquals(new HashSet<>(Arrays.asList("bar", "foo", "baz")),
                 set("foo", "bar", "baz"));
     }
@@ -209,7 +209,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testRemoveFileExtension() {
+    void testRemoveFileExtension() {
         assertEquals("foo", removeFileExtension("foo"));
         assertEquals("foo", removeFileExtension("foo.txt"));
     }

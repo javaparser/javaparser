@@ -73,5 +73,9 @@ public class XmlPrinter {
     private static String attribute(String name, String value) {
         return " " + name + "='" + value + "'";
     }
+
+    public static void print(Node node) {
+        System.out.println(new XmlPrinter(true).output(node));
+    }
 }
 
