@@ -2904,3 +2904,14 @@ TypeParameter TypeParameterParseStart():
    annotations = Annotations() ret = TypeParameter(annotations) <EOF>
    { return ret; }
 }
+
+MethodDeclaration MethodDeclarationParseStart():
+{ MethodDeclaration ret;
+	ModifierHolder modifier;
+ }
+{
+    modifier = Modifiers()
+    ret = MethodDeclaration(modifier)
+    <EOF>
+    { return ret; }
+}
