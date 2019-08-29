@@ -1,5 +1,9 @@
 Version 3.14.12
 ------------------
+- BREAKING: `NodeWithConstructors` has been merged into `NodeWithMembers`,
+so if you don't have a very specific need to only find nodes that support constructors,
+you can use `NodeWithMembers` instead.
+
 [issues resolved](https://github.com/javaparser/javaparser/milestone/148?closed=1)
 
 Version 3.14.11
