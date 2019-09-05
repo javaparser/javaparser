@@ -463,6 +463,11 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
+             // case where originalTextToken is a separator like ";" and 
+             // kept is not a new line or whitespace for example "}"
+             // see issue 2351
+            }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
+                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
