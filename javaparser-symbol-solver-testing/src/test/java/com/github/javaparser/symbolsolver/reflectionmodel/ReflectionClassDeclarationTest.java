@@ -201,6 +201,13 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void testGetConstructors() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ResolvedReferenceTypeDeclaration locale = new ReflectionClassDeclaration(ClassWithSyntheticConstructor.class, typeResolver);
+        assertEquals(1, locale.getConstructors().size());
+    }
+
+    @Test
     void testGetInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
@@ -361,7 +368,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
@@ -440,7 +446,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.resolution.Resolvable"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -778,4 +783,20 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertTrue(ancestors.isEmpty());
     }
+
+    public static class ClassWithSyntheticConstructor {
+
+        private ClassWithSyntheticConstructor() {}
+
+        public static ClassWithSyntheticConstructor newInstance() {
+            return ClassWithSyntheticConstructorHelper.create();
+        }
+
+        private static class ClassWithSyntheticConstructorHelper {
+            public static ClassWithSyntheticConstructor create() {
+                return new ClassWithSyntheticConstructor();
+            }
+        }
+    }
+
 }

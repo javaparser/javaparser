@@ -103,6 +103,7 @@ public class MetaModelGenerator {
         add(SimpleName.class);
         add(SingleMemberAnnotationExpr.class);
         add(SuperExpr.class);
+        add(TextBlockLiteralExpr.class);
         add(ThisExpr.class);
         add(TypeExpr.class);
         add(UnaryExpr.class);
@@ -132,6 +133,7 @@ public class MetaModelGenerator {
         add(TryStmt.class);
         add(LocalClassDeclarationStmt.class);
         add(WhileStmt.class);
+        add(YieldStmt.class);
         add(UnparsableStmt.class);
 
         add(ArrayType.class);

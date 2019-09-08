@@ -21,13 +21,85 @@
 
 package com.github.javaparser.utils;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UtilsTest {
+
+    @Test
+    void testIsNullOrEmpty() {
+        assertTrue(isNullOrEmpty(null));
+        assertTrue(isNullOrEmpty(new ArrayList<>()));
+
+        assertFalse(isNullOrEmpty(
+                new ArrayList<>(Arrays.asList("foo", "bar"))));
+    }
+
+    @Test
+    void testAssertNotNull() {
+        assertEquals("foo", assertNotNull("foo"));
+        assertThrows(AssertionError.class, () -> assertNotNull(null));
+    }
+
+    @Test
+    void testAssertNonEmpty() {
+        assertEquals("foo", assertNonEmpty("foo"));
+        assertThrows(AssertionError.class, () -> assertNonEmpty(""));
+        assertThrows(AssertionError.class, () -> assertNonEmpty(null));
+
+    }
+
+    @Test
+    void testAssertNonNegative() {
+        assertEquals((Number) 2, assertNonNegative(2));
+        assertThrows(AssertionError.class, () -> assertNonNegative(-2));
+    }
+
+    @Test
+    void testAssertPositive() {
+        assertEquals((Number) 2, assertPositive(2));
+        assertThrows(AssertionError.class, () -> assertPositive(-2));
+    }
+
+    @Test
+    void testEscapeEndOfLines() {
+        assertEquals("f\\no\\ro", escapeEndOfLines("f\no\ro"));
+    }
+
+    @Test
+    void testReaderToString() throws IOException {
+        Reader reader = new Reader() {
+            @Override
+            public int read(char[] chars, int i, int i1) throws IOException {
+                return 0;
+            }
+
+            @Override
+            public void close() throws IOException {
+            }
+        };
+        assertEquals("", readerToString(reader));
+    }
+
+    @Test
+    void testToCamelCase() {
+        assertEquals("foo", toCamelCase("foo"));
+        assertEquals("foo", toCamelCase("Foo"));
+        assertEquals("foo", toCamelCase("FOO"));
+        assertEquals("foo", toCamelCase("fOo"));
+    }
 
     @Test
     void testScreamingToCamelCase() {
@@ -42,6 +114,25 @@ class UtilsTest {
         assertEquals("ABC", camelCaseToScreaming("abc"));
         assertEquals("HELLO_HELLO", camelCaseToScreaming("HelloHello"));
         assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
+    }
+
+    @Test
+    void testNextWord() {
+        assertEquals("foo", nextWord("foo"));
+        assertEquals("foo", nextWord("foo bar"));
+        assertEquals("foo", nextWord("foo bar Baz"));
+    }
+
+    @Test
+    void testIndent() {
+        assertEquals("foo",
+                indent(new StringBuilder("foo"), 0).toString());
+        assertEquals("foo\t",
+                indent(new StringBuilder("foo"), 1).toString());
+        assertEquals("foo\t\t",
+                indent(new StringBuilder("foo"), 2).toString());
+        assertEquals("foo\t\t\t",
+                indent(new StringBuilder("foo"), 3).toString());
     }
 
     @Test
@@ -73,11 +164,54 @@ class UtilsTest {
     void decapitalizeOnStringOfTwoCharacters() {
         assertEquals("fo", decapitalize("Fo"));
     }
-    
+
+    @Test
+    void testValueIsNullOrEmpty() {
+        assertTrue(valueIsNullOrEmpty(null));
+        assertTrue(valueIsNullOrEmpty(Optional.empty()));
+        assertTrue(valueIsNullOrEmpty(new ArrayList<>()));
+
+        assertFalse(valueIsNullOrEmpty(
+                Optional.ofNullable("foo")));
+        assertFalse(valueIsNullOrEmpty(
+                new ArrayList<>(Arrays.asList("foo", "bar"))));
+    }
+
+    @Test
+    void testValueIsNullOrEmptyStringOrOptional() {
+        assertTrue(valueIsNullOrEmptyStringOrOptional(null));
+        assertTrue(valueIsNullOrEmptyStringOrOptional(
+                Optional.empty()));
+
+        assertFalse(valueIsNullOrEmptyStringOrOptional("foo"));
+        assertFalse(valueIsNullOrEmptyStringOrOptional(
+                Optional.ofNullable("foo")));
+    }
+
+    @Test
+    void testIndexOfElementByObjectIdentity() {
+        assertEquals(-1, indexOfElementByObjectIdentity(
+                new ArrayList<>(), "bar"));
+        assertEquals(1, indexOfElementByObjectIdentity(
+                new ArrayList<>(Arrays.asList("foo", "bar")), "bar"));
+    }
+
+    @Test
+    void testSet() {
+        assertEquals(new HashSet<>(Arrays.asList("bar", "foo", "baz")),
+                set("foo", "bar", "baz"));
+    }
+
     @Test
     void normalizeEolInTextBlock() {
         String result = Utils.normalizeEolInTextBlock("\r\n \r \n", "Q");
         assertEquals("Q Q Q", result);
+    }
+
+    @Test
+    void testRemoveFileExtension() {
+        assertEquals("foo", removeFileExtension("foo"));
+        assertEquals("foo", removeFileExtension("foo.txt"));
     }
 
     @Test

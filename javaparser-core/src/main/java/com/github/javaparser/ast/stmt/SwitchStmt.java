@@ -54,7 +54,7 @@ import com.github.javaparser.ast.Generated;
  * <h2>Java 7-11</h2>
  * Switching can now also be done on strings.
  *
- * <h2>Java 12-</h2>
+ * <h2>Java 12</h2>
  * In preparation for pattern matching, lots of changes are made:
  * <ul>
  * <li>multiple labels per case
@@ -65,10 +65,15 @@ import com.github.javaparser.ast.Generated;
  * <code>switch(x) { case BANANA,PEAR: b=10; break; default: b=5; };</code>
  * <br/><code>switch(x) { case 5,6 -> println("uhuh"); default -> println("nope"); };</code>
  *
+ * <h2>Java 13</h2>
+ * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.
+ *
  * @author Julio Vilmar Gesser
  * @see SwitchEntry
  * @see com.github.javaparser.ast.expr.SwitchExpr
  * @see SwitchNode
+ * @see BreakStmt
+ * @see YieldStmt
  */
 public class SwitchStmt extends Statement implements SwitchNode {
 

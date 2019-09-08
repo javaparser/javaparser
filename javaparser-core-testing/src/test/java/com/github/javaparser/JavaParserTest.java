@@ -26,29 +26,29 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.printer.YamlPrinter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JavaParserTest {
 
@@ -70,6 +70,32 @@ class JavaParserTest {
         assertTrue(memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
+
+    @Test
+    void testSourcePositionsWithUnicodeEscapes() {
+        String code = "@interface AD \\u007B String foo(); \\u007D";
+        CompilationUnit cu = parseWithUnicodeEscapes(code).getResult().get();
+        AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
+        assertTrue(memberDeclaration.getRange().isPresent());
+        assertEquals(new Range(new Position(1, 22), new Position(1, 34)), memberDeclaration.getRange().get());
+    }
+
+    @Test
+    void testSourcePositionsWithBrokenUnicodeEscapes() {
+    	// Source positions
+    	//                      111111111122222222 2 22333 3333
+    	//             123456789012345678901234567 8 90123 4567
+    	String code = "@interface AD { String X = \"\\uABC\"; }";
+    	ParseResult<CompilationUnit> cu = parseWithUnicodeEscapes(code);
+    	assertFalse(cu.getResult().isPresent());
+    	assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
+    }
+    
+	private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
+		ParserConfiguration config = new ParserConfiguration();
+        config.setPreprocessUnicodeEscapes(true);
+		return new JavaParser(config).parse(code);
+	}
 
     @Test
     void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
@@ -116,7 +142,7 @@ class JavaParserTest {
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
-        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
+        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 
@@ -225,17 +251,6 @@ class JavaParserTest {
     }
 
     @Test
-    void everyTokenHasACategory() throws IOException {
-        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
-        Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class).resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
-        CompilationUnit tokenTypesCu = parse(tokenTypesPath);
-        // -1 to take off the default: case.
-        int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
-        // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
-        assertEquals(tokenCount, switchEntries);
-    }
-
-    @Test
     void parsingInitializedAndUnitializedVarsInForStmt() {
         ForStmt forStmt = parseStatement("for(int a,b=0;;){}").asForStmt();
         assertEquals(1, forStmt.getInitialization().size());
@@ -287,5 +302,10 @@ class JavaParserTest {
     @Test
     void parseTypeDeclaration() {
         StaticJavaParser.parseTypeDeclaration("enum Z {A, B}");
+    }
+    
+    @Test
+    void xxx(){
+        YamlPrinter.print(StaticJavaParser.parse("class X{}"));
     }
 }
