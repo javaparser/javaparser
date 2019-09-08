@@ -229,4 +229,8 @@ public interface GenericVisitor<R, A> {
     R visit(Modifier n, A arg);
 
     R visit(SwitchExpr n, A arg);
+
+    R visit(YieldStmt n, A arg);
+
+    R visit(TextBlockLiteralExpr n, A arg);
 }

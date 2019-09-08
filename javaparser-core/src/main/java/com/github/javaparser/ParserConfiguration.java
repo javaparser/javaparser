@@ -21,6 +21,17 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.utils.Utils.*;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import com.github.javaparser.ParseResult.PostProcessor;
+import com.github.javaparser.Providers.PreProcessor;
+import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
@@ -29,13 +40,7 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.version.Java13PostProcessor;
 
 /**
  * The configuration that is used by the parser.
@@ -44,40 +49,79 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ParserConfiguration {
     public enum LanguageLevel {
-        /** Does no post processing or validation. Only for people wanting the fastest parsing. */
-        RAW(null, null),
-        /** The most used Java version. */
-        POPULAR(new Java8Validator(), null),
-        /** The latest Java version that is available. */
-        CURRENT(new Java8Validator(), null),
-        /** The newest Java features supported. */
-        BLEEDING_EDGE(new Java11Validator(), new Java11PostProcessor()),
-        /** Java 1.0 */
+        /**
+         * Java 1.0
+         */
         JAVA_1_0(new Java1_0Validator(), null),
-        /** Java 1.1 */
+        /**
+         * Java 1.1
+         */
         JAVA_1_1(new Java1_1Validator(), null),
-        /** Java 1.2 */
+        /**
+         * Java 1.2
+         */
         JAVA_1_2(new Java1_2Validator(), null),
-        /** Java 1.3 */
+        /**
+         * Java 1.3
+         */
         JAVA_1_3(new Java1_3Validator(), null),
-        /** Java 1.4 */
+        /**
+         * Java 1.4
+         */
         JAVA_1_4(new Java1_4Validator(), null),
-        /** Java 5 */
+        /**
+         * Java 5
+         */
         JAVA_5(new Java5Validator(), null),
-        /** Java 6 */
+        /**
+         * Java 6
+         */
         JAVA_6(new Java6Validator(), null),
-        /** Java 7 */
+        /**
+         * Java 7
+         */
         JAVA_7(new Java7Validator(), null),
-        /** Java 8 */
+        /**
+         * Java 8
+         */
         JAVA_8(new Java8Validator(), null),
-        /** Java 9 */
+        /**
+         * Java 9
+         */
         JAVA_9(new Java9Validator(), null),
-        /** Java 10 */
+        /**
+         * Java 10
+         */
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
-        /** Java 11 */
+        /**
+         * Java 11
+         */
         JAVA_11(new Java11Validator(), new Java11PostProcessor()),
-        /** Java 12 */
-        JAVA_12(new Java12Validator(), new Java12PostProcessor());
+        /**
+         * Java 12
+         */
+        JAVA_12(new Java12Validator(), new Java12PostProcessor()),
+        /**
+         * Java 12
+         */
+        JAVA_13(new Java13Validator(), new Java13PostProcessor());
+
+        /**
+         * Does no post processing or validation. Only for people wanting the fastest parsing.
+         */
+        public static LanguageLevel RAW = null;
+        /**
+         * The most used Java version.
+         */
+        public static LanguageLevel POPULAR = JAVA_8;
+        /**
+         * The latest Java version that is available.
+         */
+        public static LanguageLevel CURRENT = JAVA_12;
+        /**
+         * The newest Java features supported.
+         */
+        public static LanguageLevel BLEEDING_EDGE = JAVA_13;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
@@ -96,23 +140,48 @@ public class ParserConfiguration {
     private boolean preprocessUnicodeEscapes = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel = CURRENT;
+    private LanguageLevel languageLevel = JAVA_8;
+    private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
-        preProcessors.add(innerProvider -> {
-            if (preprocessUnicodeEscapes) {
-                return new UnicodeEscapeProcessingProvider(innerProvider);
+        class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
+            private UnicodeEscapeProcessingProvider _unicodeDecoder;
+
+            @Override
+            public Provider process(Provider innerProvider) {
+                if (isPreprocessUnicodeEscapes()) {
+                    _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+                    return _unicodeDecoder;
+                }
+                return innerProvider;
             }
-            return innerProvider;
-        });
+
+            @Override
+            public void process(ParseResult<? extends Node> result,
+                                ParserConfiguration configuration) {
+                if (isPreprocessUnicodeEscapes()) {
+                    result.getResult().ifPresent(
+                            root -> {
+                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                                if (!mapping.isEmpty()) {
+                                    root.walk(
+                                            node -> node.getRange().ifPresent(
+                                                    range -> node.setRange(mapping.transform(range))));
+                                }
+                            }
+                    );
+                }
+            }
+        }
+        UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
+        preProcessors.add(unicodeProcessor);
+        postProcessors.add(unicodeProcessor);
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
-                if (configuration.isLexicalPreservationEnabled()) {
-                    result.ifSuccessful(LexicalPreservingPrinter::setup);
-                }
+                result.ifSuccessful(LexicalPreservingPrinter::setup);
             }
         });
         postProcessors.add((result, configuration) -> {
@@ -124,11 +193,13 @@ public class ParserConfiguration {
         });
         postProcessors.add((result, configuration) -> {
             LanguageLevel languageLevel = getLanguageLevel();
-            if (languageLevel.postProcessor != null) {
-                languageLevel.postProcessor.process(result, configuration);
-            }
-            if (languageLevel.validator != null) {
-                languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+            if (languageLevel != null) {
+                if (languageLevel.postProcessor != null) {
+                    languageLevel.postProcessor.process(result, configuration);
+                }
+                if (languageLevel.validator != null) {
+                    languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+                }
             }
         });
         postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
@@ -162,22 +233,6 @@ public class ParserConfiguration {
         return this;
     }
 
-    /**
-     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
-     */
-    @Deprecated
-    public boolean isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution() {
-        return isIgnoreAnnotationsWhenAttributingComments();
-    }
-
-    /**
-     * @deprecated this setting has been renamed to ignoreAnnotationsWhenAttributingComments
-     */
-    @Deprecated
-    public ParserConfiguration setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
-        return setIgnoreAnnotationsWhenAttributingComments(doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
-    }
-
     public boolean isIgnoreAnnotationsWhenAttributingComments() {
         return ignoreAnnotationsWhenAttributingComments;
     }
@@ -209,48 +264,6 @@ public class ParserConfiguration {
      */
     public ParserConfiguration setTabSize(int tabSize) {
         this.tabSize = tabSize;
-        return this;
-    }
-
-    /**
-     * @deprecated use getLanguageLevel
-     */
-    @Deprecated
-    public Optional<Validator> getValidator() {
-        throw new IllegalStateException("method is deprecated");
-    }
-
-    /**
-     * @deprecated use setLanguageLevel, or getPostProcessors if you use a custom validator.
-     */
-    @Deprecated
-    public ParserConfiguration setValidator(Validator validator) {
-        // This whole method is a backwards compatability hack.
-        if (validator instanceof Java10Validator) {
-            setLanguageLevel(JAVA_10);
-        } else if (validator instanceof Java9Validator) {
-            setLanguageLevel(JAVA_9);
-        } else if (validator instanceof Java8Validator) {
-            setLanguageLevel(JAVA_8);
-        } else if (validator instanceof Java7Validator) {
-            setLanguageLevel(JAVA_7);
-        } else if (validator instanceof Java6Validator) {
-            setLanguageLevel(JAVA_6);
-        } else if (validator instanceof Java5Validator) {
-            setLanguageLevel(JAVA_5);
-        } else if (validator instanceof Java1_4Validator) {
-            setLanguageLevel(JAVA_1_4);
-        } else if (validator instanceof Java1_3Validator) {
-            setLanguageLevel(JAVA_1_3);
-        } else if (validator instanceof Java1_2Validator) {
-            setLanguageLevel(JAVA_1_2);
-        } else if (validator instanceof Java1_1Validator) {
-            setLanguageLevel(JAVA_1_1);
-        } else if (validator instanceof Java1_0Validator) {
-            setLanguageLevel(JAVA_1_0);
-        } else if (validator instanceof NoProblemsValidator) {
-            setLanguageLevel(RAW);
-        }
         return this;
     }
 
@@ -292,7 +305,7 @@ public class ParserConfiguration {
     }
 
     public ParserConfiguration setLanguageLevel(LanguageLevel languageLevel) {
-        this.languageLevel = assertNotNull(languageLevel);
+        this.languageLevel = languageLevel;
         return this;
     }
 
@@ -303,14 +316,9 @@ public class ParserConfiguration {
     /**
      * When set to true, unicode escape handling is done by preprocessing the whole input,
      * meaning that all unicode escapes are turned into unicode characters before parsing.
-     * That means the AST will never contain literal unicode escapes,
-     * and that positions will point to where a token was found in the *processed input*, not in the original input,
-     * which is mostly not what you want.
-     * That's why the default is false, which is not the correct way to parse a Java file according to the Java Language Specification,
-     * but it works for almost any input, since unicode escapes are mostly used in comments, strings and characters,
-     * and the parser will understand them in those locations.
-     * The unicode escapes will not be processed and are transfered intact to the AST,
-     * and the locations will point to the original stream.
+     * That means the AST will never contain literal unicode escapes. However,
+     * positions in the AST will point to the original input, which is exactly the same as without this option.
+     * Without this option enabled, the unicode escapes will not be processed and are transfered intact to the AST.
      */
     public ParserConfiguration setPreprocessUnicodeEscapes(boolean preprocessUnicodeEscapes) {
         this.preprocessUnicodeEscapes = preprocessUnicodeEscapes;
@@ -320,4 +328,17 @@ public class ParserConfiguration {
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
     }
+
+    public Charset getCharacterEncoding() {
+        return characterEncoding;
+    }
+
+    /**
+     * The character encoding used for reading input from files and streams. By default UTF8 is used.
+     */
+    public ParserConfiguration setCharacterEncoding(Charset characterEncoding) {
+        this.characterEncoding = characterEncoding;
+        return this;
+    }
+
 }

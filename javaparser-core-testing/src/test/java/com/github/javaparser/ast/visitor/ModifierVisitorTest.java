@@ -21,18 +21,22 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ModifierVisitorTest {
     @Test
@@ -101,7 +105,7 @@ class ModifierVisitorTest {
 
     @Test
     void fieldDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("int x=1;");
+        final BodyDeclaration<?> bodyDeclaration = parseBodyDeclaration("int x=1;");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {
@@ -109,12 +113,12 @@ class ModifierVisitorTest {
             }
         }, null);
 
-        assertEquals(null, result);
+        assertNull(result);
     }
 
     @Test
     void variableDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("void x() {int x=1;}");
+        final BodyDeclaration<?> bodyDeclaration = parseBodyDeclaration("void x() {int x=1;}");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {
@@ -123,5 +127,19 @@ class ModifierVisitorTest {
         }, null);
 
         assertEquals("void x() {" + EOL + "}", result.toString());
+    }
+
+    @Test
+    void issue2124() {
+        ModifierVisitor<Void> modifier = new ModifierVisitor<>();
+        CompilationUnit cu = StaticJavaParser.parse("\n" +
+                "public class ModifierVisitorTest {\n" +
+                "    private void causesException() {\n" +
+                "        String[] listWithExtraCommaAndEqualElements = {\"a\", \"a\",};\n" +
+                "    }\n" +
+                "}");
+        LexicalPreservingPrinter.setup(cu);
+        cu.accept(modifier, null);
+        System.out.println(LexicalPreservingPrinter.print(cu));
     }
 }

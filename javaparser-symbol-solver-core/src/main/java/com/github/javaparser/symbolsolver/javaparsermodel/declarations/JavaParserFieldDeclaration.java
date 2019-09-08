@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -49,14 +50,6 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
             throw new IllegalStateException(requireParentNode(variableDeclarator).getClass().getCanonicalName());
         }
         this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) requireParentNode(variableDeclarator);
-    }
-
-    /**
-     * @deprecated Use JavaParserEnumConstantDeclaration instead.
-     */
-    @Deprecated
-    public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -98,7 +91,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
     }
 
     @Override
-    public Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return wrappedNode.getAccessSpecifier();
     }
 

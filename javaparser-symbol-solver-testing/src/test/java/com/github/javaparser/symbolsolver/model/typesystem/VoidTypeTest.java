@@ -91,23 +91,17 @@ class VoidTypeTest {
 
     @Test
     void testAsReferenceTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            ResolvedVoidType.INSTANCE.asReferenceType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asReferenceType());
     }
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            ResolvedVoidType.INSTANCE.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asTypeParameter());
     }
 
     @Test
     void testAsArrayTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            ResolvedVoidType.INSTANCE.asArrayType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asArrayType());
     }
 
     @Test

@@ -108,4 +108,8 @@ public class YamlPrinter {
                 .replace("\b", "\\b")
                 .replace("\t", "\\t") + "\"";
     }
+
+    public static void print(Node node) {
+        System.out.println(new YamlPrinter(true).output(node));
+    }
 }

@@ -71,7 +71,7 @@ public class SourceZip {
         assertNotNull(configuration);
         this.zipPath = zipPath.normalize();
         this.parserConfiguration = configuration;
-        Log.info("New source zip at \"%s\"", this.zipPath);
+        Log.info("New source zip at \"%s\"", ()->this.zipPath);
     }
 
     /**
@@ -83,7 +83,7 @@ public class SourceZip {
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
-        Log.info("Parsing zip at \"%s\"", zipPath);
+        Log.info("Parsing zip at \"%s\"", ()-> zipPath);
         List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
         parse((path, result) -> results.add(new Pair<>(path, result)));
         return results;
@@ -98,12 +98,12 @@ public class SourceZip {
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public SourceZip parse(Callback callback) throws IOException {
-        Log.info("Parsing zip at \"%s\"", zipPath);
+        Log.info("Parsing zip at \"%s\"", ()-> zipPath);
         JavaParser javaParser = new JavaParser(parserConfiguration);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-                    Log.info("Parsing zip entry \"%s\"", entry.getName());
+                    Log.info("Parsing zip entry \"%s\"", ()-> entry.getName());
                     final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
                             provider(zipFile.getInputStream(entry)));
                     callback.process(Paths.get(entry.getName()), result);
@@ -137,26 +137,6 @@ public class SourceZip {
         return zipPath;
     }
     
-    /**
-     * @deprecated store ParserConfiguration now
-     */
-    @Deprecated
-    public JavaParser getJavaParser() {
-        return new JavaParser(parserConfiguration);
-    }
-
-    /**
-     * Set the parser that is used for parsing by default.
-     *
-     * @deprecated store ParserConfiguration now
-     */
-    @Deprecated
-    public SourceZip setJavaParser(JavaParser javaParser) {
-        assertNotNull(javaParser);
-        this.parserConfiguration = javaParser.getParserConfiguration();
-        return this;
-    }
-
     public ParserConfiguration getParserConfiguration() {
         return parserConfiguration;
     }

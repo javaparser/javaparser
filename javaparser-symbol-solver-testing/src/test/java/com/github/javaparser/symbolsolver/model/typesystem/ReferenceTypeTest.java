@@ -155,16 +155,12 @@ class ReferenceTypeTest {
 
     @Test
     void testAsTypeParameter() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            object.asTypeParameter();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> object.asTypeParameter());
     }
 
     @Test
     void testAsArrayTypeUsage() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            object.asArrayType();
-    });
+        assertThrows(UnsupportedOperationException.class, () -> object.asArrayType());
     }
 
     @Test
@@ -644,6 +640,14 @@ class ReferenceTypeTest {
                 new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
         Set<String> ancestors = buffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
         assertEquals(new HashSet<>(Arrays.asList("java.lang.Object")), ancestors);
+    }
+
+    @Test
+    void testDirectAncestorsOfObjectClass() {
+        ResolvedReferenceType object = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        Set<String> ancestors = object.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        assertEquals(new HashSet<>(), ancestors);
     }
 
     @Test

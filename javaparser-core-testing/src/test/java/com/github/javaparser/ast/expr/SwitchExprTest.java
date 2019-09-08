@@ -3,10 +3,11 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
+import static com.github.javaparser.utils.TestParser.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SwitchExprTest {
@@ -74,7 +75,7 @@ class SwitchExprTest {
                 "    default      -> {\n" +
                 "        int k = day.toString().length();\n" +
                 "        int result = f(k);\n" +
-                "        break result;\n" +
+                "        yield result;\n" +
                 "    }\n" +
                 "};").findFirst(SwitchExpr.class).get();
 
@@ -86,12 +87,12 @@ class SwitchExprTest {
     void jep325Example6() {
         parseStatement("int result = switch (s) {\n" +
                 "    case \"Foo\": \n" +
-                "        break 1;\n" +
+                "        yield 1;\n" +
                 "    case \"Bar\":\n" +
-                "        break 2;\n" +
+                "        yield 2;\n" +
                 "    default:\n" +
                 "        System.out.println(\"Neither Foo nor Bar, hmmm...\");\n" +
-                "        break 0;\n" +
+                "        yield 0;\n" +
                 "};");
     }
 }

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ArrayInitializerExpr;
@@ -30,13 +29,16 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class TreeVisitorTest {
     @Test
     void isValidBreadthFirstTraversal() {
-        Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
+        Expression expression = parseExpression("(2+3)+(4+5)");
 
         StringBuilder result = new StringBuilder();
 
@@ -53,7 +55,7 @@ class TreeVisitorTest {
 
     @Test
     void issue743ConcurrentModificationProblem() {
-        Expression expression = JavaParser.parseExpression("new int[]{1,2,3,4}");
+        Expression expression = parseExpression("new int[]{1,2,3,4}");
 
         StringBuilder result = new StringBuilder();
         TreeVisitor visitor = new TreeVisitor() {
@@ -78,7 +80,7 @@ class TreeVisitorTest {
             public void process(Node node) {
                 result.append("<").append(node).append("> ");
             }
-        }.visitPreOrder(JavaParser.parseExpression("(2+3)+(4+5)"));
+        }.visitPreOrder(parseExpression("(2+3)+(4+5)"));
         assertEquals("<(2 + 3) + (4 + 5)> <(2 + 3)> <2 + 3> <2> <3> <(4 + 5)> <4 + 5> <4> <5> ", result.toString());
     }
 
@@ -90,7 +92,7 @@ class TreeVisitorTest {
             public void process(Node node) {
                 result.append("<").append(node).append("> ");
             }
-        }.visitPostOrder(JavaParser.parseExpression("(2+3)+(4+5)"));
+        }.visitPostOrder(parseExpression("(2+3)+(4+5)"));
         assertEquals("<2> <3> <2 + 3> <(2 + 3)> <4> <5> <4 + 5> <(4 + 5)> <(2 + 3) + (4 + 5)> ", result.toString());
     }
 
@@ -104,7 +106,7 @@ class TreeVisitorTest {
                             parent -> ((ArrayInitializerExpr) parent).getValues().add(new IntegerLiteralExpr("1")));
                 }
             }
-        }.visitPreOrder(JavaParser.parseExpression("new int[]{1,2,3,4}"));
+        }.visitPreOrder(parseExpression("new int[]{1,2,3,4}"));
     }
 
     @Test
@@ -117,12 +119,12 @@ class TreeVisitorTest {
                             parent -> ((ArrayInitializerExpr) parent).getValues().add(new IntegerLiteralExpr("1")));
                 }
             }
-        }.visitPostOrder(JavaParser.parseExpression("new int[]{1,2,3,4}"));
+        }.visitPostOrder(parseExpression("new int[]{1,2,3,4}"));
     }
 
     @Test
     void parents() {
-        CompilationUnit cu = JavaParser.parse("class X{int x=1;}");
+        CompilationUnit cu = parse("class X{int x=1;}");
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariable(0).getName();
 
         Node.ParentsVisitor visitor = new Node.ParentsVisitor(x);
@@ -136,12 +138,12 @@ class TreeVisitorTest {
                 "\n" +
                 "    int x = 1;\n" +
                 "}\n", visitor.next().toString());
-        assertEquals(false, visitor.hasNext());
+        assertFalse(visitor.hasNext());
     }
 
     @Test
     void isValidDirectChildrenTraversal() {
-        Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
+        Expression expression = parseExpression("(2+3)+(4+5)");
 
         StringBuilder result = new StringBuilder();
 

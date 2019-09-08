@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -170,7 +171,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessSpecifier() != Modifier.Keyword.PRIVATE && m.accessSpecifier() != Modifier.Keyword.PACKAGE_PRIVATE)
+                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.PACKAGE_PRIVATE)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         int foundCount = 0;
@@ -197,6 +198,13 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
             }
         }
         assertEquals(3, foundCount);
+    }
+
+    @Test
+    void testGetConstructors() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ResolvedReferenceTypeDeclaration locale = new ReflectionClassDeclaration(ClassWithSyntheticConstructor.class, typeResolver);
+        assertEquals(1, locale.getConstructors().size());
     }
 
     @Test
@@ -360,7 +368,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
@@ -439,7 +446,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.resolution.Resolvable"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -777,4 +783,20 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertTrue(ancestors.isEmpty());
     }
+
+    public static class ClassWithSyntheticConstructor {
+
+        private ClassWithSyntheticConstructor() {}
+
+        public static ClassWithSyntheticConstructor newInstance() {
+            return ClassWithSyntheticConstructorHelper.create();
+        }
+
+        private static class ClassWithSyntheticConstructorHelper {
+            public static ClassWithSyntheticConstructor create() {
+                return new ClassWithSyntheticConstructor();
+            }
+        }
+    }
+
 }

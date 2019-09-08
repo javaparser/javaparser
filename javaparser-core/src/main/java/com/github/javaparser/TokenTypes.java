@@ -11,14 +11,6 @@ public class TokenTypes {
         return getCategory(kind).isWhitespace();
     }
 
-    /**
-     * @deprecated use isEndOfLineToken
-     */
-    @Deprecated
-    public static boolean isEndOfLineCharacter(int kind) {
-        return isEndOfLineToken(kind);
-    }
-
     public static boolean isEndOfLineToken(int kind) {
         return getCategory(kind).isEndOfLine();
     }
@@ -33,14 +25,6 @@ public class TokenTypes {
 
     public static boolean isComment(int kind) {
         return getCategory(kind).isComment();
-    }
-
-    /**
-     * @deprecated use eolTokenKind
-     */
-    @Deprecated
-    public static int eolToken() {
-        return eolTokenKind();
     }
 
     /**
@@ -64,14 +48,6 @@ public class TokenTypes {
      */
     public static int spaceTokenKind() {
         return SPACE;
-    }
-
-    /**
-     * @deprecated use spaceTokenKind
-     */
-    @Deprecated
-    public static int spaceToken() {
-        return spaceTokenKind();
     }
 
     /**
@@ -145,6 +121,7 @@ public class TokenTypes {
             case VOID:
             case VOLATILE:
             case WHILE:
+            case YIELD:
             case REQUIRES:
             case TO:
             case WITH:
@@ -169,6 +146,7 @@ public class TokenTypes {
             case HEXADECIMAL_EXPONENT:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
+            case TEXT_BLOCK_LITERAL:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
@@ -232,6 +210,8 @@ public class TokenTypes {
             case LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
+            case TEXT_BLOCK_CONTENT:
+            case ENTER_TEXT_BLOCK:
             default:
                 throw new AssertionError("Invalid token kind " + kind);
         }

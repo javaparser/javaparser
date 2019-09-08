@@ -33,7 +33,7 @@ class SymbolSolverCollectionStrategyTest {
                         // not supported operation, just skip
                     } catch (Exception e) {
                         unresolved.getAndIncrement();
-                        Log.error(e, "Unable to resolve %s from %s", expr, compilationUnit.getStorage().get().getPath());
+                        Log.error(e, "Unable to resolve %s from %s", () -> expr, () -> compilationUnit.getStorage().get().getPath());
                     }
                 }
             });

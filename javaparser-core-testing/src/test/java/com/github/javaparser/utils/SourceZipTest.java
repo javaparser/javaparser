@@ -44,7 +44,7 @@ class SourceZipTest {
             .normalize();
 
     @Test
-    void parseTestDirectory() throws URISyntaxException, IOException {
+    void parseTestDirectory() throws IOException {
         SourceZip sourceZip = new SourceZip(testDir.resolve("test.zip"));
         List<Pair<Path, ParseResult<CompilationUnit>>> results = sourceZip.parse();
         assertEquals(3, results.size());
@@ -56,7 +56,7 @@ class SourceZipTest {
     }
 
     @Test
-    void parseTestDirectoryWithCallback() throws URISyntaxException, IOException {
+    void parseTestDirectoryWithCallback() throws IOException {
         SourceZip sourceZip = new SourceZip(testDir.resolve("test.zip"));
         List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
 
@@ -71,16 +71,12 @@ class SourceZipTest {
     }
 
     @Test
-    void dirAsZipIsNotAllowed() throws IOException {
-        assertThrows(IOException.class, () -> {
-            new SourceZip(testDir.resolve("test")).parse();
-    });
+    void dirAsZipIsNotAllowed() {
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test")).parse());
     }
 
     @Test
-    void fileAsZipIsNotAllowed() throws IOException {
-        assertThrows(IOException.class, () -> {
-            new SourceZip(testDir.resolve("test.txt")).parse();
-    });
+    void fileAsZipIsNotAllowed() {
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test.txt")).parse());
     }
 }

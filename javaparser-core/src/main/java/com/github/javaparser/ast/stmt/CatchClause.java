@@ -43,7 +43,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {
+public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {
 
     private Parameter parameter;
 

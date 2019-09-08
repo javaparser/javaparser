@@ -28,9 +28,7 @@ class LexicalDifferenceCalculator {
         }
 
         public CalculatedSyntaxModel from(int index) {
-            List<CsmElement> newList = new LinkedList<>();
-            newList.addAll(elements.subList(index, elements.size()));
-            return new CalculatedSyntaxModel(newList);
+            return new CalculatedSyntaxModel(new ArrayList<>(elements.subList(index, elements.size())));
         }
 
         @Override
@@ -265,6 +263,8 @@ class LexicalDifferenceCalculator {
                 return GeneratedJavaParserConstants.FINAL;
             case ABSTRACT:
                 return GeneratedJavaParserConstants.ABSTRACT;
+            case TRANSIENT:
+                return GeneratedJavaParserConstants.TRANSIENT;
             default:
                 throw new UnsupportedOperationException(modifier.getKeyword().name());
         }

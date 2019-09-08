@@ -32,7 +32,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;
@@ -45,7 +45,7 @@ import static java.util.stream.Collectors.toList;
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
  */
-public interface NodeWithMembers<N extends Node> {
+public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     /**
      * @return all members inside the braces of this node,
      * like fields, methods, nested types, etc.
@@ -76,7 +76,7 @@ public interface NodeWithMembers<N extends Node> {
      * Add a field to this and automatically add the import of the type if needed
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -88,8 +88,8 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Add a field to this.
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type      the type of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -100,8 +100,8 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Add a field to this.
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type      the type of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -117,10 +117,10 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Add a field to this and automatically add the import of the type if needed
      *
-     * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param typeClass   the type of the field
+     * @param name        the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier.Keyword... modifiers) {
@@ -131,10 +131,10 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Add a field to this.
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type        the type of the field
+     * @param name        the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier.Keyword... modifiers) {
@@ -144,10 +144,10 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Add a field to this.
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type        the type of the field
+     * @param name        the name of the field
      * @param initializer the initializer of the field
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier.Keyword... modifiers) {
@@ -160,7 +160,7 @@ public interface NodeWithMembers<N extends Node> {
      * Add a private field to this.
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPrivateField(Class<?> typeClass, String name) {
@@ -194,7 +194,7 @@ public interface NodeWithMembers<N extends Node> {
      * Add a public field to this.
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPublicField(Class<?> typeClass, String name) {
@@ -228,7 +228,7 @@ public interface NodeWithMembers<N extends Node> {
      * Add a protected field to this.
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(Class<?> typeClass, String name) {
@@ -262,7 +262,7 @@ public interface NodeWithMembers<N extends Node> {
      * Adds a methods with void return by default to this.
      *
      * @param methodName the method name
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers  the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
     default MethodDeclaration addMethod(String methodName, Keyword... modifiers) {
@@ -272,6 +272,20 @@ public interface NodeWithMembers<N extends Node> {
         methodDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(methodDeclaration);
         return methodDeclaration;
+    }
+
+    /**
+     * Adds a constructor to this node with members.
+     *
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the created constructor
+     */
+    default ConstructorDeclaration addConstructor(Modifier.Keyword... modifiers) {
+        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
+        constructorDeclaration.setModifiers(createModifierList(modifiers));
+        constructorDeclaration.setName(getName());
+        getMembers().add(constructorDeclaration);
+        return constructorDeclaration;
     }
 
     /**
@@ -319,11 +333,19 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Try to find a {@link MethodDeclaration} by its parameters types
+     * Try to find a {@link MethodDeclaration} by its parameter types. The given parameter types must <i>literally</i>
+     * match the declared types of this node's parameters, so passing the string {@code "List"} to this method will find
+     * all methods that have exactly one parameter whose type is declared as {@code List}, but not methods with exactly
+     * one parameter whose type is declared as {@code java.util.List} or {@code java.awt.List}. Conversely, passing the
+     * string {@code "java.util.List"} to this method will find all methods that have exactly one parameter whose type
+     * is declared as {@code java.util.List}, but not if the parameter type is declared as {@code List}. Similarly,
+     * note that generics are matched as well: If there is a method that has a parameter declared as
+     * {@code List&lt;String&gt;}, then it will be considered as a match only if the given string is
+     * {@code "List&lt;String&gt;"}, but not if the given string is only {@code "List"}.
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
-     * foo(Map&lt;Integer,String&gt; myMap,int number)
-     * @return the methods found (multiple in case of overloading)
+     * @param paramTypes the types of parameters like {@code "Map&lt;Integer, String&gt;", "int"} to match
+     *                   {@code void foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the methods found
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return unmodifiableList(getMethods().stream()
@@ -332,11 +354,12 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Try to find {@link MethodDeclaration}s by their name and parameters types
+     * Try to find {@link MethodDeclaration}s by their name and parameter types. Parameter types are matched exactly as
+     * in the case of {@link #getMethodsByParameterTypes(String...)}.
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
-     * foo(Map&lt;Integer,String&gt; myMap,int number)
-     * @return the methods found (multiple in case of overloading)
+     * @param paramTypes the types of parameters like {@code "Map&lt;Integer, String&gt;", "int"} to match
+     *                   {@code void foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the methods found
      */
     default List<MethodDeclaration> getMethodsBySignature(String name, String... paramTypes) {
         return unmodifiableList(getMethodsByName(name).stream()
@@ -345,16 +368,86 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Try to find a {@link MethodDeclaration} by its parameters types
+     * Try to find a {@link MethodDeclaration} by its parameter types. Note that this is a match in SimpleName, so
+     * {@code java.awt.List} and {@code java.util.List} are identical to this algorithm. In addition, note that it is
+     * the erasure of each type which is considered, so passing {@code List.class} to this method will return all
+     * methods that have exactly one parameter whose type is named {@code List}, regardless of whether the parameter
+     * type is declared without generics as {@code List}, or with generics as {@code List&lt;String&gt;}, or
+     * {@code List&lt;Integer&gt;}, etc.
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
-     * foo(Map&lt;Integer,String&gt; myMap,int number)
-     * @return the methods found (multiple in case of overloading)
+     * @param paramTypes the types of parameters like {@code Map.class, int.class} to match
+     *                   {@code void foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the methods found
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(Class<?>... paramTypes) {
         return unmodifiableList(getMethods().stream()
                 .filter(m -> m.hasParametersOfType(paramTypes))
                 .collect(toList()));
+    }
+
+    /**
+     * Find all constructors in the members of this node.
+     *
+     * @return the constructors found. This list is immutable.
+     */
+    default List<ConstructorDeclaration> getConstructors() {
+        return unmodifiableList(getMembers().stream()
+                .filter(m -> m instanceof ConstructorDeclaration)
+                .map(m -> (ConstructorDeclaration) m)
+                .collect(toList()));
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} with no parameters.
+     *
+     * @return the constructor found, if any.
+     */
+    default Optional<ConstructorDeclaration> getDefaultConstructor() {
+        return getMembers().stream()
+                .filter(m -> m instanceof ConstructorDeclaration)
+                .map(m -> (ConstructorDeclaration) m)
+                .filter(cd -> cd.getParameters().isEmpty())
+                .findFirst();
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} by its parameter types. The given parameter types must
+     * <i>literally</i> match the declared types of the desired constructor, so passing the string {@code "List"} to
+     * this method will search for a constructor that has exactly one parameter whose type is declared as {@code List},
+     * but not for a constructor with exactly one parameter whose type is declared as {@code java.util.List} or
+     * {@code java.awt.List}. Conversely, passing the string {@code "java.util.List"} to this method will search for a
+     * constructor that has exactly one parameter whose type is declared as {@code java.util.List}, but not for a
+     * constructor whose type is declared as {@code List}. Similarly, note that generics are matched as well: If there
+     * is a constructor that has a parameter declared as {@code List&lt;String&gt;}, then it will be considered as a
+     * match only if the given string is {@code "List&lt;String&gt;"}, but not if the given string is only
+     * {@code "List"}.
+     *
+     * @param paramTypes the types of parameters like {@code "Map&lt;Integer, String&gt;", "int"} to match
+     *                   {@code Foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the constructor found, if any.
+     */
+    default Optional<ConstructorDeclaration> getConstructorByParameterTypes(String... paramTypes) {
+        return getConstructors().stream()
+                .filter(m -> m.hasParametersOfType(paramTypes))
+                .findFirst();
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} by its parameter types.  Note that this is a match in SimpleName,
+     * so {@code java.awt.List} and {@code java.util.List} are identical to this algorithm. In addition, note that it is
+     * the erasure of each type which is considered, so passing {@code List.class} to this method will search for a
+     * constructor that has exactly one parameter whose type is named {@code List}, regardless of whether the parameter
+     * type is declared without generics as {@code List}, or with generics as {@code List&lt;String&gt;}, or
+     * {@code List&lt;Integer&gt;}, etc.
+     *
+     * @param paramTypes the types of parameters like {@code Map.class, int.class} to match
+     *                   {@code Foo(Map&lt;Integer,String&gt; myMap, int number)}
+     * @return the constructor found, if any.
+     */
+    default Optional<ConstructorDeclaration> getConstructorByParameterTypes(Class<?>... paramTypes) {
+        return getConstructors().stream()
+                .filter(m -> m.hasParametersOfType(paramTypes))
+                .findFirst();
     }
 
     /**
@@ -382,5 +475,12 @@ public interface NodeWithMembers<N extends Node> {
                 .filter(m -> m instanceof FieldDeclaration)
                 .map(m -> (FieldDeclaration) m)
                 .collect(toList()));
+    }
+
+    /**
+     * @return true if there are no members contained in this node.
+     */
+    default boolean isEmpty() {
+        return getMembers().isEmpty();
     }
 }

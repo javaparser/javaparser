@@ -1,17 +1,19 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.TokenTypes;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
-import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 import java.util.*;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.TokenTypes;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -48,11 +50,10 @@ public class Difference {
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
-        List<TextElement> res = new LinkedList<>();
-        res.addAll(indentation);
+        List<TextElement> res = new LinkedList<>(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isNewline() || e.isToken(SINGLE_LINE_COMMENT)) {
+            if (e.isNewline()) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -375,8 +376,12 @@ public class Difference {
 
                 diffIndex++;
             }
-        } else if (removed.isToken() && originalElementIsToken
-                && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind())) {
+        } else if (removed.isToken() && originalElementIsToken &&
+                (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
+                        // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
+                        // element always has the current operating system's EOL as type
+                        || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
+                                && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
@@ -388,7 +393,7 @@ public class Difference {
             } else {
                 throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
             }
-        } else if (removed.isWhiteSpace()) {
+        } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
             diffIndex++;
         } else if (originalElement.isWhiteSpace()) {
             originalIndex++;
@@ -458,6 +463,11 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
+             // case where originalTextToken is a separator like ";" and 
+             // kept is not a new line or whitespace for example "}"
+             // see issue 2351
+            }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
+                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
@@ -518,6 +528,16 @@ public class Difference {
         }
     }
 
+    private boolean nextIsRightBrace(int index) {
+        List<TextElement> elements = originalElements.subList(index, originalElements.size());
+        for(TextElement element : elements) {
+            if (!element.isSpaceOrTab()) {
+                return element.isToken(RBRACE);
+            }
+        }
+        return false;
+    }
+
     private void applyAddedDiffElement(Added added) {
         if (added.isIndent()) {
             for (int i=0;i<STANDARD_INDENTATION_SIZE;i++){
@@ -539,8 +559,12 @@ public class Difference {
         TextElement addedTextElement = added.toTextElement();
         boolean used = false;
         if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
-            for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                if (e instanceof TokenTextElement && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
+            List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
+            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
+            for (TextElement e : elements) {
+                if (!nextIsRightBrace
+                        && e instanceof TokenTextElement
+                        && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
                     originalIndex++;
                 } else {
                     nodeText.addElement(originalIndex++, e);
@@ -572,13 +596,28 @@ public class Difference {
         }
 
         if (!used) {
-            nodeText.addElement(originalIndex, addedTextElement);
-            originalIndex++;
+            // Handling trailing comments
+            if(nodeText.numberOfElements() > originalIndex + 1 &&
+                    nodeText.getTextElement(originalIndex).isComment()) {
+                // Need to get behind the comment:
+                originalIndex += 2;
+                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+                // We want to adjust the indentation while considering the new element that we added
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
+                originalIndex++; // Now we can increment
+            } else {
+                nodeText.addElement(originalIndex, addedTextElement);
+                originalIndex++;
+            }
         }
 
         if (addedTextElement.isNewline()) {
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
-            originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent/* && !addedIndentation*/);
+            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
+            boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
+            if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
+            }
         }
 
         diffIndex++;

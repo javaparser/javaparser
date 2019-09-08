@@ -16,7 +16,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -36,6 +37,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -44,6 +46,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FieldsResolutionTest extends AbstractResolutionTest {
+
+    @AfterEach
+    void resetConfiguration() {
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
 
     @Test
     void accessClassFieldThroughThis() {
@@ -114,7 +121,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldThroughThis() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
@@ -136,7 +143,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldThroughSuper() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("AccessThroughSuper");
@@ -159,7 +166,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldOfClassExtendingUnknownClass1() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
@@ -181,7 +188,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldOfClassExtendingUnknownClass2() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
@@ -203,7 +210,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveInheritedFieldFromInterface() {
         // configure symbol solver before parsing
-        JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ReflectionTypeSolverFieldFromInterfaceResolution");
@@ -215,5 +222,4 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("int", ref.describe());
     }
-
 }
