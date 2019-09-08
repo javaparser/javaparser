@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -165,7 +166,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != Modifier.Keyword.PRIVATE)
+                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
                        .collect(Collectors.toList());
     }
 

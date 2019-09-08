@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -191,7 +191,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             fields.add(new ResolvedFieldDeclaration() {
                 
                 @Override
-                public Modifier.Keyword accessSpecifier() {
+                public AccessSpecifier accessSpecifier() {
                     return f.accessSpecifier();
                 }
                 
@@ -317,7 +317,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return wrappedNode.getAccessSpecifier();
     }
 
@@ -363,9 +363,6 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (ref == null || !ref.isSolved()) {
             ref = solveType(typeName);
-        }
-        if (!ref.isSolved() && classOrInterfaceType.getScope().isPresent()) {
-            ref = solveType(classOrInterfaceType.getName().getId());
         }
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());

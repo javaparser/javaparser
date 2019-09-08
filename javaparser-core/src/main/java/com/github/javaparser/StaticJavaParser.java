@@ -26,6 +26,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
@@ -465,6 +466,18 @@ public final class StaticJavaParser {
      */
     public static TypeParameter parseTypeParameter(String typeParameter) {
         return handleResult(newParser().parseTypeParameter(typeParameter));
+    }
+
+    /**
+     * Parses a method declaration and returns it as a MethodDeclaration.
+     *
+     * @param methodDeclaration a method declaration like "void foo() {}"
+     * @return the AST for the method declaration
+     * @throws ParseProblemException if the source code has parser errors
+     * @see MethodDeclaration
+     */
+    public static MethodDeclaration parseMethodDeclaration(String methodDeclaration) {
+        return handleResult(newParser().parseMethodDeclaration(methodDeclaration));
     }
 
 }

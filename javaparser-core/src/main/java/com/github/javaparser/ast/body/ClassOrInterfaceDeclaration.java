@@ -21,13 +21,9 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
@@ -44,17 +40,18 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */
-public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration>, NodeWithTypeParameters<ClassOrInterfaceDeclaration>, NodeWithAbstractModifier<ClassOrInterfaceDeclaration>, NodeWithFinalModifier<ClassOrInterfaceDeclaration>, NodeWithConstructors<ClassOrInterfaceDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
+public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration>, NodeWithTypeParameters<ClassOrInterfaceDeclaration>, NodeWithAbstractModifier<ClassOrInterfaceDeclaration>, NodeWithFinalModifier<ClassOrInterfaceDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
 
     private boolean isInterface;
 
@@ -206,6 +203,14 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      */
     public boolean isLocalClassDeclaration() {
         return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
+    }
+
+    @Override
+    public Optional<String> getFullyQualifiedName() {
+        if (isLocalClassDeclaration()) {
+            return Optional.empty();
+        }
+        return super.getFullyQualifiedName();
     }
 
     /**

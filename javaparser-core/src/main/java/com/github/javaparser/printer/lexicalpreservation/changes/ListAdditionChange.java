@@ -22,6 +22,7 @@ public class ListAdditionChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             NodeList<Node> nodeList = new NodeList<>();
+	    nodeList.setParentNode(node);
             Object currentRawValue = new NoChange().getValue(property, node);
             if (!(currentRawValue instanceof NodeList)){
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());

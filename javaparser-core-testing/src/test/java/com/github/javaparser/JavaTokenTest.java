@@ -30,8 +30,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.JavaToken.Category.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavaTokenTest {
 
@@ -46,7 +45,7 @@ class JavaTokenTest {
         assertToken("1", range(1, 9, 1, 9), INTEGER_LITERAL, LITERAL, iterator.next());
         assertToken(" ", range(1, 10, 1, 10), SPACE, WHITESPACE_NO_EOL, iterator.next());
         assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE_NO_EOL, iterator.next());
-        assertEquals(false, iterator.hasNext());
+        assertFalse(iterator.hasNext());
     }
 
     private void assertToken(String image, Range range, int kind, JavaToken.Category category, JavaToken token) {

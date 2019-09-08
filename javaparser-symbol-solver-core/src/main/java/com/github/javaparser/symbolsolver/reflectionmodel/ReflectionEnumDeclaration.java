@@ -14,6 +14,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -76,7 +77,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   ///
 
   @Override
-  public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+  public AccessSpecifier accessSpecifier() {
     return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
   }
   
