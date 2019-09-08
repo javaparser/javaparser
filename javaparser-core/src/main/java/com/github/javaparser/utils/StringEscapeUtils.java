@@ -62,6 +62,8 @@ public class StringEscapeUtils {
      * {@code 'n'} into a newline character, unless the {@code '\'}
      * is preceded by another {@code '\'}.</p>
      *
+     * This can be replaced by String::translateEscapes in JDK 13
+     * 
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */

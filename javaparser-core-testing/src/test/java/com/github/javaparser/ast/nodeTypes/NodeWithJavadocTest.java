@@ -36,7 +36,7 @@ class NodeWithJavadocTest {
     void removeJavaDocNegativeCaseNoComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
-        assertEquals(false, decl.removeJavaDocComment());
+        assertFalse(decl.removeJavaDocComment());
     }
 
     @Test
@@ -44,7 +44,7 @@ class NodeWithJavadocTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new LineComment("A comment"));
-        assertEquals(false, decl.removeJavaDocComment());
+        assertFalse(decl.removeJavaDocComment());
         assertTrue(decl.getComment().isPresent());
     }
 
@@ -53,7 +53,7 @@ class NodeWithJavadocTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
                 false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
-        assertEquals(true, decl.removeJavaDocComment());
+        assertTrue(decl.removeJavaDocComment());
         assertFalse(decl.getComment().isPresent());
     }
 

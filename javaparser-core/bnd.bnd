@@ -9,6 +9,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.metamodel, \
     com.github.javaparser.printer, \
     com.github.javaparser.printer.concretesyntaxmodel, \
+    com.github.javaparser.printer.lexicalpreservation, \
+    com.github.javaparser.printer.lexicalpreservation.changes, \
     com.github.javaparser.resolution, \
     com.github.javaparser.resolution.declarations, \
     com.github.javaparser.resolution.types, \

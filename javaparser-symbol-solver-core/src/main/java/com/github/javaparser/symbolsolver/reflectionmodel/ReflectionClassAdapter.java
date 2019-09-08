@@ -177,6 +177,7 @@ class ReflectionClassAdapter {
 
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(m -> !m.isSynthetic())
                 .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
                 .collect(Collectors.toList());
     }

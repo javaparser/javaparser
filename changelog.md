@@ -1,3 +1,90 @@
+Version 3.14.12
+------------------
+- BREAKING: `NodeWithConstructors` has been merged into `NodeWithMembers`,
+so if you don't have a very specific need to only find nodes that support constructors,
+you can use `NodeWithMembers` instead.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/148?closed=1)
+
+Version 3.14.11
+------------------
+- BREAKING: the pseudo-language levels have been turned into constants with the same name in the same place.
+With a little luck everything will keep compiling.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/147?closed=1)
+
+Version 3.14.10 (buggy!)
+------------------
+- BREAKING: Java 13: `break` no longer has an expression, this was part of a language preview in Java 12
+and has been removed in Java 13.
+- BREAKING: Java 13: `YieldStatement` and the keyword `yield` have been added.
+This means the token numbers have changed, and this affects serialization.
+If you rely on serialized tokens, be sure to deserialize with your current version and serialize with this version.
+- Java 13: `TextBlockLiteralExpr` has been added.
+- This release is broken because no identifier called `yield` can be used.
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/146?closed=1)
+
+Version 3.14.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/145?closed=1)
+
+Version 3.14.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/144?closed=1)
+
+Version 3.14.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/143?closed=1)
+
+Version 3.14.6 (oops, failed)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/142?closed=1)
+
+Version 3.14.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/141?closed=1)
+
+Version 3.14.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/140?closed=1)
+
+Version 3.14.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/139?closed=1)
+
+Version 3.14.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/138?closed=1)
+
+Version 3.14.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/137?closed=1)
+
+Version 3.14.0
+------------------
+* BREAKING: `SuperExpr` and `ThisExpr` used to have an `Expression classExpr`.
+this has been tightened to `Name typeName` which is more specific and easier to use.
+Checking if the expression is a `FieldAccessExpr` or `NameExpr` is no longer needed. 
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/136?closed=1)
+
+Version 3.13.10
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/135?closed=1)
+
+Version 3.13.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/134?closed=1)
+
+Version 3.13.8 (failed)
+------------------
+(release failed)
+
+Version 3.13.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/133?closed=1)
+
 Version 3.13.6
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/132?closed=1)

@@ -96,6 +96,9 @@ public interface NodeWithStatements<N extends Node> {
         return addAndGetStatement(new NameExpr(statement));
     }
 
+    /**
+     * @return true if there are no statements contained in this node.
+     */
     default boolean isEmpty() {
         return getStatements().isEmpty();
     }

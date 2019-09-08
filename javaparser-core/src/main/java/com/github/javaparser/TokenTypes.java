@@ -121,6 +121,7 @@ public class TokenTypes {
             case VOID:
             case VOLATILE:
             case WHILE:
+            case YIELD:
             case REQUIRES:
             case TO:
             case WITH:
@@ -145,6 +146,7 @@ public class TokenTypes {
             case HEXADECIMAL_EXPONENT:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
+            case TEXT_BLOCK_LITERAL:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
@@ -208,6 +210,8 @@ public class TokenTypes {
             case LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
+            case TEXT_BLOCK_CONTENT:
+            case ENTER_TEXT_BLOCK:
             default:
                 throw new AssertionError("Invalid token kind " + kind);
         }

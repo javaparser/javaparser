@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
@@ -143,6 +144,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
             if (method.isBridge() || method.isSynthetic()) continue;
             ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
+
+            // no need to search for overloaded/inherited methods if the method has no parameters
+            if (argumentsTypes.isEmpty() && methodDeclaration.getNumberOfParams() == 0) {
+                return SymbolReference.solved(methodDeclaration);
+            }
         }
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
@@ -191,6 +197,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
                 methodUsage = methodUsage.replaceTypeParameter(tpToReplace, newValue);
             }
             methods.add(methodUsage);
+
+            // no need to search for overloaded/inherited methods if the method has no parameters
+            if (argumentsTypes.isEmpty() && methodUsage.getNoParams() == 0) {
+                return Optional.of(methodUsage);
+            }
         }
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
@@ -321,7 +332,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 

@@ -8,5 +8,5 @@ public class SuperExprMetaModel extends ExpressionMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.SuperExpr.class, "SuperExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
-    public PropertyMetaModel classExprPropertyMetaModel;
+    public PropertyMetaModel typeNamePropertyMetaModel;
 }

@@ -104,6 +104,11 @@ class TokenTextElement extends TextElement {
     public boolean isComment() {
         return token.getCategory().isComment();
     }
+    
+    @Override
+    public boolean isSeparator() {
+        return token.getCategory().isSeparator();
+    }
 
     @Override
     public boolean isNewline() {

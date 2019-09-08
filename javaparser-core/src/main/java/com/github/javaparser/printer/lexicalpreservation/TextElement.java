@@ -53,6 +53,8 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isNewline();
 
     public abstract boolean isComment();
+    
+    public abstract boolean isSeparator();
 
     public final boolean isWhiteSpaceOrComment() {
         return isWhiteSpace() || isComment();
