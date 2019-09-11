@@ -702,6 +702,11 @@ public class JavaToken {
                     throw new IllegalArgumentException(f("Token kind %i is unknown.", kind));
             }
         }
+        
+        public boolean isPrimitive() {
+            return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG
+                    || this == FLOAT || this == DOUBLE;
+        }
 
         public int getKind() {
             return kind;

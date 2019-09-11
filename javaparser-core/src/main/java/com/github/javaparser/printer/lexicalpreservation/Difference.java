@@ -5,9 +5,14 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import java.util.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -387,7 +392,7 @@ public class Difference {
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
         } else if (removed.isPrimitiveType()) {
-            if (isPrimitiveType(originalElement)) {
+            if (originalElement.isPrimitive()) {
                 nodeText.removeElement(originalIndex);
                 diffIndex++;
             } else {
@@ -446,6 +451,21 @@ public class Difference {
         } else if (kept.isChild() && originalElementIsToken) {
             if (originalElement.isWhiteSpaceOrComment()) {
                 originalIndex++;
+            } else if (originalElement.isIdentifier() && isNodeWithTypeArguments(kept)) {
+                diffIndex++;
+                // skip all token related to node with type argument declaration
+                // for example:
+                // List i : in this case originalElement is "List" and the next token is space. There is nothing to skip. in the originalElements list.
+                // List<String> i : in this case originalElement is "List" and the next token is
+                // "<" so we have to skip all the tokens which are used in the typed argument declaration [<][String][>](3 tokens) in the originalElements list.
+                // List<List<String>> i : in this case originalElement is "List" and the next
+                // token is "<" so we have to skip all the tokens which are used in the typed arguments declaration [<][List][<][String][>][>](6 tokens) in the originalElements list.
+                int step = getIndexToNextTokenElement((TokenTextElement) originalElement);
+                originalIndex += step;
+                originalIndex++;
+            } else if (originalElement.isIdentifier()) {
+                originalIndex++;
+                diffIndex++;
             } else {
                 if (kept.isPrimitiveType()) {
                     originalIndex++;
@@ -463,7 +483,7 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
-             // case where originalTextToken is a separator like ";" and 
+             // case where originalTextToken is a separator like ";" and
              // kept is not a new line or whitespace for example "}"
              // see issue 2351
             }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
@@ -493,6 +513,39 @@ public class Difference {
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
+    }
+
+    /*
+     * Returns true if the DifferenceElement is a CsmChild with type arguments
+     */
+    private boolean isNodeWithTypeArguments(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+            return false;
+        CsmChild child = (CsmChild) csmElem;
+        if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
+            return false;
+        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
+        return typeArgs.isPresent() && typeArgs.get().size() > 0;
+    }
+
+    /*
+     * Returns the number of tokens to skip in originalElements list to synchronize with the DiffElements list
+     * This is due to the fact that types are considered as token in the originalElements list.
+     * For example,
+     * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
+     * So in this case, getIndexToNextTokenElement(..) returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
+     * DiffElements list and originalElements list 
+     * The end of recursivity is reached when there is no next token or if the next token is a whitespace,EOL or tab, to take into account this type of declaration
+     * List<List<String>> l
+     */
+    private int getIndexToNextTokenElement(TokenTextElement element) {
+        int step = 0;
+        Optional<JavaToken> next = element.getToken().getNextToken();
+        if (!next.isPresent() || (next.isPresent() && next.get().getCategory().isWhitespace()))
+            return step;
+        step++;
+        return step += getIndexToNextTokenElement(new TokenTextElement(next.get()));
     }
 
     private boolean openBraceWasOnSameLine() {
@@ -717,6 +770,7 @@ public class Difference {
         ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
 
         private final int priority;
+
         MatchClassification(int priority) {
             this.priority = priority;
         }
@@ -781,21 +835,6 @@ public class Difference {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }
 
-    private boolean isPrimitiveType(TextElement textElement) {
-        if (textElement instanceof TokenTextElement) {
-            TokenTextElement tokenTextElement = (TokenTextElement)textElement;
-            int tokenKind = tokenTextElement.getTokenKind();
-            return tokenKind == BYTE
-                || tokenKind == CHAR
-                || tokenKind == SHORT
-                || tokenKind == INT
-                || tokenKind == LONG
-                || tokenKind == FLOAT
-                || tokenKind == DOUBLE;
-        } else {
-            return false;
-        }
-    }
     @Override
     public String toString() {
         return "Difference{" + diffElements + '}';

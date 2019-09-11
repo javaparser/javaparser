@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.utils.TestUtils.readResource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,6 +44,10 @@ public abstract class AbstractLexicalPreservingTest {
 
     protected void considerExpression(String code) {
         expression = LexicalPreservingPrinter.setup(parseExpression(code));
+    }
+    
+    protected void considerVariableDeclaration(String code) {
+        expression = LexicalPreservingPrinter.setup(parseVariableDeclarationExpr(code));
     }
 
     protected String considerExample(String resourceName) throws IOException {
