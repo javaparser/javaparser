@@ -37,15 +37,15 @@ class Java10ValidatorTest {
     }
 
     @Test
-    void varNotAllowedInCast() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int a = (var)20;"));
+    void varAllowedInTryWithResources() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(var f = new FileReader(\"\")){ }catch (Exception e){ }"));
         assertNoProblems(result);
     }
 
     @Test
-    void varNotAllowedInTryWithResources() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(var f = new FileReader(\"\")){ }catch (Exception e){ }"));
-        assertProblems(result, "(line 1,col 5) \"var\" is not allowed here.");
+    void varNotAllowedInCast() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int a = (var)20;"));
+        assertNoProblems(result);
     }
 
     @Test

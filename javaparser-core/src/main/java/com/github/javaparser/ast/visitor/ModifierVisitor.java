@@ -182,9 +182,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final BreakStmt n, final A arg) {
-        Expression value = n.getValue().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        SimpleName label = n.getLabel().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setValue(value);
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }
@@ -1236,6 +1236,24 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setEntries(entries);
         n.setSelector(selector);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final YieldStmt n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }

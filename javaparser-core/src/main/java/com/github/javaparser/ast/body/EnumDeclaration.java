@@ -21,13 +21,9 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -38,18 +34,19 @@ import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */
-public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, NodeWithConstructors<EnumDeclaration>, Resolvable<ResolvedEnumDeclaration> {
+public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, Resolvable<ResolvedEnumDeclaration> {
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
 

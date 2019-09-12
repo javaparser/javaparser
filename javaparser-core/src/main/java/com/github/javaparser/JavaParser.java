@@ -26,6 +26,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
@@ -89,6 +90,12 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
+        if (configuration.getLanguageLevel() != null) {
+            switch (configuration.getLanguageLevel()) {
+                case JAVA_13:
+                    astParser.setYieldSupported();
+            }
+        }
         return astParser;
     }
 
@@ -378,8 +385,9 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseBodyDeclaration(String body) {
-        return parse(CLASS_BODY, provider(body));
+    @SuppressWarnings("unchecked")
+    public <T extends BodyDeclaration<?>> ParseResult<T> parseBodyDeclaration(String body) {
+        return (ParseResult<T>) parse(CLASS_BODY, provider(body));
     }
 
     /**
@@ -516,6 +524,18 @@ public final class JavaParser {
      */
     public ParseResult<TypeParameter> parseTypeParameter(String typeParameter) {
         return parse(TYPE_PARAMETER, provider(typeParameter));
+    }
+
+    /**
+     * Parses a method declaration and returns it as a MethodDeclaration.
+     *
+     * @param methodDeclaration a method declaration like "void foo() {}"
+     * @return the AST for the method declaration
+     * @throws ParseProblemException if the source code has parser errors
+     * @see MethodDeclaration
+     */
+    public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
+        return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
 
 }
