@@ -460,7 +460,7 @@ public class Difference {
                 // "<" so we have to skip all the tokens which are used in the typed argument declaration [<][String][>](3 tokens) in the originalElements list.
                 // List<List<String>> i : in this case originalElement is "List" and the next
                 // token is "<" so we have to skip all the tokens which are used in the typed arguments declaration [<][List][<][String][>][>](6 tokens) in the originalElements list.
-                int step = getIndexToNextTokenElement((TokenTextElement) originalElement);
+                int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
                 originalIndex++;
             } else if (originalElement.isIdentifier()) {
@@ -530,22 +530,49 @@ public class Difference {
     }
 
     /*
-     * Returns the number of tokens to skip in originalElements list to synchronize with the DiffElements list
+     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      * This is due to the fact that types are considered as token in the originalElements list.
      * For example,
      * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
-     * So in this case, getIndexToNextTokenElement(..) returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
+     * So in this case, getIndexToNextTokenElement(..) on the [List] token returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
      * DiffElements list and originalElements list 
-     * The end of recursivity is reached when there is no next token or if the next token is a whitespace,EOL or tab, to take into account this type of declaration
-     * List<List<String>> l
+     * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally managed, to take into account this type of declaration
+     * List <List<String>> l
+     * Be careful, this method must be call only if diamond operator could be found in the sequence
+     * 
+     * @Param TokenTextElement the token currently analyzed 
+     * @Param int the number of nested diamond operators
+     * @return the number of token to skip in originalElements list
      */
-    private int getIndexToNextTokenElement(TokenTextElement element) {
-        int step = 0;
+    private int getIndexToNextTokenElement(TokenTextElement element, int nestedDiamondOperator) {
+        int step = 0; // number of token to skip
         Optional<JavaToken> next = element.getToken().getNextToken();
-        if (!next.isPresent() || (next.isPresent() && next.get().getCategory().isWhitespace()))
-            return step;
+        if (!next.isPresent()) return step;
+        // because there is a token, first we need to increment the number of token to skip 
         step++;
-        return step += getIndexToNextTokenElement(new TokenTextElement(next.get()));
+        // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
+        JavaToken token = next.get();
+        Kind kind = Kind.valueOf(token.getKind());
+        if (isDiamondOperator(kind)) {
+            if (kind.GT.equals(kind))
+                nestedDiamondOperator--;
+            else
+                nestedDiamondOperator++;
+        }
+        // manage the fact where the first token is not a diamond operator but a whitespace
+        // and the end of the token sequence to skip
+        // for example in this declaration List <String> a;
+        if (nestedDiamondOperator == 0 && !next.get().getCategory().isWhitespace())
+            return step;
+        // recursively analyze token to skip
+        return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
+    }
+    
+    /*
+     * Returns true if the token is possibly a diamond operator
+     */
+    private boolean isDiamondOperator(Kind kind) {
+        return kind.GT.equals(kind) || kind.LT.equals(kind);
     }
 
     private boolean openBraceWasOnSameLine() {

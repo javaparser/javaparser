@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -17,17 +18,24 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         String def2 = "List i";
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
-//        System.out.println(LexicalPreservingPrinter.print(expression));
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-   
+
     @Test
     void printingGenericVariableDeclarationWithAddedModifier() {
         String def2 = "List<String> i";
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
-//        System.out.println(LexicalPreservingPrinter.print(expression));
+        assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+    }
+    
+    @Test
+    void printingGenericVariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
+        String def2 = "List <String> i";
+        considerVariableDeclaration(def2);
+        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
@@ -37,7 +45,15 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         String def2 = "List<List<String>> i";
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
-//        System.out.println(LexicalPreservingPrinter.print(expression));
+        assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+    }
+    
+    @Test
+    void printingGeneric2VariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
+        String def2 = "List < List < String > > i";
+        considerVariableDeclaration(def2);
+        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
