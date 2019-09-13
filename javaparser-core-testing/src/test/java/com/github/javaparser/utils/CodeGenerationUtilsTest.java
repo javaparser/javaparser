@@ -15,8 +15,8 @@ class CodeGenerationUtilsTest {
     @Test
     void getters() {
         assertEquals("getValue", getterName(Object.class, "value"));
-        assertEquals("isBlue", getterName(Boolean.TYPE, "isBlue"));
-        assertEquals("isBlue", getterName(Boolean.TYPE, "blue"));
+        assertEquals("isBlue", getterName(boolean.class, "isBlue"));
+        assertEquals("isBlue", getterName(boolean.class, "blue"));
         assertEquals("getBlue", getterName(Boolean.class, "blue"));
         assertEquals("getIsBlue", getterName(Boolean.class, "isBlue"));
     }

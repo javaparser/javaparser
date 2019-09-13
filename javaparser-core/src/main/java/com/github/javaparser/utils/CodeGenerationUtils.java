@@ -16,7 +16,7 @@ public final class CodeGenerationUtils {
     }
 
     public static String getterName(Class<?> type, String name) {
-        if (name.startsWith("is") && Boolean.TYPE.equals(type)) {
+        if (name.startsWith("is") && boolean.class.equals(type)) {
             return name;
         } else if (Boolean.TYPE.equals(type)) {
             return "is" + capitalize(name);
