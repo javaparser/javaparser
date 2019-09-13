@@ -88,7 +88,7 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
     public void changingNonePrimitiveTypes() {
         FieldDeclaration it = consider("String a;");
         it.getVariable(0).setType("Xyz");
-        assertTransformedToString("Xyz a", it);
+        assertTransformedToString("Xyz a;", it);
     }
 
     // Annotations
