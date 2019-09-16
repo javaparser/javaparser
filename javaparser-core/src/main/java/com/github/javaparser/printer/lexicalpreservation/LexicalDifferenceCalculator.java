@@ -265,6 +265,8 @@ class LexicalDifferenceCalculator {
                 return GeneratedJavaParserConstants.ABSTRACT;
             case TRANSIENT:
                 return GeneratedJavaParserConstants.TRANSIENT;
+            case SYNCHRONIZED:
+                return GeneratedJavaParserConstants.SYNCHRONIZED;
             default:
                 throw new UnsupportedOperationException(modifier.getKeyword().name());
         }
