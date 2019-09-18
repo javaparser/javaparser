@@ -32,10 +32,4 @@ class Java11ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3,4,5: ;}"));
         assertProblems(result, "(line 1,col 11) Only one label allowed in a switch-case.");
     }
-
-    @Test
-    void noValueBreak() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break 6;}"));
-        assertProblems(result, "(line 1,col 19) Only labels allowed in break statements.");
-    }
 }

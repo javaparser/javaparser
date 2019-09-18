@@ -31,10 +31,4 @@ class Java12ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3,4,5: ;}"));
         assertNoProblems(result);
     }
-
-    @Test
-    void valueBreakAllowed() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break 6;}"));
-        assertNoProblems(result);
-    }
 }

@@ -26,6 +26,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
@@ -89,6 +90,13 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
+        if (configuration.getLanguageLevel() != null) {
+            switch (configuration.getLanguageLevel()) {
+                case JAVA_13:
+                case JAVA_14:
+                    astParser.setYieldSupported();
+            }
+        }
         return astParser;
     }
 
@@ -173,7 +181,7 @@ public final class JavaParser {
     @Deprecated
     public ParseResult<CompilationUnit> parse(final File file, final Charset encoding) throws FileNotFoundException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
+        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), encoding));
         return result;
     }
 
@@ -188,7 +196,7 @@ public final class JavaParser {
      */
     public ParseResult<CompilationUnit> parse(final File file) throws FileNotFoundException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
+        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), configuration.getCharacterEncoding()));
         return result;
     }
 
@@ -206,7 +214,7 @@ public final class JavaParser {
     @Deprecated
     public ParseResult<CompilationUnit> parse(final Path path, final Charset encoding) throws IOException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        result.getResult().ifPresent(cu -> cu.setStorage(path, encoding));
         return result;
     }
 
@@ -221,7 +229,7 @@ public final class JavaParser {
      */
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         return result;
     }
 
@@ -378,8 +386,9 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseBodyDeclaration(String body) {
-        return parse(CLASS_BODY, provider(body));
+    @SuppressWarnings("unchecked")
+    public <T extends BodyDeclaration<?>> ParseResult<T> parseBodyDeclaration(String body) {
+        return (ParseResult<T>) parse(CLASS_BODY, provider(body));
     }
 
     /**
@@ -516,6 +525,18 @@ public final class JavaParser {
      */
     public ParseResult<TypeParameter> parseTypeParameter(String typeParameter) {
         return parse(TYPE_PARAMETER, provider(typeParameter));
+    }
+
+    /**
+     * Parses a method declaration and returns it as a MethodDeclaration.
+     *
+     * @param methodDeclaration a method declaration like "void foo() {}"
+     * @return the AST for the method declaration
+     * @throws ParseProblemException if the source code has parser errors
+     * @see MethodDeclaration
+     */
+    public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
+        return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
 
 }

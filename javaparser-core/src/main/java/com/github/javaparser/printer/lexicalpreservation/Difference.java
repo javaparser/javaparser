@@ -1,17 +1,24 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.TokenTypes;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
-import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 import java.util.*;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.TokenTypes;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -374,14 +381,18 @@ public class Difference {
 
                 diffIndex++;
             }
-        } else if (removed.isToken() && originalElementIsToken
-                && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind())) {
+        } else if (removed.isToken() && originalElementIsToken &&
+                (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
+                        // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
+                        // element always has the current operating system's EOL as type
+                        || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
+                                && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
         } else if (removed.isPrimitiveType()) {
-            if (isPrimitiveType(originalElement)) {
+            if (originalElement.isPrimitive()) {
                 nodeText.removeElement(originalIndex);
                 diffIndex++;
             } else {
@@ -440,6 +451,21 @@ public class Difference {
         } else if (kept.isChild() && originalElementIsToken) {
             if (originalElement.isWhiteSpaceOrComment()) {
                 originalIndex++;
+            } else if (originalElement.isIdentifier() && isNodeWithTypeArguments(kept)) {
+                diffIndex++;
+                // skip all token related to node with type argument declaration
+                // for example:
+                // List i : in this case originalElement is "List" and the next token is space. There is nothing to skip. in the originalElements list.
+                // List<String> i : in this case originalElement is "List" and the next token is
+                // "<" so we have to skip all the tokens which are used in the typed argument declaration [<][String][>](3 tokens) in the originalElements list.
+                // List<List<String>> i : in this case originalElement is "List" and the next
+                // token is "<" so we have to skip all the tokens which are used in the typed arguments declaration [<][List][<][String][>][>](6 tokens) in the originalElements list.
+                int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
+                originalIndex += step;
+                originalIndex++;
+            } else if (originalElement.isIdentifier()) {
+                originalIndex++;
+                diffIndex++;
             } else {
                 if (kept.isPrimitiveType()) {
                     originalIndex++;
@@ -457,6 +483,11 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
+             // case where originalTextToken is a separator like ";" and
+             // kept is not a new line or whitespace for example "}"
+             // see issue 2351
+            }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
+                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
@@ -482,6 +513,66 @@ public class Difference {
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
+    }
+
+    /*
+     * Returns true if the DifferenceElement is a CsmChild with type arguments
+     */
+    private boolean isNodeWithTypeArguments(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+            return false;
+        CsmChild child = (CsmChild) csmElem;
+        if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
+            return false;
+        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
+        return typeArgs.isPresent() && typeArgs.get().size() > 0;
+    }
+
+    /*
+     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
+     * This is due to the fact that types are considered as token in the originalElements list.
+     * For example,
+     * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
+     * So in this case, getIndexToNextTokenElement(..) on the [List] token returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
+     * DiffElements list and originalElements list 
+     * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally managed, to take into account this type of declaration
+     * List <List<String>> l
+     * Be careful, this method must be call only if diamond operator could be found in the sequence
+     * 
+     * @Param TokenTextElement the token currently analyzed 
+     * @Param int the number of nested diamond operators
+     * @return the number of token to skip in originalElements list
+     */
+    private int getIndexToNextTokenElement(TokenTextElement element, int nestedDiamondOperator) {
+        int step = 0; // number of token to skip
+        Optional<JavaToken> next = element.getToken().getNextToken();
+        if (!next.isPresent()) return step;
+        // because there is a token, first we need to increment the number of token to skip 
+        step++;
+        // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
+        JavaToken token = next.get();
+        Kind kind = Kind.valueOf(token.getKind());
+        if (isDiamondOperator(kind)) {
+            if (kind.GT.equals(kind))
+                nestedDiamondOperator--;
+            else
+                nestedDiamondOperator++;
+        }
+        // manage the fact where the first token is not a diamond operator but a whitespace
+        // and the end of the token sequence to skip
+        // for example in this declaration List <String> a;
+        if (nestedDiamondOperator == 0 && !next.get().getCategory().isWhitespace())
+            return step;
+        // recursively analyze token to skip
+        return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
+    }
+    
+    /*
+     * Returns true if the token is possibly a diamond operator
+     */
+    private boolean isDiamondOperator(Kind kind) {
+        return kind.GT.equals(kind) || kind.LT.equals(kind);
     }
 
     private boolean openBraceWasOnSameLine() {
@@ -706,6 +797,7 @@ public class Difference {
         ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
 
         private final int priority;
+
         MatchClassification(int priority) {
             this.priority = priority;
         }
@@ -770,21 +862,6 @@ public class Difference {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }
 
-    private boolean isPrimitiveType(TextElement textElement) {
-        if (textElement instanceof TokenTextElement) {
-            TokenTextElement tokenTextElement = (TokenTextElement)textElement;
-            int tokenKind = tokenTextElement.getTokenKind();
-            return tokenKind == BYTE
-                || tokenKind == CHAR
-                || tokenKind == SHORT
-                || tokenKind == INT
-                || tokenKind == LONG
-                || tokenKind == FLOAT
-                || tokenKind == DOUBLE;
-        } else {
-            return false;
-        }
-    }
     @Override
     public String toString() {
         return "Difference{" + diffElements + '}';

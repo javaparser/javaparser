@@ -1,334 +1,599 @@
+/*
+ * Copyright (C) 2019 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
 package com.github.javaparser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * An implementation of interface CharStream, where the stream is assumed to
- * contain only ASCII characters (with java-like unicode escape processing).
+ * {@link Provider} un-escaping unicode escape sequences in the input sequence.
  */
-class UnicodeEscapeProcessingProvider implements Provider {
-    private static int hexval(char c) throws java.io.IOException {
-        switch (c) {
-            case '0':
-                return 0;
-            case '1':
-                return 1;
-            case '2':
-                return 2;
-            case '3':
-                return 3;
-            case '4':
-                return 4;
-            case '5':
-                return 5;
-            case '6':
-                return 6;
-            case '7':
-                return 7;
-            case '8':
-                return 8;
-            case '9':
-                return 9;
+public class UnicodeEscapeProcessingProvider implements Provider {
+	
+	private static final char LF = '\n';
 
-            case 'a':
-            case 'A':
-                return 10;
-            case 'b':
-            case 'B':
-                return 11;
-            case 'c':
-            case 'C':
-                return 12;
-            case 'd':
-            case 'D':
-                return 13;
-            case 'e':
-            case 'E':
-                return 14;
-            case 'f':
-            case 'F':
-                return 15;
-        }
+	private static final char CR = '\r';
 
-        throw new java.io.IOException(); // Should never come here
-    }
+	private static final char BACKSLASH = '\\';
 
-    /**
-     * Position in buffer.
-     */
-    private int bufpos = -1;
-    private int bufsize;
-    private int available;
-    private int tokenBegin;
-    private int bufline[];
-    private int bufcolumn[];
+	private static final int EOF = -1;
+	
+	private char[] _data;
+	
+	/**
+	 * The number of characters in {@link #_data}.
+	 */
+	private int _len = 0;
+	
+	/**
+	 * The position in {@link #_data} where to read the next source character from.
+	 */
+	private int _pos = 0;
 
-    protected int column;
-    protected int line;
+	private boolean _backslashSeen;
+	
+	private final LineCounter _inputLine = new LineCounter();
 
-    private boolean prevCharIsCR = false;
-    private boolean prevCharIsLF = false;
+	private final LineCounter _outputLine = new LineCounter();
+	
+	private final PositionMappingBuilder _mappingBuilder = new PositionMappingBuilder(_outputLine, _inputLine);
+	
+	private Provider _input;
 
-    private Provider provider;
+	/** 
+	 * Creates a {@link UnicodeEscapeProcessingProvider}.
+	 */
+	public UnicodeEscapeProcessingProvider(Provider input) {
+		this(2048, input);
+	}
 
-    private char[] nextCharBuf;
-    protected char[] buffer;
-    private int maxNextCharInd = 0;
-    private int nextCharInd = -1;
-    private int inBuf = 0;
+	/** 
+	 * Creates a {@link UnicodeEscapeProcessingProvider}.
+	 */
+	public UnicodeEscapeProcessingProvider(int bufferSize, Provider input) {
+		_input = input;
+		_data = new char[bufferSize];
+	}
+	
+	/**
+	 * The {@link LineCounter} of the input file.
+	 */
+	public LineCounter getInputCounter() {
+		return _inputLine;
+	}
+	
+	/**
+	 * The {@link LineCounter} of the output file.
+	 */
+	public LineCounter getOutputCounter() {
+		return _outputLine;
+	}
 
-    private void expandBuffer(boolean wrapAround) {
-        char[] newbuffer = new char[bufsize + 2048];
-        int newbufline[] = new int[bufsize + 2048];
-        int newbufcolumn[] = new int[bufsize + 2048];
+	@Override
+	public int read(char[] buffer, final int offset, int len) throws IOException {
+		int pos = offset;
+		int stop = offset + len;
+		while (pos < stop) {
+			int ch = _outputLine.process(nextOutputChar());
+			if (ch < 0) {
+				if (pos == offset) {
+					// Nothing read yet, this is the end of the stream.
+					return EOF;
+				} else {
+					break;
+				}
+			} else {
+				_mappingBuilder.update();
+				buffer[pos++] = (char) ch;
+			}
+		}
+		return pos - offset;
+	}
 
-        try {
-            if (wrapAround) {
-                System.arraycopy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
-                System.arraycopy(buffer, 0, newbuffer, bufsize - tokenBegin, bufpos);
-                buffer = newbuffer;
+	@Override
+	public void close() throws IOException {
+		_input.close();
+	}
 
-                System.arraycopy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
-                System.arraycopy(bufline, 0, newbufline, bufsize - tokenBegin, bufpos);
-                bufline = newbufline;
+	/** 
+	 * Produces the next un-escaped character to be written to the output.
+	 * 
+	 * @return The next character or <code>-1</code> if no more characters are available.
+	 */
+	private int nextOutputChar() throws IOException {
+		int next = nextInputChar();
+		switch (next) {
+			case EOF:
+				return EOF;
+			case BACKSLASH: {
+				if (_backslashSeen) {
+					return clearBackSlashSeen(next);
+				} else {
+					return backSlashSeen();
+				}
+			}
+			default: {
+				// An arbitrary character.
+				return clearBackSlashSeen(next);
+			}
+		}
+	}
 
-                System.arraycopy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
-                System.arraycopy(bufcolumn, 0, newbufcolumn, bufsize - tokenBegin, bufpos);
-                bufcolumn = newbufcolumn;
+	private int clearBackSlashSeen(int next) {
+		_backslashSeen = false;
+		return next;
+	}
 
-                bufpos += (bufsize - tokenBegin);
-            } else {
-                System.arraycopy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
-                buffer = newbuffer;
+	private int backSlashSeen() throws IOException {
+		_backslashSeen = true;
+		
+		int next = nextInputChar();
+		switch (next) {
+			case EOF:
+				// End of file after backslash produces the backslash itself.
+				return BACKSLASH;
+			case 'u': {
+				return unicodeStartSeen();
+			}
+			default: {
+				pushBack(next);
+				return BACKSLASH;
+			}
+		}
+	}
 
-                System.arraycopy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
-                bufline = newbufline;
+	private int unicodeStartSeen() throws IOException {
+		int uCnt = 1;
+		while (true) {
+			int next = nextInputChar();
+			switch (next) {
+				case EOF: {
+					pushBackUs(uCnt);
+					return BACKSLASH;
+				}
+				case 'u': {
+					uCnt++;
+					continue;
+				}
+				default: {
+					return readDigits(uCnt, next);
+				}
+			}
+		}
+	}
 
-                System.arraycopy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
-                bufcolumn = newbufcolumn;
+	private int readDigits(int uCnt, int next3) throws IOException {
+		int digit3 = digit(next3);
+		if (digit3 < 0) {
+			pushBack(next3);
+			pushBackUs(uCnt);
+			return BACKSLASH;
+		}
+		
+		int next2 = nextInputChar();
+		int digit2 = digit(next2);
+		if (digit2 < 0) {
+			pushBack(next2);
+			pushBack(next3);
+			pushBackUs(uCnt);
+			return BACKSLASH;
+		}
+		
+		int next1 = nextInputChar();
+		int digit1 = digit(next1);
+		if (digit1 < 0) {
+			pushBack(next1);
+			pushBack(next2);
+			pushBack(next3);
+			pushBackUs(uCnt);
+			return BACKSLASH;
+		}
+		
+		int next0 = nextInputChar();
+		int digit0 = digit(next0);
+		if (digit0 < 0) {
+			pushBack(next0);
+			pushBack(next1);
+			pushBack(next2);
+			pushBack(next3);
+			pushBackUs(uCnt);
+			return BACKSLASH;
+		}
 
-                bufpos -= tokenBegin;
-            }
-        } catch (Exception t) {
-            throw new RuntimeException(t.getMessage());
-        }
+		int ch = digit3 << 12 | digit2 << 8 | digit1 << 4 | digit0;
+		return clearBackSlashSeen(ch);
+	}
 
-        available = (bufsize += 2048);
-        tokenBegin = 0;
-    }
+	private void pushBackUs(int cnt) {
+		for (int n = 0; n < cnt; n++) {
+			pushBack('u');
+		}
+	}
 
-    private void fillBuffer() throws java.io.IOException {
-        int i;
-        if (maxNextCharInd == 4096)
-            maxNextCharInd = nextCharInd = 0;
+	private static int digit(int ch) {
+		if (ch >= '0' && ch <= '9') {
+			return ch - '0';
+		}
+		if (ch >= 'A' && ch <= 'F') {
+			return 10 + ch - 'A';
+		}
+		if (ch >= 'a' && ch <= 'f') {
+			return 10 + ch - 'a';
+		}
+		return -1;
+	}
 
-        try {
-            if ((i = provider.read(nextCharBuf, maxNextCharInd, 4096 - maxNextCharInd)) == -1) {
-                provider.close();
-                throw new java.io.IOException();
-            } else
-                maxNextCharInd += i;
-        } catch (java.io.IOException e) {
-            if (bufpos != 0) {
-                --bufpos;
-                backup(0);
-            } else {
-                bufline[bufpos] = line;
-                bufcolumn[bufpos] = column;
-            }
-            throw e;
-        }
-    }
+	/** 
+	 * Processes column/line information from the input file.
+	 * 
+	 * @return The next character or <code>-1</code> if no more input is available.
+	 */
+	private int nextInputChar() throws IOException {
+		int result = nextBufferedChar();
+		return _inputLine.process(result);
+	}
 
-    private char readByte() throws java.io.IOException {
-        if (++nextCharInd >= maxNextCharInd)
-            fillBuffer();
+	/** 
+	 * Retrieves the next un-escaped character from the buffered {@link #_input}.
+	 * 
+	 * @return The next character or <code>-1</code> if no more input is available.
+	 */
+	private int nextBufferedChar() throws IOException {
+		while (isBufferEmpty()) {
+			int direct = fillBuffer();
+			if (direct < 0) {
+				return EOF;
+			}
+		}
+		return _data[_pos++];
+	}
 
-        return nextCharBuf[nextCharInd];
-    }
+	private boolean isBufferEmpty() {
+		return _pos >= _len;
+	}
 
-    private void adjustBufferSize() {
-        if (available == bufsize) {
-            if (tokenBegin > 2048) {
-                bufpos = 0;
-                available = tokenBegin;
-            } else
-                expandBuffer(false);
-        } else if (available > tokenBegin)
-            available = bufsize;
-        else if ((tokenBegin - available) < 2048)
-            expandBuffer(true);
-        else
-            available = tokenBegin;
-    }
+	private int fillBuffer() throws IOException {
+		_pos = 0;
+		int direct = _input.read(_data, 0, _data.length);
+		if (direct != 0) {
+			_len = direct;
+		}
+		return direct;
+	}
 
-    private void updateLineColumn(char c) {
-        column++;
+	private void pushBack(int ch) {
+		if (ch < 0) {
+			return;
+		}
+		
+		if (isBufferEmpty()) {
+			_pos = _data.length;
+			_len = _data.length;
+		} else if (_pos == 0) {
+			if (_len == _data.length) {
+				// Buffer is completely full, no push possible, enlarge buffer.
+				char[] newData = new char[_data.length + 1024];
+				_len = newData.length;
+				_pos = newData.length - _data.length;
+				System.arraycopy(_data, 0, newData, _pos, _data.length);
+				_data = newData;
+			} else {
+				// Move contents to the right.
+				int cnt = _len - _pos;
+				_pos = _data.length - _len;
+				_len = _data.length;
+				System.arraycopy(_data, 0, _data, _pos, cnt);
+			}
+		}
+		_data[--_pos] = (char) ch;
+	}
+	
+	/**
+	 * The {@link PositionMapping} being built during processing the file.
+	 */
+	public PositionMapping getPositionMapping() {
+		return _mappingBuilder.getMapping();
+	}
+	
+	/**
+	 * An algorithm mapping {@link Position} form two corresponding files.
+	 */
+	public static final class PositionMapping {
+		
+		private final List<DeltaInfo> _deltas = new ArrayList<>();
+		
+		/** 
+		 * Creates a {@link UnicodeEscapeProcessingProvider.PositionMapping}.
+		 */
+		public PositionMapping() {
+			super();
+		}
+		
+		/**
+		 * Whether this is the identity transformation.
+		 */
+		public boolean isEmpty() {
+			return _deltas.isEmpty();
+		}
 
-        if (prevCharIsLF) {
-            prevCharIsLF = false;
-            line += (column = 1);
-        } else if (prevCharIsCR) {
-            prevCharIsCR = false;
-            if (c == '\n') {
-                prevCharIsLF = true;
-            } else
-                line += (column = 1);
-        }
+		void add(int line, int column, int lineDelta, int columnDelta) {
+			_deltas.add(new DeltaInfo(line, column, lineDelta, columnDelta));
+		}
+		
+		/**
+		 * Looks up the {@link PositionUpdate} for the given Position.
+		 */
+		public PositionUpdate lookup(Position position) {
+			int result = Collections.binarySearch(_deltas, position);
+			if (result >= 0) {
+				return _deltas.get(result);
+			} else {
+				int insertIndex = -result - 1;
+				if (insertIndex == 0) {
+					// Before the first delta info, identity mapping.
+					return PositionUpdate.NONE;
+				} else {
+					// The relevant update is the one with the position smaller
+					// than the requested position.
+					return _deltas.get(insertIndex - 1);
+				}
+			}
+		}
+		
+		/**
+		 * Algorithm updating a {@link Position} from one file to a
+		 * {@link Position} in a corresponding file.
+		 */
+		public static interface PositionUpdate {
+			
+			/**
+			 * The identity position mapping.
+			 */
+			PositionUpdate NONE = new PositionUpdate() {
+				@Override
+				public int transformLine(int line) {
+					return line;
+				}
+				
+				@Override
+				public int transformColumn(int column) {
+					return column;
+				}
+				
+				@Override
+				public Position transform(Position pos) {
+					return pos;
+				}
+			};
 
-        int tabSize = 1;
-        switch (c) {
-            case '\r':
-                prevCharIsCR = true;
-                break;
-            case '\n':
-                prevCharIsLF = true;
-                break;
-            case '\t':
-                column--;
-                column += (tabSize - (column % tabSize));
-                break;
-            default:
-                break;
-        }
+			/** 
+			 * Maps the given line to an original line.
+			 */
+			int transformLine(int line);
 
-        bufline[bufpos] = line;
-        bufcolumn[bufpos] = column;
-    }
+			/** 
+			 * Maps the given column to an original column.
+			 */
+			int transformColumn(int column);
 
-    /**
-     * Read a character.
-     */
-    private char readChar() throws java.io.IOException {
-        if (inBuf > 0) {
-            --inBuf;
+			/**
+			 * The transformed position.
+			 */
+			default Position transform(Position pos) {
+				int line = pos.line;
+				int column = pos.column;
+				int transformedLine = transformLine(line);
+				int transformedColumn = transformColumn(column);
+				return new Position(transformedLine, transformedColumn);
+			}
+			
+		}
+		
+		private static final class DeltaInfo extends Position implements PositionUpdate {
 
-            if (++bufpos == bufsize)
-                bufpos = 0;
+			/**
+			 * The offset to add to the {@link #line} and all following source
+			 * positions up to the next {@link PositionUpdate}.
+			 */
+			private final int _lineDelta;
+			
+			/**
+			 * The offset to add to the {@link #column} and all following
+			 * source positions up to the next {@link PositionUpdate}.
+			 */
+			private final int _columnDelta;
 
-            return buffer[bufpos];
-        }
+			/** 
+			 * Creates a {@link PositionUpdate}.
+			 */
+			public DeltaInfo(int line, int column, int lineDelta,
+					int columnDelta) {
+				super(line, column);
+				_lineDelta = lineDelta;
+				_columnDelta = columnDelta;
+			}
+			
+			@Override
+			public int transformLine(int sourceLine) {
+				return sourceLine + _lineDelta;
+			}
+			
+			@Override
+			public int transformColumn(int sourceColumn) {
+				return sourceColumn + _columnDelta;
+			}
+			
+			@Override
+			public String toString() {
+				return "(" + line + ", " + column + ": " + _lineDelta + ", " + _columnDelta + ")";
+			}
 
-        char c;
+		}
 
-        if (++bufpos == available)
-            adjustBufferSize();
+		/** 
+		 * Transforms the given {@link Position}.
+		 */
+		public Position transform(Position pos) {
+			return lookup(pos).transform(pos);
+		}
 
-        if ((buffer[bufpos] = c = readByte()) == '\\') {
-            updateLineColumn(c);
+		/** 
+		 * Transforms the given {@link Range}.
+		 */
+		public Range transform(Range range) {
+			Position begin = transform(range.begin);
+			Position end = transform(range.end);
+			if (begin == range.begin && end == range.end) {
+				// No change.
+				return range;
+			}
+			return new Range(begin, end);
+		}
+	}
+	
+	private static final class PositionMappingBuilder {
+		
+		private LineCounter _left;
+		
+		private LineCounter _right;
+		
+		private final PositionMapping _mapping = new PositionMapping();
+		
+		private int _lineDelta = 0;
+		private int _columnDelta = 0;
+		
+		/** 
+		 * Creates a {@link PositionMappingBuilder}.
+		 *
+		 * @param left The source {@link LineCounter}.
+		 * @param right The target {@link LineCounter}.
+		 */
+		public PositionMappingBuilder(LineCounter left, LineCounter right) {
+			_left = left;
+			_right = right;
+			update();
+		}
+		
+		/**
+		 * The built {@link PositionMapping}.
+		 */
+		public PositionMapping getMapping() {
+			return _mapping;
+		}
+		
+		public void update() {
+			int lineDelta = _right.getLine() - _left.getLine();
+			int columnDelta = _right.getColumn() - _left.getColumn();
+			
+			if (lineDelta != _lineDelta || columnDelta != _columnDelta) {
+				_mapping.add(_left.getLine(), _left.getColumn(), lineDelta, columnDelta);
+				
+				_lineDelta = lineDelta;
+				_columnDelta = columnDelta;
+			}
+		}
+		
+	}
+	
+	/**
+	 * Processor keeping track of the current line and column in a stream of
+	 * incoming characters.
+	 * 
+	 * @see #process(int)
+	 */
+	public static final class LineCounter {
+		
+		/**
+		 * Whether {@link #CR} has been seen on the input as last character.
+		 */
+		private boolean _crSeen;
 
-            int backSlashCnt = 1;
+		private int _line = 1;
 
-            for (; ; ) // Read all the backslashes
-            {
-                if (++bufpos == available)
-                    adjustBufferSize();
+		private int _column = 1;
 
-                try {
-                    if ((buffer[bufpos] = c = readByte()) != '\\') {
-                        updateLineColumn(c);
-                        // found a non-backslash char.
-                        if ((c == 'u') && ((backSlashCnt & 1) == 1)) {
-                            if (--bufpos < 0)
-                                bufpos = bufsize - 1;
+		/** 
+		 * Creates a {@link UnicodeEscapeProcessingProvider.LineCounter}.
+		 */
+		public LineCounter() {
+			super();
+		}
+		
+		/**
+		 * The line of the currently processed input character.
+		 */
+		public int getLine() {
+			return _line;
+		}
+		
+		/**
+		 * The column of the currently processed input character.
+		 */
+		public int getColumn() {
+			return _column;
+		}
+		
+		/** 
+		 * The current position.
+		 */
+		public Position getPosition() {
+			return new Position(getLine(), getColumn());
+		}
 
-                            break;
-                        }
+		/** 
+		 * Analyzes the given character for line feed.
+		 */
+		public int process(int ch) {
+			switch (ch) {
+				case EOF: {
+					break;
+				}
+				case CR: {
+					incLine();
+					_crSeen = true;
+					break;
+				}
+				case LF: {
+					// CR LF does only count as a single line terminator.
+					if (_crSeen) {
+						_crSeen = false;
+					} else {
+						incLine();
+					}
+					break;
+				}
+				default: {
+					_crSeen = false;
+					_column++;
+				}
+			}
+			return ch;
+		}
 
-                        backup(backSlashCnt);
-                        return '\\';
-                    }
-                } catch (java.io.IOException e) {
-                    // We are returning one backslash so we should only backup (count-1)
-                    if (backSlashCnt > 1)
-                        backup(backSlashCnt - 1);
+		private void incLine() {
+			_line++;
+			_column = 1;
+		}
 
-                    return '\\';
-                }
-
-                updateLineColumn(c);
-                backSlashCnt++;
-            }
-
-            // Here, we have seen an odd number of backslash's followed by a 'u'
-            try {
-                while ((c = readByte()) == 'u')
-                    ++column;
-
-                buffer[bufpos] = c = (char) (hexval(c) << 12 |
-                        hexval(readByte()) << 8 |
-                        hexval(readByte()) << 4 |
-                        hexval(readByte()));
-
-                column += 4;
-            } catch (java.io.IOException e) {
-                throw new RuntimeException("Invalid escape character at line " + line +
-                        " column " + column + ".");
-            }
-
-            if (backSlashCnt == 1)
-                return c;
-            else {
-                backup(backSlashCnt - 1);
-                return '\\';
-            }
-        } else {
-            updateLineColumn(c);
-            return c;
-        }
-    }
-
-    /**
-     * Retreat.
-     */
-    private void backup(int amount) {
-
-        inBuf += amount;
-        if ((bufpos -= amount) < 0)
-            bufpos += bufsize;
-    }
-
-    /**
-     * Constructor.
-     */
-    private UnicodeEscapeProcessingProvider(Provider provider, int startline, int startcolumn, int buffersize) {
-        this.provider = provider;
-        line = startline;
-        column = startcolumn - 1;
-
-        available = bufsize = buffersize;
-        buffer = new char[buffersize];
-        bufline = new int[buffersize];
-        bufcolumn = new int[buffersize];
-        nextCharBuf = new char[4096];
-    }
-
-    /**
-     * Constructor.
-     */
-    UnicodeEscapeProcessingProvider(Provider dstream) {
-        this(dstream, 1, 1, 4096);
-    }
-
-    @Override
-    public int read(char[] buffer, int offset, int len) {
-        int written = 0;
-        try {
-            for (int i = offset; i < offset + len; i++) {
-                buffer[i] = readChar();
-                written++;
-            }
-        } catch (IOException e) {
-            if (written == 0) {
-                return -1;
-            }
-        }
-        return written;
-    }
-
-    @Override
-    public void close() throws IOException {
-        provider.close();
-    }
+	}
+	
 }
-/* JavaCC - OriginalChecksum=5b3a48657b00e1766eaec2b5683a555c (do not edit this line) */
