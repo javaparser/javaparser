@@ -17,10 +17,17 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.symbolsolver.logic.InferenceContext;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.*;
@@ -30,7 +37,9 @@ import java.util.stream.Stream;
 /**
  * @author Malte Skoruppa
  */
-public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
+public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration,
+                                                                                        MethodUsageResolutionCapability,
+                                                                                        MethodResolutionCapability {
 
     ///
     /// Fields
@@ -127,7 +136,9 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        throw new UnsupportedOperationException();
+        // we do not attempt to perform any symbol solving when analyzing ancestors in the reflection model, so we can
+        // simply ignore the boolean parameter here; an UnsolvedSymbolException cannot occur
+        return reflectionClassAdapter.getAncestors();
     }
 
     @Override
@@ -159,6 +170,13 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return Arrays.stream(this.clazz.getDeclaredClasses())
+            .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
+            .collect(Collectors.toSet());
+    }
+
+    @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
     }
@@ -173,5 +191,48 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Optional<AnnotationDeclaration> toAst() {
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(final String name,
+                                                    final List<ResolvedType> parameterTypes,
+                                                    final Context invokationContext,
+                                                    final List<ResolvedType> typeParameterValues) {
+        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
+            typeParameterValues, this, clazz);
+        if (res.isPresent()) {
+            // We have to replace method type typeParametersValues here
+            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            MethodUsage methodUsage = res.get();
+            int i = 0;
+            List<ResolvedType> parameters = new LinkedList<>();
+            for (ResolvedType actualType : parameterTypes) {
+                ResolvedType formalType = methodUsage.getParamType(i);
+                // We need to replace the class type typeParametersValues (while we derive the method ones)
+
+                parameters.add(inferenceContext.addPair(formalType, actualType));
+                i++;
+            }
+            try {
+                ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
+                for (int j=0;j<parameters.size();j++) {
+                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+                }
+                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
+                return Optional.of(methodUsage);
+            } catch (ConfilictingGenericTypesException e) {
+                return Optional.empty();
+            }
+        } else {
+            return res;
+        }
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(final String name,
+                                                                  final List<ResolvedType> argumentsTypes,
+                                                                  final boolean staticOnly) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly,
+            typeSolver,this, clazz);
     }
 }

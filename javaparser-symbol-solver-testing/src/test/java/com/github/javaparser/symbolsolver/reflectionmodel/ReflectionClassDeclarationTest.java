@@ -368,7 +368,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
@@ -447,7 +446,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.resolution.Resolvable"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
