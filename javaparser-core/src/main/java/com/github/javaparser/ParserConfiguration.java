@@ -37,10 +37,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.version.Java10PostProcessor;
-import com.github.javaparser.version.Java11PostProcessor;
-import com.github.javaparser.version.Java12PostProcessor;
-import com.github.javaparser.version.Java13PostProcessor;
+import com.github.javaparser.version.*;
 
 /**
  * The configuration that is used by the parser.
@@ -102,9 +99,13 @@ public class ParserConfiguration {
          */
         JAVA_12(new Java12Validator(), new Java12PostProcessor()),
         /**
-         * Java 12
+         * Java 13
          */
-        JAVA_13(new Java13Validator(), new Java13PostProcessor());
+        JAVA_13(new Java13Validator(), new Java13PostProcessor()),
+        /**
+         * Java 14
+         */
+        JAVA_14(new Java14Validator(), new Java14PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -117,11 +118,11 @@ public class ParserConfiguration {
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_12;
+        public static LanguageLevel CURRENT = JAVA_13;
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_13;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_14;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;

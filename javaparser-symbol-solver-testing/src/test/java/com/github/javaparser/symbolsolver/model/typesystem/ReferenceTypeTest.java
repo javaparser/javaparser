@@ -199,19 +199,19 @@ class ReferenceTypeTest {
     }
 
     @Test
-    void testIsAssignableByBoxedPrimitive(){
-        ResolvedReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver),typeSolver);
-        ResolvedReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver),typeSolver);
-        ResolvedReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver),typeSolver);
+    void testIsAssignableByBoxedPrimitive() {
+        ResolvedReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver), typeSolver);
+        ResolvedReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
+        ResolvedReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
 
-        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.INT));
-        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
-        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.SHORT));
-        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.LONG));
-        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.FLOAT));
+        assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.INT));
+        assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
+        assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.SHORT));
+        assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.LONG));
+        assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.FLOAT));
         assertEquals(false, numberType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
-        assertEquals(true,  intType.isAssignableBy(ResolvedPrimitiveType.INT));
-        assertEquals(true,  doubleType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
+        assertEquals(true, intType.isAssignableBy(ResolvedPrimitiveType.INT));
+        assertEquals(true, doubleType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
     }
 
     @Test
@@ -662,10 +662,10 @@ class ReferenceTypeTest {
     @Test
     void testDirectAncestorsOfClassWithInterfaces() {
         Set<String> ancestors = string.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertEquals(new HashSet<>(Arrays.asList("java.lang.CharSequence",
+        assertTrue(ancestors.containsAll(Arrays.asList("java.lang.CharSequence",
                 "java.lang.Object",
                 "java.lang.Comparable<java.lang.String>",
-                "java.io.Serializable")), ancestors);
+                "java.io.Serializable")));
     }
 
     @Test
