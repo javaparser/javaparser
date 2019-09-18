@@ -1,3 +1,11 @@
+Version 3.14.14
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/150?closed=1)
+
+Version 3.14.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/149?closed=1)
+
 Version 3.14.12
 ------------------
 - BREAKING: `NodeWithConstructors` has been merged into `NodeWithMembers`,
