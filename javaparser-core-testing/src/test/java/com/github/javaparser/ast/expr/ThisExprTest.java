@@ -3,6 +3,7 @@ package com.github.javaparser.ast.expr;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ThisExprTest {
@@ -15,19 +16,19 @@ class ThisExprTest {
 
     @Test
     void singleScopeThis() {
-        Expression expr = parseExpression("a.this");
+        Expression expr = parseExpression("A.this");
 
-        Expression classExpr = expr.asThisExpr().getClassExpr().get();
+        Name className = expr.asThisExpr().getTypeName().get();
 
-        assertTrue(classExpr.isNameExpr());
+        assertEquals("A", className.asString());
     }
 
     @Test
     void multiScopeThis() {
-        Expression expr = parseExpression("a.b.this");
+        Expression expr = parseExpression("a.B.this");
 
-        Expression classExpr = expr.asThisExpr().getClassExpr().get();
+        Name className = expr.asThisExpr().getTypeName().get();
 
-        assertTrue(classExpr.isFieldAccessExpr());
+        assertEquals("a.B", className.asString());
     }
 }

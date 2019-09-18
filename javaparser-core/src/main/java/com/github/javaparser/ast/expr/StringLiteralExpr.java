@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
+import static com.github.javaparser.utils.StringEscapeUtils.*;
+
 /**
  * A literal string.
  * <br/><code>"Hello World!"</code>
@@ -44,7 +46,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class StringLiteralExpr extends LiteralStringValueExpr {
+public class StringLiteralExpr extends LiteralStringValueExpr {
 
     public StringLiteralExpr() {
         this(null, "empty");
@@ -104,7 +106,7 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
      * @return the unescaped literal value
      */
     public String asString() {
-        return StringEscapeUtils.unescapeJava(value);
+        return unescapeJava(value);
     }
 
     /**
@@ -114,7 +116,7 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
      * @return this literal expression
      */
     public StringLiteralExpr setString(String value) {
-        this.value = StringEscapeUtils.escapeJava(value);
+        this.value = escapeJava(value);
         return this;
     }
 

@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -34,10 +35,7 @@ import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -160,7 +158,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         try {
             if (ctMethod.getGenericSignature() == null) {
-                return Collections.emptyList();
+                return new ArrayList<>();
             }
             SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature());
             return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, this, typeSolver)).collect(Collectors.toList());
@@ -170,7 +168,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctMethod.getModifiers());
     }
 

@@ -28,7 +28,7 @@ public class TokenKindGenerator extends Generator {
 
     @Override
     public void generate() {
-        Log.info("Running %s", getClass().getSimpleName());
+        Log.info("Running %s", () -> getClass().getSimpleName());
         
         final CompilationUnit javaTokenCu = sourceRoot.parse("com.github.javaparser", "JavaToken.java");
         final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));

@@ -7,9 +7,7 @@ public class Java12Validator extends Java11Validator {
 
     public Java12Validator() {
         super();
-        remove(intAndEnumAndStringSwitch);
         remove(noSwitchExpressions);
         remove(onlyOneLabelInSwitchCase);
-        remove(noValueBreak);
     }
 }

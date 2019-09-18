@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -36,7 +36,7 @@ class DefaultPackageTest {
         }
 
         @Override
-        public Modifier.Keyword accessSpecifier() {
+        public AccessSpecifier accessSpecifier() {
             throw new UnsupportedOperationException();
         }
 

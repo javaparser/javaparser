@@ -26,6 +26,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
@@ -59,8 +60,7 @@ public final class JavaParser {
     private GeneratedJavaParser astParser = null;
 
     /**
-     * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
-     * this class.
+     * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods {@link StaticJavaParser}.
      * Creating an instance will reduce setup time between parsing files.
      */
     public JavaParser() {
@@ -68,7 +68,7 @@ public final class JavaParser {
     }
 
     /**
-     * Instantiate the parser. Note that parsing can also be done with the static methods on this class.
+     * Instantiate the parser. Note that parsing can also be done with the static methods {@link StaticJavaParser}.
      * Creating an instance will reduce setup time between parsing files.
      */
     public JavaParser(ParserConfiguration configuration) {
@@ -90,6 +90,13 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
+        if (configuration.getLanguageLevel() != null) {
+            switch (configuration.getLanguageLevel()) {
+                case JAVA_13:
+                case JAVA_14:
+                    astParser.setYieldSupported();
+            }
+        }
         return astParser;
     }
 
@@ -151,14 +158,13 @@ public final class JavaParser {
     /**
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.<br>
-     * Note: Uses UTF-8 encoding
      *
      * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
     public ParseResult<CompilationUnit> parse(final InputStream in) {
-        return parse(in, UTF8);
+        return parse(in, configuration.getCharacterEncoding());
     }
 
     /**
@@ -170,17 +176,18 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
+     * @deprecated set the encoding in the {@link ParserConfiguration}
      */
+    @Deprecated
     public ParseResult<CompilationUnit> parse(final File file, final Charset encoding) throws FileNotFoundException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
+        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), encoding));
         return result;
     }
 
     /**
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.<br>
-     * Note: Uses UTF-8 encoding
      *
      * @param file {@link File} containing Java source code. It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
@@ -188,8 +195,8 @@ public final class JavaParser {
      * @throws FileNotFoundException the file was not found
      */
     public ParseResult<CompilationUnit> parse(final File file) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file));
-        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath()));
+        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
+        result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), configuration.getCharacterEncoding()));
         return result;
     }
 
@@ -202,17 +209,18 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws IOException the path could not be accessed
      * @throws ParseProblemException if the source code has parser errors
+     * @deprecated set the encoding in the {@link ParserConfiguration}
      */
+    @Deprecated
     public ParseResult<CompilationUnit> parse(final Path path, final Charset encoding) throws IOException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, encoding));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        result.getResult().ifPresent(cu -> cu.setStorage(path, encoding));
         return result;
     }
 
     /**
      * Parses the Java code contained in a file and returns a
      * {@link CompilationUnit} that represents it.<br>
-     * Note: Uses UTF-8 encoding
      *
      * @param path path to a file containing Java source code
      * @return CompilationUnit representing the Java source code
@@ -220,15 +228,14 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      */
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path));
-        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+        result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         return result;
     }
 
     /**
      * Parses the Java code contained in a resource and returns a
      * {@link CompilationUnit} that represents it.<br>
-     * Note: Uses UTF-8 encoding
      *
      * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
      * leading "/" is not allowed in pathToResource
@@ -237,7 +244,7 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      */
     public ParseResult<CompilationUnit> parseResource(final String path) throws IOException {
-        return parse(COMPILATION_UNIT, resourceProvider(path));
+        return parse(COMPILATION_UNIT, resourceProvider(path, configuration.getCharacterEncoding()));
     }
 
     /**
@@ -250,7 +257,9 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
+     * @deprecated set the encoding in the {@link ParserConfiguration}
      */
+    @Deprecated
     public ParseResult<CompilationUnit> parseResource(final String path, Charset encoding) throws IOException {
         return parse(COMPILATION_UNIT, resourceProvider(path, encoding));
     }
@@ -265,7 +274,9 @@ public final class JavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
+     * @deprecated set the encoding in the {@link ParserConfiguration}
      */
+    @Deprecated
     public ParseResult<CompilationUnit> parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
         return parse(COMPILATION_UNIT, resourceProvider(classLoader, path, encoding));
     }
@@ -375,8 +386,9 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public ParseResult<BodyDeclaration<?>> parseBodyDeclaration(String body) {
-        return parse(CLASS_BODY, provider(body));
+    @SuppressWarnings("unchecked")
+    public <T extends BodyDeclaration<?>> ParseResult<T> parseBodyDeclaration(String body) {
+        return (ParseResult<T>) parse(CLASS_BODY, provider(body));
     }
 
     /**
@@ -513,6 +525,18 @@ public final class JavaParser {
      */
     public ParseResult<TypeParameter> parseTypeParameter(String typeParameter) {
         return parse(TYPE_PARAMETER, provider(typeParameter));
+    }
+
+    /**
+     * Parses a method declaration and returns it as a MethodDeclaration.
+     *
+     * @param methodDeclaration a method declaration like "void foo() {}"
+     * @return the AST for the method declaration
+     * @throws ParseProblemException if the source code has parser errors
+     * @see MethodDeclaration
+     */
+    public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
+        return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
 
 }

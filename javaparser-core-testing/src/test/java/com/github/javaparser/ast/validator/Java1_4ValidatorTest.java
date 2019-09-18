@@ -67,10 +67,4 @@ class Java1_4ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
         assertNoProblems(result);
     }
-
-    @Test
-    void noEnumInSwitch() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case GREEN: ;}"));
-        assertProblems(result, "(line 1,col 11) Only 'int's in switch statements are supported.");
-    }
 }

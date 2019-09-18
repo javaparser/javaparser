@@ -22,12 +22,6 @@ class Java11ValidatorTest {
     }
 
     @Test
-    void expressionsInLabelsNotAllowed() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3+4+5: ;}"));
-        assertProblems(result, "(line 1,col 11) Only 'int's, enums, and strings in switch statements are supported.");
-    }
-
-    @Test
     void switchExpressionNotAllowed() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int a = switch(x){};"));
         assertProblems(result, "(line 1,col 9) Switch expressions are not supported.");
@@ -37,11 +31,5 @@ class Java11ValidatorTest {
     void multiLabelCaseNotAllowed() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3,4,5: ;}"));
         assertProblems(result, "(line 1,col 11) Only one label allowed in a switch-case.");
-    }
-
-    @Test
-    void noValueBreak() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break 6;}"));
-        assertProblems(result, "(line 1,col 19) Only labels allowed in break statements.");
     }
 }

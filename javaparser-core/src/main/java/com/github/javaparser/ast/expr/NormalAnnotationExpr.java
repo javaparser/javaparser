@@ -39,7 +39,7 @@ import com.github.javaparser.ast.Generated;
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
  * @author Julio Vilmar Gesser
  */
-public final class NormalAnnotationExpr extends AnnotationExpr {
+public class NormalAnnotationExpr extends AnnotationExpr {
 
     private NodeList<MemberValuePair> pairs;
 

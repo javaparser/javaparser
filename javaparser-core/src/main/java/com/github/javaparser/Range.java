@@ -80,15 +80,36 @@ public class Range {
         return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
                 (end.isAfter(other.end) || end.equals(other.end));
     }
-
+    
     /**
-     * Do this strictly contains other? It means that this has to be larger than other and it has to start as other
-     * or before and end as other or after.
+     * As strictlyContains, but a position that matches the begin or the end of this range is also considered contained one in each other.
+     */
+    public boolean contains(Position position) {
+        return strictlyContains(position) || begin.equals(position) || end.equals(position);
+    }
+    
+    /**
+     * Does this strictly contain other? It means that this has to be larger than other and it has to start before
+     * other and end after other.
      */
     public boolean strictlyContains(Range other) {
         return begin.isBefore(other.begin) && end.isAfter(other.end);
     }
-
+    
+    /**
+     * Does this strictly contain position. It means that the position is after the begin of this range and before the end of this range.
+     */
+    public boolean strictlyContains(Position position) {
+        return position.isAfter(begin) && position.isBefore(end);
+    }
+    
+    /**
+     * Checks whether this Range overlaps with another Range. If two ranges overlap, this range or the other range strictlyContains the begin or the end of the other range.
+     */
+    public boolean overlapsWith(Range other) {
+		return strictlyContains(other.begin) || strictlyContains(other.end) || other.strictlyContains(begin) || other.strictlyContains(end);
+	}
+    
     public boolean isBefore(Position position) {
         return end.isBefore(position);
     }
@@ -101,11 +122,9 @@ public class Range {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+		
         Range range = (Range) o;
-
         return begin.equals(range.begin) && end.equals(range.end);
-
     }
 
     @Override

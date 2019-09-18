@@ -168,9 +168,9 @@ public class JavaParserFacade {
 
     public SymbolReference<ResolvedTypeDeclaration> solve(ThisExpr node) {
         // If 'this' is prefixed by a class eg. MyClass.this
-        if (node.getClassExpr().isPresent()) {
+        if (node.getTypeName().isPresent()) {
             // Get the class name
-            String className = node.getClassExpr().get().toString();
+            String className = node.getTypeName().get().asString();
             // Attempt to resolve using a typeSolver
             SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
             if (clazz.isSolved()) {
@@ -327,7 +327,7 @@ public class JavaParserFacade {
                     node.setData(TYPE_WITH_LAMBDAS_RESOLVED, type);
 
                 }
-                Log.trace("getType on %s  -> %s" ,node, res);
+                Log.trace("getType on %s  -> %s" ,()-> node, ()-> res);
             }
             return node.getData(TYPE_WITH_LAMBDAS_RESOLVED);
         } else {
@@ -339,7 +339,8 @@ public class JavaParserFacade {
             if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
                 node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
-                Log.trace("getType on %s (no solveLambdas) -> %s", node, res);
+                Optional<ResolvedType> finalRes = res;
+                Log.trace("getType on %s (no solveLambdas) -> %s", ()-> node, ()-> finalRes);
                 return resType;
             }
             return res.get();

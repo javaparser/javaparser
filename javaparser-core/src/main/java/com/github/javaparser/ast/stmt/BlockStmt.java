@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
+public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
 
     private NodeList<Statement> statements;
 

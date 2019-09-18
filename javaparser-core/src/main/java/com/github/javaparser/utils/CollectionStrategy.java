@@ -24,9 +24,9 @@ public interface CollectionStrategy {
             return parse(file.toFile()).getStorage()
                     .map(CompilationUnit.Storage::getSourceRoot);
         } catch (ParseProblemException e) {
-            Log.info("Problem parsing file %s", file);
+            Log.info("Problem parsing file %s", () -> file);
         } catch (RuntimeException e) {
-            Log.info("Could not parse file %s", file);
+            Log.info("Could not parse file %s", () -> file);
         }
         return Optional.empty();
     }

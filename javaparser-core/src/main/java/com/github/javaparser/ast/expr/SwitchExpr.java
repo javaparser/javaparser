@@ -27,33 +27,39 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.SwitchExprMetaModel;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.SwitchExprMetaModel;
 
 /**
  * <h1>The switch expression</h1>
  * <h2>Java 1.0-11</h2>
  * Not available.
- * <h2>Java 12-</h2>
+ * <h2>Java 12</h2>
  * Like {@link com.github.javaparser.ast.stmt.SwitchStmt},
  * but can also be used as an expression.
  * <br/>
  * <br/><code>int a = switch(x) { case 5,6 -> 20; case 9 -> 30; default -> 40; };</code>
  * <br/><code>int a = switch(x) { case 5,6: break 20; default: break 5+5; };</code>
+ * <h2>Java 13</h2>
+ * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.
+ * <br/><code>int a = switch(x) { case 5,6: yield 20; default: yield 5+5; };</code>
  *
- * @author Julio Vilmar Gesser
  * @see SwitchEntry
  * @see com.github.javaparser.ast.stmt.SwitchStmt
  * @see SwitchNode
+ * @see com.github.javaparser.ast.stmt.BreakStmt
+ * @see com.github.javaparser.ast.stmt.YieldStmt
  */
-public final class SwitchExpr extends Expression implements SwitchNode {
+public class SwitchExpr extends Expression implements SwitchNode {
 
     private Expression selector;
 

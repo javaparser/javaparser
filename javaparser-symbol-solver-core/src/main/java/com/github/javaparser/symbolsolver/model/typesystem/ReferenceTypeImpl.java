@@ -218,7 +218,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
         boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
                 && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
-                !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName()));
+                        !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName())
+                || this.getTypeDeclaration().asClass().getQualifiedName().equals(Object.class.getCanonicalName()));
         if (!isClassWithSuperClassOrObject) {
             ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
             ResolvedReferenceType objectRef = create(objectType);

@@ -248,20 +248,20 @@ class Java1_1ValidatorTest {
     void catchParameter() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch(" + allModifiers + " Integer x){}}}"));
         assertProblems(result,
-                "(line 1,col 144) Can have only one of 'public', 'protected', 'private'.",
-                "(line 1,col 144) Can have only one of 'final', 'abstract'.",
-                "(line 1,col 144) 'transient' is not allowed here.",
-                "(line 1,col 144) 'volatile' is not allowed here.",
-                "(line 1,col 144) 'synchronized' is not allowed here.",
-                "(line 1,col 144) 'native' is not allowed here.",
-                "(line 1,col 144) 'default' is not allowed here.",
-                "(line 1,col 144) 'strictfp' is not allowed here.",
-                "(line 1,col 144) 'abstract' is not allowed here.",
-                "(line 1,col 144) 'static' is not allowed here.",
-                "(line 1,col 144) 'transitive' is not allowed here.",
-                "(line 1,col 144) 'private' is not allowed here.",
-                "(line 1,col 144) 'public' is not allowed here.",
-                "(line 1,col 144) 'protected' is not allowed here."
+                "(line 1,col 29) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 29) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 29) 'transient' is not allowed here.",
+                "(line 1,col 29) 'volatile' is not allowed here.",
+                "(line 1,col 29) 'synchronized' is not allowed here.",
+                "(line 1,col 29) 'native' is not allowed here.",
+                "(line 1,col 29) 'default' is not allowed here.",
+                "(line 1,col 29) 'strictfp' is not allowed here.",
+                "(line 1,col 29) 'abstract' is not allowed here.",
+                "(line 1,col 29) 'static' is not allowed here.",
+                "(line 1,col 29) 'transitive' is not allowed here.",
+                "(line 1,col 29) 'private' is not allowed here.",
+                "(line 1,col 29) 'public' is not allowed here.",
+                "(line 1,col 29) 'protected' is not allowed here."
         );
     }
 

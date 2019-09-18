@@ -47,18 +47,11 @@ public class Java5Validator extends Java1_4Validator {
         }
     });
 
-    final Validator intAndEnumSwitch = new SimpleValidator<>(SwitchEntry.class,
-            n -> !n.getLabels().stream().allMatch(l -> l.isIntegerLiteralExpr() || l.isNameExpr()),
-            (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only 'int's and enums in switch statements are supported.")
-    );
-
-
     final Validator enumNotAllowed = new ReservedKeywordValidator("enum");
 
     public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
-        replace(intOnlySwitch, intAndEnumSwitch);
         add(noPrimitiveGenericArguments);
         add(enumNotAllowed);
         add(forEachStmt);
