@@ -36,8 +36,7 @@ import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NodeListTest {
 
@@ -150,7 +149,7 @@ class NodeListTest {
         assertEquals(cd.getMembers().size(), 4);
 
         for (int i = 3; i >= 0; i--) {
-            assertTrue(cd.getMembers().removeFirst() != null);
+            assertNotNull(cd.getMembers().removeFirst());
             assertEquals(cd.getMembers().size(), i);
         }
 
@@ -170,7 +169,7 @@ class NodeListTest {
         assertEquals(cd.getMembers().size(), 4);
 
         for (int i = 3; i >= 0; i--) {
-            assertTrue(cd.getMembers().removeLast() != null);
+            assertNotNull(cd.getMembers().removeLast());
             assertEquals(cd.getMembers().size(), i);
         }
 
@@ -253,7 +252,7 @@ class NodeListTest {
 
         final boolean replaced = list.replace(new Name("b"), new Name("z"));
 
-        assertEquals(true, replaced);
+        assertTrue(replaced);
         assertEquals(3, list.size());
         assertEquals("a", list.get(0).asString());
         assertEquals("z", list.get(1).asString());

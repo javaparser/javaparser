@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -113,13 +113,13 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     return
         findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class)
             .stream()
-            .map(ctor -> new JavaParserConstructorDeclaration(this, ctor, typeSolver))
+            .map(ctor -> new JavaParserConstructorDeclaration<>(this, ctor, typeSolver))
             .collect(Collectors.toList());
   }
 
   @Override
-  public Modifier.Keyword accessSpecifier() {
-    return Modifier.Keyword.PRIVATE;
+  public AccessSpecifier accessSpecifier() {
+    return AccessSpecifier.PRIVATE;
   }
 
   @Override

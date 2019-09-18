@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -123,7 +124,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
+        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, getTypeParameters(), typeParameterValues);
     }
 
     @Deprecated
@@ -202,7 +203,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
             boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
             if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
+                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
+                candidates.add(candidate);
+
+                // no need to search for overloaded/inherited methods if the method has no parameters
+                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
+                    return SymbolReference.solved(candidate);
+                }
             }
         }
 
@@ -348,7 +355,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 

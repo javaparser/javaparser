@@ -38,21 +38,21 @@ class CompilationUnitTransformationsTest extends AbstractLexicalPreservingTest {
     // packageDeclaration
 
     @Test
-    void addingPackageDeclaration() throws IOException {
+    void addingPackageDeclaration() {
         considerCode("class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo"), "bar")));
         assertTransformedToString("package foo.bar;"+ EOL + EOL + "class A {}", cu);
     }
 
     @Test
-    void removingPackageDeclaration() throws IOException {
+    void removingPackageDeclaration() {
         considerCode("package foo.bar; class A {}");
         cu.removePackageDeclaration();
         assertTransformedToString("class A {}", cu);
     }
 
     @Test
-    void replacingPackageDeclaration() throws IOException {
+    void replacingPackageDeclaration() {
         considerCode("package foo.bar; class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo2"), "baz")));
         assertTransformedToString("package foo2.baz;" +
