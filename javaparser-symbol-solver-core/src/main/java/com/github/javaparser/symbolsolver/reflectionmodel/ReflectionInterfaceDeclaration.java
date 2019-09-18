@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -87,7 +88,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     public String getClassName() {
         String canonicalName = clazz.getCanonicalName();
         if (canonicalName != null && getPackageName() != null) {
-            return canonicalName.substring(getPackageName().length() + 1, canonicalName.length());
+            return canonicalName.substring(getPackageName().length() + 1);
         }
         return null;
     }
@@ -307,7 +308,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 

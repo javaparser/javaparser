@@ -4,8 +4,8 @@ import com.github.javaparser.ParseProblemException;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SuperExprTest {
     @Test
@@ -15,19 +15,19 @@ class SuperExprTest {
 
     @Test
     void singleScopeSuper() {
-        Expression expr = parseExpression("a.super");
+        Expression expr = parseExpression("A.super");
 
-        Expression classExpr = expr.asSuperExpr().getClassExpr().get();
+        Name className = expr.asSuperExpr().getTypeName().get();
 
-        assertTrue(classExpr.isNameExpr());
+        assertEquals("A", className.asString());
     }
 
     @Test
     void multiScopeSuper() {
-        Expression expr = parseExpression("a.b.super");
+        Expression expr = parseExpression("a.B.super");
 
-        Expression classExpr = expr.asSuperExpr().getClassExpr().get();
+        Name className = expr.asSuperExpr().getTypeName().get();
 
-        assertTrue(classExpr.isFieldAccessExpr());
+        assertEquals("a.B", className.asString());
     }
 }

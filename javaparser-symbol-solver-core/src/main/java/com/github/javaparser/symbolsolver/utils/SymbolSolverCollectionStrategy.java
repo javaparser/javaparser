@@ -64,8 +64,8 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                 }
 
                 @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e) {
-                    if (dir.equals(current_root)) {
+                public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+                    if (current_root != null && Files.isSameFile(dir, current_root)) {
                         projectRoot.addSourceRoot(dir);
                         typeSolver.add(new JavaParserTypeSolver(current_root.toFile()));
                         current_root = null;

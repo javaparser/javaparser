@@ -27,6 +27,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -134,5 +135,10 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.of(this);
+    }
+
+    @Override
+    public FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
+        throw new IllegalStateException("Cannot add a field to an annotation declaration.");
     }
 }

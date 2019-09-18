@@ -80,8 +80,8 @@ public class Java1_0Validator extends Validators {
             n -> n.getLabels().size() > 1,
             (n, reporter) -> reporter.report(n.getLabels().getParentNode().get(), "Only one label allowed in a switch-case.")
     );
-    final Validator noValueBreak = new SimpleValidator<>(BreakStmt.class,
-            n -> n.getValue().map(expression -> !expression.isNameExpr()).orElse(false),
+    final Validator noYield = new SimpleValidator<>(YieldStmt.class,
+            n -> true,
             (n, reporter) -> reporter.report(n, "Only labels allowed in break statements.")
     );
     final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
@@ -116,7 +116,7 @@ public class Java1_0Validator extends Validators {
         add(noVarargs);
         add(noForEach);
         add(noStaticImports);
-        add(noValueBreak);
+        add(noYield);
         add(onlyOneLabelInSwitchCase);
         add(noBinaryIntegerLiterals);
         add(noUnderscoresInIntegerLiterals);

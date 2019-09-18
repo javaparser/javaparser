@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
@@ -76,7 +77,7 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
     }
     
     @Override
-    public Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return wrappedNode.getAccessSpecifier();
     }
 

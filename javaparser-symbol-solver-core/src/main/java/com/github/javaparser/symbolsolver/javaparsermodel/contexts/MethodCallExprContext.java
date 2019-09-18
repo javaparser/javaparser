@@ -357,12 +357,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), actualType);
         } else if (expectedType.isArray()) {
-            if (!actualType.isArray()) {
+        	// Issue 2258 : NullType must not fail this search
+            if (!(actualType.isArray() || actualType.isNull())) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
             matchTypeParameters(
                     expectedType.asArrayType().getComponentType(),
-                    actualType.asArrayType().getComponentType(),
+                    actualType.isNull() ? actualType : actualType.asArrayType().getComponentType(),
                     matchedTypeParameters);
         } else if (expectedType.isReferenceType()) {
             // avoid cases where the actual type has no type parameters but the expected one has. Such as: "classX extends classY<Integer>"

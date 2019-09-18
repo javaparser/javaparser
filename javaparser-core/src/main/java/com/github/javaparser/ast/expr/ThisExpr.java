@@ -39,11 +39,9 @@ import com.github.javaparser.ast.Generated;
 /**
  * An occurrence of the "this" keyword. <br/>
  * <code>World.this.greet()</code> is a MethodCallExpr of method name greet,
- * and scope "World.this" which is a ThisExpr with classExpr "World". <br/>
+ * and scope "World.this" which is a ThisExpr with typeName "World". <br/>
  * <code>this.name</code> is a FieldAccessExpr of field greet, and a ThisExpr as its scope.
- * This ThisExpr has no classExpr.
- * <br>If classExpr is a single identifier (a.this) then it is of type NameExpr.
- * If classExpr has multiple identifiers (a.b.c.this) then it is of type FieldAccessExpr.
+ * This ThisExpr has no typeName.
  *
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
@@ -52,24 +50,24 @@ import com.github.javaparser.ast.Generated;
 public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
     @OptionalProperty
-    private Expression classExpr;
+    private Name typeName;
 
     public ThisExpr() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public ThisExpr(final Expression classExpr) {
-        this(null, classExpr);
+    public ThisExpr(final Name typeName) {
+        this(null, typeName);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ThisExpr(TokenRange tokenRange, Expression classExpr) {
+    public ThisExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        setClassExpr(classExpr);
+        setTypeName(typeName);
         customInitialization();
     }
 
@@ -86,20 +84,20 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getClassExpr() {
-        return Optional.ofNullable(classExpr);
+    public Optional<Name> getTypeName() {
+        return Optional.ofNullable(typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ThisExpr setClassExpr(final Expression classExpr) {
-        if (classExpr == this.classExpr) {
+    public ThisExpr setTypeName(final Name typeName) {
+        if (typeName == this.typeName) {
             return (ThisExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
-        if (this.classExpr != null)
-            this.classExpr.setParentNode(null);
-        this.classExpr = classExpr;
-        setAsParentNodeOf(classExpr);
+        notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
+        if (this.typeName != null)
+            this.typeName.setParentNode(null);
+        this.typeName = typeName;
+        setAsParentNodeOf(typeName);
         return this;
     }
 
@@ -108,9 +106,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (classExpr != null) {
-            if (node == classExpr) {
-                removeClassExpr();
+        if (typeName != null) {
+            if (node == typeName) {
+                removeTypeName();
                 return true;
             }
         }
@@ -118,8 +116,8 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public ThisExpr removeClassExpr() {
-        return setClassExpr((Expression) null);
+    public ThisExpr removeClassName() {
+        return setTypeName((Name) null);
     }
 
     @Override
@@ -139,9 +137,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (classExpr != null) {
-            if (node == classExpr) {
-                setClassExpr((Expression) replacementNode);
+        if (typeName != null) {
+            if (node == typeName) {
+                setTypeName((Name) replacementNode);
                 return true;
             }
         }
@@ -174,5 +172,10 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThisExpr> toThisExpr() {
         return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public ThisExpr removeTypeName() {
+        return setTypeName((Name) null);
     }
 }

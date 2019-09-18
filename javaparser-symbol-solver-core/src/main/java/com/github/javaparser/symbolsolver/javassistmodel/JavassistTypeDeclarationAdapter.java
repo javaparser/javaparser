@@ -47,6 +47,7 @@ public class JavassistTypeDeclarationAdapter {
 
   public List<ResolvedConstructorDeclaration> getConstructors() {
     return Arrays.stream(ctClass.getConstructors())
+        .filter(m -> (m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)
         .map(m -> new JavassistConstructorDeclaration(m, typeSolver)).collect(Collectors.toList());
   }
 
