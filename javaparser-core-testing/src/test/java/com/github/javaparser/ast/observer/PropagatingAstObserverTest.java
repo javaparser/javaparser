@@ -32,6 +32,7 @@ import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PropagatingAstObserverTest {
     @Test
@@ -51,7 +52,7 @@ class PropagatingAstObserverTest {
 
         FieldDeclaration fieldDeclaration = cu.getClassByName("A").get().addField("String", "foo");
         assertEquals(Arrays.asList(), changes);
-        assertEquals(true, fieldDeclaration.isRegistered(observer));
+        assertTrue(fieldDeclaration.isRegistered(observer));
 
         cu.getClassByName("A").get().getFieldByName("foo").get().getVariables().get(0).setName("Bar");
         assertEquals(Arrays.asList("VariableDeclarator.name changed from foo to Bar"), changes);

@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -135,7 +136,7 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.method.getModifiers());
     }
 

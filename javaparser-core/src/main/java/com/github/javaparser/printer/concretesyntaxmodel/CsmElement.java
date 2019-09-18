@@ -60,6 +60,10 @@ public interface CsmElement {
         return new CsmString(property);
     }
 
+    static CsmElement textBlockToken(ObservableProperty property) {
+        return new CsmString(property);
+    }
+
     static CsmElement charToken(ObservableProperty property) {
         return new CsmChar(property);
     }

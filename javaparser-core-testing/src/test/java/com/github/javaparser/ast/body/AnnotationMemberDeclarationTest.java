@@ -26,8 +26,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AnnotationMemberDeclarationTest {
 
@@ -37,7 +36,7 @@ class AnnotationMemberDeclarationTest {
         SimpleName name = new SimpleName("foo");
         decl.setName(name);
         assertTrue(name.getParentNode().isPresent());
-        assertTrue(decl == name.getParentNode().get());
+        assertSame(decl, name.getParentNode().get());
     }
 
     @Test

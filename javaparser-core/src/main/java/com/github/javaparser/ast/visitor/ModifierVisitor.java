@@ -34,13 +34,15 @@ import com.github.javaparser.utils.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
+import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
  * Returning null will remove the node.
- *
+ * <p>
  * If a node is removed that was required in its parent node,
  * the parent node will be removed too.
  *
@@ -180,9 +182,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final BreakStmt n, final A arg) {
-        Expression value = n.getValue().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        SimpleName label = n.getLabel().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setValue(value);
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }
@@ -828,9 +830,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final SuperExpr n, final A arg) {
-        Expression classExpr = n.getClassExpr().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Name typeName = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setClassExpr(classExpr);
+        n.setTypeName(typeName);
         n.setComment(comment);
         return n;
     }
@@ -874,9 +876,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final ThisExpr n, final A arg) {
-        Expression classExpr = n.getClassExpr().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Name typeName = n.getTypeName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setClassExpr(classExpr);
+        n.setTypeName(typeName);
         n.setComment(comment);
         return n;
     }
@@ -1070,13 +1072,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         }
         for (Pair<Node, Node> change : changeList) {
             if (change.b == null) {
-                n.remove(change.a);
+                removeElementByObjectIdentity(n, change.a);
             } else {
-                final int i = n.indexOf(change.a);
-                // If the user removed this item by hand, ignore the change.
-                if (i != -1) {
-                    n.set(i, change.b);
-                }
+                replaceElementByObjectIdentity(n, change.a, change.b);
             }
         }
         return n;
@@ -1238,6 +1236,24 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setEntries(entries);
         n.setSelector(selector);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final YieldStmt n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }
