@@ -99,6 +99,21 @@ class ChildTextElement extends TextElement {
     public boolean isComment() {
         return child instanceof Comment;
     }
+    
+    @Override
+    public boolean isSeparator() {
+        return false;
+    }
+    
+    @Override
+    public boolean isIdentifier() {
+        return false;
+    }
+    
+    @Override
+    public boolean isPrimitive() {
+        return false;
+    }
 
     @Override
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {

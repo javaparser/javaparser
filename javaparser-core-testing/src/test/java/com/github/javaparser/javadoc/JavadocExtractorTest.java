@@ -42,7 +42,7 @@ class JavadocExtractorTest {
 
     private void processFile(File file) throws FileNotFoundException {
         try {
-            CompilationUnit cu = parse(file, StandardCharsets.UTF_8);
+            CompilationUnit cu = parse(file);
             new VoidVisitorAdapter<Object>() {
                 @Override
                 public void visit(JavadocComment n, Object arg) {

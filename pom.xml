@@ -3,6 +3,7 @@
     <modules>
         <module>javaparser-core</module>
         <module>javaparser-core-testing</module>
+        <module>javaparser-core-testing-bdd</module>
         <module>javaparser-core-generators</module>
         <module>javaparser-core-metamodel-generator</module>
         <module>javaparser-core-serialization</module>
@@ -15,7 +16,7 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.13.3-SNAPSHOT</version>
+    <version>3.14.15-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>

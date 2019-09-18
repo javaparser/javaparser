@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -65,7 +66,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public com.github.javaparser.ast.Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 
@@ -78,7 +79,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     public String getClassName() {
         String name = ctClass.getName().replace('$', '.');
         if (getPackageName() != null) {
-            return name.substring(getPackageName().length() + 1, name.length());
+            return name.substring(getPackageName().length() + 1);
         }
         return name;
     }
@@ -202,7 +203,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
+        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, getTypeParameters(), typeParameterValues);
     }
 
     @Override

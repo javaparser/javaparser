@@ -48,6 +48,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
@@ -222,7 +223,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
-     * no range information is known, or that it is not of interest.
+     *              no range information is known, or that it is not of interest.
      */
     public Node setRange(Range range) {
         if (this.range == range) {
@@ -238,12 +239,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @param comment to be set
      */
-    public final Node setComment(final Comment comment) {
+    public Node setComment(final Comment comment) {
         if (this.comment == comment) {
             return this;
-        }
-        if (comment != null && (this instanceof Comment)) {
-            throw new RuntimeException("A comment can not be commented");
         }
         notifyPropertyChange(ObservableProperty.COMMENT, this.comment, comment);
         if (this.comment != null) {
@@ -460,11 +458,23 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * This method was added to support the clone method.
+     *
+     * @return all known data keys.
+     */
+    public Set<DataKey<?>> getDataKeys() {
+        if (data == null) {
+            return emptySet();
+        }
+        return data.keySet();
+    }
+
+    /**
      * Sets data for this node using the given key.
      * For information on creating DataKey, see {@link DataKey}.
      *
-     * @param <M> The type of data
-     * @param key The singleton key for the data
+     * @param <M>    The type of data
+     * @param key    The singleton key for the data
      * @param object The data object
      * @see DataKey
      */
@@ -843,6 +853,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
             return Optional.empty();
         });
+    }
+
+    /**
+     * Determines whether this node is an ancestor of the given node. A node is <i>not</i> an ancestor of itself.
+     *
+     * @param descendant the node for which to determine whether it has this node as an ancestor.
+     * @return {@code true} if this node is an ancestor of the given node, and {@code false} otherwise.
+     * @see HasParentNode#isDescendantOf(Node)
+     */
+    public boolean isAncestorOf(Node descendant) {
+        return this != descendant && findFirst(Node.class, n -> n == descendant).isPresent();
     }
 
     /**

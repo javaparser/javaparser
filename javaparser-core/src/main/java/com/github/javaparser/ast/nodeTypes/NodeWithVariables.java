@@ -101,6 +101,19 @@ public interface NodeWithVariables<N extends Node> {
     }
 
     /**
+     * Sets the type of all variables.
+     * Erases any existing type.
+     * This is a shortcut for setting a type on all variable declarators separately.
+     */
+    @SuppressWarnings("unchecked")
+    default N setAllTypes(Type newType) {
+        for (VariableDeclarator variable : getVariables()) {
+            variable.setType(newType);
+        }
+        return (N) this;
+    }
+
+    /**
      * Returns the type that maximum shared type between all variables.
      * The minimum common type does never include annotations on the array level.
      * <p>
