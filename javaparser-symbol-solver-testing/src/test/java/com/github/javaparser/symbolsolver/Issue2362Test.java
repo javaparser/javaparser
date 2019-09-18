@@ -1,5 +1,7 @@
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +15,6 @@ import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
@@ -34,12 +35,8 @@ class Issue2362Test extends AbstractSymbolResolutionTest {
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
                 new StreamProvider(Files.newInputStream(file))).getResult().get();
-
-        unit.accept(new VoidVisitorAdapter<Object>() {
-            @Override
-            public void visit(ObjectCreationExpr exp, Object arg) {
-                System.out.println(exp.resolve().getSignature());
-            }            
-        }, null);
+        
+        ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
+        assertEquals(oce.resolve().getSignature(), "InnerClass(int)");
     }
 }
