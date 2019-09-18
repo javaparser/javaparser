@@ -9,7 +9,7 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.generator.Generator;
 import com.github.javaparser.utils.Log;
@@ -28,7 +28,7 @@ public class TokenKindGenerator extends Generator {
 
     @Override
     public void generate() {
-        Log.info("Running %s", getClass().getSimpleName());
+        Log.info("Running %s", () -> getClass().getSimpleName());
         
         final CompilationUnit javaTokenCu = sourceRoot.parse("com.github.javaparser", "JavaToken.java");
         final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
@@ -38,7 +38,7 @@ public class TokenKindGenerator extends Generator {
         annotateGenerated(kindEnum);
 
         final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
-        valueOfSwitch.findAll(SwitchEntryStmt.class).stream().filter(e -> e.getLabel().isPresent()).forEach(Node::remove);
+        valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
 
         final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
         final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
@@ -59,7 +59,7 @@ public class TokenKindGenerator extends Generator {
     }
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
-        final SwitchEntryStmt entry = new SwitchEntryStmt(kind, new NodeList<>(new ReturnStmt(name)));
+        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
         valueOfSwitch.getEntries().addFirst(entry);
     }
 

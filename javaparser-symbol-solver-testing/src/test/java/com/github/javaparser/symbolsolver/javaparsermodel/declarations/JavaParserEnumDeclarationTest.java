@@ -20,6 +20,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -149,6 +150,20 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
     ///
     /// Test ancestors
     ///
+
+    @Test
+    void getGetAncestors() {
+        Path src = adaptPath("src/test/resources/enums");
+        CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
+        combinedtypeSolver.add(new ReflectionTypeSolver());
+        combinedtypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        JavaParserEnumDeclaration enum1 = (JavaParserEnumDeclaration) combinedtypeSolver.solveType("EnumWithAncestor");
+        List<ResolvedReferenceType> ancestors = enum1.getAncestors();
+        assertEquals(2, ancestors.size());
+        assertEquals("java.lang.Enum", ancestors.get(0).getQualifiedName());
+        assertEquals("java.lang.Cloneable", ancestors.get(1).getQualifiedName());
+    }
 
 //    @Test
 //    public void testGetSuperclassWithoutTypeParameters() {
@@ -393,14 +408,14 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
         fieldDeclaration = constructorDeclaration.getField("modifiers");
         assertEquals("modifiers", fieldDeclaration.getName());
         assertEquals("java.util.EnumSet", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
+        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
         assertFalse(fieldDeclaration.isStatic());
 
         // inherited field
         fieldDeclaration = constructorDeclaration.getField("annotations");
         assertEquals("annotations", fieldDeclaration.getName());
         assertEquals("java.util.List", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
+        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
     }
 
     @Test

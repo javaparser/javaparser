@@ -36,7 +36,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * A modifier, like private, public, or volatile.
  */
-public final class Modifier extends Node {
+public class Modifier extends Node {
 
     public static Modifier publicModifier() {
         return new Modifier(Keyword.PUBLIC);
@@ -91,28 +91,24 @@ public final class Modifier extends Node {
      */
     public enum Keyword {
 
-        DEFAULT("default", false),
-        PUBLIC("public", false),
-        PROTECTED("protected", false),
-        PRIVATE("private", false),
-        ABSTRACT("abstract", false),
-        STATIC("static", false),
-        FINAL("final", false),
-        TRANSIENT("transient", false),
-        VOLATILE("volatile", false),
-        SYNCHRONIZED("synchronized", false),
-        NATIVE("native", false),
-        STRICTFP("strictfp", false),
-        TRANSITIVE("transitive", false),
-        PACKAGE_PRIVATE("", true);
+        DEFAULT("default"),
+        PUBLIC("public"),
+        PROTECTED("protected"),
+        PRIVATE("private"),
+        ABSTRACT("abstract"),
+        STATIC("static"),
+        FINAL("final"),
+        TRANSIENT("transient"),
+        VOLATILE("volatile"),
+        SYNCHRONIZED("synchronized"),
+        NATIVE("native"),
+        STRICTFP("strictfp"),
+        TRANSITIVE("transitive");
 
         private final String codeRepresentation;
 
-        private final boolean pseudoKeyword;
-
-        Keyword(String codeRepresentation, boolean pseudoKeyword) {
+        Keyword(String codeRepresentation) {
             this.codeRepresentation = codeRepresentation;
-            this.pseudoKeyword = pseudoKeyword;
         }
 
         /**
@@ -120,14 +116,6 @@ public final class Modifier extends Node {
          */
         public String asString() {
             return codeRepresentation;
-        }
-
-        /**
-         * @return true when this keyword is not an actual keyword in source code.
-         * The only case is "PACKAGE_PRIVATE."
-         */
-        public boolean isPseudoKeyword() {
-            return pseudoKeyword;
         }
     }
 

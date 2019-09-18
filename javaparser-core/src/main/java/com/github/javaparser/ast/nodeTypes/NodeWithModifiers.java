@@ -21,9 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
 
 import java.util.Arrays;
 import java.util.List;
@@ -97,18 +99,20 @@ public interface NodeWithModifiers<N extends Node> {
     }
 
     /**
-     * @return Modifier.Keyword.PUBLIC, Modifier.Keyword.PROTECTED,
-     * Modifier.Keyword.PRIVATE, or Modifier.Keyword.PACKAGE_PRIVATE when none of the others exists.
+     * @return the access specifier as far as it can be derived from the modifiers.
+     * Does not take anything else into account (like "interface methods are implicitly public")
      */
-    default Modifier.Keyword getAccessSpecifier() {
+    default AccessSpecifier getAccessSpecifier() {
         for (Modifier modifier : getModifiers()) {
             switch (modifier.getKeyword()) {
                 case PUBLIC:
+                    return AccessSpecifier.PUBLIC;
                 case PROTECTED:
+                    return AccessSpecifier.PROTECTED;
                 case PRIVATE:
-                    return modifier.getKeyword();
+                    return AccessSpecifier.PRIVATE;
             }
         }
-        return Modifier.Keyword.PACKAGE_PRIVATE;
+        return AccessSpecifier.PACKAGE_PRIVATE;
     }
 }

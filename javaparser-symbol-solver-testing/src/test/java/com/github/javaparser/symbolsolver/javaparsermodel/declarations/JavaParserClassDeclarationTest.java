@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -48,9 +48,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -411,14 +411,14 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         fieldDeclaration = constructorDeclaration.getField("modifiers");
         assertEquals("modifiers", fieldDeclaration.getName());
         assertEquals("java.util.EnumSet", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
+        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
         assertFalse(fieldDeclaration.isStatic());
 
         // inherited field
         fieldDeclaration = constructorDeclaration.getField("annotations");
         assertEquals("annotations", fieldDeclaration.getName());
         assertEquals("java.util.List", fieldDeclaration.getType().asReferenceType().getQualifiedName());
-        assertEquals(PRIVATE, fieldDeclaration.accessSpecifier());
+        assertEquals(AccessSpecifier.PRIVATE, fieldDeclaration.accessSpecifier());
     }
 
     @Test
@@ -492,7 +492,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllGenericFields() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/GenericFields.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/GenericFields.java.txt"));
         JavaParserClassDeclaration classDeclaration = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
 
         assertEquals(3, classDeclaration.getAllFields().size());
@@ -849,7 +849,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testHasDirectlyAnnotation() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/Annotations.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/Annotations.java.txt"));
 
         JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
         assertTrue(ca.hasDirectlyAnnotation("foo.bar.MyAnnotation"));
@@ -870,7 +870,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testHasAnnotation() throws IOException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
-        CompilationUnit cu = JavaParser.parse(adaptPath("src/test/resources/Annotations.java.txt"));
+        CompilationUnit cu = parse(adaptPath("src/test/resources/Annotations.java.txt"));
 
         JavaParserClassDeclaration ca = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CA"), typeSolver);
         assertTrue(ca.hasAnnotation("foo.bar.MyAnnotation"));

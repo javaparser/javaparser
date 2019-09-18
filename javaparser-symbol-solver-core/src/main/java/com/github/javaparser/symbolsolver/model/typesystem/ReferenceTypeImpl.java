@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
+import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -106,7 +107,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             }
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
-            return this.getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName());
+            return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
         } else if (other instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
             if (compareConsideringTypeParameters(otherRef)) {
@@ -217,7 +218,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
         boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
                 && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
-                !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName()));
+                        !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName())
+                || this.getTypeDeclaration().asClass().getQualifiedName().equals(Object.class.getCanonicalName()));
         if (!isClassWithSuperClassOrObject) {
             ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
             ResolvedReferenceType objectRef = create(objectType);
@@ -232,8 +234,6 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        Set<ResolvedFieldDeclaration> res = new HashSet<>();
-        res.addAll(getTypeDeclaration().getDeclaredFields());
-        return res;
+        return new HashSet<>(getTypeDeclaration().getDeclaredFields());
     }
 }

@@ -1,16 +1,17 @@
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassOrInterfaceDeclarationTest {
     @Test
     void staticNestedClass() {
-        CompilationUnit cu = JavaParser.parse("class X{static class Y{}}");
+        CompilationUnit cu = parse("class X{static class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
@@ -20,7 +21,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void nestedInterface() {
-        CompilationUnit cu = JavaParser.parse("class X{interface Y{}}");
+        CompilationUnit cu = parse("class X{interface Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
@@ -30,7 +31,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void nonStaticNestedClass() {
-        CompilationUnit cu = JavaParser.parse("class X{class Y{}}");
+        CompilationUnit cu = parse("class X{class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertTrue(y.isInnerClass());
@@ -40,7 +41,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void topClass() {
-        CompilationUnit cu = JavaParser.parse("class X{}");
+        CompilationUnit cu = parse("class X{}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get();
 
         assertFalse(y.isInnerClass());
@@ -50,7 +51,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void localClass() {
-        MethodDeclaration method= (MethodDeclaration)JavaParser.parseBodyDeclaration("void x(){class X{};}");
+        MethodDeclaration method = parseBodyDeclaration("void x(){class X{};}").asMethodDeclaration();
         ClassOrInterfaceDeclaration x = method.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         assertFalse(x.isInnerClass());

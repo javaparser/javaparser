@@ -7,5 +7,7 @@ public class Java12Validator extends Java11Validator {
 
     public Java12Validator() {
         super();
+        remove(noSwitchExpressions);
+        remove(onlyOneLabelInSwitchCase);
     }
 }

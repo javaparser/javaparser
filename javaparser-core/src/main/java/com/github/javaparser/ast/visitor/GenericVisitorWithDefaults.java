@@ -356,7 +356,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final SwitchEntryStmt n, final A arg) {
+    public R visit(final SwitchEntry n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -517,6 +517,16 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final SwitchExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final YieldStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final TextBlockLiteralExpr n, final A arg) {
         return defaultAction(n, arg);
     }
 }

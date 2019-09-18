@@ -92,6 +92,19 @@ class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void lambdaPrint() {
+        CompilationUnit cu = parseSample("Lambda");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "print");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expr = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        ResolvedType type1 = javaParserFacade.getType(expr);
+        assertEquals("void", type1.describe());
+    }
+
+    @Test
     void lambdaBifunc() {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");

@@ -39,9 +39,4 @@ public abstract class AbstractSymbolResolutionTest {
     protected static Path adaptPath(String path) {
         return adaptPath(Paths.get(path));
     }
-
-    protected boolean isJavaVersion9OrAbove() {
-        String jdkVersion = System.getProperty("java.version");
-        return Integer.parseInt(jdkVersion.substring(0, jdkVersion.indexOf('.'))) >= 9;
-    }
 }

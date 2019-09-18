@@ -50,23 +50,25 @@ public class NameLogic {
 
     /**
      * Does the Node represent a Name?
-     *
+     * <p>
      * Note that while most specific AST classes either always represent names or never represent names
      * there are exceptions as the FieldAccessExpr
      */
     public static boolean isAName(Node node) {
         if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             return isAName(fieldAccessExpr.getScope());
         } else {
-            return node instanceof SimpleName || node instanceof Name
-                    || node instanceof ClassOrInterfaceType || node instanceof NameExpr;
+            return node instanceof SimpleName ||
+                    node instanceof Name ||
+                    node instanceof ClassOrInterfaceType ||
+                    node instanceof NameExpr;
         }
     }
 
     private static Node getQualifier(Node node) {
         if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             return fieldAccessExpr.getScope();
         }
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
@@ -74,7 +76,7 @@ public class NameLogic {
 
     private static Node getRightMostName(Node node) {
         if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr)node;
+            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             return fieldAccessExpr.getName();
         }
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
@@ -82,7 +84,7 @@ public class NameLogic {
 
     /**
      * What is the Role of the given name? Does it represent a Declaration or a Reference?
-     *
+     * <p>
      * This classification is purely syntactical, i.e., it does not require symbol resolution. For this reason in the
      * future this could be moved to the core module of JavaParser.
      */
@@ -213,10 +215,10 @@ public class NameLogic {
         if (whenParentIs(ClassExpr.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+        if (whenParentIs(ThisExpr.class, name, (p, c) -> p.getTypeName().isPresent() && p.getTypeName().get() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getClassExpr().isPresent() && p.getClassExpr().get() == c)) {
+        if (whenParentIs(SuperExpr.class, name, (p, c) -> p.getTypeName().isPresent() && p.getTypeName().get() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(VariableDeclarator.class, name, (p, c) -> p.getName() == c)) {
@@ -276,7 +278,7 @@ public class NameLogic {
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
             return classifyRole(name.getParentNode().get());
         }
-        throw new UnsupportedOperationException("Unable to classify role of name contained in "+ name.getParentNode().get().getClass().getSimpleName());
+        throw new UnsupportedOperationException("Unable to classify role of name contained in " + name.getParentNode().get().getClass().getSimpleName());
     }
 
     public static NameCategory classifyReference(Node name, TypeSolver typeSolver) {
@@ -362,7 +364,7 @@ public class NameLogic {
     }
 
     private static NameCategory reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(Node nameNode,
-                                                                                           TypeSolver typeSolver) {
+                                                                                              TypeSolver typeSolver) {
         // If the AmbiguousName is a qualified name, consisting of a name, a ".", and an Identifier, then the name to
         // the left of the "." is first reclassified, for it is itself an AmbiguousName. There is then a choice:
 
@@ -474,7 +476,7 @@ public class NameLogic {
 
     /**
      * See JLS 6.5.1 Syntactic Classification of a Name According to Context.
-     *
+     * <p>
      * Most users do not want to call directly this method but call classifyReference instead.
      */
     public static NameCategory syntacticClassificationAccordingToContext(Node name) {
@@ -652,13 +654,13 @@ public class NameLogic {
         // 3. To the left of the . in a single-static-import declaration (§7.5.3)
 
         if (whenParentIs(Name.class, name, (largerName, c) ->
-           whenParentIs(ImportDeclaration.class, largerName, (importDecl, c2) ->
-                   importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)
+                whenParentIs(ImportDeclaration.class, largerName, (importDecl, c2) ->
+                        importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)
         )) {
             return true;
         }
         if (whenParentIs(ImportDeclaration.class, name, (importDecl, c2) ->
-                        importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)) {
+                importDecl.isStatic() && !importDecl.isAsterisk() && importDecl.getName() == c2)) {
             return true;
         }
 
@@ -689,27 +691,15 @@ public class NameLogic {
 
         // 8. To the left of .this in a qualified this expression (§15.8.4)
 
-        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
-                nameExpr.getName() == c && whenParentIs(ThisExpr.class, nameExpr, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
-        )) {
-            return true;
-        }
         if (whenParentIs(ThisExpr.class, name, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
+                ne.getTypeName().isPresent() && ne.getTypeName().get() == c2)) {
             return true;
         }
 
         // 9. To the left of .super in a qualified superclass field access expression (§15.11.2)
 
-        if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
-                nameExpr.getName() == c && whenParentIs(SuperExpr.class, nameExpr, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)
-        )) {
-            return true;
-        }
         if (whenParentIs(SuperExpr.class, name, (ne, c2) ->
-                        ne.getClassExpr().isPresent() && ne.getClassExpr().get() == c2)) {
+                ne.getTypeName().isPresent() && ne.getTypeName().get() == c2)) {
             return true;
         }
 
@@ -759,7 +749,7 @@ public class NameLogic {
 
         if (whenParentIs(VariableDeclarator.class, name, (p1, c1) ->
                 p1.getType() == c1 && whenParentIs(FieldDeclaration.class, p1, (p2, c2) ->
-                p2.getVariables().contains(c2)))) {
+                        p2.getVariables().contains(c2)))) {
             return true;
         }
 
@@ -865,7 +855,7 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(ExplicitConstructorInvocationStmt.class, name, (ne, c2) ->
-                        ne.getExpression().isPresent() && ne.getExpression().get() == c2)) {
+                ne.getExpression().isPresent() && ne.getExpression().get() == c2)) {
             return true;
         }
 
@@ -878,7 +868,7 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(ObjectCreationExpr.class, name, (ne, c2) ->
-                        ne.getScope().isPresent() && ne.getScope().get() == c2)) {
+                ne.getScope().isPresent() && ne.getScope().get() == c2)) {
             return true;
         }
 
@@ -891,7 +881,7 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(ArrayAccessExpr.class, name, (ne, c2) ->
-                        ne.getName() == c2)) {
+                ne.getName() == c2)) {
             return true;
         }
 
@@ -904,8 +894,8 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(UnaryExpr.class, name, (ne, c2) ->
-                        ne.getExpression() == c2 && ne.isPostfix())) {
-            return  true;
+                ne.getExpression() == c2 && ne.isPostfix())) {
+            return true;
         }
 
         // 5. As the left-hand operand of an assignment operator (§15.26)
@@ -917,7 +907,7 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(AssignExpr.class, name, (ne, c2) ->
-                        ne.getTarget() == c2)) {
+                ne.getTarget() == c2)) {
             return true;
         }
 
@@ -940,15 +930,15 @@ public class NameLogic {
             return true;
         }
         if (whenParentIs(TryStmt.class, name, (ne, c2) ->
-                        ne.getResources().contains(c2))) {
+                ne.getResources().contains(c2))) {
             return true;
         }
         if (whenParentIs(VariableDeclarator.class, name, (p2, c2) ->
-                        p2.getInitializer().isPresent() && p2.getInitializer().get() == c2 && whenParentIs(VariableDeclarationExpr.class, p2, (p3, c3) ->
-                                p3.getVariables().contains(c3) && whenParentIs(TryStmt.class, p3, (p4, c4) ->
-                                        p4.getResources().contains(c4)
-                                )
-                        ))) {
+                p2.getInitializer().isPresent() && p2.getInitializer().get() == c2 && whenParentIs(VariableDeclarationExpr.class, p2, (p3, c3) ->
+                        p3.getVariables().contains(c3) && whenParentIs(TryStmt.class, p3, (p4, c4) ->
+                                p4.getResources().contains(c4)
+                        )
+                ))) {
             return true;
         }
 
@@ -963,7 +953,7 @@ public class NameLogic {
             throw new IllegalArgumentException("A name was expected");
         }
         if (name instanceof Name) {
-            return ((Name)name).asString();
+            return ((Name) name).asString();
         } else if (name instanceof SimpleName) {
             return ((SimpleName) name).getIdentifier();
         } else if (name instanceof ClassOrInterfaceType) {
@@ -976,7 +966,7 @@ public class NameLogic {
                 throw new IllegalArgumentException();
             }
         } else if (name instanceof NameExpr) {
-            return ((NameExpr)name).getNameAsString();
+            return ((NameExpr) name).getNameAsString();
         } else {
             throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
                     + name.getClass().getCanonicalName() + ")");
@@ -991,9 +981,10 @@ public class NameLogic {
         return whenParentIs(parentClass, child, (p, c) -> true);
     }
 
-    private static <P extends Node, C extends Node> boolean whenParentIs(Class<P> parentClass,
-                                                                         C child,
-                                                                         PredicateOnParentAndChild<P, C> predicate) {
+    private static <P extends Node, C extends Node> boolean whenParentIs(
+            Class<P> parentClass,
+            C child,
+            PredicateOnParentAndChild<P, C> predicate) {
         if (child.getParentNode().isPresent()) {
             Node parent = child.getParentNode().get();
             return parentClass.isInstance(parent) && predicate.isSatisfied(parentClass.cast(parent), child);

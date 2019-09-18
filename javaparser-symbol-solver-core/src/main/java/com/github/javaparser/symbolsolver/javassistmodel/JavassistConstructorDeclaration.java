@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.*;
@@ -35,8 +36,8 @@ import java.util.stream.Collectors;
  * @author Fred Lefévère-Laoide
  */
 public class JavassistConstructorDeclaration implements ResolvedConstructorDeclaration {
-    private CtConstructor ctConstructor;
-    private TypeSolver typeSolver;
+    private final CtConstructor ctConstructor;
+    private final TypeSolver typeSolver;
 
     public JavassistConstructorDeclaration(CtConstructor ctConstructor, TypeSolver typeSolver) {
         this.ctConstructor = ctConstructor;
@@ -45,8 +46,9 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
 
     @Override
     public String toString() {
-        return "JavassistMethodDeclaration{" +
-                "CtConstructor=" + ctConstructor +
+        return getClass().getSimpleName() + "{" +
+                "ctConstructor=" + ctConstructor.getName() +
+                ", typeSolver=" + typeSolver +
                 '}';
     }
 
@@ -122,7 +124,7 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
     }
 
     @Override
-    public Modifier.Keyword accessSpecifier() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctConstructor.getModifiers());
     }
 

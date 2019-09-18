@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -275,7 +276,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typeParametersMap = new ArrayList<>();
         if (!isRawType()) {
             for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-                typeParametersMap.add(new Pair<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+                typeParametersMap.add(new Pair<>(typeDeclaration.getTypeParameters().get(i), typeParametersValues().get(i)));
             }
         }
         return typeParametersMap;
@@ -381,9 +382,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>();
-        allMethods.addAll(this.getDeclaredMethods().stream().map(MethodUsage::getDeclaration)
-                .collect(Collectors.toList()));
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(this.getTypeDeclaration().getDeclaredMethods());
         getDirectAncestors().forEach(a ->
                 allMethods.addAll(a.getAllMethods()));
         return allMethods;
@@ -395,7 +394,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
         List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
-                .filter(f -> f.accessSpecifier() != PRIVATE)
+                .filter(f -> f.accessSpecifier() != AccessSpecifier.PRIVATE)
                 .collect(Collectors.toList()));
 
         getDirectAncestors().forEach(a ->
@@ -405,18 +404,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public List<ResolvedMethodDeclaration> getAllMethodsVisibleToInheritors() {
-        List<ResolvedMethodDeclaration> res = new LinkedList<>(this.getDeclaredMethods().stream()
-                .map(m -> m.getDeclaration())
-                .filter(m -> m.accessSpecifier() != PRIVATE)
-                .collect(Collectors.toList()));
-
-        // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
-            getDirectAncestors().forEach(a ->
-                    res.addAll(a.getAllMethodsVisibleToInheritors()));
-        }
-
-        return res;
+        return this.getAllMethods().stream()
+                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE)
+                .collect(Collectors.toList());
     }
 
     //

@@ -319,8 +319,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final BreakStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getValue().isPresent()) {
-            tmp = n.getValue().get().accept(this, arg);
+        if (n.getLabel().isPresent()) {
+            tmp = n.getLabel().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1471,8 +1471,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final SuperExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getClassExpr().isPresent()) {
-            tmp = n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            tmp = n.getTypeName().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1484,11 +1484,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
-    public List<R> visit(final SwitchEntryStmt n, final A arg) {
+    public List<R> visit(final SwitchEntry n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getLabel().isPresent()) {
-            tmp = n.getLabel().get().accept(this, arg);
+        {
+            tmp = n.getLabels().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1550,8 +1550,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final ThisExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getClassExpr().isPresent()) {
-            tmp = n.getClassExpr().get().accept(this, arg);
+        if (n.getTypeName().isPresent()) {
+            tmp = n.getTypeName().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2039,6 +2039,35 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final YieldStmt n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getExpression().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final TextBlockLiteralExpr n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)

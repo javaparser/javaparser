@@ -91,7 +91,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final BreakStmt n, final Void arg) {
-        return (n.getValue().isPresent() ? n.getValue().get().accept(this, arg) : 0);
+        return (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final CastExpr n, final Void arg) {
@@ -307,11 +307,11 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final SuperExpr n, final Void arg) {
-        return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0);
+        return (n.getTypeName().isPresent() ? n.getTypeName().get().accept(this, arg) : 0);
     }
 
-    public Integer visit(final SwitchEntryStmt n, final Void arg) {
-        return (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getStatements().accept(this, arg));
+    public Integer visit(final SwitchEntry n, final Void arg) {
+        return (n.getLabels().accept(this, arg)) * 31 + (n.getStatements().accept(this, arg)) * 31 + (n.getType().hashCode());
     }
 
     public Integer visit(final SwitchStmt n, final Void arg) {
@@ -323,7 +323,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ThisExpr n, final Void arg) {
-        return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0);
+        return (n.getTypeName().isPresent() ? n.getTypeName().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final ThrowStmt n, final Void arg) {
@@ -425,5 +425,15 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final SwitchExpr n, final Void arg) {
         return (n.getEntries().accept(this, arg)) * 31 + (n.getSelector().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final YieldStmt n, final Void arg) {
+        return (n.getExpression().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
+        return (n.getValue().hashCode());
     }
 }

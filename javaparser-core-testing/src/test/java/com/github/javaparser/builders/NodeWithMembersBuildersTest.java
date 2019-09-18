@@ -27,8 +27,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,20 +96,84 @@ class NodeWithMembersBuildersTest {
 
     @Test
     void testGetMethodsWithParameterTypes() {
-        classDeclaration.addMethod("foo", PUBLIC);
-        MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration mFoo = classDeclaration.addMethod("foo", PUBLIC); // foo()
+        MethodDeclaration mFooInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i"); // foo(int)
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
         type.setTypeArguments(parseClassOrInterfaceType("String"));
-        MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", PUBLIC).addParameter(type, "overload");
-        MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "overload");
+        MethodDeclaration mFooIntList = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // foo(int, List)
+        MethodDeclaration mFooListInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // foo(List, int)
+        MethodDeclaration mFoo2Int = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i"); // foo2(int)
+        MethodDeclaration mFoo2IntInt = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // foo2(int, int)
 
-        List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypes(int.class);
-        assertEquals(2, methodsByParam.size());
-        assertTrue(methodsByParam.contains(addMethod2));
-        assertTrue(methodsByParam.contains(addMethod3));
-        List<MethodDeclaration> methodsByParam2 = classDeclaration.getMethodsByParameterTypes("List<String>");
-        assertEquals(1, methodsByParam2.size());
-        assertTrue(methodsByParam2.contains(methodWithListParam));
+        List<MethodDeclaration> methodsWithNoParams = classDeclaration.getMethodsByParameterTypes(new Class[0]); // should return foo()
+        assertEquals(1, methodsWithNoParams.size());
+        assertTrue(methodsWithNoParams.contains(mFoo));
+
+        List<MethodDeclaration> methodsWithIntParam = classDeclaration.getMethodsByParameterTypes(int.class); // should return foo(int) and foo2(int)
+        assertEquals(2, methodsWithIntParam.size());
+        assertTrue(methodsWithIntParam.contains(mFooInt));
+        assertTrue(methodsWithIntParam.contains(mFoo2Int));
+
+        List<MethodDeclaration> methodsWithListParam = classDeclaration.getMethodsByParameterTypes("List<String>");
+        assertEquals(0, methodsWithListParam.size());
+
+        List<MethodDeclaration> methodsWithIntAndListParams = classDeclaration.getMethodsByParameterTypes("int", "List<String>");
+        assertEquals(1, methodsWithIntAndListParams.size());
+        assertTrue(methodsWithIntAndListParams.contains(mFooIntList));
+
+        List<MethodDeclaration> methodsWithListAndIntParams = classDeclaration.getMethodsByParameterTypes(List.class, int.class);
+        assertEquals(1, methodsWithListAndIntParams.size());
+        assertTrue(methodsWithListAndIntParams.contains(mFooListInt));
+
+        List<MethodDeclaration> methodsWithIntAndIntParams = classDeclaration.getMethodsByParameterTypes(int.class, int.class);
+        assertEquals(1, methodsWithListAndIntParams.size());
+        assertTrue(methodsWithIntAndIntParams.contains(mFoo2IntInt));
+    }
+
+    @Test
+    void testGetConstructors() {
+        ConstructorDeclaration addConstructor = classDeclaration.addConstructor(PUBLIC);
+        ConstructorDeclaration addConstructor2 = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
+
+        List<ConstructorDeclaration> constructors = classDeclaration.getConstructors();
+
+        assertEquals(2, constructors.size());
+        assertTrue(constructors.contains(addConstructor));
+        assertTrue(constructors.contains(addConstructor2));
+    }
+
+    @Test
+    void testGetConstructorsWithParameterTypes() {
+        ConstructorDeclaration c = classDeclaration.addConstructor(PUBLIC); // Foo()
+        ConstructorDeclaration cInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i"); // Foo(int)
+        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
+        type.setTypeArguments(parseClassOrInterfaceType("String"));
+        ConstructorDeclaration cIntList = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // Foo(int, List)
+        ConstructorDeclaration cListInt = classDeclaration.addConstructor(PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // Foo(List, int)
+        ConstructorDeclaration cIntInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // Foo(int, int)
+
+        Optional<ConstructorDeclaration> constructorWithNoParams = classDeclaration.getDefaultConstructor();
+        assertTrue(constructorWithNoParams.isPresent());
+        assertSame(c, constructorWithNoParams.get());
+
+        Optional<ConstructorDeclaration> constructorWithIntParam = classDeclaration.getConstructorByParameterTypes(int.class);
+        assertTrue(constructorWithIntParam.isPresent());
+        assertSame(cInt, constructorWithIntParam.get());
+
+        Optional<ConstructorDeclaration> constructorWithListParam = classDeclaration.getConstructorByParameterTypes("List<String>");
+        assertFalse(constructorWithListParam.isPresent());
+
+        Optional<ConstructorDeclaration> constructorWithIntAndListParams = classDeclaration.getConstructorByParameterTypes("int", "List<String>");
+        assertTrue(constructorWithIntAndListParams.isPresent());
+        assertSame(cIntList, constructorWithIntAndListParams.get());
+
+        Optional<ConstructorDeclaration> constructorWithListAndIntParams = classDeclaration.getConstructorByParameterTypes(List.class, int.class);
+        assertTrue(constructorWithListAndIntParams.isPresent());
+        assertSame(cListInt, constructorWithListAndIntParams.get());
+
+        Optional<ConstructorDeclaration> constructorWithIntAndIntParams = classDeclaration.getConstructorByParameterTypes(int.class, int.class);
+        assertTrue(constructorWithIntAndIntParams.isPresent());
+        assertSame(cIntInt, constructorWithIntAndIntParams.get());
     }
 
     @Test

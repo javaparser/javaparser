@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ReferenceType;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
  * A node that declares the types of exception it throws.

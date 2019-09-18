@@ -20,21 +20,20 @@
  */
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BreakStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>The break statement</h1>
@@ -49,35 +48,38 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * <br/><code>break 123+456;</code>
  * <br/><code>break "more or less";</code>
  * <br/>The expression will be in the "value" property.
+ * <h2>Java 13</h2>
+ * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.
  *
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.expr.SwitchExpr
+ * @see YieldStmt
  */
-public final class BreakStmt extends Statement {
+public class BreakStmt extends Statement {
 
     @OptionalProperty
-    private Expression value;
+    private SimpleName label;
 
     public BreakStmt() {
-        this(null, new NameExpr());
+        this(null, new SimpleName());
     }
 
     public BreakStmt(final String label) {
-        this(null, new NameExpr(label));
+        this(null, new SimpleName(label));
     }
 
     @AllFieldsConstructor
-    public BreakStmt(final Expression value) {
-        this(null, value);
+    public BreakStmt(final SimpleName label) {
+        this(null, label);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BreakStmt(TokenRange tokenRange, Expression value) {
+    public BreakStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);
-        setValue(value);
+        setLabel(label);
         customInitialization();
     }
 
@@ -94,26 +96,26 @@ public final class BreakStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getValue() {
-        return Optional.ofNullable(value);
+    public Optional<SimpleName> getLabel() {
+        return Optional.ofNullable(label);
     }
 
     /**
      * Sets the label
      *
-     * @param value the label or the expression, can be null
+     * @param label the label, can be null
      * @return this, the BreakStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BreakStmt setValue(final Expression value) {
-        if (value == this.value) {
+    public BreakStmt setLabel(final SimpleName label) {
+        if (label == this.label) {
             return (BreakStmt) this;
         }
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null)
-            this.value.setParentNode(null);
-        this.value = value;
-        setAsParentNodeOf(value);
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
         return this;
     }
 
@@ -122,9 +124,9 @@ public final class BreakStmt extends Statement {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (value != null) {
-            if (node == value) {
-                removeValue();
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
                 return true;
             }
         }
@@ -132,8 +134,8 @@ public final class BreakStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public BreakStmt removeValue() {
-        return setValue((Expression) null);
+    public BreakStmt removeLabel() {
+        return setLabel((SimpleName) null);
     }
 
     @Override
@@ -153,9 +155,9 @@ public final class BreakStmt extends Statement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (value != null) {
-            if (node == value) {
-                setValue((Expression) replacementNode);
+        if (label != null) {
+            if (node == label) {
+                setLabel((SimpleName) replacementNode);
                 return true;
             }
         }

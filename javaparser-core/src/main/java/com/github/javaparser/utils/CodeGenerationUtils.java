@@ -8,14 +8,17 @@ import java.nio.file.Paths;
 import static com.github.javaparser.utils.Utils.capitalize;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
+/**
+ * Utilities that can be useful when generating code.
+ */
 public final class CodeGenerationUtils {
     private CodeGenerationUtils() {
     }
 
     public static String getterName(Class<?> type, String name) {
-        if (name.startsWith("is")) {
+        if (name.startsWith("is") && boolean.class.equals(type)) {
             return name;
-        } else if (type.equals(Boolean.class)) {
+        } else if (Boolean.TYPE.equals(type)) {
             return "is" + capitalize(name);
         }
         return "get" + capitalize(name);

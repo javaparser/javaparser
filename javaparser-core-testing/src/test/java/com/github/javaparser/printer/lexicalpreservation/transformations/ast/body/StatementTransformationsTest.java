@@ -25,12 +25,13 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 /**
  * Transforming Statement and verifying the LexicalPreservation works as expected.
@@ -38,20 +39,20 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     Statement consider(String code) {
-        Statement statement = JavaParser.parseStatement(code);
+        Statement statement = parseStatement(code);
         LexicalPreservingPrinter.setup(statement);
         return statement;
     }
 
     @Test
-    void ifStmtTransformation() throws IOException {
+    void ifStmtTransformation() {
         Statement stmt = consider("if (a) {} else {}");
         stmt.asIfStmt().setCondition(new NameExpr("b"));
         assertTransformedToString("if (b) {} else {}", stmt);
     }
 
     @Test
-    void switchEntryCsmHasTrailingUnindent() throws IOException {
+    void switchEntryCsmHasTrailingUnindent() {
         Statement stmt = consider("switch (a) { case 1: a; a; }");
         NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
         statements.set(1, statements.get(1).clone()); // clone() to force replacement

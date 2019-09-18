@@ -60,7 +60,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
     private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
-        return JavaParser.parse(is);
+        return StaticJavaParser.parse(is);
     }
 
     @Test
@@ -74,9 +74,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
     }
 
     @Test
@@ -90,9 +90,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
     }
 
     @Test
@@ -105,9 +105,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
 
-        assertEquals(true, symbolReference.isSolved());
+        assertTrue(symbolReference.isSolved());
         assertEquals("foo", symbolReference.getCorrespondingDeclaration().getName());
-        assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
+        assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
     }
 
     @Test
@@ -128,7 +128,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -152,7 +152,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -175,7 +175,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -199,7 +199,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("String", ref.getCorrespondingDeclaration().getName());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getQualifiedName());
     }
@@ -327,6 +327,96 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals("java.util.List<com.github.javaparser.ast.body.TypeDeclaration>", methodUsage.returnType().describe());
         assertEquals(1, methodUsage.returnType().asReferenceType().typeParametersValues().size());
         assertEquals("com.github.javaparser.ast.body.TypeDeclaration", methodUsage.returnType().asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveCompoundGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "doubleTyped");
+        MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithDoubleTypedReturnType").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("genericMethodWithDoubleTypedReturnType", methodUsage.getName());
+        assertEquals("java.util.Map<T, V>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveNestedGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTyped");
+        MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithNestedReturnType").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("genericMethodWithNestedReturnType", methodUsage.getName());
+        assertEquals("java.util.List<java.util.List<T>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveSimpleGenericReturnTypeOfMethodInJar() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "simple");
+        MethodCallExpr call = Navigator.findMethodCall(method, "get").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("get", methodUsage.getName());
+        assertEquals("java.util.List<java.util.List<java.lang.String>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveGenericReturnTypeFromInputParam() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "input");
+        MethodCallExpr call = Navigator.findMethodCall(method, "copy").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("copy", methodUsage.getName());
+        assertEquals("javaparser.GenericClass<java.util.List<java.lang.String>>", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveComplexGenericReturnType() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "complex");
+        MethodCallExpr call = Navigator.findMethodCall(method, "complexGenerics").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("complexGenerics", methodUsage.getName());
+        assertEquals("T", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveDoubleNestedClassType() throws IOException {
+        CompilationUnit cu = parseSample("GenericClassNavigator");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTypes");
+        MethodCallExpr call = Navigator.findMethodCall(method, "asList").get();
+
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
+        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
+
+        assertEquals("asList", methodUsage.getName());
+        assertEquals("java.util.List<javaparser.GenericClass.Bar.NestedBar>", methodUsage.getParamType(0).describe());
     }
 
     @Test
@@ -518,7 +608,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Node nameNode = cu.findAll(NameExpr.class).get(0);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
-        assertEquals(true, context.localVariableDeclarationInScope(name).isPresent());
+        assertTrue(context.localVariableDeclarationInScope(name).isPresent());
     }
 
     //
@@ -639,7 +729,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void localVariablesExposedToChildWithinEnhancedForeachStmt() {
         ForEachStmt foreachStmt = parse("for (int i: myList) { body(); }",
-                ParseStart.STATEMENT).asForeachStmt();
+                ParseStart.STATEMENT).asForEachStmt();
         assertOneVarExposedToChildInContextNamed(foreachStmt, foreachStmt.getBody(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getVariable(), "i");
         assertNoVarsExposedToChildInContextNamed(foreachStmt, foreachStmt.getIterable(), "i");

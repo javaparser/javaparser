@@ -20,9 +20,7 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -37,7 +35,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -46,18 +43,19 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
  * }</code>
- *
+ * <p>
  * <br/>All annotations preceding the return type will be set on this object, not on the return type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration>, NodeWithAccessModifiers<MethodDeclaration>, NodeWithAbstractModifier<MethodDeclaration>, NodeWithStaticModifier<MethodDeclaration>, NodeWithFinalModifier<MethodDeclaration>, NodeWithStrictfpModifier<MethodDeclaration>, Resolvable<ResolvedMethodDeclaration> {
+public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration>, NodeWithAccessModifiers<MethodDeclaration>, NodeWithAbstractModifier<MethodDeclaration>, NodeWithStaticModifier<MethodDeclaration>, NodeWithFinalModifier<MethodDeclaration>, NodeWithStrictfpModifier<MethodDeclaration>, Resolvable<ResolvedMethodDeclaration> {
 
     private Type type;
 
@@ -83,15 +81,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @AllFieldsConstructor
     public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
-    }
-
-    /**
-     * @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set.
-     */
-    @Deprecated
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
-        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
-        setDefault(isDefault);
     }
 
     /**
@@ -198,10 +187,8 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            Modifier.Keyword accessSpecifier = getAccessSpecifier();
-            if (!accessSpecifier.isPseudoKeyword()) {
-                sb.append(accessSpecifier.asString()).append(" ");
-            }
+            AccessSpecifier accessSpecifier = getAccessSpecifier();
+            sb.append(accessSpecifier.asString()).append(" ");
             if (isStatic()) {
                 sb.append("static ");
             }

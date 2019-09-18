@@ -44,7 +44,7 @@ import com.github.javaparser.ast.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class CharLiteralExpr extends LiteralStringValueExpr {
+public class CharLiteralExpr extends LiteralStringValueExpr {
 
     public CharLiteralExpr() {
         this(null, "?");

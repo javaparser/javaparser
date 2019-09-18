@@ -262,18 +262,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodCallExpr node, Boolean solveLambdas) {
-        Log.trace("getType on method call %s", node);
+        Log.trace("getType on method call %s", ()-> node);
         // first solve the method
         MethodUsage ref = facade.solveMethodAsUsage(node);
-        Log.trace("getType on method call %s resolved to %s", node, ref);
-        Log.trace("getType on method call %s return type is %s", node, ref.returnType());
+        Log.trace("getType on method call %s resolved to %s", ()-> node, ()-> ref);
+        Log.trace("getType on method call %s return type is %s", ()-> node, ref::returnType);
         return ref.returnType();
         // the type is the return type of the method
     }
 
     @Override
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
-        Log.trace("getType on name expr %s", node);
+        Log.trace("getType on name expr %s", ()-> node);
         Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, node.getName().getId());
@@ -290,9 +290,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(ThisExpr node, Boolean solveLambdas) {
         // If 'this' is prefixed by a class eg. MyClass.this
-        if (node.getClassExpr().isPresent()) {
+        if (node.getTypeName().isPresent()) {
             // Get the class name
-            String className = node.getClassExpr().get().toString();
+            String className = node.getTypeName().get().asString();
             // Attempt to resolve using a typeSolver
             SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
             if (clazz.isSolved()) {
@@ -357,7 +357,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on lambda expr %s", refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
 
                 // The type parameter referred here should be the java.util.stream.Stream.T
@@ -468,7 +468,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on method reference expr %s", refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
                 ResolvedType result = usage.getParamType(pos);

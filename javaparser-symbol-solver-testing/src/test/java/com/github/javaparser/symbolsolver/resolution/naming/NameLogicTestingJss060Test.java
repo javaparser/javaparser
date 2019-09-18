@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.resolution.naming;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.SlowTest;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -15,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+
 @SlowTest
 class NameLogicTestingJss060Test extends AbstractResolutionTest {
 
@@ -23,10 +24,10 @@ class NameLogicTestingJss060Test extends AbstractResolutionTest {
 
     private void classifyRoles(String projectName, String className) throws IOException {
         Path sourceFile = src.resolve(projectName + "/" + className + ".java");
-        CompilationUnit cu = JavaParser.parse(sourceFile);
+        CompilationUnit cu = parse(sourceFile);
 
         List<Node> names = new LinkedList<>();
-        names.addAll(cu.findAll(Name.class).stream().filter(n -> n.isTopLevel()).collect(Collectors.toList()));
+        names.addAll(cu.findAll(Name.class).stream().filter(Name::isTopLevel).collect(Collectors.toList()));
         names.addAll(cu.findAll(SimpleName.class));
         names.forEach(n -> {
             NameRole role = NameLogic.classifyRole(n);
@@ -35,10 +36,10 @@ class NameLogicTestingJss060Test extends AbstractResolutionTest {
 
     private void classifyReferences(String projectName, String className) throws IOException {
         Path sourceFile = src.resolve(projectName + "/" + className + ".java");
-        CompilationUnit cu = JavaParser.parse(sourceFile);
+        CompilationUnit cu = parse(sourceFile);
 
         List<Node> names = new LinkedList<>();
-        names.addAll(cu.findAll(Name.class).stream().filter(n -> n.isTopLevel()).collect(Collectors.toList()));
+        names.addAll(cu.findAll(Name.class).stream().filter(Name::isTopLevel).collect(Collectors.toList()));
         names.addAll(cu.findAll(SimpleName.class));
         names.forEach(n -> {
             if (NameLogic.classifyRole(n) == NameRole.REFERENCE) {

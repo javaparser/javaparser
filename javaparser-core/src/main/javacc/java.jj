@@ -68,6 +68,7 @@ import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -108,6 +109,7 @@ TOKEN_MGR_DECLS :
     private JavaToken homeToken;
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
+    private boolean yieldSupported = false;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -134,6 +136,10 @@ TOKEN_MGR_DECLS :
     /* Makes the parser keep a list of tokens */
     public void setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
+    }
+    
+    public void setYieldSupported() {
+        yieldSupported = true;
     }
 
     private void CommonTokenAction(Token token) {
@@ -168,7 +174,7 @@ TOKEN_MGR_DECLS :
 
 SPECIAL_TOKEN :
 {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
 }
 
 MORE :
@@ -253,6 +259,7 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
+| < YIELD: "yield" > {if(!yieldSupported)matchedToken.kind=IDENTIFIER;}
 | < REQUIRES: "requires" >
 | < TO: "to" >
 | < WITH: "with" >
@@ -354,6 +361,12 @@ TOKEN :
       "\""
   >
 }
+/* TEXT BLOCK LITERAL */
+MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
+<IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
+// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" - 
+// which might match that doublequote with following doublequotes.
+<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
 /* IDENTIFIERS */
 
@@ -1408,7 +1421,7 @@ String Identifier():
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
     (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
     // Make sure older Java versions parse
-    <ENUM> | <STRICTFP> |
+    <ENUM> | <STRICTFP> | <YIELD> |
     // An actual plain old identifier
     <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -1863,7 +1876,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(range(scope, token()), scope); }
+  	"." "super" { ret = new SuperExpr(range(scope, token()), scopeToName(scope)); }
   )
   { return ret; }
 }
@@ -1880,7 +1893,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-		"this" { ret = new ThisExpr(range(scope, token()), scope); }
+		"this" { ret = new ThisExpr(range(scope, token()), scopeToName(scope)); }
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
@@ -1921,11 +1934,15 @@ Expression Literal():
 	  }
 	|
 	  <CHARACTER_LITERAL> {
-	  	ret = new CharLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new CharLiteralExpr(tokenRange(), unquote(token.image));
 	  }
 	|
 	  <STRING_LITERAL> {
-	  	ret = new StringLiteralExpr(tokenRange(), token.image.substring(1, token.image.length()-1));
+	  	ret = new StringLiteralExpr(tokenRange(), unquote(token.image));
+	  }
+	|
+	  <TEXT_BLOCK_LITERAL> {
+	  	ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image));
 	  }
 	|
 	  ret = BooleanLiteral()
@@ -1987,13 +2004,13 @@ Expression AllocationExpression(Expression scope):
 {
     "new" { if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);} }
     
+    [ typeArgs = TypeArguments() ]
     annotations = Annotations() 
     (
         type = PrimitiveType(annotations)
         ret = ArrayCreation(begin, type)
     |
-        [ typeArgs = TypeArguments() ]
-        type = AnnotatedClassOrInterfaceType()
+        type = ClassOrInterfaceType(annotations)
         (
             ret = ArrayCreation(begin, type)
         |
@@ -2041,6 +2058,8 @@ Statement Statement():
             ret = LabeledStatement()
         |
             ret = AssertStatement()
+        |
+            ret = YieldStatement()
         |
             ret = Block()
         |
@@ -2217,8 +2236,8 @@ ExpressionStmt StatementExpression():
 SwitchStmt SwitchStatement():
 {
 	Expression selector;
-	SwitchEntryStmt entry;
-	NodeList<SwitchEntryStmt> entries = emptyList();
+	SwitchEntry entry;
+	NodeList<SwitchEntry> entries = emptyList();
 	JavaToken begin;
 }
 {
@@ -2232,8 +2251,8 @@ SwitchStmt SwitchStatement():
 SwitchExpr SwitchExpression():
 {
 	Expression selector;
-	SwitchEntryStmt entry;
-	NodeList<SwitchEntryStmt> entries = emptyList();
+	SwitchEntry entry;
+	NodeList<SwitchEntry> entries = emptyList();
 	JavaToken begin;
 }
 {
@@ -2244,21 +2263,48 @@ SwitchExpr SwitchExpression():
   { return new SwitchExpr(range(begin, token()), selector, entries); }
 }
 
-SwitchEntryStmt SwitchEntry():
+SwitchEntry SwitchEntry():
 {
 	Expression label = null;
-	NodeList<Statement> stmts;
+	NodeList<Expression> labels = emptyList();
+	NodeList<Statement> stmts = emptyList();
 	JavaToken begin;
+	SwitchEntry ret;
+	Expression expression = null;
+	Statement stmt = null;
 }
 {
-  (
-	  "case" {begin=token();} label = Expression()
+	(
+		"case" {begin=token();} label = ConditionalExpression() { labels = add(labels, label); }
+		( "," label = ConditionalExpression()  { labels = add(labels, label); } )*
 	|
-	  "default" {begin=token();}
-  )
-  ":" stmts = Statements()
-
-  { return new SwitchEntryStmt(range(begin, token()),label, stmts); }
+		"default" {begin=token();}
+	)
+    (
+        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts); }
+    |
+        "->"
+        (
+            expression = Expression() ";" {
+                TokenRange r=range(begin, token());
+				stmts.add(new ExpressionStmt(r, expression));
+				ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
+            }
+		|
+			stmt = Block() {
+				TokenRange r=range(begin, token());
+				stmts.add(stmt);
+				ret = new SwitchEntry(r, labels, BLOCK, stmts);
+			}
+		|
+			stmt = ThrowStatement() {
+				TokenRange r=range(begin, token());
+				stmts.add(stmt);
+				ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
+			}
+		)
+    )
+	{ return ret; }
 }
 
 IfStmt IfStatement():
@@ -2369,12 +2415,22 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	Expression value = null;
+	SimpleName label = null;
 	JavaToken begin;
 }
 {
-  "break" {begin=token();} [ value = Expression() ] ";"
-  { return new BreakStmt(range(begin, token()), value); }
+  "break" {begin=token();} [ label = SimpleName() ] ";"
+  { return new BreakStmt(range(begin, token()), label); }
+}
+
+YieldStmt YieldStatement():
+{
+	Expression value;
+	JavaToken begin;
+}
+{
+  "yield" {begin=token();} value = Expression() ";"
+  { return new YieldStmt(range(begin, token()), value); }
 }
 
 ContinueStmt ContinueStatement():
@@ -2443,8 +2499,8 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {catchBegin=token();}
-  			"(" { typesBegin=token(); }
-  			exceptModifier = Modifiers() exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); }
+  			"(" exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+            exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
   			( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
@@ -2456,7 +2512,7 @@ TryStmt TryStatement():
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+				Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
@@ -2847,4 +2903,15 @@ TypeParameter TypeParameterParseStart():
 {
    annotations = Annotations() ret = TypeParameter(annotations) <EOF>
    { return ret; }
+}
+
+MethodDeclaration MethodDeclarationParseStart():
+{ MethodDeclaration ret;
+	ModifierHolder modifier;
+ }
+{
+    modifier = Modifiers()
+    ret = MethodDeclaration(modifier)
+    <EOF>
+    { return ret; }
 }

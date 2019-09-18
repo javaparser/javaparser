@@ -72,7 +72,7 @@ class JavadocParser {
             //then needs to be added again so that the block parsers handles everything correctly.
             blockLines = BLOCK_PATTERN
                 .splitAsStream(tagBlock)
-                .filter(STRING_NOT_EMPTY)
+                .filter(s1 -> !s1.isEmpty())
                 .map(s -> BLOCK_TAG_PREFIX + s)
                 .collect(Collectors.toList());
         }

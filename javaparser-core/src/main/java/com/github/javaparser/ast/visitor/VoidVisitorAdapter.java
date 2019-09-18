@@ -117,7 +117,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final BreakStmt n, final A arg) {
-        n.getValue().ifPresent(l -> l.accept(this, arg));
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -488,13 +488,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final SuperExpr n, final A arg) {
-        n.getClassExpr().ifPresent(l -> l.accept(this, arg));
+        n.getTypeName().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
-    public void visit(final SwitchEntryStmt n, final A arg) {
-        n.getLabel().ifPresent(l -> l.accept(this, arg));
+    public void visit(final SwitchEntry n, final A arg) {
+        n.getLabels().forEach(p -> p.accept(this, arg));
         n.getStatements().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -515,7 +515,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final ThisExpr n, final A arg) {
-        n.getClassExpr().ifPresent(l -> l.accept(this, arg));
+        n.getTypeName().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -698,6 +698,17 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final SwitchExpr n, final A arg) {
         n.getEntries().forEach(p -> p.accept(this, arg));
         n.getSelector().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final TextBlockLiteralExpr n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final YieldStmt n, final A arg) {
+        n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

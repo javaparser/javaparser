@@ -171,16 +171,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isForeachStmt() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ForEachStmt asForeachStmt() {
-        throw new IllegalStateException(f("%s is not an ForEachStmt", this));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isIfStmt() {
         return false;
     }
@@ -218,16 +208,6 @@ public abstract class Statement extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ReturnStmt asReturnStmt() {
         throw new IllegalStateException(f("%s is not an ReturnStmt", this));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isSwitchEntryStmt() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public SwitchEntryStmt asSwitchEntryStmt() {
-        throw new IllegalStateException(f("%s is not an SwitchEntryStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -327,10 +307,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifForeachStmt(Consumer<ForEachStmt> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIfStmt(Consumer<IfStmt> action) {
     }
 
@@ -344,10 +320,6 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReturnStmt(Consumer<ReturnStmt> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -420,11 +392,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ForEachStmt> toForeachStmt() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<IfStmt> toIfStmt() {
         return Optional.empty();
     }
@@ -441,11 +408,6 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ReturnStmt> toReturnStmt() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<SwitchEntryStmt> toSwitchEntryStmt() {
         return Optional.empty();
     }
 
@@ -496,5 +458,24 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForEachStmt(Consumer<ForEachStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isYieldStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public YieldStmt asYieldStmt() {
+        throw new IllegalStateException(f("%s is not an YieldStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<YieldStmt> toYieldStmt() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifYieldStmt(Consumer<YieldStmt> action) {
     }
 }

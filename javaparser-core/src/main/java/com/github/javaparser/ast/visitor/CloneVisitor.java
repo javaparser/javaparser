@@ -22,15 +22,11 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 /**
@@ -47,7 +43,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
+        n.getStorage().ifPresent(s -> r.setStorage(s.getPath(), s.getEncoding()));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -59,6 +58,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         PackageDeclaration r = new PackageDeclaration(n.getTokenRange().orElse(null), annotations, name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -70,6 +71,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         TypeParameter r = new TypeParameter(n.getTokenRange().orElse(null), name, typeBound, annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -78,6 +81,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         LineComment r = new LineComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -86,6 +91,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         BlockComment r = new BlockComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -101,6 +108,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -115,6 +124,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         EnumDeclaration r = new EnumDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, implementedTypes, entries, members);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -127,6 +138,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         EnumConstantDeclaration r = new EnumConstantDeclaration(n.getTokenRange().orElse(null), annotations, name, arguments, classBody);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -139,6 +152,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         AnnotationDeclaration r = new AnnotationDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, members);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -152,6 +167,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, type, name, defaultValue);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -163,6 +180,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         FieldDeclaration r = new FieldDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, variables);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -174,6 +193,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         VariableDeclarator r = new VariableDeclarator(n.getTokenRange().orElse(null), type, name, initializer);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -190,6 +211,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -207,6 +230,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         MethodDeclaration r = new MethodDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -220,6 +245,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         Parameter r = new Parameter(n.getTokenRange().orElse(null), modifiers, annotations, type, n.isVarArgs(), varArgsAnnotations, name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -230,6 +257,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         InitializerDeclaration r = new InitializerDeclaration(n.getTokenRange().orElse(null), n.isStatic(), body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -238,6 +267,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         JavadocComment r = new JavadocComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -250,6 +281,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ClassOrInterfaceType r = new ClassOrInterfaceType(n.getTokenRange().orElse(null), scope, name, typeArguments, annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -259,6 +292,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         PrimitiveType r = new PrimitiveType(n.getTokenRange().orElse(null), n.getType(), annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -269,6 +304,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayType r = new ArrayType(n.getTokenRange().orElse(null), componentType, n.getOrigin(), annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -279,6 +316,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayCreationLevel r = new ArrayCreationLevel(n.getTokenRange().orElse(null), dimension, annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -289,6 +328,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         IntersectionType r = new IntersectionType(n.getTokenRange().orElse(null), elements);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -299,6 +340,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         UnionType r = new UnionType(n.getTokenRange().orElse(null), elements);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -308,6 +351,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         VoidType r = new VoidType(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -319,6 +364,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         WildcardType r = new WildcardType(n.getTokenRange().orElse(null), extendedType, superType, annotations);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -328,6 +375,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         UnknownType r = new UnknownType(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -338,6 +387,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayAccessExpr r = new ArrayAccessExpr(n.getTokenRange().orElse(null), name, index);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -349,6 +400,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayCreationExpr r = new ArrayCreationExpr(n.getTokenRange().orElse(null), elementType, levels, initializer);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -358,6 +411,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayInitializerExpr r = new ArrayInitializerExpr(n.getTokenRange().orElse(null), values);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -368,6 +423,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         AssignExpr r = new AssignExpr(n.getTokenRange().orElse(null), target, value, n.getOperator());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -378,6 +435,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         BinaryExpr r = new BinaryExpr(n.getTokenRange().orElse(null), left, right, n.getOperator());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -388,6 +447,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         CastExpr r = new CastExpr(n.getTokenRange().orElse(null), type, expression);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -397,6 +458,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ClassExpr r = new ClassExpr(n.getTokenRange().orElse(null), type);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -408,6 +471,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ConditionalExpr r = new ConditionalExpr(n.getTokenRange().orElse(null), condition, thenExpr, elseExpr);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -417,6 +482,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         EnclosedExpr r = new EnclosedExpr(n.getTokenRange().orElse(null), inner);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -428,6 +495,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         FieldAccessExpr r = new FieldAccessExpr(n.getTokenRange().orElse(null), scope, typeArguments, name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -438,6 +507,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         InstanceOfExpr r = new InstanceOfExpr(n.getTokenRange().orElse(null), expression, type);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -446,6 +517,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         StringLiteralExpr r = new StringLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -454,6 +527,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         IntegerLiteralExpr r = new IntegerLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -462,6 +537,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         LongLiteralExpr r = new LongLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -470,6 +547,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         CharLiteralExpr r = new CharLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -478,6 +557,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         DoubleLiteralExpr r = new DoubleLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -486,6 +567,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         BooleanLiteralExpr r = new BooleanLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -494,6 +577,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         NullLiteralExpr r = new NullLiteralExpr(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -506,6 +591,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         MethodCallExpr r = new MethodCallExpr(n.getTokenRange().orElse(null), scope, typeArguments, name, arguments);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -515,6 +602,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         NameExpr r = new NameExpr(n.getTokenRange().orElse(null), name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -528,6 +617,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ObjectCreationExpr r = new ObjectCreationExpr(n.getTokenRange().orElse(null), scope, type, typeArguments, arguments, anonymousClassBody);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -537,6 +628,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         Name r = new Name(n.getTokenRange().orElse(null), qualifier, n.getIdentifier());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -545,24 +638,30 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         SimpleName r = new SimpleName(n.getTokenRange().orElse(null), n.getIdentifier());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
     public Visitable visit(final ThisExpr n, final Object arg) {
-        Expression classExpr = cloneNode(n.getClassExpr(), arg);
+        Name typeName = cloneNode(n.getTypeName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ThisExpr r = new ThisExpr(n.getTokenRange().orElse(null), classExpr);
+        ThisExpr r = new ThisExpr(n.getTokenRange().orElse(null), typeName);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
     public Visitable visit(final SuperExpr n, final Object arg) {
-        Expression classExpr = cloneNode(n.getClassExpr(), arg);
+        Name typeName = cloneNode(n.getTypeName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SuperExpr r = new SuperExpr(n.getTokenRange().orElse(null), classExpr);
+        SuperExpr r = new SuperExpr(n.getTokenRange().orElse(null), typeName);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -572,6 +671,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         UnaryExpr r = new UnaryExpr(n.getTokenRange().orElse(null), expression, n.getOperator());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -583,6 +684,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         VariableDeclarationExpr r = new VariableDeclarationExpr(n.getTokenRange().orElse(null), modifiers, annotations, variables);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -592,6 +695,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         MarkerAnnotationExpr r = new MarkerAnnotationExpr(n.getTokenRange().orElse(null), name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -602,6 +707,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         SingleMemberAnnotationExpr r = new SingleMemberAnnotationExpr(n.getTokenRange().orElse(null), name, memberValue);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -612,6 +719,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         NormalAnnotationExpr r = new NormalAnnotationExpr(n.getTokenRange().orElse(null), name, pairs);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -622,6 +731,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         MemberValuePair r = new MemberValuePair(n.getTokenRange().orElse(null), name, value);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -633,6 +744,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(n.getTokenRange().orElse(null), typeArguments, n.isThis(), expression, arguments);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -642,6 +755,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         LocalClassDeclarationStmt r = new LocalClassDeclarationStmt(n.getTokenRange().orElse(null), classDeclaration);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -652,6 +767,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         AssertStmt r = new AssertStmt(n.getTokenRange().orElse(null), check, message);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -661,6 +778,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         BlockStmt r = new BlockStmt(n.getTokenRange().orElse(null), statements);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -671,6 +790,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         LabeledStmt r = new LabeledStmt(n.getTokenRange().orElse(null), label, statement);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -679,6 +800,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         EmptyStmt r = new EmptyStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -688,35 +811,43 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ExpressionStmt r = new ExpressionStmt(n.getTokenRange().orElse(null), expression);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
     public Visitable visit(final SwitchStmt n, final Object arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SwitchStmt r = new SwitchStmt(n.getTokenRange().orElse(null), selector, entries);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
-    public Visitable visit(final SwitchEntryStmt n, final Object arg) {
-        Expression label = cloneNode(n.getLabel(), arg);
+    public Visitable visit(final SwitchEntry n, final Object arg) {
+        NodeList<Expression> labels = cloneList(n.getLabels(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntryStmt r = new SwitchEntryStmt(n.getTokenRange().orElse(null), label, statements);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
     public Visitable visit(final BreakStmt n, final Object arg) {
-        Expression value = cloneNode(n.getValue(), arg);
+        SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), value);
+        BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -726,6 +857,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ReturnStmt r = new ReturnStmt(n.getTokenRange().orElse(null), expression);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -737,6 +870,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         IfStmt r = new IfStmt(n.getTokenRange().orElse(null), condition, thenStmt, elseStmt);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -747,6 +882,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         WhileStmt r = new WhileStmt(n.getTokenRange().orElse(null), condition, body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -756,6 +893,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ContinueStmt r = new ContinueStmt(n.getTokenRange().orElse(null), label);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -766,6 +905,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         DoStmt r = new DoStmt(n.getTokenRange().orElse(null), body, condition);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -777,6 +918,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ForEachStmt r = new ForEachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -789,6 +932,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ForStmt r = new ForStmt(n.getTokenRange().orElse(null), initialization, compare, update, body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -798,6 +943,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ThrowStmt r = new ThrowStmt(n.getTokenRange().orElse(null), expression);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -808,6 +955,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         SynchronizedStmt r = new SynchronizedStmt(n.getTokenRange().orElse(null), expression, body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -820,6 +969,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         TryStmt r = new TryStmt(n.getTokenRange().orElse(null), resources, tryBlock, catchClauses, finallyBlock);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -830,6 +981,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         CatchClause r = new CatchClause(n.getTokenRange().orElse(null), parameter, body);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -840,6 +993,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         LambdaExpr r = new LambdaExpr(n.getTokenRange().orElse(null), parameters, body, n.isEnclosingParameters());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -850,6 +1005,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         MethodReferenceExpr r = new MethodReferenceExpr(n.getTokenRange().orElse(null), scope, typeArguments, n.getIdentifier());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -859,6 +1016,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         TypeExpr r = new TypeExpr(n.getTokenRange().orElse(null), type);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -880,6 +1039,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -891,6 +1052,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleDeclaration r = new ModuleDeclaration(n.getTokenRange().orElse(null), annotations, name, n.isOpen(), directives);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -901,6 +1064,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleRequiresDirective r = new ModuleRequiresDirective(n.getTokenRange().orElse(null), modifiers, name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -942,6 +1107,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleExportsDirective r = new ModuleExportsDirective(n.getTokenRange().orElse(null), name, moduleNames);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -952,6 +1119,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleProvidesDirective r = new ModuleProvidesDirective(n.getTokenRange().orElse(null), name, with);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -961,6 +1130,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleUsesDirective r = new ModuleUsesDirective(n.getTokenRange().orElse(null), name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -971,6 +1142,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleOpensDirective r = new ModuleOpensDirective(n.getTokenRange().orElse(null), name, moduleNames);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -979,6 +1152,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         UnparsableStmt r = new UnparsableStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -990,6 +1165,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ReceiverParameter r = new ReceiverParameter(n.getTokenRange().orElse(null), annotations, type, name);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -999,6 +1176,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         VarType r = new VarType(n.getTokenRange().orElse(null));
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
@@ -1007,16 +1186,47 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         Modifier r = new Modifier(n.getTokenRange().orElse(null), n.getKeyword());
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 
     @Override
     public Visitable visit(final SwitchExpr n, final Object arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        NodeList<SwitchEntry> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SwitchExpr r = new SwitchExpr(n.getTokenRange().orElse(null), selector, entries);
         r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    private void copyData(Node source, Node destination) {
+        for (DataKey dataKey : source.getDataKeys()) {
+            destination.setData(dataKey, source.getData(dataKey));
+        }
+    }
+
+    @Override
+    public Visitable visit(final YieldStmt n, final Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        YieldStmt r = new YieldStmt(n.getTokenRange().orElse(null), expression);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final TextBlockLiteralExpr n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        TextBlockLiteralExpr r = new TextBlockLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
         return r;
     }
 }

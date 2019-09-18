@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.observer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -31,13 +30,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PropagatingAstObserverTest {
     @Test
     void verifyPropagation() {
         String code = "class A {  }";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new PropagatingAstObserver() {
             @Override
@@ -51,7 +52,7 @@ class PropagatingAstObserverTest {
 
         FieldDeclaration fieldDeclaration = cu.getClassByName("A").get().addField("String", "foo");
         assertEquals(Arrays.asList(), changes);
-        assertEquals(true, fieldDeclaration.isRegistered(observer));
+        assertTrue(fieldDeclaration.isRegistered(observer));
 
         cu.getClassByName("A").get().getFieldByName("foo").get().getVariables().get(0).setName("Bar");
         assertEquals(Arrays.asList("VariableDeclarator.name changed from foo to Bar"), changes);
