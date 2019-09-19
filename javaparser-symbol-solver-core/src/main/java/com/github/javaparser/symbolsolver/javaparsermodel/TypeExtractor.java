@@ -333,6 +333,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case PREFIX_DECREMENT:
             case POSTFIX_INCREMENT:
             case PREFIX_INCREMENT:
+            case BITWISE_COMPLEMENT:
                 return node.getExpression().accept(this, solveLambdas);
             default:
                 throw new UnsupportedOperationException(node.getOperator().name());
