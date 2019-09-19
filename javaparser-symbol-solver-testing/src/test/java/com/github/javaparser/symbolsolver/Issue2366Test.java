@@ -74,7 +74,7 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
             }            
         }, foundObjs);
         
-		Assertions.assertEquals(oce.size(), foundObjs);
+		Assertions.assertEquals(oce.size(), foundObjs.get());
     }
     
     @Test()
