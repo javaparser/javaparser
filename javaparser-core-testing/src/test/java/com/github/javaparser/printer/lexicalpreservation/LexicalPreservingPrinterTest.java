@@ -1124,8 +1124,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .setBlockComment("block");
         assertEqualsNoEol("public class Foo {" + EOL +
                           "    /*block*/" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
+                          "    void mymethod() {" + EOL +
+                          "    }" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1140,8 +1140,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .setLineComment("line");
         assertEqualsNoEol("public class Foo {" + EOL +
                           "    //line" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
+                          "    void mymethod() {" + EOL +
+                          "    }" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
     
