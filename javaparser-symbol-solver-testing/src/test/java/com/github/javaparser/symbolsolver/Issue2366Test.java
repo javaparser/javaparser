@@ -38,9 +38,6 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
                 new StreamProvider(Files.newInputStream(file))).getResult().get();
         
-        ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
-        
-
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
@@ -70,6 +67,7 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
 		unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
+            	super.visit(exp, arg);
                 ((AtomicInteger)arg).incrementAndGet();
             }            
         }, foundObjs);
