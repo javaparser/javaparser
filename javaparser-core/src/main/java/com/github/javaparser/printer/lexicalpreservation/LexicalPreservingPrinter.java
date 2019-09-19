@@ -135,6 +135,10 @@ public class LexicalPreservingPrinter {
                 if (oldValue == null) {
                     // Find the position of the comment node and put in front of it the comment and a newline
                     int index = nodeText.findChild(observedNode);
+
+                    // Add the same indent depth of the comment to the following node
+                    fixIndentOfMovedNode(nodeText, index);
+
                     nodeText.addChild(index, (Comment) newValue);
                     nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                 } else if (newValue == null) {
@@ -249,13 +253,27 @@ public class LexicalPreservingPrinter {
             return matchingTokens;
         }
 
-
         private boolean isEqualRange(Optional<Range> range1, Optional<Range> range2) {
             if (range1.isPresent() && range2.isPresent()) {
                 return range1.get().equals(range2.get());
             }
 
             return false;
+        }
+
+        private void fixIndentOfMovedNode(NodeText nodeText, int index) {
+            for (int i = index - 1; i >= 0; i--) {
+                TextElement spaceCandidate = nodeText.getTextElement(i);
+                if (!spaceCandidate.isSpaceOrTab()) {
+                    if (spaceCandidate.isNewline() && i != index - 1) {
+                        for (int j = 0; j < (index - 1) - i; j++) {
+                            nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
 
         @Override
