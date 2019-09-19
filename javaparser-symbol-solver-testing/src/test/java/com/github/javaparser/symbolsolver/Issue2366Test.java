@@ -41,6 +41,7 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
+            	super.visit(exp, arg);
                 exp.resolve().getSignature();
             }            
         }, null));
