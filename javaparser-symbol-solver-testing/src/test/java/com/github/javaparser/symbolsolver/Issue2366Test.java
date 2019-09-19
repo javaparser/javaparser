@@ -45,9 +45,36 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
-                System.out.println(exp.resolve().getSignature());
+                exp.resolve().getSignature();
             }            
         }, null));
+    }
+    
+    @Test()
+    void issue2366_2() throws IOException {
+        Path dir = adaptPath("src/test/resources/issue2366");
+        Path file = adaptPath("src/test/resources/issue2366/Test2.java");
+
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
+
+        ParserConfiguration pc = new ParserConfiguration()
+            	                        .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
+            	                        .setLanguageLevel(LanguageLevel.JAVA_8);
+
+        JavaParser javaParser = new JavaParser(pc);
+
+        CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
+                new StreamProvider(Files.newInputStream(file))).getResult().get();
+        
+        ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
+        
+
+        unit.accept(new VoidVisitorAdapter<Object>() {
+            @Override
+            public void visit(ObjectCreationExpr exp, Object arg) {
+                System.out.println(exp.resolve().getSignature());
+            }            
+        }, null);
     }
     
     @Test()
