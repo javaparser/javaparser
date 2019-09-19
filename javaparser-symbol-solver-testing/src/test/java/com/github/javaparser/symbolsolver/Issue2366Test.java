@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,15 +18,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 class Issue2366Test extends AbstractSymbolResolutionTest {
 	
     @Test()
-    void issue2366() throws IOException {
-        Path dir = adaptPath("src/test/resources/issue2366");
+    void testInvalidArgumentNumber() throws IOException {
         Path file = adaptPath("src/test/resources/issue2366/Test.java");
 
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
@@ -51,8 +50,7 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
     }
     
     @Test()
-    void issue2366_2() throws IOException {
-        Path dir = adaptPath("src/test/resources/issue2366");
+    void compareFindAllSizeWithVoidVisitorAdapterSize() throws IOException {
         Path file = adaptPath("src/test/resources/issue2366/Test2.java");
 
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
@@ -66,20 +64,21 @@ class Issue2366Test extends AbstractSymbolResolutionTest {
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
                 new StreamProvider(Files.newInputStream(file))).getResult().get();
         
-        ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
+        List<ObjectCreationExpr> oce = unit.findAll(ObjectCreationExpr.class);
         
-
-        unit.accept(new VoidVisitorAdapter<Object>() {
+        AtomicInteger foundObjs = new AtomicInteger(0);
+		unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
-                System.out.println(exp.resolve().getSignature());
+                ((AtomicInteger)arg).incrementAndGet();
             }            
-        }, null);
+        }, foundObjs);
+        
+		Assertions.assertEquals(oce.size(), foundObjs);
     }
     
     @Test()
-    void issue2370() throws IOException {
-        Path dir = adaptPath("src/test/resources/issue2366");
+    void testFindAllSize() throws IOException {
         Path file = adaptPath("src/test/resources/issue2366/Test2.java");
 
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
