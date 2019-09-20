@@ -261,6 +261,12 @@ public class LexicalPreservingPrinter {
             return false;
         }
 
+        /**
+         * This method inserts new space tokens at the given {@code index}. If a new comment is added to the node
+         * at the position of {@code index}, the new comment and the node will have the same indent.
+         * @param nodeText The text of the node
+         * @param index The position where a new comment will be added to
+         */
         private void fixIndentOfMovedNode(NodeText nodeText, int index) {
             if(index <= 0) {
                 return;
