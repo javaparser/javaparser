@@ -8,6 +8,7 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -1197,6 +1198,29 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                           "void mymethod() {" + EOL +
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));        
+    }
+
+    @Test
+    void testFixIndentOfMovedNode() {
+        try {
+            CompilationUnit compilationUnit = parse(readExample("FixIndentOfMovedNode"));
+            LexicalPreservingPrinter.setup(compilationUnit);
+
+            compilationUnit.getClassByName("ThisIsASampleClass").get()
+                    .getMethodsByName("longerMethod")
+                    .get(0)
+                    .setBlockComment("Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
+
+            compilationUnit.getClassByName("Foo").get()
+                    .getFieldByName("myFoo")
+                    .get()
+                    .setLineComment("sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat");
+
+            String expectedCode = readExample("FixIndentOfMovedNodeExpected");
+            assertEquals(expectedCode, LexicalPreservingPrinter.print(compilationUnit));
+        } catch (IOException ex) {
+            fail("Could not read test code", ex);
+        }
     }
 
     @Test
