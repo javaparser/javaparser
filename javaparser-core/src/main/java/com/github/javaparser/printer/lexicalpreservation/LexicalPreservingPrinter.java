@@ -262,6 +262,10 @@ public class LexicalPreservingPrinter {
         }
 
         private void fixIndentOfMovedNode(NodeText nodeText, int index) {
+            if(index <= 0) {
+                return;
+            }
+
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
                 if (!spaceCandidate.isSpaceOrTab()) {
@@ -269,9 +273,8 @@ public class LexicalPreservingPrinter {
                         for (int j = 0; j < (index - 1) - i; j++) {
                             nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
                         }
-                    } else {
-                        break;
                     }
+                    break;
                 }
             }
         }
