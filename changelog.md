@@ -1,4 +1,4 @@
-Version 3.14159265359
+Version 3.14.159265359
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/151?closed=1)
 
