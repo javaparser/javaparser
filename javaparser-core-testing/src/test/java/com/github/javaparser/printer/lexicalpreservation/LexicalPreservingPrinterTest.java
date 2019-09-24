@@ -8,12 +8,15 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.stmt.IfStmt;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
@@ -1124,8 +1127,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .setBlockComment("block");
         assertEqualsNoEol("public class Foo {" + EOL +
                           "    /*block*/" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
+                          "    void mymethod() {" + EOL +
+                          "    }" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1140,8 +1143,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .setLineComment("line");
         assertEqualsNoEol("public class Foo {" + EOL +
                           "    //line" + EOL +
-                          "void mymethod() {" + EOL +
-                          "}" + EOL +
+                          "    void mymethod() {" + EOL +
+                          "    }" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
     
@@ -1200,6 +1203,29 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void testFixIndentOfMovedNode() {
+        try {
+            CompilationUnit compilationUnit = parse(readExample("FixIndentOfMovedNode"));
+            LexicalPreservingPrinter.setup(compilationUnit);
+
+            compilationUnit.getClassByName("ThisIsASampleClass").get()
+                    .getMethodsByName("longerMethod")
+                    .get(0)
+                    .setBlockComment("Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
+
+            compilationUnit.getClassByName("Foo").get()
+                    .getFieldByName("myFoo")
+                    .get()
+                    .setLineComment("sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat");
+
+            String expectedCode = readExample("FixIndentOfMovedNodeExpected");
+            assertEquals(expectedCode, LexicalPreservingPrinter.print(compilationUnit));
+        } catch (IOException ex) {
+            fail("Could not read test code", ex);
+        }
+    }
+
+    @Test
     void issue1321() {
         CompilationUnit compilationUnit = parse("class X { X() {} private void testme() {} }");
         LexicalPreservingPrinter.setup(compilationUnit);
@@ -1220,5 +1246,28 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .forEach(Node::removeForced);
 
         assertEqualsNoEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+    }
+
+    @Test
+    void testIndentOfCodeBlocks() throws IOException {
+        CompilationUnit compilationUnit = parse(considerExample("IndentOfInsertedCodeBlocks"));
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        IfStmt ifStmt = new IfStmt();
+        ifStmt.setCondition(StaticJavaParser.parseExpression("name.equals(\"foo\")"));
+        BlockStmt blockStmt = new BlockStmt();
+        blockStmt.addStatement(StaticJavaParser.parseStatement("int i = 0;"));
+        blockStmt.addStatement(StaticJavaParser.parseStatement("System.out.println(i);"));
+        blockStmt.addStatement(
+                new IfStmt().setCondition(StaticJavaParser.parseExpression("i < 0"))
+                        .setThenStmt(new BlockStmt().addStatement(StaticJavaParser.parseStatement("i = 0;")))
+        );
+        blockStmt.addStatement(StaticJavaParser.parseStatement("new Object(){};"));
+        ifStmt.setThenStmt(blockStmt);
+        ifStmt.setElseStmt(new BlockStmt());
+
+        compilationUnit.findFirst(BlockStmt.class).get().addStatement(ifStmt);
+        String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
+        assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
     }
 }

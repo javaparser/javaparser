@@ -708,7 +708,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final BooleanLiteralExpr n, final Visitable arg) {
         final BooleanLiteralExpr n2 = (BooleanLiteralExpr) arg;
-        if (!objEquals(n.getValue(), n2.getValue()))
+        if (!objEquals(n.isValue(), n2.isValue()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
