@@ -1,0 +1,15 @@
+public class Example1 {
+    public void foo() {
+        System.out.println("Hello World!");
+        if (name.equals("foo")) {
+            int i = 0;
+            System.out.println(i);
+            if (i < 0) {
+                i = 0;
+            }
+            new Object() {
+            };
+        } else {
+        }
+    }
+}

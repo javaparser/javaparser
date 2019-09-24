@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.stmt.IfStmt;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
@@ -1244,5 +1246,28 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .forEach(Node::removeForced);
 
         assertEqualsNoEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+    }
+
+    @Test
+    void testIndentOfCodeBlocks() throws IOException {
+        CompilationUnit compilationUnit = parse(considerExample("IndentOfInsertedCodeBlocks"));
+        LexicalPreservingPrinter.setup(compilationUnit);
+
+        IfStmt ifStmt = new IfStmt();
+        ifStmt.setCondition(StaticJavaParser.parseExpression("name.equals(\"foo\")"));
+        BlockStmt blockStmt = new BlockStmt();
+        blockStmt.addStatement(StaticJavaParser.parseStatement("int i = 0;"));
+        blockStmt.addStatement(StaticJavaParser.parseStatement("System.out.println(i);"));
+        blockStmt.addStatement(
+                new IfStmt().setCondition(StaticJavaParser.parseExpression("i < 0"))
+                        .setThenStmt(new BlockStmt().addStatement(StaticJavaParser.parseStatement("i = 0;")))
+        );
+        blockStmt.addStatement(StaticJavaParser.parseStatement("new Object(){};"));
+        ifStmt.setThenStmt(blockStmt);
+        ifStmt.setElseStmt(new BlockStmt());
+
+        compilationUnit.findFirst(BlockStmt.class).get().addStatement(ifStmt);
+        String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
+        assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
     }
 }
