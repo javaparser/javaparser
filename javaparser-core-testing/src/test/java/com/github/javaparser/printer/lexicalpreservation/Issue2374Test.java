@@ -20,8 +20,11 @@ class Issue2374Test {
         CompilationUnit cu = StaticJavaParser.parse(
                 "public class Bar {\n" + 
                 "    public void foo() {\n" + 
+                "if (body instanceof ExpressionStmt) {\n" + 
+                "            // Print the expression directly\n" + 
+                "            ((ExpressionStmt) body).getExpression().accept(this, arg);\n" + 
+                "        }\n" +
                 "        System.out.print(\"Hello\");\n" + 
-                "        System.out.print(\"Hello bis\");\n" + 
                 "    }\n" + 
                 "}"
                 );
@@ -36,5 +39,6 @@ class Issue2374Test {
         String result = LexicalPreservingPrinter.print(cu);
         // verify that the LexicalPreservingPrinter don't forget the comment
         assertTrue(result.contains(lineComment));
+        System.out.println(result);
     }
 }
