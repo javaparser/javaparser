@@ -481,8 +481,7 @@ public class LexicalPreservingPrinter {
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
                 Node child = ((LexicalDifferenceCalculator.CsmChild) element).getChild();
-                if (child.getComment().isPresent())
-                    nodeText.addToken(getTokenKind(child.getComment().get()), child.getComment().get().toString());
+                child.getComment().ifPresent(comment -> nodeText.addToken(getTokenKind(comment), comment.toString()));
                 nodeText.addChild(child);
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;

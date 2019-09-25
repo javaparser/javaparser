@@ -22,6 +22,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -317,5 +318,18 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodCallExpr> toMethodCallExpr() {
         return Optional.of(this);
+    }
+    
+    @Override
+    /**
+     * Returns the comment or an Optional.empty if there is no comment on this method call.
+     * In case of MethodCallExpr, Comment are setted in an the parent ExpressionStmt comment attribute. 
+     */
+    public Optional<Comment> getComment() {
+        Optional<Comment> comment = super.getComment();
+        if (!comment.isPresent() && getParentNode().isPresent()) {
+            comment = getParentNode().get().getComment();
+        }
+        return comment;
     }
 }
