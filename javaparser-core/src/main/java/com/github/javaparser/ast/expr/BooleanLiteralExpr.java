@@ -75,9 +75,17 @@ public class BooleanLiteralExpr extends LiteralExpr {
         v.visit(this, arg);
     }
 
+    /**
+     * The code generator likes to generate an "is" getter for boolean, so this here is the generated version,
+     * but "getValue" does the same and makes more sense.
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public boolean getValue() {
+    public boolean isValue() {
         return value;
+    }
+
+    public boolean getValue() {
+        return isValue();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
