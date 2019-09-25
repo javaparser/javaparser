@@ -323,7 +323,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     /**
      * Returns the comment or an Optional.empty if there is no comment on this method call.
-     * In case of MethodCallExpr, Comment are setted in an the parent ExpressionStmt comment attribute. 
+     * In case of MethodCallExpr, Comment are setted in the parent ExpressionStmt comment attribute. 
      */
     public Optional<Comment> getComment() {
         Optional<Comment> comment = super.getComment();
