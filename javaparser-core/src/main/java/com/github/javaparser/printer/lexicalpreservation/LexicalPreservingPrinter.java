@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
+import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -35,6 +36,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
@@ -521,7 +523,9 @@ public class LexicalPreservingPrinter {
 
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+                Node child = ((LexicalDifferenceCalculator.CsmChild) element).getChild();
+                getComment(child).ifPresent(comment -> nodeText.addToken(getTokenKind(comment), comment.toString()));
+                nodeText.addChild(child);
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
@@ -554,6 +558,29 @@ public class LexicalPreservingPrinter {
             );
         }
         return nodeText;
+    }
+    
+    /**
+     * Returns the comment or an Optional.empty if there is no comment on this
+     * method call. In case of MethodCallExpr, Comment are setted in the parent
+     * ExpressionStmt comment attribute.
+     */
+    public static Optional<Comment> getComment(Node node) {
+        Optional<Comment> comment = node.getComment();
+        Optional<Node> parent= node.getParentNode();
+        if (!comment.isPresent() && parent.isPresent() && ExpressionStmt.class.isAssignableFrom(parent.get().getClass())) {
+            comment = parent.get().getComment();
+        }
+        return comment;
+    }
+
+    
+    private static int getTokenKind(Comment comment) {
+        if (comment instanceof LineComment)
+            return Kind.SINGLE_LINE_COMMENT.getKind();
+        if (comment instanceof BlockComment)
+            return Kind.MULTI_LINE_COMMENT.getKind();
+        return Kind.JAVADOC_COMMENT.getKind();
     }
 
     // Visible for testing
