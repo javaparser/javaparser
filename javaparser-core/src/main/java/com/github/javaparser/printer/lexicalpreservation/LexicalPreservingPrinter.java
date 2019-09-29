@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
+import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -35,6 +36,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
@@ -501,12 +503,29 @@ public class LexicalPreservingPrinter {
 
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
+            if (element instanceof CsmIndent) {
+                int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
+                if(calculatedSyntaxModel.elements.size() > indexCurrentElement &&
+                        !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                    for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                        indentation.add(new TokenTextElement(SPACE, " "));
+                    }
+                }
+            } else if (element instanceof CsmUnindent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE && indentation.size() > 0; i++) {
+                    indentation.remove(indentation.size() - 1);
+                }
+            }
+
             if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken) element).isNewLine())) {
                 indentation.forEach(nodeText::addElement);
             }
+
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+                Node child = ((LexicalDifferenceCalculator.CsmChild) element).getChild();
+                getComment(child).ifPresent(comment -> nodeText.addToken(getTokenKind(comment), comment.toString()));
+                nodeText.addChild(child);
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
@@ -516,22 +535,12 @@ public class LexicalPreservingPrinter {
             } else if (element instanceof CsmMix) {
                 CsmMix csmMix = (CsmMix) element;
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
-
-            // Indentation should probably be dealt with before because an indentation has effects also on the
-            // following lines
-
-            } else if (element instanceof CsmIndent) {
-                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
-                    nodeText.addToken(SPACE, " ");
-                }
-            } else if (element instanceof CsmUnindent) {
-                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
-                    if (nodeText.endWithSpace()) {
-                        nodeText.removeLastElement();
-                    }
-                }
             } else {
-                throw new UnsupportedOperationException(element.getClass().getSimpleName());
+                // Indentation should probably be dealt with before because an indentation has effects also on the
+                // following lines
+                if(!(element instanceof CsmIndent) && !(element instanceof CsmUnindent)) {
+                    throw new UnsupportedOperationException(element.getClass().getSimpleName());
+                }
             }
         }
         // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
@@ -549,6 +558,29 @@ public class LexicalPreservingPrinter {
             );
         }
         return nodeText;
+    }
+    
+    /**
+     * Returns the comment or an Optional.empty if there is no comment on this
+     * method call. In case of MethodCallExpr, Comment are setted in the parent
+     * ExpressionStmt comment attribute.
+     */
+    public static Optional<Comment> getComment(Node node) {
+        Optional<Comment> comment = node.getComment();
+        Optional<Node> parent= node.getParentNode();
+        if (!comment.isPresent() && parent.isPresent() && ExpressionStmt.class.isAssignableFrom(parent.get().getClass())) {
+            comment = parent.get().getComment();
+        }
+        return comment;
+    }
+
+    
+    private static int getTokenKind(Comment comment) {
+        if (comment instanceof LineComment)
+            return Kind.SINGLE_LINE_COMMENT.getKind();
+        if (comment instanceof BlockComment)
+            return Kind.MULTI_LINE_COMMENT.getKind();
+        return Kind.JAVADOC_COMMENT.getKind();
     }
 
     // Visible for testing

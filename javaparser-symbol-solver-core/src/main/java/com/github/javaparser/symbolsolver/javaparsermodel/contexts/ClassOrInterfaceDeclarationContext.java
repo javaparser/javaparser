@@ -70,8 +70,8 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public Optional<Value> solveSymbolAsValue(String name) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
-        if (this.getDeclaration().hasVisibleField(name)) {
-            return Optional.of(Value.from(this.getDeclaration().getVisibleField(name)));
+        if (this.getDeclaration().hasField(name)) {
+            return Optional.of(Value.from(this.getDeclaration().getField(name)));
         }
 
         // then to parent
