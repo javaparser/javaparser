@@ -1,6 +1,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -11,6 +12,7 @@ import com.github.javaparser.printer.Printable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
+import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 
@@ -146,6 +148,11 @@ class LexicalDifferenceCalculator {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
             if (child != null) {
+             // Add node comment if needed
+                if (node.getComment().isPresent()) {
+                    elements.add(new CsmChild(node.getComment().get()));
+                    elements.add(new CsmToken(Kind.EOF.getKind(), Utils.EOL));
+                }
                 elements.add(new CsmChild(child));
             }
         } else if (csm instanceof CsmNone) {
