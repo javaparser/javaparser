@@ -191,16 +191,6 @@ class CompilationUnitBuildersTest {
     }
 
     @Test
-    void testAddImportInnerClass() {
-        assertThrows(RuntimeException.class, () -> {
-            Object anonymous = new Object() {
-
-            };
-            cu.addImport(anonymous.getClass());
-        });
-    }
-
-    @Test
     void testAddClass() {
         ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", PRIVATE);
         assertEquals(1, cu.getTypes().size());
