@@ -229,19 +229,19 @@ public class CompilationUnit extends Node {
      * adds an import if not implicitly imported by java (i.e. java.lang) or
      * added before. Asterisk imports overrule the other imports within the same package.
      *
-     * @param unit
      * @param importDeclaration
      * @return <code>this</code>
      */
     public CompilationUnit addImport(ImportDeclaration importDeclaration) {
         if (importDeclaration.isAsterisk()) {
             getImports().removeIf(im -> Objects.equals(
-                    getQualifier(im).get(), getQualifier(importDeclaration).orElse(null)));
+                    getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null)));
         }
         if (!isImplicitImport(importDeclaration) && getImports().stream()
                 .noneMatch(im -> im.equals(importDeclaration) ||
                         (im.isAsterisk() && Objects.equals(
-                                getQualifier(im).get(), getQualifier(importDeclaration).orElse(null))))) {
+                                getImportPackageName(im).get(),
+                                getImportPackageName(importDeclaration).orElse(null))))) {
             getImports().add(importDeclaration);
         }
         return this;
@@ -253,7 +253,7 @@ public class CompilationUnit extends Node {
      */
     private boolean isImplicitImport(ImportDeclaration importDeclaration) {
 
-        Optional<Name> importPackageName = getQualifier(importDeclaration);
+        Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
             if (parseName(JAVA_LANG).equals(importPackageName.get())) {
                 // java.lang is implicitly imported
@@ -271,7 +271,7 @@ public class CompilationUnit extends Node {
         }
     }
 
-    private static Optional<Name> getQualifier(ImportDeclaration importDeclaration) {
+    private static Optional<Name> getImportPackageName(ImportDeclaration importDeclaration) {
         return (importDeclaration.isAsterisk() ? new Name(importDeclaration.getName(), "*")
                 : importDeclaration.getName()).getQualifier();
     }
