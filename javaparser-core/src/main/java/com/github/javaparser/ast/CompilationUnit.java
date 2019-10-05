@@ -48,6 +48,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import static com.github.javaparser.JavaToken.Kind.EOF;
@@ -79,6 +80,8 @@ import com.github.javaparser.ast.Generated;
  * @see Storage
  */
 public class CompilationUnit extends Node {
+
+    private static final String JAVA_LANG = "java.lang";
 
     @OptionalProperty
     private PackageDeclaration packageDeclaration;
@@ -222,11 +225,55 @@ public class CompilationUnit extends Node {
         return this;
     }
 
+    /**
+     * adds an import if not implicitly imported by java (i.e. java.lang) or
+     * added before. Asterisk imports overrule the other imports within the same package.
+     *
+     * @param unit
+     * @param importDeclaration
+     * @return <code>this</code>
+     */
     public CompilationUnit addImport(ImportDeclaration importDeclaration) {
-        if (getImports().stream().noneMatch(im -> im.toString().equals(importDeclaration.toString()))) {
+        if (importDeclaration.isAsterisk()) {
+            getImports().removeIf(im -> Objects.equals(
+                    getQualifier(im).get(), getQualifier(importDeclaration).orElse(null)));
+        }
+        if (!isImplicitImport(importDeclaration) && getImports().stream()
+                .noneMatch(im -> im.equals(importDeclaration) ||
+                        (im.isAsterisk() && Objects.equals(
+                                getQualifier(im).get(), getQualifier(importDeclaration).orElse(null))))) {
             getImports().add(importDeclaration);
         }
         return this;
+    }
+
+    /**
+     * @param importDeclaration
+     * @return <code>true</code>, if the import is implicit 
+     */
+    private boolean isImplicitImport(ImportDeclaration importDeclaration) {
+
+        Optional<Name> importPackageName = getQualifier(importDeclaration);
+        if (importPackageName.isPresent()) {
+            if (parseName(JAVA_LANG).equals(importPackageName.get())) {
+                // java.lang is implicitly imported
+                return true;
+            }
+            if (packageDeclaration != null) {
+                // the import is within the same package
+                Name currentPackageName = packageDeclaration.getName();
+                return currentPackageName.equals(importPackageName.get());
+            }
+            return false;
+        } else {
+            // imports of unnamed package are not allowed
+            return true;
+        }
+    }
+
+    private static Optional<Name> getQualifier(ImportDeclaration importDeclaration) {
+        return (importDeclaration.isAsterisk() ? new Name(importDeclaration.getName(), "*")
+                : importDeclaration.getName()).getQualifier();
     }
 
     /**
@@ -308,18 +355,17 @@ public class CompilationUnit extends Node {
      *
      * @param clazz the class to import
      * @return this, the {@link CompilationUnit}
-     * @throws RuntimeException if clazz is an anonymous or local class
+     * @throws IllegalArgumentException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
         if (clazz.isArray()) {
             return addImport(clazz.getComponentType());
         }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || "java.lang".equals(clazz.getPackage().getName()))
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName()))
             return this;
-        else if (clazz.isMemberClass())
-            return addImport(clazz.getName().replace("$", "."));
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
-            throw new RuntimeException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
+            throw new IllegalArgumentException(
+                    clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getName());
     }
 
@@ -337,7 +383,7 @@ public class CompilationUnit extends Node {
         if (isStatic) {
             i.append("static ");
         }
-        i.append(name);
+        i.append(name.replace("$", "."));
         if (isAsterisk) {
             i.append(".*");
         }

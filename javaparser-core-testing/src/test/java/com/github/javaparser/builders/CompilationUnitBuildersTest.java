@@ -21,36 +21,110 @@
 
 package com.github.javaparser.builders;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import org.junit.jupiter.api.Test;
-
-import java.lang.annotation.ElementType;
-import java.util.List;
-import java.util.Map;
-
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.annotation.ElementType;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.expr.Name;
+import org.junit.jupiter.api.Test;
 
 class CompilationUnitBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     void testAddImport() {
+        // duplicate imports
         cu.addImport(Map.class);
         cu.addImport(Map.class);
+        cu.addImport(Map.class.getName());
         cu.addImport(List.class);
         assertEquals(2, cu.getImports().size());
-        cu.addImport("myImport");
+
+        cu.addImport(com.github.javaparser.StaticJavaParser.class.getName() + ".parseImport", true, false);
         assertEquals(3, cu.getImports().size());
+
         assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
         assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
-        assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+        assertEquals("import static " + com.github.javaparser.StaticJavaParser.class.getName() + ".parseImport;" + EOL,
+                cu.getImport(2).toString());
+    }
+
+    @Test
+    void ignoreJavaLangImports() {
+        cu.addImport("java.lang.Long");
+        cu.addImport("java.lang.*");
+        cu.addImport(String.class);
+        assertEquals(0, cu.getImports().size());
+    }
+
+    @Test
+    void ignoreImportsWithinSamePackage() {
+        cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("one"), "two")));
+        cu.addImport("one.two.IgnoreImportWithinSamePackage");
+        assertEquals(0, cu.getImports().size());
+        cu.addImport("one.two.three.DoNotIgnoreImportWithinSubPackage");
+        assertEquals(1, cu.getImports().size());
+        assertEquals("import one.two.three.DoNotIgnoreImportWithinSubPackage;" + EOL, cu.getImport(0).toString());
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionOnImportingAnonymousClass() {
+        assertThrows(IllegalArgumentException.class, () -> cu.addImport(new Comparator<Long>() {
+
+            @Override
+            public int compare(Long o1, Long o2) {
+                return o1.compareTo(o2);
+            }
+        }.getClass()));
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionOnImportingLocalClass() {
+        class LocalClass implements Comparator<Long> {
+
+            @Override
+            public int compare(Long o1, Long o2) {
+                return o1.compareTo(o2);
+            }
+        }
+        Class<?> localClass = LocalClass.class;
+        assertThrows(IllegalArgumentException.class, () -> cu.addImport(localClass));
+    }
+
+    @Test
+    void ignoreImportsOfDefaultPackageClasses() {
+        cu.addImport("MyImport");
+        assertEquals(0, cu.getImports().size());
+    }
+
+    @Test
+    void duplicateByAsterisk() {
+        // check asterisk imports
+        cu.addImport("my", false, true);
+        cu.addImport("my.Import");
+        cu.addImport("my.AnotherImport");
+        cu.addImport("my.other.Import");
+        assertEquals(2, cu.getImports().size());
+        assertEquals("import my.*;" + EOL, cu.getImport(0).toString());
+        assertEquals("import my.other.Import;" + EOL, cu.getImport(1).toString());
+        cu.addImport("my.other.*");
+        assertEquals(2, cu.getImports().size());
+        assertEquals("import my.*;" + EOL, cu.getImport(0).toString());
+        assertEquals("import my.other.*;" + EOL, cu.getImport(1).toString());
     }
 
     @Test
@@ -63,7 +137,7 @@ class CompilationUnitBuildersTest {
     void typesInSubPackagesOfTheJavaLangPackageRequireExplicitImports() {
         cu.addImport(ElementType.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import java.lang.annotation.ElementType;"+ EOL, cu.getImport(0).toString());
+        assertEquals("import java.lang.annotation.ElementType;" + EOL, cu.getImport(0).toString());
     }
 
     @Test
@@ -119,12 +193,12 @@ class CompilationUnitBuildersTest {
     @Test
     void testAddImportInnerClass() {
         assertThrows(RuntimeException.class, () -> {
-            Object anonymous = new Object(){
+            Object anonymous = new Object() {
 
             };
             cu.addImport(anonymous.getClass());
-    });
-}
+        });
+    }
 
     @Test
     void testAddClass() {
