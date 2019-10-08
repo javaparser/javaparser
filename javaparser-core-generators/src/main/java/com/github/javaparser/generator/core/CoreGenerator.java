@@ -3,6 +3,7 @@ package com.github.javaparser.generator.core;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
+import com.github.javaparser.generator.core.other.BndGenerator;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
@@ -74,5 +75,6 @@ public class CoreGenerator {
         new NodeModifierGenerator(sourceRoot).generate();
         new AcceptGenerator(sourceRoot).generate();
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
+        new BndGenerator(sourceRoot).generate();
     }
 }
