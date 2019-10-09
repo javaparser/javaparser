@@ -26,14 +26,13 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Generates the bnd.bnd file in javaparser-core.
  */
 public class BndGenerator extends Generator {
-
-    private final Set<String> packages = new HashSet<>();
 
     public BndGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
@@ -42,38 +41,33 @@ public class BndGenerator extends Generator {
     @Override
     public void generate() throws IOException {
         Log.info("Running %s", () -> getClass().getSimpleName());
-        File root = sourceRoot.getRoot().toFile();
-        visit(root, "");
-        List<String> sortedPackages = new ArrayList<>(packages);
-        sortedPackages.sort(String::compareTo);
-        File projectRoot = root.getParentFile().getParentFile().getParentFile();
-        File template = new File(projectRoot, "bnd.bnd.template");
-        File output = new File(projectRoot, "bnd.bnd");
+        Path root = sourceRoot.getRoot();
+        Path projectRoot = root.getParent().getParent().getParent();
         String lineSeparator = System.getProperty("line.separator");
-        StringBuilder packagesList = new StringBuilder("\\" + lineSeparator);
-        boolean first = true;
-        for(String pkg : sortedPackages) {
-            if(!first) {
-                packagesList.append(", \\").append(lineSeparator);
-            }
-            packagesList.append("    ").append(pkg);
-            first = false;
+        String packagesList = Files.walk(root)
+                .filter(Files::isRegularFile)
+                .map(path -> getPackageName(root, path))
+                .distinct()
+                .sorted()
+                .reduce(null, (packageList, packageName) ->
+                        concatPackageName(packageName, packageList, lineSeparator));
+        Path template = projectRoot.resolve("bnd.bnd.template");
+        Path output = projectRoot.resolve("bnd.bnd");
+        try(PrintWriter writer = new PrintWriter(Files.newBufferedWriter(output))) {
+            Files.lines(template)
+                    .map(l -> l.replace("{exportedPackages}", packagesList))
+                    .forEach(writer::println);
         }
-        try(BufferedReader reader = new BufferedReader(new FileReader(template))) {
-            try(PrintWriter writer = new PrintWriter(new FileWriter(output))) {
-                reader.lines().forEach(l -> writer.println(l.replace("{exportedPackages}", packagesList)));
-            }
-        }
-        Log.info("Written " + output.getAbsolutePath());
+        Log.info("Written " + output);
     }
 
-    private void visit(File file, String packageName) {
-        for(File child : Objects.requireNonNull(file.listFiles())) {
-            if(child.isFile() && child.getName().endsWith(".java")) {
-                packages.add(packageName);
-            } else if(child.isDirectory()) {
-                visit(child, (packageName.isEmpty() ? "" : packageName + ".") + child.getName());
-            }
-        }
+    private String concatPackageName(String packageName, String packageList, String lineSeparator) {
+        return (packageList == null ?
+                ("\\" + lineSeparator) :
+                (packageList + ", \\" + lineSeparator)) + "    " + packageName;
+    }
+
+    private static String getPackageName(Path root, Path path) {
+        return root.relativize(path.getParent()).toString().replace(File.separatorChar, '.');
     }
 }
