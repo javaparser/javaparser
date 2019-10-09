@@ -366,7 +366,7 @@ public class CompilationUnit extends Node {
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
             throw new IllegalArgumentException(
                     clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
-        return addImport(clazz.getName());
+        return addImport(clazz.getCanonicalName());
     }
 
     /**
@@ -379,11 +379,14 @@ public class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
+        if (name == null) {
+          return this;
+        }
         final StringBuilder i = new StringBuilder("import ");
         if (isStatic) {
             i.append("static ");
         }
-        i.append(name.replace("$", "."));
+        i.append(name);
         if (isAsterisk) {
             i.append(".*");
         }
