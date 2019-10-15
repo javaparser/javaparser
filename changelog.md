@@ -1,3 +1,13 @@
+Version 3.15.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/154?closed=1)
+
+Version 3.15.0
+------------------
+- The funny "PI" version number messed up the release order in the maven site,
+    so here is a new minor release.
+[issues resolved](https://github.com/javaparser/javaparser/milestone/153?closed=1)
+
 Version 3.14.16
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/152?closed=1)
@@ -6,7 +16,7 @@ Version 3.14.159265359
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/151?closed=1)
 
-Version 3.14.14
+Version 3.14.14 
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/150?closed=1)
 
