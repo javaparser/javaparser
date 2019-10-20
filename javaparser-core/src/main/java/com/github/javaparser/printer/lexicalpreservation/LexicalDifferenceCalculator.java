@@ -1,16 +1,19 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.Printable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
+import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 
@@ -146,6 +149,19 @@ class LexicalDifferenceCalculator {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
             if (child != null) {
+                // fix issue #2374
+                // Add node comment if needed (it's not very elegant but it works)
+                // We need to be sure that the node is an ExpressionStmt because we can meet
+                // this class definition
+                // a line comment <This is my class, with my comment> followed by
+                // class A {}
+                // In this case keyworld [class] is considered as a token and [A] is a child element
+                // So if we don't care that the node is an ExpressionStmt we could try to generate a wrong definition
+                // like this [class // This is my class, with my comment A {}]
+                if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
+                    elements.add(new CsmChild(node.getComment().get()));
+                    elements.add(new CsmToken(Kind.EOF.getKind(), Utils.EOL));
+                }
                 elements.add(new CsmChild(child));
             }
         } else if (csm instanceof CsmNone) {
