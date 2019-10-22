@@ -66,7 +66,7 @@ public class JavadocBlockTag {
         private String keyword;
 
         boolean hasName() {
-            return this == PARAM;
+            return this == PARAM || this == EXCEPTION || this == THROWS;
         }
 
         static Type fromName(String tagName) {
