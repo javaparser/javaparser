@@ -29,6 +29,8 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -102,12 +104,22 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     public ResolvedType getReturnType() {
         try {
             if (ctMethod.getGenericSignature() != null) {
-                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature()).getReturnType();
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toMethodSignature(
+                    ctMethod.getGenericSignature()).getReturnType();
                 return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, this);
             } else {
-                return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
+                try {
+                    final CtClass methodReturnType = ctMethod.getReturnType();
+                    return JavassistFactory.typeUsageFor(methodReturnType, typeSolver);
+                } catch (NotFoundException e) {
+                    final String returnTypeDesc = ctMethod.getMethodInfo().getDescriptor();
+                    String returnTypeClassRefPath = toClassRefPath(returnTypeDesc);
+                    final ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver
+                        .solveType(returnTypeClassRefPath);
+                    return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+                }
             }
-        } catch (NotFoundException | BadBytecode e) {
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -197,5 +209,33 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public Optional<MethodDeclaration> toAst() {
         return Optional.empty();
+    }
+
+    /**
+     * copy from javassist.bytecode.Descriptor#toCtClass(javassist.ClassPool, java.lang.String, int,
+     * javassist.CtClass[], int)
+     *
+     * @param desc like: ()Lpersonal/leo/SomeClass;
+     * @return personal.leo.SomeClass
+     */
+    private String toClassRefPath(String desc) {
+        int i = desc.indexOf(')');
+        int i2;
+        if (i < 0) {
+            throw new RuntimeException("parse descriptor error:" + desc);
+        }
+        i += 1;
+        char c = desc.charAt(i);
+        int arrayDim = 0;
+        while (c == '[') {
+            ++arrayDim;
+            c = desc.charAt(++i);
+        }
+        if (c == 'L') {
+            i2 = desc.indexOf(';', ++i);
+            return desc.substring(i, i2++).replace('/', '.');
+        }
+
+        throw new RuntimeException("parse descriptor error:" + desc);
     }
 }
