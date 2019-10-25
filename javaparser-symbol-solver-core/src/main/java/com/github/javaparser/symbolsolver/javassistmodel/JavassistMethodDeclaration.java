@@ -30,10 +30,10 @@ import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolution
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
+import javassist.bytecode.MethodInfo;
 import javassist.bytecode.SignatureAttribute;
 
 import java.lang.reflect.Modifier;
@@ -104,16 +104,21 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     public ResolvedType getReturnType() {
         try {
             if (ctMethod.getGenericSignature() != null) {
-                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toMethodSignature(
-                    ctMethod.getGenericSignature()).getReturnType();
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute
+                    .toMethodSignature(ctMethod.getGenericSignature())
+                    .getReturnType();
                 return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, this);
             } else {
                 try {
-                    final CtClass methodReturnType = ctMethod.getReturnType();
-                    return JavassistFactory.typeUsageFor(methodReturnType, typeSolver);
+                    return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
                 } catch (NotFoundException e) {
-                    final String returnTypeDesc = ctMethod.getMethodInfo().getDescriptor();
-                    String returnTypeClassRefPath = toClassRefPath(returnTypeDesc);
+                    /*
+                        "ctMethod.getReturnType()" will use "declaringClass.getClassPool()" to solve the returnType,
+                        but in some case ,the returnType cannot solve by "declaringClass.getClassPool()".
+                        In this case, we try to use "typeSolver" to solve "ctMethod.getReturnType()"
+                        See https://github.com/javaparser/javaparser/pull/2398
+                     */
+                    final String returnTypeClassRefPath = toClassRefPath(ctMethod.getMethodInfo());
                     final ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver
                         .solveType(returnTypeClassRefPath);
                     return new ReferenceTypeImpl(typeDeclaration, typeSolver);
@@ -215,12 +220,19 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
      * copy from javassist.bytecode.Descriptor#toCtClass(javassist.ClassPool, java.lang.String, int,
      * javassist.CtClass[], int)
      *
-     * @param desc like: ()Lpersonal/leo/SomeClass;
-     * @return personal.leo.SomeClass
+     * convert methodInfo.getDescriptor() to class reference path
+     * e.g: convert "()Ljava/sql/Driver" to "java.sql.Driver"
+     *
+     * @param methodInfo
+     * @return class reference path,e.g: "java.sql.Driver"
      */
-    private String toClassRefPath(String desc) {
+    private String toClassRefPath(MethodInfo methodInfo) {
+        final String desc = methodInfo.getDescriptor();//e.g: ()Ljava/sql/Driver;
+
         int i = desc.indexOf(')');
         int i2;
+        String classRefPath = null;//e.g: java.sql.Driver
+
         if (i < 0) {
             throw new RuntimeException("parse descriptor error:" + desc);
         }
@@ -233,9 +245,18 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
         }
         if (c == 'L') {
             i2 = desc.indexOf(';', ++i);
-            return desc.substring(i, i2++).replace('/', '.');
+            classRefPath = desc.substring(i, i2++).replace('/', '.');
         }
 
-        throw new RuntimeException("parse descriptor error:" + desc);
+        if (arrayDim > 0) {
+            StringBuffer sbuf = new StringBuffer(classRefPath);
+            while (arrayDim-- > 0) {
+                sbuf.append("[]");
+            }
+
+            classRefPath = sbuf.toString();
+        }
+
+        return classRefPath;
     }
 }
