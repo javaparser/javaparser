@@ -39,6 +39,12 @@ class JavadocParserTest {
     }
 
     @Test
+    void parseEmptySingleLine() {
+        Assertions.assertEquals(new Javadoc(JavadocDescription.parseText("")),
+                JavadocParser.parse(EOL));
+    }
+
+    @Test
     void parseSingleLineWithSpacing() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The line number of the first character of this Token.")),
                 JavadocParser.parse(" The line number of the first character of this Token. "));

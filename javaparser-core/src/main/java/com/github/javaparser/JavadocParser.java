@@ -101,6 +101,10 @@ class JavadocParser {
 
     private static List<String> cleanLines(String content) {
         String[] lines = content.split(EOL);
+        if (lines.length == 0) {
+            return Collections.emptyList();
+        }
+
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
             int asteriskIndex = startsWithAsterisk(l);
             if (asteriskIndex == -1) {
