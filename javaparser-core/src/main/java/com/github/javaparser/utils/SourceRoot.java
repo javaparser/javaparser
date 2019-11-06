@@ -246,7 +246,7 @@ public class SourceRoot {
     private FileVisitResult callback(Path absolutePath, ParserConfiguration configuration, Callback callback) throws IOException {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
-        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
