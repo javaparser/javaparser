@@ -372,7 +372,7 @@ public class SourceRoot {
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
     public SourceRoot parseParallelized(String startPackage, Callback callback) throws IOException {
-        return parseParallelized(startPackage, new ParserConfiguration(), callback);
+        return parseParallelized(startPackage, this.parserConfiguration, callback);
     }
 
     /**
@@ -383,7 +383,7 @@ public class SourceRoot {
      * this is much more memory efficient, but saveAll() won't work.
      */
     public SourceRoot parseParallelized(Callback callback) throws IOException {
-        return parseParallelized("", new ParserConfiguration(), callback);
+        return parseParallelized("", this.parserConfiguration, callback);
     }
 
     /**
