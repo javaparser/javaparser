@@ -1,3 +1,10 @@
+Version 3.15.5
+------------------
+* BREAKING: bugs have been fixed in how SourceRoot configures parsing,
+so behaviour may change (which can be fixed by setting configuration on SourceRoot correctly.)
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/158?closed=1)
+
 Version 3.15.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/157?closed=1)
