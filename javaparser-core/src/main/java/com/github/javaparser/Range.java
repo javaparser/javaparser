@@ -30,6 +30,15 @@ public class Range {
     public final Position begin;
     public final Position end;
 
+    /**
+     * A range of characters in a source file, from "begin" to "end".
+     * This range is inclusive of the characters at the "begin" and "end" positions.
+     * <p>
+     * Note that if the given parameters are reversed (i.e. the end is earlier than begin, then the values are swapped.
+     *
+     * @param begin The starting position of the range.
+     * @param end   The end position of the range.
+     */
     public Range(Position begin, Position end) {
         if (begin == null) {
             throw new IllegalArgumentException("begin can't be null");
@@ -37,8 +46,15 @@ public class Range {
         if (end == null) {
             throw new IllegalArgumentException("end can't be null");
         }
-        this.begin = begin;
-        this.end = end;
+
+        // Force `begin` to be the position that is earliest within the document:
+        if (begin.isBefore(end)) {
+            this.begin = begin;
+            this.end = end;
+        } else {
+            this.begin = end;
+            this.end = begin;
+        }
     }
 
     public static Range range(Position begin, Position end) {
