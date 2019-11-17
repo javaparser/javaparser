@@ -126,8 +126,6 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
         return super.remove(node);
     }
 
-    public abstract String asString();
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Type clone() {

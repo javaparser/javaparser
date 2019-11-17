@@ -111,6 +111,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     /**
      * @return the complete qualified name. Only the identifiers and the dots, so no comments or whitespace.
      */
+    @Override
     public String asString() {
         if (qualifier != null) {
             return qualifier.asString() + "." + identifier;

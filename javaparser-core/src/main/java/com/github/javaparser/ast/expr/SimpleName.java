@@ -100,6 +100,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return super.remove(node);
     }
 
+    @Override
     public String asString() {
         return identifier;
     }

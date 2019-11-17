@@ -172,6 +172,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     /**
      * @return the final string value of this text block after all processing.
      */
+    @Override
     public String asString() {
         return translateEscapes();
     }

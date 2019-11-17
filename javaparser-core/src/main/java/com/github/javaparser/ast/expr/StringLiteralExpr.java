@@ -104,6 +104,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     /**
      * @return the unescaped literal value
      */
+    @Override
     public String asString() {
         return unescapeJava(value);
     }
