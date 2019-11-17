@@ -588,6 +588,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
         assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier.N").get().asReferenceType().getQualifiedName());
+
+        assertEquals(expcetedInterfaceCount, i);
     }
 
     @Test
