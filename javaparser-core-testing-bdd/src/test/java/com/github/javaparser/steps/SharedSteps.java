@@ -37,11 +37,11 @@ import java.net.URL;
 import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SharedSteps {
 

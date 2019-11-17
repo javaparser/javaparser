@@ -36,8 +36,8 @@ import java.net.URL;
 
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class PrettyPrintingSteps {

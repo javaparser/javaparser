@@ -45,9 +45,7 @@ import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition
 import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class ParsingSteps {
 

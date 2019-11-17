@@ -24,6 +24,7 @@ package com.github.javaparser;
 import com.github.javaparser.steps.CommentParsingSteps;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
+
 public class CommentParsingTest extends BasicJBehaveTest {
 
     @Override

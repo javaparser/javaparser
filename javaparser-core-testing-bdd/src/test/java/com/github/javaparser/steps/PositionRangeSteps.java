@@ -48,7 +48,7 @@ public class PositionRangeSteps {
         secondRange = null;
     }
     /*
-	 * Given steps
+     * Given steps
      */
 
     @Given("the position $line, $column")
@@ -62,7 +62,7 @@ public class PositionRangeSteps {
     }
 
     /*
-	 * When steps
+     * When steps
      */
 
     @When("I compare to position $line, $column")
@@ -76,7 +76,7 @@ public class PositionRangeSteps {
     }
 
     /*
-	 * Then steps
+     * Then steps
      */
 
     @Then("the positions are equal")

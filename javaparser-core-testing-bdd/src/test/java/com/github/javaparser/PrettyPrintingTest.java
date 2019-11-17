@@ -24,6 +24,7 @@ package com.github.javaparser;
 import com.github.javaparser.steps.PrettyPrintingSteps;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
+
 public class PrettyPrintingTest extends BasicJBehaveTest {
 
     @Override
