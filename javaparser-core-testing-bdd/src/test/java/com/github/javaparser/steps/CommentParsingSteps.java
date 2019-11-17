@@ -274,7 +274,7 @@ public class CommentParsingSteps {
     public void thenClassOrphanCommentIs(int classPosition, int commentPosition, String expectedContent) {
         TypeDeclaration<?> classUnderTest = compilationUnit.getType(classPosition - 1);
         Comment commentUnderTest = classUnderTest.getOrphanComments().get(commentPosition - 1);
-        assertThat(commentUnderTest.getContent(), is(expectedContent));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("method $methodPosition in class $classPosition is commented \"$expectedContent\"")
