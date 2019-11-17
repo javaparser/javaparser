@@ -69,10 +69,10 @@ class /*Comment1*/ A {
 }
 When the class is parsed by the Java parser
 Then class 1 is not commented
-Then class 1 orphan comment 1 is "Comment2"
+Then class 1 orphan comment 1 is "comment2"
 
 
-Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser
+Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser #1
 
 Given the class:
 package com.github.javaparser.ast.comments;
@@ -110,7 +110,7 @@ Then block statement in method 2 in class 1 has 4 orphan comments
 
 
 
-Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser
+Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser #2
 
 Given the class:
 package com.github.javaparser.ast.comments;
