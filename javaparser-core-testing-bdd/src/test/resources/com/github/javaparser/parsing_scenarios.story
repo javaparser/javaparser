@@ -55,7 +55,7 @@ Scenario: The same class source is parsed by two different compilation units and
 Given a CompilationUnit
 Given a second CompilationUnit
 When the following source is parsed:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class ClassEquality {
 
     public void aMethod(){
@@ -64,7 +64,7 @@ public class ClassEquality {
     }
 }
 When the following sources is parsed by the second CompilationUnit:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class ClassEquality {
 
     public void aMethod(){
@@ -83,7 +83,7 @@ Scenario: Two different class sources are parsed by two different compilation un
 Given a CompilationUnit
 Given a second CompilationUnit
 When the following source is parsed:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class ClassEquality {
 
     public void aMethod(){
@@ -92,7 +92,7 @@ public class ClassEquality {
     }
 }
 When the following sources is parsed by the second CompilationUnit:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class DifferentClass {
 
     public void aMethod(){
@@ -111,7 +111,7 @@ Scenario: Classes that only differ by comments should not be equal or have the s
 Given a CompilationUnit
 Given a second CompilationUnit
 When the following source is parsed:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class ClassEquality {
 
     public void aMethod(){
@@ -120,7 +120,7 @@ public class ClassEquality {
     }
 }
 When the following sources is parsed by the second CompilationUnit:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 public class ClassEquality {
 
     public void aMethod(){
@@ -138,7 +138,7 @@ Scenario: A class with a colon in the annoation value is parsed by the Java Pars
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast;
+package com.github.javaparser.ast;
 import org.junit.Test;
 public class Issue37 {
     public static @interface SomeAnnotation {

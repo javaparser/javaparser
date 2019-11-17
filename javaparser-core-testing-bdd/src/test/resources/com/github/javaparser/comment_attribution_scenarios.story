@@ -1,7 +1,7 @@
 Scenario: A Class With Line Comments is processed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithLineComments {
 
@@ -26,7 +26,7 @@ Then block statement in method 1 in class 1 has 3 orphan comments
 Scenario: A Class With Line Comments is processed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 /**Javadoc associated with the class*/
 public class ClassWithOrphanComments {
@@ -75,7 +75,7 @@ Then class 1 orphan comment 1 is "Comment2"
 Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithLineCommentsInMultipleMethods {
 
@@ -113,7 +113,7 @@ Then block statement in method 2 in class 1 has 4 orphan comments
 Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithLineCommentInsideBlockComment {
 
@@ -141,7 +141,7 @@ Then class 1 orphan comment 1 is "// Line Comment put immediately after block co
 Scenario: A Class With Line Comments on Fields is parsed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class Issue43 {
     //Case 1
@@ -167,7 +167,7 @@ Then variable 1 value of field 2 in class 1 is commented "field2"
 Scenario: Another Class With Line Comments on Fields is parsed by the Java Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class Issue43variant {
     private String field1 = null; //field1
@@ -188,7 +188,7 @@ Then variable 1 value of field 2 in class 1 is commented "field2"
 Scenario: A Class With Mixed Comments on Fields is parsed by the Java Parser
 
 Given the class:
-package japa.parser.javacc;
+package com.github.javaparser.javacc;
 public class Teste {
     //line comment1
     int a = 0; //line comment2
@@ -275,7 +275,7 @@ Scenario: A Class With Line Comments is processed by the Java Parser
 
 Given the class:
 /*CompilationUnitComment*/
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithMixedStyleComments {
     // line comment

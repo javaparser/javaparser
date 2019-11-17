@@ -1,7 +1,7 @@
 Scenario: A Class With Line Comments is processed by the Comments Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithLineComments {
 
@@ -28,7 +28,7 @@ Then the line comments have the following positions:
 Scenario: A Class With Block Comments is processed by the Comments Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 /* comment which is not attributed to the class, it floats around as an orphan */
 /* comment to a class */
@@ -64,7 +64,7 @@ Then the block comments have the following positions:
 Scenario: A Class With Javadoc Comments is processed by the Comments Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 /** a proper javadoc comment */
 public class ClassWithJavadocComments {
@@ -88,7 +88,7 @@ Then the Javadoc comments have the following positions:
 Scenario: A Class With Orphan Comments is processed by the Comments Parser
 
 Given the class:
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 /**Javadoc associated with the class*/
 public class ClassWithOrphanComments {
@@ -116,7 +116,7 @@ Scenario: A Class With Orphan Comments is processed by the Comments Parser
 
 Given the class:
 /*CompilationUnitComment*/
-package japa.parser.comments;
+package com.github.javaparser.ast.comments;
 
 public class ClassWithMixedStyleComments {
     // line comment

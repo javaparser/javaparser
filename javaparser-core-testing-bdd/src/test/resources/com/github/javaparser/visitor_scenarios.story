@@ -3,7 +3,7 @@ Scenario: A class that is replicated using a CloneVisitor should be equal to the
 Given a CompilationUnit
 Given a second CompilationUnit
 When the following source is parsed:
-package japa.parser;
+package com.github.javaparser;
 public class ClassEquality {
 
     public void aMethod(){
@@ -20,13 +20,13 @@ Scenario: A classes variable name is changed to uppercase VoidVisitorAdapter
 Given a CompilationUnit
 Given a VoidVisitorAdapter with a visit method that changes variable names to uppercase
 When the following source is parsed:
-package japa.parser;
+package com.github.javaparser;
 public class ToUpperClass {
     private int zero = 0;
 }
 When the CompilationUnit is visited by the to uppercase visitor
 Then the expected source should be:
-package japa.parser;
+package com.github.javaparser;
 public class ToUpperClass {
     private int ZERO = 0;
 }
@@ -36,7 +36,7 @@ Scenario: A class with a try statement is visited using by a VoidVisitorAdapter
 Given a CompilationUnit
 Given a VoidVisitorAdapter with a visit method and collects the variable names
 When the following source is parsed:
-package japa.parser;
+package com.github.javaparser;
 public class ToUpperClass {
     public void aMethod(){
         try {
@@ -54,7 +54,7 @@ Scenario: A class with a try statement is visited using by a GenericVisitorAdapt
 Given a CompilationUnit
 Given a GenericVisitorAdapter with a visit method that returns variable names
 When the following source is parsed:
-package japa.parser;
+package com.github.javaparser;
 public class ToUpperClass {
     public void aMethod(){
         try {

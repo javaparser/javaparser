@@ -3,10 +3,10 @@ Scenario: Check a whole lot of things at once that should be separate tests
 Given the class in the file "JavaConcepts.java"
 When the class is parsed by the Java parser
 Then it is printed as:
-package japa.bdd.samples;
+package com.github.javaparser.samples;
 
 import com.github.javaparser.JavaParser;
-import japa.parser.ParseException;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.Ignore;
 import java.io.*;

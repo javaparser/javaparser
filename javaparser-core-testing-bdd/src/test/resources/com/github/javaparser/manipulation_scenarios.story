@@ -30,14 +30,14 @@ Then all the VariableDeclarations parent is the TryStmt
 Scenario: Creating a complete CompilationUnit
 
 Given a CompilationUnit
-When the package declaration is set to "japa.parser.ast.manipulation"
+When the package declaration is set to "com.github.javaparser.ast.manipulation"
 When a public class called "CreateClass" is added to the CompilationUnit
 When a public static method called "main" returning void is added to class 1 in the compilation unit
 When String varargs called "args" are added to method 1 in class 1
 When a BlockStmt is added to method 1 in class 1
 When System.out.println("Hello World!"); is added to the body of method 1 in class 1
 Then the expected source should be:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class CreateClass {
 
@@ -51,7 +51,7 @@ Scenario: Change the name of a method to be uppercase
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class UpdateMethod {
 
@@ -67,7 +67,7 @@ Scenario: Change the name of all methods to be uppercase using a visitor
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class UpdateMethod {
 
@@ -85,7 +85,7 @@ Scenario: Add int arguments to a method
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class UpdateMethod {
 
@@ -103,7 +103,7 @@ Scenario: Add int arguments to all methods using a visitor
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class UpdateMethod {
 
@@ -123,7 +123,7 @@ Scenario: Clone a compilation unit
 
 Given a CompilationUnit
 When the following source is parsed:
-package japa.parser.ast.manipulation;
+package com.github.javaparser.ast.manipulation;
 
 public class UpdateMethod {
 

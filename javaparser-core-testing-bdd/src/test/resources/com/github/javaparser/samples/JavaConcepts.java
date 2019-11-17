@@ -1,8 +1,8 @@
-package japa.bdd.samples;
+package com.github.javaparser.samples;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
-import japa.parser.ParseException;
 import org.junit.Ignore;
 
 import java.io.*;
