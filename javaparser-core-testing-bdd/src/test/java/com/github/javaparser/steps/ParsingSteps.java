@@ -44,10 +44,10 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static java.lang.String.format;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ParsingSteps {
 
@@ -166,7 +166,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassBlockStatementIsNull(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         BlockStmt blockStmt = lambdaExpr.getBody().asBlockStmt();
-        assertEquals(true, blockStmt.getStatements().isEmpty());
+        assertThat(blockStmt.getStatements().isEmpty(), is(true));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition has parameters with non-null type")
@@ -204,7 +204,7 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIsScope(int statementPosition, int methodPosition,
                                                                      int classPosition, String expectedName) {
         ExpressionStmt statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition).asExpressionStmt();
-        assertEquals(1, statementUnderTest.findAll(MethodReferenceExpr.class).size());
+        assertThat(statementUnderTest.findAll(MethodReferenceExpr.class).size(), is(1));
         MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.findFirst(MethodReferenceExpr.class).get();
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
@@ -213,7 +213,7 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIdentifierIsCompareByAge(int statementPosition, int methodPosition,
                                                                                       int classPosition, String expectedName) {
         Statement statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        assertEquals(1, statementUnderTest.findAll(MethodReferenceExpr.class).size());
+        assertThat(statementUnderTest.findAll(MethodReferenceExpr.class).size(), is(1));
         MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.findFirst(MethodReferenceExpr.class).get();
         assertThat(methodReferenceUnderTest.getIdentifier(), is(expectedName));
     }
@@ -273,25 +273,25 @@ public class ParsingSteps {
     @Then("the begin line is $line")
     public void thenTheBeginLineIs(int line) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getBegin().get().line);
+        assertThat(node.getBegin().get().line, is(line));
     }
 
     @Then("the begin column is $column")
     public void thenTheBeginColumnIs(int column) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getBegin().get().column);
+        assertThat(node.getBegin().get().column, is(column));
     }
 
     @Then("the end line is $line")
     public void thenTheEndLineIs(int line) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(line, node.getEnd().get().line);
+        assertThat(node.getEnd().get().line, is(line));
     }
 
     @Then("the end column is $column")
     public void thenTheEndColumnIs(int column) {
         Node node = (Node) state.get("selectedNode");
-        assertEquals(column, node.getEnd().get().column);
+        assertThat(node.getEnd().get().column, is(column));
     }
 
     @Then("no errors are reported")
@@ -303,21 +303,21 @@ public class ParsingSteps {
     @Then("the package name is $package")
     public void thenThePackageNameIs(String expected) {
         PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
-        assertEquals(expected, node.getNameAsString());
-        assertEquals(expected, node.getName().toString());
+        assertThat(node.getNameAsString(), is(expected));
+        assertThat(node.getName().toString(), is(expected));
     }
 
     @Then("the type's diamond operator flag should be $expectedValue")
     public void thenTheUsesDiamondOperatorShouldBeBooleanAsString(boolean expectedValue) {
         ObjectCreationExpr expr = (ObjectCreationExpr) state.get("selectedNode");
-        assertEquals(expectedValue, expr.getType().isUsingDiamondOperator());
+        assertThat(expr.getType().isUsingDiamondOperator(), is(expectedValue));
     }
 
     @Then("the Java parser cannot parse it because of an error")
     public void javaParserCannotParseBecauseOfLexicalErrors() {
         ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(sourceUnderTest));
         if (result.isSuccessful()) {
-            fail("Lexical error expected");
+            assertThat("Fail here - Lexical error expected", false);
         }
     }
 
@@ -328,9 +328,9 @@ public class ParsingSteps {
         ConstructorDeclaration ctor = classDeclaration.getMember(1).asConstructorDeclaration();
         ExpressionStmt assignStmt = ctor.getBody().getStatement(0).asExpressionStmt();
         AssignExpr assignExpr = assignStmt.getExpression().asAssignExpr();
-        assertNotNull(assignExpr.getTarget());
-        assertEquals(NameExpr.class, assignExpr.getTarget().getClass());
-        assertEquals(assignExpr.getTarget().asNameExpr().getNameAsString(), "mString");
+        assertThat(assignExpr.getTarget(), is(notNullValue()));
+        assertThat(assignExpr.getTarget(), instanceOf(NameExpr.class));
+        assertThat(assignExpr.getTarget().asNameExpr().getNameAsString(), is("mString"));
     }
 
     private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {

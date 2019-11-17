@@ -39,21 +39,18 @@ import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 
 public class CommentParsingSteps {
 
@@ -105,7 +102,7 @@ public class CommentParsingSteps {
     public void javaParserCannotParseBecauseOfLexicalErrors() {
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(sourceUnderTest));
         if (result.isSuccessful()) {
-            fail("Lexical error expected");
+            assertThat("Fail here - Lexical error expected", false);
         }
     }
 
@@ -206,7 +203,7 @@ public class CommentParsingSteps {
 
     @Then("the compilation unit is not commented")
     public void thenTheCompilationUnitIsNotCommented() {
-        assertEquals(false, compilationUnit.getComment().isPresent());
+        assertThat(compilationUnit.getComment().isPresent(), is(false));
     }
 
     @Then("the compilation is commented \"$expectedContent\"")
@@ -251,7 +248,7 @@ public class CommentParsingSteps {
     @Then("class $position is not commented")
     public void thenClassIsNotCommented(int position) {
         TypeDeclaration<?> classUnderTest = compilationUnit.getType(position - 1);
-        assertEquals(false, classUnderTest.getComment().isPresent());
+        assertThat(classUnderTest.getComment().isPresent(), is(false));
     }
 
     @Then("class $position is commented \"$expectedContent\"")
@@ -363,7 +360,7 @@ public class CommentParsingSteps {
         TypeDeclaration<?> classUnderTest = compilationUnit.getType(classPosition - 1);
         FieldDeclaration fieldUnderTest = getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
-        assertEquals(false, fieldUnderTest.getComment().isPresent());
+        assertThat(fieldUnderTest.getComment().isPresent(), is(false));
     }
 
     @Then("field $fieldPosition in class $classPosition is commented \"$expectedContent\"")

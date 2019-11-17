@@ -36,7 +36,9 @@ import java.net.URL;
 
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+
 
 public class PrettyPrintingSteps {
 
@@ -107,6 +109,6 @@ public class PrettyPrintingSteps {
 
     @Then("it is printed as:$src")
     public void isPrintedAs(String src) {
-        assertEquals(src.trim(), resultNode.toString().trim());
+        assertThat(resultNode.toString().trim(), is(src.trim()));
     }
 }

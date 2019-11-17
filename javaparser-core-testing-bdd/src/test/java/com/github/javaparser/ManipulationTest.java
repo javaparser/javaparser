@@ -23,15 +23,11 @@ package com.github.javaparser;
 
 import com.github.javaparser.steps.ManipulationSteps;
 import com.github.javaparser.steps.SharedSteps;
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
-import org.junit.runner.RunWith;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(JUnitReportingRunner.class)
 public class ManipulationTest extends BasicJBehaveTest {
 
     @Override

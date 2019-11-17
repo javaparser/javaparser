@@ -22,7 +22,6 @@
 package com.github.javaparser;
 
 
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.failures.FailingUponPendingStep;
@@ -42,7 +41,7 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     BasicJBehaveTest(String storiesPath) {
         this.storiesPath = storiesPath;
-        JUnitReportingRunner.recommendedControls(configuredEmbedder());
+//        JUnitReportingRunner.recommendedControls(configuredEmbedder());
     }
 
     @Override

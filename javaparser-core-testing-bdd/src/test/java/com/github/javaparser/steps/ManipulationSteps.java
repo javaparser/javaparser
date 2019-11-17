@@ -50,8 +50,8 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
 import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 public class ManipulationSteps {
 
@@ -213,13 +213,14 @@ public class ManipulationSteps {
     @Then("is not equal to null")
     public void thenIsNotEqualToNull() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertNotEquals(compilationUnit, null);
+        assertThat(compilationUnit, is(notNullValue()));
+
     }
 
     @Then("is not equal to $value")
     public void thenIsNotEqualTo(String value) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertNotEquals(compilationUnit, value);
+        assertThat(compilationUnit, is(notNullValue()));
     }
 
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
