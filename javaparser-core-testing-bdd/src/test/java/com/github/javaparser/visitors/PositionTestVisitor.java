@@ -38,7 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.is;
 
 public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 

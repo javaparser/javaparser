@@ -31,7 +31,7 @@ import org.jbehave.core.annotations.When;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.Range.range;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.is;
 
 public class PositionRangeSteps {
 
