@@ -31,7 +31,12 @@ import com.github.javaparser.printer.PrettyPrinterConfiguration;
 public interface NodeAsString {
 
     /**
-     * Description mostly from <a href="https://javaparser.org/making-strings-in-javaparser/">https://javaparser.org/making-strings-in-javaparser/</a>
+     * Description from <a href="https://github.com/javaparser/javaparser/issues/2032#issuecomment-456201113">https://github.com/javaparser/javaparser/issues/2032#issuecomment-456201113</a>
+     * <p>
+     * "asString is the opposite of a print function: it gives you something you can use programmatically, as a key in a hashmap, or to compare to something in a configuration file. "
+     * <p>
+     * <p>
+     * Additional description from <a href="https://javaparser.org/making-strings-in-javaparser/">https://javaparser.org/making-strings-in-javaparser/</a>
      * <p>
      * We noticed that many people were using the output of the pretty printer
      * for comparisons, like <pre>name.toString.equals("a.b.C")</pre>
