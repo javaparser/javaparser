@@ -34,12 +34,16 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
+import static org.jbehave.core.reporters.Format.*;
 
 abstract class BasicJBehaveTest extends JUnitStories {
 
     private final String storiesPath;
 
+    private Format[] formats = new Format[] {CONSOLE, HTML, STATS, JSON};
+
     BasicJBehaveTest(String storiesPath) {
+        super();
         this.storiesPath = storiesPath;
 //        JUnitReportingRunner.recommendedControls(configuredEmbedder());
     }
@@ -51,9 +55,12 @@ abstract class BasicJBehaveTest extends JUnitStories {
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
                 // Fails if Steps are not implemented
                 .usePendingStepStrategy(new FailingUponPendingStep())
-                // CONSOLE and HTML reporting
-                .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
-                        .withFormats(Format.CONSOLE, Format.HTML));
+                // Reporting formats
+                .useStoryReporterBuilder(
+                        new StoryReporterBuilder()
+                                .withFailureTrace(true)
+                                .withFormats(formats)
+                );
     }
 
     @Override
