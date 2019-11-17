@@ -50,7 +50,7 @@ import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
+import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
 
 public class CommentParsingSteps {
 
@@ -132,14 +132,14 @@ public class CommentParsingSteps {
     public void thenBlockCommentIs(int position, String expectedContent) {
         BlockComment lineCommentUnderTest = getCommentAt(commentsCollection.getBlockComments(), position - 1);
 
-        assertThat(lineCommentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(lineCommentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("Javadoc comment $position is \"$expectedContent\"")
     public void thenJavadocCommentIs(int position, String expectedContent) {
         JavadocComment commentUnderTest = getCommentAt(commentsCollection.getJavadocComments(), position - 1);
 
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("the line comments have the following positions: $table")
@@ -224,7 +224,7 @@ public class CommentParsingSteps {
     @Then("the compilation unit orphan comment $position is \"$expectedContent\"")
     public void thenTheCompilationUnitOrphanCommentIs(int position, String expectedContent) {
         Comment commentUnderTest = compilationUnit.getOrphanComments().get(position - 1);
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("comment $commentPosition in compilation unit is not an orphan")
@@ -242,7 +242,7 @@ public class CommentParsingSteps {
     @Then("comment $commentPosition in compilation unit is \"$expectedContent\"")
     public void thenCommentInCompilationUnitIs(int position, String expectedContent) {
         Comment commentUnderTest = compilationUnit.getAllContainedComments().get(position - 1);
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("class $position is not commented")
@@ -274,7 +274,7 @@ public class CommentParsingSteps {
     public void thenClassOrphanCommentIs(int classPosition, int commentPosition, String expectedContent) {
         TypeDeclaration<?> classUnderTest = compilationUnit.getType(classPosition - 1);
         Comment commentUnderTest = classUnderTest.getOrphanComments().get(commentPosition - 1);
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(expectedContent));
     }
 
     @Then("method $methodPosition in class $classPosition is commented \"$expectedContent\"")
@@ -282,7 +282,7 @@ public class CommentParsingSteps {
         TypeDeclaration<?> classUnderTest = compilationUnit.getType(classPosition - 1);
         MethodDeclaration methodUnderTest = getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
-        assertThat(methodUnderTest.getComment().get().getContent(), equalToIgnoringWhiteSpace(expectedContent));
+        assertThat(methodUnderTest.getComment().get().getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount total contained comments")
@@ -299,7 +299,7 @@ public class CommentParsingSteps {
         MethodDeclaration methodUnderTest = getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         Comment commentUnderTest = methodUnderTest.getAllContainedComments().get(commentPosition - 1);
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount orphan comments")
@@ -335,7 +335,7 @@ public class CommentParsingSteps {
                 MethodDeclaration.class);
         BlockStmt blockStmtUnderTest = methodUnderTest.getBody().orElse(null);
         Comment commentUnderTest = blockStmtUnderTest.getOrphanComments().get(commentPosition - 1);
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("type of method $methodPosition in class $classPosition is commented \"$expectedContent\"")
@@ -344,7 +344,7 @@ public class CommentParsingSteps {
         MethodDeclaration methodUnderTest = getMemberByTypeAndPosition(classUnderTest, methodPosition - 1,
                 MethodDeclaration.class);
         Comment commentUnderTest = methodUnderTest.getType().getComment().get();
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("field $fieldPosition in class $classPosition contains $expectedCount comments")
@@ -369,7 +369,7 @@ public class CommentParsingSteps {
         FieldDeclaration fieldUnderTest = getMemberByTypeAndPosition(classUnderTest, fieldPosition - 1,
                 FieldDeclaration.class);
         Comment commentUnderTest = fieldUnderTest.getComment().get();
-        assertThat(commentUnderTest.getContent(), is(equalToIgnoringWhiteSpace(expectedContent)));
+        assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
 
     @Then("variable $variablePosition value of field $fieldPosition in class $classPosition is commented \"$expectedContent\"")

@@ -26,7 +26,6 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -55,7 +54,7 @@ public class ComparingSteps {
 
     @Then("they are equals")
     public void thenTheyAreEquals() {
-        assertThat(first, is(equalTo(second)));
+        assertThat(first, is(second));
     }
 
 }

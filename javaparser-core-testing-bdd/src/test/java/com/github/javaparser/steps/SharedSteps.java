@@ -25,7 +25,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -38,10 +37,9 @@ import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 
 public class SharedSteps {
 
@@ -97,7 +95,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit, is(equalTo(compilationUnit2)));
+        assertThat(compilationUnit, is(compilationUnit2));
     }
 
     @Then("the CompilationUnit has the same hashcode to the second CompilationUnit")
@@ -105,7 +103,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit.hashCode(), is(equalTo(compilationUnit2.hashCode())));
+        assertThat(compilationUnit.hashCode(), is(compilationUnit2.hashCode()));
     }
 
     @Then("the CompilationUnit is not equal to the second CompilationUnit")
@@ -113,7 +111,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit, not(equalTo(compilationUnit2)));
+        assertThat(compilationUnit, is(not(compilationUnit2)));
     }
 
     @Then("the CompilationUnit has a different hashcode to the second CompilationUnit")
@@ -121,13 +119,13 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit.hashCode(), not(equalTo(compilationUnit2.hashCode())));
+        assertThat(compilationUnit.hashCode(), is(not(compilationUnit2.hashCode())));
     }
 
     @Then("the expected source should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
+        assertThat(compilationUnit.toString(), is(equalToCompressingWhiteSpace(classSrc)));
     }
 
     public static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {
