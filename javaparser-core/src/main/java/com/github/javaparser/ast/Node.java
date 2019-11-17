@@ -31,6 +31,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
@@ -308,10 +309,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Contains all nodes that have this node set as their parent.
+     * Contains an unsorted collection of all nodes that have this node set as their parent.
      * You can add and remove nodes from this list by adding or removing nodes from the fields of this node.
+     * <p>
+     * If you need the children nodes in the same order that they appear within the source code,
+     * you may be able to use {@link BlockStmt#getStatements()} or a similar method which returns a {@link NodeList}
      *
-     * @return all nodes that have this node as their parent.
+     * @return a collection of nodes that have this node as their parent. NOTE - not necessarily in the order that they appear within the source code.
      */
     public List<Node> getChildNodes() {
         return unmodifiableList(childNodes);

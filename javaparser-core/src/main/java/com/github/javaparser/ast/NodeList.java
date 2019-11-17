@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A list of nodes.
+ * An ordered list of nodes.
  * It usually has a parent node.
  * Unlike normal Nodes, this does not mean that it is a child of that parent.
  * Instead, this list will make every node it contains a child of its parent.
