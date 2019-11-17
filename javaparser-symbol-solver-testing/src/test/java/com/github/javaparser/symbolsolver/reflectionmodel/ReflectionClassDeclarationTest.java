@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -33,7 +32,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.*;
+import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
@@ -418,8 +417,12 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAllInterfacesWithoutParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable",
-                "com.github.javaparser.HasParentNode", "com.github.javaparser.ast.nodeTypes.NodeWithRange",
+        assertEquals(ImmutableSet.of("java.lang.Cloneable",
+                "com.github.javaparser.ast.visitor.Visitable",
+                "com.github.javaparser.ast.observer.Observable",
+                "com.github.javaparser.HasParentNode",
+                "com.github.javaparser.ast.nodeTypes.NodeAsString",
+                "com.github.javaparser.ast.nodeTypes.NodeWithRange",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange").stream().sorted().collect(Collectors.toList()),
                 compilationUnit.getAllInterfaces().stream().map(i -> i.getQualifiedName()).sorted().collect(Collectors.toList()));
 
@@ -429,6 +432,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Cloneable",
                 "com.github.javaparser.HasParentNode",
                 "com.github.javaparser.ast.visitor.Visitable",
+                "com.github.javaparser.ast.nodeTypes.NodeAsString",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.NodeWithSimpleName",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers",
@@ -453,7 +457,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
-        assertEquals(34, interfaces.size());
+        int expcetedInterfaceCount = 35;
+        assertEquals(expcetedInterfaceCount, interfaces.size());
 
         ResolvedReferenceType interfaze;
         int i = 0;
@@ -504,6 +509,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
         assertEquals("com.github.javaparser.resolution.Resolvable", interfaze.getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(i++);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeAsString", interfaze.getQualifiedName());
 
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
         assertEquals("java.lang.Cloneable", interfaze.getQualifiedName());
@@ -641,7 +649,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllAncestorsWithoutTypeParameters() {
         ReflectionClassDeclaration cu = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable",
-                "com.github.javaparser.ast.observer.Observable", "com.github.javaparser.ast.Node",
+                "com.github.javaparser.ast.observer.Observable",
+                "com.github.javaparser.ast.Node", "com.github.javaparser.ast.nodeTypes.NodeAsString",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange", "java.lang.Object", "com.github.javaparser.HasParentNode",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
@@ -668,6 +677,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.CallableDeclaration.T").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeAsString", ancestor.getQualifiedName());
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
@@ -788,7 +800,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     public static class ClassWithSyntheticConstructor {
 
-        private ClassWithSyntheticConstructor() {}
+        private ClassWithSyntheticConstructor() {
+        }
 
         public static ClassWithSyntheticConstructor newInstance() {
             return ClassWithSyntheticConstructorHelper.create();
