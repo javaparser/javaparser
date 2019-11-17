@@ -26,6 +26,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.nodeTypes.NodeAsString;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -40,21 +41,20 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -99,13 +99,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node>, NodeWithTokenRange<Node> {
+public abstract class Node implements NodeAsString, Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node>, NodeWithTokenRange<Node> {
 
     /**
      * Different registration mode for observers on nodes.
      */
     public enum ObserverRegistrationMode {
-
         /**
          * Notify exclusively for changes happening on this node alone.
          */
@@ -124,7 +123,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public enum Parsedness {
-
         PARSED, UNPARSABLE
     }
 
@@ -200,6 +198,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * @return the range of characters in the source code that this node covers.
      */
+    @Override
     public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
@@ -207,10 +206,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * @return the range of tokens that this node covers.
      */
+    @Override
     public Optional<TokenRange> getTokenRange() {
         return Optional.ofNullable(tokenRange);
     }
 
+    @Override
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
         if (tokenRange == null || !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getBegin().getRange().isPresent())) {
@@ -225,6 +226,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
      *              no range information is known, or that it is not of interest.
      */
+    @Override
     public Node setRange(Range range) {
         if (this.range == range) {
             return this;
@@ -272,22 +274,51 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return setComment(new BlockComment(comment));
     }
 
-    /**
-     * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
-     */
+    @Override
+    public PrettyPrinterConfiguration getDefaultPrinterConfiguration() {
+        return toStringPrettyPrinterConfiguration;
+    }
+
+    @Override
+    public String asString() {
+        return this.toPrettyString();
+    }
+
     @Override
     public final String toString() {
+        return toPrettyString();
+    }
+
+    @Override
+    public final String toPrettyString() {
         return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
 
-    /**
-     * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with parameter prettyPrinterConfiguration.
-     */
+    @Override
     public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
+        return toPrettyString(prettyPrinterConfiguration);
+    }
+
+    @Override
+    public final String toPrettyString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         return new PrettyPrinter(prettyPrinterConfiguration).print(this);
     }
+
+    /**
+     * @return The current pretty printer configuration used when calling {@link #toString()} or {@link #toPrettyString()}
+     */
+    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
+        return toStringPrettyPrinterConfiguration;
+    }
+
+    /**
+     *
+     * @param toStringPrettyPrinterConfiguration The current pretty printer configuration used when calling {@link #toString()} or {@link #toPrettyString()}
+     */
+    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
+        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
+    }
+
 
     @Override
     public final int hashCode() {
@@ -606,8 +637,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
             if (property.isNodeList()) {
                 NodeList<?> nodeList = (NodeList<?>) property.getValue(this);
-                if (nodeList != null)
+                if (nodeList != null) {
                     nodeList.register(observer);
+                }
             }
         }
     }
@@ -619,8 +651,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (comment != null) {
             if (node == comment) {
                 removeComment();
@@ -665,18 +698,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return this;
     }
 
-    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
-        return toStringPrettyPrinterConfiguration;
-    }
-
-    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
-        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (comment != null) {
             if (node == comment) {
                 setComment((Comment) replacementNode);
@@ -806,8 +832,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, n -> {
-            if (predicate.test(n))
+            if (predicate.test(n)) {
                 found.add(n);
+            }
         });
         return found;
     }
