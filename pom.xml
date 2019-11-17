@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>javaparser-core</module>
-<!--        <module>javaparser-core-testing</module>-->
+        <module>javaparser-core-testing</module>
         <module>javaparser-core-testing-bdd</module>
         <module>javaparser-core-generators</module>
         <module>javaparser-core-metamodel-generator</module>
@@ -10,7 +10,7 @@
         <module>javaparser-symbol-solver-model</module>
         <module>javaparser-symbol-solver-logic</module>
         <module>javaparser-symbol-solver-core</module>
-<!--        <module>javaparser-symbol-solver-testing</module>-->
+        <module>javaparser-symbol-solver-testing</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
