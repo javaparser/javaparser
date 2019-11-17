@@ -152,13 +152,29 @@ class RangeTest {
     }
     
     @Test
+    void touchingLineColumnRangesOverlap() {
+        Range r1 = Range.range(1, 1, 3, 10);
+        Range r2 = Range.range(3, 10, 5, 10);
+        assertTrue(r1.overlapsWith(r2));
+        assertTrue(r2.overlapsWith(r1));
+    }
+
+    @Test
+    void touchingLineNotColumnRangesDoNotOverlap() {
+        Range r1 = Range.range(1, 1, 3, 5);
+        Range r2 = Range.range(3, 10, 5, 10);
+        assertFalse(r1.overlapsWith(r2));
+        assertFalse(r2.overlapsWith(r1));
+    }
+
+    @Test
     void rangesOverlap() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(3, 5, 5, 10);
         assertTrue(r1.overlapsWith(r2));
         assertTrue(r2.overlapsWith(r1));
     }
-    
+
     @Test
     void rangesDoNotOverlap() {
         Range r1 = Range.range(1, 1, 3, 10);
