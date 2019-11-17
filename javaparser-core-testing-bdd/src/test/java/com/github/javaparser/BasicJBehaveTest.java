@@ -29,7 +29,9 @@ import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.Format;
+import org.jbehave.core.reporters.FreemarkerViewGenerator;
 import org.jbehave.core.reporters.StoryReporterBuilder;
+import org.jbehave.core.reporters.SurefireReporter;
 
 import java.util.List;
 
@@ -40,7 +42,7 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     private final String storiesPath;
 
-    private Format[] formats = new Format[] {CONSOLE, HTML, STATS, JSON};
+    private Format[] formats = new Format[]{CONSOLE, HTML, STATS, TXT, JSON, XML};
 
     BasicJBehaveTest(String storiesPath) {
         super();
@@ -50,6 +52,8 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     @Override
     public final Configuration configuration() {
+        SurefireReporter surefireReporter = new SurefireReporter(getClass());
+
         return new MostUsefulConfiguration()
                 // where to find the stories
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
@@ -58,9 +62,11 @@ abstract class BasicJBehaveTest extends JUnitStories {
                 // Reporting formats
                 .useStoryReporterBuilder(
                         new StoryReporterBuilder()
+                                .withSurefireReporter(surefireReporter)
                                 .withFailureTrace(true)
                                 .withFormats(formats)
-                );
+                )
+                .useViewGenerator(new FreemarkerViewGenerator());
     }
 
     @Override
