@@ -23,6 +23,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -35,6 +36,7 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,12 +152,18 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+
+        if (rrtds.isEmpty()) {
+            rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
+        }
+
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (res.isSolved()) {
                 return res;
             }
         }
+
         return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
     }
 
@@ -384,12 +392,21 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
-        for (ResolvedTypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds()) {
+        List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.asTypeParameter().getBounds();
+
+        if (bounds.isEmpty()) {
+            bounds = Collections.singletonList(
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
+                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+        }
+
+        for (ResolvedTypeParameterDeclaration.Bound bound : bounds) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, argumentsTypes, invokationContext);
             if (methodUsage.isPresent()) {
                 return methodUsage;
             }
         }
+
         return Optional.empty();
     }
 
