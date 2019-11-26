@@ -197,11 +197,19 @@ public class JavaParserFacade {
 
         solveArguments(objectCreationExpr, objectCreationExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
-        if (!classDecl.isReferenceType()) {
+        ResolvedReferenceTypeDeclaration typeDecl = null;
+        if (objectCreationExpr.getAnonymousClassBody().isPresent()) {
+            typeDecl = new JavaParserAnonymousClassDeclaration(objectCreationExpr, typeSolver);
+        } else {
+            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
+            if (classDecl.isReferenceType()) {
+                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+            }
+        }
+        if (typeDecl == null) {
             return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
         }
-        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(classDecl.asReferenceType().getTypeDeclaration().getConstructors(), argumentTypes, typeSolver);
+        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(typeDecl.getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }

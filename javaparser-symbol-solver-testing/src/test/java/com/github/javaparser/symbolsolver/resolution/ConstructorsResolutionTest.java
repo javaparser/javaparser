@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConstructorsResolutionTest extends AbstractResolutionTest {
 
@@ -109,6 +110,52 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
 
         assertEquals(expectedConstructor, actualConstructor);
+    }
+
+    @Test
+    void solveAnonymousInnerClassEmptyConstructor() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructor");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+    }
+
+    @Test
+    void solveAnonymousInnerClassEmptyConstructorInterface() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructorInterface");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+    }
+
+    @Test
+    void solveAnonymousInnerClassStringConstructor() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassStringConstructor");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
     }
 
     @Test
