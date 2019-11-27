@@ -49,14 +49,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /*
  * https://github.com/javaparser/javaparser/issues/2162
  *
- * I'm trying to solve the generic return type of a MethodCallExpr.
- * e.g.: getView().getTest(), where getView() returns V with the superclass AWT.Component.
- * I'm using "JavaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType()", where "methodCallExpr" is the expression above (getView().getTest()). getView() is resolved in the type AWT.Component, which does not obviously has a method called getTest.
- * I get "java.lang.RuntimeException: Unable to calculate the type of a parameter of a method call".
+ * I'm trying to solve the generic return type of a `MethodCallExpr`.
+ * e.g.: `getView().getTest()`, where `getView()` returns `V` with the superclass `AWT.Component`.
  *
- * (getView() // B#getView
- *   .getTest()) // D#getTest -- inherited from abstract class Screen
- * ).getView() // D#getView -- inherited from abstract class Screen
+ *  I'm using `JavaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType()`, where `methodCallExpr` is the expression above (`getView().getTest()`).
+ * `getView()` is resolved in the type `AWT.Component`, which does not obviously has a method called `getTest`.
+ *
+ * I get `java.lang.RuntimeException: Unable to calculate the type of a parameter of a method call`.
+ *
+ * getView() // B#getView
+ * getView().getTest()) // D#getTest -- inherited from abstract class Screen
  *
  *
  * {@code
