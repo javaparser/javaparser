@@ -67,7 +67,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
       }
 
       class D extends Component {
-          void test() {
+          void getTest() {
           }
       }
 
@@ -106,7 +106,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             "}\n" +
             "\n" +
             "class D extends Component {\n" +
-            "    void test() {\n" +
+            "    void getTest() {\n" +
             "    }\n" +
             "}\n" +
             "\n" +
@@ -121,10 +121,9 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             "  public static void main(String[] args) {\n" +
             "    B b1 = new B();\n" +
             "    b1.getView(); // B#getView\n" +
+            "    \n" +
             "    B b2 = new B();\n" +
             "    b2.getView().getTest(); // D#getTest -- inherited from abstract class Screen\n" +
-            "    B b3 = new B();\n" +
-            "    b3.getView().getTest().getView(); // D#getView -- inherited from abstract class Screen\n" +
             "  }\n" +
             "}\n" +
             "";
@@ -231,6 +230,27 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
         assertEquals(0, errorMessages.size(), "Expecting zero error messages. See log for details.");
 
+    }
+
+
+    @Test
+    public void doTest_withJavaParserFacade_explicit() {
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(this.typeSolver);
+
+        // b1.getView()
+        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(0)).getCorrespondingDeclaration().getReturnType().describe());
+
+        // b2.getView().getTest() -- causing error
+        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(1)).getCorrespondingDeclaration().getReturnType().describe());
+        // b2.getView()
+        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(2)).getCorrespondingDeclaration().getReturnType().describe());
+
+        // b3.getView().getTest().getView() -- causing error
+        assertEquals("", javaParserFacade.solve(methodCallExprs.get(3)).getCorrespondingDeclaration().getReturnType().describe());
+        // b3.getView().getTest() -- causing error
+        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(4)).getCorrespondingDeclaration().getReturnType().describe());
+        // b3.getView()
+        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(5)).getCorrespondingDeclaration().getReturnType().describe());
     }
 
 
