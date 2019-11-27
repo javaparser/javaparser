@@ -93,7 +93,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
         configuration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
@@ -159,7 +159,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
 
     @Test
-    public void doTest_resolveMethod() {
+    public void doTest_resolveMethod_collectErrors() {
         List<String> errorMessages = new ArrayList<>();
         for (int i = 0; i < methodCallExprs.size(); i++) {
             MethodCallExpr methodCallExpr = methodCallExprs.get(i);
@@ -181,6 +181,19 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    public void doTest_resolveMethod_throwErrors() {
+        for (int i = 0; i < methodCallExprs.size(); i++) {
+            MethodCallExpr methodCallExpr = methodCallExprs.get(i);
+            System.out.println();
+            System.out.println("methodCallExpr #" + i + "= " + methodCallExpr);
+
+            ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+            System.out.println("resolvedMethodDeclaration.getReturnType().describe() = " + resolvedMethodDeclaration.getReturnType().describe());
+        }
+    }
+
+
+    @Test
     public void doTest_calculateResolvedType() {
         List<String> errorMessages = new ArrayList<>();
         for (int i = 0; i < methodCallExprs.size(); i++) {
@@ -192,6 +205,9 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
                 ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
                 System.out.println("resolvedType.describe() = " + resolvedType.describe());
             } catch (UnsolvedSymbolException e) {
+                String errMessage = "Unexpectedly unable to resolve method call #" + i + "\n --> " + methodCallExpr;
+                errorMessages.add(errMessage);
+            } catch (RuntimeException e) {
                 String errMessage = "Unexpectedly unable to resolve method call #" + i + "\n --> " + methodCallExpr;
                 errorMessages.add(errMessage);
             }
@@ -261,13 +277,20 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
     public void doTest_withJavaParserFacade_explicit() {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(this.typeSolver);
 
+        assertEquals(5, methodCallExprs.size(), "Unexpected number of method calls -- has the test code been updated, without also updating this test case?");
+
         // b1.getView()
         assertEquals("D", javaParserFacade.solve(methodCallExprs.get(0)).getCorrespondingDeclaration().getReturnType().describe());
 
-        // b2.getView().getTest() -- causing error
-        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(1)).getCorrespondingDeclaration().getReturnType().describe());
         // b2.getView()
         assertEquals("D", javaParserFacade.solve(methodCallExprs.get(2)).getCorrespondingDeclaration().getReturnType().describe());
+        // b2.getView().getTest()
+        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(1)).getCorrespondingDeclaration().getReturnType().describe());
+
+        // b3.getView()
+        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(4)).getCorrespondingDeclaration().getReturnType().describe());
+        // b3.getView().getView() -- causing error
+        assertEquals("V", javaParserFacade.solve(methodCallExprs.get(3)).getCorrespondingDeclaration().getReturnType().describe());
 
     }
 
