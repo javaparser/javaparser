@@ -46,41 +46,8 @@ import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/*
- * https://github.com/javaparser/javaparser/issues/2162
- *
- * I'm trying to solve the generic return type of a `MethodCallExpr`.
- * e.g.: `getView().getTest()`, where `getView()` returns `V` with the superclass `AWT.Component`.
- *
- *  I'm using `JavaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType()`, where `methodCallExpr` is the expression above (`getView().getTest()`).
- * `getView()` is resolved in the type `AWT.Component`, which does not obviously has a method called `getTest`.
- *
- * I get `java.lang.RuntimeException: Unable to calculate the type of a parameter of a method call`.
- *
- * getView() // B#getView
- * getView().getTest()) // D#getTest -- inherited from abstract class Screen
- *
- *
- * {@code
-      import java.awt.*;
-
-      abstract class Screen <V extends Component> {
-          abstract V getView();
-      }
-
-      class D extends Component {
-          void getTest() {
-          }
-      }
-
-      class B extends Screen<D> {
-          @Override
-          D getView() {
-              return new D();
-          }
-      }
- * }
- *
+/**
+ * @see <a href="https://github.com/javaparser/javaparser/issues/2162">https://github.com/javaparser/javaparser/issues/2162</a>
  */
 public class Issue2162Test extends AbstractSymbolResolutionTest {
 
@@ -120,17 +87,18 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             "}\n" +
             "\n" +
             "class Run {\n" +
-            "  public static void main(String[] args) {\n" +
-            "    B b1 = new B();\n" +
-            "    b1.getView(); // B#getView --- method is directly on class B\n" +
-            "    \n" +
-            "    B b2 = new B();\n" +
-            "    b2.getView().getTest(); // D#getTest -- method getTest directly on class D (return value of getView())\n" +
-            "    \n" +
-            "    // Part of code that attempts to call an inherited method (whose return type JP will attempt to resolve)\n" +
-            "    B b3 = new B();\n" +
-            "    b3.getView().getView(); // D#getView -- method getView inherited from abstract class Screen\n" +
-            "  }\n" +
+            "    public static void main(String[] args) {\n" +
+            "        B b1 = new B();\n" +
+            "        b1.getView(); // b1.getView() -> B#getView(), overriding Screen#getView() -> returns object of type D.\n" +
+            "        \n" +
+            "        // Note that if `b2.getView` is parsed as Screen#getView (as B extends Screen), it will return type `V extends Component` thus will fail to locate the method `Component#getTest()` \n" +
+            "        B b2 = new B();\n" +
+            "        b2.getView().getTest(); // b2.getView() -> returns object of type D, per above // D#getTest returns void.\n" +
+            "        \n" +
+            "        // This part is expected to fail as D#getView does not exist (where D is of type `V extends Component`)\n" +
+            "        B b3 = new B();\n" +
+            "        b3.getView().getView(); // b3.getView() -> returns object of type D, per above // D#getView doesn't exist, thus resolution will fail.\n" +
+            "    }\n" +
             "}\n" +
             "";
 
