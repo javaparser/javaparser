@@ -26,7 +26,6 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -42,7 +41,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -88,6 +86,9 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
     private CompilationUnit cu;
     private TypeSolver typeSolver;
     private ParserConfiguration configuration;
+    private List<MethodDeclaration> classMethods;
+    private List<MethodCallExpr> methodCallExprs;
+
 
     @BeforeEach
     void setUp() {
@@ -95,7 +96,6 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
         configuration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         javaParser = new JavaParser(configuration);
-
 
         //language=JAVA
         String src = "" +
@@ -140,25 +140,24 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
         parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
 
         assertTrue(parseResult.isSuccessful());
-        assertEquals(0, parseResult.getProblems().size());
+        assertEquals(0, parseResult.getProblems().size(), "Expected zero errors when attempting to parse the input code.");
         assertTrue(parseResult.getResult().isPresent(), "Must have a parse result to run this test.");
 
         this.cu = parseResult.getResult().get();
+
+        classMethods = this.cu.getClassByName("Run").get().getMethods();
+        assertEquals(1, classMethods.size(), "Expected only one class with this matching name.");
+
+        methodCallExprs = classMethods.get(0).findAll(MethodCallExpr.class);
+        assertTrue(methodCallExprs.size() > 0, "Expected more than one method call.");
     }
 
 
     @Test
-    public void doTest() {
-        Optional<ClassOrInterfaceDeclaration> classOpt = this.cu.getClassByName("Run");
-        assertTrue(classOpt.isPresent());
-
-        List<MethodDeclaration> classMethods = classOpt.get().getMethods();
-        assertEquals(1, classMethods.size());
-
+    public void doTest_resolveMethod() {
         List<String> errorMessages = new ArrayList<>();
-
-        List<MethodCallExpr> methodCallExprs = classMethods.get(0).findAll(MethodCallExpr.class);
         for (int i = 0; i < methodCallExprs.size(); i++) {
+
             System.out.println();
             System.out.println();
             MethodCallExpr methodCallExpr = methodCallExprs.get(i);
@@ -172,18 +171,15 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             }
         }
 
-        // Print out the collected error messages
-        errorMessages.forEach(System.err::println);
+        // Print out the collected error messages (if any)
+        printErrorMessagesIfPresent(errorMessages);
+
         assertEquals(0, errorMessages.size(), "Expecting zero error messages. See log for details.");
-
-//        JavaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType();
-
     }
+
 
     @Test
     public void doTest_withJavaParserFacade() {
-        List<MethodDeclaration> classMethods = this.cu.getClassByName("Run").get().getMethods();
-        List<MethodCallExpr> methodCallExprs = classMethods.get(0).findAll(MethodCallExpr.class);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(this.typeSolver);
 
@@ -198,6 +194,8 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             ResolvedMethodDeclaration correspondingDeclaration;
             ResolvedType returnType;
 
+            // Try/Catch each stage of the call to:
+            // javaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType()
             try {
                 solved = javaParserFacade.solve(methodCallExpr);
 //                System.out.println("solved = " + solved);
@@ -211,7 +209,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
                     try {
                         returnType = correspondingDeclaration.getReturnType();
-//                        System.out.println("returnType = " + returnType);
+                        System.out.println("returnType.describe() = " + returnType.describe());
                     } catch (UnsolvedSymbolException | UnsupportedOperationException e) {
                         String errMessage = "Unexpectedly unable to get return type for method call #" + i + "\n --> " + methodCallExpr + "\n --> solved.isSolved() = " + solved.isSolved();
                         errorMessages.add(errMessage);
@@ -228,7 +226,15 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             }
         }
 
-        // Print out the collected error messages
+        // Print out the collected error messages (if any)
+        printErrorMessagesIfPresent(errorMessages);
+
+        assertEquals(0, errorMessages.size(), "Expecting zero error messages. See log for details.");
+
+    }
+
+
+    private void printErrorMessagesIfPresent(List<String> errorMessages) {
         if (errorMessages.size() > 0) {
             System.err.println();
             System.err.println();
@@ -238,9 +244,6 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             String errorMessage = errorMessages.get(i);
             System.err.println("ERROR #" + i + ": " + errorMessage);
         }
-
-        assertEquals(0, errorMessages.size(), "Expecting zero error messages. See log for details.");
-
     }
 
 }
