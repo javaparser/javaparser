@@ -158,14 +158,35 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
     public void doTest_resolveMethod() {
         List<String> errorMessages = new ArrayList<>();
         for (int i = 0; i < methodCallExprs.size(); i++) {
-
-            System.out.println();
-            System.out.println();
             MethodCallExpr methodCallExpr = methodCallExprs.get(i);
+            System.out.println();
+            System.out.println("methodCallExpr #" + i + "= " + methodCallExpr);
+            try {
+                ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+                System.out.println("resolvedMethodDeclaration.getReturnType().describe() = " + resolvedMethodDeclaration.getReturnType().describe());
+            } catch (UnsolvedSymbolException e) {
+                String errMessage = "Unexpectedly unable to resolve method call #" + i + "\n --> " + methodCallExpr;
+                errorMessages.add(errMessage);
+            }
+        }
+
+        // Print out the collected error messages (if any)
+        printErrorMessagesIfPresent(errorMessages);
+
+        assertEquals(0, errorMessages.size(), "Expecting zero error messages. See log for details.");
+    }
+
+    @Test
+    public void doTest_calculateResolvedType() {
+        List<String> errorMessages = new ArrayList<>();
+        for (int i = 0; i < methodCallExprs.size(); i++) {
+            MethodCallExpr methodCallExpr = methodCallExprs.get(i);
+            System.out.println();
             System.out.println("methodCallExpr #" + i + "= " + methodCallExpr);
 
             try {
-                ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+                ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+                System.out.println("resolvedType.describe() = " + resolvedType.describe());
             } catch (UnsolvedSymbolException e) {
                 String errMessage = "Unexpectedly unable to resolve method call #" + i + "\n --> " + methodCallExpr;
                 errorMessages.add(errMessage);
@@ -186,9 +207,8 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
         List<String> errorMessages = new ArrayList<>();
         for (int i = 0; i < methodCallExprs.size(); i++) {
-            System.out.println();
-            System.out.println();
             MethodCallExpr methodCallExpr = methodCallExprs.get(i);
+            System.out.println();
             System.out.println("methodCallExpr #" + i + "= " + methodCallExpr);
 
             SymbolReference<ResolvedMethodDeclaration> solved;
@@ -199,18 +219,16 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             // javaParserFacade.solve(methodCallExpr).getCorrespondingDeclaration().getReturnType()
             try {
                 solved = javaParserFacade.solve(methodCallExpr);
-//                System.out.println("solved = " + solved);
                 if (!solved.isSolved()) {
                     System.err.println("Unexpectedly unsolved methodCallExpr");
                 }
 
                 try {
                     correspondingDeclaration = solved.getCorrespondingDeclaration();
-//                    System.out.println("correspondingDeclaration = " + correspondingDeclaration);
-
                     try {
                         returnType = correspondingDeclaration.getReturnType();
                         System.out.println("returnType.describe() = " + returnType.describe());
+
                     } catch (UnsolvedSymbolException | UnsupportedOperationException e) {
                         String errMessage = "Unexpectedly unable to get return type for method call #" + i + "\n --> " + methodCallExpr + "\n --> solved.isSolved() = " + solved.isSolved();
                         errorMessages.add(errMessage);
@@ -247,12 +265,6 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
         // b2.getView()
         assertEquals("D", javaParserFacade.solve(methodCallExprs.get(2)).getCorrespondingDeclaration().getReturnType().describe());
 
-        // b3.getView().getTest().getView() -- causing error
-        assertEquals("", javaParserFacade.solve(methodCallExprs.get(3)).getCorrespondingDeclaration().getReturnType().describe());
-        // b3.getView().getTest() -- causing error
-        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(4)).getCorrespondingDeclaration().getReturnType().describe());
-        // b3.getView()
-        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(5)).getCorrespondingDeclaration().getReturnType().describe());
     }
 
 
