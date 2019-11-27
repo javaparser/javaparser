@@ -125,11 +125,11 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
             "    b1.getView(); // B#getView --- method is directly on class B\n" +
             "    \n" +
             "    B b2 = new B();\n" +
-            "    b2.getView().getTest(); // D#getTest -- method directly on class D (return value of getView())\n" +
+            "    b2.getView().getTest(); // D#getTest -- method getTest directly on class D (return value of getView())\n" +
             "    \n" +
             "    // Part of code that attempts to call an inherited method (whose return type JP will attempt to resolve)\n" +
             "    B b3 = new B();\n" +
-            "    b3.getView().getView(); // D#getView -- method inherited from abstract class Screen\n" +
+            "    b3.getView().getView(); // D#getView -- method getView inherited from abstract class Screen\n" +
             "  }\n" +
             "}\n" +
             "";
