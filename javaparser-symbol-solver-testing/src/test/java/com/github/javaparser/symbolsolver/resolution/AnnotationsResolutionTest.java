@@ -9,6 +9,7 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -236,5 +237,31 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertTrue(resolved.hasDirectlyAnnotation("java.lang.annotation.Target"));
         assertTrue(resolved.hasDirectlyAnnotation("java.lang.annotation.Retention"));
         assertFalse(resolved.hasDirectlyAnnotation("java.lang.annotation.Documented"));
+    }
+
+    @Test
+    void solveQualifiedAnnotation() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CE");
+        AnnotationExpr annotationOnClass = clazz.getAnnotation(0);
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testSomething");
+        AnnotationExpr annotationOnMethod = method.getAnnotation(0);
+
+        ResolvedAnnotationDeclaration resolvedAnnotationOnClass = annotationOnClass.resolve();
+        ResolvedAnnotationDeclaration resolvedAnnotationOnMethod = annotationOnMethod.resolve();
+
+        assertEquals("foo.bar.MyAnnotation", resolvedAnnotationOnClass.getQualifiedName());
+        assertEquals("org.junit.Ignore", resolvedAnnotationOnMethod.getQualifiedName());
+    }
+
+    @Test
+    void solveQualifiedAnnotationWithReferenceTypeHasAnnotationAsWell() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CE");
+        ResolvedReferenceTypeDeclaration referenceType = clazz.resolve();
+
+        boolean hasAnnotation = referenceType.hasAnnotation("org.junit.runner.RunWith");
+
+        assertTrue(hasAnnotation, "org.junit.runner.RunWith not found on reference type");
     }
 }

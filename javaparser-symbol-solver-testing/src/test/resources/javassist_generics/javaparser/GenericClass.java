@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class GenericClass<S> {
 
+    public GenericClass(S s) {}
+
+    public GenericClass(Foo foo) {}
+
     public S get() {
         return null;
     }
