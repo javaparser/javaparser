@@ -85,15 +85,15 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look among statically imported values
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if(importDecl.isStatic()){
-                    if(importDecl.isAsterisk()) {
+                if (importDecl.isStatic()) {
+                    if (importDecl.isAsterisk()) {
                         String qName = importDecl.getNameAsString();
                         ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
                         SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
                         if (ref.isSolved()) {
                             return ref;
                         }
-                    } else{
+                    } else {
                         String whole = importDecl.getNameAsString();
 
                         // split in field/method name and type name
@@ -119,7 +119,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
             // interface in this compilation unit called "A".
             for (TypeDeclaration<?> type : wrappedNode.getTypes()) {
-                if (type.getName().getId().equals(name)) {
+                if (type.getName().getId().equals(name)
+                        || type.getFullyQualifiedName().map(qualified -> qualified.equals(name)).orElse(false)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
                     } else if (type instanceof AnnotationDeclaration) {
@@ -141,13 +142,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 SymbolReference<ResolvedTypeDeclaration> outerMostRef =
                         solveType(name.substring(0, name.indexOf(".")));
                 if (outerMostRef != null && outerMostRef.isSolved() &&
-                    outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
+                        outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
                     ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                                  .solveType(name.substring(name.indexOf(".") + 1));
+                            .solveType(name.substring(name.indexOf(".") + 1));
                 } else if (outerMostRef != null && outerMostRef.isSolved() &&
-                           outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
+                        outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
                     ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                                  .solveType(name.substring(name.indexOf(".") + 1));
+                            .solveType(name.substring(name.indexOf(".") + 1));
                 }
                 if (ref != null && ref.isSolved()) {
                     return ref;
