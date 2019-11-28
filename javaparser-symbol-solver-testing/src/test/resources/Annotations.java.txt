@@ -45,3 +45,9 @@ class CC {
 class CD {
     @Test(expected = Throwable.class, timeout = 42L) public void testSomethingElse() {}
 }
+
+@foo.bar.MyAnnotation
+@org.junit.runner.RunWith(CE.class)
+class CE {
+	@org.junit.Ignore("ignore text") public void testSomething() {}
+}
