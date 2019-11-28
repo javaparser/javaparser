@@ -37,9 +37,15 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -158,6 +164,25 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         assertEquals(1, cd.getNumberOfParams());
         assertEquals(ResolvedPrimitiveType.INT, cd.getParam(0).getType());
         assertEquals("java.lang.AbstractStringBuilder", cd.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void testGenericParentContructorJavassist() throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
+        TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+
+        CompilationUnit cu = parseSample("JarTypeSolverConstructorResolution");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JarTypeSolverConstructionResolution");
+        ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
+        ExplicitConstructorInvocationStmt stmt =
+                (ExplicitConstructorInvocationStmt) constructorDeclaration.getBody().getStatement(0);
+
+        ResolvedConstructorDeclaration cd = stmt.resolve();
+
+        assertEquals(1, cd.getNumberOfParams());
+        assertEquals("S", cd.getParam(0).describeType());
+        assertEquals("javaparser.GenericClass", cd.declaringType().getQualifiedName());
     }
 
 }

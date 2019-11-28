@@ -120,9 +120,10 @@ public class ConstructorResolutionLogic {
                         expectedType.asReferenceType(), actualType.asReferenceType(), matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
-                List<ResolvedTypeParameterDeclaration> typeParameters = constructor.getTypeParameters();
-                typeParameters.addAll(constructor.declaringType().getTypeParameters());
-                for (ResolvedTypeParameterDeclaration tp : typeParameters) {
+                for (ResolvedTypeParameterDeclaration tp : constructor.getTypeParameters()) {
+                    expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
+                }
+                for (ResolvedTypeParameterDeclaration tp : constructor.declaringType().getTypeParameters()) {
                     expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                 }
 
