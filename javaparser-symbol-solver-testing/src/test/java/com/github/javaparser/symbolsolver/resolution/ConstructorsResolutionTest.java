@@ -206,7 +206,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(1)); // new TypeIfc() {}
         assertTrue(ref.isSolved());
         //assertEquals("B$1", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
-        assertTrue(ref.getCorrespondingDeclaration().declaringType().getQualifiedName().startsWith("B"));
+        assertTrue(ref.getCorrespondingDeclaration().declaringType().getQualifiedName().startsWith("B.Anonymous-"));
     }
 
     @Test
