@@ -28,6 +28,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class RangeTest {
 
     @Test
+    void constructorWithOrderedPositions() {
+        final Position pos1 = new Position(10, 11);
+        final Position pos2 = new Position(20, 21);
+        final Range range_orderedPositions = Range.range(pos1, pos2);
+
+        assertEquals(10, range_orderedPositions.begin.line);
+        assertEquals(11, range_orderedPositions.begin.column);
+        assertEquals(20, range_orderedPositions.end.line);
+        assertEquals(21, range_orderedPositions.end.column);
+    }
+
+    @Test
+    void constructorWithReversedPositions() {
+        final Position pos1 = new Position(10, 11);
+        final Position pos2 = new Position(20, 21);
+        final Range range_reversedPositions = Range.range(pos2, pos1);
+
+        assertEquals(10, range_reversedPositions.begin.line);
+        assertEquals(11, range_reversedPositions.begin.column);
+        assertEquals(20, range_reversedPositions.end.line);
+        assertEquals(21, range_reversedPositions.end.column);
+    }
+
+    @Test
     void aRangeContainsItself() {
         Range r = Range.range(1, 1, 3, 10);
         assertTrue(r.contains(r));
