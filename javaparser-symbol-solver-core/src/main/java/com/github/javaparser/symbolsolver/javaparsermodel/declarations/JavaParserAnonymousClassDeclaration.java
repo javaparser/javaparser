@@ -131,11 +131,10 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public List<ResolvedConstructorDeclaration> getConstructors() {
-    return
-        findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class)
-            .stream()
-            .map(ctor -> new JavaParserConstructorDeclaration<>(this, ctor, typeSolver))
-            .collect(Collectors.toList());
+    if (superTypeDeclaration.isInterface()) {
+      return Collections.singletonList(new DefaultConstructorDeclaration<>(this));
+    }
+    return superTypeDeclaration.asReferenceType().getConstructors();
   }
 
   @Override

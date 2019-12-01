@@ -46,8 +46,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConstructorsResolutionTest extends AbstractResolutionTest {
 
@@ -130,6 +132,81 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
 
         assertEquals(expectedConstructor, actualConstructor);
+    }
+
+    @Test
+    void solveAnonymousInnerClassEmptyConstructor() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructor");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+    }
+
+    @Test
+    void solveAnonymousInnerClassEmptyConstructorInterface() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructorInterface");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+    }
+
+    @Test
+    void solveAnonymousInnerClassStringConstructor() {
+        CompilationUnit cu = parseSample("ConstructorCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassStringConstructor");
+        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
+                .asExpressionStmt().getExpression().asObjectCreationExpr();
+
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
+
+        assertTrue(ref.isSolved());
+        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
+    }
+
+    @Test
+    public void testIssue1436() {
+        CompilationUnit cu = StaticJavaParser.parse("interface TypeIfc {}" +
+                "class TypeA {" +
+                "  void doSomething(TypeIfc typeIfc) {" +
+                "  }" +
+                "}" +
+
+                "class B {" +
+                "  void x() {" +
+                "    TypeA obj = new TypeA();" +
+                "    obj.doSomething(new TypeIfc() {" +
+                "    });" +
+                "  }" +
+                "}");
+
+        List<ObjectCreationExpr> oceList = cu.findAll(ObjectCreationExpr.class);
+        assertEquals(2, oceList.size());
+
+        SymbolReference<ResolvedConstructorDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(0)); // new TypeA();
+        assertTrue(ref.isSolved());
+        assertEquals("TypeA", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
+
+        ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(1)); // new TypeIfc() {}
+        assertTrue(ref.isSolved());
+        //assertEquals("B$1", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
+        assertTrue(ref.getCorrespondingDeclaration().declaringType().getQualifiedName().startsWith("B.Anonymous-"));
     }
 
     @Test
