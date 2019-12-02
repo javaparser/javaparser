@@ -16,11 +16,25 @@ class ConstructorCalls {
     void testInnerInnerClassConstructor() {
         new OtherClass().new InnerClass().new InnerInnerClass();
     }
+
+    void testAnonymousInnerClassEmptyConstructor() {
+        new OtherClass() {};
+    }
+
+    void testAnonymousInnerClassEmptyConstructorInterface() {
+        new OtherInterface() {};
+    }
+
+    void testAnonymousInnerClassStringConstructor() {
+        new OtherClass("foo") {};
+    }
 }
 
 class OtherClass {
 
     OtherClass() {}
+
+    OtherClass(String foo) {}
 
     class InnerClass {
 
@@ -31,4 +45,8 @@ class OtherClass {
             InnerInnerClass() {}
         }
     }
+}
+
+interface OtherInterface {
+
 }
