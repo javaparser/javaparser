@@ -154,6 +154,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
         if (rrtds.isEmpty()) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            // we don't make this _ex_plicit in the data representation because that would affect codegen
+            // and make everything generate like <T extends Object> instead of <T>
+            // https://github.com/javaparser/javaparser/issues/2044
             rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
         }
 
@@ -395,6 +399,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.asTypeParameter().getBounds();
 
         if (bounds.isEmpty()) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            // we don't make this _ex_plicit in the data representation because that would affect codegen
+            // and make everything generate like <T extends Object> instead of <T>
+            // https://github.com/javaparser/javaparser/issues/2044
             bounds = Collections.singletonList(
                     ResolvedTypeParameterDeclaration.Bound.extendsBound(
                             JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
