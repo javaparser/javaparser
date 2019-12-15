@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
@@ -23,6 +28,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -35,6 +41,7 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,12 +157,22 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+
+        if (rrtds.isEmpty()) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            // we don't make this _ex_plicit in the data representation because that would affect codegen
+            // and make everything generate like <T extends Object> instead of <T>
+            // https://github.com/javaparser/javaparser/issues/2044
+            rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
+        }
+
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (res.isSolved()) {
                 return res;
             }
         }
+
         return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
     }
 
@@ -384,12 +401,25 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
-        for (ResolvedTypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds()) {
+        List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.asTypeParameter().getBounds();
+
+        if (bounds.isEmpty()) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            // we don't make this _ex_plicit in the data representation because that would affect codegen
+            // and make everything generate like <T extends Object> instead of <T>
+            // https://github.com/javaparser/javaparser/issues/2044
+            bounds = Collections.singletonList(
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
+                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+        }
+
+        for (ResolvedTypeParameterDeclaration.Bound bound : bounds) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, argumentsTypes, invokationContext);
             if (methodUsage.isPresent()) {
                 return methodUsage;
             }
         }
+
         return Optional.empty();
     }
 
