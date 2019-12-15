@@ -1,24 +1,33 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.io.InputStream;
 
@@ -41,5 +50,26 @@ public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTes
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
         return StaticJavaParser.parse(is);
+    }
+
+    protected CompilationUnit parseSampleWithStandardExtension(String sampleName, TypeSolver typeSolver) {
+        return parseSample(sampleName, "java", typeSolver);
+    }
+
+    protected CompilationUnit parseSample(String sampleName, TypeSolver typeSolver) {
+        return parseSample(sampleName, "java.txt", typeSolver);
+    }
+
+    private CompilationUnit parseSample(String sampleName, String extension, TypeSolver typeSolver) {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + "." + extension);
+        if (is == null) {
+            throw new RuntimeException("Unable to find sample " + sampleName);
+        }
+        JavaParser javaParser = createParserWithResolver(typeSolver);
+        return javaParser.parse(is).getResult().orElseThrow(() -> new IllegalArgumentException("Sample does not parse: " + sampleName));
+    }
+
+    protected JavaParser createParserWithResolver(TypeSolver typeSolver) {
+        return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
     }
 }

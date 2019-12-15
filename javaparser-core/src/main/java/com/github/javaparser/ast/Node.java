@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -501,7 +501,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @see DataKey
      */
-    public void removeData(DataKey<ResolvedType> key) {
+    public void removeData(DataKey<?> key) {
         if (data != null) {
             data.remove(key);
         }
