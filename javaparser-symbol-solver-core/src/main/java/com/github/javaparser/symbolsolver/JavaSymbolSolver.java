@@ -114,7 +114,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             ResolvedReferenceTypeDeclaration resolvedTypeDeclaration = resolveDeclaration(typeDeclaration, ResolvedReferenceTypeDeclaration.class);
             ResolvedConstructorDeclaration resolved = resolvedTypeDeclaration.getConstructors().stream()
                     .filter(c -> c instanceof JavaParserConstructorDeclaration)
-                    .filter(c -> ((JavaParserConstructorDeclaration) c).getWrappedNode() == constructorDeclaration)
+                    .filter(c -> ((JavaParserConstructorDeclaration<?>) c).getWrappedNode() == constructorDeclaration)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("This constructor cannot be found in its parent. This seems wrong"));
             if (resultClass.isInstance(resolved)) {
@@ -185,6 +185,16 @@ public class JavaSymbolSolver implements SymbolResolver {
                 }
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
+            }
+        }
+        if (node instanceof MethodReferenceExpr) {
+            SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodReferenceExpr) node);
+            if (result.isSolved()) {
+                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+            } else {
+                throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }
         }
         if (node instanceof FieldAccessExpr) {

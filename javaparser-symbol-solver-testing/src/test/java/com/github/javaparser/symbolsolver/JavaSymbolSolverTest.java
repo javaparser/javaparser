@@ -21,11 +21,12 @@
 
 package com.github.javaparser.symbolsolver;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
@@ -36,10 +37,7 @@ class JavaSymbolSolverTest extends AbstractResolutionTest {
 
     @Test
     void resolveMethodDeclaration() {
-        TypeSolver typeSolver = new ReflectionTypeSolver();
-
-        CompilationUnit cu = parseSample("SymbolResolverExample");
-        new JavaSymbolSolver(typeSolver).inject(cu);
+        CompilationUnit cu = parseSample("SymbolResolverExample", new ReflectionTypeSolver());
 
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMethods().get(0);
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodDeclaration.resolve();
@@ -50,11 +48,20 @@ class JavaSymbolSolverTest extends AbstractResolutionTest {
     }
 
     @Test
-    void resolveArrayType() {
-        TypeSolver typeSolver = new ReflectionTypeSolver();
+    void resolveMethodReferenceExpr() {
+        JavaParser parser = createParserWithResolver(new ReflectionTypeSolver());
+        MethodReferenceExpr methodRef = parser.parse("class X{void x(){Function<Object, Integer>r=Object::hashCode;}}")
+                .getResult().get()
+                .findFirst(MethodReferenceExpr.class).get();
+        ResolvedMethodDeclaration resolvedMethodRef = methodRef.resolve();
+        assertEquals("hashCode", resolvedMethodRef.getName());
+        assertEquals("int", resolvedMethodRef.getReturnType().describe());
+        assertEquals(0, resolvedMethodRef.getNumberOfParams());
+    }
 
-        CompilationUnit cu = parseSample("SymbolResolverExample");
-        new JavaSymbolSolver(typeSolver).inject(cu);
+    @Test
+    void resolveArrayType() {
+        CompilationUnit cu = parseSample("SymbolResolverExample", new ReflectionTypeSolver());
 
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMethods().get(0);
         ResolvedType resolvedType = methodDeclaration.getType().resolve();
