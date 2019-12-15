@@ -501,7 +501,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @see DataKey
      */
-    public void removeData(DataKey<ResolvedType> key) {
+    public void removeData(DataKey<?> key) {
         if (data != null) {
             data.remove(key);
         }
