@@ -234,14 +234,9 @@ public class CompilationUnit extends Node {
      */
     public CompilationUnit addImport(ImportDeclaration importDeclaration) {
         if (importDeclaration.isAsterisk()) {
-            getImports().removeIf(im -> Objects.equals(
-                    getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null)));
+            getImports().removeIf(im -> Objects.equals(getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null)));
         }
-        if (!isImplicitImport(importDeclaration) && getImports().stream()
-                .noneMatch(im -> im.equals(importDeclaration) ||
-                        (im.isAsterisk() && Objects.equals(
-                                getImportPackageName(im).get(),
-                                getImportPackageName(importDeclaration).orElse(null))))) {
+        if (!isImplicitImport(importDeclaration) && getImports().stream().noneMatch(im -> im.equals(importDeclaration) || (im.isAsterisk() && Objects.equals(getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null))))) {
             getImports().add(importDeclaration);
         }
         return this;
@@ -249,10 +244,9 @@ public class CompilationUnit extends Node {
 
     /**
      * @param importDeclaration
-     * @return <code>true</code>, if the import is implicit 
+     * @return <code>true</code>, if the import is implicit
      */
     private boolean isImplicitImport(ImportDeclaration importDeclaration) {
-
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
             if (parseName(JAVA_LANG).equals(importPackageName.get())) {
@@ -272,8 +266,7 @@ public class CompilationUnit extends Node {
     }
 
     private static Optional<Name> getImportPackageName(ImportDeclaration importDeclaration) {
-        return (importDeclaration.isAsterisk() ? new Name(importDeclaration.getName(), "*")
-                : importDeclaration.getName()).getQualifier();
+        return (importDeclaration.isAsterisk() ? new Name(importDeclaration.getName(), "*") : importDeclaration.getName()).getQualifier();
     }
 
     /**
@@ -364,8 +357,7 @@ public class CompilationUnit extends Node {
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName()))
             return this;
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
-            throw new IllegalArgumentException(
-                    clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
+            throw new IllegalArgumentException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getCanonicalName());
     }
 
@@ -380,7 +372,7 @@ public class CompilationUnit extends Node {
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
         if (name == null) {
-          return this;
+            return this;
         }
         final StringBuilder i = new StringBuilder("import ");
         if (isStatic) {
