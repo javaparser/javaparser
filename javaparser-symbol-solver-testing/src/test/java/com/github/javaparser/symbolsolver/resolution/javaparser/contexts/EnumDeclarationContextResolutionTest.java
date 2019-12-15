@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Federico Tomassetti
@@ -58,7 +59,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("i");
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
     }
 
@@ -69,7 +70,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("j");
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("long", ref.getCorrespondingDeclaration().getType().describe());
     }
 
@@ -80,7 +81,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, new MemoryTypeSolver());
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("E1");
-        assertEquals(true, ref.isSolved());
+        assertTrue(ref.isSolved());
         assertEquals("MyEnum", ref.getCorrespondingDeclaration().getType().describe());
     }
 
@@ -91,7 +92,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("i");
-        assertEquals(true, ref.isPresent());
+        assertTrue(ref.isPresent());
         assertEquals("int", ref.get().getType().describe());
     }
 
@@ -102,7 +103,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("j");
-        assertEquals(true, ref.isPresent());
+        assertTrue(ref.isPresent());
         assertEquals("long", ref.get().getType().describe());
     }
 
@@ -113,7 +114,7 @@ class EnumDeclarationContextResolutionTest extends AbstractResolutionTest {
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("E1");
-        assertEquals(true, ref.isPresent());
+        assertTrue(ref.isPresent());
         assertEquals("MyEnum", ref.get().getType().describe());
     }
 
