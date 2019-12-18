@@ -33,12 +33,17 @@ public final class GenericMethodCalls {
         public void callee(T data) {
         }
 
+        public T get() {
+            return null;
+        }
+
     }
 
     public class Derived extends Base<String> {
 
         public void caller() {
             callee("test");
+            get();
         }
 
     }
