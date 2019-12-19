@@ -144,7 +144,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		StaticJavaParser.setConfiguration(config);
 		CompilationUnit cu = parseSample("Issue2258");
 		List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
-		assertTrue(expressions.size() == 2);
+		assertEquals(2, expressions.size());
 		ResolvedType r = expressions.get(1).calculateResolvedType();
 		assertTrue(ResolvedVoidType.class.isAssignableFrom(r.getClass()));
 	}

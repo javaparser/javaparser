@@ -21,9 +21,13 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.io.InputStream;
 
@@ -46,5 +50,26 @@ public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTes
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
         return StaticJavaParser.parse(is);
+    }
+
+    protected CompilationUnit parseSampleWithStandardExtension(String sampleName, TypeSolver typeSolver) {
+        return parseSample(sampleName, "java", typeSolver);
+    }
+
+    protected CompilationUnit parseSample(String sampleName, TypeSolver typeSolver) {
+        return parseSample(sampleName, "java.txt", typeSolver);
+    }
+
+    private CompilationUnit parseSample(String sampleName, String extension, TypeSolver typeSolver) {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + "." + extension);
+        if (is == null) {
+            throw new RuntimeException("Unable to find sample " + sampleName);
+        }
+        JavaParser javaParser = createParserWithResolver(typeSolver);
+        return javaParser.parse(is).getResult().orElseThrow(() -> new IllegalArgumentException("Sample does not parse: " + sampleName));
+    }
+
+    protected JavaParser createParserWithResolver(TypeSolver typeSolver) {
+        return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
     }
 }

@@ -58,6 +58,16 @@ class DataKeyTest {
     }
 
     @Test
+    void removeWorks() {
+        Node node = new SimpleName();
+        node.setData(ABC, "Hurray!");
+        
+        node.removeData(ABC);
+
+        assertThat(node.containsData(ABC)).isFalse();
+    }
+
+    @Test
     void aNonExistentKeyThrowsAnException() {
         Node node = new SimpleName();
 
