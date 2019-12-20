@@ -27,6 +27,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A TypeSolver which only consider the TypeDeclarations provided to it.
@@ -72,6 +73,13 @@ public class MemoryTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        Objects.requireNonNull(parent);
+        if (this.parent != null) {
+            throw new IllegalStateException("This TypeSolver already has a parent.");
+        }
+        if (parent == this) {
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        }
         this.parent = parent;
     }
 
