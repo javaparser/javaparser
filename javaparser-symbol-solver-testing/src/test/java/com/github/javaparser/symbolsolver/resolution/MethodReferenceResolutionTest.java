@@ -91,7 +91,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
 
         // check that the expected method declaration equals the resolved method declaration
-        assertEquals("java.util.AbstractList.hashCode()", resolvedMethodDeclaration.getQualifiedSignature());
+        assertEquals("java.lang.String.hashCode()", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
     @Test
@@ -208,25 +208,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         // check that the expected method declaration equals the resolved method declaration
         assertEquals("SuperClass.print(java.lang.Boolean)", resolvedMethodDeclaration.getQualifiedSignature());
-    }
-
-    @Test
-    void biPredicate() {
-        // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-
-        // parse compilation unit and get method reference expression
-        CompilationUnit cu = parseSample("MethodReferences");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "biPredicate");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
-
-        // resolve method reference expression
-        ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
-
-        // check that the expected method declaration equals the resolved method declaration
-        assertEquals("SuperClass.isEqual(java.lang.Integer, java.lang.Integer)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
     @Test

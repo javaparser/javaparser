@@ -1,10 +1,21 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+
+interface Function<T, R> {
+    R apply(T t);
+}
+
+interface Consumer<T> {
+    void accept(T t);
+}
+
+interface Supplier<T> {
+    T get();
+}
+
+interface BiFunction<T, U, R> {
+    R apply(T t, U u);
+}
 
 interface TriFunction<T, U, V, R> {
     R apply(T t, U u, V v);
@@ -78,11 +89,11 @@ public class MethodReferences extends SuperClass {
         return SuperClass::hashCode;
     }
 
-    Function<ArrayList<?>, Integer> superclassMethodOverridden() {
-        return ArrayList::hashCode;
+    Function<String, Integer> superclassMethodOverridden() {
+        return String::hashCode;
     }
 
-    Function<Integer, Integer> superclassMethodWithSubclassType() {
+    Function<Object, Integer> superclassMethodWithSubclassType() {
         return Object::hashCode;
     }
 
@@ -112,10 +123,6 @@ public class MethodReferences extends SuperClass {
 
     Consumer<Boolean> staticMethod() {
         return SuperClass::print;
-    }
-
-    BiPredicate<Integer, Integer> biPredicate() {
-        return super::isEqual;
     }
 
     BiFunction<Integer, String, Boolean> biFunction() {
