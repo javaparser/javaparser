@@ -22,11 +22,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -130,6 +132,35 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             return Optional.of(value);
                         } else {
                             throw new UnsupportedOperationException();
+                        }
+                    } else if (requireParentNode(wrappedNode) instanceof ReturnStmt) {
+                        ReturnStmt returnStmt = (ReturnStmt) requireParentNode(wrappedNode);
+                        Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
+                        if (optDeclaration.isPresent()) {
+                            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
+                            Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
+
+                            if (functionalMethod.isPresent()) {
+                                ResolvedType lambdaType = functionalMethod.get().getParamType(index);
+
+                                // Replace parameter from declarator
+                                Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
+                                if (lambdaType.isReferenceType()) {
+                                    for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
+                                        if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
+                                            ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
+                                            lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
+                                        }
+                                    }
+                                } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
+                                    lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
+                                }
+
+                                Value value = new Value(lambdaType, name);
+                                return Optional.of(value);
+                            } else {
+                                throw new UnsupportedOperationException();
+                            }
                         }
                     } else {
                         throw new UnsupportedOperationException();

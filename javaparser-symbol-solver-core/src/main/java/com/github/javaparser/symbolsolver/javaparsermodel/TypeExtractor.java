@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -300,6 +301,21 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, node.getName().getId());
         } else {
             return value.get().getType();
+        }
+    }
+
+    @Override
+    public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
+        Log.trace("getType on type expr %s", ()-> node);
+        if (!(node.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
+            throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
+        }
+        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
+        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
+        if (!typeDeclarationSymbolReference.isSolved()) {
+            throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
+        } else {
+            return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
     }
 

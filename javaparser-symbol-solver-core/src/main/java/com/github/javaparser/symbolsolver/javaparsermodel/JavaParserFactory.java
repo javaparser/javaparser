@@ -66,6 +66,8 @@ public class JavaParserFactory {
             return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration) node, typeSolver);
         } else if (node instanceof MethodCallExpr) {
             return new MethodCallExprContext((MethodCallExpr) node, typeSolver);
+        } else if (node instanceof MethodReferenceExpr) {
+            return new MethodReferenceExprContext((MethodReferenceExpr) node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
