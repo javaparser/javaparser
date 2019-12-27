@@ -40,6 +40,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -109,6 +110,13 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        Objects.requireNonNull(parent);
+        if (this.parent != null) {
+            throw new IllegalStateException("This TypeSolver already has a parent.");
+        }
+        if (parent == this) {
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        }
         this.parent = parent;
     }
 
