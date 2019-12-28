@@ -50,7 +50,7 @@ class JavaSymbolSolverTest extends AbstractResolutionTest {
     @Test
     void resolveMethodReferenceExpr() {
         JavaParser parser = createParserWithResolver(new ReflectionTypeSolver());
-        MethodReferenceExpr methodRef = parser.parse("class X{void x(){Function<Object, Integer>r=Object::hashCode;}}")
+        MethodReferenceExpr methodRef = parser.parse("import java.util.function.Function; class X{void x(){Function<Object, Integer>r=Object::hashCode;}}")
                 .getResult().get()
                 .findFirst(MethodReferenceExpr.class).get();
         ResolvedMethodDeclaration resolvedMethodRef = methodRef.resolve();
