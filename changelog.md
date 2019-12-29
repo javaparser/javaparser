@@ -1,8 +1,12 @@
+Version 3.15.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/160?closed=1)
+
 Version 3.15.7
 ------------------
 * BREAKING: Range.overlapsWith works slightly different now.
 
-[issues resolved](https://github.com/javaparser/javaparser/milestone/160?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/162?closed=1)
 
 Version 3.15.6
 ------------------
