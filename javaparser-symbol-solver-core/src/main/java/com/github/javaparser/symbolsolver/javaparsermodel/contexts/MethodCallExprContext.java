@@ -305,6 +305,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             mappings.put(target.asTypeParameter(), source);
             return;
         }
+        if (source.isTypeVariable()) {
+            inferTypes(target, source, mappings);
+            return;
+        }
         if (source.isPrimitive() || target.isPrimitive()) {
             return;
         }
