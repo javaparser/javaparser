@@ -132,8 +132,7 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr) {
-        MethodUsage methodUsage = toMethodUsage(methodReferenceExpr);
-        return solved(methodUsage.getDeclaration());
+        return solve(methodReferenceExpr, true);
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solve(ObjectCreationExpr objectCreationExpr) {
@@ -263,6 +262,15 @@ public class JavaParserFacade {
             placeholder.setMethod(res);
         }
         return res;
+    }
+
+    /**
+     * Given a method reference find out to which method declaration it corresponds.
+     */
+    public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr, boolean solveLambdas) {
+        // pass empty argument list to be populated
+        List<ResolvedType> argumentTypes = new LinkedList<>();
+        return JavaParserFactory.getContext(methodReferenceExpr, typeSolver).solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
