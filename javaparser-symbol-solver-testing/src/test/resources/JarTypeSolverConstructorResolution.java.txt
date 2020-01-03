@@ -1,0 +1,9 @@
+package java.lang;
+
+import javaparser.GenericClass;
+
+public class JarTypeSolverConstructionResolution extends GenericClass<String> {
+    public JarTypeSolverConstructionResolution(String s) {
+        super(s);
+    }
+}

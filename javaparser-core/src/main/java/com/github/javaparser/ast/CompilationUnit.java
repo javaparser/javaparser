@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -48,6 +48,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import static com.github.javaparser.JavaToken.Kind.EOF;
@@ -79,6 +80,8 @@ import com.github.javaparser.ast.Generated;
  * @see Storage
  */
 public class CompilationUnit extends Node {
+
+    private static final String JAVA_LANG = "java.lang";
 
     @OptionalProperty
     private PackageDeclaration packageDeclaration;
@@ -222,11 +225,55 @@ public class CompilationUnit extends Node {
         return this;
     }
 
+    /**
+     * adds an import if not implicitly imported by java (i.e. java.lang) or
+     * added before. Asterisk imports overrule the other imports within the same package.
+     *
+     * @param importDeclaration
+     * @return <code>this</code>
+     */
     public CompilationUnit addImport(ImportDeclaration importDeclaration) {
-        if (getImports().stream().noneMatch(im -> im.toString().equals(importDeclaration.toString()))) {
+        if (importDeclaration.isAsterisk()) {
+            getImports().removeIf(im -> Objects.equals(
+                    getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null)));
+        }
+        if (!isImplicitImport(importDeclaration) && getImports().stream()
+                .noneMatch(im -> im.equals(importDeclaration) ||
+                        (im.isAsterisk() && Objects.equals(
+                                getImportPackageName(im).get(),
+                                getImportPackageName(importDeclaration).orElse(null))))) {
             getImports().add(importDeclaration);
         }
         return this;
+    }
+
+    /**
+     * @param importDeclaration
+     * @return <code>true</code>, if the import is implicit 
+     */
+    private boolean isImplicitImport(ImportDeclaration importDeclaration) {
+
+        Optional<Name> importPackageName = getImportPackageName(importDeclaration);
+        if (importPackageName.isPresent()) {
+            if (parseName(JAVA_LANG).equals(importPackageName.get())) {
+                // java.lang is implicitly imported
+                return true;
+            }
+            if (packageDeclaration != null) {
+                // the import is within the same package
+                Name currentPackageName = packageDeclaration.getName();
+                return currentPackageName.equals(importPackageName.get());
+            }
+            return false;
+        } else {
+            // imports of unnamed package are not allowed
+            return true;
+        }
+    }
+
+    private static Optional<Name> getImportPackageName(ImportDeclaration importDeclaration) {
+        return (importDeclaration.isAsterisk() ? new Name(importDeclaration.getName(), "*")
+                : importDeclaration.getName()).getQualifier();
     }
 
     /**
@@ -308,19 +355,18 @@ public class CompilationUnit extends Node {
      *
      * @param clazz the class to import
      * @return this, the {@link CompilationUnit}
-     * @throws RuntimeException if clazz is an anonymous or local class
+     * @throws IllegalArgumentException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
         if (clazz.isArray()) {
             return addImport(clazz.getComponentType());
         }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || "java.lang".equals(clazz.getPackage().getName()))
+        if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName()))
             return this;
-        else if (clazz.isMemberClass())
-            return addImport(clazz.getName().replace("$", "."));
         else if (clazz.isAnonymousClass() || clazz.isLocalClass())
-            throw new RuntimeException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
-        return addImport(clazz.getName());
+            throw new IllegalArgumentException(
+                    clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
+        return addImport(clazz.getCanonicalName());
     }
 
     /**
@@ -333,6 +379,9 @@ public class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
+        if (name == null) {
+          return this;
+        }
         final StringBuilder i = new StringBuilder("import ");
         if (isStatic) {
             i.append("static ");

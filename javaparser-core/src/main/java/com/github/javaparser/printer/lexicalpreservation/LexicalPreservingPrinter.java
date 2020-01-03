@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -501,9 +501,24 @@ public class LexicalPreservingPrinter {
 
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
+            if (element instanceof CsmIndent) {
+                int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
+                if(calculatedSyntaxModel.elements.size() > indexCurrentElement &&
+                        !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                    for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                        indentation.add(new TokenTextElement(SPACE, " "));
+                    }
+                }
+            } else if (element instanceof CsmUnindent) {
+                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE && indentation.size() > 0; i++) {
+                    indentation.remove(indentation.size() - 1);
+                }
+            }
+
             if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken) element).isNewLine())) {
                 indentation.forEach(nodeText::addElement);
             }
+
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
                 nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
@@ -516,22 +531,12 @@ public class LexicalPreservingPrinter {
             } else if (element instanceof CsmMix) {
                 CsmMix csmMix = (CsmMix) element;
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
-
-            // Indentation should probably be dealt with before because an indentation has effects also on the
-            // following lines
-
-            } else if (element instanceof CsmIndent) {
-                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
-                    nodeText.addToken(SPACE, " ");
-                }
-            } else if (element instanceof CsmUnindent) {
-                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
-                    if (nodeText.endWithSpace()) {
-                        nodeText.removeLastElement();
-                    }
-                }
             } else {
-                throw new UnsupportedOperationException(element.getClass().getSimpleName());
+                // Indentation should probably be dealt with before because an indentation has effects also on the
+                // following lines
+                if(!(element instanceof CsmIndent) && !(element instanceof CsmUnindent)) {
+                    throw new UnsupportedOperationException(element.getClass().getSimpleName());
+                }
             }
         }
         // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
