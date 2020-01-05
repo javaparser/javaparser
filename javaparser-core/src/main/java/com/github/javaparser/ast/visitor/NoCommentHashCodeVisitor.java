@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -87,7 +87,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final BooleanLiteralExpr n, final Void arg) {
-        return (n.getValue() ? 1 : 0);
+        return (n.isValue() ? 1 : 0);
     }
 
     public Integer visit(final BreakStmt n, final Void arg) {

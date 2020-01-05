@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javassistmodel;
@@ -29,9 +34,11 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
+import javassist.bytecode.MethodInfo;
 import javassist.bytecode.SignatureAttribute;
 
 import java.lang.reflect.Modifier;
@@ -102,12 +109,27 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     public ResolvedType getReturnType() {
         try {
             if (ctMethod.getGenericSignature() != null) {
-                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature()).getReturnType();
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute
+                    .toMethodSignature(ctMethod.getGenericSignature())
+                    .getReturnType();
                 return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, this);
             } else {
-                return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
+                try {
+                    return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
+                } catch (NotFoundException e) {
+                    /*
+                        "ctMethod.getReturnType()" will use "declaringClass.getClassPool()" to solve the returnType,
+                        but in some case ,the returnType cannot solve by "declaringClass.getClassPool()".
+                        In this case, we try to use "typeSolver" to solve "ctMethod.getReturnType()"
+                        See https://github.com/javaparser/javaparser/pull/2398
+                     */
+                    final String returnTypeClassRefPath = toClassRefPath(ctMethod.getMethodInfo());
+                    final ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver
+                        .solveType(returnTypeClassRefPath);
+                    return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+                }
             }
-        } catch (NotFoundException | BadBytecode e) {
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
@@ -197,5 +219,49 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public Optional<MethodDeclaration> toAst() {
         return Optional.empty();
+    }
+
+    /**
+     * copy from javassist.bytecode.Descriptor#toCtClass(javassist.ClassPool, java.lang.String, int,
+     * javassist.CtClass[], int)
+     *
+     * convert methodInfo.getDescriptor() to class reference path
+     * e.g: convert "()Ljava/sql/Driver" to "java.sql.Driver"
+     *
+     * @param methodInfo
+     * @return class reference path,e.g: "java.sql.Driver"
+     */
+    private String toClassRefPath(MethodInfo methodInfo) {
+        final String desc = methodInfo.getDescriptor();//e.g: ()Ljava/sql/Driver;
+
+        int i = desc.indexOf(')');
+        int i2;
+        String classRefPath = null;//e.g: java.sql.Driver
+
+        if (i < 0) {
+            throw new RuntimeException("parse descriptor error:" + desc);
+        }
+        i += 1;
+        char c = desc.charAt(i);
+        int arrayDim = 0;
+        while (c == '[') {
+            ++arrayDim;
+            c = desc.charAt(++i);
+        }
+        if (c == 'L') {
+            i2 = desc.indexOf(';', ++i);
+            classRefPath = desc.substring(i, i2++).replace('/', '.');
+        }
+
+        if (arrayDim > 0) {
+            StringBuffer sbuf = new StringBuffer(classRefPath);
+            while (arrayDim-- > 0) {
+                sbuf.append("[]");
+            }
+
+            classRefPath = sbuf.toString();
+        }
+
+        return classRefPath;
     }
 }
