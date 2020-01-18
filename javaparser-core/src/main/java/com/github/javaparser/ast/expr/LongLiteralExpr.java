@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
 import com.github.javaparser.TokenRange;
+import java.math.BigInteger;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
@@ -105,6 +107,22 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
             return Long.parseUnsignedLong(result.substring(1), 8);
         }
         return Long.parseLong(result);
+    }
+
+    /**
+     * @return the literal value as an long while respecting different number representations
+     */
+    public Number asNumber() {
+        /* we need to handle the special case for the literal 9223372036854775808L, which is used to
+         * represent Integer.MIN_VALUE (-9223372036854775808L) as a combination of a UnaryExpr and a
+         * LongLiteralExpr. However 9223372036854775808L cannot be represented in a long, so we need
+         * to return a BigInteger
+         */
+        if (Objects.equals(value, "9223372036854775808L")) {
+            return new BigInteger("9223372036854775808");
+        } else {
+            return asLong();
+        }
     }
 
     public LongLiteralExpr setLong(long value) {

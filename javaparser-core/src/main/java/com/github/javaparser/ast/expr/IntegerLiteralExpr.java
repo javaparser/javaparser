@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
@@ -101,6 +102,22 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
             return Integer.parseUnsignedInt(result.substring(1), 8);
         }
         return Integer.parseInt(result);
+    }
+
+    /**
+     * @return the literal value as an integer while respecting different number representations
+     */
+    public Number asNumber() {
+        /* we need to handle the special case for the literal 2147483648, which is used to
+         * represent Integer.MIN_VALUE (-2147483648) as a combination of a UnaryExpr and an
+         * IntegerLiteralExpr. However 2147483648 cannot be represented in an integer, so we
+         * need to return a long
+         */
+        if (Objects.equals(value, "2147483648")) {
+            return 2147483648L;
+        } else {
+            return asInt();
+        }
     }
 
     public IntegerLiteralExpr setInt(int value) {
