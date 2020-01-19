@@ -203,6 +203,19 @@ class GenericsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void resolveUsageOfMethodOfGenericClassWithGenericReturnType() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodCalls.Derived");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "get").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("get", methodUsage.getName());
+        assertEquals("java.lang.String", methodUsage.returnType().describe());
+    }
+
+    @Test
     void resolveUsageOfMethodOfGenericClassWithUnboundedWildcard() {
         CompilationUnit cu = parseSample("GenericsWildcard");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
