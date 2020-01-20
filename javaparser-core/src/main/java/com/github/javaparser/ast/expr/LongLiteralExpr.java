@@ -28,19 +28,25 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
 import com.github.javaparser.TokenRange;
+
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
+
+import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
 
 /**
  * All ways to specify a long literal.
- * <br/><code>8934l</code>
- * <br/><code>0x01L</code>
- * <br/><code>022l</code>
- * <br/><code>0B10101010L</code>
- * <br/><code>99999999L</code>
+ * <ul>
+ * <li><code>8934l</code></li>
+ * <li><code>0x01L</code></li>
+ * <li><code>022l</code></li>
+ * <li><code>0B10101010L</code></li>
+ * <li><code>99999999L</code></li>
+ * </ul>
  *
  * @author Julio Vilmar Gesser
  */
@@ -90,6 +96,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * @return the literal value as an long while respecting different number representations
+     * @deprecated Will be made private or merged with {@link LongLiteralExpr#asNumber()} in future releases
      */
     public long asLong() {
         String result = value.replaceAll("_", "");
@@ -110,7 +117,17 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @return the literal value as an long while respecting different number representations
+     * This function returns a representation of the literal values as a number. This will return a long, except for the
+     * case when the literal has the value 9223372036854775808L (which is only allowed in the expression
+     * <code>-9223372036854775808L</code>) and returns a BigInteger.
+     * <p>
+     * Note, that this function will NOT return a negative number if the literal was specified in decimal, since *
+     * according to the language specification an expression such as <code>-1L</code> is represented by a unary *
+     * expression with a minus operator and the literal <code>1L</code>. It is however possible to represent negative *
+     * numbers in a literal directly, i.e. by using the binary or hexadecimal representation. For example *
+     * <code>0xffff_ffff_ffff_ffffL</code> represents the value <code>-1L</code>.
+     *
+     * @return the literal value as a number while respecting different number representations
      */
     public Number asNumber() {
         /* we need to handle the special case for the literal 9223372036854775808L, which is used to
@@ -118,7 +135,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
          * LongLiteralExpr. However 9223372036854775808L cannot be represented in a long, so we need
          * to return a BigInteger
          */
-        if (Objects.equals(value, "9223372036854775808L")) {
+        if (Objects.equals(value, "9223372036854775808L") && hasUnaryMinusAsParent(this)) {
             return new BigInteger("9223372036854775808");
         } else {
             return asLong();

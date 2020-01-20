@@ -28,18 +28,25 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.utils.Utils;
+
+import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
 
 /**
  * All ways to specify an int literal.
- * <br/><code>8934</code>
- * <br/><code>0x01</code>
- * <br/><code>022</code>
- * <br/><code>0B10101010</code>
- * <br/><code>99999999L</code>
+ * <ul>
+ * <li><code>8934</code></li>
+ * <li><code>0x01</code></li>
+ * <li><code>022</code></li>
+ * <li><code>0B10101010</code></li>
+ * <li><code>99999999L</code></li>
+ * </ul>
  *
  * @author Julio Vilmar Gesser
  */
@@ -89,6 +96,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * @return the literal value as an integer while respecting different number representations
+     * @deprecated Will be made private or merged with {@link IntegerLiteralExpr#asNumber()} in future releases
      */
     public int asInt() {
         String result = value.replaceAll("_", "");
@@ -105,15 +113,26 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @return the literal value as an integer while respecting different number representations
+     * This function returns a representation of the literal values as a number. This will return an integer, except for
+     * the case when the literal has the value 2147483648 (which is only allowed in the expression
+     * <code>-2147483648</code>) and returns a long.
+     * <p>
+     * Note, that this function will NOT return a negative number if the literal was specified in decimal, since
+     * according to the language specification an expression such as <code>-1</code> is represented by a unary
+     * expression with a minus operator and the literal <code>1</code>. It is however possible to represent negative
+     * numbers in a literal directly, i.e. by using the binary or hexadecimal representation. For example
+     * <code>0xffff_ffff</code> represents the value <code>-1</code>.
+     *
+     * @return the literal value as a number while respecting different number representations
      */
     public Number asNumber() {
-        /* we need to handle the special case for the literal 2147483648, which is used to
+        /*
+         * we need to handle the special case for the literal 2147483648, which is used to
          * represent Integer.MIN_VALUE (-2147483648) as a combination of a UnaryExpr and an
          * IntegerLiteralExpr. However 2147483648 cannot be represented in an integer, so we
          * need to return a long
          */
-        if (Objects.equals(value, "2147483648")) {
+        if (Objects.equals(value, "2147483648") && hasUnaryMinusAsParent(this)) {
             return 2147483648L;
         } else {
             return asInt();

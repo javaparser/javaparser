@@ -27,6 +27,7 @@ import java.math.BigInteger;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("OctalInteger")
 class LiteralStringValueExprTest {
@@ -94,13 +95,19 @@ class LiteralStringValueExprTest {
 
     @Test
     void negativeLiteralValues() {
-        UnaryExpr unaryIntExpr = parseExpression("-2147483648"); // Integer.MIN_VALUE
+        UnaryExpr unaryIntExpr = parseExpression("-2147483648"); // valid, Integer.MIN_VALUE
         IntegerLiteralExpr literalIntExpr = (IntegerLiteralExpr) unaryIntExpr.getExpression();
-        UnaryExpr unaryLongExpr = parseExpression("-9223372036854775808L"); // Long.MIN_VALUE
+        IntegerLiteralExpr notValidIntExpr = parseExpression("2147483648"); // not valid
+
+        UnaryExpr unaryLongExpr = parseExpression("-9223372036854775808L"); // valid, Long.MIN_VALUE
         LongLiteralExpr literalLongExpr = (LongLiteralExpr) unaryLongExpr.getExpression();
+        LongLiteralExpr notValidLongExpr = parseExpression("9223372036854775808L"); // not valid
 
         assertThat(literalIntExpr.asNumber()).isEqualTo(2147483648L);
         assertThat(literalLongExpr.asNumber()).isEqualTo(new BigInteger("9223372036854775808"));
+
+        assertThatThrownBy(notValidIntExpr::asNumber).isInstanceOf(NumberFormatException.class);
+        assertThatThrownBy(notValidLongExpr::asNumber).isInstanceOf(NumberFormatException.class);
     }
 
     @Test
