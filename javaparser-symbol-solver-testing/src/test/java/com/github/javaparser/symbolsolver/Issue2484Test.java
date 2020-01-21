@@ -26,13 +26,17 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,8 +64,8 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
     public void test() {
         String x = "public class MyClass {\n" +
             "    private Ibaz m_something;\n" +
-            "\n" +
-            "    public interface Ibaz {\n" +
+            "    \n" +
+            "    public class Ibaz {\n" +
             "    }\n" +
             "    \n" +
             "    public void foo(Class<? extends Ibaz> clazz) {\n" +
@@ -70,6 +74,13 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             "    protected void bar() {\n" +
             "        foo(null); // this works\n" +
             "        foo(Ibaz.class); // this works\n" +
+            "        \n" +
+            "        Class c1 = m_something.getClass();\n" +
+            "        foo(c1); // this works\n" +
+            "        \n" +
+            "        Class<Ibaz> c2 = m_something.getClass();\n" +
+            "        foo(c2); // this works\n" +
+            "        \n" +
             "        foo(m_something.getClass()); // this doesn't work\n" +
             "    }\n" +
             "}";
@@ -79,10 +90,10 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
 
         result.ifSuccessful(compilationUnit -> {
             List<MethodCallExpr> methodCallExprs = compilationUnit.findAll(MethodCallExpr.class);
-            assertEquals(4, methodCallExprs.size());
+//            assertEquals(4, methodCallExprs.size());
 
             for (int i = 0; i < methodCallExprs.size(); i++) {
-//                if(i==2) {continue;}
+//                if(i!=2) {continue;}
                 MethodCallExpr methodCallExpr = methodCallExprs.get(i);
                 System.out.println();
                 System.out.println("methodCallExpr (" + i + ") = " + methodCallExpr);
@@ -90,6 +101,32 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
                 System.out.println("methodCallExpr.calculateResolvedType() = " + methodCallExpr.calculateResolvedType());
                 System.out.println();
             }
+
+//            MethodCallExpr methodCall = methodCallExprs.get(2);
+//            Expression arg = methodCall.getArgument(0);
+//            ResolvedType argResolvedType = arg.calculateResolvedType();
+//
+//            System.out.println("argResolvedType = " + argResolvedType);
+//
+//
+//            String name = "foo";
+////            List<ResolvedMethodDeclaration> methodsWithMatchingName = methodCallExprs.stream()
+////                .filter(m -> m.getName().equals(name))
+////                .collect(Collectors.toList());
+//
+////            ResolvedType a = methodCall.calculateResolvedType();
+//
+//            ResolvedMethodDeclaration a = methodCall.resolve();
+//            ResolvedMethodDeclaration foo = a.asMethod();
+//            int numParams = foo.getNumberOfParams();
+//
+////            List<ResolvedMethodDeclaration> applicableMethods = methodsWithMatchingName.stream()
+////                // Filters out duplicate ResolvedMethodDeclaration by their signature.
+////                .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
+////                // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+////                .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
+////                .collect(Collectors.toList());
+
 
         });
     }
