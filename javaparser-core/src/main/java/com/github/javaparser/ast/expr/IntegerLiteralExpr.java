@@ -52,6 +52,9 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  */
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
+    public static final String MAX_31_BIT_UNSIGNED_VALUE_AS_STRING = "2147483648";
+    public static final long MAX_31_BIT_UNSIGNED_VALUE_AS_LONG = 2147483648L;
+
     public IntegerLiteralExpr() {
         this(null, "0");
     }
@@ -96,7 +99,9 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * @return the literal value as an integer while respecting different number representations
-     * @deprecated Will be made private or merged with {@link IntegerLiteralExpr#asNumber()} in future releases
+     * @deprecated This function has issues with corner cases, such as 2147483648, so please use {@link
+     * IntegerLiteralExpr#asNumber()}. It will be made private or merged with {@link IntegerLiteralExpr#asNumber()} in
+     * future releases
      */
     public int asInt() {
         String result = value.replaceAll("_", "");
@@ -113,9 +118,10 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * This function returns a representation of the literal values as a number. This will return an integer, except for
-     * the case when the literal has the value 2147483648 (which is only allowed in the expression
-     * <code>-2147483648</code>) and returns a long.
+     * This function returns a representation of the literal value as a number. This will return an integer, except for
+     * the case when the literal has the value <code>2147483648</code>. This special literal is only allowed in the
+     * expression <code>-2147483648</code> which represents <code>Integer.MIN_VALUE</code>). However 2147483648 (2^31)
+     * is out of range of int, which is -(2^31) to (2^31)-1 and thus a long must be returned.
      * <p>
      * Note, that this function will NOT return a negative number if the literal was specified in decimal, since
      * according to the language specification an expression such as <code>-1</code> is represented by a unary
@@ -132,8 +138,8 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
          * IntegerLiteralExpr. However 2147483648 cannot be represented in an integer, so we
          * need to return a long
          */
-        if (Objects.equals(value, "2147483648") && hasUnaryMinusAsParent(this)) {
-            return 2147483648L;
+        if (Objects.equals(value, MAX_31_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
+            return MAX_31_BIT_UNSIGNED_VALUE_AS_LONG;
         } else {
             return asInt();
         }

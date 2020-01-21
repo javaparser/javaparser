@@ -96,7 +96,9 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * @return the literal value as an long while respecting different number representations
-     * @deprecated Will be made private or merged with {@link LongLiteralExpr#asNumber()} in future releases
+     * @deprecated This function has issues with corner cases, such as 9223372036854775808L, so please use {@link
+     * LongLiteralExpr#asNumber()}. It will be made private or merged with {@link LongLiteralExpr#asNumber()} in future
+     * releases
      */
     public long asLong() {
         String result = value.replaceAll("_", "");
@@ -117,9 +119,11 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * This function returns a representation of the literal values as a number. This will return a long, except for the
-     * case when the literal has the value 9223372036854775808L (which is only allowed in the expression
-     * <code>-9223372036854775808L</code>) and returns a BigInteger.
+     * This function returns a representation of the literal value as a number. This will return a long, except for the
+     * case when the literal has the value <code>9223372036854775808L</code>. This special literal is only allowed in
+     * the expression <code>-9223372036854775808L</code> which represents <code>Long.MIN_VALUE</code>). However
+     * 9223372036854775808 (2^63) is out of range of long, which is -(2^63) to (2^63)-1 and thus a BigInteger must be
+     * returned.
      * <p>
      * Note, that this function will NOT return a negative number if the literal was specified in decimal, since *
      * according to the language specification an expression such as <code>-1L</code> is represented by a unary *
