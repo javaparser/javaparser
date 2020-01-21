@@ -66,7 +66,7 @@ public class NodeMetaModelGenerator {
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(MetaModelGenerator.METAMODEL_PACKAGE);
-        classMetaModelJavaFile.setBlockComment(MetaModelGenerator.COPYRIGHT_NOTICE);
+        classMetaModelJavaFile.setBlockComment(MetaModelGenerator.COPYRIGHT_NOTICE_JP_CORE);
         classMetaModelJavaFile.addImport("java.util.Optional");
         sourceRoot.add(MetaModelGenerator.METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
         final ClassOrInterfaceDeclaration nodeMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);

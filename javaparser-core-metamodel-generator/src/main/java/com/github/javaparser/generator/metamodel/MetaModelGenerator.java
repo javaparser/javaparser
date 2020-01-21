@@ -48,9 +48,31 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
     static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
-    static final String COPYRIGHT_NOTICE = "\n" +
+
+    static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
         " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
         " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+        " *\n" +
+        " * This file is part of JavaParser.\n" +
+        " *\n" +
+        " * JavaParser can be used either under the terms of\n" +
+        " * a) the GNU Lesser General Public License as published by\n" +
+        " *     the Free Software Foundation, either version 3 of the License, or\n" +
+        " *     (at your option) any later version.\n" +
+        " * b) the terms of the Apache License\n" +
+        " *\n" +
+        " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+        " * LICENCE.APACHE. Please refer to those files for details.\n" +
+        " *\n" +
+        " * JavaParser is distributed in the hope that it will be useful,\n" +
+        " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+        " * GNU Lesser General Public License for more details.\n" +
+        " ";
+
+    static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
+        " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
+        " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
         " *\n" +
         " * This file is part of JavaParser.\n" +
         " *\n" +
@@ -217,7 +239,7 @@ public class MetaModelGenerator {
 
     private void run(SourceRoot sourceRoot) throws NoSuchMethodException {
         final CompilationUnit javaParserMetaModelCu = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java");
-        javaParserMetaModelCu.setBlockComment(COPYRIGHT_NOTICE);
+        javaParserMetaModelCu.setBlockComment(COPYRIGHT_NOTICE_JP_CORE);
 
         generateNodeMetaModels(javaParserMetaModelCu, sourceRoot);
     }
