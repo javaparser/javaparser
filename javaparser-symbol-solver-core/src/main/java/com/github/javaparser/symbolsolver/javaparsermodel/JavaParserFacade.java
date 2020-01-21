@@ -145,46 +145,53 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solve(ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt, boolean solveLambdas) {
-        List<ResolvedType> argumentTypes = new LinkedList<>();
-        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
-
-        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
-
-        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
-        if (!optAncestor.isPresent()) {
+        // Constructor invocation must exist within a class (not interface).
+        Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
+        if (!optAncestorClassOrInterfaceNode.isPresent()) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
-        ClassOrInterfaceDeclaration classNode = optAncestor.get();
-        ResolvedTypeDeclaration typeDecl = null;
-        if (!explicitConstructorInvocationStmt.isThis()) {
-            final ClassOrInterfaceType extendedType;
-            if(classNode.getExtendedTypes().isNonEmpty()) {
-                // Get the first explicit extended type -- n.b. interfaces may extend multiple interfaces.
-                extendedType = classNode.getExtendedTypes(0);
-            } else {
-                // If no explicit "extends", the extended type is implicitly `java.lang.Object`
-//                extendedType = new ClassOrInterfaceType("java.lang.Object");
-//                extendedType = new ClassOrInterfaceType(null, "Object");
-                extendedType = StaticJavaParser.parseClassOrInterfaceType("java.lang.Object"); // Feels clumsy, but works?
-            }
 
-            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(extendedType, classNode);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
-            }
-        } else {
-            SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString());
+        ClassOrInterfaceDeclaration classNode = optAncestorClassOrInterfaceNode.get();
+        ResolvedTypeDeclaration typeDecl = null;
+        final Context context = JavaParserFactory.getContext(classNode, typeSolver);
+        if (explicitConstructorInvocationStmt.isThis()) {
+            // this()
+            SymbolReference<ResolvedTypeDeclaration> sr = context.solveType(classNode.getNameAsString());
             if (sr.isSolved()) {
                 typeDecl = sr.getCorrespondingDeclaration();
             }
+        } else {
+            // super()
+            if(classNode.getExtendedTypes().isNonEmpty()) {
+                // Get the first explicit extended type -- n.b. interfaces may extend multiple interfaces.
+                ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
+                if (classDecl.isReferenceType()) {
+                    typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+                }
+            } else {
+                // If no explicit "extends", the extended type is implicitly `java.lang.Object`
+                SymbolReference<ResolvedTypeDeclaration> sr = context.solveType("java.lang.Object");
+                if (sr.isSolved()) {
+                    typeDecl = sr.getCorrespondingDeclaration();
+                }
+            }
         }
+
         if (typeDecl == null) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
+
+        // Solve each of the arguments being passed into this constructor invocation.
+        List<ResolvedType> argumentTypes = new LinkedList<>();
+        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
+        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
+
+        // Determine which constructor is referred to, and return it.
         SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
+
         return res;
     }
 
