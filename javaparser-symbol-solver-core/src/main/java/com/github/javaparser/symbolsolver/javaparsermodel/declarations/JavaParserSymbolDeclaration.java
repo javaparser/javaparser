@@ -37,7 +37,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.
@@ -72,7 +72,7 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     public static int getParamPos(Parameter parameter) {
         int pos = 0;
-        for (Node node : requireParentNode(parameter).getChildNodes()) {
+        for (Node node : demandParentNode(parameter).getChildNodes()) {
             if (node == parameter) {
                 return pos;
             } else if (node instanceof Parameter) {
@@ -83,8 +83,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     }
 
     public static int getParamPos(Node node) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
             for (int i = 0; i < call.getArguments().size(); i++) {
                 if (call.getArguments().get(i) == node) return i;
             }
@@ -125,9 +125,9 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     public ResolvedType getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
-            if (requireParentNode(wrappedNode) instanceof LambdaExpr) {
+            if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(requireParentNode(wrappedNode));
+                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(demandParentNode(wrappedNode));
 
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
@@ -147,9 +147,9 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode;
-            if (requireParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
+            if (demandParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
-            } else if (requireParentNode(wrappedNode) instanceof FieldDeclaration) {
+            } else if (demandParentNode(wrappedNode) instanceof FieldDeclaration) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             }
         }

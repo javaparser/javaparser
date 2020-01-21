@@ -78,7 +78,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.demandNodeOfGivenClass(parse(code), MethodCallExpr.class);
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(methodCallExpr);
         assertEquals("java.lang.Throwable.getMessage()", methodUsage.getQualifiedSignature());
     }
@@ -100,7 +100,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(parse(code), MethodCallExpr.class);
+        MethodCallExpr methodCallExpr = Navigator.demandNodeOfGivenClass(parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertTrue(symbolReference.isSolved());
@@ -122,7 +122,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        public X x = null;\n" +
                 "    }\n" +
                 "}";
-        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(parse(code), FieldDeclaration.class);
+        FieldDeclaration fieldDeclaration = Navigator.demandNodeOfGivenClass(parse(code), FieldDeclaration.class);
         Type jpType = fieldDeclaration.getCommonType();
         ResolvedType jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
         assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
@@ -162,7 +162,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "        }\n" +
                 "    }";
         CompilationUnit cu = parseWithTypeSolver(code);
-        CatchClause catchClause = Navigator.findNodeOfGivenClass(cu, CatchClause.class);
+        CatchClause catchClause = Navigator.demandNodeOfGivenClass(cu, CatchClause.class);
         Type jpType = catchClause.getParameter().getType();
         ResolvedType jssType = jpType.resolve();
         assertTrue(jssType instanceof ResolvedUnionType);

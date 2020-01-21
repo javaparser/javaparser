@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 import static java.util.Comparator.comparing;
 
 /**
@@ -121,7 +121,7 @@ public class SourceFileInfoExtractor {
         if (node instanceof ClassOrInterfaceDeclaration) {
             solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
-            Node parentNode = requireParentNode(node);
+            Node parentNode = demandParentNode(node);
             if (parentNode instanceof ImportDeclaration ||
                     parentNode instanceof Expression ||
                     parentNode instanceof MethodDeclaration ||

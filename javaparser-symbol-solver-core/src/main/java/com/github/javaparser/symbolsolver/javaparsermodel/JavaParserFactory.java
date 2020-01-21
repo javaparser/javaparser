@@ -38,7 +38,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSy
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -99,11 +99,11 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            final Node parentNode = requireParentNode(node);
+            final Node parentNode = demandParentNode(node);
             if (parentNode instanceof ObjectCreationExpr
                     && (node == ((ObjectCreationExpr) parentNode).getType()
                         || ((ObjectCreationExpr) parentNode).getArguments().contains(node))) {
-                return getContext(requireParentNode(parentNode), typeSolver);
+                return getContext(demandParentNode(parentNode), typeSolver);
             }
             if (parentNode == null) {
                 throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");

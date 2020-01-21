@@ -65,7 +65,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
         LambdaExpr lambdaExpr = (LambdaExpr) methodCallExpr.getArguments().get(0);
 

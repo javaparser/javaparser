@@ -60,7 +60,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
@@ -75,12 +75,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof FieldDeclaration) {
+        if (demandParentNode(node) instanceof FieldDeclaration) {
             return facade.convertToUsageVariableType(node);
-        } else if (requireParentNode(node) instanceof VariableDeclarationExpr) {
+        } else if (demandParentNode(node) instanceof VariableDeclarationExpr) {
             return facade.convertToUsageVariableType(node);
         }
-        throw new UnsupportedOperationException(requireParentNode(node).getClass().getCanonicalName());
+        throw new UnsupportedOperationException(demandParentNode(node).getClass().getCanonicalName());
     }
 
     @Override
@@ -388,12 +388,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
+                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
@@ -499,12 +499,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
+                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
