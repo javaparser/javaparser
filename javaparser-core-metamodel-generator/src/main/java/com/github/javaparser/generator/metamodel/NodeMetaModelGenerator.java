@@ -45,6 +45,27 @@ import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class NodeMetaModelGenerator {
+    private static final String COPYRIGHT_NOTICE = "\n" +
+        " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
+        " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+        " *\n" +
+        " * This file is part of JavaParser.\n" +
+        " *\n" +
+        " * JavaParser can be used either under the terms of\n" +
+        " * a) the GNU Lesser General Public License as published by\n" +
+        " *     the Free Software Foundation, either version 3 of the License, or\n" +
+        " *     (at your option) any later version.\n" +
+        " * b) the terms of the Apache License\n" +
+        " *\n" +
+        " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+        " * LICENCE.APACHE. Please refer to those files for details.\n" +
+        " *\n" +
+        " * JavaParser is distributed in the hope that it will be useful,\n" +
+        " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+        " * GNU Lesser General Public License for more details.\n" +
+        " ";
+
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
     private final InitializeConstructorParametersStatementsGenerator initializeConstructorParametersStatementsGenerator = new InitializeConstructorParametersStatementsGenerator();
 
@@ -66,6 +87,7 @@ public class NodeMetaModelGenerator {
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
+        classMetaModelJavaFile.setBlockComment(COPYRIGHT_NOTICE);
         classMetaModelJavaFile.addImport("java.util.Optional");
         sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
         final ClassOrInterfaceDeclaration nodeMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
