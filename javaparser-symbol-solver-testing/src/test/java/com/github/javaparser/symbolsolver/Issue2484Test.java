@@ -52,6 +52,35 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
 
     private JavaParser javaParser;
 
+    private final String x = "public class MyClass {\n" +
+        "    private Ibaz m_something;\n" +
+        "    \n" +
+        "    public class Ibaz {\n" +
+        "    }\n" +
+        "    \n" +
+        "    public void foo(Class<? extends Ibaz> clazz) {\n" +
+        "    }\n" +
+        "    \n" +
+        "    protected void bar() {\n" +
+        "        foo(null); // this works\n" +
+        "        foo(Ibaz.class); // this works\n" +
+        "        \n" +
+        "        Class c1 = m_something.getClass();\n" +
+        "        foo(c1); // this works\n" +
+        "        \n" +
+        "        Class<Ibaz> c2 = m_something.getClass();\n" +
+        "        foo(c2); // this works\n" +
+        "        \n" +
+        "        Class<> c3 = m_something.getClass();\n" +
+        "        foo(c3); // this works\n" +
+        "        \n" +
+        "        Class<Object> c4 = m_something.getClass();\n" +
+//            "        foo(c4); // this doesn't work\n" +
+        "        \n" +
+//            "        foo(m_something.getClass()); // this doesn't work\n" +
+        "    }\n" +
+        "}";
+
     @BeforeEach
     void setUp() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
@@ -60,40 +89,17 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
         javaParser = new JavaParser(configuration);
     }
 
+
+
     @Test
-    public void test() {
-        String x = "public class MyClass {\n" +
-            "    private Ibaz m_something;\n" +
-            "    \n" +
-            "    public class Ibaz {\n" +
-            "    }\n" +
-            "    \n" +
-            "    public void foo(Class<? extends Ibaz> clazz) {\n" +
-            "    }\n" +
-            "    \n" +
-            "    protected void bar() {\n" +
-            "        foo(null); // this works\n" +
-            "        foo(Ibaz.class); // this works\n" +
-            "        \n" +
-            "        Class c1 = m_something.getClass();\n" +
-            "        foo(c1); // this works\n" +
-            "        \n" +
-            "        Class<Ibaz> c2 = m_something.getClass();\n" +
-            "        foo(c2); // this works\n" +
-            "        \n" +
-            "        foo(m_something.getClass()); // this doesn't work\n" +
-            "    }\n" +
-            "}";
+    public void showAll() {
 
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
         assumeTrue(result.isSuccessful());
 
         result.ifSuccessful(compilationUnit -> {
             List<MethodCallExpr> methodCallExprs = compilationUnit.findAll(MethodCallExpr.class);
-//            assertEquals(4, methodCallExprs.size());
-
             for (int i = 0; i < methodCallExprs.size(); i++) {
-//                if(i!=2) {continue;}
                 MethodCallExpr methodCallExpr = methodCallExprs.get(i);
                 System.out.println();
                 System.out.println("methodCallExpr (" + i + ") = " + methodCallExpr);
@@ -101,12 +107,74 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
                 System.out.println("methodCallExpr.calculateResolvedType() = " + methodCallExpr.calculateResolvedType());
                 System.out.println();
             }
+        });
+    }
 
-//            MethodCallExpr methodCall = methodCallExprs.get(2);
-//            Expression arg = methodCall.getArgument(0);
-//            ResolvedType argResolvedType = arg.calculateResolvedType();
-//
-//            System.out.println("argResolvedType = " + argResolvedType);
+
+    @Test
+    public void test() {
+        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
+        assumeTrue(result.isSuccessful());
+
+        result.ifSuccessful(compilationUnit -> {
+            List<MethodCallExpr> methodCallExprs = compilationUnit.findAll(MethodCallExpr.class);
+
+            MethodCallExpr methodCall;
+            Expression arg;
+            ResolvedType argResolvedType;
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(1);
+            System.out.println("methodCall = " + methodCall);
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+            System.out.println();
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(3);
+            System.out.println("methodCall = " + methodCall);
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+            System.out.println();
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(5);
+            System.out.println("methodCall = " + methodCall);
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+            System.out.println();
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(7);
+            System.out.println("methodCall = " + methodCall);
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+            System.out.println();
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(8);
+            System.out.println("methodCall = " + methodCall);
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+            System.out.println();
+
+
+
 //
 //
 //            String name = "foo";
