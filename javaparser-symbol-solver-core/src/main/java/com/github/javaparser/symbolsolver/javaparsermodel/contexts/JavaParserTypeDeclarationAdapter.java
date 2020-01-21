@@ -144,12 +144,16 @@ public class JavaParserTypeDeclarationAdapter {
                             .stream()
                             .filter(m -> m.getName().equals(name))
                             .collect(Collectors.toList()));
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic
-                            .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
+
+                    if(name.equals("getClass")) {
+                        System.out.println("getClass...");
+                    }
+                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
                     if (res.isSolved()) {
+
                         candidateMethods.add(res.getCorrespondingDeclaration());
                     }
                 }

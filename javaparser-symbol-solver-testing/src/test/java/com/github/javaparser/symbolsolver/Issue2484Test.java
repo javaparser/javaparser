@@ -36,10 +36,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
@@ -74,10 +72,13 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
         "        Class<> c3 = m_something.getClass();\n" +
         "        foo(c3); // this works\n" +
         "        \n" +
-        "        Class<Object> c4 = m_something.getClass();\n" +
-//            "        foo(c4); // this doesn't work\n" +
+//        "        Class<Object> c4 = m_something.getClass();\n" +
+//        "        foo(c4); // this doesn't work\n" +
         "        \n" +
-//            "        foo(m_something.getClass()); // this doesn't work\n" +
+        "        Object c5 = m_something.getClass();\n" +
+        "        foo(c5); // this works\n" +
+        "        \n" +
+        "        foo(m_something.getClass()); // this doesn't work\n" +
         "    }\n" +
         "}";
 
@@ -88,7 +89,6 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
 
         javaParser = new JavaParser(configuration);
     }
-
 
 
     @Test
@@ -112,6 +112,53 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
 
 
     @Test
+    public void test_2() {
+        String x = "public class MyClass {\n" +
+            "    private Ibaz m_something;\n" +
+            "    \n" +
+            "    public class Ibaz {\n" +
+            "    }\n" +
+            "    \n" +
+            "    public void foo(Class<? extends Ibaz> clazz) {\n" +
+            "    }\n" +
+            "    \n" +
+            "    protected void bar() {\n" +
+            "        foo(m_something.getClass()); // this doesn't work\n" +
+            "    }\n" +
+            "}";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
+        assumeTrue(result.isSuccessful());
+
+//        result.getClass();
+        result.ifSuccessful(compilationUnit -> {
+            List<MethodCallExpr> methodCallExprs = compilationUnit.findAll(MethodCallExpr.class);
+
+            MethodCallExpr methodCall;
+            Expression arg;
+            ResolvedType argResolvedType;
+            ResolvedMethodDeclaration methodResolve;
+
+            //
+            System.out.println();
+            methodCall = methodCallExprs.get(0);
+            System.out.println("methodCall = " + methodCall);
+
+            arg = methodCall.getArgument(0);
+            System.out.println("arg = " + arg);
+
+            argResolvedType = arg.calculateResolvedType();
+            System.out.println("argResolvedType = " + argResolvedType);
+
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
+            System.out.println();
+            //
+
+        });
+    }
+
+    @Test
     public void test() {
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
         assumeTrue(result.isSuccessful());
@@ -122,6 +169,7 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             MethodCallExpr methodCall;
             Expression arg;
             ResolvedType argResolvedType;
+            ResolvedMethodDeclaration methodResolve;
 
             //
             System.out.println();
@@ -131,6 +179,8 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             System.out.println("arg = " + arg);
             argResolvedType = arg.calculateResolvedType();
             System.out.println("argResolvedType = " + argResolvedType);
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
             System.out.println();
 
             //
@@ -141,6 +191,8 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             System.out.println("arg = " + arg);
             argResolvedType = arg.calculateResolvedType();
             System.out.println("argResolvedType = " + argResolvedType);
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
             System.out.println();
 
             //
@@ -151,6 +203,8 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             System.out.println("arg = " + arg);
             argResolvedType = arg.calculateResolvedType();
             System.out.println("argResolvedType = " + argResolvedType);
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
             System.out.println();
 
             //
@@ -161,6 +215,8 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             System.out.println("arg = " + arg);
             argResolvedType = arg.calculateResolvedType();
             System.out.println("argResolvedType = " + argResolvedType);
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
             System.out.println();
 
             //
@@ -171,8 +227,9 @@ public class Issue2484Test extends AbstractSymbolResolutionTest {
             System.out.println("arg = " + arg);
             argResolvedType = arg.calculateResolvedType();
             System.out.println("argResolvedType = " + argResolvedType);
+            methodResolve = methodCall.resolve();
+            System.out.println("methodResolve = " + methodResolve);
             System.out.println();
-
 
 
 //

@@ -164,7 +164,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
-                throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
+                throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to the MethodCallExpr " + node);
             }
         }
         if (node instanceof ObjectCreationExpr) {
@@ -194,7 +194,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
-                throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
+                throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to the MethodReferenceExpr " + node);
             }
         }
         if (node instanceof FieldAccessExpr) {
