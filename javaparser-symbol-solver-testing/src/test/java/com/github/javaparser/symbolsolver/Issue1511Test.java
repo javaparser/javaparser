@@ -21,7 +21,6 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
@@ -31,16 +30,20 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 import static com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest.adaptPath;
 
+/**
+ * IndexOutOfBoundsException when attempting to resolve super() #1511
+ *
+ * @see <a href="https://github.com/javaparser/javaparser/issues/1511">https://github.com/javaparser/javaparser/issues/1511</a>
+ */
 public class Issue1511Test {
 
     @Test
-    public void tempTest() throws FileNotFoundException {
+    public void test() throws FileNotFoundException {
 
         Path dir = adaptPath("src/test/resources/issue1511");
         Path file = adaptPath("src/test/resources/issue1511/A.java");
