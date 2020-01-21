@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -156,9 +157,19 @@ public class JavaParserFacade {
         ClassOrInterfaceDeclaration classNode = optAncestor.get();
         ResolvedTypeDeclaration typeDecl = null;
         if (!explicitConstructorInvocationStmt.isThis()) {
-            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+            final ClassOrInterfaceType extendedType;
+            if(classNode.getExtendedTypes().isNonEmpty()) {
+                // Get the first explicit extended type -- n.b. interfaces may extend multiple interfaces.
+                extendedType = classNode.getExtendedTypes(0);
+                ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(extendedType, classNode);
+                if (classDecl.isReferenceType()) {
+                    typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+                }
+            } else {
+                // If no explicit "extends", the extended type is implicitly `java.lang.Object`
+//                extendedType = new ClassOrInterfaceType("java.lang.Object");
+//                extendedType = new ClassOrInterfaceType(null, "Object");
+                extendedType = StaticJavaParser.parseClassOrInterfaceType("java.lang.Object"); // Feels clumsy, but works?
             }
         } else {
             SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString());
