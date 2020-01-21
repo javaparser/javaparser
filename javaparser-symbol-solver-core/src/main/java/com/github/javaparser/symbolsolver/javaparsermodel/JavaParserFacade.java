@@ -151,32 +151,23 @@ public class JavaParserFacade {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
 
-        ClassOrInterfaceDeclaration classNode = optAncestorClassOrInterfaceNode.get();
-        ResolvedTypeDeclaration typeDecl = null;
-        final Context context = JavaParserFactory.getContext(classNode, typeSolver);
-        if (explicitConstructorInvocationStmt.isThis()) {
-            // this()
-            SymbolReference<ResolvedTypeDeclaration> sr = context.solveType(classNode.getNameAsString());
-            if (sr.isSolved()) {
-                typeDecl = sr.getCorrespondingDeclaration();
-            }
-        } else {
-            // super()
-            if(classNode.getExtendedTypes().isNonEmpty()) {
-                // Get the first explicit extended type -- n.b. interfaces may extend multiple interfaces.
-                ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
-                if (classDecl.isReferenceType()) {
-                    typeDecl = classDecl.asReferenceType().getTypeDeclaration();
-                }
-            } else {
-                // If no explicit "extends", the extended type is implicitly `java.lang.Object`
-                SymbolReference<ResolvedTypeDeclaration> sr = context.solveType("java.lang.Object");
-                if (sr.isSolved()) {
-                    typeDecl = sr.getCorrespondingDeclaration();
-                }
-            }
+        ClassOrInterfaceDeclaration classOrInterfaceNode = optAncestorClassOrInterfaceNode.get();
+        ResolvedReferenceTypeDeclaration resolvedClassNode = classOrInterfaceNode.resolve();
+        if(!resolvedClassNode.isClass()) {
+            throw new IllegalStateException("Expected to be a class -- cannot call this() or super() within an interface.");
         }
 
+        ResolvedTypeDeclaration typeDecl = null;
+        if (explicitConstructorInvocationStmt.isThis()) {
+            // this()
+            typeDecl = resolvedClassNode.asReferenceType();
+        } else {
+            // super()
+            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
+            if(superClass != null) {
+                typeDecl = superClass.getTypeDeclaration();
+            }
+        }
         if (typeDecl == null) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
