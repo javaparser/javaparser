@@ -39,8 +39,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class Issue1526Test extends AbstractSymbolResolutionTest {
 
+/**
+ * CompilationUnitContext.solveType(String name, TypeSolver typeSolver) checks package and imports in wrong order
+ * @see <a href="https://github.com/javaparser/javaparser/issues/1526">https://github.com/javaparser/javaparser/issues/1526</a>
+ */
+public class Issue1526Test extends AbstractSymbolResolutionTest {
 
     private final Path testRoot = adaptPath("src/test/resources/issue1526");
     private final Path rootCompiles = testRoot.resolve("compiles");
