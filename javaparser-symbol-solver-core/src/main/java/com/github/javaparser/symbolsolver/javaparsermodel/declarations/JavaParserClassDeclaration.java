@@ -242,10 +242,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         }
         ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
         if (superclass != null) {
-            // We want to avoid infinite recursion in case of Object having Object as ancestor
-            if (Object.class.getCanonicalName().equals(superclass.getQualifiedName())) {
-                return true;
-            }
             if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
