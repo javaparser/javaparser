@@ -25,10 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
@@ -905,4 +902,19 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     // Set<TypeDeclaration> internalTypes()
 
     // Optional<TypeDeclaration> containerType()
+
+
+    @Test
+    void testCanBeAssignedTo() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        ResolvedReferenceTypeDeclaration stringTypeDeclaration = typeSolver.solveType("java.lang.String");
+        ResolvedReferenceTypeDeclaration objectTypeDeclaration = typeSolver.solveType("java.lang.Object");
+        ResolvedReferenceTypeDeclaration cloneableTypeDeclaration = typeSolver.solveType("java.lang.Cloneable");
+
+        assertFalse(compilationUnit.canBeAssignedTo(stringTypeDeclaration), "CompilationUnit should not be reported as assignable to String");
+        assertTrue(compilationUnit.canBeAssignedTo(objectTypeDeclaration), "CompilationUnit should be reported as assignable to Object");
+        assertTrue(compilationUnit.canBeAssignedTo(cloneableTypeDeclaration),
+                "CompilationUnit should be reported as assignable to Cloneable, because it extends Node which implements Cloneable");
+    }
+
 }
