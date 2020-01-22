@@ -35,7 +35,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 public class ForEachStatementContext extends AbstractJavaParserContext<ForEachStmt> {
 
@@ -52,7 +52,7 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
         if (variableDeclarator.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         } else {
-            if (requireParentNode(wrappedNode) instanceof BlockStmt) {
+            if (demandParentNode(wrappedNode) instanceof BlockStmt) {
                 return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
             } else {
                 return getParent().solveSymbol(name);

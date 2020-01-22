@@ -36,7 +36,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -49,7 +49,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        SwitchStmt switchStmt = (SwitchStmt) requireParentNode(wrappedNode);
+        SwitchStmt switchStmt = (SwitchStmt) demandParentNode(wrappedNode);
         ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isEnum()) {
             if (type instanceof ReferenceTypeImpl) {
