@@ -69,7 +69,7 @@ class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpression().get();
+        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.demandReturnStmt(methodDecl).getExpression().get();
         ResolvedMethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
             assertTrue(tp instanceof JavaParserTypeParameter);
@@ -86,7 +86,7 @@ class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.findReturnStmt(methodDecl).getExpression().get();
+        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.demandReturnStmt(methodDecl).getExpression().get();
         ResolvedMethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         ResolvedReferenceTypeDeclaration typeDeclaration = methodDeclaration.declaringType();
         assertEquals(2, typeDeclaration.getTypeParameters().size());
