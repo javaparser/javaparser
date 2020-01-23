@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -501,7 +501,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @see DataKey
      */
-    public void removeData(DataKey<ResolvedType> key) {
+    public void removeData(DataKey<?> key) {
         if (data != null) {
             data.remove(key);
         }
@@ -710,11 +710,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     protected SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
-            SymbolResolver symbolResolver = cu.getData(SYMBOL_RESOLVER_KEY);
-            if (symbolResolver == null) {
+            if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
+                return cu.getData(SYMBOL_RESOLVER_KEY);
+            } else {
                 throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
             }
-            return symbolResolver;
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 

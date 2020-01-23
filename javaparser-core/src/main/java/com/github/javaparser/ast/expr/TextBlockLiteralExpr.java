@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,12 +30,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TextBlockLiteralExprMetaModel;
 import com.github.javaparser.utils.Pair;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
@@ -142,29 +140,17 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
         /* Split the content of the text block at every LF, producing a list of individual lines. 
         Note that any line in the content which was just an LF will become an empty line in the list of individual lines. */
         String[] rawLines = getValue().split("\\R", -1);
-        
         /* Add all non-blank lines from the list of individual lines into a set of determining lines. 
         (Blank lines -- lines that are empty or are composed wholly of white space -- have no visible influence on the indentation. 
         Excluding blank lines from the set of determining lines avoids throwing off step 4 of the algorithm.) */
-
         /* If the last line in the list of individual lines (i.e., the line with the closing delimiter) is blank, then add it to the set of determining lines. 
         (The indentation of the closing delimiter should influence the indentation of the content as a whole -- a "significant trailing line" policy.) */
-
         /* Compute the common white space prefix of the set of determining lines, by counting the number of leading white space characters on each line and taking the minimum count. */
-        int commonWhiteSpacePrefixSize = range(0, rawLines.length)
-                .mapToObj(nr -> new Pair<>(nr, rawLines[nr]))
-                .filter(l -> !emptyOrWhitespace(l.b) || isLastLine(rawLines, l.a))
-                .map(l -> indentSize(l.b))
-                .min(Integer::compare)
-                .orElse(0);
-
+        int commonWhiteSpacePrefixSize = range(0, rawLines.length).mapToObj(nr -> new Pair<>(nr, rawLines[nr])).filter(l -> !emptyOrWhitespace(l.b) || isLastLine(rawLines, l.a)).map(l -> indentSize(l.b)).min(Integer::compare).orElse(0);
         /* Remove the common white space prefix from each non-blank line in the list of individual lines. */
-
         /* Remove all trailing white space from all lines in the modified list of individual lines from step 5. 
         This step collapses wholly-whitespace lines in the modified list so that they are empty, but does not discard them. */
-        return Arrays.stream(rawLines)
-                .map(l -> l.substring(commonWhiteSpacePrefixSize))
-                .map(this::trimTrailing);
+        return Arrays.stream(rawLines).map(l -> l.substring(commonWhiteSpacePrefixSize)).map(this::trimTrailing);
     }
 
     /**

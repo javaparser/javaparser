@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -702,10 +702,9 @@ public class JavaToken {
                     throw new IllegalArgumentException(f("Token kind %i is unknown.", kind));
             }
         }
-        
+
         public boolean isPrimitive() {
-            return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG
-                    || this == FLOAT || this == DOUBLE;
+            return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG || this == FLOAT || this == DOUBLE;
         }
 
         public int getKind() {
