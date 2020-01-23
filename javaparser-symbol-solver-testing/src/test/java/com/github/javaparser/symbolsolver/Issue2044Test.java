@@ -21,10 +21,7 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -47,6 +44,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class Issue2044Test {
 
+    @OpenIssueTest(issueNumber = {2044, 2422})
     @Test
     public void issue2044_typeVariableExtendsObject() {
 
@@ -60,7 +58,7 @@ public class Issue2044Test {
         doTestSimple(x);
     }
 
-
+    @OpenIssueTest(issueNumber = {2044, 2422})
     @Test
     public void issue2044_simpleTypeVariable() {
         String x = "public class X <K> {\n" +
