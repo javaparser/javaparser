@@ -29,7 +29,7 @@ import static org.javaparser.StaticJavaParser.parseResource;
 
 class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {
-        return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
+        return "org/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
     @Test

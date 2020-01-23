@@ -57,13 +57,13 @@ class SymbolSolverWithJavassistClassTest extends AbstractSymbolResolutionTest {
 
         symbolSolver = new SymbolSolver(typeSolver);
 
-        classDeclarationConcreteClass = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.ConcreteClass");
-        classDeclarationSubClassOwnJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassOwnJar");
-        classDeclarationSubClassIncludedJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassIncludedJar");
-        classDeclarationSubClassExcludedJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassExcludedJar");
-        classDeclarationInterfaceUserOwnJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserOwnJar");
-        classDeclarationInterfaceUserIncludedJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserIncludedJar");
-        classDeclarationInterfaceUserExcludedJar = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserExcludedJar");
+        classDeclarationConcreteClass = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.ConcreteClass");
+        classDeclarationSubClassOwnJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassOwnJar");
+        classDeclarationSubClassIncludedJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassIncludedJar");
+        classDeclarationSubClassExcludedJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubClassExcludedJar");
+        classDeclarationInterfaceUserOwnJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserOwnJar");
+        classDeclarationInterfaceUserIncludedJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserIncludedJar");
+        classDeclarationInterfaceUserExcludedJar = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.InterfaceUserExcludedJar");
     }
 
     @Test
@@ -108,7 +108,7 @@ class SymbolSolverWithJavassistClassTest extends AbstractSymbolResolutionTest {
             symbolSolver.solveSymbolInType(classDeclarationSubClassExcludedJar, "SUPER_FIELD");
         } catch (Exception e) {
             assertTrue(e instanceof UnsolvedSymbolException);
-            assertEquals("Unsolved symbol : org.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.SuperClassExcludedJar", e.getMessage());
+            assertEquals("Unsolved symbol : com.github.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.SuperClassExcludedJar", e.getMessage());
             return;
         }
         fail("Excepted NotFoundException wrapped in a RuntimeException, but got no exception.");
@@ -130,7 +130,7 @@ class SymbolSolverWithJavassistClassTest extends AbstractSymbolResolutionTest {
             symbolSolver.solveSymbolInType(classDeclarationInterfaceUserExcludedJar, "INTERFACE_FIELD");
         } catch (Exception e) {
             assertTrue(e instanceof UnsolvedSymbolException);
-            assertEquals("Unsolved symbol : org.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.InterfaceExcludedJar", e.getMessage());
+            assertEquals("Unsolved symbol : com.github.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.InterfaceExcludedJar", e.getMessage());
             return;
         }
         fail("Excepted NotFoundException wrapped in a RuntimeException, but got no exception.");

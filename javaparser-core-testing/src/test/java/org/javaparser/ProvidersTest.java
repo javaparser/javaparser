@@ -33,7 +33,7 @@ class ProvidersTest {
 
     @Test
     void testResourceProvider() throws IOException {
-        Provider provider = Providers.resourceProvider("com/github/javaparser/issue_samples/Issue290.java.txt");
+        Provider provider = Providers.resourceProvider("org/javaparser/issue_samples/Issue290.java.txt");
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
@@ -42,7 +42,7 @@ class ProvidersTest {
 
     @Test
     void testResourceProviderWithWrongEncoding() throws IOException {
-        Provider provider = Providers.resourceProvider("com/github/javaparser/TestFileIso88591.java");
+        Provider provider = Providers.resourceProvider("org/javaparser/TestFileIso88591.java");
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
@@ -52,7 +52,7 @@ class ProvidersTest {
     @Test
     void testResourceProviderWithEncoding() throws IOException {
         Provider provider = Providers.resourceProvider(
-                "com/github/javaparser/TestFileIso88591.java",
+                "org/javaparser/TestFileIso88591.java",
                 Charset.forName("ISO-8859-1")
         );
         assertNotNull(provider);

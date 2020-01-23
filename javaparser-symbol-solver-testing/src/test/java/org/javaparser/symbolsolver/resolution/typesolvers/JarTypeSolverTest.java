@@ -41,11 +41,11 @@ class JarTypeSolverTest extends AbstractSymbolResolutionTest {
     void initial() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
-        assertEquals(true, jarTypeSolver.tryToSolveType("org.javaparser.SourcesHelper").isSolved());
-        assertEquals(true, jarTypeSolver.tryToSolveType("org.javaparser.Token").isSolved());
-        assertEquals(true, jarTypeSolver.tryToSolveType("org.javaparser.ASTParser.JJCalls").isSolved());
-        assertEquals(false, jarTypeSolver.tryToSolveType("org.javaparser.ASTParser.Foo").isSolved());
-        assertEquals(false, jarTypeSolver.tryToSolveType("org.javaparser.Foo").isSolved());
+        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
+        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.Token").isSolved());
+        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.JJCalls").isSolved());
+        assertEquals(false, jarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.Foo").isSolved());
+        assertEquals(false, jarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
         assertEquals(false, jarTypeSolver.tryToSolveType("Foo").isSolved());
     }
 

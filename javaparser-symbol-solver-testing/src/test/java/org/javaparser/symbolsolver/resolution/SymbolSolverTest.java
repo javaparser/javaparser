@@ -60,7 +60,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolveSymbolUnexisting() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "unexisting");
         assertFalse(res.isSolved());
@@ -68,7 +68,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolveSymbolToDeclaredField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "name");
         assertTrue(res.isSolved());
@@ -77,7 +77,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolveSymbolToInheritedPublicField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "NODE_BY_BEGIN_POSITION");
         assertTrue(res.isSolved());
@@ -86,7 +86,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolveSymbolToInheritedPrivateField() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "parentNode");
         assertFalse(res.isSolved());
@@ -94,6 +94,6 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolvePackageLocalClass() {
-        assertTrue(typeSolverNewCode.solveType("org.javaparser.FooClass").isClass());
+        assertTrue(typeSolverNewCode.solveType("com.github.javaparser.FooClass").isClass());
     }
 }

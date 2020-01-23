@@ -54,7 +54,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
     @Test
     void compatibilityShouldConsiderAlsoTypeVariablesNegative() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         ResolvedReferenceType stringType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolver);
         ResolvedReferenceType rawClassType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
@@ -67,7 +67,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
     @Test
     void compatibilityShouldConsiderAlsoTypeVariablesRaw() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         ResolvedReferenceType rawClassType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);
         MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
@@ -77,7 +77,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
     @Test
     void compatibilityShouldConsiderAlsoTypeVariablesPositive() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("org.javaparser.ast.body.ConstructorDeclaration");
+        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
         ResolvedReferenceType runtimeException = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(RuntimeException.class, typeSolver);
         ResolvedReferenceType rawClassType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolver);

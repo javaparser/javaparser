@@ -36,7 +36,7 @@ public class AncestorDescendantTests {
     void nodeIsNotAncestorOfItself() throws IOException {
         JavaParser parser = new JavaParser();
 
-        Provider provider = Providers.resourceProvider("com/github/javaparser/range/A.java");
+        Provider provider = Providers.resourceProvider("org/javaparser/range/A.java");
         assertNotNull(provider);
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
@@ -54,7 +54,7 @@ public class AncestorDescendantTests {
     void nodeIsNotDescendantOfItself() throws IOException {
         JavaParser parser = new JavaParser();
 
-        Provider provider = Providers.resourceProvider("com/github/javaparser/range/A.java");
+        Provider provider = Providers.resourceProvider("org/javaparser/range/A.java");
         assertNotNull(provider);
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
@@ -72,7 +72,7 @@ public class AncestorDescendantTests {
     void nodeInSameFileIsDescendantOfAncestor() throws IOException {
         JavaParser parser = new JavaParser();
 
-        Provider provider = Providers.resourceProvider("com/github/javaparser/range/A.java");
+        Provider provider = Providers.resourceProvider("org/javaparser/range/A.java");
         assertNotNull(provider);
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
@@ -95,12 +95,12 @@ public class AncestorDescendantTests {
     void nodesInTwoDifferentFilesAreNotDescendantOrAncestorOfEachOther() throws IOException {
         JavaParser parser = new JavaParser();
 
-        Provider providerA = Providers.resourceProvider("com/github/javaparser/range/A.java");
+        Provider providerA = Providers.resourceProvider("org/javaparser/range/A.java");
         assertNotNull(providerA);
         ParseResult<CompilationUnit> parseA = parser.parse(ParseStart.COMPILATION_UNIT, providerA);
         assertTrue(parseA.isSuccessful());
 
-        Provider providerB = Providers.resourceProvider("com/github/javaparser/range/B.java");
+        Provider providerB = Providers.resourceProvider("org/javaparser/range/B.java");
         assertNotNull(providerB);
         ParseResult<CompilationUnit> parseB = parser.parse(ParseStart.COMPILATION_UNIT, providerB);
         assertTrue(parseB.isSuccessful());

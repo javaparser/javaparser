@@ -45,7 +45,7 @@ class CompilationUnitTest {
     @Test
     void testGetSourceRoot() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "Z.java"));
+        Path testFile = sourceRoot.resolve(Paths.get("org", "javaparser", "storage", "Z.java"));
 
         CompilationUnit cu = parse(testFile);
         Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
@@ -56,7 +56,7 @@ class CompilationUnitTest {
     void testGetSourceRootWithBadPackageDeclaration() {
         assertThrows(RuntimeException.class, () -> {
             Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
+        Path testFile = sourceRoot.resolve(Paths.get("org", "javaparser", "storage", "A.java"));
         CompilationUnit cu = parse(testFile);
         cu.getStorage().get().getSourceRoot();
     });
@@ -65,7 +65,7 @@ class CompilationUnitTest {
 
     @Test
     void testGetSourceRootInDefaultPackage() throws IOException {
-        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources", "com", "github", "javaparser", "storage")).normalize();
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources", "org", "javaparser", "storage")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("B.java"));
 
         CompilationUnit cu = parse(testFile);
@@ -76,7 +76,7 @@ class CompilationUnitTest {
     @Test
     void testGetPrimaryTypeName() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
+        Path testFile = sourceRoot.resolve(Paths.get("org", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
         
         assertEquals("PrimaryType", cu.getPrimaryTypeName().get());
@@ -91,7 +91,7 @@ class CompilationUnitTest {
     @Test
     void testGetPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
+        Path testFile = sourceRoot.resolve(Paths.get("org", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
 
         assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
@@ -100,7 +100,7 @@ class CompilationUnitTest {
     @Test
     void testNoPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType2.java"));
+        Path testFile = sourceRoot.resolve(Paths.get("org", "javaparser", "storage", "PrimaryType2.java"));
         CompilationUnit cu = parse(testFile);
 
         assertFalse(cu.getPrimaryType().isPresent());

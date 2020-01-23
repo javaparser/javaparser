@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CommentsInserterTest {
     private String makeFilename(String sampleName) {
-        return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
+        return "org/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {

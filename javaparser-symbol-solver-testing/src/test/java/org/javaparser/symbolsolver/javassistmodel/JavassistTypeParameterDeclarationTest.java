@@ -64,7 +64,7 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
 
     @Test
     void testGetBounds() {
-        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.utils.PositionUtils");
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.utils.PositionUtils");
         assertTrue(compilationUnit.isClass());
 
         for (ResolvedMethodDeclaration method : compilationUnit.getDeclaredMethods()) {
@@ -77,7 +77,7 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
                     List<ResolvedTypeParameterDeclaration.Bound> bounds = typeParams.get(0).getBounds();
                     assertEquals(1, bounds.size());
                     assertTrue(bounds.get(0).isExtends());
-                    assertEquals("org.javaparser.ast.Node", bounds.get(0).getType().describe());
+                    assertEquals("com.github.javaparser.ast.Node", bounds.get(0).getType().describe());
             }
         }
     }

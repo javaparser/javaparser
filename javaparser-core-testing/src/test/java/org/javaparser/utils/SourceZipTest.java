@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SourceZipTest {
 
     private final Path testDir = CodeGenerationUtils.mavenModuleRoot(SourceZipTest.class)
-            .resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "com", "github", "javaparser",
+            .resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "org", "javaparser",
                     "source_zip"))
             .normalize();
 

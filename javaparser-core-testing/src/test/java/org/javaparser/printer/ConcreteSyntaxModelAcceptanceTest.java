@@ -41,7 +41,7 @@ class ConcreteSyntaxModelAcceptanceTest {
     }
 
     private String prettyPrintedExpectation(String name) throws IOException {
-        return TestUtils.readResource("com/github/javaparser/printer/" + name + "_prettyprinted");
+        return TestUtils.readResource("org/javaparser/printer/" + name + "_prettyprinted");
     }
 
     @Test

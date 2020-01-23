@@ -54,10 +54,10 @@ class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTes
 
         symbolSolver = new SymbolSolver(typeSolver);
 
-        interfaceDeclarationStandalone = (JavassistInterfaceDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.StandaloneInterface");
-        interfaceDeclarationSubInterfaceOwnJar = (JavassistInterfaceDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceOwnJar");
-        interfaceDeclarationSubInterfaceIncludedJar = (JavassistInterfaceDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceIncludedJar");
-        interfaceDeclarationSubInterfaceExcludedJar = (JavassistInterfaceDeclaration) typeSolver.solveType("org.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceExcludedJar");
+        interfaceDeclarationStandalone = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.StandaloneInterface");
+        interfaceDeclarationSubInterfaceOwnJar = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceOwnJar");
+        interfaceDeclarationSubInterfaceIncludedJar = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceIncludedJar");
+        interfaceDeclarationSubInterfaceExcludedJar = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.SubInterfaceExcludedJar");
     }
 
     @Test
@@ -102,7 +102,7 @@ class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTes
             symbolSolver.solveSymbolInType(interfaceDeclarationSubInterfaceExcludedJar, "INTERFACE_FIELD");
         } catch (Exception e) {
             assertTrue(e instanceof UnsolvedSymbolException);
-            assertEquals("Unsolved symbol : org.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.InterfaceExcludedJar", e.getMessage());
+            assertEquals("Unsolved symbol : com.github.javaparser.javasymbolsolver.javassist_symbols.excluded_jar.InterfaceExcludedJar", e.getMessage());
             return;
         }
         fail("Excepted NotFoundException wrapped in a RuntimeException, but got no exception.");

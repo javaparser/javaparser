@@ -140,7 +140,7 @@ class BulkParseTest {
     private void writeResults(TreeMap<Path, List<Problem>> results, String testResultsFileName) throws IOException {
         Log.info("Writing results...");
 
-        Path testResults = mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
+        Path testResults = mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "org", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
 

@@ -49,7 +49,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
     @Test
     void noNamesAvailableInInterfaceMethods() {
         JavassistInterfaceDeclaration namesNotAvailable = (JavassistInterfaceDeclaration) typeSolver
-                .solveType("org.javaparser.ast.nodeTypes.NodeWithBody");
+                .solveType("com.github.javaparser.ast.nodeTypes.NodeWithBody");
 
         namesNotAvailable.getDeclaredMethods().forEach(methodDecl -> {
             for (int i = 0; i < methodDecl.getNumberOfParams(); i++) {
@@ -61,7 +61,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void nameForConstructorParameter() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         ResolvedConstructorDeclaration constructor = rangeDecl.getConstructors().get(0);
         assertEquals("begin", constructor.getParam(0).getName());
         assertTrue(constructor.getParam(0).hasName());
@@ -71,7 +71,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void nameForMethodParameters() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         for (ResolvedMethodDeclaration methodDecl : rangeDecl.getDeclaredMethods()) {
             switch (methodDecl.getName()) {
                 case "range": // static methods
@@ -101,7 +101,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isField() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertFalse(paramDecl.isField());
@@ -109,7 +109,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isParameter() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertTrue(paramDecl.isParameter());
@@ -118,7 +118,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isType() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertFalse(paramDecl.isType());
@@ -126,7 +126,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isVaraidic() {
-        JavassistClassDeclaration cuDecl = (JavassistClassDeclaration) typeSolver.solveType("org" +
+        JavassistClassDeclaration cuDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github" +
                 ".javaparser" +
                 ".ast.CompilationUnit");
         cuDecl.getDeclaredMethods().forEach(methodDecl -> {
@@ -143,7 +143,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isEnumConstant() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertFalse(paramDecl.isEnumConstant());
@@ -151,7 +151,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isMethod() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertFalse(paramDecl.isMethod());
@@ -160,7 +160,7 @@ class JavassistParameterDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isVariable() {
-        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("org.javaparser.Range");
+        JavassistClassDeclaration rangeDecl = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.Range");
         JavassistParameterDeclaration paramDecl = (JavassistParameterDeclaration) rangeDecl.getConstructors().get(0).getParam(0);
 
         assertFalse(paramDecl.isVariable());

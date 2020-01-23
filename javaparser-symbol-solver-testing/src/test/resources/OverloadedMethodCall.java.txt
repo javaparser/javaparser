@@ -1,8 +1,8 @@
 package test;
 
-import org.javaparser.ast.Node;
-import org.javaparser.ast.visitor.GenericVisitor;
-import org.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 public class OverloadedMethodCall {
     public void foo(Node node) {

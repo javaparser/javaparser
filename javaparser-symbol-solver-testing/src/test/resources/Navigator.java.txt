@@ -1,12 +1,12 @@
 package me.tomassetti.symbolsolver.javaparser;
 
-import org.javaparser.ast.CompilationUnit;
-import org.javaparser.ast.Node;
-import org.javaparser.ast.body.BodyDeclaration;
-import org.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import org.javaparser.ast.body.MethodDeclaration;
-import org.javaparser.ast.body.TypeDeclaration;
-import org.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.NameExpr;
 
 import java.util.Optional;
 

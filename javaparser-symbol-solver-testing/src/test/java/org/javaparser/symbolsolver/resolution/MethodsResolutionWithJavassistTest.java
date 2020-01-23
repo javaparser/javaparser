@@ -68,10 +68,10 @@ public class MethodsResolutionWithJavassistTest extends AbstractResolutionTest {
 
         // node.accept((GenericVisitor) null, null);
         MethodUsage methodUsage1 = JavaParserFacade.get(typeSolver).solveMethodAsUsage(calls.get(0));
-        assertEquals("org.javaparser.ast.visitor.GenericVisitor<R, A>", methodUsage1.getParamType(0).describe());
+        assertEquals("com.github.javaparser.ast.visitor.GenericVisitor<R, A>", methodUsage1.getParamType(0).describe());
 
         // node.accept((VoidVisitor) null, null);
         MethodUsage methodUsage2 = JavaParserFacade.get(typeSolver).solveMethodAsUsage(calls.get(1));
-        assertEquals("org.javaparser.ast.visitor.VoidVisitor<A>", methodUsage2.getParamType(0).describe());
+        assertEquals("com.github.javaparser.ast.visitor.VoidVisitor<A>", methodUsage2.getParamType(0).describe());
     }
 }

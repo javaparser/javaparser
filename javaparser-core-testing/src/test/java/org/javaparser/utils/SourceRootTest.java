@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SourceRootTest {
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/");
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/org/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
 
     @BeforeEach
@@ -70,21 +70,21 @@ class SourceRootTest {
     @Test
     void fileAsRootIsNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
-            Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");
+            Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("org/javaparser/utils/Bla.java");
         new SourceRoot(path);
     });
 }
 
     @Test
     void dotsInRootDirectoryAreAllowed() throws IOException {
-        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/source.root");
+        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/org/javaparser/utils/source.root");
         new SourceRoot(path).tryToParse();
     }
 
     @Test
     void dotsInPackageAreNotAllowed() {
         assertThrows(ParseProblemException.class, () -> {
-            Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils");
+            Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/org/javaparser/utils");
         new SourceRoot(path).parse("source.root", "Y.java");
     });
 }
