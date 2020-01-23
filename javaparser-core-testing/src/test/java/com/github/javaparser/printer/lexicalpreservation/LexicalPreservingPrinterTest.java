@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.OpenIssueTest;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
@@ -1324,4 +1325,38 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
         assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
     }
+
+    @OpenIssueTest(issueNumber = {2137, 2186})
+    @Test
+    void issue2137() {
+        String code = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        String expected = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod3() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+
+        ClassOrInterfaceDeclaration type = cu.getClassByName("Foo").get();
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName("mymethod3");
+        methodDeclaration.setType(new VoidType());
+        type.getMembers().add(1, methodDeclaration);
+
+        assertEqualsNoEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+
 }
