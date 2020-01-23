@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
@@ -246,7 +267,7 @@ public class SourceRoot {
     private FileVisitResult callback(Path absolutePath, ParserConfiguration configuration, Callback callback) throws IOException {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
-        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
@@ -372,7 +393,7 @@ public class SourceRoot {
      * @param startPackage files in this package and deeper are parsed. Pass "" to parse all files.
      */
     public SourceRoot parseParallelized(String startPackage, Callback callback) throws IOException {
-        return parseParallelized(startPackage, new ParserConfiguration(), callback);
+        return parseParallelized(startPackage, this.parserConfiguration, callback);
     }
 
     /**
@@ -383,7 +404,7 @@ public class SourceRoot {
      * this is much more memory efficient, but saveAll() won't work.
      */
     public SourceRoot parseParallelized(Callback callback) throws IOException {
-        return parseParallelized("", new ParserConfiguration(), callback);
+        return parseParallelized("", this.parserConfiguration, callback);
     }
 
     /**
