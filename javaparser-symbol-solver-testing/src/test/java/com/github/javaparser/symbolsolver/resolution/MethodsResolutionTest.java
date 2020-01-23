@@ -421,7 +421,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 
-        ThisExpr thisExpression = Navigator.findNodeOfGivenClass(clazz, ThisExpr.class);
+        ThisExpr thisExpression = Navigator.demandNodeOfGivenClass(clazz, ThisExpr.class);
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
         assertEquals(true, type.isReferenceType());

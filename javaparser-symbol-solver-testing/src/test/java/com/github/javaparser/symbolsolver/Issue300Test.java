@@ -50,7 +50,7 @@ class Issue300Test extends AbstractResolutionTest {
         Path pathToSourceFile = adaptPath("src/test/resources/issue300/Issue300.java");
         CompilationUnit cu = parse(pathToSourceFile);
 
-        final FieldAccessExpr fieldAccess = Navigator.findNodeOfGivenClass(cu, FieldAccessExpr.class);
+        final FieldAccessExpr fieldAccess = Navigator.demandNodeOfGivenClass(cu, FieldAccessExpr.class);
         assertNotNull(fieldAccess);
 
         TypeSolver typeSolver = new CombinedTypeSolver(

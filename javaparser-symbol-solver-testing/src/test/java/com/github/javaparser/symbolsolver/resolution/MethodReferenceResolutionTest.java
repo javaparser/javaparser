@@ -46,7 +46,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "classMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -65,7 +65,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "superclassMethodNotOverridden");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -84,7 +84,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "superclassMethodOverridden");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -103,7 +103,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "superclassMethodWithSubclassType");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -123,7 +123,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "fieldAccessMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -142,7 +142,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "thisClassMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -161,7 +161,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "superclassMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -181,7 +181,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "instanceMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -200,7 +200,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "staticMethod");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -219,7 +219,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "biFunction");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
@@ -238,7 +238,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
         MethodDeclaration method = Navigator.demandMethod(clazz, "customTriFunction");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
 
         // resolve method reference expression
