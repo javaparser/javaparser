@@ -272,6 +272,26 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 "}\n", result);
     }
 
+    @OpenIssueTest(issueNumber = 2027)
+    @Test
+    void removingModifiersWithExistingAnnotations_preserveIndentation() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
     @Test
     void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
