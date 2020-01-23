@@ -21,6 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.OpenIssueTest;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -208,6 +210,32 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         MethodDeclaration it = consider("public void A(){}");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("void A(){}", it);
+    }
+
+
+    @OpenIssueTest(issueNumber = 2009)
+    @Test
+    void wrapMethodBodyIntoAssertThrows() {
+        MethodDeclaration it = consider("void m(){\n" +
+                "    List<Byte> bytes=new ArrayList<>();\n" +
+                "    bytes.add((byte)'a');\n" +
+                "}");
+
+        it.getBody().ifPresent(body -> {
+            Statement statement = StaticJavaParser.parseStatement("assertThrows(IllegalArgumentException.class, ()->"
+                    + body.toString()
+                    + ");\n");
+            NodeList<Statement> statements = new NodeList<>();
+            statements.add(statement);
+            body.setStatements(statements);
+        });
+
+        assertTransformedToString("void m(){\n" +
+                "                assertThrows(IllegalArgumentException.class, () -> {\n" +
+                "                    List<Byte> bytes = new ArrayList<>();\n" +
+                "                    bytes.add((byte) 'a');\n" +
+                "                });\n" +
+                "    }", it);
     }
 
     @Test
