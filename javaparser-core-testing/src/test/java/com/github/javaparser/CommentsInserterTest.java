@@ -115,4 +115,94 @@ class CommentsInserterTest {
         assertEqualToTextResource(makeExpectedFilename("Issue412"), cu.toString());
     }
 
+
+    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @Test
+    void issue263LostComments() {
+        CompilationUnit cu = parse(
+                "public class Test {\n" +
+                        "            // one line of comment\n" +
+                        "            // another line of comment\n" +
+                        "\n" +
+                        "            static {\n" +
+                        "                System.out.println(\"Hello\");\n" +
+                        "            }\n" +
+                        "}");
+
+        assertEqualsNoEol(
+                "public class Test {\n" +
+                        "    // one line of comment\n" +
+                        "    // another line of comment\n" +
+                        "\n" +
+                        "    static {\n" +
+                        "        System.out.println(\"Hello\");\n" +
+                        "    }\n" +
+                        "}\n", cu.toString());
+    }
+
+
+    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @Test
+    void issue307LostComments() {
+        CompilationUnit cu = parse(
+                "public class CommentTestCase {\n" +
+                        "    public static void main(String[] args) throws Exception {\n" +
+                        "        int a = 4, b = 8;\n" +
+                        "        if (a < b) { // what a weird bug?\n" +
+                        "            // Another comment\n" +
+                        "            if (b == a) {\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "        if (b > a) { // for real?\n" +
+                        "        }\n" +
+                        "        CompilationUnit cu = JavaParser.parse(new File(\"src/main/java/testcase/CommentTestCase.java\"));\n" +
+                        "        System.out.println(cu.toString());\n" +
+                        "    }\n" +
+                        "}");
+
+        assertEqualsNoEol(
+                "public class CommentTestCase {\n" +
+                        "    public static void main(String[] args) throws Exception {\n" +
+                        "        int a = 4, b = 8;\n" +
+                        "        if (a < b) { // what a weird bug?\n" +
+                        "            // Another comment\n" +
+                        "            if (b == a) {\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "        if (b > a) { // for real?\n" +
+                        "        }\n" +
+                        "        CompilationUnit cu = JavaParser.parse(new File(\"src/main/java/testcase/CommentTestCase.java\"));\n" +
+                        "        System.out.println(cu.toString());\n" +
+                        "    }\n" +
+                        "}", cu.toString());
+    }
+
+    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @Test
+    void issue498LostComments() {
+        CompilationUnit cu = parse(
+                "public class TestDumpVisitor {\r\n" +
+                        "\r\n" +
+                        "    public boolean test() {\r\n" +
+                        "        // line 1\r\n" +
+                        "        // line 2\r\n" +
+                        "        // line 3\r\n" +
+                        "        return false;\r\n" +
+                        "    }\r\n" +
+                        "}\r\n" +
+                        "");
+
+        assertEqualsNoEol(
+                "public class TestDumpVisitor {\r\n" +
+                        "\r\n" +
+                        "    public boolean test() {\r\n" +
+                        "        // line 1\r\n" +
+                        "        // line 2\r\n" +
+                        "        // line 3\r\n" +
+                        "        return false;\r\n" +
+                        "    }\r\n" +
+                        "}\r\n" +
+                        "", cu.toString());
+    }
+
 }
