@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseResource;
+import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +44,11 @@ class CommentsInserterTest {
                 makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
+
+    private String makeExpectedFilename(String sampleName) {
+        return "/com/github/javaparser/issue_samples/" + sampleName + ".java.expected.txt";
+    }
+
 
     /**
      * Issue: "When there is a String constant "\\" compilationUnit ignores all further comments"
@@ -99,6 +105,14 @@ class CommentsInserterTest {
                 "})\n" +
                 "class ABC {\n" +
                 "}\n", cu.toString());
+    }
+
+
+    @OpenIssueTest(issueNumber = {412, 2102})
+    @Test
+    void issue412() throws IOException {
+        CompilationUnit cu = parseSample("Issue412").getResult().get();
+        assertEqualToTextResource(makeExpectedFilename("Issue412"), cu.toString());
     }
 
 }
