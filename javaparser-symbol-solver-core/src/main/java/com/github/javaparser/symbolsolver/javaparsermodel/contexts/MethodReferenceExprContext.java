@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 
@@ -103,8 +103,8 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
     ///
 
     private List<ResolvedType> inferArgumentTypes() {
-        if (requireParentNode(wrappedNode) instanceof MethodCallExpr) {
-            MethodCallExpr methodCallExpr = (MethodCallExpr) requireParentNode(wrappedNode);
+        if (demandParentNode(wrappedNode) instanceof MethodCallExpr) {
+            MethodCallExpr methodCallExpr = (MethodCallExpr) demandParentNode(wrappedNode);
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
             int pos = pos(methodCallExpr, wrappedNode);
             ResolvedType lambdaType = methodUsage.getParamTypes().get(pos);
@@ -140,8 +140,8 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             } else {
                 throw new UnsupportedOperationException();
             }
-        } else if (requireParentNode(wrappedNode) instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator) requireParentNode(wrappedNode);
+        } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
+            VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
             Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
             if (functionalMethod.isPresent()) {
@@ -166,8 +166,8 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             } else {
                 throw new UnsupportedOperationException();
             }
-        } else if (requireParentNode(wrappedNode) instanceof ReturnStmt) {
-            ReturnStmt returnStmt = (ReturnStmt) requireParentNode(wrappedNode);
+        } else if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
+            ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
             Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
             if (optDeclaration.isPresent()) {
                 ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
