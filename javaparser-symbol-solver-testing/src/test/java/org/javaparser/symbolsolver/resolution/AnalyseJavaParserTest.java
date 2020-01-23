@@ -104,167 +104,167 @@ class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
 
     @Test
     void parsePositionUtils() throws IOException {
-        parse("org/javaparser/PositionUtils");
+        parse("com/github/javaparser/PositionUtils");
     }
 
     @Test
     void parseJavaParser() throws IOException {
-        parse("org/javaparser/JavaParser");
+        parse("com/github/javaparser/JavaParser");
     }
 
     @Test
     void parseStatement() throws IOException {
-        parse("org/javaparser/ast/stmt/Statement");
+        parse("com/github/javaparser/ast/stmt/Statement");
     }
 
     @Test
     void parseCatchClause() throws IOException {
-        parse("org/javaparser/ast/stmt/CatchClause");
+        parse("com/github/javaparser/ast/stmt/CatchClause");
     }
 
     @Test
     void parseStatements() throws IOException {
-        parse("org/javaparser/ast/stmt/LabeledStmt");
-        parse("org/javaparser/ast/stmt/BreakStmt");
-        parse("org/javaparser/ast/stmt/ReturnStmt");
-        parse("org/javaparser/ast/stmt/DoStmt");
-        parse("org/javaparser/ast/stmt/AssertStmt");
-        parse("org/javaparser/ast/stmt/ContinueStmt");
-        parse("org/javaparser/ast/stmt/BlockStmt");
-        parse("org/javaparser/ast/stmt/ExplicitConstructorInvocationStmt");
-        parse("org/javaparser/ast/stmt/ExpressionStmt");
-        parse("org/javaparser/ast/stmt/EmptyStmt");
-        parse("org/javaparser/ast/stmt/SwitchStmt");
-        parse("org/javaparser/ast/stmt/IfStmt");
-        parse("org/javaparser/ast/stmt/SwitchEntryStmt");
-        parse("org/javaparser/ast/stmt/SynchronizedStmt");
-        parse("org/javaparser/ast/stmt/ForeachStmt");
-        parse("org/javaparser/ast/stmt/ForStmt");
-        parse("org/javaparser/ast/stmt/WhileStmt");
-        parse("org/javaparser/ast/stmt/ThrowStmt");
-        parse("org/javaparser/ast/stmt/TryStmt");
-        parse("org/javaparser/ast/stmt/TypeDeclarationStmt");
+        parse("com/github/javaparser/ast/stmt/LabeledStmt");
+        parse("com/github/javaparser/ast/stmt/BreakStmt");
+        parse("com/github/javaparser/ast/stmt/ReturnStmt");
+        parse("com/github/javaparser/ast/stmt/DoStmt");
+        parse("com/github/javaparser/ast/stmt/AssertStmt");
+        parse("com/github/javaparser/ast/stmt/ContinueStmt");
+        parse("com/github/javaparser/ast/stmt/BlockStmt");
+        parse("com/github/javaparser/ast/stmt/ExplicitConstructorInvocationStmt");
+        parse("com/github/javaparser/ast/stmt/ExpressionStmt");
+        parse("com/github/javaparser/ast/stmt/EmptyStmt");
+        parse("com/github/javaparser/ast/stmt/SwitchStmt");
+        parse("com/github/javaparser/ast/stmt/IfStmt");
+        parse("com/github/javaparser/ast/stmt/SwitchEntryStmt");
+        parse("com/github/javaparser/ast/stmt/SynchronizedStmt");
+        parse("com/github/javaparser/ast/stmt/ForeachStmt");
+        parse("com/github/javaparser/ast/stmt/ForStmt");
+        parse("com/github/javaparser/ast/stmt/WhileStmt");
+        parse("com/github/javaparser/ast/stmt/ThrowStmt");
+        parse("com/github/javaparser/ast/stmt/TryStmt");
+        parse("com/github/javaparser/ast/stmt/TypeDeclarationStmt");
     }
 
     @Test
     void parseExpressions() throws IOException {
-        parse("org/javaparser/ast/expr/NameExpr");
-        parse("org/javaparser/ast/expr/FieldAccessExpr");
-        parse("org/javaparser/ast/expr/CharLiteralExpr");
-        parse("org/javaparser/ast/expr/IntegerLiteralMinValueExpr");
-        parse("org/javaparser/ast/expr/IntegerLiteralExpr");
-        parse("org/javaparser/ast/expr/ArrayCreationExpr");
-        parse("org/javaparser/ast/expr/VariableDeclarationExpr");
-        parse("org/javaparser/ast/expr/SuperExpr");
-        parse("org/javaparser/ast/expr/ArrayInitializerExpr");
-        parse("org/javaparser/ast/expr/EnclosedExpr");
-        parse("org/javaparser/ast/expr/Expression");
-        parse("org/javaparser/ast/expr/SingleMemberAnnotationExpr");
-        parse("org/javaparser/ast/expr/MethodReferenceExpr");
-        parse("org/javaparser/ast/expr/ThisExpr");
-        parse("org/javaparser/ast/expr/LiteralExpr");
-        parse("org/javaparser/ast/expr/AnnotationExpr");
-        parse("org/javaparser/ast/expr/InstanceOfExpr");
-        parse("org/javaparser/ast/expr/LongLiteralExpr");
-        parse("org/javaparser/ast/expr/StringLiteralExpr");
-        parse("org/javaparser/ast/expr/NullLiteralExpr");
-        parse("org/javaparser/ast/expr/ObjectCreationExpr");
-        parse("org/javaparser/ast/expr/TypeExpr");
-        parse("org/javaparser/ast/expr/DoubleLiteralExpr");
-        parse("org/javaparser/ast/expr/LongLiteralMinValueExpr");
-        parse("org/javaparser/ast/expr/MarkerAnnotationExpr");
-        parse("org/javaparser/ast/expr/LambdaExpr");
-        parse("org/javaparser/ast/expr/AssignExpr");
-        parse("org/javaparser/ast/expr/NormalAnnotationExpr");
-        parse("org/javaparser/ast/expr/QualifiedNameExpr");
-        parse("org/javaparser/ast/expr/MemberValuePair");
-        parse("org/javaparser/ast/expr/ArrayAccessExpr");
-        parse("org/javaparser/ast/expr/ClassExpr");
-        parse("org/javaparser/ast/expr/MethodCallExpr");
-        parse("org/javaparser/ast/expr/ConditionalExpr");
-        parse("org/javaparser/ast/expr/CastExpr");
-        parse("org/javaparser/ast/expr/BooleanLiteralExpr");
-        parse("org/javaparser/ast/expr/BinaryExpr");
-        parse("org/javaparser/ast/expr/UnaryExpr");
+        parse("com/github/javaparser/ast/expr/NameExpr");
+        parse("com/github/javaparser/ast/expr/FieldAccessExpr");
+        parse("com/github/javaparser/ast/expr/CharLiteralExpr");
+        parse("com/github/javaparser/ast/expr/IntegerLiteralMinValueExpr");
+        parse("com/github/javaparser/ast/expr/IntegerLiteralExpr");
+        parse("com/github/javaparser/ast/expr/ArrayCreationExpr");
+        parse("com/github/javaparser/ast/expr/VariableDeclarationExpr");
+        parse("com/github/javaparser/ast/expr/SuperExpr");
+        parse("com/github/javaparser/ast/expr/ArrayInitializerExpr");
+        parse("com/github/javaparser/ast/expr/EnclosedExpr");
+        parse("com/github/javaparser/ast/expr/Expression");
+        parse("com/github/javaparser/ast/expr/SingleMemberAnnotationExpr");
+        parse("com/github/javaparser/ast/expr/MethodReferenceExpr");
+        parse("com/github/javaparser/ast/expr/ThisExpr");
+        parse("com/github/javaparser/ast/expr/LiteralExpr");
+        parse("com/github/javaparser/ast/expr/AnnotationExpr");
+        parse("com/github/javaparser/ast/expr/InstanceOfExpr");
+        parse("com/github/javaparser/ast/expr/LongLiteralExpr");
+        parse("com/github/javaparser/ast/expr/StringLiteralExpr");
+        parse("com/github/javaparser/ast/expr/NullLiteralExpr");
+        parse("com/github/javaparser/ast/expr/ObjectCreationExpr");
+        parse("com/github/javaparser/ast/expr/TypeExpr");
+        parse("com/github/javaparser/ast/expr/DoubleLiteralExpr");
+        parse("com/github/javaparser/ast/expr/LongLiteralMinValueExpr");
+        parse("com/github/javaparser/ast/expr/MarkerAnnotationExpr");
+        parse("com/github/javaparser/ast/expr/LambdaExpr");
+        parse("com/github/javaparser/ast/expr/AssignExpr");
+        parse("com/github/javaparser/ast/expr/NormalAnnotationExpr");
+        parse("com/github/javaparser/ast/expr/QualifiedNameExpr");
+        parse("com/github/javaparser/ast/expr/MemberValuePair");
+        parse("com/github/javaparser/ast/expr/ArrayAccessExpr");
+        parse("com/github/javaparser/ast/expr/ClassExpr");
+        parse("com/github/javaparser/ast/expr/MethodCallExpr");
+        parse("com/github/javaparser/ast/expr/ConditionalExpr");
+        parse("com/github/javaparser/ast/expr/CastExpr");
+        parse("com/github/javaparser/ast/expr/BooleanLiteralExpr");
+        parse("com/github/javaparser/ast/expr/BinaryExpr");
+        parse("com/github/javaparser/ast/expr/UnaryExpr");
     }
 
     @Test
     void parseTypes() throws IOException {
-        parse("org/javaparser/ast/type/ClassOrInterfaceType");
-        parse("org/javaparser/ast/type/PrimitiveType");
-        parse("org/javaparser/ast/type/WildcardType");
-        parse("org/javaparser/ast/type/UnknownType");
-        parse("org/javaparser/ast/type/ReferenceType");
-        parse("org/javaparser/ast/type/VoidType");
-        parse("org/javaparser/ast/type/Type");
+        parse("com/github/javaparser/ast/type/ClassOrInterfaceType");
+        parse("com/github/javaparser/ast/type/PrimitiveType");
+        parse("com/github/javaparser/ast/type/WildcardType");
+        parse("com/github/javaparser/ast/type/UnknownType");
+        parse("com/github/javaparser/ast/type/ReferenceType");
+        parse("com/github/javaparser/ast/type/VoidType");
+        parse("com/github/javaparser/ast/type/Type");
     }
 
     @Test
     void parseVisitors() throws IOException {
-        parse("org/javaparser/ast/visitor/EqualsVisitor");
-        parse("org/javaparser/ast/visitor/ModifierVisitorAdapter");
-        parse("org/javaparser/ast/visitor/DumpVisitor");
-        parse("org/javaparser/ast/visitor/VoidVisitor");
-        parse("org/javaparser/ast/visitor/GenericVisitor");
-        parse("org/javaparser/ast/visitor/VoidVisitorAdapter");
-        parse("org/javaparser/ast/visitor/GenericVisitorAdapter");
+        parse("com/github/javaparser/ast/visitor/EqualsVisitor");
+        parse("com/github/javaparser/ast/visitor/ModifierVisitorAdapter");
+        parse("com/github/javaparser/ast/visitor/DumpVisitor");
+        parse("com/github/javaparser/ast/visitor/VoidVisitor");
+        parse("com/github/javaparser/ast/visitor/GenericVisitor");
+        parse("com/github/javaparser/ast/visitor/VoidVisitorAdapter");
+        parse("com/github/javaparser/ast/visitor/GenericVisitorAdapter");
     }
 
     @Test
     void parseCloneVisitor() throws IOException {
-        parse("org/javaparser/ast/visitor/CloneVisitor");
+        parse("com/github/javaparser/ast/visitor/CloneVisitor");
     }
 
     @Test
     void parseSourcesHelper() throws IOException {
-        parse("org/javaparser/SourcesHelper");
+        parse("com/github/javaparser/SourcesHelper");
     }
 
     @Test
     void parseComments() throws IOException {
-        parse("org/javaparser/ast/comments/LineComment");
-        parse("org/javaparser/ast/comments/Comment");
-        parse("org/javaparser/ast/comments/CommentsParser");
-        parse("org/javaparser/ast/comments/JavadocComment");
-        parse("org/javaparser/ast/comments/BlockComment");
-        parse("org/javaparser/ast/comments/CommentsCollection");
+        parse("com/github/javaparser/ast/comments/LineComment");
+        parse("com/github/javaparser/ast/comments/Comment");
+        parse("com/github/javaparser/ast/comments/CommentsParser");
+        parse("com/github/javaparser/ast/comments/JavadocComment");
+        parse("com/github/javaparser/ast/comments/BlockComment");
+        parse("com/github/javaparser/ast/comments/CommentsCollection");
     }
 
     @Test
     void parseTheRest() throws IOException {
-        parse("org/javaparser/ast/internal/Utils");
-        parse("org/javaparser/ast/body/AnnotationMemberDeclaration");
-        parse("org/javaparser/ast/body/EnumDeclaration");
-        parse("org/javaparser/ast/body/Parameter");
-        parse("org/javaparser/ast/body/EnumConstantDeclaration");
-        parse("org/javaparser/ast/body/VariableDeclarator");
-        parse("org/javaparser/ast/body/TypeDeclaration");
-        parse("org/javaparser/ast/body/EmptyMemberDeclaration");
-        parse("org/javaparser/ast/body/ModifierSet");
-        parse("org/javaparser/ast/body/VariableDeclaratorId");
-        parse("org/javaparser/ast/body/BaseParameter");
-        parse("org/javaparser/ast/body/AnnotableNode");
-        parse("org/javaparser/ast/body/AnnotationDeclaration");
-        parse("org/javaparser/ast/body/MethodDeclaration");
-        parse("org/javaparser/ast/body/EmptyTypeDeclaration");
-        parse("org/javaparser/ast/body/InitializerDeclaration");
-        parse("org/javaparser/ast/body/BodyDeclaration");
-        parse("org/javaparser/ast/body/FieldDeclaration");
-        parse("org/javaparser/ast/body/ConstructorDeclaration");
-        parse("org/javaparser/ast/body/WithDeclaration");
-        parse("org/javaparser/ast/body/MultiTypeParameter");
-        parse("org/javaparser/ast/body/ClassOrInterfaceDeclaration");
-        parse("org/javaparser/ast/TreeVisitor");
-        parse("org/javaparser/ast/PackageDeclaration");
-        parse("org/javaparser/ast/DocumentableNode");
-        parse("org/javaparser/ast/NamedNode");
-        parse("org/javaparser/ast/Node");
-        parse("org/javaparser/ast/AccessSpecifier");
-        parse("org/javaparser/ast/CompilationUnit");
-        parse("org/javaparser/ast/TypeParameter");
-        parse("org/javaparser/ast/ImportDeclaration");
-        parse("org/javaparser/Position");
-        parse("org/javaparser/ASTHelper");
+        parse("com/github/javaparser/ast/internal/Utils");
+        parse("com/github/javaparser/ast/body/AnnotationMemberDeclaration");
+        parse("com/github/javaparser/ast/body/EnumDeclaration");
+        parse("com/github/javaparser/ast/body/Parameter");
+        parse("com/github/javaparser/ast/body/EnumConstantDeclaration");
+        parse("com/github/javaparser/ast/body/VariableDeclarator");
+        parse("com/github/javaparser/ast/body/TypeDeclaration");
+        parse("com/github/javaparser/ast/body/EmptyMemberDeclaration");
+        parse("com/github/javaparser/ast/body/ModifierSet");
+        parse("com/github/javaparser/ast/body/VariableDeclaratorId");
+        parse("com/github/javaparser/ast/body/BaseParameter");
+        parse("com/github/javaparser/ast/body/AnnotableNode");
+        parse("com/github/javaparser/ast/body/AnnotationDeclaration");
+        parse("com/github/javaparser/ast/body/MethodDeclaration");
+        parse("com/github/javaparser/ast/body/EmptyTypeDeclaration");
+        parse("com/github/javaparser/ast/body/InitializerDeclaration");
+        parse("com/github/javaparser/ast/body/BodyDeclaration");
+        parse("com/github/javaparser/ast/body/FieldDeclaration");
+        parse("com/github/javaparser/ast/body/ConstructorDeclaration");
+        parse("com/github/javaparser/ast/body/WithDeclaration");
+        parse("com/github/javaparser/ast/body/MultiTypeParameter");
+        parse("com/github/javaparser/ast/body/ClassOrInterfaceDeclaration");
+        parse("com/github/javaparser/ast/TreeVisitor");
+        parse("com/github/javaparser/ast/PackageDeclaration");
+        parse("com/github/javaparser/ast/DocumentableNode");
+        parse("com/github/javaparser/ast/NamedNode");
+        parse("com/github/javaparser/ast/Node");
+        parse("com/github/javaparser/ast/AccessSpecifier");
+        parse("com/github/javaparser/ast/CompilationUnit");
+        parse("com/github/javaparser/ast/TypeParameter");
+        parse("com/github/javaparser/ast/ImportDeclaration");
+        parse("com/github/javaparser/Position");
+        parse("com/github/javaparser/ASTHelper");
     }
 
 }

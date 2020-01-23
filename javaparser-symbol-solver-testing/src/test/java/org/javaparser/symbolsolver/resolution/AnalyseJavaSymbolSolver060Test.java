@@ -128,240 +128,240 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     @Test
     void parseCoreSourceFileInfoExtractor() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/SourceFileInfoExtractor");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/SourceFileInfoExtractor");
     }
 
     @Test
     void parseCoreCoreResolution() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/core/resolution/Context");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/core/resolution/ContextHelper");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/core/resolution/Context");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/core/resolution/ContextHelper");
     }
 
     @Test
     void parseCoreDeclarationsCommon() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/declarations/common/MethodDeclarationCommonLogic");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/declarations/common/MethodDeclarationCommonLogic");
     }
 
     @Test
     void parseCoreJavaparserNavigator() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparser/Navigator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparser/Navigator");
     }
 
     @Test
     void parseCoreJavaparsermodelTypeExtractor() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor");
     }
 
     @Test
     void parseCoreJavaparsermodel() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/JavaParserFacade");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/JavaParserFactory");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/LambdaArgumentTypePlaceholder");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/UnsolvedSymbolException");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFacade");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFactory");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/LambdaArgumentTypePlaceholder");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/UnsolvedSymbolException");
     }
 
     @Test
     void parseCoreJavaparsermodelContexts() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/AbstractJavaParserContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/AbstractMethodLikeDeclarationContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/AnonymousClassDeclarationContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/CatchClauseContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/ClassOrInterfaceDeclarationContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/CompilationUnitContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/ConstructorContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/ContextHelper");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/EnumDeclarationContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/FieldAccessContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/ForechStatementContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/ForStatementContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/JavaParserTypeDeclarationAdapter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/LambdaExprContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/MethodCallExprContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/MethodContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/StatementContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/SwitchEntryContext");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/contexts/TryWithResourceContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractJavaParserContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractMethodLikeDeclarationContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/AnonymousClassDeclarationContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/CatchClauseContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/ClassOrInterfaceDeclarationContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/CompilationUnitContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/ConstructorContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/ContextHelper");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/EnumDeclarationContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/FieldAccessContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/ForechStatementContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/ForStatementContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/JavaParserTypeDeclarationAdapter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/LambdaExprContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/MethodCallExprContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/MethodContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/StatementContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/SwitchEntryContext");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/TryWithResourceContext");
     }
 
     @Test
     void parseCoreJavaparsermodelJavaParserAnonymousClassDeclaration() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnonymousClassDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnonymousClassDeclaration");
     }
 
     @Test
     void parseCoreJavaparsermodelJavaParserInterfaceDeclaration() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserInterfaceDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserInterfaceDeclaration");
     }
 
     @Test
     void parseCoreJavaparsermodelDeclarationsHelper() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/Helper");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/Helper");
     }
 
     @Test
     void parseCoreJavaparsermodelDeclarationsJavaParserFieldDeclaration() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserFieldDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserFieldDeclaration");
     }
 
     @Test
     void parseCoreJavaparsermodelDeclarations() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/DefaultConstructorDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnnotationDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserClassDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserConstructorDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumConstantDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserMethodDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserParameterDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserSymbolDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeAdapter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeParameter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeVariableDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/DefaultConstructorDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnnotationDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserClassDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserConstructorDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumConstantDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserMethodDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserParameterDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserSymbolDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeAdapter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeParameter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeVariableDeclaration");
     }
 
     @Test
     void parseCoreJavaparsermodelDeclarators() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarators/AbstractSymbolDeclarator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarators/FieldSymbolDeclarator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarators/NoSymbolDeclarator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarators/ParameterSymbolDeclarator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javaparsermodel/declarators/VariableSymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/AbstractSymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/FieldSymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/NoSymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/ParameterSymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/VariableSymbolDeclarator");
     }
 
     @Test
     void parseCoreJavassistmodelJavassistClassDeclaration() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration");
     }
 
     @Test
     void parseCoreJavassistmodel() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistEnumDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistFactory");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistFieldDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistInterfaceDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistMethodDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistParameterDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistTypeDeclarationAdapter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistTypeParameter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/javassistmodel/JavassistUtils");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistEnumDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistFactory");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistFieldDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistInterfaceDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistMethodDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistParameterDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistTypeDeclarationAdapter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistTypeParameter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistUtils");
     }
 
     @Test
     void parseCoreModelTypesystem() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/model/typesystem/LazyType");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/model/typesystem/ReferenceTypeImpl");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/model/typesystem/LazyType");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/model/typesystem/ReferenceTypeImpl");
     }
 
     @Test
     void parseCoreReflectionmodel() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/MyObjectProvider");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionClassAdapter");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionClassDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionConstructorDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionEnumDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionFactory");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionFieldDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionInterfaceDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionMethodDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionMethodResolutionLogic");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionParameterDeclaration");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/ReflectionTypeParameter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/MyObjectProvider");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionClassAdapter");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionClassDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionConstructorDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionEnumDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionFactory");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionFieldDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionInterfaceDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionMethodDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionMethodResolutionLogic");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionParameterDeclaration");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionTypeParameter");
     }
 
     @Test
     void parseCoreReflectionmodelComparators() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/comparators/ClassComparator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/comparators/MethodComparator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/reflectionmodel/comparators/ParameterComparator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/comparators/ClassComparator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/comparators/MethodComparator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/comparators/ParameterComparator");
     }
 
     @Test
     void parseCoreResolution() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/ConstructorResolutionLogic");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/MethodResolutionLogic");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/SymbolDeclarator");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/SymbolSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/ConstructorResolutionLogic");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/MethodResolutionLogic");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/SymbolDeclarator");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/SymbolSolver");
     }
 
     @Test
     void parseCoreResolutionTypesolvers() throws IOException {
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/typesolvers/CombinedTypeSolver");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/typesolvers/JarTypeSolver");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/typesolvers/JavaParserTypeSolver");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/typesolvers/MemoryTypeSolver");
-        parse("java-symbol-solver-core", "org/javaparser/symbolsolver/resolution/typesolvers/ReflectionTypeSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/CombinedTypeSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/JarTypeSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/JavaParserTypeSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/MemoryTypeSolver");
+        parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/ReflectionTypeSolver");
     }
 
     @Test
     void parseLogic() throws IOException {
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/AbstractClassDeclaration");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/AbstractTypeDeclaration");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/ConfilictingGenericTypesException");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/FunctionalInterfaceLogic");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/InferenceContext");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/InferenceVariableType");
-        parse("java-symbol-solver-logic", "org/javaparser/symbolsolver/logic/ObjectProvider");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractClassDeclaration");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractTypeDeclaration");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ConfilictingGenericTypesException");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/FunctionalInterfaceLogic");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceContext");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/InferenceVariableType");
+        parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/ObjectProvider");
     }
 
     @Test
     void parseModelDeclarations() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/AccessLevel");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/AnnotationDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/ClassDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/ConstructorDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/Declaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/EnumDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/FieldDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/HasAccessLevel");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/InterfaceDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/MethodAmbiguityException");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/MethodDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/MethodLikeDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/ParameterDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/ReferenceTypeDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/TypeDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/TypeParameterDeclaration");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/TypeParametrizable");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/declarations/ValueDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/AccessLevel");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/AnnotationDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/ClassDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/ConstructorDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/Declaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/EnumDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/FieldDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/HasAccessLevel");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/InterfaceDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/MethodAmbiguityException");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/MethodDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/MethodLikeDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/ParameterDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/ReferenceTypeDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/TypeDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/TypeParameterDeclaration");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/TypeParametrizable");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/ValueDeclaration");
     }
 
     @Test
     void parseModelMethodsMethodUsage() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/methods/MethodUsage");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/methods/MethodUsage");
     }
 
     @Test
     void parseModelResolution() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/resolution/SymbolReference");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/resolution/TypeSolver");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/resolution/UnsolvedSymbolException");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/resolution/Value");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/SymbolReference");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/TypeSolver");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/UnsolvedSymbolException");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/Value");
     }
 
     @Test
     void parseModelTypesystemReferenceType() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/ReferenceType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/ReferenceType");
     }
 
     @Test
     void parseModelTypesystem() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/ArrayType");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/LambdaConstraintType");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/NullType");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/PrimitiveType");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/Type");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/TypeTransformer");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/TypeVariable");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/VoidType");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/Wildcard");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/ArrayType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/LambdaConstraintType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/NullType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/PrimitiveType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/Type");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/TypeTransformer");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/TypeVariable");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/VoidType");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/Wildcard");
     }
 
     @Test
     void parseModelTypesystemParametrization() throws IOException {
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametersMap");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/parametrization/TypeParameterValueProvider");
-        parse("java-symbol-solver-model", "org/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametrized");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametersMap");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParameterValueProvider");
+        parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametrized");
     }
 }
