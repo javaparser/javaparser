@@ -48,27 +48,26 @@ PARSER_BEGIN(GeneratedJavaParser)
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser;
-import java.io.*;
+package org.javaparser;
 import java.util.*;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.utils.*;
-import static com.github.javaparser.JavaToken.INVALID;
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.Utils.*;
-import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.GeneratedJavaParser.*;
-import static com.github.javaparser.Range.*;
-import static com.github.javaparser.Position.*;
-import static com.github.javaparser.ast.type.ArrayType.*;
-import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
-import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
+import org.javaparser.ast.*;
+import org.javaparser.ast.body.*;
+import org.javaparser.ast.comments.*;
+import org.javaparser.ast.modules.*;
+import org.javaparser.ast.expr.*;
+import org.javaparser.ast.stmt.*;
+import org.javaparser.ast.type.*;
+import org.javaparser.utils.*;
+import static org.javaparser.JavaToken.INVALID;
+import static org.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static org.javaparser.utils.Utils.*;
+import static org.javaparser.ast.NodeList.*;
+import static org.javaparser.GeneratedJavaParser.*;
+import static org.javaparser.Range.*;
+import static org.javaparser.Position.*;
+import static org.javaparser.ast.type.ArrayType.*;
+import static org.javaparser.GeneratedJavaParserTokenManagerBase.*;
+import static org.javaparser.ast.stmt.SwitchEntry.Type.*;
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {

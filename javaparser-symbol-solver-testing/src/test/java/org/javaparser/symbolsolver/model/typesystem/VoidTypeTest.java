@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.symbolsolver.model.typesystem;
+
+import org.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import org.javaparser.resolution.types.ResolvedArrayType;
+import org.javaparser.resolution.types.ResolvedPrimitiveType;
+import org.javaparser.resolution.types.ResolvedTypeVariable;
+import org.javaparser.resolution.types.ResolvedVoidType;
+import org.javaparser.symbolsolver.model.resolution.TypeSolver;
+import org.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import org.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
+import org.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class VoidTypeTest {
+
+    private ResolvedArrayType arrayOfBooleans;
+    private ResolvedArrayType arrayOfListOfA;
+    private ReferenceTypeImpl OBJECT;
+    private ReferenceTypeImpl STRING;
+    private TypeSolver typeSolver;
+
+    @BeforeEach
+    void setup() {
+        typeSolver = new ReflectionTypeSolver();
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
+        arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
+                new ReflectionInterfaceDeclaration(List.class, typeSolver),
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+    }
+
+    @Test
+    void testIsArray() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isArray());
+    }
+
+    @Test
+    void testIsPrimitive() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isPrimitive());
+    }
+
+    @Test
+    void testIsNull() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isNull());
+    }
+
+    @Test
+    void testIsReference() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isReference());
+    }
+
+    @Test
+    void testIsReferenceType() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isReferenceType());
+    }
+
+    @Test
+    void testIsVoid() {
+        assertEquals(true, ResolvedVoidType.INSTANCE.isVoid());
+    }
+
+    @Test
+    void testIsTypeVariable() {
+        assertEquals(false, ResolvedVoidType.INSTANCE.isTypeVariable());
+    }
+
+    @Test
+    void testAsReferenceTypeUsage() {
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asReferenceType());
+    }
+
+    @Test
+    void testAsTypeParameter() {
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asTypeParameter());
+    }
+
+    @Test
+    void testAsArrayTypeUsage() {
+        assertThrows(UnsupportedOperationException.class, () -> ResolvedVoidType.INSTANCE.asArrayType());
+    }
+
+    @Test
+    void testAsDescribe() {
+        assertEquals("void", ResolvedVoidType.INSTANCE.describe());
+    }
+
+    @Test
+    void testIsAssignableBy() {
+        try {
+            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));
+            fail();
+        } catch (UnsupportedOperationException e) {
+
+        }
+        try {
+            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(OBJECT));
+            fail();
+        } catch (UnsupportedOperationException e) {
+
+        }
+        try {
+            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(STRING));
+            fail();
+        } catch (UnsupportedOperationException e) {
+
+        }
+        try {
+            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+            fail();
+        } catch (UnsupportedOperationException e) {
+
+        }
+        try {
+            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
+            fail();
+        } catch (UnsupportedOperationException e) {
+
+        }
+    }
+
+}

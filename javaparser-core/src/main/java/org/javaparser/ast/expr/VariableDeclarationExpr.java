@@ -1,0 +1,274 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+package org.javaparser.ast.expr;
+
+import org.javaparser.ast.AllFieldsConstructor;
+import org.javaparser.ast.Modifier;
+import org.javaparser.ast.Node;
+import org.javaparser.ast.NodeList;
+import org.javaparser.ast.body.VariableDeclarator;
+import org.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import org.javaparser.ast.nodeTypes.NodeWithVariables;
+import org.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import org.javaparser.ast.observer.ObservableProperty;
+import org.javaparser.ast.type.Type;
+import org.javaparser.ast.visitor.CloneVisitor;
+import org.javaparser.ast.visitor.GenericVisitor;
+import org.javaparser.ast.visitor.VoidVisitor;
+import org.javaparser.metamodel.JavaParserMetaModel;
+import org.javaparser.metamodel.NonEmptyProperty;
+import org.javaparser.metamodel.VariableDeclarationExprMetaModel;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import static org.javaparser.ast.NodeList.nodeList;
+import static org.javaparser.utils.Utils.assertNotNull;
+import org.javaparser.TokenRange;
+import java.util.function.Consumer;
+import java.util.Optional;
+import org.javaparser.ast.Generated;
+
+/**
+ * A declaration of variables.
+ * It is an expression, so it can be put in places like the initializer of a for loop,
+ * or the resources part of the try statement.
+ * <br/><code>final int x=3, y=55</code>
+ *
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
+ *
+ * @author Julio Vilmar Gesser
+ */
+public class VariableDeclarationExpr extends Expression implements NodeWithFinalModifier<VariableDeclarationExpr>, NodeWithAnnotations<VariableDeclarationExpr>, NodeWithVariables<VariableDeclarationExpr> {
+
+    private NodeList<Modifier> modifiers;
+
+    private NodeList<AnnotationExpr> annotations;
+
+    @NonEmptyProperty
+    private NodeList<VariableDeclarator> variables;
+
+    public VariableDeclarationExpr() {
+        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>());
+    }
+
+    public VariableDeclarationExpr(final Type type, String variableName) {
+        this(null, new NodeList<>(), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
+    }
+
+    public VariableDeclarationExpr(VariableDeclarator var) {
+        this(null, new NodeList<>(), new NodeList<>(), nodeList(var));
+    }
+
+    public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
+        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> new NodeList<>())), new NodeList<>(), nodeList(new VariableDeclarator(type, variableName)));
+    }
+
+    public VariableDeclarationExpr(VariableDeclarator var, Modifier... modifiers) {
+        this(null, Arrays.stream(modifiers).collect(Collectors.toCollection(() -> new NodeList<>())), new NodeList<>(), nodeList(var));
+    }
+
+    public VariableDeclarationExpr(final NodeList<VariableDeclarator> variables) {
+        this(null, new NodeList<>(), new NodeList<>(), variables);
+    }
+
+    public VariableDeclarationExpr(final NodeList<Modifier> modifiers, final NodeList<VariableDeclarator> variables) {
+        this(null, modifiers, new NodeList<>(), variables);
+    }
+
+    @AllFieldsConstructor
+    public VariableDeclarationExpr(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<VariableDeclarator> variables) {
+        this(null, modifiers, annotations, variables);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("org.javaparser.generator.core.node.MainConstructorGenerator")
+    public VariableDeclarationExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
+        super(tokenRange);
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setVariables(variables);
+        customInitialization();
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Return the modifiers of this variable declaration.
+     *
+     * @return modifiers
+     * @see Modifier
+     */
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> getModifiers() {
+        return modifiers;
+    }
+
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<VariableDeclarator> getVariables() {
+        return variables;
+    }
+
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (VariableDeclarationExpr) this;
+        }
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
+        return this;
+    }
+
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public VariableDeclarationExpr setModifiers(final NodeList<Modifier> modifiers) {
+        assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (VariableDeclarationExpr) this;
+        }
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
+        this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
+        return this;
+    }
+
+    @Generated("org.javaparser.generator.core.node.PropertyGenerator")
+    public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
+        assertNotNull(variables);
+        if (variables == this.variables) {
+            return (VariableDeclarationExpr) this;
+        }
+        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
+        if (this.variables != null)
+            this.variables.setParentNode(null);
+        this.variables = variables;
+        setAsParentNodeOf(variables);
+        return this;
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.CloneGenerator")
+    public VariableDeclarationExpr clone() {
+        return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.GetMetaModelGenerator")
+    public VariableDeclarationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.variableDeclarationExprMetaModel;
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.set(i, (VariableDeclarator) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVariableDeclarationExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.TypeCastingGenerator")
+    public VariableDeclarationExpr asVariableDeclarationExpr() {
+        return this;
+    }
+
+    @Generated("org.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("org.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
+        return Optional.of(this);
+    }
+}

@@ -68,7 +68,7 @@
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                         <!-- Set module name -->
                         <manifestEntries>
-                            <Automatic-Module-Name>com.github.javaparser.core</Automatic-Module-Name>
+                            <Automatic-Module-Name>org.javaparser.core</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

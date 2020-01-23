@@ -1,0 +1,84 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.printer.lexicalpreservation;
+
+import org.javaparser.printer.concretesyntaxmodel.CsmElement;
+import org.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import org.javaparser.printer.concretesyntaxmodel.CsmToken;
+import org.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+
+public class Added implements DifferenceElement {
+    private final CsmElement element;
+
+    Added(CsmElement element) {
+        this.element = element;
+    }
+
+    @Override
+    public String toString() {
+        return "Added{" + element + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Added added = (Added) o;
+
+        return element.equals(added.element);
+    }
+
+    @Override
+    public int hashCode() {
+        return element.hashCode();
+    }
+
+    @Override
+    public CsmElement getElement() {
+        return element;
+    }
+
+    @Override
+    public boolean isAdded() {
+        return true;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
+
+    public boolean isIndent() { return element instanceof CsmIndent; }
+
+    public boolean isUnindent() { return element instanceof CsmUnindent; }
+
+    public TextElement toTextElement() {
+        if (element instanceof LexicalDifferenceCalculator.CsmChild) {
+            return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+        } else if (element instanceof CsmToken) {
+            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(null));
+        } else {
+            throw new UnsupportedOperationException(element.getClass().getSimpleName());
+        }
+    }
+}

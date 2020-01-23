@@ -1,0 +1,118 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.generator.core.node;
+
+import org.javaparser.ast.CompilationUnit;
+import org.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import org.javaparser.ast.body.MethodDeclaration;
+import org.javaparser.generator.NodeGenerator;
+import org.javaparser.metamodel.BaseNodeMetaModel;
+import org.javaparser.metamodel.JavaParserMetaModel;
+import org.javaparser.utils.Pair;
+import org.javaparser.utils.SourceRoot;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import static org.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static org.javaparser.utils.CodeGenerationUtils.f;
+import static org.javaparser.utils.Utils.set;
+
+public class TypeCastingGenerator extends NodeGenerator {
+    private final Set<BaseNodeMetaModel> baseNodes = set(
+            JavaParserMetaModel.statementMetaModel,
+            JavaParserMetaModel.expressionMetaModel,
+            JavaParserMetaModel.typeMetaModel,
+            JavaParserMetaModel.moduleDirectiveMetaModel,
+            JavaParserMetaModel.bodyDeclarationMetaModel,
+            JavaParserMetaModel.commentMetaModel
+    );
+
+    public TypeCastingGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
+    }
+
+    @Override
+    protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception {
+        Pair<CompilationUnit, ClassOrInterfaceDeclaration> baseCode = null;
+        for (BaseNodeMetaModel baseNode : baseNodes) {
+            if(nodeMetaModel == baseNode) {
+                // We adjust the base models from the child nodes,
+                // so we don't do anything when we *are* the base model.
+                return;
+            }
+            if (nodeMetaModel.isInstanceOfMetaModel(baseNode)) {
+                baseCode = parseNode(baseNode);
+            }
+        }
+
+        if (baseCode == null) {
+            // Node is not a child of one of the base nodes, so we don't want to generate this method for it.
+            return;
+        }
+
+        final String typeName = nodeMetaModel.getTypeName();
+        final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
+        final CompilationUnit baseCu = baseCode.a;
+        
+        generateIsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateAsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+        generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+    }
+
+    private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not an %s\", this)); }", typeName, typeName, typeName));
+        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+        baseCu.addImport("org.javaparser.utils.CodeGenerationUtils.f", true, false);
+    }
+
+    private void generateToType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        baseCu.addImport(Optional.class);
+        nodeCu.addImport(Optional.class);
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
+        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+    }
+
+    private void generateIfType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
+        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
+
+        baseCu.addImport(Consumer.class);
+        nodeCu.addImport(Consumer.class);
+    }
+
+    private void generateIsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
+        final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
+
+        addOrReplaceWhenSameSignature(nodeCoid, overriddenIsTypeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, baseIsTypeMethod);
+    }
+}

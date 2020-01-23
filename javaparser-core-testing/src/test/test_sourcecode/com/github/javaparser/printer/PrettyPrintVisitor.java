@@ -19,20 +19,20 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.printer;
+package org.javaparser.printer;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import org.javaparser.ast.*;
+import org.javaparser.ast.body.*;
+import org.javaparser.ast.comments.BlockComment;
+import org.javaparser.ast.comments.Comment;
+import org.javaparser.ast.comments.JavadocComment;
+import org.javaparser.ast.comments.LineComment;
+import org.javaparser.ast.expr.*;
+import org.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import org.javaparser.ast.nodeTypes.NodeWithVariables;
+import org.javaparser.ast.stmt.*;
+import org.javaparser.ast.type.*;
+import org.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -40,8 +40,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import static org.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static org.javaparser.utils.Utils.isNullOrEmpty;
 
 /**
  * Outputs the AST as formatted Java source code.

@@ -55,7 +55,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.github.javaparser.symbolsolver.model</Automatic-Module-Name>
+                            <Automatic-Module-Name>org.javaparser.symbolsolver.model</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

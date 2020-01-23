@@ -47,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.github.javaparser.symbolsolver.logic</Automatic-Module-Name>
+                            <Automatic-Module-Name>org.javaparser.symbolsolver.logic</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

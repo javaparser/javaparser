@@ -1,0 +1,117 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.ast.nodeTypes;
+
+import org.javaparser.JavaParser;
+import org.javaparser.ast.Node;
+import org.javaparser.ast.NodeList;
+import org.javaparser.ast.expr.Expression;
+import org.javaparser.ast.expr.NameExpr;
+import org.javaparser.ast.stmt.ExpressionStmt;
+import org.javaparser.ast.stmt.Statement;
+
+import static org.javaparser.StaticJavaParser.parseStatement;
+
+/**
+ * A node that contains a list of statements.
+ */
+public interface NodeWithStatements<N extends Node> {
+    NodeList<Statement> getStatements();
+
+    default Statement getStatement(int i) {
+        return getStatements().get(i);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setStatement(int i, Statement statement) {
+        getStatements().set(i, statement);
+        return (N) this;
+    }
+
+    N setStatements(final NodeList<Statement> statements);
+
+    @SuppressWarnings("unchecked")
+    default N addStatement(Statement statement) {
+        getStatements().add(statement);
+        return (N) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addStatement(int index, final Statement statement) {
+        getStatements().add(index, statement);
+        return (N) this;
+    }
+
+    default N addStatement(Expression expr) {
+        return addStatement(new ExpressionStmt(expr));
+    }
+
+    /**
+     * It will use {@link JavaParser#parseStatement(String)} inside, so it should end with a semicolon
+     */
+    default N addStatement(String statement) {
+        return addStatement(parseStatement(statement));
+    }
+
+    default N addStatement(int index, final Expression expr) {
+        Statement stmt = new ExpressionStmt(expr);
+        return addStatement(index, stmt);
+    }
+
+    default <A extends Statement> A addAndGetStatement(A statement) {
+        getStatements().add(statement);
+        return statement;
+    }
+
+    default Statement addAndGetStatement(int index, final Statement statement) {
+        getStatements().add(index, statement);
+        return statement;
+    }
+
+    default ExpressionStmt addAndGetStatement(Expression expr) {
+        ExpressionStmt statement = new ExpressionStmt(expr);
+        return addAndGetStatement(statement);
+    }
+
+    default ExpressionStmt addAndGetStatement(String statement) {
+        return addAndGetStatement(new NameExpr(statement));
+    }
+
+    /**
+     * @return true if there are no statements contained in this node.
+     */
+    default boolean isEmpty() {
+        return getStatements().isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    default N copyStatements(NodeList<Statement> nodeList) {
+        for (Statement n : nodeList) {
+            addStatement(n.clone());
+        }
+        return (N) this;
+    }
+
+    default N copyStatements(NodeWithStatements<?> other) {
+        return copyStatements(other.getStatements());
+    }
+}

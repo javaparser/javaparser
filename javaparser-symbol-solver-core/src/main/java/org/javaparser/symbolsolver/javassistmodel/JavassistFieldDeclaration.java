@@ -1,0 +1,97 @@
+/*
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.symbolsolver.javassistmodel;
+
+import org.javaparser.ast.AccessSpecifier;
+import org.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import org.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import org.javaparser.resolution.declarations.ResolvedTypeParametrizable;
+import org.javaparser.resolution.types.ResolvedType;
+import org.javaparser.symbolsolver.model.resolution.TypeSolver;
+import javassist.CtField;
+import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
+
+import java.lang.reflect.Modifier;
+
+/**
+ * @author Federico Tomassetti
+ */
+public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
+    private CtField ctField;
+    private TypeSolver typeSolver;
+
+    public JavassistFieldDeclaration(CtField ctField, TypeSolver typeSolver) {
+        this.ctField = ctField;
+        this.typeSolver = typeSolver;
+    }
+
+    @Override
+    public ResolvedType getType() {
+        try {
+            if (ctField.getGenericSignature() != null && declaringType() instanceof ResolvedTypeParametrizable) {
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toFieldSignature(ctField.getGenericSignature());
+                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
+            } else {
+                return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
+            }
+        } catch (NotFoundException | BadBytecode e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(ctField.getModifiers());
+    }
+
+    @Override
+    public String getName() {
+        return ctField.getName();
+    }
+
+    @Override
+    public boolean isField() {
+        return true;
+    }
+
+    @Override
+    public boolean isParameter() {
+        return false;
+    }
+
+    @Override
+    public boolean isType() {
+        return false;
+    }
+
+    @Override
+    public AccessSpecifier accessSpecifier() {
+        return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
+    }
+
+    @Override
+    public ResolvedTypeDeclaration declaringType() {
+        return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
+    }
+}

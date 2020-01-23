@@ -36,7 +36,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Automatic-Module-Name>com.github.javaparser.core.serialization</Automatic-Module-Name>
+							<Automatic-Module-Name>org.javaparser.core.serialization</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
 				</configuration>

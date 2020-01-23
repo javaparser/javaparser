@@ -1,6 +1,6 @@
 package samples;
 
-import com.github.javaparser.ast.expr.AnnotationExpr;
+import org.javaparser.ast.expr.AnnotationExpr;
 
 class ReferenceToParameter extends AnnotationExpr {
 

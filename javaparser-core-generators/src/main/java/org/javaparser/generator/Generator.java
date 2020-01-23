@@ -1,0 +1,125 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package org.javaparser.generator;
+
+import org.javaparser.ast.Node;
+import org.javaparser.ast.body.CallableDeclaration;
+import org.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import org.javaparser.ast.body.MethodDeclaration;
+import org.javaparser.ast.expr.Expression;
+import org.javaparser.ast.expr.StringLiteralExpr;
+import org.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import org.javaparser.ast.Generated;
+import org.javaparser.utils.SourceRoot;
+
+import java.util.List;
+
+import static org.javaparser.ast.NodeList.toNodeList;
+import static org.javaparser.utils.CodeGenerationUtils.f;
+
+/**
+ * A general pattern that the generators in this module will follow.
+ */
+public abstract class Generator {
+    protected final SourceRoot sourceRoot;
+
+    protected Generator(SourceRoot sourceRoot) {
+        this.sourceRoot = sourceRoot;
+    }
+
+    public abstract void generate() throws Exception;
+
+    protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
+        annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
+    }
+
+    protected <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
+        annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
+    }
+
+    protected void annotateOverridden(MethodDeclaration method) {
+        annotate(method, Override.class, null);
+    }
+
+    private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
+        node.setAnnotations(
+                node.getAnnotations().stream()
+                        .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
+                        .collect(toNodeList()));
+
+        if (content != null) {
+            node.addSingleMemberAnnotation(annotation.getSimpleName(), content);
+        } else {
+            node.addMarkerAnnotation(annotation.getSimpleName());
+        }
+        node.tryAddImportToParentCompilationUnit(annotation);
+    }
+
+    /**
+     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
+     * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
+     */
+    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addMethod(containingClassOrInterface, callable, () -> containingClassOrInterface.addMember(callable));
+    }
+
+    /**
+     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
+     * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept. The
+     * method or constructor is annotated with the generator class.
+     */
+    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addMethod(containingClassOrInterface, callable,
+                () -> {
+                    throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+                });
+    }
+
+    private void addMethod(
+            ClassOrInterfaceDeclaration containingClassOrInterface,
+            CallableDeclaration<?> callable,
+            Runnable onNoExistingMethod) {
+        List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
+        if (existingCallables.isEmpty()) {
+            onNoExistingMethod.run();
+            return;
+        }
+        if (existingCallables.size() > 1) {
+            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+        }
+        final CallableDeclaration<?> existingCallable = existingCallables.get(0);
+        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+        annotateGenerated(callable);
+        containingClassOrInterface.getMembers().replace(existingCallable, callable);
+    }
+
+    /**
+     * Removes all methods from containingClassOrInterface that have the same signature as callable. This is not used by
+     * any code, but it is useful when changing a generator and you need to get rid of a set of outdated methods.
+     */
+    protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
+            containingClassOrInterface.remove(existingCallable);
+        }
+    }
+
+}

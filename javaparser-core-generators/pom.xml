@@ -37,7 +37,7 @@
                         </executions>
                         <configuration>
                             <classpathScope>test</classpathScope>
-                            <mainClass>com.github.javaparser.generator.core.CoreGenerator</mainClass>
+                            <mainClass>org.javaparser.generator.core.CoreGenerator</mainClass>
                             <arguments>
                                 <argument>${project.basedir}</argument>
                             </arguments>

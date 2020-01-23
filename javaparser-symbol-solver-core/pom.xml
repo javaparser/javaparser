@@ -60,7 +60,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.github.javaparser.symbolsolver.core</Automatic-Module-Name>
+                            <Automatic-Module-Name>org.javaparser.symbolsolver.core</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

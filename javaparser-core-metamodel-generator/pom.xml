@@ -50,7 +50,7 @@
                         </executions>
                         <configuration>
                             <classpathScope>test</classpathScope>
-                            <mainClass>com.github.javaparser.generator.metamodel.MetaModelGenerator</mainClass>
+                            <mainClass>org.javaparser.generator.metamodel.MetaModelGenerator</mainClass>
                             <arguments>
                                 <argument>${project.basedir}</argument>
                             </arguments>
