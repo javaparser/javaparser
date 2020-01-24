@@ -23,6 +23,7 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -34,6 +35,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.lang.Integer.signum;
 
@@ -64,10 +67,10 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
-        if(a.getRange().isPresent() && !b.getRange().isPresent()) {
+        if (a.getRange().isPresent() && !b.getRange().isPresent()) {
             return -1;
         }
-        if(!a.getRange().isPresent() && b.getRange().isPresent()) {
+        if (!a.getRange().isPresent() && b.getRange().isPresent()) {
             return 1;
         }
         if (!a.getRange().isPresent() && !b.getRange().isPresent()) {
@@ -127,27 +130,66 @@ public final class PositionUtils {
         }
     }
 
-    public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations) {
-        final Range containedRange = contained.getRange().get();
-        final Range containerRange = container.getRange().get();
-        if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null) {
-            return container.containsWithinRange(contained);
+    /**
+     * Compare nodes. Optionally include annotations in the range checks.
+     * This method takes into account whether the nodes are within the same compilation unit.
+     *
+     * @param container
+     * @param other
+     * @param ignoringAnnotations
+     * @return
+     */
+    public static boolean nodeContains(Node container, Node other, boolean ignoringAnnotations) {
+        if(!container.getRange().isPresent()) {
+            throw new IllegalArgumentException("Cannot compare the positions of nodes if container node does not have a range.");
         }
-        if (!container.containsWithinRange(contained)) {
+        if(!other.getRange().isPresent()) {
+            throw new IllegalArgumentException("Cannot compare the positions of nodes if contained node does not have a range.");
+        }
+
+        if(!Objects.equals(container.findCompilationUnit(), other.findCompilationUnit())) {
+            // Allow the check to complete if they are both within a known CU (i.e. the CUs are the same),
+            // ... or both not within a CU (i.e. both are Optional.empty())
             return false;
         }
+
+        final boolean hasAnnotations = !(container instanceof NodeWithAnnotations) || PositionUtils.getLastAnnotation(container) != null;
+        if ((!ignoringAnnotations || !hasAnnotations)) {
+            // No special consideration required - perform simple range check.
+            return container.containsWithinRange(other);
+        }
+
+        // Is this an unwarranted (potentially backfiring?) micro-optimisation?
+        if (!container.containsWithinRange(other)) {
+            // If not in the looser range check, certainly will not be in narrower range check.
+            return false;
+        }
+
+
+        final Range containerRange = container.getRange().get();
+        final Range otherRange = other.getRange().get();
+
         // if the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained
-        if (container instanceof NodeWithAnnotations) {
-            int bl = beginLineWithoutConsideringAnnotation(container);
-            int bc = beginColumnWithoutConsideringAnnotation(container);
-            if (bl > containedRange.begin.line) return false;
-            if (bl == containedRange.begin.line && bc > containedRange.begin.column) return false;
-            if (containerRange.end.line < containedRange.end.line) return false;
-            // TODO < or <= ?
-            return !(containerRange.end.line == containedRange.end.line && containerRange.end.column < containedRange.end.column);
+        int containerStartLine = beginLineWithoutConsideringAnnotation(container);
+        int containerStartColumn = beginColumnWithoutConsideringAnnotation(container);
+
+        if (otherRange.begin.line < containerStartLine) {
+            // Other node starts before the container starts
+            return false;
+        } else if (otherRange.begin.line == containerStartLine && otherRange.begin.column < containerStartColumn) {
+            // Same start line, but earlier column start -- note this permits equal start columns
+            return false;
+        } else if (otherRange.end.line > containerRange.end.line) {
+            // Other node ends after the container ends
+            return false;
+        } else if (otherRange.end.line == containerRange.end.line && otherRange.end.column > containerRange.end.column) {
+            // Same end line, but later column end -- note this permits equal end columns
+            return false;
+        } else {
+            // All checks pass -- must be contained.
+            return true;
         }
-        return true;
     }
 
 }
