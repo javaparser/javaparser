@@ -107,15 +107,15 @@ public final class PositionUtils {
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
-        return nodeWithoutConsideringAnnotations(node).getRange().get().begin.line;
+        return firstNonAnnotationNode(node).getRange().get().begin.line;
     }
 
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
-        return nodeWithoutConsideringAnnotations(node).getRange().get().begin.column;
+        return firstNonAnnotationNode(node).getRange().get().begin.column;
     }
 
-    private static Node nodeWithoutConsideringAnnotations(Node node) {
+    private static Node firstNonAnnotationNode(Node node) {
         if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
             NodeWithType<?, Type> casted = (NodeWithType<?, Type>) node;
             return casted.getType();
