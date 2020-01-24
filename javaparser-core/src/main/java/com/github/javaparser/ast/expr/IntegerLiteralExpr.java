@@ -20,32 +20,29 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.Optional;
-
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.utils.Utils;
-
+import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
 
 /**
  * All ways to specify an int literal.
+ *
  * <ul>
- * <li><code>8934</code></li>
- * <li><code>0x01</code></li>
- * <li><code>022</code></li>
- * <li><code>0B10101010</code></li>
- * <li><code>99999999L</code></li>
+ * <li><code>8934</code>
+ * <li><code>0x01</code>
+ * <li><code>022</code>
+ * <li><code>0B10101010</code>
+ * <li><code>99999999L</code>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -53,6 +50,7 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public static final String MAX_31_BIT_UNSIGNED_VALUE_AS_STRING = "2147483648";
+
     public static final long MAX_31_BIT_UNSIGNED_VALUE_AS_LONG = 2147483648L;
 
     public IntegerLiteralExpr() {
@@ -73,6 +71,11 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         customInitialization();
     }
 
+    /**
+     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
+     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     */
+    @Deprecated
     public IntegerLiteralExpr(final int value) {
         this(null, String.valueOf(value));
     }
@@ -103,6 +106,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
      * IntegerLiteralExpr#asNumber()}. It will be made private or merged with {@link IntegerLiteralExpr#asNumber()} in
      * future releases
      */
+    @Deprecated
     public int asInt() {
         String result = value.replaceAll("_", "");
         if (result.startsWith("0x") || result.startsWith("0X")) {
@@ -122,12 +126,12 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
      * the case when the literal has the value <code>2147483648</code>. This special literal is only allowed in the
      * expression <code>-2147483648</code> which represents <code>Integer.MIN_VALUE</code>). However 2147483648 (2^31)
      * is out of range of int, which is -(2^31) to (2^31)-1 and thus a long must be returned.
-     * <p>
-     * Note, that this function will NOT return a negative number if the literal was specified in decimal, since
-     * according to the language specification an expression such as <code>-1</code> is represented by a unary
-     * expression with a minus operator and the literal <code>1</code>. It is however possible to represent negative
-     * numbers in a literal directly, i.e. by using the binary or hexadecimal representation. For example
-     * <code>0xffff_ffff</code> represents the value <code>-1</code>.
+     *
+     * <p>Note, that this function will NOT return a negative number if the literal was specified in decimal, since
+     * according to the language specification (chapter 3.10.1) an expression such as <code>-1</code> is represented by
+     * a unary expression with a minus operator and the literal <code>1</code>. It is however possible to represent
+     * negative numbers in a literal directly, i.e. by using the binary or hexadecimal representation. For example
+     * <code>0xffff_ffff</code> represents the value <code> -1</code>.
      *
      * @return the literal value as a number while respecting different number representations
      */
@@ -145,6 +149,11 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         }
     }
 
+    /**
+     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
+     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     */
+    @Deprecated
     public IntegerLiteralExpr setInt(int value) {
         this.value = String.valueOf(value);
         return this;
