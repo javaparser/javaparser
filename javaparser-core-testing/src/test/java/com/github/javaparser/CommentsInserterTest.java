@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -39,8 +38,7 @@ class CommentsInserterTest {
     }
 
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
-        Provider p = Providers.resourceProvider(
-                makeFilename(sampleName));
+        Provider p = Providers.resourceProvider(makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
 
@@ -63,7 +61,7 @@ class CommentsInserterTest {
 
     @Test
     void issue200EnumConstantsWithCommentsForceVerticalAlignment() {
-        CompilationUnit cu = parse("public enum X {" + EOL +
+        CompilationUnit cu = StaticJavaParser.parse("public enum X {" + EOL +
                 "    /** const1 javadoc */" + EOL +
                 "    BORDER_CONSTANT," + EOL +
                 "    /** const2 javadoc */" + EOL +
@@ -84,7 +82,7 @@ class CommentsInserterTest {
 
     @Test
     void issue234LosingCommentsInArrayInitializerExpr() {
-        CompilationUnit cu = parse("@Anno(stuff={" + EOL +
+        CompilationUnit cu = StaticJavaParser.parse("@Anno(stuff={" + EOL +
                 "    // Just," + EOL +
                 "    // an," + EOL +
                 "    // example" + EOL +

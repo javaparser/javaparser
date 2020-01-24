@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -98,13 +98,15 @@ class CommentsInserter {
                 .filter(n -> !(n instanceof Modifier))
                 .collect(toList());
 
+        boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             commentsInsideChild.addAll(
                     commentsToAttribute.stream()
-                            .filter(c -> c.getRange().isPresent())
-                            .filter(c -> PositionUtils.nodeContains(child, c,
-                                    configuration.isIgnoreAnnotationsWhenAttributingComments())).collect(toList()));
+                            .filter(comment -> comment.getRange().isPresent())
+                            .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
+                            .collect(toList())
+            );
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
