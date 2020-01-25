@@ -140,6 +140,7 @@ public class PositionUtilsTest {
         CompilationUnit cu = StaticJavaParser.parse("@A @B /*o*/ public class X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
+        // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
         SimpleName simpleName = x.getName();
         Comment o = simpleName.getComment().get();
 
@@ -155,6 +156,12 @@ public class PositionUtilsTest {
         // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertFalse(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
+
+
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
+//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+
     }
 
     @Test
@@ -162,6 +169,7 @@ public class PositionUtilsTest {
         CompilationUnit cu = StaticJavaParser.parse("@A @B public /*o*/ class X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
+        // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
         SimpleName simpleName = x.getName();
         Comment o = simpleName.getComment().get();
 
@@ -178,6 +186,10 @@ public class PositionUtilsTest {
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
 
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
+//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+
     }
 
     @Test
@@ -185,6 +197,7 @@ public class PositionUtilsTest {
         CompilationUnit cu = StaticJavaParser.parse("@A @B public class /*o*/ X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
+        // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
         SimpleName simpleName = x.getName();
         Comment o = simpleName.getComment().get();
 
@@ -200,6 +213,50 @@ public class PositionUtilsTest {
         // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
+
+        assertTrue(o.getCommentedNode().isPresent());
+
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
+//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+
+    }
+
+    @Test
+    public void nodeContainsAnnotations_WithCommentAfterTheEnd_IgnoringAnnotations3() {
+        CompilationUnit cu = StaticJavaParser.parse("@A @B public class X /*o*/ {}");
+        ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
+
+//        // TODO: At what point is the declaration supposed to end and the code block begin? Should the block comment move "inside" the code block?
+//        // cu =
+//        @A
+//        @B
+//        public class X {
+//            /*o*/
+//        }
+
+        // TODO: Should the comment be attached to the SimpleName (as opposed to being attached to null but not orphaned?)
+        Comment o = cu.getComments().get(0);
+
+
+        //// 12345678912345678912345678901
+        //// @A @B public class X /*o*/ {}
+        //// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ // range of x, WITH annotations -- thus contained == TRUE
+        //// @A @B public class X /*o*/ {}
+        ////       ^^^^^^^^^^^^^^^^^^^^^^^ // range of x, ignoring annotations -- thus contained == TRUE
+        //// @A @B public class X /*o*/ {}
+        ////                      ^^^^^    // range of o
+
+        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
+        assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
+        assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
+
+        // FIXME: Comment is unattached (returns null), but is not considered to be orphaned...?
+//        assertTrue(o.getCommentedNode().isPresent());
+
+        // FIXME: Both tests currently fail due to the comment being unattached, as opposed to the ClassOrInterfaceDeclaration
+//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
 
     }
 }
