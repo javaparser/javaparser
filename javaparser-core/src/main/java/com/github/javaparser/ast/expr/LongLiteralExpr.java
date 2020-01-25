@@ -39,11 +39,11 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  * All ways to specify a long literal.
  *
  * <ul>
- * <li><code>8934l</code>
- * <li><code>0x01L</code>
- * <li><code>022l</code>
- * <li><code>0B10101010L</code>
- * <li><code>99999999L</code>
+ * <li><code>8934l</code></li>
+ * <li><code>0x01L</code></li>
+ * <li><code>022l</code></li>
+ * <li><code>0B10101010L</code></li>
+ * <li><code>99999999L</code></li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -73,8 +73,8 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
-     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     * @deprecated This function is deprecated in favor of {@link #LongLiteralExpr(String)}. Please refer to the {@link
+     * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
     public LongLiteralExpr(final long value) {
@@ -155,8 +155,8 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
-     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     * @deprecated This function is deprecated in favor of {@link #setValue(String)}. Please refer to the {@link
+     * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
     public LongLiteralExpr setLong(long value) {

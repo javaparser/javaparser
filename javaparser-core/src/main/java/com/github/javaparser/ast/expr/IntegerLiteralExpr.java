@@ -38,11 +38,10 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  * All ways to specify an int literal.
  *
  * <ul>
- * <li><code>8934</code>
- * <li><code>0x01</code>
- * <li><code>022</code>
- * <li><code>0B10101010</code>
- * <li><code>99999999L</code>
+ * <li><code>8934</code></li>
+ * <li><code>0x01</code></li>
+ * <li><code>022</code></li>
+ * <li><code>0B10101010</code></li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -72,8 +71,8 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
-     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     * @deprecated This function is deprecated in favor of {@link #IntegerLiteralExpr(String)}. Please refer to the
+     * {@link #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
     public IntegerLiteralExpr(final int value) {
@@ -150,8 +149,8 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @deprecated This function is deprecated in favor of constructing the literal by a string value. Please refer to
-     * the {@link #asNumber()} function especially on how to construct literals holding negative values.
+     * @deprecated This function is deprecated in favor of {@link #setValue(String)}. Please refer to the {@link
+     * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
     public IntegerLiteralExpr setInt(int value) {
