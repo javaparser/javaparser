@@ -23,11 +23,11 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.StaticJavaParser.parseResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,21 +47,21 @@ class CommentsInserterTest {
      */
     @Test
     void issue290() throws IOException {
-        ParseResult result = parseSample("Issue290");
-        CommentsCollection cc = (CommentsCollection) result.getCommentsCollection().get();
+        ParseResult<CompilationUnit> result = this.parseSample("Issue290");
+        CommentsCollection cc = result.getCommentsCollection().get();
         assertEquals(1, cc.getLineComments().size());
         assertEquals(1, cc.getJavadocComments().size());
     }
 
     @Test
     void issue624() throws IOException {
-        parseResource(makeFilename("Issue624"));
+        this.parseSample("Issue624");
         // Should not fail
     }
 
     @Test
     void issue200EnumConstantsWithCommentsForceVerticalAlignment() {
-        CompilationUnit cu = StaticJavaParser.parse("public enum X {" + EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("public enum X {" + EOL +
                 "    /** const1 javadoc */" + EOL +
                 "    BORDER_CONSTANT," + EOL +
                 "    /** const2 javadoc */" + EOL +
@@ -82,7 +82,7 @@ class CommentsInserterTest {
 
     @Test
     void issue234LosingCommentsInArrayInitializerExpr() {
-        CompilationUnit cu = StaticJavaParser.parse("@Anno(stuff={" + EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("@Anno(stuff={" + EOL +
                 "    // Just," + EOL +
                 "    // an," + EOL +
                 "    // example" + EOL +
