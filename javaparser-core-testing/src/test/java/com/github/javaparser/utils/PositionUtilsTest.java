@@ -170,7 +170,7 @@ public class PositionUtilsTest {
         //// @A @B public /*o*/ class X {}
         //// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ // range of x, WITH annotations -- thus contained == TRUE
         //// @A @B public /*o*/ class X {}
-        ////       ^^^^^^^^^^^^^^^^^^^^^^^ // range of x, ignoring annotations -- thus contained == FALSE
+        ////       ^^^^^^^^^^^^^^^^^^^^^^^ // range of x, ignoring annotations -- thus contained == TRUE
         //// @A @B public /*o*/ class X {}
         ////              ^^^^^            // range of o
 
@@ -182,7 +182,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentAfterTheEnd_IgnoringAnnotations2() {
-        CompilationUnit cu = StaticJavaParser.parse("@A @B public /*o*/ class X {}");
+        CompilationUnit cu = StaticJavaParser.parse("@A @B public class /*o*/ X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
         SimpleName simpleName = x.getName();
@@ -190,12 +190,12 @@ public class PositionUtilsTest {
 
 
         //// 12345678912345678912345678901
-        //// @A @B public /*o*/ class X {}
+        //// @A @B public class /*o*/ X {}
         //// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ // range of x, WITH annotations -- thus contained == TRUE
-        //// @A @B public /*o*/ class X {}
-        ////       ^^^^^^^^^^^^^^^^^^^^^^^ // range of x, ignoring annotations -- thus contained == FALSE
-        //// @A @B public /*o*/ class X {}
-        ////              ^^^^^            // range of o
+        //// @A @B public class /*o*/ X {}
+        ////       ^^^^^^^^^^^^^^^^^^^^^^^ // range of x, ignoring annotations -- thus contained == TRUE
+        //// @A @B public class /*o*/ X {}
+        ////                    ^^^^^      // range of o
 
         // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
