@@ -53,7 +53,7 @@ import com.github.javaparser.utils.Log;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.*;
 
 /**
@@ -492,7 +492,7 @@ public class JavaParserFacade {
         if (node instanceof EnumDeclaration) {
             return (EnumDeclaration) node;
         }
-        return findContainingTypeDecl(requireParentNode(node));
+        return findContainingTypeDecl(demandParentNode(node));
 
     }
 
@@ -503,7 +503,7 @@ public class JavaParserFacade {
         if (node instanceof EnumDeclaration) {
             return node;
         }
-        Node parent = requireParentNode(node);
+        Node parent = demandParentNode(node);
         if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
             return parent;
         }
@@ -654,7 +654,7 @@ public class JavaParserFacade {
             JavaParserAnonymousClassDeclaration anonymousDeclaration = new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
             return new ReferenceTypeImpl(anonymousDeclaration, typeSolver);
         }
-        return getTypeOfThisIn(requireParentNode(node));
+        return getTypeOfThisIn(demandParentNode(node));
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?> typeDeclaration) {

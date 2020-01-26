@@ -90,9 +90,7 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     public JavaParserTypeSolver(Path srcDir) {
-        this(srcDir,
-                new ParserConfiguration()
-                        .setLanguageLevel(BLEEDING_EDGE));
+        this(srcDir, new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
     }
 
     @Override
@@ -155,7 +153,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         try {
             return parsedDirectories.get(srcDirectory.toAbsolutePath(), () -> {
                 List<CompilationUnit> units = new ArrayList<>();
-                if(Files.exists(srcDirectory)) {
+                if (Files.exists(srcDirectory)) {
                     try (DirectoryStream<Path> srcDirectoryStream = Files.newDirectoryStream(srcDirectory)) {
                         srcDirectoryStream
                                 .forEach(file -> {
@@ -177,8 +175,6 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
-        // TODO support enums
-        // TODO support interfaces
         try {
             return foundTypes.get(name, () -> {
                 SymbolReference<ResolvedReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
