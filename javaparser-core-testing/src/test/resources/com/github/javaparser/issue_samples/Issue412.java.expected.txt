@@ -4,7 +4,8 @@
 2
 2
  */
-package /* a *//* b */
+package /* a */
+/* b */
 // c
 // d
 com.pany/*alma*/
@@ -17,7 +18,9 @@ com.pany/*alma*/
 // x
 /*y*/
 /*w*/
-/*aa*//*bb*///cc
+/*aa*/
+/*bb*/
+// cc
 // dd
 import com.github.javaparser.JavaParser;
 
