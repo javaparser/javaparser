@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -144,35 +145,44 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solve(ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt, boolean solveLambdas) {
-        List<ResolvedType> argumentTypes = new LinkedList<>();
-        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
-
-        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
-
-        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
-        if (!optAncestor.isPresent()) {
+        // Constructor invocation must exist within a class (not interface).
+        Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
+        if (!optAncestorClassOrInterfaceNode.isPresent()) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
-        ClassOrInterfaceDeclaration classNode = optAncestor.get();
+
+        ClassOrInterfaceDeclaration classOrInterfaceNode = optAncestorClassOrInterfaceNode.get();
+        ResolvedReferenceTypeDeclaration resolvedClassNode = classOrInterfaceNode.resolve();
+        if(!resolvedClassNode.isClass()) {
+            throw new IllegalStateException("Expected to be a class -- cannot call this() or super() within an interface.");
+        }
+
         ResolvedTypeDeclaration typeDecl = null;
-        if (!explicitConstructorInvocationStmt.isThis()) {
-            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
-            }
+        if (explicitConstructorInvocationStmt.isThis()) {
+            // this()
+            typeDecl = resolvedClassNode.asReferenceType();
         } else {
-            SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString());
-            if (sr.isSolved()) {
-                typeDecl = sr.getCorrespondingDeclaration();
+            // super()
+            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
+            if(superClass != null) {
+                typeDecl = superClass.getTypeDeclaration();
             }
         }
         if (typeDecl == null) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
+
+        // Solve each of the arguments being passed into this constructor invocation.
+        List<ResolvedType> argumentTypes = new LinkedList<>();
+        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
+        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
+
+        // Determine which constructor is referred to, and return it.
         SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
+
         return res;
     }
 
