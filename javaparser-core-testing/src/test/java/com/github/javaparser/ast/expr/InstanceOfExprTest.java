@@ -21,9 +21,11 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.utils.TestParser.parseStatement;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class InstanceOfExprTest {
@@ -32,5 +34,12 @@ class InstanceOfExprTest {
         InstanceOfExpr expr = parseExpression("s instanceof @A @DA String");
 
         assertThat(expr.getType().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"), new MarkerAnnotationExpr("DA"));
+    }
+
+    @Test
+    void java14TypeTestPattern() {
+        Statement ifContainingTypeTestPattern = parseStatement("if (obj instanceof String s && s.length() > 5) { }");
+
+        // TODO find the pattern, check the parts.
     }
 }
