@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
@@ -65,18 +66,18 @@ class NodeTest {
         assertEquals(Arrays.asList(), changes);
 
         cu.getClassByName("A").get().setName("MyCoolClass");
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
         cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean"), changes);
+                "VariableDeclarator.type changed from int to boolean");
 
         cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam");
     }
 
     @Test
@@ -156,30 +157,30 @@ class NodeTest {
         };
         cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
 
-        assertEquals(Arrays.asList(), changes);
+        assertThat(changes).isEmpty();
 
         cu.getClassByName("A").get().setName("MyCoolClass");
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass"), changes);
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
         cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean"), changes);
+                "VariableDeclarator.type changed from int to boolean");
 
         cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam"), changes);
+                "Parameter.name changed from p to myParam");
 
         cu.getClassByName("MyCoolClass").get()
                 .addField("int", "bar")
                 .getVariables().get(0).setInitializer("0");
-        assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam",
-                "VariableDeclarator.initializer changed from null to 0"), changes);
+                "VariableDeclarator.initializer changed from null to 0");
     }
 
     @Test
