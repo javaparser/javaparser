@@ -1579,7 +1579,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             return;
         }
         printer
-                .print("// ")
+                .print("//")
                 .println(normalizeEolInTextBlock(n.getContent(), "").trim());
     }
 
