@@ -392,7 +392,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public AccessSpecifier accessSpecifier() {
-        throw new UnsupportedOperationException();
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override
