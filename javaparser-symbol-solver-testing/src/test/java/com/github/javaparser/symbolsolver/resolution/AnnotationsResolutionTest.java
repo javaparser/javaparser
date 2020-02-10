@@ -31,6 +31,7 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -298,6 +299,21 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         List<ResolvedReferenceType> ancestors = referenceType.getAncestors();
         assertEquals(ancestors.size(), 1);
         assertEquals(ancestors.get(0).getQualifiedName(), "java.lang.annotation.Annotation");
+    }
+
+    @Test
+    void solvePrimitiveAnnotationMember() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithSingleValue").get().asAnnotationDeclaration();
+        assertEquals(ad.getMember(0).asAnnotationMemberDeclaration().resolve().getType().asPrimitive().describe(), "int");
+    }
+
+    @Test
+    void solveInnerClassAnnotationMember() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithInnerClass").get().asAnnotationDeclaration();
+        ResolvedAnnotationMemberDeclaration am = ad.getMember(0).asAnnotationMemberDeclaration().resolve();
+        assertEquals(am.getType().asReferenceType().getQualifiedName(), "foo.bar.MyAnnotationWithInnerClass.MyInnerClass");
     }
 
 }
