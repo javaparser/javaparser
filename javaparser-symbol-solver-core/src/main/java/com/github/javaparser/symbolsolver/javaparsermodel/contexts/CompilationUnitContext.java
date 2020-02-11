@@ -169,7 +169,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (dotPos > -1) {
                 prefix = name.substring(0, dotPos);
             }
-            // look into type imports
+            // look into single type imports
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (!importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
@@ -189,16 +189,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     }
                 }
             }
-            // look into type imports on demand
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl.isAsterisk()) {
-                    String qName = importDecl.getNameAsString() + "." + name;
-                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                    if (ref != null && ref.isSolved()) {
-                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-                    }
-                }
-            }
         }
 
         // Look in current package
@@ -214,6 +204,19 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref != null && ref.isSolved()) {
                 return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+            }
+        }
+
+        // look into asterisk imports on demand
+        if (wrappedNode.getImports() != null) {
+            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+                if (importDecl.isAsterisk()) {
+                    String qName = importDecl.getNameAsString() + "." + name;
+                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    if (ref != null && ref.isSolved()) {
+                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                    }
+                }
             }
         }
 

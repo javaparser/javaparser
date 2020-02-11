@@ -118,4 +118,58 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         assertNotEquals("another.MyEnum.A", qualifiedName, "Error - mistakenly resolved to an enum member instead of the expected class.");
     }
 
+    @Test
+    void testTypesWithSameNameSingleTypeImportAndPackage() throws IOException {
+        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member");
+        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member/main/Main.java");
+
+        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
+        StaticJavaParser
+                .getConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+
+        CompilationUnit cu = StaticJavaParser.parse(mainPath);
+        ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
+
+        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        assertEquals("another.A", qualifiedName, "Error - not resolved to the imorted class.");
+        assertNotEquals("main.A", qualifiedName, "Error - mistakenly resolved to a package member insted of the explicitly imported class.");
+    }
+
+    @Test
+    void testTypesWithSameNamePackageAndAsteriskImport() throws IOException {
+        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import");
+        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import/main/Main.java");
+
+        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
+        StaticJavaParser
+                .getConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+
+        CompilationUnit cu = StaticJavaParser.parse(mainPath);
+        ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
+
+        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        assertEquals("main.A", qualifiedName, "Error - not resolved to a package member.");
+        assertNotEquals("another.A", qualifiedName, "Error - mistakenly resolved to an asterisk-imported class instead of the expected package member.");
+    }
+
+    @Test
+    void testTypesWithSameNameAsteriskImportAndJavaLang() throws IOException {
+        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang");
+        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang/main/Main.java");
+
+        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
+        StaticJavaParser
+                .getConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+
+        CompilationUnit cu = StaticJavaParser.parse(mainPath);
+        ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
+
+        String qualifiedName = c.getFieldByName("s").get().resolve().getType().describe();
+        assertEquals("another.String", qualifiedName, "Error - not resolved to an asterisk-imported class.");
+        assertNotEquals("java.lang.String", qualifiedName, "Error - mistakenly resolved to a member of java.lang instead of a member of asterisk-imported package.");
+    }
+
 }
