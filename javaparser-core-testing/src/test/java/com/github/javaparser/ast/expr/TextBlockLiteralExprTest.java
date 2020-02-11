@@ -189,7 +189,7 @@ class TextBlockLiteralExprTest {
                 "    \"\"\";").findFirst(TextBlockLiteralExpr.class).get();
 
         assertEquals("red   \n" +
-                "    green \n" +
-                "    blue  \n", textBlock.translateEscapes());
+                "green \n" +
+                "blue  \n", textBlock.translateEscapes());
     }
 }
