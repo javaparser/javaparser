@@ -175,20 +175,16 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     String qName = importDecl.getNameAsString();
                     boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
                     boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
-                    if (!found) {
-                        if (prefix != null) {
-                            found = qName.endsWith("." + prefix);
-                            if (found) {
-                                qName = qName + name.substring(dotPos);
-                            }
+                    if (!found && prefix != null) {
+                        found = qName.endsWith("." + prefix);
+                        if (found) {
+                            qName = qName + name.substring(dotPos);
                         }
                     }
                     if (found) {
                         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref != null && ref.isSolved()) {
                             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-                        } else {
-                            return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
                         }
                     }
                 }

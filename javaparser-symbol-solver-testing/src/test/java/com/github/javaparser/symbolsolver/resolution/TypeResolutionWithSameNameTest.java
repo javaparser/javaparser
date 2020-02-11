@@ -100,5 +100,22 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         assertNotEquals("implements_duplicate.A.DuplicateTypeName", qualifiedName, "Error - mistakenly resolved to a nested class instead of the expected interface.");
     }
 
+    @Test
+    void testTypesWithSameNameStaticNonTypeAndNonStaticType() throws IOException {
+        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import");
+        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import/main/Main.java");
+
+        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
+        StaticJavaParser
+                .getConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+
+        CompilationUnit cu = StaticJavaParser.parse(mainPath);
+        ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
+
+        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        assertEquals("another.A", qualifiedName, "Error - not resolved to a class.");
+        assertNotEquals("another.MyEnum.A", qualifiedName, "Error - mistakenly resolved to an enum member instead of the expected class.");
+    }
 
 }
