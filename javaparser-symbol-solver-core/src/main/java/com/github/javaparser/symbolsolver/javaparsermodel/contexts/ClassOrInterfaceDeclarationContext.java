@@ -95,16 +95,17 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        // First attempt to resolve against implemented classes - cf. issue #2195
         for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
             if (implementedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver).solveType(name);
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
+                    .solveType(implementedType.getNameWithScope());
             }
         }
 
         for (ClassOrInterfaceType extendedType : wrappedNode.getExtendedTypes()) {
             if (extendedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver).solveType(name);
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
+                    .solveType(extendedType.getNameWithScope());
             }
         }
 

@@ -118,6 +118,13 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         return name;
     }
 
+    public String getNameWithScope() {
+        StringBuilder str = new StringBuilder();
+        getScope().ifPresent(s -> str.append(s.getNameWithScope()).append("."));
+        str.append(name.asString());
+        return str.toString();
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ClassOrInterfaceType> getScope() {
         return Optional.ofNullable(scope);
