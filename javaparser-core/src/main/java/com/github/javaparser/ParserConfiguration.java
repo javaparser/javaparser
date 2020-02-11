@@ -181,11 +181,6 @@ public class ParserConfiguration {
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
         postProcessors.add((result, configuration) -> {
-            if (configuration.isLexicalPreservationEnabled()) {
-                result.ifSuccessful(LexicalPreservingPrinter::setup);
-            }
-        });
-        postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
                 result.ifSuccessful(resultNode -> result
                         .getCommentsCollection().ifPresent(comments ->
@@ -210,6 +205,11 @@ public class ParserConfiguration {
                     }
                 })
         ));
+        postProcessors.add((result, configuration) -> {
+            if (configuration.isLexicalPreservationEnabled()) {
+                result.ifSuccessful(LexicalPreservingPrinter::setup);
+            }
+        });
     }
 
     public boolean isAttributeComments() {

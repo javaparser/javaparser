@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -44,6 +46,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -285,4 +288,16 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         assertTrue(hasAnnotation, "org.junit.runner.RunWith not found on reference type");
     }
+
+    @Test
+    void solveAnnotationAncestor() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotation").get().asAnnotationDeclaration();
+        ResolvedReferenceTypeDeclaration referenceType = ad.resolve();
+
+        List<ResolvedReferenceType> ancestors = referenceType.getAncestors();
+        assertEquals(ancestors.size(), 1);
+        assertEquals(ancestors.get(0).getQualifiedName(), "java.lang.annotation.Annotation");
+    }
+
 }

@@ -34,7 +34,7 @@ import static java.util.Collections.synchronizedMap;
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration
  */
-class PhantomNodeLogic {
+public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
@@ -70,5 +70,13 @@ class PhantomNodeLogic {
         return node.getParentNode().isPresent() &&
                 (isPhantomNode(node.getParentNode().get())
                         || inPhantomNode(node.getParentNode().get(), levels - 1));
+    }
+
+    /**
+     * Clean up the cache used by the LexicalPreserving logic. This should only be used once you're done printing all parsed data with
+     * a JavaParser's configuration setLexicalPreservationEnabled=true.
+     */
+    public static void cleanUpCache() {
+        isPhantomNodeCache.clear();
     }
 }
