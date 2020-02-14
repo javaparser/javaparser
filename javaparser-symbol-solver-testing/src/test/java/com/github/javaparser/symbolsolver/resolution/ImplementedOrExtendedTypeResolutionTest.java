@@ -26,14 +26,14 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.io.IOException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests resolution of implemented/extended types
@@ -42,23 +42,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
-    @BeforeAll
-    static void configureSymbolSolver() throws IOException {
-        // configure symbol solver before parsing
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-        typeSolver.add(new ReflectionTypeSolver());
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-    }
-
-    @AfterAll
-    static void unConfigureSymbolSolver() {
+    @AfterEach
+    void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
         StaticJavaParser.getConfiguration().setSymbolResolver(null);
     }
 
     @Test
     void solveImplementedTypes() {
-        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution");
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "InterfaceTest");
         assertEquals(clazz.getFieldByName("field_i1").get().resolve().getType().describe(), "I1");
         assertEquals(clazz.getFieldByName("field_i2").get().resolve().getType().describe(), "I2.I2_1");
@@ -67,23 +61,41 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveExtendedType1() {
-        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution");
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest1");
         assertEquals(clazz.getFieldByName("field_c1").get().resolve().getType().describe(), "C1");
     }
 
     @Test
     void solveExtendedType2() {
-        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution");
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest2");
         assertEquals(clazz.getFieldByName("field_c2").get().resolve().getType().describe(), "C2.C2_1");
     }
 
     @Test
     void solveExtendedType3() {
-        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution");
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest3");
         assertEquals(clazz.getFieldByName("field_c3").get().resolve().getType().describe(), "C3.C3_1.C3_1_1");
+    }
+
+    @Test
+    void solveImplementedTypeWithSameName() throws IOException {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(
+            new JavaParserTypeSolver(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg"))));
+
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg/main/A.java"));
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "A");
+        String actual = clazz.getFieldByName("field_a").get().resolve().getType().describe();
+        assertEquals("main.A", actual);
+        assertNotEquals("another.A", actual);
     }
 
 }

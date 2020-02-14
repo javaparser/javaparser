@@ -95,6 +95,10 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        if (wrappedNode.getName().getId().equals(name)) {
+            return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
+        }
+
         for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
             if (implementedType.getName().getId().equals(name)) {
                 return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
