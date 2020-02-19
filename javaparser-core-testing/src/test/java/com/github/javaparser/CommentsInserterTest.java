@@ -39,16 +39,15 @@ class CommentsInserterTest {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
+    private String makeExpectedFilename(String sampleName) {
+        return "/com/github/javaparser/issue_samples/" + sampleName + ".java.expected.txt";
+    }
+
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
         Provider p = Providers.resourceProvider(
                 makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
-
-    private String makeExpectedFilename(String sampleName) {
-        return "/com/github/javaparser/issue_samples/" + sampleName + ".java.expected.txt";
-    }
-
 
     /**
      * Issue: "When there is a String constant "\\" compilationUnit ignores all further comments"

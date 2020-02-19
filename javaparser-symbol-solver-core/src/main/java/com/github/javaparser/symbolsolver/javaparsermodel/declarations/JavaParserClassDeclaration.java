@@ -412,6 +412,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+
+        // If unable to solve by the class name alone, attempt to qualify it.
         if (!ref.isSolved()) {
             Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
             if (localScope.isPresent()) {
@@ -419,12 +421,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                 ref = solveType(localName);
             }
         }
+
+        // If still unable to resolve, throw an exception.
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
+
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
                                                               .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                                                               .collect(Collectors.toList());

@@ -64,7 +64,7 @@ public interface AstObserver {
      * @param index position at which the changed occurred
      * @param nodeAddedOrRemoved element added or removed
      */
-    void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
+    void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
 
-    void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode);
+    void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode);
 }

@@ -44,7 +44,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
             }
 
             @Override
-            public void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+            public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
                 observer.listChange(observedNode, type, index, nodeAddedOrRemoved);
             }
 
@@ -63,7 +63,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
     }
 
     @Override
-    public final void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+    public final void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         if (type == ListChangeType.REMOVAL) {
             considerRemoving(nodeAddedOrRemoved);
         } else if (type == ListChangeType.ADDITION) {
@@ -73,7 +73,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
     }
 
     @Override
-    public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+    public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
         if (oldNode == newNode) {
             return;
         }
@@ -86,11 +86,11 @@ public abstract class PropagatingAstObserver implements AstObserver {
         // do nothing
     }
 
-    public void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+    public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         // do nothing
     }
 
-    public void concreteListReplacement(NodeList observedNode, int index, Node oldValue, Node newValue) {
+    public void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
         // do nothing
     }
 

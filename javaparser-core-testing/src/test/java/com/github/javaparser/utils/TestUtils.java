@@ -72,6 +72,11 @@ public class TestUtils {
             return null;
         }
     }
+    
+    public static void assertEqualToTextResource(String resourceName, String actual){
+        String expected = readResource(resourceName);
+        assertEquals(expected, actual);
+    }
 
     public static void assertEqualToTextResource(String resourceName, String actual){
         String expected = readResource(resourceName);

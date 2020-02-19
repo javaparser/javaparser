@@ -25,6 +25,9 @@ import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
@@ -51,11 +54,15 @@ public class JavaParserAnnotationMemberDeclaration implements ResolvedAnnotation
 
     @Override
     public ResolvedType getType() {
-        throw new UnsupportedOperationException();
+        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), getContext());
     }
 
     @Override
     public String getName() {
         return wrappedNode.getNameAsString();
+    }
+
+    private Context getContext() {
+        return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
 }

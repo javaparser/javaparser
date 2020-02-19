@@ -72,11 +72,11 @@ public class CsmConditional implements CsmElement {
                 return property.getValueAsBooleanAttribute(node);
             }
             if (this == IS_EMPTY) {
-                NodeList value = property.getValueAsMultipleReference(node);
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                NodeList value = property.getValueAsMultipleReference(node);
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());
