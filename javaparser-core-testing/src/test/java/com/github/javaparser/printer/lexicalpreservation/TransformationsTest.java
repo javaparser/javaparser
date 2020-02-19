@@ -313,7 +313,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
 
-    @OpenIssueTest(issueNumber = {2137, 2186})
+    @OpenIssueTest(issueNumber = {2137}, testcasePrNumber = {2186})
     @Test
     void issue2137() {
         String code = "public class Foo {" + EOL +

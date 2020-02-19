@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class AmbiguousVoidGenericTest {
 
-    @OpenIssueTest(issueNumber = {1950, 1958})
+    @OpenIssueTest(issueNumber = {1950}, testcasePrNumber = 1958)
     @Test
     public void issueWithInternalEnumConstantReference() {
         String code = "package com.github.javaparser.symbolsolver.testingclasses; class Foo { void foo() { UtilityClass.method(()->{}); } }";

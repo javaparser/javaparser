@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class Issue2044Test {
 
-    @OpenIssueTest(issueNumber = {2044, 2422})
+    @OpenIssueTest(issueNumber = {2044}, testcasePrNumber = {2422})
     @Test
     public void issue2044_typeVariableExtendsObject() {
 
@@ -58,7 +58,7 @@ public class Issue2044Test {
         doTestSimple(x);
     }
 
-    @OpenIssueTest(issueNumber = {2044, 2422})
+    @OpenIssueTest(issueNumber = {2044}, testcasePrNumber = {2422})
     @Test
     public void issue2044_simpleTypeVariable() {
         String x = "public class X <K> {\n" +

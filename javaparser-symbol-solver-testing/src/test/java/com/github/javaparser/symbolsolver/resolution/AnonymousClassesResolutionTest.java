@@ -91,7 +91,7 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
     }
 
 
-    @OpenIssueTest(issueNumber = {1599, 2441})
+    @OpenIssueTest(issueNumber = {1599}, testcasePrNumber = 2441)
     @Test
     public void testAnonymousInterfaceImplementationConstructorResolution() {
         CompilationUnit cu = parseSample("AnonymousClasses");
@@ -107,7 +107,7 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
         // wrapped node be? The interface declaration? There should probably be additional assertions here.
     }
 
-    @OpenIssueTest(issueNumber = {1599, 2441})
+    @OpenIssueTest(issueNumber = {1599}, testcasePrNumber = 2441)
     @Test
     public void testAnonymousInterfaceImplementationMethodResolution() {
         CompilationUnit cu = parseSample("AnonymousClasses");
@@ -125,7 +125,7 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
         assertEquals(mdec.getWrappedNode().asMethodDeclaration().getParentNode().get(), creationExpr);
     }
 
-    @OpenIssueTest(issueNumber = {1599, 2441})
+    @OpenIssueTest(issueNumber = {1599}, testcasePrNumber = 2441)
     @Test
     public void testAnonymousClassImplementationConstructorResolution() {
         CompilationUnit cu = parseSample("AnonymousClasses");
@@ -144,7 +144,7 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
                 clazz.findFirst(ClassOrInterfaceDeclaration.class, c -> c.getNameAsString().equals("ClassFoo")).get());
     }
 
-    @OpenIssueTest(issueNumber = {1599, 2441})
+    @OpenIssueTest(issueNumber = {1599}, testcasePrNumber = 2441)
     @Test
     public void testAnonymousClassImplementationMethodResolution() {
         CompilationUnit cu = parseSample("AnonymousClasses");

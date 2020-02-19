@@ -22,6 +22,9 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.OpenIssueTest;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,6 +33,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
@@ -1305,7 +1309,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
     }
 
-    @OpenIssueTest(issueNumber = {2137, 2186})
+    @OpenIssueTest(issueNumber = {2137}, testcasePrNumber = {2186})
     @Test
     void issue2137() {
         String code = "public class Foo {" + EOL +

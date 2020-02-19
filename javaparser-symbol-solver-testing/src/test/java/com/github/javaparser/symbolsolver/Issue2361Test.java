@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Issue2361Test {
 
 
-    @OpenIssueTest(issueNumber = {2361, 2435})
+    @OpenIssueTest(issueNumber = {2361}, testcasePrNumber = 2435)
     @Test
     public void doTest_expectingFloat() {
         //language=JAVA

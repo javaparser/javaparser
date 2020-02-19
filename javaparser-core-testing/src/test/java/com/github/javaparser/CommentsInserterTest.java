@@ -107,7 +107,7 @@ class CommentsInserterTest {
     }
 
 
-    @OpenIssueTest(issueNumber = {412, 2102})
+    @OpenIssueTest(issueNumber = {412}, testcasePrNumber = {2102})
     @Test
     void issue412() throws IOException {
         CompilationUnit cu = parseSample("Issue412").getResult().get();
@@ -115,7 +115,7 @@ class CommentsInserterTest {
     }
 
 
-    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @OpenIssueTest(issueNumber = {263, 307, 498}, testcasePrNumber = {2103})
     @Test
     void issue263LostComments() {
         CompilationUnit cu = parse(
@@ -140,7 +140,7 @@ class CommentsInserterTest {
     }
 
 
-    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @OpenIssueTest(issueNumber = {263, 307, 498}, testcasePrNumber = {2103})
     @Test
     void issue307LostComments() {
         CompilationUnit cu = parse(
@@ -176,7 +176,7 @@ class CommentsInserterTest {
                         "}", cu.toString());
     }
 
-    @OpenIssueTest(issueNumber = {263, 307, 498, 2103})
+    @OpenIssueTest(issueNumber = {263, 307, 498}, testcasePrNumber = {2103})
     @Test
     void issue498LostComments() {
         CompilationUnit cu = parse(

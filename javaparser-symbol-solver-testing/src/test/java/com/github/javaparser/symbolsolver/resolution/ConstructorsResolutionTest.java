@@ -245,7 +245,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.AbstractStringBuilder", cd.declaringType().getQualifiedName());
     }
 
-    @OpenIssueTest(issueNumber = {1827, 1828})
+    @OpenIssueTest(issueNumber = {1827}, testcasePrNumber = 1828)
     @Test
     public void solveParametrizedParametersConstructor() {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));

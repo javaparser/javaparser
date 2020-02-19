@@ -40,6 +40,7 @@ import static java.lang.annotation.ElementType.*;
 @Tag("com.github.javaparser.OpenIssueTest")
 public @interface OpenIssueTest {
 
-    int[] issueNumber();
+    int[] issueNumber() default {};
+    int[] testcasePrNumber() default {};
 
 }

@@ -213,7 +213,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     }
 
 
-    @OpenIssueTest(issueNumber = 2009)
+    @OpenIssueTest(testcasePrNumber = 2009)
     @Test
     void wrapMethodBodyIntoAssertThrows() {
         MethodDeclaration it = consider("void m(){\n" +
@@ -272,7 +272,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 "}\n", result);
     }
 
-    @OpenIssueTest(issueNumber = 2027)
+    @OpenIssueTest(testcasePrNumber = 2027)
     @Test
     void removingModifiersWithExistingAnnotations_preserveIndentation() {
         considerCode(

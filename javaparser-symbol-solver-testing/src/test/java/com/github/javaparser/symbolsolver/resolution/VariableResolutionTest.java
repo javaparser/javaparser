@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class VariableResolutionTest extends AbstractResolutionTest {
 
-    @OpenIssueTest(issueNumber = {2132, 2133})
+    @OpenIssueTest(issueNumber = {2132}, testcasePrNumber = 2133)
     @Test
     void variableResolutionNoBlockStmt() {
         // Test without nested block statement
@@ -30,7 +30,7 @@ public class VariableResolutionTest extends AbstractResolutionTest {
         assertTrue(methodUsage.declaringType().getQualifiedName().equals("java.lang.String"));
     }
 
-    @OpenIssueTest(issueNumber = {2132, 2133})
+    @OpenIssueTest(issueNumber = {2132}, testcasePrNumber = 2133)
     @Test
     void variableResolutionWithBlockStmt() {
         // Test without nested block statement
