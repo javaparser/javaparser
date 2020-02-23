@@ -11,8 +11,8 @@ This project contains a set of libraries implementing a Java 1.0 - Java 13 Parse
 Our main site is at [JavaParser.org](http://javaparser.org)
 
 ## DD2480
-[Report drive link](https://docs.google.com/document/d/13ff8jUpI84NFwM0KuGhsp_ybh6-d-mCyPlQCwnk0c9k/edit?usp=sharing)
-[Before resolving the issue: copy of test log](https://drive.google.com/file/d/192A2JEi2cfnDmyL6hvWhEaQN9qh6woSr/view?usp=sharing)
+* [Report drive link](https://docs.google.com/document/d/13ff8jUpI84NFwM0KuGhsp_ybh6-d-mCyPlQCwnk0c9k/edit?usp=sharing)
+* [Before resolving the issue: copy of test log](https://drive.google.com/file/d/192A2JEi2cfnDmyL6hvWhEaQN9qh6woSr/view?usp=sharing)
 
 ## Setup
 
