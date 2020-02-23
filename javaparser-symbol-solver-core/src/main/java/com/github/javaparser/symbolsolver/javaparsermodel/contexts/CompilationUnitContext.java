@@ -169,37 +169,23 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (dotPos > -1) {
                 prefix = name.substring(0, dotPos);
             }
-            // look into type imports
+            // look into single type imports
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (!importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
                     boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
                     boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
-                    if (!found) {
-                        if (prefix != null) {
-                            found = qName.endsWith("." + prefix);
-                            if (found) {
-                                qName = qName + name.substring(dotPos);
-                            }
+                    if (!found && prefix != null) {
+                        found = qName.endsWith("." + prefix);
+                        if (found) {
+                            qName = qName + name.substring(dotPos);
                         }
                     }
                     if (found) {
                         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref != null && ref.isSolved()) {
                             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-                        } else {
-                            return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
                         }
-                    }
-                }
-            }
-            // look into type imports on demand
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl.isAsterisk()) {
-                    String qName = importDecl.getNameAsString() + "." + name;
-                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                    if (ref != null && ref.isSolved()) {
-                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                     }
                 }
             }
@@ -218,6 +204,19 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref != null && ref.isSolved()) {
                 return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+            }
+        }
+
+        // look into asterisk imports on demand
+        if (wrappedNode.getImports() != null) {
+            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+                if (importDecl.isAsterisk()) {
+                    String qName = importDecl.getNameAsString() + "." + name;
+                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    if (ref != null && ref.isSolved()) {
+                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                    }
+                }
             }
         }
 
