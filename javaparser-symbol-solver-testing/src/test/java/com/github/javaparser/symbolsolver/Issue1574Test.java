@@ -17,17 +17,17 @@ public class Issue1574Test {
     private static final String BLOCK_FILE = "src/test/resources/issue1574/BlockComment.java";
     private static final String ORPHAN_FILE = "src/test/resources/issue1574/ClassWithOrphanComments.java";
     @Test
-    void getAllCommentBeforePackageDeclarationLine() throws Exception{
+    void getAllContainedCommentBeforePackageDeclarationLine() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
         List<Comment> comments = cu.getAllContainedComments();
-        assertEquals(3,comments.size());
+        assertEquals(2,comments.size());
 
     }
     @Test
-    void getAllCommentBeforePackageDeclarationBlock() throws Exception{
+    void getAllContainedCommentBeforePackageDeclarationBlock() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
         List<Comment> comments = cu.getAllContainedComments();
-        assertEquals(3,comments.size());
+        assertEquals(2,comments.size());
 
     }
     @Test
@@ -53,4 +53,19 @@ public class Issue1574Test {
         assertEquals(1,comments.size());
 
     }
+    @Test
+    void getAllCommentBeforePackageDeclarationLine() throws Exception{
+        CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
+        List<Comment> comments = cu.getComments();
+        assertEquals(3,comments.size());
+
+    }
+    @Test
+    void getAllCommentBeforePackageDeclarationBlock() throws Exception{
+        CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
+        List<Comment> comments = cu.getComments();
+        assertEquals(3,comments.size());
+
+    }
+
 }

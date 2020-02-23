@@ -358,9 +358,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     public List<Comment> getAllContainedComments() {
         List<Comment> comments = new LinkedList<>();
-        this.getComment().ifPresent(comments::add);
         comments.addAll(getOrphanComments());
         for (Node child : getChildNodes()) {
+            child.getComment().ifPresent(comments::add);
             comments.addAll(child.getAllContainedComments());
         }
         return comments;
