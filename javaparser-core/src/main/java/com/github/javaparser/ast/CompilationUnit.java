@@ -146,7 +146,9 @@ public class CompilationUnit extends Node {
      * @see com.github.javaparser.ast.comments.BlockComment
      */
     public List<Comment> getComments() {
-        return this.getAllContainedComments();
+        List<Comment> comments =  this.getAllContainedComments();
+        this.getComment().ifPresent(comments::add);
+        return comments;
     }
 
     /**
