@@ -1,5 +1,6 @@
 package com.github.javaparser;
 
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class Issue2482Test {
                 "{ if (file != null) {} }");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
-        assertEquals(1, st.getAllContainedComments());
+        assertEquals(1, st.getAllContainedComments().size());
     }
 
     @Test
@@ -36,6 +37,17 @@ public class Issue2482Test {
                         "if (file != null) {}");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
-        assertEquals(1, st.getAllContainedComments());
+        assertEquals(1, st.getAllContainedComments().size());
+    }
+
+    @Test
+    public void commentBeforeAssignment() {
+        Statement st = StaticJavaParser.parseStatement(
+                "// a comment" + System.lineSeparator() +
+                "int x = 3;");
+
+        assertTrue(st.getComment().isPresent());
+        assertTrue(st.getOrphanComments().isEmpty());
+        assertEquals(1, st.getAllContainedComments().size());
     }
 }
