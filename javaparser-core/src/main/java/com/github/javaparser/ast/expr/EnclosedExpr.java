@@ -108,11 +108,6 @@ public class EnclosedExpr extends Expression {
         return super.remove(node);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public EnclosedExpr removeInner() {
-        return setInner((Expression) null);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnclosedExpr clone() {
