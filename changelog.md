@@ -1,3 +1,7 @@
+Version 3.15.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/166?closed=1)
+
 Version 3.15.12
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/165?closed=1)
