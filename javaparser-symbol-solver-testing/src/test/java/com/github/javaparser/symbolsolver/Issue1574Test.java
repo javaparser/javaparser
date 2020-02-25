@@ -11,11 +11,30 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class Issue1574Test {
     private static final String LINE_FILE = "src/test/resources/issue1574/Comment.java";
     private static final String BLOCK_FILE = "src/test/resources/issue1574/BlockComment.java";
     private static final String ORPHAN_FILE = "src/test/resources/issue1574/ClassWithOrphanComments.java";
+    @Test
+    void removeAllCommentsBeforePackageLine() throws Exception{
+        CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
+        for(Comment child: cu.getComments()){
+            child.remove();
+        }
+        assertEquals(0,cu.getComments().size());
+        assertFalse(cu.getComment().isPresent());
+    }
+    @Test
+    void removeAllCommentsBeforePackageBlock() throws Exception{
+        CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
+        for(Comment child: cu.getComments()){
+            child.remove();
+        }
+        assertEquals(0,cu.getComments().size());
+        assertFalse(cu.getComment().isPresent());
+    }
     @Test
     void getAllContainedCommentBeforePackageDeclarationLine() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
@@ -44,6 +63,7 @@ public class Issue1574Test {
         //The 2 first should be orphan comment while the third will be associated to the package
         assertEquals(1,comments.size());
 
+
     }
     @Test
     void getOrphanCommentsBlock() throws Exception{
@@ -65,7 +85,6 @@ public class Issue1574Test {
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
         List<Comment> comments = cu.getComments();
         assertEquals(3,comments.size());
-
     }
 
 }
