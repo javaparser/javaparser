@@ -144,9 +144,31 @@ public class CompilationUnit extends Node {
      * @see JavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
+     * @deprecated getComments was a too generic name and can be confused with getComment
+     * Use {@link #getAllComments()} instead
      */
+    @Deprecated
     public List<Comment> getComments() {
-        return this.getAllContainedComments();
+        List<Comment> comments =  this.getAllContainedComments();
+        this.getComment().ifPresent(comments::add);
+        return comments;
+    }
+
+    /**
+     * Return a list containing all comments declared in this compilation unit.
+     * Including javadocs, line comments and block comments of all types,
+     * inner-classes and other members.<br>
+     * If there is no comment, an empty list is returned.
+     *
+     * @return list with all comments of this compilation unit.
+     * @see JavadocComment
+     * @see com.github.javaparser.ast.comments.LineComment
+     * @see com.github.javaparser.ast.comments.BlockComment
+     */
+    public List<Comment> getAllComments() {
+        List<Comment> comments =  this.getAllContainedComments();
+        this.getComment().ifPresent(comments::add);
+        return comments;
     }
 
     /**
