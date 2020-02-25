@@ -1,6 +1,5 @@
 package com.github.javaparser;
 
-import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
@@ -8,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests related to https://github.com/javaparser/javaparser/issues/2482.
+ */
 public class Issue2482Test {
     @Test
     public void commentBeforeLambda() {
@@ -17,7 +19,7 @@ public class Issue2482Test {
 
         assertTrue(le.getComment().isPresent());
         assertTrue(le.getOrphanComments().isEmpty());
-        assertEquals(1, le.getAllContainedComments().size());
+        assertEquals(0, le.getAllContainedComments().size());
     }
 
     @Test
@@ -27,7 +29,7 @@ public class Issue2482Test {
                 "{ if (file != null) {} }");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
-        assertEquals(1, st.getAllContainedComments().size());
+        assertEquals(0, st.getAllContainedComments().size());
     }
 
     @Test
@@ -37,7 +39,7 @@ public class Issue2482Test {
                         "if (file != null) {}");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
-        assertEquals(1, st.getAllContainedComments().size());
+        assertEquals(0, st.getAllContainedComments().size());
     }
 
     @Test
@@ -48,6 +50,6 @@ public class Issue2482Test {
 
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
-        assertEquals(1, st.getAllContainedComments().size());
+        assertEquals(0, st.getAllContainedComments().size());
     }
 }
