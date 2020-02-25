@@ -10,10 +10,6 @@ This project contains a set of libraries implementing a Java 1.0 - Java 13 Parse
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
-## DD2480
-* [Report drive link](https://docs.google.com/document/d/13ff8jUpI84NFwM0KuGhsp_ybh6-d-mCyPlQCwnk0c9k/edit?usp=sharing)
-* [Before resolving the issues #1574 & #2480: copy of test log](https://drive.google.com/file/d/192A2JEi2cfnDmyL6hvWhEaQN9qh6woSr/view?usp=sharing)
-
 ## Setup
 
 The project binaries are available in Maven Central. 
@@ -33,14 +29,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.15.12</version>
+    <version>3.15.13</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.15.12'
+implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.15.13'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. 
@@ -55,14 +51,14 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.15.12</version>
+    <version>3.15.13</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core:3.15.12'
+implementation 'com.github.javaparser:javaparser-core:3.15.13'
 ```
 
 Since version 3.6.17 the AST can be serialized to JSON.
@@ -74,14 +70,14 @@ There is a separate module for this:
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core-serialization</artifactId>
-    <version>3.15.12</version>
+    <version>3.15.13</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core-serialization:3.15.12'
+implementation 'com.github.javaparser:javaparser-core-serialization:3.15.13'
 ```
 
 ## How To Compile Sources
