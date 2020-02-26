@@ -111,6 +111,15 @@ class CommentsInserter {
 
         attributeLineCommentsOnSameLine(commentsToAttribute, children);
 
+        /* if a comment is on the line right before a node it should belong
+        to that node*/
+        if (!commentsToAttribute.isEmpty()) {
+            if (commentIsOnNextLine(node, commentsToAttribute.first())) {
+                node.setComment(commentsToAttribute.first());
+                commentsToAttribute.remove(commentsToAttribute.first());
+            }
+        }
+
         /* at this point I create an ordered list of all remaining comments and
          children */
         Comment previousComment = null;
@@ -213,6 +222,11 @@ class CommentsInserter {
         }
         int endOfA = a.getEnd().get().line;
         return b.getBegin().get().line > endOfA + 1;
+    }
+
+    private boolean commentIsOnNextLine(Node a, Comment c) {
+        if (!c.getRange().isPresent() || !a.getRange().isPresent()) return false;
+        return c.getRange().get().end.line + 1 == a.getRange().get().begin.line;
     }
 
 }
