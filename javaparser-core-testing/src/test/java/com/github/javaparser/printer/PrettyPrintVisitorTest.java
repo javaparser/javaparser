@@ -69,6 +69,16 @@ class PrettyPrintVisitorTest {
         assertEquals("Foo.class", print(expr));
     }
 
+
+    /**
+     * work in progress for issue-545
+     */
+    @Test
+    void printOperator(){
+        BinaryExpr expr = parseExpression("1     +  1");
+        assertEquals("1 + 1", print(expr));
+    }
+
     @Test
     void printArrayClassExpr() {
         ClassExpr expr = parseExpression("Foo[].class");
