@@ -78,6 +78,7 @@ public class PrettyPrinterConfiguration {
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
+    private boolean indentInSwitch = true;
     private IndentType indentType = SPACES;
     private int tabWidth = 4;
     private int indentSize = 4;
@@ -172,9 +173,12 @@ public class PrettyPrinterConfiguration {
         return columnAlignParameters;
     }
 
-    public boolean isColumnAlignFirstMethodChain() {
-        return columnAlignFirstMethodChain;
+    public boolean isColumnAlignFirstMethodChain() { return columnAlignFirstMethodChain; }
+
+    public boolean isIndentInSwitch() {
+        return indentInSwitch;
     }
+
 
     /**
      * When true, all comments will be printed, unless printJavadoc is false, then only line and block comments will be
@@ -200,6 +204,11 @@ public class PrettyPrinterConfiguration {
 
     public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
         this.columnAlignFirstMethodChain = columnAlignFirstMethodChain;
+        return this;
+    }
+
+    public PrettyPrinterConfiguration setIndentInSwitch(boolean indentInSwitch) {
+        this.indentInSwitch = indentInSwitch;
         return this;
     }
 

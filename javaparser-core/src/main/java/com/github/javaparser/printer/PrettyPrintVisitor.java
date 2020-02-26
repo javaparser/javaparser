@@ -1164,11 +1164,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getSelector().accept(this, arg);
         printer.println(") {");
         if (n.getEntries() != null) {
-            printer.indent();
+            if(configuration.isIndentInSwitch()) {
+                printer.indent();
+            }
             for (final SwitchEntry e : n.getEntries()) {
                 e.accept(this, arg);
             }
-            printer.unindent();
+            if(configuration.isIndentInSwitch()) {
+                printer.unindent();
+            }
         }
         printer.print("}");
     }
