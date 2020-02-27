@@ -63,10 +63,88 @@ class PrettyPrintVisitorTest {
         return new PrettyPrinter().print(node);
     }
 
+    private String print(Node node, PrettyPrinterConfiguration conf) {
+        return new PrettyPrinter(conf).print(node);
+    }
+
+
     @Test
     void printSimpleClassExpr() {
         ClassExpr expr = parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
+    }
+
+
+    /**
+     * Here is a simple test according to R0 (removing spaces)
+     */
+    @Test
+    void printOperatorsR0(){
+        Statement statement1 = parseStatement("a = 1 + 1;");
+        assertEquals("a=1+1;", print(statement1));
+    }
+
+    /**
+     * Here we test different operators according to requirement R1 (handling different operators)
+     */
+    @Test
+    void printOperatorsR1(){
+
+        Statement statement1 = parseStatement("a = 1 + 1;");
+        assertEquals("a=1+1;", print(statement1));
+
+        Statement statement2 = parseStatement("a = 1 - 1;");
+        assertEquals("a=1-1;", print(statement2));
+
+        Statement statement3 = parseStatement("a = 1 * 1;");
+        assertEquals("a=1*1;", print(statement3));
+
+        Statement statement4 = parseStatement("a = 1 % 1;");
+        assertEquals("a=1%1;", print(statement4));
+
+        Statement statement5 = parseStatement("a=1/1;");
+        assertEquals("a=1/1;", print(statement5));
+
+        Statement statement6 = parseStatement("if(1 > 2 && 1 < 3 || 1 < 3){}");
+        assertEquals("if (1>2&&1<3||1<3) {\n" + "}", print(statement6));
+
+    }
+
+    /**
+     * Here is a simple test according to R2 (that it should be optional/modifiable)
+     */
+    @Test
+    void printOperatorsR2(){
+        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        Statement statement1 = parseStatement("a = 1 + 1;");
+        assertEquals("a=1+1;", print(statement1, conf1));
+
+        PrettyPrinterConfiguration conf2 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        Statement statement2 = parseStatement("a=1+1;");
+        assertEquals("a=1+1;", print(statement2, conf2));
+
+        PrettyPrinterConfiguration conf3 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(true);
+        Statement statement3 = parseStatement("a = 1 + 1;");
+        assertEquals("a = 1 + 1;", print(statement3, conf3));
+
+        PrettyPrinterConfiguration conf4 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(true);
+        Statement statement4 = parseStatement("a=1+1;");
+        assertEquals("a = 1 + 1;", print(statement4, conf4));
+
+    }
+
+    @Test
+    void printOperatorA(){
+        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
+        assertEquals("if (1>2&&1<3||1<3) {\n" + "}", print(statement6, conf));
+    }
+
+    @Test
+    void printOperator2(){
+        Expression expression = parseExpression("1+1");
+        PrettyPrinterConfiguration spaces = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        assertEquals("1+1", print(expression, spaces));
     }
 
     @Test
@@ -373,7 +451,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printYield() {
         Statement statement = parseStatement("yield 5*5;");
-        assertEqualsNoEol("yield 5 * 5;", statement.toString());
+        assertEqualsNoEol("yield 5*5;", statement.toString());
     }
 
     @Test
