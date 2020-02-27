@@ -127,6 +127,15 @@ public final class JavaParserMetaModel {
         blockCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         javadocCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         lineCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        javadocContentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        javadocContentMetaModel.getConstructorParameters().add(javadocContentMetaModel.descriptionPropertyMetaModel);
+        javadocContentMetaModel.getConstructorParameters().add(javadocContentMetaModel.blockTagsPropertyMetaModel);
+        javadocDescriptionMetaModel.getConstructorParameters().add(javadocDescriptionMetaModel.elementsPropertyMetaModel);
+        javadocBlockTagMetaModel.getConstructorParameters().add(javadocBlockTagMetaModel.descriptionPropertyMetaModel);
+        javadocBlockTagMetaModel.getConstructorParameters().add(javadocBlockTagMetaModel.typePropertyMetaModel);
+        javadocSnippetMetaModel.getConstructorParameters().add(javadocSnippetMetaModel.textPropertyMetaModel);
+        javadocInlineTagMetaModel.getConstructorParameters().add(javadocInlineTagMetaModel.typePropertyMetaModel);
+        javadocInlineTagMetaModel.getConstructorParameters().add(javadocInlineTagMetaModel.contentPropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.namePropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.indexPropertyMetaModel);
         arrayCreationExprMetaModel.getConstructorParameters().add(arrayCreationExprMetaModel.elementTypePropertyMetaModel);
@@ -319,7 +328,13 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(instanceOfExprMetaModel);
         nodeMetaModels.add(integerLiteralExprMetaModel);
         nodeMetaModels.add(intersectionTypeMetaModel);
+        nodeMetaModels.add(javadocBlockTagMetaModel);
         nodeMetaModels.add(javadocCommentMetaModel);
+        nodeMetaModels.add(javadocContentMetaModel);
+        nodeMetaModels.add(javadocDescriptionElementMetaModel);
+        nodeMetaModels.add(javadocDescriptionMetaModel);
+        nodeMetaModels.add(javadocInlineTagMetaModel);
+        nodeMetaModels.add(javadocSnippetMetaModel);
         nodeMetaModels.add(labeledStmtMetaModel);
         nodeMetaModels.add(lambdaExprMetaModel);
         nodeMetaModels.add(lineCommentMetaModel);
@@ -505,6 +520,22 @@ public final class JavaParserMetaModel {
         variableDeclaratorMetaModel.getDeclaredPropertyMetaModels().add(variableDeclaratorMetaModel.typePropertyMetaModel);
         commentMetaModel.contentPropertyMetaModel = new PropertyMetaModel(commentMetaModel, "content", java.lang.String.class, Optional.empty(), false, false, false, false);
         commentMetaModel.getDeclaredPropertyMetaModels().add(commentMetaModel.contentPropertyMetaModel);
+        javadocContentMetaModel.blockTagsPropertyMetaModel = new PropertyMetaModel(javadocContentMetaModel, "blockTags", com.github.javaparser.ast.comments.JavadocBlockTag.class, Optional.of(javadocBlockTagMetaModel), false, false, true, false);
+        javadocContentMetaModel.getDeclaredPropertyMetaModels().add(javadocContentMetaModel.blockTagsPropertyMetaModel);
+        javadocContentMetaModel.descriptionPropertyMetaModel = new PropertyMetaModel(javadocContentMetaModel, "description", com.github.javaparser.ast.comments.JavadocDescription.class, Optional.of(javadocDescriptionMetaModel), false, false, false, false);
+        javadocContentMetaModel.getDeclaredPropertyMetaModels().add(javadocContentMetaModel.descriptionPropertyMetaModel);
+        javadocDescriptionMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(javadocDescriptionMetaModel, "elements", com.github.javaparser.ast.comments.JavadocDescriptionElement.class, Optional.of(javadocDescriptionElementMetaModel), false, false, true, false);
+        javadocDescriptionMetaModel.getDeclaredPropertyMetaModels().add(javadocDescriptionMetaModel.elementsPropertyMetaModel);
+        javadocBlockTagMetaModel.descriptionPropertyMetaModel = new PropertyMetaModel(javadocBlockTagMetaModel, "description", com.github.javaparser.ast.comments.JavadocDescription.class, Optional.of(javadocDescriptionMetaModel), false, false, false, false);
+        javadocBlockTagMetaModel.getDeclaredPropertyMetaModels().add(javadocBlockTagMetaModel.descriptionPropertyMetaModel);
+        javadocBlockTagMetaModel.typePropertyMetaModel = new PropertyMetaModel(javadocBlockTagMetaModel, "type", com.github.javaparser.ast.comments.JavadocBlockTag.BlockTagType.class, Optional.empty(), false, false, false, false);
+        javadocBlockTagMetaModel.getDeclaredPropertyMetaModels().add(javadocBlockTagMetaModel.typePropertyMetaModel);
+        javadocSnippetMetaModel.textPropertyMetaModel = new PropertyMetaModel(javadocSnippetMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
+        javadocSnippetMetaModel.getDeclaredPropertyMetaModels().add(javadocSnippetMetaModel.textPropertyMetaModel);
+        javadocInlineTagMetaModel.contentPropertyMetaModel = new PropertyMetaModel(javadocInlineTagMetaModel, "content", java.lang.String.class, Optional.empty(), false, false, false, false);
+        javadocInlineTagMetaModel.getDeclaredPropertyMetaModels().add(javadocInlineTagMetaModel.contentPropertyMetaModel);
+        javadocInlineTagMetaModel.typePropertyMetaModel = new PropertyMetaModel(javadocInlineTagMetaModel, "type", com.github.javaparser.ast.comments.JavadocInlineTag.InlineTagType.class, Optional.empty(), false, false, false, false);
+        javadocInlineTagMetaModel.getDeclaredPropertyMetaModels().add(javadocInlineTagMetaModel.typePropertyMetaModel);
         arrayAccessExprMetaModel.indexPropertyMetaModel = new PropertyMetaModel(arrayAccessExprMetaModel, "index", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         arrayAccessExprMetaModel.getDeclaredPropertyMetaModels().add(arrayAccessExprMetaModel.indexPropertyMetaModel);
         arrayAccessExprMetaModel.namePropertyMetaModel = new PropertyMetaModel(arrayAccessExprMetaModel, "name", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
@@ -861,6 +892,18 @@ public final class JavaParserMetaModel {
     public static final JavadocCommentMetaModel javadocCommentMetaModel = new JavadocCommentMetaModel(Optional.of(commentMetaModel));
 
     public static final LineCommentMetaModel lineCommentMetaModel = new LineCommentMetaModel(Optional.of(commentMetaModel));
+
+    public static final JavadocContentMetaModel javadocContentMetaModel = new JavadocContentMetaModel(Optional.of(commentMetaModel));
+
+    public static final JavadocDescriptionMetaModel javadocDescriptionMetaModel = new JavadocDescriptionMetaModel(Optional.of(nodeMetaModel));
+
+    public static final JavadocBlockTagMetaModel javadocBlockTagMetaModel = new JavadocBlockTagMetaModel(Optional.of(nodeMetaModel));
+
+    public static final JavadocDescriptionElementMetaModel javadocDescriptionElementMetaModel = new JavadocDescriptionElementMetaModel(Optional.of(nodeMetaModel));
+
+    public static final JavadocSnippetMetaModel javadocSnippetMetaModel = new JavadocSnippetMetaModel(Optional.of(javadocDescriptionElementMetaModel));
+
+    public static final JavadocInlineTagMetaModel javadocInlineTagMetaModel = new JavadocInlineTagMetaModel(Optional.of(javadocDescriptionElementMetaModel));
 
     public static final ArrayAccessExprMetaModel arrayAccessExprMetaModel = new ArrayAccessExprMetaModel(Optional.of(expressionMetaModel));
 

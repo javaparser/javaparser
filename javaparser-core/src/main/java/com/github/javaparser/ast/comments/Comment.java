@@ -236,4 +236,23 @@ public abstract class Comment extends Node {
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
     }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJavadocContent() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JavadocContent asJavadocContent() {
+        throw new IllegalStateException(f("%s is not an JavadocContent", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JavadocContent> toJavadocContent() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJavadocContent(Consumer<JavadocContent> action) {
+    }
 }

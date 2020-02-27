@@ -20,43 +20,80 @@
  */
 package com.github.javaparser.ast.comments;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JavadocCommentMetaModel;
+import com.github.javaparser.metamodel.JavadocSnippetMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
- * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
+ * A JavadocSnippet node containing string content.
  *
- * @author Julio Vilmar Gesser
+ * @author Simon Sirak & David Johansson
  */
-public class JavadocComment extends Comment {
+public class JavadocSnippet extends JavadocDescriptionElement {
 
-    public JavadocComment() {
-        this(null, "empty");
+    private String text;
+
+    public JavadocSnippet() {
+        this(null, "");
     }
 
     @AllFieldsConstructor
-    public JavadocComment(String content) {
-        this(null, content);
+    public JavadocSnippet(String text) {
+        this(null, text);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JavadocComment(TokenRange tokenRange, String content) {
-        super(tokenRange, content);
+    public JavadocSnippet(TokenRange tokenRange, String text) {
+        super(tokenRange);
+        setText(text);
         customInitialization();
+    }
+
+    /**
+     * Set text of current node.
+     *
+     * @param text string text
+     * @return new version of current object
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JavadocSnippet setText(final String text) {
+        assertNotNull(text);
+        if (text == this.text) {
+            return (JavadocSnippet) this;
+        }
+        notifyPropertyChange(ObservableProperty.TEXT, this.text, text);
+        this.text = text;
+        return this;
+    }
+
+    /**
+     * Return the text content of the the snippet.
+     *
+     * @return string content
+     */
+    public String toText() {
+        return text;
+    }
+
+    /**
+     * Return the text content of the the snippet.
+     *
+     * @return string content
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getText() {
+        return text;
     }
 
     @Override
@@ -71,28 +108,12 @@ public class JavadocComment extends Comment {
         v.visit(this, arg);
     }
 
-    public Javadoc parse() {
-        return parseJavadoc(getContent());
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JavadocComment clone() {
-        return (JavadocComment) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JavadocCommentMetaModel getMetaModel() {
-        return JavaParserMetaModel.javadocCommentMetaModel;
     }
 
     @Override
@@ -104,25 +125,14 @@ public class JavadocComment extends Comment {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJavadocComment() {
-        return true;
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public JavadocSnippet clone() {
+        return (JavadocSnippet) accept(new CloneVisitor(), null);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JavadocComment asJavadocComment() {
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {
-        action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JavadocComment> toJavadocComment() {
-        return Optional.of(this);
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JavadocSnippetMetaModel getMetaModel() {
+        return JavaParserMetaModel.javadocSnippetMetaModel;
     }
 }
