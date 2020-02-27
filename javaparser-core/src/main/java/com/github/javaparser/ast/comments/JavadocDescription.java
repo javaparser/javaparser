@@ -62,7 +62,11 @@ public class JavadocDescription extends Node {
         customInitialization();
     }
 
-    // TODO: NOT FINISHED
+    /**
+     * Get text representation of description    
+     * 
+     * @return text representation of node
+     */
     public String toText() {
         StringBuilder sb = new StringBuilder();
         elements.forEach(e -> sb.append(e.toText()));

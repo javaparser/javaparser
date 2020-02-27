@@ -83,8 +83,12 @@ public class JavadocBlockTag extends Node {
     public JavadocBlockTag(JavadocDescription description, BlockTagType type) {
         this(null, description, type);
     }
-
-    // TODO: Use optional instead of null check ?
+    
+    /**
+     * Get text representation block tag
+     * 
+     * @return text representation of node
+     */
     public String toText() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
