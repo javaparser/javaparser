@@ -76,7 +76,7 @@ public class PrettyPrinterConfiguration {
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
-    private boolean spacesBetweenOperators = false;
+    private boolean spacesBetweenOperators = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
     private IndentType indentType = SPACES;

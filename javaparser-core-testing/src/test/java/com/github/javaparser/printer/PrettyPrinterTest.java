@@ -54,15 +54,6 @@ class PrettyPrinterTest {
         return new PrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
-
-    @Test
-    void print545() {
-        String code;
-        code = "{ a=1+1; }";
-        assertEquals("a=1+1;", prettyPrintField(code));
-    }
-
-
     @Test
     void printingArrayFields() {
         String code;
