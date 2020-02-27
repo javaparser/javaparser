@@ -26,6 +26,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocDescriptionElement;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseMethodDeclaration;
 import static com.github.javaparser.utils.Utils.EOL;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
@@ -76,63 +78,26 @@ class JavadocTest {
         assertEquals("first line" + EOL + "second line" + EOL + EOL + "@author something useful" + EOL, javadoc.toText());
     }
 
-//    @Test
-//    void descriptionAndBlockTagsAreRetrievable() {
-//        // TODO: Test is more relevant to the grammar
-//        // REQ 1 & 2
-//        Javadoc javadoc = parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
-//        assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
-//        assertEquals(2, javadoc.getBlockTags().size());
-//    }
-
-
-    // TODO: Add when inlineTags are added
-//    @Test
-//    void inlineTagsAreParsable() {
-//    // REQ 1 & 2
-//        String docText =
-//          "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
-//            "{@link TOVersion}. Set {@systemProperty JAVA_HOME} correctly." + EOL +
-//            "" + EOL +
-//            "@param versionID the id of the {@link TOVersion}." + EOL +
-//            "@return the filenames" + EOL +
-//            "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
-//        Javadoc javadoc = parseJavadoc(docText);
+//   @Test
+//   void descriptionAndBlockTagsAreRetrievable() {
+//       // REQ 1 & 2
 //
-//        List<com.github.javaparser.javadoc.description.JavadocInlineTag> inlineTags = javadoc.getDescription().getElements().stream()
-//          .filter(element -> element instanceof com.github.javaparser.javadoc.description.JavadocInlineTag)
-//          .map(element -> (com.github.javaparser.javadoc.description.JavadocInlineTag) element)
-//          .collect(toList());
+//       CompilationUnit cu = parse("public class MyClass {" + EOL +
+//         EOL +
+//         "  /**" + EOL +
+//         "   * first line" + EOL +
+//         "   * second line" + EOL +
+//         "   * @author Simon" + EOL +
+//         "   * @return Nothing" + EOL +
+//         "   */" + EOL +
+//         "  public void oneMethod() {" + EOL +
+//         "  }" + EOL +
+//         "}" + EOL);
 //
-//        assertEquals("link", inlineTags.get(0).getName());
-//        assertEquals(" TOFilename", inlineTags.get(0).getContent());
-//        assertEquals(LINK, inlineTags.get(0).getType());
-//        assertEquals("link", inlineTags.get(1).getName());
-//        assertEquals(" TOVersion", inlineTags.get(1).getContent());
-//        assertEquals(LINK, inlineTags.get(1).getType());
-//        assertEquals("systemProperty", inlineTags.get(2).getName());
-//        assertEquals(" JAVA_HOME", inlineTags.get(2).getContent());
-//        assertEquals(SYSTEM_PROPERTY, inlineTags.get(2).getType());
-//
-//        String javadocText = javadoc.toText();
-//        assertTrue(javadocText.contains("{@link TOVersion}"));
-//    }
-//
-    // TODO: Related to parsing
-//    @Test
-//    void emptyLinesBetweenBlockTagsGetsFiltered() {
-//        // REQ 1
-//        String comment = " * The type of the Object to be mapped." + EOL +
-//          " * This interface maps the given Objects to existing ones in the database and" + EOL +
-//          " * saves them." + EOL +
-//          " * " + EOL +
-//          " * @author censored" + EOL +
-//          " * " + EOL +
-//          " * @param <T>" + EOL;
-//        Javadoc javadoc = parseJavadoc(comment);
-//        assertEquals(2, javadoc.getBlockTags().size());
-//    }
-//
+//       MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
+//       assertEquals("first line" + EOL + "second line", methodDeclaration.getJavadocComment().get().getContentNode().getDescription().toText());
+//       assertEquals(2, methodDeclaration.getJavadocComment().get().getContentNode().getBlockTags().size());
+//   }
 
     @Test
     void blockTagModificationWorks() {
@@ -151,34 +116,4 @@ class JavadocTest {
         assertEquals(blockTag, javadoc.getBlockTags().remove(0));
         assertEquals(0, javadoc.getBlockTags().size());
     }
-    // TODO: Add when inline tags are added
-//    @Test
-//    void descriptionModificationWorks() {
-//        // REQ 2
-//        JavadocDescription description = new JavadocDescription();
-//
-//        assertEquals(0, description.getElements().size());
-//
-//        JavadocDescriptionElement inlineTag = new com.github.javaparser.javadoc.description.JavadocInlineTag("inheritDoc", INHERIT_DOC, "");
-//        assertTrue(description.addElement(inlineTag));
-//
-//        assertEquals(1, description.getElements().size());
-//        assertEquals(inlineTag, description.getElements().get(0));
-//
-//        assertEquals(inlineTag, description.getElements().remove(0));
-//        assertEquals(0, description.getElements().size());
-//    }
-//
-//    @Test
-//    void issue1533() {
-//        CompilationUnit compilationUnit = parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
-//        List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
-//        assertEquals(3, elements.size());
-//        assertEquals(new JavadocSnippet("hallo "), elements.get(0));
-//        assertEquals(new JavadocInlineTag("link", LINK, " Foo"), elements.get(1));
-//        assertEquals(new JavadocSnippet(" welt"), elements.get(2));
-//    }
-//
-
-// I don't think the rest are related to our refactoring: They acts on the parent of a JavadocComment
 }

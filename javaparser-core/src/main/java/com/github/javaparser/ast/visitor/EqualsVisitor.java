@@ -398,6 +398,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JavadocComment n, final Visitable arg) {
         final JavadocComment n2 = (JavadocComment) arg;
+        if (!nodeEquals(n.getContentNode(), n2.getContentNode()))
+            return false;
         if (!objEquals(n.getContent(), n2.getContent()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))

@@ -320,6 +320,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JavadocComment n, final A arg) {
+        n.getContentNode().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

@@ -546,7 +546,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JavadocComment n, final A arg) {
+        JavadocContent contentNode = (JavadocContent) n.getContentNode().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (contentNode == null)
+            return null;
+        n.setContentNode(contentNode);
         n.setComment(comment);
         return n;
     }

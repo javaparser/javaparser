@@ -126,10 +126,8 @@ public class JavadocContent extends Comment {
      * at the start of the line.
      */
     public String toText() {
-        // TODO: NOT FINISHED
         StringBuilder sb = new StringBuilder();
         if (!description.toText().isEmpty()) {
-            System.out.println("rtaTRJAVSDLHTR SDRY");
             sb.append(description.toText());
             sb.append(EOL);
         }

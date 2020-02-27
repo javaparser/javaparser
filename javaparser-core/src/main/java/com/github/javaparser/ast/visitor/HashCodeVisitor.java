@@ -213,7 +213,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final JavadocComment n, final Void arg) {
-        return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getContentNode().accept(this, arg)) * 31 + (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final LabeledStmt n, final Void arg) {

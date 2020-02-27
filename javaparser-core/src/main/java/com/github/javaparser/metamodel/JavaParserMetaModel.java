@@ -125,6 +125,7 @@ public final class JavaParserMetaModel {
         variableDeclaratorMetaModel.getConstructorParameters().add(variableDeclaratorMetaModel.initializerPropertyMetaModel);
         commentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         blockCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        javadocCommentMetaModel.getConstructorParameters().add(javadocCommentMetaModel.contentNodePropertyMetaModel);
         javadocCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         lineCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         javadocContentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
@@ -520,6 +521,8 @@ public final class JavaParserMetaModel {
         variableDeclaratorMetaModel.getDeclaredPropertyMetaModels().add(variableDeclaratorMetaModel.typePropertyMetaModel);
         commentMetaModel.contentPropertyMetaModel = new PropertyMetaModel(commentMetaModel, "content", java.lang.String.class, Optional.empty(), false, false, false, false);
         commentMetaModel.getDeclaredPropertyMetaModels().add(commentMetaModel.contentPropertyMetaModel);
+        javadocCommentMetaModel.contentNodePropertyMetaModel = new PropertyMetaModel(javadocCommentMetaModel, "contentNode", com.github.javaparser.ast.comments.JavadocContent.class, Optional.of(javadocContentMetaModel), false, false, false, false);
+        javadocCommentMetaModel.getDeclaredPropertyMetaModels().add(javadocCommentMetaModel.contentNodePropertyMetaModel);
         javadocContentMetaModel.blockTagsPropertyMetaModel = new PropertyMetaModel(javadocContentMetaModel, "blockTags", com.github.javaparser.ast.comments.JavadocBlockTag.class, Optional.of(javadocBlockTagMetaModel), false, false, true, false);
         javadocContentMetaModel.getDeclaredPropertyMetaModels().add(javadocContentMetaModel.blockTagsPropertyMetaModel);
         javadocContentMetaModel.descriptionPropertyMetaModel = new PropertyMetaModel(javadocContentMetaModel, "description", com.github.javaparser.ast.comments.JavadocDescription.class, Optional.of(javadocDescriptionMetaModel), false, false, false, false);
