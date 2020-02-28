@@ -22,10 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -549,7 +546,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JavadocComment n, final A arg) {
+        JavadocContent contentNode = (JavadocContent) n.getContentNode().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (contentNode == null)
+            return null;
+        n.setContentNode(contentNode);
         n.setComment(comment);
         return n;
     }
@@ -1253,6 +1254,53 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JavadocBlockTag n, final A arg) {
+        JavadocDescription description = (JavadocDescription) n.getDescription().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (description == null)
+            return null;
+        n.setDescription(description);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JavadocContent n, final A arg) {
+        NodeList<JavadocBlockTag> blockTags = modifyList(n.getBlockTags(), arg);
+        JavadocDescription description = (JavadocDescription) n.getDescription().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (description == null)
+            return null;
+        n.setBlockTags(blockTags);
+        n.setDescription(description);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JavadocDescription n, final A arg) {
+        NodeList<JavadocDescriptionElement> elements = modifyList(n.getElements(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setElements(elements);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JavadocInlineTag n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JavadocSnippet n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;

@@ -264,8 +264,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JavadocComment n, final Object arg) {
+        JavadocContent contentNode = cloneNode(n.getContentNode(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JavadocComment r = new JavadocComment(n.getTokenRange().orElse(null), n.getContent());
+        JavadocComment r = new JavadocComment(n.getTokenRange().orElse(null), contentNode, n.getContent());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1224,6 +1225,60 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final TextBlockLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         TextBlockLiteralExpr r = new TextBlockLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JavadocBlockTag n, final Object arg) {
+        JavadocDescription description = cloneNode(n.getDescription(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocBlockTag r = new JavadocBlockTag(n.getTokenRange().orElse(null), description, n.getType());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JavadocContent n, final Object arg) {
+        NodeList<JavadocBlockTag> blockTags = cloneList(n.getBlockTags(), arg);
+        JavadocDescription description = cloneNode(n.getDescription(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocContent r = new JavadocContent(n.getTokenRange().orElse(null), n.getContent(), description, blockTags);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JavadocDescription n, final Object arg) {
+        NodeList<JavadocDescriptionElement> elements = cloneList(n.getElements(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocDescription r = new JavadocDescription(n.getTokenRange().orElse(null), elements);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JavadocInlineTag n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocInlineTag r = new JavadocInlineTag(n.getTokenRange().orElse(null), n.getType(), n.getContent());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JavadocSnippet n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocSnippet r = new JavadocSnippet(n.getTokenRange().orElse(null), n.getText());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

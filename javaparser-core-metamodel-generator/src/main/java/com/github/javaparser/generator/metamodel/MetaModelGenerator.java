@@ -25,10 +25,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -137,6 +134,13 @@ public class MetaModelGenerator {
         add(BlockComment.class);
         add(JavadocComment.class);
         add(LineComment.class);
+
+        add(JavadocContent.class);
+        add(JavadocDescription.class);
+        add(JavadocBlockTag.class);
+        add(JavadocDescriptionElement.class);
+        add(JavadocSnippet.class);
+        add(JavadocInlineTag.class);
 
         add(ArrayAccessExpr.class);
         add(ArrayCreationExpr.class);
