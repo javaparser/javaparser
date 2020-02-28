@@ -28,7 +28,7 @@ public class Issue546Test {
     void switchWithoutTabs() {
         Statement cu = parseStatement("switch(x){ case 1: return y; case 2: return z;}");
 
-        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setIndentInSwitch(false))
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setIndentCaseInSwitch(false))
                 .print(cu);
         assertEqualsNoEol("switch(x) {\n" +
                 "case 1:\n" +

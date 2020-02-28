@@ -78,7 +78,16 @@ public class PrettyPrinterConfiguration {
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
-    private boolean indentInSwitch = true;
+    /**
+     * Indent the case when it is true, don't if false
+     * switch(x) {            switch(x) {
+     *    case 1:             case 1:
+     *        return y;           return y;
+     *    case 2:             case 2:
+     *        return z;           return x;
+     *}                       }
+     */
+    private boolean indentCaseInSwitch = true;
     private IndentType indentType = SPACES;
     private int tabWidth = 4;
     private int indentSize = 4;
@@ -175,8 +184,8 @@ public class PrettyPrinterConfiguration {
 
     public boolean isColumnAlignFirstMethodChain() { return columnAlignFirstMethodChain; }
 
-    public boolean isIndentInSwitch() {
-        return indentInSwitch;
+    public boolean isIndentCaseInSwitch() {
+        return indentCaseInSwitch;
     }
 
 
@@ -207,8 +216,8 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
-    public PrettyPrinterConfiguration setIndentInSwitch(boolean indentInSwitch) {
-        this.indentInSwitch = indentInSwitch;
+    public PrettyPrinterConfiguration setIndentCaseInSwitch(boolean indentInSwitch) {
+        this.indentCaseInSwitch = indentInSwitch;
         return this;
     }
 
