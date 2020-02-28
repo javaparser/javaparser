@@ -21,12 +21,15 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
 
-public class JavadocCommentMetaModel extends CommentMetaModel {
+public class JavadocDescriptionElementMetaModel extends NodeMetaModel {
 
-    JavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.JavadocComment.class, "JavadocComment", "com.github.javaparser.ast.comments", false, false);
+    JavadocDescriptionElementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.JavadocDescriptionElement.class, "JavadocDescriptionElement", "com.github.javaparser.ast.comments", true, false);
     }
 
-    public PropertyMetaModel contentNodePropertyMetaModel;
+    protected JavadocDescriptionElementMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
+    }
 }

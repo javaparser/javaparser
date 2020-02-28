@@ -22,9 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -435,5 +433,30 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode());
+    }
+
+    @Override
+    public Integer visit(final JavadocBlockTag n, final Void arg) {
+        return (n.getDescription().accept(this, arg)) * 31 + (n.getType().hashCode());
+    }
+
+    @Override
+    public Integer visit(final JavadocContent n, final Void arg) {
+        return (n.getBlockTags().accept(this, arg)) * 31 + (n.getDescription().accept(this, arg)) * 31 + (n.getContent().hashCode());
+    }
+
+    @Override
+    public Integer visit(final JavadocDescription n, final Void arg) {
+        return (n.getElements().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final JavadocInlineTag n, final Void arg) {
+        return (n.getContent().hashCode()) * 31 + (n.getType().hashCode());
+    }
+
+    @Override
+    public Integer visit(final JavadocSnippet n, final Void arg) {
+        return (n.getText().hashCode());
     }
 }

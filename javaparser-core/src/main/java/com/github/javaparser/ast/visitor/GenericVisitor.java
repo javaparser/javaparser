@@ -22,9 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -233,4 +231,14 @@ public interface GenericVisitor<R, A> {
     R visit(YieldStmt n, A arg);
 
     R visit(TextBlockLiteralExpr n, A arg);
+
+    R visit(JavadocBlockTag n, A arg);
+
+    R visit(JavadocContent n, A arg);
+
+    R visit(JavadocDescription n, A arg);
+
+    R visit(JavadocInlineTag n, A arg);
+
+    R visit(JavadocSnippet n, A arg);
 }
