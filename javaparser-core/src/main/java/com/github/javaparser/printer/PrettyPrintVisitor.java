@@ -1175,11 +1175,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getSelector().accept(this, arg);
         printer.println(") {");
         if (n.getEntries() != null) {
-            printer.indent();
+            indentIf(configuration.isIndentCaseInSwitch());
             for (final SwitchEntry e : n.getEntries()) {
                 e.accept(this, arg);
             }
-            printer.unindent();
+            unindentIf(configuration.isIndentCaseInSwitch());
         }
         printer.print("}");
     }
@@ -1840,5 +1840,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             everything.get(everything.size() - commentsAtEnd + i).accept(this, null);
         }
     }
-
+     private void indentIf(boolean expr){
+        if(expr)
+            printer.indent();
+     }
+    private void unindentIf(boolean expr){
+        if(expr)
+            printer.unindent();
+    }
 }
