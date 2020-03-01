@@ -76,6 +76,7 @@ public class PrettyPrinterConfiguration {
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
+    private boolean spacesBetweenOperators = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
     /**
@@ -147,6 +148,8 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
+
+
     /**
      * Get the tab width for pretty aligning.
      */
@@ -173,6 +176,8 @@ public class PrettyPrinterConfiguration {
     public boolean isIgnoreComments() {
         return !printComments;
     }
+    
+    public boolean isSpacesBetweenOperators() { return spacesBetweenOperators; }
 
     public boolean isPrintJavadoc() {
         return printJavadoc;
@@ -203,6 +208,14 @@ public class PrettyPrinterConfiguration {
      */
     public PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
         this.printJavadoc = printJavadoc;
+        return this;
+    }
+
+    /**
+     * Set if there should be spaces between operators
+     */
+    public PrettyPrinterConfiguration setSpacesBetweenOperators(boolean spacesBetweenOperators){
+        this.spacesBetweenOperators = spacesBetweenOperators;
         return this;
     }
 
@@ -253,6 +266,8 @@ public class PrettyPrinterConfiguration {
         this.orderImports = orderImports;
         return this;
     }
+
+
 
     public int getMaxEnumConstantsToAlignHorizontally() {
         return maxEnumConstantsToAlignHorizontally;

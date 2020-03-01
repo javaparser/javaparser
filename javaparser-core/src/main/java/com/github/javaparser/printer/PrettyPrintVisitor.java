@@ -610,20 +610,34 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getTarget().accept(this, arg);
-        printer.print(" ");
+        if (configuration.isSpacesBetweenOperators()) {
+            printer.print(" ");
+        }
         printer.print(n.getOperator().asString());
-        printer.print(" ");
+        if (configuration.isSpacesBetweenOperators()) {
+            printer.print(" ");
+        }
         n.getValue().accept(this, arg);
     }
+
+
+
+    /**
+     * work in progress for issue-545
+     */
 
     @Override
     public void visit(final BinaryExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getLeft().accept(this, arg);
-        printer.print(" ");
+        if (configuration.isSpacesBetweenOperators()) {
+            printer.print(" ");
+        }
         printer.print(n.getOperator().asString());
-        printer.print(" ");
+        if (configuration.isSpacesBetweenOperators()) {
+            printer.print(" ");
+        }
         n.getRight().accept(this, arg);
     }
 
