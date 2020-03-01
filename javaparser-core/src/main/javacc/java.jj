@@ -51,6 +51,8 @@ PARSER_BEGIN(GeneratedJavaParser)
 package com.github.javaparser;
 import java.io.*;
 import java.util.*;
+import com.github.javadocparser.*;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -162,7 +164,24 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
-            if(TokenTypes.isComment(token.kind)) {
+            if(token.kind == JAVADOC_COMMENT){
+              JavadocComment comment = (JavadocComment) createCommentFromToken(token);
+
+              try {
+                InputStream stream = new ByteArrayInputStream(token.image.getBytes("UTF-8"));
+                GeneratedJavaDocParser jdp = new GeneratedJavaDocParser(stream, "UTF-8");
+                try {
+                  comment.setContentNode(jdp.parse());
+                } catch(com.github.javadocparser.ParseException e) {
+                  e.printStackTrace();
+                }
+              } catch(java.io.UnsupportedEncodingException e) {
+                e.printStackTrace();
+                System.exit(1);
+              }
+
+              commentsCollection.addComment(comment);
+            } else if(TokenTypes.isComment(token.kind)) {
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
             }

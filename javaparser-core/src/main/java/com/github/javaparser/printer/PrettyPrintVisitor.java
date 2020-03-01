@@ -23,10 +23,7 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -1218,6 +1215,31 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("yield ");
         n.getExpression().accept(this, arg);
         printer.print(";");
+    }
+
+    @Override
+    public void visit(JavadocBlockTag n, Void arg) {
+        // TODO
+    }
+
+    @Override
+    public void visit(JavadocContent n, Void arg) {
+        // TODO
+    }
+
+    @Override
+    public void visit(JavadocDescription n, Void arg) {
+        // TODO
+    }
+
+    @Override
+    public void visit(JavadocInlineTag n, Void arg) {
+        // TODO
+    }
+
+    @Override
+    public void visit(JavadocSnippet n, Void arg) {
+        // TODO
     }
 
     @Override

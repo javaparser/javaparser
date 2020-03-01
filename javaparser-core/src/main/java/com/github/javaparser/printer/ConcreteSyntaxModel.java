@@ -24,7 +24,7 @@ package com.github.javaparser.printer;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -939,6 +939,15 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
+
+        // Javadoc
+        // TODO
+        concreteSyntaxModelByClass.put(JavadocContent.class, sequence());
+        concreteSyntaxModelByClass.put(JavadocDescription.class, sequence());
+        concreteSyntaxModelByClass.put(JavadocBlockTag.class, sequence());
+        concreteSyntaxModelByClass.put(JavadocDescriptionElement.class, sequence());
+        concreteSyntaxModelByClass.put(JavadocSnippet.class, sequence());
+        concreteSyntaxModelByClass.put(JavadocInlineTag.class, sequence());
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
