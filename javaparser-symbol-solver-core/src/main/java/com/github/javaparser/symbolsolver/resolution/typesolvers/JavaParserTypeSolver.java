@@ -61,9 +61,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
 
-    private final Cache<Path, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
-    private final Cache<Path, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
-    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<Path, Optional<CompilationUnit>> parsedFiles;
+    private final Cache<Path, List<CompilationUnit>> parsedDirectories;
+    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes;
+    private static final int CACHE_SIZE_UNSET = -1;
 
     public JavaParserTypeSolver(File srcDir) {
         this(srcDir.toPath());
@@ -71,6 +72,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     public JavaParserTypeSolver(String srcDir) {
         this(new File(srcDir));
+    }
+
+    public JavaParserTypeSolver(Path srcDir) {
+        this(srcDir, new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
     }
 
     public JavaParserTypeSolver(File srcDir, ParserConfiguration parserConfiguration) {
@@ -82,23 +87,26 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration) {
+        this(srcDir, parserConfiguration, CACHE_SIZE_UNSET);
+    }
+
+    public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration, long cacheSizeLimit) {
         if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir);
         }
         this.srcDir = srcDir;
         javaParser = new JavaParser(parserConfiguration);
-    }
-
-    public JavaParserTypeSolver(Path srcDir) {
-        this(srcDir, new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
+        parsedFiles = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
+        parsedDirectories = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
+        foundTypes = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
     }
 
     @Override
     public String toString() {
         return "JavaParserTypeSolver{" +
-                "srcDir=" + srcDir +
-                ", parent=" + parent +
-                '}';
+            "srcDir=" + srcDir +
+            ", parent=" + parent +
+            '}';
     }
 
     @Override
@@ -126,8 +134,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                         return Optional.empty();
                     }
                     return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
-                            .getResult()
-                            .map(cu -> cu.setStorage(srcFile));
+                        .getResult()
+                        .map(cu -> cu.setStorage(srcFile));
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("Issue while parsing while type solving: " + srcFile.toAbsolutePath(), e);
                 }
@@ -156,13 +164,13 @@ public class JavaParserTypeSolver implements TypeSolver {
                 if (Files.exists(srcDirectory)) {
                     try (DirectoryStream<Path> srcDirectoryStream = Files.newDirectoryStream(srcDirectory)) {
                         srcDirectoryStream
-                                .forEach(file -> {
-                                    if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
-                                        parse(file).ifPresent(units::add);
-                                    } else if (recursively && file.toFile().isDirectory()) {
-                                        units.addAll(parseDirectoryRecursively(file));
-                                    }
-                                });
+                            .forEach(file -> {
+                                if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
+                                    parse(file).ifPresent(units::add);
+                                } else if (recursively && file.toFile().isDirectory()) {
+                                    units.addAll(parseDirectoryRecursively(file));
+                                }
+                            });
                     }
                 }
                 return units;
@@ -195,7 +203,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             StringBuilder filePath = new StringBuilder(srcDir.toAbsolutePath().toString());
             for (int j = 0; j < i; j++) {
                 filePath.append("/")
-                        .append(nameElements[j]);
+                    .append(nameElements[j]);
             }
             filePath.append(".java");
 
