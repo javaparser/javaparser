@@ -90,15 +90,23 @@ public class JavaParserTypeSolver implements TypeSolver {
         this(srcDir, parserConfiguration, CACHE_SIZE_UNSET);
     }
 
+    private <TKey, TValue> Cache<TKey, TValue> BuildCache(long cacheSizeLimit) {
+        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().softValues();
+        if (cacheSizeLimit != CACHE_SIZE_UNSET) {
+            cacheBuilder.maximumSize(cacheSizeLimit);
+        }
+        return cacheBuilder.build();
+    }
+
     public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration, long cacheSizeLimit) {
         if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir);
         }
         this.srcDir = srcDir;
         javaParser = new JavaParser(parserConfiguration);
-        parsedFiles = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
-        parsedDirectories = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
-        foundTypes = CacheBuilder.newBuilder().softValues().maximumSize(cacheSizeLimit).build();
+        parsedFiles = BuildCache(cacheSizeLimit);
+        parsedDirectories = BuildCache(cacheSizeLimit);
+        foundTypes = BuildCache(cacheSizeLimit);
     }
 
     @Override
