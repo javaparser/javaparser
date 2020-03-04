@@ -98,6 +98,13 @@ public class JavaParserTypeSolver implements TypeSolver {
         return cacheBuilder.build();
     }
 
+    /**
+     * @param srcDir is the source code directory for the type solver.
+     * @param parserConfiguration is the configuration the solver should use when inspecting source code files.
+     * @param cacheSizeLimit is an optional size limit to the internal caches used by this solver.
+     *        Be advised that setting the size too low might lead to noticeable performance degradation.
+     *        However, using a size limit is advised when solving symbols in large code sources. In such cases, internal caches might consume large amounts of heap space.
+     */
     public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration, long cacheSizeLimit) {
         if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir);
