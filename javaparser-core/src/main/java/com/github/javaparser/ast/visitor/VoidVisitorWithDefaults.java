@@ -22,7 +22,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -521,31 +523,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final YieldStmt n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JavadocBlockTag n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JavadocContent n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JavadocDescription n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JavadocInlineTag n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JavadocSnippet n, final A arg) {
         defaultAction(n, arg);
     }
 }
