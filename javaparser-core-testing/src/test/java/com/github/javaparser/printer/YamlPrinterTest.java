@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static com.github.javaparser.utils.TestUtils.readTextResource;
+import static com.github.javaparser.utils.TestUtils.*;
 
 class YamlPrinterTest {
 
@@ -68,16 +67,4 @@ class YamlPrinterTest {
         assertEqualsNoEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
     }
 
-    @Test
-    void testParsingJavadocWithQuoteAndNewline() {
-        String code = "/**\n" + 
-                " * \" this comment contains a quote and newlines\n" +
-                " */\n" + 
-                "public class Dog {}";
-
-        YamlPrinter yamlPrinter = new YamlPrinter(true);
-        CompilationUnit computationUnit = parse(code);
-        String output = yamlPrinter.output(computationUnit);
-        assertEqualsNoEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
-    }
 }

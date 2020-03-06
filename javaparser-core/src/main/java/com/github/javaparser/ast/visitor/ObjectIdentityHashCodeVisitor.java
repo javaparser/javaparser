@@ -22,9 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -434,6 +432,31 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JavadocBlockTag n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JavadocContent n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JavadocDescription n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JavadocInlineTag n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JavadocSnippet n, final Void arg) {
         return n.hashCode();
     }
 }
