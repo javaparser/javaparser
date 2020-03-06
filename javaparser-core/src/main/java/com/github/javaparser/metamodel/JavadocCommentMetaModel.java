@@ -27,6 +27,4 @@ public class JavadocCommentMetaModel extends CommentMetaModel {
     JavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.JavadocComment.class, "JavadocComment", "com.github.javaparser.ast.comments", false, false);
     }
-
-    public PropertyMetaModel contentNodePropertyMetaModel;
 }
