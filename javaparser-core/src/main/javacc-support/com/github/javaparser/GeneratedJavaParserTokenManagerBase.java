@@ -21,7 +21,10 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -44,7 +47,7 @@ abstract class GeneratedJavaParserTokenManagerBase {
     static Comment createCommentFromToken(Token token) {
         String commentText = token.image;
         if (token.kind == JAVADOC_COMMENT) {
-            return new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2), new JavadocContent());
+            return new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
         } else if (token.kind == MULTI_LINE_COMMENT) {
             return new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
         } else if (token.kind == SINGLE_LINE_COMMENT) {
