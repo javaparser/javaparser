@@ -55,13 +55,13 @@ public class MetaModelGenerator {
 
         add(com.github.javaparser.ast.body.BodyDeclaration.class);
         add(com.github.javaparser.ast.body.CallableDeclaration.class);
-        add(com.github.javaparser.ast.stmt.Statement.class);
         add(com.github.javaparser.ast.expr.Expression.class);
+        add(com.github.javaparser.ast.stmt.Statement.class);
         add(com.github.javaparser.ast.type.Type.class);
 
         add(com.github.javaparser.ast.expr.AnnotationExpr.class);
-        add(com.github.javaparser.ast.body.TypeDeclaration.class);
         add(com.github.javaparser.ast.type.ReferenceType.class);
+        add(com.github.javaparser.ast.body.TypeDeclaration.class);
 
         add(com.github.javaparser.ast.expr.LiteralExpr.class);
         add(com.github.javaparser.ast.expr.LiteralStringValueExpr.class);
@@ -73,8 +73,9 @@ public class MetaModelGenerator {
         //
         add(com.github.javaparser.ast.ArrayCreationLevel.class);
         add(com.github.javaparser.ast.CompilationUnit.class);
-        add(com.github.javaparser.ast.PackageDeclaration.class);
+        add(com.github.javaparser.ast.ImportDeclaration.class);
         add(com.github.javaparser.ast.Modifier.class);
+        add(com.github.javaparser.ast.PackageDeclaration.class);
 
         //
         add(com.github.javaparser.ast.body.AnnotationDeclaration.class);
@@ -90,10 +91,10 @@ public class MetaModelGenerator {
         add(com.github.javaparser.ast.body.ReceiverParameter.class);
         add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
-        add(com.github.javaparser.ast.comments.Comment.class);
+        add(com.github.javaparser.ast.comments.Comment.class); // Base of other comment types
         add(com.github.javaparser.ast.comments.BlockComment.class);
-        add(com.github.javaparser.ast.comments.JavadocComment.class);
         add(com.github.javaparser.ast.comments.LineComment.class);
+        add(com.github.javaparser.ast.comments.JavadocComment.class);
 
         add(com.github.javaparser.ast.expr.ArrayAccessExpr.class);
         add(com.github.javaparser.ast.expr.ArrayCreationExpr.class);
@@ -131,8 +132,6 @@ public class MetaModelGenerator {
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
         add(com.github.javaparser.ast.expr.SwitchExpr.class);
 
-        add(com.github.javaparser.ast.ImportDeclaration.class);
-
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
         add(com.github.javaparser.ast.stmt.BreakStmt.class);
@@ -146,16 +145,16 @@ public class MetaModelGenerator {
         add(com.github.javaparser.ast.stmt.ForStmt.class);
         add(com.github.javaparser.ast.stmt.IfStmt.class);
         add(com.github.javaparser.ast.stmt.LabeledStmt.class);
+        add(com.github.javaparser.ast.stmt.LocalClassDeclarationStmt.class);
         add(com.github.javaparser.ast.stmt.ReturnStmt.class);
         add(com.github.javaparser.ast.stmt.SwitchEntry.class);
         add(com.github.javaparser.ast.stmt.SwitchStmt.class);
         add(com.github.javaparser.ast.stmt.SynchronizedStmt.class);
         add(com.github.javaparser.ast.stmt.ThrowStmt.class);
         add(com.github.javaparser.ast.stmt.TryStmt.class);
-        add(com.github.javaparser.ast.stmt.LocalClassDeclarationStmt.class);
+        add(com.github.javaparser.ast.stmt.UnparsableStmt.class);
         add(com.github.javaparser.ast.stmt.WhileStmt.class);
         add(com.github.javaparser.ast.stmt.YieldStmt.class);
-        add(com.github.javaparser.ast.stmt.UnparsableStmt.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);
@@ -164,15 +163,15 @@ public class MetaModelGenerator {
         add(com.github.javaparser.ast.type.TypeParameter.class);
         add(com.github.javaparser.ast.type.UnionType.class);
         add(com.github.javaparser.ast.type.UnknownType.class);
+        add(com.github.javaparser.ast.type.VarType.class);
         add(com.github.javaparser.ast.type.VoidType.class);
         add(com.github.javaparser.ast.type.WildcardType.class);
-        add(com.github.javaparser.ast.type.VarType.class);
 
-        add(com.github.javaparser.ast.modules.ModuleRequiresDirective.class);
         add(com.github.javaparser.ast.modules.ModuleExportsDirective.class);
-        add(com.github.javaparser.ast.modules.ModuleProvidesDirective.class);
-        add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
         add(com.github.javaparser.ast.modules.ModuleOpensDirective.class);
+        add(com.github.javaparser.ast.modules.ModuleProvidesDirective.class);
+        add(com.github.javaparser.ast.modules.ModuleRequiresDirective.class);
+        add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
     }};
 
 
