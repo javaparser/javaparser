@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -34,13 +32,9 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.generator.AbstractGenerator;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -50,8 +44,7 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 public class MetaModelGenerator {
 
     static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
-
-    static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
+    static final String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     // Manually maintained..?
     private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
@@ -181,24 +174,8 @@ public class MetaModelGenerator {
         add(ModuleOpensDirective.class);
     }};
 
-    public static void main(String[] args) throws NoSuchMethodException {
-        if (args.length != 1) {
-            throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
-        }
-        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final ParserConfiguration parserConfiguration = new ParserConfiguration()
-                .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
-                .setStoreTokens(false);
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
-        StaticJavaParser.setConfiguration(parserConfiguration);
 
-        new MetaModelGenerator().run(sourceRoot);
-
-        sourceRoot.saveAll();
-    }
-
-    private void run(SourceRoot sourceRoot) throws NoSuchMethodException {
+    public void run(SourceRoot sourceRoot) throws NoSuchMethodException {
         final CompilationUnit javaParserMetaModelCu = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java");
         javaParserMetaModelCu.setBlockComment(AbstractGenerator.COPYRIGHT_NOTICE_JP_CORE);
 
