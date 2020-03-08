@@ -21,14 +21,28 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.Node;
 
+/**
+ * This file, class, and its contents are completely generated based on:
+ * <ul>
+ *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+ *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+ * </ul>
+ *
+ * For this reason, any changes made directly to this file risk being overwritten.
+ */
+@Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
 public class StatementMetaModel extends NodeMetaModel {
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     StatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.Statement.class, "Statement", "com.github.javaparser.ast.stmt", true, false);
+        super(superBaseNodeMetaModel, Statement.class, "Statement", "com.github.javaparser.ast.stmt", true, false);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     protected StatementMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }

@@ -21,18 +21,35 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.TryStmt;
 
+/**
+ * This file, class, and its contents are completely generated based on:
+ * <ul>
+ *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+ *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+ * </ul>
+ *
+ * For this reason, any changes made directly to this file risk being overwritten.
+ */
+@Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
 public class TryStmtMetaModel extends StatementMetaModel {
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     TryStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.TryStmt.class, "TryStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, TryStmt.class, "TryStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel catchClausesPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel finallyBlockPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel resourcesPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel tryBlockPropertyMetaModel;
 }

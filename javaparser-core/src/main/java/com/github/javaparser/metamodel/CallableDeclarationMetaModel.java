@@ -21,27 +21,47 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.Node;
 
+/**
+ * This file, class, and its contents are completely generated based on:
+ * <ul>
+ *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+ *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+ * </ul>
+ *
+ * For this reason, any changes made directly to this file risk being overwritten.
+ */
+@Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
 public class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CallableDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.body.CallableDeclaration.class, "CallableDeclaration", "com.github.javaparser.ast.body", true, true);
+        super(superBaseNodeMetaModel, CallableDeclaration.class, "CallableDeclaration", "com.github.javaparser.ast.body", true, true);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     protected CallableDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel modifiersPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel namePropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel parametersPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel receiverParameterPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel thrownExceptionsPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel typeParametersPropertyMetaModel;
 }

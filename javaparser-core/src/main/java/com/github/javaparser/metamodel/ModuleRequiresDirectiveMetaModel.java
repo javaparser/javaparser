@@ -21,14 +21,29 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 
+/**
+ * This file, class, and its contents are completely generated based on:
+ * <ul>
+ *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+ *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+ * </ul>
+ *
+ * For this reason, any changes made directly to this file risk being overwritten.
+ */
+@Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
 public class ModuleRequiresDirectiveMetaModel extends ModuleDirectiveMetaModel {
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ModuleRequiresDirectiveMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.modules.ModuleRequiresDirective.class, "ModuleRequiresDirective", "com.github.javaparser.ast.modules", false, false);
+        super(superBaseNodeMetaModel, ModuleRequiresDirective.class, "ModuleRequiresDirective", "com.github.javaparser.ast.modules", false, false);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel modifiersPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel namePropertyMetaModel;
 }

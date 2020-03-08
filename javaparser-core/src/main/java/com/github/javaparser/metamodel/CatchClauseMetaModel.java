@@ -21,14 +21,29 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.CatchClause;
 
+/**
+ * This file, class, and its contents are completely generated based on:
+ * <ul>
+ *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+ *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+ * </ul>
+ *
+ * For this reason, any changes made directly to this file risk being overwritten.
+ */
+@Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
 public class CatchClauseMetaModel extends NodeMetaModel {
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CatchClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.CatchClause.class, "CatchClause", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, CatchClause.class, "CatchClause", "com.github.javaparser.ast.stmt", false, false);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel bodyPropertyMetaModel;
 
+    @Generated("com.github.javaparser.generator.metamodel.InitializePropertyMetaModelsStatementsGenerator")
     public PropertyMetaModel parameterPropertyMetaModel;
 }

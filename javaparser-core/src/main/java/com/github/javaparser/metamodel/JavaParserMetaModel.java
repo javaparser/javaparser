@@ -23,7 +23,11 @@ package com.github.javaparser.metamodel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.github.javaparser.ast.Generated;
 
+/**
+ * The content of this class is partially or completely generated.
+ */
 public final class JavaParserMetaModel {
 
     private JavaParserMetaModel() {
@@ -31,6 +35,7 @@ public final class JavaParserMetaModel {
 
     private static final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>();
 
+    @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializeConstructorParameters() {
         bodyDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         callableDeclarationMetaModel.getConstructorParameters().add(callableDeclarationMetaModel.modifiersPropertyMetaModel);
@@ -271,6 +276,7 @@ public final class JavaParserMetaModel {
         return nodeMetaModels;
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializeNodeMetaModels() {
         nodeMetaModels.add(annotationDeclarationMetaModel);
         nodeMetaModels.add(annotationExprMetaModel);
@@ -382,6 +388,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(yieldStmtMetaModel);
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializePropertyMetaModels() {
         nodeMetaModel.commentPropertyMetaModel = new PropertyMetaModel(nodeMetaModel, "comment", com.github.javaparser.ast.comments.Comment.class, Optional.of(commentMetaModel), true, false, false, false);
         nodeMetaModel.getDeclaredPropertyMetaModels().add(nodeMetaModel.commentPropertyMetaModel);
@@ -794,220 +801,328 @@ public final class JavaParserMetaModel {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final NodeMetaModel nodeMetaModel = new NodeMetaModel(Optional.empty());
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BodyDeclarationMetaModel bodyDeclarationMetaModel = new BodyDeclarationMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CallableDeclarationMetaModel callableDeclarationMetaModel = new CallableDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final StatementMetaModel statementMetaModel = new StatementMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ExpressionMetaModel expressionMetaModel = new ExpressionMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypeMetaModel typeMetaModel = new TypeMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final AnnotationExprMetaModel annotationExprMetaModel = new AnnotationExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypeDeclarationMetaModel typeDeclarationMetaModel = new TypeDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ReferenceTypeMetaModel referenceTypeMetaModel = new ReferenceTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LiteralExprMetaModel literalExprMetaModel = new LiteralExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LiteralStringValueExprMetaModel literalStringValueExprMetaModel = new LiteralStringValueExprMetaModel(Optional.of(literalExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final StringLiteralExprMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleDeclarationMetaModel moduleDeclarationMetaModel = new ModuleDeclarationMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleDirectiveMetaModel moduleDirectiveMetaModel = new ModuleDirectiveMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayCreationLevelMetaModel arrayCreationLevelMetaModel = new ArrayCreationLevelMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CompilationUnitMetaModel compilationUnitMetaModel = new CompilationUnitMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final PackageDeclarationMetaModel packageDeclarationMetaModel = new PackageDeclarationMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModifierMetaModel modifierMetaModel = new ModifierMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final AnnotationDeclarationMetaModel annotationDeclarationMetaModel = new AnnotationDeclarationMetaModel(Optional.of(typeDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final AnnotationMemberDeclarationMetaModel annotationMemberDeclarationMetaModel = new AnnotationMemberDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ClassOrInterfaceDeclarationMetaModel classOrInterfaceDeclarationMetaModel = new ClassOrInterfaceDeclarationMetaModel(Optional.of(typeDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ConstructorDeclarationMetaModel constructorDeclarationMetaModel = new ConstructorDeclarationMetaModel(Optional.of(callableDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final EnumConstantDeclarationMetaModel enumConstantDeclarationMetaModel = new EnumConstantDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final EnumDeclarationMetaModel enumDeclarationMetaModel = new EnumDeclarationMetaModel(Optional.of(typeDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final FieldDeclarationMetaModel fieldDeclarationMetaModel = new FieldDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final InitializerDeclarationMetaModel initializerDeclarationMetaModel = new InitializerDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final MethodDeclarationMetaModel methodDeclarationMetaModel = new MethodDeclarationMetaModel(Optional.of(callableDeclarationMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ParameterMetaModel parameterMetaModel = new ParameterMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ReceiverParameterMetaModel receiverParameterMetaModel = new ReceiverParameterMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final VariableDeclaratorMetaModel variableDeclaratorMetaModel = new VariableDeclaratorMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CommentMetaModel commentMetaModel = new CommentMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BlockCommentMetaModel blockCommentMetaModel = new BlockCommentMetaModel(Optional.of(commentMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JavadocCommentMetaModel javadocCommentMetaModel = new JavadocCommentMetaModel(Optional.of(commentMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LineCommentMetaModel lineCommentMetaModel = new LineCommentMetaModel(Optional.of(commentMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayAccessExprMetaModel arrayAccessExprMetaModel = new ArrayAccessExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayCreationExprMetaModel arrayCreationExprMetaModel = new ArrayCreationExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayInitializerExprMetaModel arrayInitializerExprMetaModel = new ArrayInitializerExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final AssignExprMetaModel assignExprMetaModel = new AssignExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BinaryExprMetaModel binaryExprMetaModel = new BinaryExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BooleanLiteralExprMetaModel booleanLiteralExprMetaModel = new BooleanLiteralExprMetaModel(Optional.of(literalExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CastExprMetaModel castExprMetaModel = new CastExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CharLiteralExprMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ClassExprMetaModel classExprMetaModel = new ClassExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ConditionalExprMetaModel conditionalExprMetaModel = new ConditionalExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final DoubleLiteralExprMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final EnclosedExprMetaModel enclosedExprMetaModel = new EnclosedExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final FieldAccessExprMetaModel fieldAccessExprMetaModel = new FieldAccessExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final InstanceOfExprMetaModel instanceOfExprMetaModel = new InstanceOfExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final IntegerLiteralExprMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LambdaExprMetaModel lambdaExprMetaModel = new LambdaExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LongLiteralExprMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final MarkerAnnotationExprMetaModel markerAnnotationExprMetaModel = new MarkerAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final MemberValuePairMetaModel memberValuePairMetaModel = new MemberValuePairMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final MethodCallExprMetaModel methodCallExprMetaModel = new MethodCallExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final MethodReferenceExprMetaModel methodReferenceExprMetaModel = new MethodReferenceExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final NameExprMetaModel nameExprMetaModel = new NameExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final NameMetaModel nameMetaModel = new NameMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final NormalAnnotationExprMetaModel normalAnnotationExprMetaModel = new NormalAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final NullLiteralExprMetaModel nullLiteralExprMetaModel = new NullLiteralExprMetaModel(Optional.of(literalExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ObjectCreationExprMetaModel objectCreationExprMetaModel = new ObjectCreationExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SimpleNameMetaModel simpleNameMetaModel = new SimpleNameMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SingleMemberAnnotationExprMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SuperExprMetaModel superExprMetaModel = new SuperExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TextBlockLiteralExprMetaModel textBlockLiteralExprMetaModel = new TextBlockLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ThisExprMetaModel thisExprMetaModel = new ThisExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypeExprMetaModel typeExprMetaModel = new TypeExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnaryExprMetaModel unaryExprMetaModel = new UnaryExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final VariableDeclarationExprMetaModel variableDeclarationExprMetaModel = new VariableDeclarationExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SwitchExprMetaModel switchExprMetaModel = new SwitchExprMetaModel(Optional.of(expressionMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ImportDeclarationMetaModel importDeclarationMetaModel = new ImportDeclarationMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final AssertStmtMetaModel assertStmtMetaModel = new AssertStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BlockStmtMetaModel blockStmtMetaModel = new BlockStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BreakStmtMetaModel breakStmtMetaModel = new BreakStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final CatchClauseMetaModel catchClauseMetaModel = new CatchClauseMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ContinueStmtMetaModel continueStmtMetaModel = new ContinueStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final DoStmtMetaModel doStmtMetaModel = new DoStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final EmptyStmtMetaModel emptyStmtMetaModel = new EmptyStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ExplicitConstructorInvocationStmtMetaModel explicitConstructorInvocationStmtMetaModel = new ExplicitConstructorInvocationStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ExpressionStmtMetaModel expressionStmtMetaModel = new ExpressionStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ForEachStmtMetaModel forEachStmtMetaModel = new ForEachStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ForStmtMetaModel forStmtMetaModel = new ForStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final IfStmtMetaModel ifStmtMetaModel = new IfStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LabeledStmtMetaModel labeledStmtMetaModel = new LabeledStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ReturnStmtMetaModel returnStmtMetaModel = new ReturnStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SwitchEntryMetaModel switchEntryMetaModel = new SwitchEntryMetaModel(Optional.of(nodeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SwitchStmtMetaModel switchStmtMetaModel = new SwitchStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SynchronizedStmtMetaModel synchronizedStmtMetaModel = new SynchronizedStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ThrowStmtMetaModel throwStmtMetaModel = new ThrowStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TryStmtMetaModel tryStmtMetaModel = new TryStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LocalClassDeclarationStmtMetaModel localClassDeclarationStmtMetaModel = new LocalClassDeclarationStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final WhileStmtMetaModel whileStmtMetaModel = new WhileStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final YieldStmtMetaModel yieldStmtMetaModel = new YieldStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnparsableStmtMetaModel unparsableStmtMetaModel = new UnparsableStmtMetaModel(Optional.of(statementMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayTypeMetaModel arrayTypeMetaModel = new ArrayTypeMetaModel(Optional.of(referenceTypeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ClassOrInterfaceTypeMetaModel classOrInterfaceTypeMetaModel = new ClassOrInterfaceTypeMetaModel(Optional.of(referenceTypeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final IntersectionTypeMetaModel intersectionTypeMetaModel = new IntersectionTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final PrimitiveTypeMetaModel primitiveTypeMetaModel = new PrimitiveTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypeParameterMetaModel typeParameterMetaModel = new TypeParameterMetaModel(Optional.of(referenceTypeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnionTypeMetaModel unionTypeMetaModel = new UnionTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnknownTypeMetaModel unknownTypeMetaModel = new UnknownTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final VoidTypeMetaModel voidTypeMetaModel = new VoidTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final WildcardTypeMetaModel wildcardTypeMetaModel = new WildcardTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final VarTypeMetaModel varTypeMetaModel = new VarTypeMetaModel(Optional.of(typeMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleRequiresDirectiveMetaModel moduleRequiresDirectiveMetaModel = new ModuleRequiresDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleExportsDirectiveMetaModel moduleExportsDirectiveMetaModel = new ModuleExportsDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleProvidesDirectiveMetaModel moduleProvidesDirectiveMetaModel = new ModuleProvidesDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleUsesDirectiveMetaModel moduleUsesDirectiveMetaModel = new ModuleUsesDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ModuleOpensDirectiveMetaModel moduleOpensDirectiveMetaModel = new ModuleOpensDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
     static {
