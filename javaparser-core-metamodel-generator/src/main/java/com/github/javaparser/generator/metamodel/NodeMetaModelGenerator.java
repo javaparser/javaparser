@@ -79,7 +79,7 @@ public class NodeMetaModelGenerator {
             SourceRoot sourceRoot
     ) {
 
-        metaModelCoid.setJavadocComment("The content of this class is partially or completely generated.");
+        metaModelCoid.setJavadocComment("Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.");
 
         final AstTypeAnalysis typeAnalysis = new AstTypeAnalysis(nodeClass);
 
@@ -87,17 +87,15 @@ public class NodeMetaModelGenerator {
         final String nodeMetaModelFieldName = decapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
 
-        final FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
-        AbstractGenerator.annotateGenerated(nodeField, this.getClass().getName());
-
-        final Class<?> superclass = nodeClass.getSuperclass();
-        final String superNodeMetaModel = MetaModelGenerator.nodeMetaModelName(superclass);
-
-        final boolean isRootNode = !MetaModelGenerator.isNode(superclass);
-
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
         this.initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
 
+        final Class<?> superclass = nodeClass.getSuperclass();
+        final String superNodeMetaModel = MetaModelGenerator.nodeMetaModelName(superclass);
+        final boolean isRootNode = !MetaModelGenerator.isNode(superclass);
+
+        final FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
+        AbstractGenerator.annotateGenerated(nodeField, this.getClass().getName());
         nodeField.getVariable(0).setInitializer(
                 parseExpression(
                         f("new %s(%s)",

@@ -26,14 +26,27 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The content of this class is partially or completely generated.
+ * Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.
  */
 public final class JavaParserMetaModel {
 
     private JavaParserMetaModel() {
     }
 
-    private static final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>();
+    private static final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>(150);
+
+    public static List<BaseNodeMetaModel> getNodeMetaModels() {
+        return nodeMetaModels;
+    }
+
+    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
+        for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
+            if (nodeMetaModel.getTypeName().equals(c.getSimpleName())) {
+                return Optional.of(nodeMetaModel);
+            }
+        }
+        return Optional.empty();
+    }
 
     @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializeConstructorParameters() {
@@ -270,10 +283,6 @@ public final class JavaParserMetaModel {
         moduleRequiresDirectiveMetaModel.getConstructorParameters().add(moduleRequiresDirectiveMetaModel.modifiersPropertyMetaModel);
         moduleRequiresDirectiveMetaModel.getConstructorParameters().add(moduleRequiresDirectiveMetaModel.namePropertyMetaModel);
         moduleUsesDirectiveMetaModel.getConstructorParameters().add(moduleUsesDirectiveMetaModel.namePropertyMetaModel);
-    }
-
-    public static List<BaseNodeMetaModel> getNodeMetaModels() {
-        return nodeMetaModels;
     }
 
     @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
@@ -790,15 +799,6 @@ public final class JavaParserMetaModel {
         moduleRequiresDirectiveMetaModel.getDeclaredPropertyMetaModels().add(moduleRequiresDirectiveMetaModel.namePropertyMetaModel);
         moduleUsesDirectiveMetaModel.namePropertyMetaModel = new PropertyMetaModel(moduleUsesDirectiveMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         moduleUsesDirectiveMetaModel.getDeclaredPropertyMetaModels().add(moduleUsesDirectiveMetaModel.namePropertyMetaModel);
-    }
-
-    public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
-        for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getTypeName().equals(c.getSimpleName())) {
-                return Optional.of(nodeMetaModel);
-            }
-        }
-        return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
