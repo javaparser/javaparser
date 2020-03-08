@@ -37,6 +37,7 @@ import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInv
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class MainConstructorGenerator extends NodeGenerator {
+
     public MainConstructorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -59,7 +60,7 @@ public class MainConstructorGenerator extends NodeGenerator {
         for (PropertyMetaModel parameter : nodeMetaModel.getConstructorParameters()) {
             constructor.addParameter(parameter.getTypeNameForSetter(), parameter.getName());
             if (nodeMetaModel.getDeclaredPropertyMetaModels().contains(parameter)) {
-                body.addStatement(f("%s(%s);", parameter.getSetterMethodName(), parameter.getName()));
+                body.addStatement(f("this.%s(%s);", parameter.getSetterMethodName(), parameter.getName()));
             } else {
                 superCall.append(parameter.getName());
             }
@@ -67,9 +68,9 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.getStatements().addFirst(parseExplicitConstructorInvocationStmt(superCall.toString()));
 
-        body.addStatement("customInitialization();");
+        body.addStatement("this.customInitialization();");
 
-        addOrReplaceWhenSameSignature(nodeCoid, constructor);
+        this.addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
     }
 }

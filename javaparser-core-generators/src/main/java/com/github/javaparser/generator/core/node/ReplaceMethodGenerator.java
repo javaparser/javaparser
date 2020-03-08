@@ -35,6 +35,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class ReplaceMethodGenerator extends NodeGenerator {
+
     public ReplaceMethodGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -43,11 +44,11 @@ public class ReplaceMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration replaceNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean replace(Node node, Node replacementNode) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(replaceNodeMethod));
+        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> this.annotateOverridden(replaceNodeMethod));
 
         final BlockStmt body = replaceNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
+        body.addStatement("if (node == null) { return false; }");
 
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
@@ -55,12 +56,12 @@ public class ReplaceMethodGenerator extends NodeGenerator {
             }
             String check;
             if (property.isNodeList()) {
-                check = nodeListCheck(property);
+                check = this.nodeListCheck(property);
             } else {
-                check = attributeCheck(property, property.getSetterMethodName());
+                check = this.attributeCheck(property, property.getSetterMethodName());
             }
             if (property.isOptional()) {
-                check = f("if (%s != null) { %s }", property.getName(), check);
+                check = f("if (this.%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
         }
@@ -69,21 +70,21 @@ public class ReplaceMethodGenerator extends NodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+
+        this.addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
-        return f("if (node == %s) {" +
-                "    %s((%s) replacementNode);" +
+        return f("if (node == this.%s) {" +
+                "    this.%s((%s) replacementNode);" +
                 "    return true;\n" +
                 "}", property.getName(), attributeSetterName, property.getTypeName());
     }
 
     private String nodeListCheck(PropertyMetaModel property) {
-        return f("for (int i = 0; i < %s.size(); i++) {" +
-                "  if (%s.get(i) == node) {" +
-                "    %s.set(i, (%s) replacementNode);" +
+        return f("for (int i = 0; i < this.%s.size(); i++) {" +
+                "  if (this.%s.get(i) == node) {" +
+                "    this.%s.set(i, (%s) replacementNode);" +
                 "    return true;" +
                 "  }" +
                 "}", property.getName(), property.getName(), property.getName(), property.getTypeName());

@@ -25,9 +25,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -35,6 +35,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's VoidVisitorAdapter.
  */
 public class VoidVisitorAdapterGenerator extends VisitorGenerator {
+
     public VoidVisitorAdapterGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorAdapter", "void", "A", true);
     }
@@ -50,7 +51,7 @@ public class VoidVisitorAdapterGenerator extends VisitorGenerator {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional() && field.isNodeList()) {
-                    body.addStatement(f("n.%s.ifPresent( l -> l.forEach( v -> v.accept(this, arg)));", getter));
+                    body.addStatement(f("n.%s.ifPresent(l -> l.forEach(v -> v.accept(this, arg)));", getter));
                 } else if (field.isOptional()) {
                     body.addStatement(f("n.%s.ifPresent(l -> l.accept(this, arg));", getter));
                 } else if (field.isNodeList()) {

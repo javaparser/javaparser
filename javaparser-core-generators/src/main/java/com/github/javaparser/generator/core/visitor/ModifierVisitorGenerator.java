@@ -34,6 +34,7 @@ import com.github.javaparser.utils.SourceRoot;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class ModifierVisitorGenerator extends VisitorGenerator {
+
     public ModifierVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
     }
@@ -48,7 +49,7 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
             if (property.isNode()) {
                 if (property.isNodeList()) {
-                    body.addStatement(f("NodeList<%s> %s = modifyList(n.%s(), arg);",
+                    body.addStatement(f("NodeList<%s> %s = this.modifyList(n.%s(), arg);",
                             property.getTypeNameGenerified(),
                             property.getName(),
                             property.getGetterMethodName()));
@@ -68,15 +69,15 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             }
         }
 
-        if(node.is(BinaryExpr.class)){
-            body.addStatement("if (left == null) return right;");
-            body.addStatement("if (right == null) return left;");
-        }else {
-            final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
+        if (node.is(BinaryExpr.class)) {
+            body.addStatement("if (left == null) { return right; }");
+            body.addStatement("if (right == null) { return left; }");
+        } else {
+            final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") { return null; }");
             for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
                 if (property.isRequired() && property.isNode()) {
                     if (property.isNodeList()) {
-                        if(property.isNonEmpty()){
+                        if (property.isNonEmpty()) {
                             collapseCheck.append(f("%s.isEmpty()", property.getName()));
                         }
                     } else {

@@ -33,6 +33,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CloneGenerator extends NodeGenerator {
+
     public CloneGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -41,10 +42,10 @@ public class CloneGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         nodeCu.addImport(CloneVisitor.class);
         MethodDeclaration cloneMethod = (MethodDeclaration) parseBodyDeclaration(f(
-                "@Override public %s clone() { return (%s) accept(new CloneVisitor(), null); }",
+                "@Override public %s clone() { return (%s) this.accept(new CloneVisitor(), null); }",
                 nodeMetaModel.getTypeNameGenerified(),
                 nodeMetaModel.getTypeNameGenerified()
         ));
-        addOrReplaceWhenSameSignature(nodeCoid, cloneMethod);
+        this.addOrReplaceWhenSameSignature(nodeCoid, cloneMethod);
     }
 }

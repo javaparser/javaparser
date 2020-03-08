@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import java.util.List;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -33,6 +31,8 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.List;
+
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
@@ -42,8 +42,7 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
-                                           CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();
@@ -68,14 +67,14 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
                 // Is this field another AST node? Visit it.
                 if (field.getNodeReference().isPresent()) {
                     if (field.isOptional()) {
-                        builder.append("(n.%s.isPresent()? n.%s.get().accept(this, arg):0)", getter, getter);
+                        builder.append("(n.%s.isPresent() ? n.%s.get().accept(this, arg) : 0)", getter, getter);
                     } else {
                         builder.append("(n.%s.accept(this, arg))", getter);
                     }
                 } else {
                     Class<?> type = field.getType();
                     if (type.equals(boolean.class)) {
-                        builder.append("(n.%s?1:0)", getter);
+                        builder.append("(n.%s ? 1 : 0)", getter);
                     } else if (type.equals(int.class)) {
                         builder.append("n.%s", getter);
                     } else {

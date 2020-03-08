@@ -32,6 +32,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates JavaParser's ObjectIdentityHashCodeVisitor.
  */
 public class ObjectIdentityHashCodeVisitorGenerator extends VisitorGenerator {
+
     public ObjectIdentityHashCodeVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "ObjectIdentityHashCodeVisitor", "Integer", "Void", true);
     }

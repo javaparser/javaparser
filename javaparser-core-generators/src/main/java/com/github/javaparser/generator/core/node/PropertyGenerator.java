@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,17 +59,17 @@ public class PropertyGenerator extends NodeGenerator {
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
-            generateGetter(nodeMetaModel, nodeCoid, property);
-            generateSetter(nodeMetaModel, nodeCoid, property);
+            this.generateGetter(nodeMetaModel, nodeCoid, property);
+            this.generateSetter(nodeMetaModel, nodeCoid, property);
         }
-        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
+        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> this.derivedProperties.put(p.getName(), p));
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
         final String name = property.getName();
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        declaredProperties.put(observableName, property);
+        this.declaredProperties.put(observableName, property);
 
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
@@ -93,24 +94,32 @@ public class PropertyGenerator extends NodeGenerator {
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
-        body.addStatement(f("if (%s == this.%s) { return (%s) this; }", name, name, setter.getType()));
 
-        body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
+        // Only include the cast on `this` if the type is different to the coid we're currently in
+        String castValue = (setter.getTypeAsString().equals(nodeCoid.getNameAsString())) ? "" : "(" + setter.getTypeAsString() + ")";
+        body.addStatement(f(
+                "if (%s == this.%s) { return %s this; }",
+                name,
+                name,
+                castValue
+        ));
+
+        body.addStatement(f("this.notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {
-            body.addStatement(f("if (this.%s != null) this.%s.setParentNode(null);", name, name));
+            body.addStatement(f("if (this.%s != null) { this.%s.setParentNode(null); }", name, name));
         }
         body.addStatement(f("this.%s = %s;", name, name));
         if (property.isNode()) {
-            body.addStatement(f("setAsParentNodeOf(%s);", name));
+            body.addStatement(f("this.setAsParentNodeOf(%s);", name));
         }
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             body.addStatement(f("return (T) this;"));
         } else {
             body.addStatement(f("return this;"));
         }
-        replaceWhenSameSignature(nodeCoid, setter);
+        this.addOrReplaceWhenSameSignature(nodeCoid, setter);
         if (property.getContainingNodeMetaModel().hasWildcard()) {
-            annotateSuppressWarnings(setter);
+            this.annotateSuppressWarnings(setter);
         }
     }
 
@@ -119,11 +128,11 @@ public class PropertyGenerator extends NodeGenerator {
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
         if (property.isOptional()) {
-            body.addStatement(f("return Optional.ofNullable(%s);", property.getName()));
+            body.addStatement(f("return Optional.ofNullable(this.%s);", property.getName()));
         } else {
-            body.addStatement(f("return %s;", property.getName()));
+            body.addStatement(f("return this.%s;", property.getName()));
         }
-        replaceWhenSameSignature(nodeCoid, getter);
+        this.addOrReplaceWhenSameSignature(nodeCoid, getter);
     }
 
     private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
@@ -146,21 +155,28 @@ public class PropertyGenerator extends NodeGenerator {
     }
 
     @Override
-    protected void after() throws Exception {
-        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
-        EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
-        observablePropertyEnum.getEntries().clear();
-        List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
-        observablePropertyNames.sort(String::compareTo);
-        for (String propName : observablePropertyNames) {
-            generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
+    protected void after() {
+
+        try {
+            CompilationUnit observablePropertyCu = this.sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
+            EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
+            observablePropertyEnum.getEntries().clear();
+            List<String> observablePropertyNames = new LinkedList<>(this.declaredProperties.keySet());
+            observablePropertyNames.sort(String::compareTo);
+            for (String propName : observablePropertyNames) {
+                this.generateObservableProperty(observablePropertyEnum, this.declaredProperties.get(propName), false);
+            }
+            List<String> derivedPropertyNames = new LinkedList<>(this.derivedProperties.keySet());
+            derivedPropertyNames.sort(String::compareTo);
+            for (String propName : derivedPropertyNames) {
+                this.generateObservableProperty(observablePropertyEnum, this.derivedProperties.get(propName), true);
+            }
+            observablePropertyEnum.addEnumConstant("RANGE");
+            observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error parsing the file -- IOException (see stack trace for details)", e);
         }
-        List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
-        derivedPropertyNames.sort(String::compareTo);
-        for (String propName : derivedPropertyNames) {
-            generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
-        }
-        observablePropertyEnum.addEnumConstant("RANGE");
-        observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
     }
 }

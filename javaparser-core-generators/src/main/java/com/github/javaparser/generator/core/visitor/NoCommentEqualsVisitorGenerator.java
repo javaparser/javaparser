@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -32,6 +30,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
 
     public NoCommentEqualsVisitorGenerator(SourceRoot sourceRoot) {
@@ -39,8 +39,7 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
-                                           CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         BlockStmt body = visitMethod.getBody().get();
@@ -58,12 +57,12 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
                     continue;
                 if (field.getNodeReference().isPresent()) {
                     if (field.isNodeList()) {
-                        body.addStatement(f("if (!nodesEquals(n.%s, n2.%s)) return false;", getter, getter));
+                        body.addStatement(f("if (!this.nodesEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                     } else {
-                        body.addStatement(f("if (!nodeEquals(n.%s, n2.%s)) return false;", getter, getter));
+                        body.addStatement(f("if (!this.nodeEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                     }
                 } else {
-                    body.addStatement(f("if (!objEquals(n.%s, n2.%s)) return false;", getter, getter));
+                    body.addStatement(f("if (!this.objEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                 }
             }
             if (body.getStatements().size() == 1) {

@@ -27,9 +27,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -37,6 +37,7 @@ import static com.github.javaparser.utils.Utils.capitalize;
 
 
 public class RemoveMethodGenerator extends NodeGenerator {
+
     public RemoveMethodGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -45,11 +46,11 @@ public class RemoveMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration removeNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean remove(Node node) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(removeNodeMethod));
+        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> this.annotateOverridden(removeNodeMethod));
 
         final BlockStmt body = removeNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
+        body.addStatement("if (node == null) { return false; }");
 
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
@@ -57,16 +58,16 @@ public class RemoveMethodGenerator extends NodeGenerator {
             }
             String check;
             if (property.isNodeList()) {
-                check = nodeListCheck(property);
+                check = this.nodeListCheck(property);
             } else {
                 if (property.isRequired()) {
                     continue;
                 }
-                String removeAttributeMethodName = generateRemoveMethodForAttribute(nodeCoid, nodeMetaModel, property);
-                check = attributeCheck(property, removeAttributeMethodName);
+                String removeAttributeMethodName = this.generateRemoveMethodForAttribute(nodeCoid, nodeMetaModel, property);
+                check = this.attributeCheck(property, removeAttributeMethodName);
             }
             if (property.isOptional()) {
-                check = f("if (%s != null) { %s }", property.getName(), check);
+                check = f("if (this.%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
         }
@@ -75,21 +76,21 @@ public class RemoveMethodGenerator extends NodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+
+        this.addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
-        return f("if (node == %s) {" +
-                "    %s();" +
+        return f("if (node == this.%s) {" +
+                "    this.%s();" +
                 "    return true;\n" +
                 "}", property.getName(), removeAttributeMethodName);
     }
 
     private String nodeListCheck(PropertyMetaModel property) {
-        return f("for (int i = 0; i < %s.size(); i++) {" +
-                "  if (%s.get(i) == node) {" +
-                "    %s.remove(i);" +
+        return f("for (int i = 0; i < this.%s.size(); i++) {" +
+                "  if (this.%s.get(i) == node) {" +
+                "    this.%s.remove(i);" +
                 "    return true;" +
                 "  }" +
                 "}", property.getName(), property.getName(), property.getName());
@@ -100,9 +101,9 @@ public class RemoveMethodGenerator extends NodeGenerator {
         final MethodDeclaration removeMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName));
 
         final BlockStmt block = removeMethod.getBody().get();
-        block.addStatement(f("return %s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
+        block.addStatement(f("return this.%s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
 
-        addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
+        this.addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
         return methodName;
     }
 }

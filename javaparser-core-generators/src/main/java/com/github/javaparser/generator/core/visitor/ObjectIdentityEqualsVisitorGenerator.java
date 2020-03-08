@@ -32,6 +32,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates JavaParser's ObjectIdentityEqualsVisitor.
  */
 public class ObjectIdentityEqualsVisitorGenerator extends VisitorGenerator {
+
     public ObjectIdentityEqualsVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "ObjectIdentityEqualsVisitor", "Boolean", "Visitable", true);
     }

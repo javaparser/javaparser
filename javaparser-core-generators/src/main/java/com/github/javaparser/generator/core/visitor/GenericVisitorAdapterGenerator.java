@@ -25,9 +25,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -35,6 +35,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's VoidVisitorAdapter.
  */
 public class GenericVisitorAdapterGenerator extends VisitorGenerator {
+
     public GenericVisitorAdapterGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorAdapter", "R", "A", true);
     }
@@ -45,10 +46,10 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
 
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
-        
+
         body.addStatement("R result;");
 
-        final String resultCheck = "if (result != null) return result;";
+        final String resultCheck = "if (result != null) { return result; }";
 
         for (PropertyMetaModel field : node.getAllPropertyMetaModels()) {
             final String getter = field.getGetterMethodName() + "()";

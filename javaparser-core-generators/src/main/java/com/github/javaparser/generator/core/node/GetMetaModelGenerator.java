@@ -33,6 +33,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetMetaModelGenerator extends NodeGenerator {
+
     public GetMetaModelGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -44,7 +45,7 @@ public class GetMetaModelGenerator extends NodeGenerator {
                 nodeMetaModel.getClass().getSimpleName(),
                 nodeMetaModel.getMetaModelFieldName()));
 
-        addOrReplaceWhenSameSignature(nodeCoid, getMetaModelMethod);
+        this.addOrReplaceWhenSameSignature(nodeCoid, getMetaModelMethod);
         nodeCu.addImport(nodeMetaModel.getClass().getName());
         nodeCu.addImport(JavaParserMetaModel.class);
     }

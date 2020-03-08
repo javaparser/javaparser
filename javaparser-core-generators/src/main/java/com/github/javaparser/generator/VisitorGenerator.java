@@ -31,6 +31,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -40,7 +43,8 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
  * It will create missing visit methods on the fly,
  * and will ask you to fill in the bodies of the visit methods.
  */
-public abstract class VisitorGenerator extends Generator {
+public abstract class VisitorGenerator extends AbstractGenerator {
+
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
@@ -56,25 +60,29 @@ public abstract class VisitorGenerator extends Generator {
         this.createMissingVisitMethods = createMissingVisitMethods;
     }
 
-    public final void generate() throws Exception {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+    @Override
+    public final List<CompilationUnit> generate() {
+        Log.info("Running %s", () -> this.getClass().getSimpleName());
 
-        final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java").getResult().get();
+        try {
+            final CompilationUnit compilationUnit = this.sourceRoot.tryToParse(this.pkg, this.visitorClassName + ".java").getResult().get();
 
-        Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
-        if (!visitorClassOptional.isPresent()) {
-            visitorClassOptional = compilationUnit.getInterfaceByName(visitorClassName);
+            Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(this.visitorClassName);
+            if (!visitorClassOptional.isPresent()) {
+                visitorClassOptional = compilationUnit.getInterfaceByName(this.visitorClassName);
+            }
+            final ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
+
+            JavaParserMetaModel.getNodeMetaModels().stream()
+                    .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
+                    .forEach(node -> this.generateVisitMethodForNode(node, visitorClass, compilationUnit));
+            this.after();
+
+            return Collections.singletonList(compilationUnit);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error parsing the file -- IOException (see stack trace for details)", e);
         }
-        final ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
-
-        JavaParserMetaModel.getNodeMetaModels().stream()
-                .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
-                .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
-        after();
-    }
-
-    protected void after() throws Exception {
-
     }
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
@@ -84,18 +92,20 @@ public abstract class VisitorGenerator extends Generator {
                 .findFirst();
 
         if (existingVisitMethod.isPresent()) {
-            generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
-        } else if (createMissingVisitMethods) {
+            this.generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
+            this.annotateGenerated(existingVisitMethod.get());
+        } else if (this.createMissingVisitMethods) {
             MethodDeclaration newVisitMethod = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
-                    .addParameter(argumentType, "arg")
-                    .setType(returnType);
+                    .addParameter(this.argumentType, "arg")
+                    .setType(this.returnType);
             if (!visitorClass.isInterface()) {
                 newVisitMethod
                         .addAnnotation(new MarkerAnnotationExpr(new Name("Override")))
                         .addModifier(PUBLIC);
             }
-            generateVisitMethodBody(node, newVisitMethod, compilationUnit);
+            this.generateVisitMethodBody(node, newVisitMethod, compilationUnit);
+            this.annotateGenerated(newVisitMethod);
         }
     }
 

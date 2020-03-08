@@ -32,6 +32,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates JavaParser's VoidVisitorWithDefaults.
  */
 public class VoidVisitorWithDefaultsGenerator extends VisitorGenerator {
+
     public VoidVisitorWithDefaultsGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorWithDefaults", "void", "A", true);
     }
@@ -43,6 +44,6 @@ public class VoidVisitorWithDefaultsGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        body.addStatement("defaultAction(n, arg);");
+        body.addStatement("this.defaultAction(n, arg);");
     }
 }

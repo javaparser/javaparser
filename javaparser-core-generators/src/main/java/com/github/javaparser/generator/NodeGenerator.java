@@ -29,33 +29,41 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.List;
+
 /**
- * Makes it easier to generate code in the core AST nodes. The generateNode method will get every node type passed to
- * it, ready for modification.
+ * Makes it easier to generate code in the core AST nodes.
+ * The generateNode method will get every node type passed to it, ready for modification.
  */
-public abstract class NodeGenerator extends Generator {
+public abstract class NodeGenerator extends AbstractGenerator {
+
     protected NodeGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 
-    public final void generate() throws Exception {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+    @Override
+    public final List<CompilationUnit> generate() {
+        Log.info("Running %s", () -> this.getClass().getSimpleName());
+        this.before();
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = parseNode(nodeMetaModel);
-            generateNode(nodeMetaModel, result.a, result.b);
+            final Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = this.parseNode(nodeMetaModel);
+            final CompilationUnit nodeCu = result.a;
+            final ClassOrInterfaceDeclaration nodeCoid = result.b;
+
+            this.generateNode(nodeMetaModel, nodeCu, nodeCoid);
+            this.editedCus.add(nodeCu);
         }
-        after();
+
+        this.after();
+
+        return this.editedCus;
     }
 
     protected Pair<CompilationUnit, ClassOrInterfaceDeclaration> parseNode(BaseNodeMetaModel nodeMetaModel) {
-        CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
-        ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
+        final CompilationUnit nodeCu = this.sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
+        final ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
     }
 
-    protected void after() throws Exception {
-
-    }
-
-    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception;
+    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid);
 }

@@ -32,6 +32,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates JavaParser's GenericVisitorWithDefaults.
  */
 public class GenericVisitorWithDefaultsGenerator extends VisitorGenerator {
+
     public GenericVisitorWithDefaultsGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorWithDefaults", "R", "A", true);
     }
@@ -43,6 +44,6 @@ public class GenericVisitorWithDefaultsGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        body.addStatement("return defaultAction(n, arg);");
+        body.addStatement("return this.defaultAction(n, arg);");
     }
 }
