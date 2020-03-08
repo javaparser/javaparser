@@ -115,11 +115,11 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(tokenRange);
-        setPackageDeclaration(packageDeclaration);
-        setImports(imports);
-        setTypes(types);
-        setModule(module);
-        customInitialization();
+        this.setPackageDeclaration(packageDeclaration);
+        this.setImports(imports);
+        this.setTypes(types);
+        this.setModule(module);
+        this.customInitialization();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class CompilationUnit extends Node {
      */
     @Deprecated
     public List<Comment> getComments() {
-        List<Comment> comments =  this.getAllContainedComments();
+        List<Comment> comments = this.getAllContainedComments();
         this.getComment().ifPresent(comments::add);
         return comments;
     }
@@ -158,7 +158,7 @@ public class CompilationUnit extends Node {
      * @see com.github.javaparser.ast.comments.BlockComment
      */
     public List<Comment> getAllComments() {
-        List<Comment> comments =  this.getAllContainedComments();
+        List<Comment> comments = this.getAllContainedComments();
         this.getComment().ifPresent(comments::add);
         return comments;
     }
@@ -171,7 +171,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
-        return imports;
+        return this.imports;
     }
 
     public ImportDeclaration getImport(int i) {
@@ -187,7 +187,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
-        return Optional.ofNullable(packageDeclaration);
+        return Optional.ofNullable(this.packageDeclaration);
     }
 
     /**
@@ -201,7 +201,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> getTypes() {
-        return types;
+        return this.types;
     }
 
     /**
@@ -224,13 +224,14 @@ public class CompilationUnit extends Node {
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
-            return (CompilationUnit) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
-        if (this.imports != null)
+        this.notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
+        if (this.imports != null) {
             this.imports.setParentNode(null);
+        }
         this.imports = imports;
-        setAsParentNodeOf(imports);
+        this.setAsParentNodeOf(imports);
         return this;
     }
 
@@ -291,13 +292,14 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
-            return (CompilationUnit) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
-        if (this.packageDeclaration != null)
+        this.notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
+        if (this.packageDeclaration != null) {
             this.packageDeclaration.setParentNode(null);
+        }
         this.packageDeclaration = packageDeclaration;
-        setAsParentNodeOf(packageDeclaration);
+        this.setAsParentNodeOf(packageDeclaration);
         return this;
     }
 
@@ -308,13 +310,14 @@ public class CompilationUnit extends Node {
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
-            return (CompilationUnit) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
-        if (this.types != null)
+        this.notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
+        if (this.types != null) {
             this.types.setParentNode(null);
+        }
         this.types = types;
-        setAsParentNodeOf(types);
+        this.setAsParentNodeOf(types);
         return this;
     }
 
@@ -548,29 +551,30 @@ public class CompilationUnit extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < imports.size(); i++) {
-            if (imports.get(i) == node) {
-                imports.remove(i);
+        }
+        for (int i = 0; i < this.imports.size(); i++) {
+            if (this.imports.get(i) == node) {
+                this.imports.remove(i);
                 return true;
             }
         }
-        if (module != null) {
-            if (node == module) {
-                removeModule();
+        if (this.module != null) {
+            if (node == this.module) {
+                this.removeModule();
                 return true;
             }
         }
-        if (packageDeclaration != null) {
-            if (node == packageDeclaration) {
-                removePackageDeclaration();
+        if (this.packageDeclaration != null) {
+            if (node == this.packageDeclaration) {
+                this.removePackageDeclaration();
                 return true;
             }
         }
-        for (int i = 0; i < types.size(); i++) {
-            if (types.get(i) == node) {
-                types.remove(i);
+        for (int i = 0; i < this.types.size(); i++) {
+            if (this.types.get(i) == node) {
+                this.types.remove(i);
                 return true;
             }
         }
@@ -579,7 +583,7 @@ public class CompilationUnit extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removePackageDeclaration() {
-        return setPackageDeclaration((PackageDeclaration) null);
+        return this.setPackageDeclaration((PackageDeclaration) null);
     }
 
     /**
@@ -587,25 +591,26 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
-        return Optional.ofNullable(module);
+        return Optional.ofNullable(this.module);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
-            return (CompilationUnit) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
-        if (this.module != null)
+        this.notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
+        if (this.module != null) {
             this.module.setParentNode(null);
+        }
         this.module = module;
-        setAsParentNodeOf(module);
+        this.setAsParentNodeOf(module);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
-        return setModule((ModuleDeclaration) null);
+        return this.setModule((ModuleDeclaration) null);
     }
 
     /**
@@ -766,7 +771,7 @@ public class CompilationUnit extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CompilationUnit clone() {
-        return (CompilationUnit) accept(new CloneVisitor(), null);
+        return (CompilationUnit) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -778,29 +783,30 @@ public class CompilationUnit extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < imports.size(); i++) {
-            if (imports.get(i) == node) {
-                imports.set(i, (ImportDeclaration) replacementNode);
+        }
+        for (int i = 0; i < this.imports.size(); i++) {
+            if (this.imports.get(i) == node) {
+                this.imports.set(i, (ImportDeclaration) replacementNode);
                 return true;
             }
         }
-        if (module != null) {
-            if (node == module) {
-                setModule((ModuleDeclaration) replacementNode);
+        if (this.module != null) {
+            if (node == this.module) {
+                this.setModule((ModuleDeclaration) replacementNode);
                 return true;
             }
         }
-        if (packageDeclaration != null) {
-            if (node == packageDeclaration) {
-                setPackageDeclaration((PackageDeclaration) replacementNode);
+        if (this.packageDeclaration != null) {
+            if (node == this.packageDeclaration) {
+                this.setPackageDeclaration((PackageDeclaration) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < types.size(); i++) {
-            if (types.get(i) == node) {
-                types.set(i, (TypeDeclaration) replacementNode);
+        for (int i = 0; i < this.types.size(); i++) {
+            if (this.types.get(i) == node) {
+                this.types.set(i, (TypeDeclaration) replacementNode);
                 return true;
             }
         }

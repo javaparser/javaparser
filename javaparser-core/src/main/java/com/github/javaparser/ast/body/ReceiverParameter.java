@@ -85,10 +85,10 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReceiverParameter(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Type type, Name name) {
         super(tokenRange);
-        setAnnotations(annotations);
-        setType(type);
-        setName(name);
-        customInitialization();
+        this.setAnnotations(annotations);
+        this.setType(type);
+        this.setName(name);
+        this.customInitialization();
     }
 
     @Override
@@ -105,20 +105,21 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReceiverParameter setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (ReceiverParameter) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) {
             this.type.setParentNode(null);
+        }
         this.type = type;
-        setAsParentNodeOf(type);
+        this.setAsParentNodeOf(type);
         return this;
     }
 
@@ -127,7 +128,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return annotations;
+        return this.annotations;
     }
 
     /**
@@ -138,20 +139,21 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (ReceiverParameter) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null)
+        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null) {
             this.annotations.setParentNode(null);
+        }
         this.annotations = annotations;
-        setAsParentNodeOf(annotations);
+        this.setAsParentNodeOf(annotations);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReceiverParameter clone() {
-        return (ReceiverParameter) accept(new CloneVisitor(), null);
+        return (ReceiverParameter) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -162,31 +164,33 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReceiverParameter setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ReceiverParameter) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.remove(i);
+        }
+        for (int i = 0; i < this.annotations.size(); i++) {
+            if (this.annotations.get(i) == node) {
+                this.annotations.remove(i);
                 return true;
             }
         }
@@ -196,20 +200,21 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.set(i, (AnnotationExpr) replacementNode);
+        }
+        for (int i = 0; i < this.annotations.size(); i++) {
+            if (this.annotations.get(i) == node) {
+                this.annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        if (node == name) {
-            setName((Name) replacementNode);
+        if (node == this.name) {
+            this.setName((Name) replacementNode);
             return true;
         }
-        if (node == type) {
-            setType((Type) replacementNode);
+        if (node == this.type) {
+            this.setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

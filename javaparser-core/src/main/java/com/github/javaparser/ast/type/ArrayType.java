@@ -87,9 +87,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(TokenRange tokenRange, Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        setComponentType(componentType);
-        setOrigin(origin);
-        customInitialization();
+        this.setComponentType(componentType);
+        this.setOrigin(origin);
+        this.customInitialization();
     }
 
     @Override
@@ -106,20 +106,21 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getComponentType() {
-        return componentType;
+        return this.componentType;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {
-            return (ArrayType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
-        if (this.componentType != null)
+        this.notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
+        if (this.componentType != null) {
             this.componentType.setParentNode(null);
+        }
         this.componentType = componentType;
-        setAsParentNodeOf(componentType);
+        this.setAsParentNodeOf(componentType);
         return this;
     }
 
@@ -217,16 +218,16 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Origin getOrigin() {
-        return origin;
+        return this.origin;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayType setOrigin(final Origin origin) {
         assertNotNull(origin);
         if (origin == this.origin) {
-            return (ArrayType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
+        this.notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
         this.origin = origin;
         return this;
     }
@@ -234,8 +235,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
@@ -247,7 +249,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayType clone() {
-        return (ArrayType) accept(new CloneVisitor(), null);
+        return (ArrayType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -259,10 +261,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == componentType) {
-            setComponentType((Type) replacementNode);
+        }
+        if (node == this.componentType) {
+            this.setComponentType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -280,6 +283,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);

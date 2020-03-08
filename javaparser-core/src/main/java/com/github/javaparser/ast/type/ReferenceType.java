@@ -54,21 +54,22 @@ public abstract class ReferenceType extends Type {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReferenceType clone() {
-        return (ReferenceType) accept(new CloneVisitor(), null);
+        return (ReferenceType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -80,8 +81,9 @@ public abstract class ReferenceType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -97,6 +99,7 @@ public abstract class ReferenceType extends Type {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReferenceType(Consumer<ReferenceType> action) {
         action.accept(this);

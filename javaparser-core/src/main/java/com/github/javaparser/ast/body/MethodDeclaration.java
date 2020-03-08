@@ -89,9 +89,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
-        setType(type);
-        setBody(body);
-        customInitialization();
+        this.setType(type);
+        this.setBody(body);
+        this.customInitialization();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
-        return Optional.ofNullable(body);
+        return Optional.ofNullable(this.body);
     }
 
     /**
@@ -120,32 +120,34 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
-            return (MethodDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
+        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null) {
             this.body.setParentNode(null);
+        }
         this.body = body;
-        setAsParentNodeOf(body);
+        this.setAsParentNodeOf(body);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (MethodDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) {
             this.type.setParentNode(null);
+        }
         this.type = type;
-        setAsParentNodeOf(type);
+        this.setAsParentNodeOf(type);
         return this;
     }
 
@@ -257,11 +259,12 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (body != null) {
-            if (node == body) {
-                removeBody();
+        }
+        if (this.body != null) {
+            if (node == this.body) {
+                this.removeBody();
                 return true;
             }
         }
@@ -270,13 +273,13 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
-        return setBody((BlockStmt) null);
+        return this.setBody((BlockStmt) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodDeclaration clone() {
-        return (MethodDeclaration) accept(new CloneVisitor(), null);
+        return (MethodDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -288,16 +291,17 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (body != null) {
-            if (node == body) {
-                setBody((BlockStmt) replacementNode);
+        }
+        if (this.body != null) {
+            if (node == this.body) {
+                this.setBody((BlockStmt) replacementNode);
                 return true;
             }
         }
-        if (node == type) {
-            setType((Type) replacementNode);
+        if (node == this.type) {
+            this.setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -315,6 +319,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodDeclaration(Consumer<MethodDeclaration> action) {
         action.accept(this);

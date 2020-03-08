@@ -98,12 +98,12 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ObjectCreationExpr(TokenRange tokenRange, Expression scope, ClassOrInterfaceType type, NodeList<Type> typeArguments, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> anonymousClassBody) {
         super(tokenRange);
-        setScope(scope);
-        setType(type);
-        setTypeArguments(typeArguments);
-        setArguments(arguments);
-        setAnonymousClassBody(anonymousClassBody);
-        customInitialization();
+        this.setScope(scope);
+        this.setType(type);
+        this.setTypeArguments(typeArguments);
+        this.setArguments(arguments);
+        this.setAnonymousClassBody(anonymousClassBody);
+        this.customInitialization();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<BodyDeclaration<?>>> getAnonymousClassBody() {
-        return Optional.ofNullable(anonymousClassBody);
+        return Optional.ofNullable(this.anonymousClassBody);
     }
 
     public void addAnonymousClassBody(BodyDeclaration<?> body) {
@@ -131,17 +131,17 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
-        return arguments;
+        return this.arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getScope() {
-        return Optional.ofNullable(scope);
+        return Optional.ofNullable(this.scope);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType getType() {
-        return type;
+        return this.type;
     }
 
     /**
@@ -155,13 +155,14 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         if (anonymousClassBody == this.anonymousClassBody) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
-        if (this.anonymousClassBody != null)
+        this.notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
+        if (this.anonymousClassBody != null) {
             this.anonymousClassBody.setParentNode(null);
+        }
         this.anonymousClassBody = anonymousClassBody;
-        setAsParentNodeOf(anonymousClassBody);
+        this.setAsParentNodeOf(anonymousClassBody);
         return this;
     }
 
@@ -169,13 +170,14 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null)
+        this.notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        if (this.arguments != null) {
             this.arguments.setParentNode(null);
+        }
         this.arguments = arguments;
-        setAsParentNodeOf(arguments);
+        this.setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -188,13 +190,14 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setScope(final Expression scope) {
         if (scope == this.scope) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null)
+        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null) {
             this.scope.setParentNode(null);
+        }
         this.scope = scope;
-        setAsParentNodeOf(scope);
+        this.setAsParentNodeOf(scope);
         return this;
     }
 
@@ -202,19 +205,20 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) {
             this.type.setParentNode(null);
+        }
         this.type = type;
-        setAsParentNodeOf(type);
+        this.setAsParentNodeOf(type);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(typeArguments);
+        return Optional.ofNullable(this.typeArguments);
     }
 
     /**
@@ -226,45 +230,47 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null) {
             this.typeArguments.setParentNode(null);
+        }
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(typeArguments);
+        this.setAsParentNodeOf(typeArguments);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (anonymousClassBody != null) {
-            for (int i = 0; i < anonymousClassBody.size(); i++) {
-                if (anonymousClassBody.get(i) == node) {
-                    anonymousClassBody.remove(i);
+        }
+        if (this.anonymousClassBody != null) {
+            for (int i = 0; i < this.anonymousClassBody.size(); i++) {
+                if (this.anonymousClassBody.get(i) == node) {
+                    this.anonymousClassBody.remove(i);
                     return true;
                 }
             }
         }
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.remove(i);
+        for (int i = 0; i < this.arguments.size(); i++) {
+            if (this.arguments.get(i) == node) {
+                this.arguments.remove(i);
                 return true;
             }
         }
-        if (scope != null) {
-            if (node == scope) {
-                removeScope();
+        if (this.scope != null) {
+            if (node == this.scope) {
+                this.removeScope();
                 return true;
             }
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.remove(i);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.remove(i);
                     return true;
                 }
             }
@@ -274,13 +280,13 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ObjectCreationExpr removeScope() {
-        return setScope((Expression) null);
+        return this.setScope((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ObjectCreationExpr clone() {
-        return (ObjectCreationExpr) accept(new CloneVisitor(), null);
+        return (ObjectCreationExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -292,36 +298,37 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (anonymousClassBody != null) {
-            for (int i = 0; i < anonymousClassBody.size(); i++) {
-                if (anonymousClassBody.get(i) == node) {
-                    anonymousClassBody.set(i, (BodyDeclaration) replacementNode);
+        }
+        if (this.anonymousClassBody != null) {
+            for (int i = 0; i < this.anonymousClassBody.size(); i++) {
+                if (this.anonymousClassBody.get(i) == node) {
+                    this.anonymousClassBody.set(i, (BodyDeclaration) replacementNode);
                     return true;
                 }
             }
         }
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.set(i, (Expression) replacementNode);
+        for (int i = 0; i < this.arguments.size(); i++) {
+            if (this.arguments.get(i) == node) {
+                this.arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        if (scope != null) {
-            if (node == scope) {
-                setScope((Expression) replacementNode);
+        if (this.scope != null) {
+            if (node == this.scope) {
+                this.setScope((Expression) replacementNode);
                 return true;
             }
         }
-        if (node == type) {
-            setType((ClassOrInterfaceType) replacementNode);
+        if (node == this.type) {
+            this.setType((ClassOrInterfaceType) replacementNode);
             return true;
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.set(i, (Type) replacementNode);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }
@@ -341,6 +348,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
         action.accept(this);

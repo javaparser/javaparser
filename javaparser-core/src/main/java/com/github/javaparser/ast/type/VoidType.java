@@ -56,7 +56,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VoidType(TokenRange tokenRange) {
         super(tokenRange);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
@@ -79,8 +79,9 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
@@ -92,7 +93,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VoidType clone() {
-        return (VoidType) accept(new CloneVisitor(), null);
+        return (VoidType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -104,8 +105,9 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -121,6 +123,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVoidType(Consumer<VoidType> action) {
         action.accept(this);

@@ -70,10 +70,10 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IfStmt(TokenRange tokenRange, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(tokenRange);
-        setCondition(condition);
-        setThenStmt(thenStmt);
-        setElseStmt(elseStmt);
-        customInitialization();
+        this.setCondition(condition);
+        this.setThenStmt(thenStmt);
+        this.setElseStmt(elseStmt);
+        this.customInitialization();
     }
 
     @Override
@@ -90,30 +90,31 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
-        return condition;
+        return this.condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Statement> getElseStmt() {
-        return Optional.ofNullable(elseStmt);
+        return Optional.ofNullable(this.elseStmt);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getThenStmt() {
-        return thenStmt;
+        return this.thenStmt;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
-            return (IfStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
+        this.notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null) {
             this.condition.setParentNode(null);
+        }
         this.condition = condition;
-        setAsParentNodeOf(condition);
+        this.setAsParentNodeOf(condition);
         return this;
     }
 
@@ -126,13 +127,14 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setElseStmt(final Statement elseStmt) {
         if (elseStmt == this.elseStmt) {
-            return (IfStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
-        if (this.elseStmt != null)
+        this.notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
+        if (this.elseStmt != null) {
             this.elseStmt.setParentNode(null);
+        }
         this.elseStmt = elseStmt;
-        setAsParentNodeOf(elseStmt);
+        this.setAsParentNodeOf(elseStmt);
         return this;
     }
 
@@ -140,24 +142,26 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     public IfStmt setThenStmt(final Statement thenStmt) {
         assertNotNull(thenStmt);
         if (thenStmt == this.thenStmt) {
-            return (IfStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
-        if (this.thenStmt != null)
+        this.notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
+        if (this.thenStmt != null) {
             this.thenStmt.setParentNode(null);
+        }
         this.thenStmt = thenStmt;
-        setAsParentNodeOf(thenStmt);
+        this.setAsParentNodeOf(thenStmt);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (elseStmt != null) {
-            if (node == elseStmt) {
-                removeElseStmt();
+        }
+        if (this.elseStmt != null) {
+            if (node == this.elseStmt) {
+                this.removeElseStmt();
                 return true;
             }
         }
@@ -166,7 +170,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public IfStmt removeElseStmt() {
-        return setElseStmt((Statement) null);
+        return this.setElseStmt((Statement) null);
     }
 
     /**
@@ -204,7 +208,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IfStmt clone() {
-        return (IfStmt) accept(new CloneVisitor(), null);
+        return (IfStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -216,20 +220,21 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == condition) {
-            setCondition((Expression) replacementNode);
+        }
+        if (node == this.condition) {
+            this.setCondition((Expression) replacementNode);
             return true;
         }
-        if (elseStmt != null) {
-            if (node == elseStmt) {
-                setElseStmt((Statement) replacementNode);
+        if (this.elseStmt != null) {
+            if (node == this.elseStmt) {
+                this.setElseStmt((Statement) replacementNode);
                 return true;
             }
         }
-        if (node == thenStmt) {
-            setThenStmt((Statement) replacementNode);
+        if (node == this.thenStmt) {
+            this.setThenStmt((Statement) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -247,6 +252,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIfStmt(Consumer<IfStmt> action) {
         action.accept(this);

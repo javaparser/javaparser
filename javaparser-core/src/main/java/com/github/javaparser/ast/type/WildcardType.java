@@ -73,9 +73,9 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        setExtendedType(extendedType);
-        setSuperType(superType);
-        customInitialization();
+        this.setExtendedType(extendedType);
+        this.setSuperType(superType);
+        this.customInitialization();
     }
 
     @Override
@@ -92,12 +92,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getExtendedType() {
-        return Optional.ofNullable(extendedType);
+        return Optional.ofNullable(this.extendedType);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getSuperType() {
-        return Optional.ofNullable(superType);
+        return Optional.ofNullable(this.superType);
     }
 
     /**
@@ -109,13 +109,14 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setExtendedType(final ReferenceType extendedType) {
         if (extendedType == this.extendedType) {
-            return (WildcardType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
-        if (this.extendedType != null)
+        this.notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
+        if (this.extendedType != null) {
             this.extendedType.setParentNode(null);
+        }
         this.extendedType = extendedType;
-        setAsParentNodeOf(extendedType);
+        this.setAsParentNodeOf(extendedType);
         return this;
     }
 
@@ -128,13 +129,14 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setSuperType(final ReferenceType superType) {
         if (superType == this.superType) {
-            return (WildcardType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
-        if (this.superType != null)
+        this.notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
+        if (this.superType != null) {
             this.superType.setParentNode(null);
+        }
         this.superType = superType;
-        setAsParentNodeOf(superType);
+        this.setAsParentNodeOf(superType);
         return this;
     }
 
@@ -146,17 +148,18 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (extendedType != null) {
-            if (node == extendedType) {
-                removeExtendedType();
+        }
+        if (this.extendedType != null) {
+            if (node == this.extendedType) {
+                this.removeExtendedType();
                 return true;
             }
         }
-        if (superType != null) {
-            if (node == superType) {
-                removeSuperType();
+        if (this.superType != null) {
+            if (node == this.superType) {
+                this.removeSuperType();
                 return true;
             }
         }
@@ -173,18 +176,18 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeExtendedType() {
-        return setExtendedType((ReferenceType) null);
+        return this.setExtendedType((ReferenceType) null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeSuperType() {
-        return setSuperType((ReferenceType) null);
+        return this.setSuperType((ReferenceType) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WildcardType clone() {
-        return (WildcardType) accept(new CloneVisitor(), null);
+        return (WildcardType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -196,17 +199,18 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (extendedType != null) {
-            if (node == extendedType) {
-                setExtendedType((ReferenceType) replacementNode);
+        }
+        if (this.extendedType != null) {
+            if (node == this.extendedType) {
+                this.setExtendedType((ReferenceType) replacementNode);
                 return true;
             }
         }
-        if (superType != null) {
-            if (node == superType) {
-                setSuperType((ReferenceType) replacementNode);
+        if (this.superType != null) {
+            if (node == this.superType) {
+                this.setSuperType((ReferenceType) replacementNode);
                 return true;
             }
         }
@@ -216,7 +220,6 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     /**
      * This constructor is used by the parser and is considered private.
      */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType) {
         super(tokenRange);
         setExtendedType(extendedType);
@@ -236,6 +239,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
         action.accept(this);

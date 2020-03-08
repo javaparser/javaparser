@@ -51,7 +51,7 @@ public class NullLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NullLiteralExpr(TokenRange tokenRange) {
         super(tokenRange);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
@@ -69,15 +69,16 @@ public class NullLiteralExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NullLiteralExpr clone() {
-        return (NullLiteralExpr) accept(new CloneVisitor(), null);
+        return (NullLiteralExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -89,8 +90,9 @@ public class NullLiteralExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -106,6 +108,7 @@ public class NullLiteralExpr extends LiteralExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
         action.accept(this);

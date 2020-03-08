@@ -65,8 +65,8 @@ public class LocalClassDeclarationStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LocalClassDeclarationStmt(TokenRange tokenRange, ClassOrInterfaceDeclaration classDeclaration) {
         super(tokenRange);
-        setClassDeclaration(classDeclaration);
-        customInitialization();
+        this.setClassDeclaration(classDeclaration);
+        this.customInitialization();
     }
 
     @Override
@@ -83,35 +83,37 @@ public class LocalClassDeclarationStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration getClassDeclaration() {
-        return classDeclaration;
+        return this.classDeclaration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
         assertNotNull(classDeclaration);
         if (classDeclaration == this.classDeclaration) {
-            return (LocalClassDeclarationStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        if (this.classDeclaration != null)
+        this.notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
+        if (this.classDeclaration != null) {
             this.classDeclaration.setParentNode(null);
+        }
         this.classDeclaration = classDeclaration;
-        setAsParentNodeOf(classDeclaration);
+        this.setAsParentNodeOf(classDeclaration);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LocalClassDeclarationStmt clone() {
-        return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
+        return (LocalClassDeclarationStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -123,10 +125,11 @@ public class LocalClassDeclarationStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == classDeclaration) {
-            setClassDeclaration((ClassOrInterfaceDeclaration) replacementNode);
+        }
+        if (node == this.classDeclaration) {
+            this.setClassDeclaration((ClassOrInterfaceDeclaration) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -144,6 +147,7 @@ public class LocalClassDeclarationStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
         action.accept(this);

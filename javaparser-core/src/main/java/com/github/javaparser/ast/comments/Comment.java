@@ -60,8 +60,8 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Comment(TokenRange tokenRange, String content) {
         super(tokenRange);
-        setContent(content);
-        customInitialization();
+        this.setContent(content);
+        this.customInitialization();
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class Comment extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getContent() {
-        return content;
+        return this.content;
     }
 
     /**
@@ -83,9 +83,9 @@ public abstract class Comment extends Node {
     public Comment setContent(final String content) {
         assertNotNull(content);
         if (content == this.content) {
-            return (Comment) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
+        this.notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
         this.content = content;
         return this;
     }
@@ -165,15 +165,16 @@ public abstract class Comment extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Comment clone() {
-        return (Comment) accept(new CloneVisitor(), null);
+        return (Comment) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -185,8 +186,9 @@ public abstract class Comment extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 

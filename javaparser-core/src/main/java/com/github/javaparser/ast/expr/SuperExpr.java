@@ -65,8 +65,8 @@ public class SuperExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SuperExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        setTypeName(typeName);
-        customInitialization();
+        this.setTypeName(typeName);
+        this.customInitialization();
     }
 
     @Override
@@ -83,30 +83,32 @@ public class SuperExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getTypeName() {
-        return Optional.ofNullable(typeName);
+        return Optional.ofNullable(this.typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SuperExpr setTypeName(final Name typeName) {
         if (typeName == this.typeName) {
-            return (SuperExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
+        if (this.typeName != null) {
             this.typeName.setParentNode(null);
+        }
         this.typeName = typeName;
-        setAsParentNodeOf(typeName);
+        this.setAsParentNodeOf(typeName);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (typeName != null) {
-            if (node == typeName) {
-                removeTypeName();
+        }
+        if (this.typeName != null) {
+            if (node == this.typeName) {
+                this.removeTypeName();
                 return true;
             }
         }
@@ -116,7 +118,7 @@ public class SuperExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SuperExpr clone() {
-        return (SuperExpr) accept(new CloneVisitor(), null);
+        return (SuperExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -137,6 +139,7 @@ public class SuperExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSuperExpr(Consumer<SuperExpr> action) {
         action.accept(this);
@@ -148,7 +151,6 @@ public class SuperExpr extends Expression {
         return Optional.of(this);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeClassName() {
         return setTypeName((Name) null);
     }
@@ -156,11 +158,12 @@ public class SuperExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (typeName != null) {
-            if (node == typeName) {
-                setTypeName((Name) replacementNode);
+        }
+        if (this.typeName != null) {
+            if (node == this.typeName) {
+                this.setTypeName((Name) replacementNode);
                 return true;
             }
         }
@@ -169,6 +172,6 @@ public class SuperExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeTypeName() {
-        return setTypeName((Name) null);
+        return this.setTypeName((Name) null);
     }
 }

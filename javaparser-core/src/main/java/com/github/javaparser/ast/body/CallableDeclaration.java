@@ -75,13 +75,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
         super(tokenRange, annotations);
-        setModifiers(modifiers);
-        setTypeParameters(typeParameters);
-        setName(name);
-        setParameters(parameters);
-        setThrownExceptions(thrownExceptions);
-        setReceiverParameter(receiverParameter);
-        customInitialization();
+        this.setModifiers(modifiers);
+        this.setTypeParameters(typeParameters);
+        this.setName(name);
+        this.setParameters(parameters);
+        this.setThrownExceptions(thrownExceptions);
+        this.setReceiverParameter(receiverParameter);
+        this.customInitialization();
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return modifiers;
+        return this.modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -102,17 +102,18 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (modifiers == this.modifiers) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
+        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null) {
             this.modifiers.setParentNode(null);
+        }
         this.modifiers = modifiers;
-        setAsParentNodeOf(modifiers);
+        this.setAsParentNodeOf(modifiers);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -122,17 +123,18 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (name == this.name) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
-        return parameters;
+        return this.parameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -142,17 +144,18 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (parameters == this.parameters) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null)
+        this.notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
+        if (this.parameters != null) {
             this.parameters.setParentNode(null);
+        }
         this.parameters = parameters;
-        setAsParentNodeOf(parameters);
+        this.setAsParentNodeOf(parameters);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getThrownExceptions() {
-        return thrownExceptions;
+        return this.thrownExceptions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -162,17 +165,18 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (thrownExceptions == this.thrownExceptions) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
-        if (this.thrownExceptions != null)
+        this.notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
+        if (this.thrownExceptions != null) {
             this.thrownExceptions.setParentNode(null);
+        }
         this.thrownExceptions = thrownExceptions;
-        setAsParentNodeOf(thrownExceptions);
+        this.setAsParentNodeOf(thrownExceptions);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
-        return typeParameters;
+        return this.typeParameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -182,11 +186,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (typeParameters == this.typeParameters) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
+        if (this.typeParameters != null) {
             this.typeParameters.setParentNode(null);
+        }
         this.typeParameters = typeParameters;
-        setAsParentNodeOf(typeParameters);
+        this.setAsParentNodeOf(typeParameters);
         return (T) this;
     }
 
@@ -210,35 +215,36 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.remove(i);
+        }
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < parameters.size(); i++) {
-            if (parameters.get(i) == node) {
-                parameters.remove(i);
+        for (int i = 0; i < this.parameters.size(); i++) {
+            if (this.parameters.get(i) == node) {
+                this.parameters.remove(i);
                 return true;
             }
         }
-        if (receiverParameter != null) {
-            if (node == receiverParameter) {
-                removeReceiverParameter();
+        if (this.receiverParameter != null) {
+            if (node == this.receiverParameter) {
+                this.removeReceiverParameter();
                 return true;
             }
         }
-        for (int i = 0; i < thrownExceptions.size(); i++) {
-            if (thrownExceptions.get(i) == node) {
-                thrownExceptions.remove(i);
+        for (int i = 0; i < this.thrownExceptions.size(); i++) {
+            if (this.thrownExceptions.get(i) == node) {
+                this.thrownExceptions.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < typeParameters.size(); i++) {
-            if (typeParameters.get(i) == node) {
-                typeParameters.remove(i);
+        for (int i = 0; i < this.typeParameters.size(); i++) {
+            if (this.typeParameters.get(i) == node) {
+                this.typeParameters.remove(i);
                 return true;
             }
         }
@@ -332,7 +338,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CallableDeclaration<?> clone() {
-        return (CallableDeclaration<?>) accept(new CloneVisitor(), null);
+        return (CallableDeclaration<?>) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -344,39 +350,40 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.set(i, (Modifier) replacementNode);
+        }
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
-        for (int i = 0; i < parameters.size(); i++) {
-            if (parameters.get(i) == node) {
-                parameters.set(i, (Parameter) replacementNode);
+        for (int i = 0; i < this.parameters.size(); i++) {
+            if (this.parameters.get(i) == node) {
+                this.parameters.set(i, (Parameter) replacementNode);
                 return true;
             }
         }
-        if (receiverParameter != null) {
-            if (node == receiverParameter) {
-                setReceiverParameter((ReceiverParameter) replacementNode);
+        if (this.receiverParameter != null) {
+            if (node == this.receiverParameter) {
+                this.setReceiverParameter((ReceiverParameter) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < thrownExceptions.size(); i++) {
-            if (thrownExceptions.get(i) == node) {
-                thrownExceptions.set(i, (ReferenceType) replacementNode);
+        for (int i = 0; i < this.thrownExceptions.size(); i++) {
+            if (this.thrownExceptions.get(i) == node) {
+                this.thrownExceptions.set(i, (ReferenceType) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < typeParameters.size(); i++) {
-            if (typeParameters.get(i) == node) {
-                typeParameters.set(i, (TypeParameter) replacementNode);
+        for (int i = 0; i < this.typeParameters.size(); i++) {
+            if (this.typeParameters.get(i) == node) {
+                this.typeParameters.set(i, (TypeParameter) replacementNode);
                 return true;
             }
         }
@@ -395,6 +402,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
         action.accept(this);
@@ -402,7 +410,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReceiverParameter> getReceiverParameter() {
-        return Optional.ofNullable(receiverParameter);
+        return Optional.ofNullable(this.receiverParameter);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -411,17 +419,18 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (receiverParameter == this.receiverParameter) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
-        if (this.receiverParameter != null)
+        this.notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
+        if (this.receiverParameter != null) {
             this.receiverParameter.setParentNode(null);
+        }
         this.receiverParameter = receiverParameter;
-        setAsParentNodeOf(receiverParameter);
+        this.setAsParentNodeOf(receiverParameter);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CallableDeclaration removeReceiverParameter() {
-        return setReceiverParameter((ReceiverParameter) null);
+        return this.setReceiverParameter((ReceiverParameter) null);
     }
 
     @Override

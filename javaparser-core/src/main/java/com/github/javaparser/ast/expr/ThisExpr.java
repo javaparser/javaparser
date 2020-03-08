@@ -67,8 +67,8 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThisExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        setTypeName(typeName);
-        customInitialization();
+        this.setTypeName(typeName);
+        this.customInitialization();
     }
 
     @Override
@@ -85,37 +85,38 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getTypeName() {
-        return Optional.ofNullable(typeName);
+        return Optional.ofNullable(this.typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ThisExpr setTypeName(final Name typeName) {
         if (typeName == this.typeName) {
-            return (ThisExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
+        if (this.typeName != null) {
             this.typeName.setParentNode(null);
+        }
         this.typeName = typeName;
-        setAsParentNodeOf(typeName);
+        this.setAsParentNodeOf(typeName);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (typeName != null) {
-            if (node == typeName) {
-                removeTypeName();
+        }
+        if (this.typeName != null) {
+            if (node == this.typeName) {
+                this.removeTypeName();
                 return true;
             }
         }
         return super.remove(node);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassName() {
         return setTypeName((Name) null);
     }
@@ -123,7 +124,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThisExpr clone() {
-        return (ThisExpr) accept(new CloneVisitor(), null);
+        return (ThisExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -135,11 +136,12 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (typeName != null) {
-            if (node == typeName) {
-                setTypeName((Name) replacementNode);
+        }
+        if (this.typeName != null) {
+            if (node == this.typeName) {
+                this.setTypeName((Name) replacementNode);
                 return true;
             }
         }
@@ -158,6 +160,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThisExpr(Consumer<ThisExpr> action) {
         action.accept(this);
@@ -176,6 +179,6 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeTypeName() {
-        return setTypeName((Name) null);
+        return this.setTypeName((Name) null);
     }
 }

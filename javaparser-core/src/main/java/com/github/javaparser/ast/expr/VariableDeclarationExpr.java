@@ -104,10 +104,10 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarationExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange);
-        setModifiers(modifiers);
-        setAnnotations(annotations);
-        setVariables(variables);
-        customInitialization();
+        this.setModifiers(modifiers);
+        this.setAnnotations(annotations);
+        this.setVariables(variables);
+        this.customInitialization();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return annotations;
+        return this.annotations;
     }
 
     /**
@@ -135,25 +135,26 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return modifiers;
+        return this.modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
-        return variables;
+        return this.variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null)
+        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null) {
             this.annotations.setParentNode(null);
+        }
         this.annotations = annotations;
-        setAsParentNodeOf(annotations);
+        this.setAsParentNodeOf(annotations);
         return this;
     }
 
@@ -161,13 +162,14 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     public VariableDeclarationExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
+        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null) {
             this.modifiers.setParentNode(null);
+        }
         this.modifiers = modifiers;
-        setAsParentNodeOf(modifiers);
+        this.setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -175,36 +177,38 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null)
+        this.notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
+        if (this.variables != null) {
             this.variables.setParentNode(null);
+        }
         this.variables = variables;
-        setAsParentNodeOf(variables);
+        this.setAsParentNodeOf(variables);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.remove(i);
+        }
+        for (int i = 0; i < this.annotations.size(); i++) {
+            if (this.annotations.get(i) == node) {
+                this.annotations.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.remove(i);
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.remove(i);
+        for (int i = 0; i < this.variables.size(); i++) {
+            if (this.variables.get(i) == node) {
+                this.variables.remove(i);
                 return true;
             }
         }
@@ -214,7 +218,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarationExpr clone() {
-        return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
+        return (VariableDeclarationExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -226,23 +230,24 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < annotations.size(); i++) {
-            if (annotations.get(i) == node) {
-                annotations.set(i, (AnnotationExpr) replacementNode);
+        }
+        for (int i = 0; i < this.annotations.size(); i++) {
+            if (this.annotations.get(i) == node) {
+                this.annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.set(i, (VariableDeclarator) replacementNode);
+        for (int i = 0; i < this.variables.size(); i++) {
+            if (this.variables.get(i) == node) {
+                this.variables.set(i, (VariableDeclarator) replacementNode);
                 return true;
             }
         }
@@ -261,6 +266,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
         action.accept(this);

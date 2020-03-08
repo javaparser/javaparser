@@ -50,22 +50,22 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LiteralStringValueExpr(TokenRange tokenRange, String value) {
         super(tokenRange);
-        setValue(value);
-        customInitialization();
+        this.setValue(value);
+        this.customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getValue() {
-        return value;
+        return this.value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
         if (value == this.value) {
-            return (LiteralStringValueExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;
     }
@@ -73,15 +73,16 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralStringValueExpr clone() {
-        return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
+        return (LiteralStringValueExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -93,8 +94,9 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -110,6 +112,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
         action.accept(this);

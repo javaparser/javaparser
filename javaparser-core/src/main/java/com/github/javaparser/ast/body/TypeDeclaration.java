@@ -74,10 +74,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, annotations);
-        setModifiers(modifiers);
-        setName(name);
-        setMembers(members);
-        customInitialization();
+        this.setModifiers(modifiers);
+        this.setName(name);
+        this.setMembers(members);
+        this.customInitialization();
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<BodyDeclaration<?>> getMembers() {
-        return members;
+        return this.members;
     }
 
     /**
@@ -104,7 +104,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return modifiers;
+        return this.modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -114,11 +114,12 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         if (members == this.members) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
-        if (this.members != null)
+        this.notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
+        if (this.members != null) {
             this.members.setParentNode(null);
+        }
         this.members = members;
-        setAsParentNodeOf(members);
+        this.setAsParentNodeOf(members);
         return (T) this;
     }
 
@@ -129,11 +130,12 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         if (modifiers == this.modifiers) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
+        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null) {
             this.modifiers.setParentNode(null);
+        }
         this.modifiers = modifiers;
-        setAsParentNodeOf(modifiers);
+        this.setAsParentNodeOf(modifiers);
         return (T) this;
     }
 
@@ -144,33 +146,35 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         if (name == this.name) {
             return (T) this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < members.size(); i++) {
-            if (members.get(i) == node) {
-                members.remove(i);
+        }
+        for (int i = 0; i < this.members.size(); i++) {
+            if (this.members.get(i) == node) {
+                this.members.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.remove(i);
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.remove(i);
                 return true;
             }
         }
@@ -215,7 +219,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeDeclaration<?> clone() {
-        return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
+        return (TypeDeclaration<?>) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -227,22 +231,23 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < members.size(); i++) {
-            if (members.get(i) == node) {
-                members.set(i, (BodyDeclaration) replacementNode);
+        }
+        for (int i = 0; i < this.members.size(); i++) {
+            if (this.members.get(i) == node) {
+                this.members.set(i, (BodyDeclaration) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -260,6 +265,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);

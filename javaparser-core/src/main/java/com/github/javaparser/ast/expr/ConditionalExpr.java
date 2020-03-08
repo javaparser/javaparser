@@ -64,10 +64,10 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConditionalExpr(TokenRange tokenRange, Expression condition, Expression thenExpr, Expression elseExpr) {
         super(tokenRange);
-        setCondition(condition);
-        setThenExpr(thenExpr);
-        setElseExpr(elseExpr);
-        customInitialization();
+        this.setCondition(condition);
+        this.setThenExpr(thenExpr);
+        this.setElseExpr(elseExpr);
+        this.customInitialization();
     }
 
     @Override
@@ -84,30 +84,31 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
-        return condition;
+        return this.condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getElseExpr() {
-        return elseExpr;
+        return this.elseExpr;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getThenExpr() {
-        return thenExpr;
+        return this.thenExpr;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
-            return (ConditionalExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
+        this.notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null) {
             this.condition.setParentNode(null);
+        }
         this.condition = condition;
-        setAsParentNodeOf(condition);
+        this.setAsParentNodeOf(condition);
         return this;
     }
 
@@ -115,13 +116,14 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public ConditionalExpr setElseExpr(final Expression elseExpr) {
         assertNotNull(elseExpr);
         if (elseExpr == this.elseExpr) {
-            return (ConditionalExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
-        if (this.elseExpr != null)
+        this.notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
+        if (this.elseExpr != null) {
             this.elseExpr.setParentNode(null);
+        }
         this.elseExpr = elseExpr;
-        setAsParentNodeOf(elseExpr);
+        this.setAsParentNodeOf(elseExpr);
         return this;
     }
 
@@ -129,28 +131,30 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public ConditionalExpr setThenExpr(final Expression thenExpr) {
         assertNotNull(thenExpr);
         if (thenExpr == this.thenExpr) {
-            return (ConditionalExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
-        if (this.thenExpr != null)
+        this.notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
+        if (this.thenExpr != null) {
             this.thenExpr.setParentNode(null);
+        }
         this.thenExpr = thenExpr;
-        setAsParentNodeOf(thenExpr);
+        this.setAsParentNodeOf(thenExpr);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConditionalExpr clone() {
-        return (ConditionalExpr) accept(new CloneVisitor(), null);
+        return (ConditionalExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -162,18 +166,19 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == condition) {
-            setCondition((Expression) replacementNode);
+        }
+        if (node == this.condition) {
+            this.setCondition((Expression) replacementNode);
             return true;
         }
-        if (node == elseExpr) {
-            setElseExpr((Expression) replacementNode);
+        if (node == this.elseExpr) {
+            this.setElseExpr((Expression) replacementNode);
             return true;
         }
-        if (node == thenExpr) {
-            setThenExpr((Expression) replacementNode);
+        if (node == this.thenExpr) {
+            this.setThenExpr((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -191,6 +196,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
         action.accept(this);

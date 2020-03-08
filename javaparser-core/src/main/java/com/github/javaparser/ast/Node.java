@@ -194,7 +194,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Comment> getComment() {
-        return Optional.ofNullable(comment);
+        return Optional.ofNullable(this.comment);
     }
 
     /**
@@ -619,11 +619,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (comment != null) {
-            if (node == comment) {
-                removeComment();
+        }
+        if (this.comment != null) {
+            if (node == this.comment) {
+                this.removeComment();
                 return true;
             }
         }
@@ -632,13 +633,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Node removeComment() {
-        return setComment((Comment) null);
+        return this.setComment((Comment) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Node clone() {
-        return (Node) accept(new CloneVisitor(), null);
+        return (Node) this.accept(new CloneVisitor(), null);
     }
 
     /**
@@ -675,11 +676,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (comment != null) {
-            if (node == comment) {
-                setComment((Comment) replacementNode);
+        }
+        if (this.comment != null) {
+            if (node == this.comment) {
+                this.setComment((Comment) replacementNode);
                 return true;
             }
         }

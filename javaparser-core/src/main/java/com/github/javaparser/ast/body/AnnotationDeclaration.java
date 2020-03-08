@@ -66,7 +66,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
@@ -84,15 +84,16 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationDeclaration clone() {
-        return (AnnotationDeclaration) accept(new CloneVisitor(), null);
+        return (AnnotationDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -104,8 +105,9 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -121,6 +123,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
         action.accept(this);

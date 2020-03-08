@@ -90,9 +90,9 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public FieldDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange, annotations);
-        setModifiers(modifiers);
-        setVariables(variables);
-        customInitialization();
+        this.setModifiers(modifiers);
+        this.setVariables(variables);
+        this.customInitialization();
     }
 
     /**
@@ -126,25 +126,26 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return modifiers;
+        return this.modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
-        return variables;
+        return this.variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (FieldDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
+        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null) {
             this.modifiers.setParentNode(null);
+        }
         this.modifiers = modifiers;
-        setAsParentNodeOf(modifiers);
+        this.setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -152,13 +153,14 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (FieldDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null)
+        this.notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
+        if (this.variables != null) {
             this.variables.setParentNode(null);
+        }
         this.variables = variables;
-        setAsParentNodeOf(variables);
+        this.setAsParentNodeOf(variables);
         return this;
     }
 
@@ -236,17 +238,18 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.remove(i);
+        }
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.remove(i);
+        for (int i = 0; i < this.variables.size(); i++) {
+            if (this.variables.get(i) == node) {
+                this.variables.remove(i);
                 return true;
             }
         }
@@ -256,7 +259,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldDeclaration clone() {
-        return (FieldDeclaration) accept(new CloneVisitor(), null);
+        return (FieldDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -268,17 +271,18 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < modifiers.size(); i++) {
-            if (modifiers.get(i) == node) {
-                modifiers.set(i, (Modifier) replacementNode);
+        }
+        for (int i = 0; i < this.modifiers.size(); i++) {
+            if (this.modifiers.get(i) == node) {
+                this.modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.set(i, (VariableDeclarator) replacementNode);
+        for (int i = 0; i < this.variables.size(); i++) {
+            if (this.variables.get(i) == node) {
+                this.variables.set(i, (VariableDeclarator) replacementNode);
                 return true;
             }
         }
@@ -297,6 +301,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
         action.accept(this);

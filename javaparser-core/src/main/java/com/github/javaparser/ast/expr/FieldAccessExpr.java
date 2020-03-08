@@ -78,10 +78,10 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public FieldAccessExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
         super(tokenRange);
-        setScope(scope);
-        setTypeArguments(typeArguments);
-        setName(name);
-        customInitialization();
+        this.setScope(scope);
+        this.setTypeArguments(typeArguments);
+        this.setName(name);
+        this.customInitialization();
     }
 
     @Override
@@ -98,26 +98,27 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (FieldAccessExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getScope() {
-        return scope;
+        return this.scope;
     }
 
     /**
@@ -130,19 +131,20 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     public FieldAccessExpr setScope(final Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
-            return (FieldAccessExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null)
+        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null) {
             this.scope.setParentNode(null);
+        }
         this.scope = scope;
-        setAsParentNodeOf(scope);
+        this.setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(typeArguments);
+        return Optional.ofNullable(this.typeArguments);
     }
 
     /**
@@ -154,20 +156,21 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (FieldAccessExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null) {
             this.typeArguments.setParentNode(null);
+        }
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(typeArguments);
+        this.setAsParentNodeOf(typeArguments);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldAccessExpr clone() {
-        return (FieldAccessExpr) accept(new CloneVisitor(), null);
+        return (FieldAccessExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -179,12 +182,13 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.remove(i);
+        }
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.remove(i);
                     return true;
                 }
             }
@@ -195,20 +199,21 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == scope) {
-            setScope((Expression) replacementNode);
+        if (node == this.scope) {
+            this.setScope((Expression) replacementNode);
             return true;
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.set(i, (Type) replacementNode);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }
@@ -228,6 +233,7 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
         action.accept(this);

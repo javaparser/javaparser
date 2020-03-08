@@ -60,41 +60,43 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationExpr(TokenRange tokenRange, Name name) {
         super(tokenRange);
-        setName(name);
-        customInitialization();
+        this.setName(name);
+        this.customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationExpr setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (AnnotationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationExpr clone() {
-        return (AnnotationExpr) accept(new CloneVisitor(), null);
+        return (AnnotationExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -106,10 +108,11 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((Name) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -127,6 +130,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationExpr(Consumer<AnnotationExpr> action) {
         action.accept(this);

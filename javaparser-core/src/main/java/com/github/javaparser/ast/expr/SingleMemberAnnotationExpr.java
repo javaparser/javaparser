@@ -58,8 +58,8 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
         super(tokenRange, name);
-        setMemberValue(memberValue);
-        customInitialization();
+        this.setMemberValue(memberValue);
+        this.customInitialization();
     }
 
     @Override
@@ -76,35 +76,37 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getMemberValue() {
-        return memberValue;
+        return this.memberValue;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
         if (memberValue == this.memberValue) {
-            return (SingleMemberAnnotationExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
-        if (this.memberValue != null)
+        this.notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
+        if (this.memberValue != null) {
             this.memberValue.setParentNode(null);
+        }
         this.memberValue = memberValue;
-        setAsParentNodeOf(memberValue);
+        this.setAsParentNodeOf(memberValue);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SingleMemberAnnotationExpr clone() {
-        return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
+        return (SingleMemberAnnotationExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -116,10 +118,11 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == memberValue) {
-            setMemberValue((Expression) replacementNode);
+        }
+        if (node == this.memberValue) {
+            this.setMemberValue((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -137,6 +140,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
         action.accept(this);

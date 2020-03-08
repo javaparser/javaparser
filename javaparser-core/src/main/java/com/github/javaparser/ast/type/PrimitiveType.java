@@ -140,8 +140,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        setType(type);
-        customInitialization();
+        this.setType(type);
+        this.customInitialization();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive getType() {
-        return type;
+        return this.type;
     }
 
     public ClassOrInterfaceType toBoxedType() {
@@ -169,9 +169,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     public PrimitiveType setType(final Primitive type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (PrimitiveType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         return this;
     }
@@ -189,15 +189,16 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PrimitiveType clone() {
-        return (PrimitiveType) accept(new CloneVisitor(), null);
+        return (PrimitiveType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -209,8 +210,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -226,6 +228,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
         action.accept(this);

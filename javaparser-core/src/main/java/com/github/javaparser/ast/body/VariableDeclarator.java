@@ -100,10 +100,10 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
         super(tokenRange);
-        setType(type);
-        setName(name);
-        setInitializer(initializer);
-        customInitialization();
+        this.setType(type);
+        this.setName(name);
+        this.setInitializer(initializer);
+        this.customInitialization();
     }
 
     @Override
@@ -151,25 +151,26 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getInitializer() {
-        return Optional.ofNullable(initializer);
+        return Optional.ofNullable(this.initializer);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (VariableDeclarator) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
@@ -182,13 +183,14 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setInitializer(final Expression initializer) {
         if (initializer == this.initializer) {
-            return (VariableDeclarator) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
-        if (this.initializer != null)
+        this.notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
+        if (this.initializer != null) {
             this.initializer.setParentNode(null);
+        }
         this.initializer = initializer;
-        setAsParentNodeOf(initializer);
+        this.setAsParentNodeOf(initializer);
         return this;
     }
 
@@ -204,31 +206,33 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (VariableDeclarator) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) {
             this.type.setParentNode(null);
+        }
         this.type = type;
-        setAsParentNodeOf(type);
+        this.setAsParentNodeOf(type);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (initializer != null) {
-            if (node == initializer) {
-                removeInitializer();
+        }
+        if (this.initializer != null) {
+            if (node == this.initializer) {
+                this.removeInitializer();
                 return true;
             }
         }
@@ -237,13 +241,13 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public VariableDeclarator removeInitializer() {
-        return setInitializer((Expression) null);
+        return this.setInitializer((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarator clone() {
-        return (VariableDeclarator) accept(new CloneVisitor(), null);
+        return (VariableDeclarator) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -255,20 +259,21 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (initializer != null) {
-            if (node == initializer) {
-                setInitializer((Expression) replacementNode);
+        }
+        if (this.initializer != null) {
+            if (node == this.initializer) {
+                this.setInitializer((Expression) replacementNode);
                 return true;
             }
         }
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == type) {
-            setType((Type) replacementNode);
+        if (node == this.type) {
+            this.setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

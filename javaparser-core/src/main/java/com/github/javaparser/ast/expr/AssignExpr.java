@@ -123,10 +123,10 @@ public class AssignExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
         super(tokenRange);
-        setTarget(target);
-        setValue(value);
-        setOperator(operator);
-        customInitialization();
+        this.setTarget(target);
+        this.setValue(value);
+        this.setOperator(operator);
+        this.customInitialization();
     }
 
     @Override
@@ -143,26 +143,26 @@ public class AssignExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
-        return operator;
+        return this.operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getTarget() {
-        return target;
+        return this.target;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getValue() {
-        return value;
+        return this.value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
-            return (AssignExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        this.notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
     }
@@ -171,13 +171,14 @@ public class AssignExpr extends Expression {
     public AssignExpr setTarget(final Expression target) {
         assertNotNull(target);
         if (target == this.target) {
-            return (AssignExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
-        if (this.target != null)
+        this.notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
+        if (this.target != null) {
             this.target.setParentNode(null);
+        }
         this.target = target;
-        setAsParentNodeOf(target);
+        this.setAsParentNodeOf(target);
         return this;
     }
 
@@ -185,28 +186,30 @@ public class AssignExpr extends Expression {
     public AssignExpr setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {
-            return (AssignExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null)
+        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        if (this.value != null) {
             this.value.setParentNode(null);
+        }
         this.value = value;
-        setAsParentNodeOf(value);
+        this.setAsParentNodeOf(value);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssignExpr clone() {
-        return (AssignExpr) accept(new CloneVisitor(), null);
+        return (AssignExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -218,14 +221,15 @@ public class AssignExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == target) {
-            setTarget((Expression) replacementNode);
+        }
+        if (node == this.target) {
+            this.setTarget((Expression) replacementNode);
             return true;
         }
-        if (node == value) {
-            setValue((Expression) replacementNode);
+        if (node == this.value) {
+            this.setValue((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -243,6 +247,7 @@ public class AssignExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssignExpr(Consumer<AssignExpr> action) {
         action.accept(this);

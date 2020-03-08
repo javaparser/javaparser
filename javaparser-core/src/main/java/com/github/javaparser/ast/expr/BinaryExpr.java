@@ -128,10 +128,10 @@ public class BinaryExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BinaryExpr(TokenRange tokenRange, Expression left, Expression right, Operator operator) {
         super(tokenRange);
-        setLeft(left);
-        setRight(right);
-        setOperator(operator);
-        customInitialization();
+        this.setLeft(left);
+        this.setRight(right);
+        this.setOperator(operator);
+        this.customInitialization();
     }
 
     @Override
@@ -148,30 +148,31 @@ public class BinaryExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getLeft() {
-        return left;
+        return this.left;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
-        return operator;
+        return this.operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getRight() {
-        return right;
+        return this.right;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BinaryExpr setLeft(final Expression left) {
         assertNotNull(left);
         if (left == this.left) {
-            return (BinaryExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
-        if (this.left != null)
+        this.notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
+        if (this.left != null) {
             this.left.setParentNode(null);
+        }
         this.left = left;
-        setAsParentNodeOf(left);
+        this.setAsParentNodeOf(left);
         return this;
     }
 
@@ -179,9 +180,9 @@ public class BinaryExpr extends Expression {
     public BinaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
-            return (BinaryExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        this.notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
     }
@@ -190,28 +191,30 @@ public class BinaryExpr extends Expression {
     public BinaryExpr setRight(final Expression right) {
         assertNotNull(right);
         if (right == this.right) {
-            return (BinaryExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
-        if (this.right != null)
+        this.notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
+        if (this.right != null) {
             this.right.setParentNode(null);
+        }
         this.right = right;
-        setAsParentNodeOf(right);
+        this.setAsParentNodeOf(right);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BinaryExpr clone() {
-        return (BinaryExpr) accept(new CloneVisitor(), null);
+        return (BinaryExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -223,14 +226,15 @@ public class BinaryExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == left) {
-            setLeft((Expression) replacementNode);
+        }
+        if (node == this.left) {
+            this.setLeft((Expression) replacementNode);
             return true;
         }
-        if (node == right) {
-            setRight((Expression) replacementNode);
+        if (node == this.right) {
+            this.setRight((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -248,6 +252,7 @@ public class BinaryExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBinaryExpr(Consumer<BinaryExpr> action) {
         action.accept(this);

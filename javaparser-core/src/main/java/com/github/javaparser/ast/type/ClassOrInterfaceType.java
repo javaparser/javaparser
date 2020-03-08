@@ -95,10 +95,10 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        setScope(scope);
-        setName(name);
-        setTypeArguments(typeArguments);
-        customInitialization();
+        this.setScope(scope);
+        this.setName(name);
+        this.setTypeArguments(typeArguments);
+        this.customInitialization();
     }
 
     @Override
@@ -115,12 +115,12 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ClassOrInterfaceType> getScope() {
-        return Optional.ofNullable(scope);
+        return Optional.ofNullable(this.scope);
     }
 
     public boolean isBoxedType() {
@@ -138,13 +138,14 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     public ClassOrInterfaceType setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ClassOrInterfaceType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
@@ -157,19 +158,20 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         if (scope == this.scope) {
-            return (ClassOrInterfaceType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null)
+        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null) {
             this.scope.setParentNode(null);
+        }
         this.scope = scope;
-        setAsParentNodeOf(scope);
+        this.setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(typeArguments);
+        return Optional.ofNullable(this.typeArguments);
     }
 
     /**
@@ -181,13 +183,14 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (ClassOrInterfaceType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null) {
             this.typeArguments.setParentNode(null);
+        }
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(typeArguments);
+        this.setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -199,18 +202,19 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (scope != null) {
-            if (node == scope) {
-                removeScope();
+        }
+        if (this.scope != null) {
+            if (node == this.scope) {
+                this.removeScope();
                 return true;
             }
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.remove(i);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.remove(i);
                     return true;
                 }
             }
@@ -229,13 +233,13 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
-        return setScope((ClassOrInterfaceType) null);
+        return this.setScope((ClassOrInterfaceType) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceType clone() {
-        return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
+        return (ClassOrInterfaceType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -247,22 +251,23 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
-        if (scope != null) {
-            if (node == scope) {
-                setScope((ClassOrInterfaceType) replacementNode);
+        if (this.scope != null) {
+            if (node == this.scope) {
+                this.setScope((ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.set(i, (Type) replacementNode);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }
@@ -282,6 +287,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
         action.accept(this);

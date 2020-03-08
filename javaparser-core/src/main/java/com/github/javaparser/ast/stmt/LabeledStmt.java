@@ -65,9 +65,9 @@ public class LabeledStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LabeledStmt(TokenRange tokenRange, SimpleName label, Statement statement) {
         super(tokenRange);
-        setLabel(label);
-        setStatement(statement);
-        customInitialization();
+        this.setLabel(label);
+        this.setStatement(statement);
+        this.customInitialization();
     }
 
     @Override
@@ -84,54 +84,57 @@ public class LabeledStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getStatement() {
-        return statement;
+        return this.statement;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LabeledStmt setStatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
-            return (LabeledStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
-        if (this.statement != null)
+        this.notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
+        if (this.statement != null) {
             this.statement.setParentNode(null);
+        }
         this.statement = statement;
-        setAsParentNodeOf(statement);
+        this.setAsParentNodeOf(statement);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getLabel() {
-        return label;
+        return this.label;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LabeledStmt setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
-            return (LabeledStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
+        this.notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null) {
             this.label.setParentNode(null);
+        }
         this.label = label;
-        setAsParentNodeOf(label);
+        this.setAsParentNodeOf(label);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LabeledStmt clone() {
-        return (LabeledStmt) accept(new CloneVisitor(), null);
+        return (LabeledStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -143,14 +146,15 @@ public class LabeledStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == label) {
-            setLabel((SimpleName) replacementNode);
+        }
+        if (node == this.label) {
+            this.setLabel((SimpleName) replacementNode);
             return true;
         }
-        if (node == statement) {
-            setStatement((Statement) replacementNode);
+        if (node == this.statement) {
+            this.setStatement((Statement) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -168,6 +172,7 @@ public class LabeledStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLabeledStmt(Consumer<LabeledStmt> action) {
         action.accept(this);

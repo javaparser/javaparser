@@ -75,9 +75,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Name(TokenRange tokenRange, Name qualifier, String identifier) {
         super(tokenRange);
-        setQualifier(qualifier);
-        setIdentifier(identifier);
-        customInitialization();
+        this.setQualifier(qualifier);
+        this.setIdentifier(identifier);
+        this.customInitialization();
     }
 
     @Override
@@ -94,16 +94,16 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
-            return (Name) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
@@ -120,30 +120,32 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
-        return Optional.ofNullable(qualifier);
+        return Optional.ofNullable(this.qualifier);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setQualifier(final Name qualifier) {
         if (qualifier == this.qualifier) {
-            return (Name) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
-        if (this.qualifier != null)
+        this.notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
+        if (this.qualifier != null) {
             this.qualifier.setParentNode(null);
+        }
         this.qualifier = qualifier;
-        setAsParentNodeOf(qualifier);
+        this.setAsParentNodeOf(qualifier);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (qualifier != null) {
-            if (node == qualifier) {
-                removeQualifier();
+        }
+        if (this.qualifier != null) {
+            if (node == this.qualifier) {
+                this.removeQualifier();
                 return true;
             }
         }
@@ -152,13 +154,13 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Name removeQualifier() {
-        return setQualifier((Name) null);
+        return this.setQualifier((Name) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Name clone() {
-        return (Name) accept(new CloneVisitor(), null);
+        return (Name) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -170,11 +172,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (qualifier != null) {
-            if (node == qualifier) {
-                setQualifier((Name) replacementNode);
+        }
+        if (this.qualifier != null) {
+            if (node == this.qualifier) {
+                this.setQualifier((Name) replacementNode);
                 return true;
             }
         }

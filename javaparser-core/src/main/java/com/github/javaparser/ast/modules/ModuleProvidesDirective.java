@@ -61,9 +61,9 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleProvidesDirective(TokenRange tokenRange, Name name, NodeList<Name> with) {
         super(tokenRange);
-        setName(name);
-        setWith(with);
-        customInitialization();
+        this.setName(name);
+        this.setWith(with);
+        this.customInitialization();
     }
 
     @Override
@@ -81,11 +81,12 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < with.size(); i++) {
-            if (with.get(i) == node) {
-                with.remove(i);
+        }
+        for (int i = 0; i < this.with.size(); i++) {
+            if (this.with.get(i) == node) {
+                this.with.remove(i);
                 return true;
             }
         }
@@ -95,48 +96,45 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleProvidesDirective clone() {
-        return (ModuleProvidesDirective) accept(new CloneVisitor(), null);
+        return (ModuleProvidesDirective) this.accept(new CloneVisitor(), null);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleProvidesStmt() {
         return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesDirective asModuleProvidesStmt() {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleProvidesStmt(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleProvidesDirective> toModuleProvidesStmt() {
         return Optional.of(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleProvidesDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleProvidesDirective) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
@@ -144,33 +142,35 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     public ModuleProvidesDirective setWith(final NodeList<Name> with) {
         assertNotNull(with);
         if (with == this.with) {
-            return (ModuleProvidesDirective) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.WITH, this.with, with);
-        if (this.with != null)
+        this.notifyPropertyChange(ObservableProperty.WITH, this.with, with);
+        if (this.with != null) {
             this.with.setParentNode(null);
+        }
         this.with = with;
-        setAsParentNodeOf(with);
+        this.setAsParentNodeOf(with);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> getWith() {
-        return with;
+        return this.with;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((Name) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((Name) replacementNode);
             return true;
         }
-        for (int i = 0; i < with.size(); i++) {
-            if (with.get(i) == node) {
-                with.set(i, (Name) replacementNode);
+        for (int i = 0; i < this.with.size(); i++) {
+            if (this.with.get(i) == node) {
+                this.with.set(i, (Name) replacementNode);
                 return true;
             }
         }
@@ -195,6 +195,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);

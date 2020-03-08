@@ -69,7 +69,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LongLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        customInitialization();
+        this.customInitialization();
     }
 
     /**
@@ -96,8 +96,9 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
@@ -167,7 +168,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LongLiteralExpr clone() {
-        return (LongLiteralExpr) accept(new CloneVisitor(), null);
+        return (LongLiteralExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -179,8 +180,9 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -196,6 +198,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
         action.accept(this);

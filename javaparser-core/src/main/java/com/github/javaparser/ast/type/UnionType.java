@@ -72,8 +72,8 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);
-        setElements(elements);
-        customInitialization();
+        this.setElements(elements);
+        this.customInitialization();
     }
 
     @AllFieldsConstructor
@@ -83,20 +83,21 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getElements() {
-        return elements;
+        return this.elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
-            return (UnionType) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        if (this.elements != null)
+        this.notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
+        if (this.elements != null) {
             this.elements.setParentNode(null);
+        }
         this.elements = elements;
-        setAsParentNodeOf(elements);
+        this.setAsParentNodeOf(elements);
         return this;
     }
 
@@ -120,11 +121,12 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < elements.size(); i++) {
-            if (elements.get(i) == node) {
-                elements.remove(i);
+        }
+        for (int i = 0; i < this.elements.size(); i++) {
+            if (this.elements.get(i) == node) {
+                this.elements.remove(i);
                 return true;
             }
         }
@@ -139,7 +141,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnionType clone() {
-        return (UnionType) accept(new CloneVisitor(), null);
+        return (UnionType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -151,11 +153,12 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < elements.size(); i++) {
-            if (elements.get(i) == node) {
-                elements.set(i, (ReferenceType) replacementNode);
+        }
+        for (int i = 0; i < this.elements.size(); i++) {
+            if (this.elements.get(i) == node) {
+                this.elements.set(i, (ReferenceType) replacementNode);
                 return true;
             }
         }
@@ -174,6 +177,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
         action.accept(this);

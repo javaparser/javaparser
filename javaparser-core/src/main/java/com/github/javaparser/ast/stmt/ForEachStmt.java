@@ -70,10 +70,10 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(tokenRange);
-        setVariable(variable);
-        setIterable(iterable);
-        setBody(body);
-        customInitialization();
+        this.setVariable(variable);
+        this.setIterable(iterable);
+        this.setBody(body);
+        this.customInitialization();
     }
 
     public ForEachStmt(VariableDeclarationExpr variable, String iterable, BlockStmt body) {
@@ -94,30 +94,31 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return body;
+        return this.body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIterable() {
-        return iterable;
+        return this.iterable;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr getVariable() {
-        return variable;
+        return this.variable;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForEachStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (ForEachStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
+        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null) {
             this.body.setParentNode(null);
+        }
         this.body = body;
-        setAsParentNodeOf(body);
+        this.setAsParentNodeOf(body);
         return this;
     }
 
@@ -125,13 +126,14 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     public ForEachStmt setIterable(final Expression iterable) {
         assertNotNull(iterable);
         if (iterable == this.iterable) {
-            return (ForEachStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
-        if (this.iterable != null)
+        this.notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
+        if (this.iterable != null) {
             this.iterable.setParentNode(null);
+        }
         this.iterable = iterable;
-        setAsParentNodeOf(iterable);
+        this.setAsParentNodeOf(iterable);
         return this;
     }
 
@@ -139,13 +141,14 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     public ForEachStmt setVariable(final VariableDeclarationExpr variable) {
         assertNotNull(variable);
         if (variable == this.variable) {
-            return (ForEachStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
-        if (this.variable != null)
+        this.notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
+        if (this.variable != null) {
             this.variable.setParentNode(null);
+        }
         this.variable = variable;
-        setAsParentNodeOf(variable);
+        this.setAsParentNodeOf(variable);
         return this;
     }
 
@@ -181,32 +184,34 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForEachStmt clone() {
-        return (ForEachStmt) accept(new CloneVisitor(), null);
+        return (ForEachStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == body) {
-            setBody((Statement) replacementNode);
+        }
+        if (node == this.body) {
+            this.setBody((Statement) replacementNode);
             return true;
         }
-        if (node == iterable) {
-            setIterable((Expression) replacementNode);
+        if (node == this.iterable) {
+            this.setIterable((Expression) replacementNode);
             return true;
         }
-        if (node == variable) {
-            setVariable((VariableDeclarationExpr) replacementNode);
+        if (node == this.variable) {
+            this.setVariable((VariableDeclarationExpr) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -230,6 +235,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForEachStmt(Consumer<ForEachStmt> action) {
         action.accept(this);

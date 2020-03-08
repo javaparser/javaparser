@@ -68,9 +68,9 @@ public class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
         super(tokenRange);
-        setCheck(check);
-        setMessage(message);
-        customInitialization();
+        this.setCheck(check);
+        this.setMessage(message);
+        this.customInitialization();
     }
 
     @Override
@@ -87,25 +87,26 @@ public class AssertStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCheck() {
-        return check;
+        return this.check;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getMessage() {
-        return Optional.ofNullable(message);
+        return Optional.ofNullable(this.message);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setCheck(final Expression check) {
         assertNotNull(check);
         if (check == this.check) {
-            return (AssertStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
-        if (this.check != null)
+        this.notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
+        if (this.check != null) {
             this.check.setParentNode(null);
+        }
         this.check = check;
-        setAsParentNodeOf(check);
+        this.setAsParentNodeOf(check);
         return this;
     }
 
@@ -118,24 +119,26 @@ public class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setMessage(final Expression message) {
         if (message == this.message) {
-            return (AssertStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);
-        if (this.message != null)
+        this.notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);
+        if (this.message != null) {
             this.message.setParentNode(null);
+        }
         this.message = message;
-        setAsParentNodeOf(message);
+        this.setAsParentNodeOf(message);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (message != null) {
-            if (node == message) {
-                removeMessage();
+        }
+        if (this.message != null) {
+            if (node == this.message) {
+                this.removeMessage();
                 return true;
             }
         }
@@ -144,13 +147,13 @@ public class AssertStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AssertStmt removeMessage() {
-        return setMessage((Expression) null);
+        return this.setMessage((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssertStmt clone() {
-        return (AssertStmt) accept(new CloneVisitor(), null);
+        return (AssertStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -162,15 +165,16 @@ public class AssertStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == check) {
-            setCheck((Expression) replacementNode);
+        }
+        if (node == this.check) {
+            this.setCheck((Expression) replacementNode);
             return true;
         }
-        if (message != null) {
-            if (node == message) {
-                setMessage((Expression) replacementNode);
+        if (this.message != null) {
+            if (node == this.message) {
+                this.setMessage((Expression) replacementNode);
                 return true;
             }
         }
@@ -189,6 +193,7 @@ public class AssertStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssertStmt(Consumer<AssertStmt> action) {
         action.accept(this);

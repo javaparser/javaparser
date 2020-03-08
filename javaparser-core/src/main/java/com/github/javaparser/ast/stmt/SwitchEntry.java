@@ -106,10 +106,10 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements) {
         super(tokenRange);
-        setLabels(labels);
-        setType(type);
-        setStatements(statements);
-        customInitialization();
+        this.setLabels(labels);
+        this.setType(type);
+        this.setStatements(statements);
+        this.customInitialization();
     }
 
     @Override
@@ -126,12 +126,12 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getLabels() {
-        return labels;
+        return this.labels;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
-        return statements;
+        return this.statements;
     }
 
     /**
@@ -144,13 +144,14 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     public SwitchEntry setLabels(final NodeList<Expression> labels) {
         assertNotNull(labels);
         if (labels == this.labels) {
-            return (SwitchEntry) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.LABELS, this.labels, labels);
-        if (this.labels != null)
+        this.notifyPropertyChange(ObservableProperty.LABELS, this.labels, labels);
+        if (this.labels != null) {
             this.labels.setParentNode(null);
+        }
         this.labels = labels;
-        setAsParentNodeOf(labels);
+        this.setAsParentNodeOf(labels);
         return this;
     }
 
@@ -158,30 +159,32 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
-            return (SwitchEntry) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        if (this.statements != null)
+        this.notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
+        if (this.statements != null) {
             this.statements.setParentNode(null);
+        }
         this.statements = statements;
-        setAsParentNodeOf(statements);
+        this.setAsParentNodeOf(statements);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < labels.size(); i++) {
-            if (labels.get(i) == node) {
-                labels.remove(i);
+        }
+        for (int i = 0; i < this.labels.size(); i++) {
+            if (this.labels.get(i) == node) {
+                this.labels.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < statements.size(); i++) {
-            if (statements.get(i) == node) {
-                statements.remove(i);
+        for (int i = 0; i < this.statements.size(); i++) {
+            if (this.statements.get(i) == node) {
+                this.statements.remove(i);
                 return true;
             }
         }
@@ -191,7 +194,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SwitchEntry clone() {
-        return (SwitchEntry) accept(new CloneVisitor(), null);
+        return (SwitchEntry) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -202,16 +205,16 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntry setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (SwitchEntry) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         return this;
     }
@@ -219,17 +222,18 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < labels.size(); i++) {
-            if (labels.get(i) == node) {
-                labels.set(i, (Expression) replacementNode);
+        }
+        for (int i = 0; i < this.labels.size(); i++) {
+            if (this.labels.get(i) == node) {
+                this.labels.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < statements.size(); i++) {
-            if (statements.get(i) == node) {
-                statements.set(i, (Statement) replacementNode);
+        for (int i = 0; i < this.statements.size(); i++) {
+            if (this.statements.get(i) == node) {
+                this.statements.set(i, (Statement) replacementNode);
                 return true;
             }
         }

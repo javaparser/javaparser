@@ -50,21 +50,22 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Expression(TokenRange tokenRange) {
         super(tokenRange);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Expression clone() {
-        return (Expression) accept(new CloneVisitor(), null);
+        return (Expression) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -76,8 +77,9 @@ public abstract class Expression extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 

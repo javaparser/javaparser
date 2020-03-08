@@ -58,7 +58,7 @@ public class UnknownType extends Type {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnknownType(TokenRange tokenRange) {
         super(tokenRange);
-        customInitialization();
+        this.customInitialization();
     }
 
     @Override
@@ -84,8 +84,9 @@ public class UnknownType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
@@ -97,7 +98,7 @@ public class UnknownType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnknownType clone() {
-        return (UnknownType) accept(new CloneVisitor(), null);
+        return (UnknownType) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -109,8 +110,9 @@ public class UnknownType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -126,6 +128,7 @@ public class UnknownType extends Type {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnknownType(Consumer<UnknownType> action) {
         action.accept(this);

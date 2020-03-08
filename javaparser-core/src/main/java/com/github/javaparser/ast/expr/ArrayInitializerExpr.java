@@ -62,8 +62,8 @@ public class ArrayInitializerExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayInitializerExpr(TokenRange tokenRange, NodeList<Expression> values) {
         super(tokenRange);
-        setValues(values);
-        customInitialization();
+        this.setValues(values);
+        this.customInitialization();
     }
 
     @Override
@@ -80,31 +80,33 @@ public class ArrayInitializerExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getValues() {
-        return values;
+        return this.values;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
         assertNotNull(values);
         if (values == this.values) {
-            return (ArrayInitializerExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
-        if (this.values != null)
+        this.notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
+        if (this.values != null) {
             this.values.setParentNode(null);
+        }
         this.values = values;
-        setAsParentNodeOf(values);
+        this.setAsParentNodeOf(values);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i) == node) {
-                values.remove(i);
+        }
+        for (int i = 0; i < this.values.size(); i++) {
+            if (this.values.get(i) == node) {
+                this.values.remove(i);
                 return true;
             }
         }
@@ -114,7 +116,7 @@ public class ArrayInitializerExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayInitializerExpr clone() {
-        return (ArrayInitializerExpr) accept(new CloneVisitor(), null);
+        return (ArrayInitializerExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -126,11 +128,12 @@ public class ArrayInitializerExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i) == node) {
-                values.set(i, (Expression) replacementNode);
+        }
+        for (int i = 0; i < this.values.size(); i++) {
+            if (this.values.get(i) == node) {
+                this.values.set(i, (Expression) replacementNode);
                 return true;
             }
         }
@@ -149,6 +152,7 @@ public class ArrayInitializerExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
         action.accept(this);

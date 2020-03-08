@@ -92,11 +92,11 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
         super(tokenRange);
-        setInitialization(initialization);
-        setCompare(compare);
-        setUpdate(update);
-        setBody(body);
-        customInitialization();
+        this.setInitialization(initialization);
+        this.setCompare(compare);
+        this.setUpdate(update);
+        this.setBody(body);
+        this.customInitialization();
     }
 
     @Override
@@ -113,35 +113,36 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return body;
+        return this.body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getCompare() {
-        return Optional.ofNullable(compare);
+        return Optional.ofNullable(this.compare);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getInitialization() {
-        return initialization;
+        return this.initialization;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getUpdate() {
-        return update;
+        return this.update;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (ForStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
+        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null) {
             this.body.setParentNode(null);
+        }
         this.body = body;
-        setAsParentNodeOf(body);
+        this.setAsParentNodeOf(body);
         return this;
     }
 
@@ -154,13 +155,14 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setCompare(final Expression compare) {
         if (compare == this.compare) {
-            return (ForStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
-        if (this.compare != null)
+        this.notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
+        if (this.compare != null) {
             this.compare.setParentNode(null);
+        }
         this.compare = compare;
-        setAsParentNodeOf(compare);
+        this.setAsParentNodeOf(compare);
         return this;
     }
 
@@ -168,13 +170,14 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
         if (initialization == this.initialization) {
-            return (ForStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
-        if (this.initialization != null)
+        this.notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
+        if (this.initialization != null) {
             this.initialization.setParentNode(null);
+        }
         this.initialization = initialization;
-        setAsParentNodeOf(initialization);
+        this.setAsParentNodeOf(initialization);
         return this;
     }
 
@@ -182,36 +185,38 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
         if (update == this.update) {
-            return (ForStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
-        if (this.update != null)
+        this.notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
+        if (this.update != null) {
             this.update.setParentNode(null);
+        }
         this.update = update;
-        setAsParentNodeOf(update);
+        this.setAsParentNodeOf(update);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (compare != null) {
-            if (node == compare) {
-                removeCompare();
+        }
+        if (this.compare != null) {
+            if (node == this.compare) {
+                this.removeCompare();
                 return true;
             }
         }
-        for (int i = 0; i < initialization.size(); i++) {
-            if (initialization.get(i) == node) {
-                initialization.remove(i);
+        for (int i = 0; i < this.initialization.size(); i++) {
+            if (this.initialization.get(i) == node) {
+                this.initialization.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < update.size(); i++) {
-            if (update.get(i) == node) {
-                update.remove(i);
+        for (int i = 0; i < this.update.size(); i++) {
+            if (this.update.get(i) == node) {
+                this.update.remove(i);
                 return true;
             }
         }
@@ -220,13 +225,13 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ForStmt removeCompare() {
-        return setCompare((Expression) null);
+        return this.setCompare((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForStmt clone() {
-        return (ForStmt) accept(new CloneVisitor(), null);
+        return (ForStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -238,27 +243,28 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == body) {
-            setBody((Statement) replacementNode);
+        }
+        if (node == this.body) {
+            this.setBody((Statement) replacementNode);
             return true;
         }
-        if (compare != null) {
-            if (node == compare) {
-                setCompare((Expression) replacementNode);
+        if (this.compare != null) {
+            if (node == this.compare) {
+                this.setCompare((Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < initialization.size(); i++) {
-            if (initialization.get(i) == node) {
-                initialization.set(i, (Expression) replacementNode);
+        for (int i = 0; i < this.initialization.size(); i++) {
+            if (this.initialization.get(i) == node) {
+                this.initialization.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < update.size(); i++) {
-            if (update.get(i) == node) {
-                update.set(i, (Expression) replacementNode);
+        for (int i = 0; i < this.update.size(); i++) {
+            if (this.update.get(i) == node) {
+                this.update.set(i, (Expression) replacementNode);
                 return true;
             }
         }
@@ -277,6 +283,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);

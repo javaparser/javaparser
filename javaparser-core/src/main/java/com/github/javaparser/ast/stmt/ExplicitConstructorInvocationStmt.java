@@ -83,11 +83,11 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ExplicitConstructorInvocationStmt(TokenRange tokenRange, NodeList<Type> typeArguments, boolean isThis, Expression expression, NodeList<Expression> arguments) {
         super(tokenRange);
-        setTypeArguments(typeArguments);
-        setThis(isThis);
-        setExpression(expression);
-        setArguments(arguments);
-        customInitialization();
+        this.setTypeArguments(typeArguments);
+        this.setThis(isThis);
+        this.setExpression(expression);
+        this.setArguments(arguments);
+        this.customInitialization();
     }
 
     @Override
@@ -104,30 +104,31 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
-        return arguments;
+        return this.arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
-        return Optional.ofNullable(expression);
+        return Optional.ofNullable(this.expression);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
-        return isThis;
+        return this.isThis;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null)
+        this.notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        if (this.arguments != null) {
             this.arguments.setParentNode(null);
+        }
         this.arguments = arguments;
-        setAsParentNodeOf(arguments);
+        this.setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -140,29 +141,30 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
         if (expression == this.expression) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
+        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null) {
             this.expression.setParentNode(null);
+        }
         this.expression = expression;
-        setAsParentNodeOf(expression);
+        this.setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
         if (isThis == this.isThis) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
+        this.notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
         this.isThis = isThis;
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(typeArguments);
+        return Optional.ofNullable(this.typeArguments);
     }
 
     /**
@@ -174,37 +176,39 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null) {
             this.typeArguments.setParentNode(null);
+        }
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(typeArguments);
+        this.setAsParentNodeOf(typeArguments);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.remove(i);
+        }
+        for (int i = 0; i < this.arguments.size(); i++) {
+            if (this.arguments.get(i) == node) {
+                this.arguments.remove(i);
                 return true;
             }
         }
-        if (expression != null) {
-            if (node == expression) {
-                removeExpression();
+        if (this.expression != null) {
+            if (node == this.expression) {
+                this.removeExpression();
                 return true;
             }
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.remove(i);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.remove(i);
                     return true;
                 }
             }
@@ -214,13 +218,13 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ExplicitConstructorInvocationStmt removeExpression() {
-        return setExpression((Expression) null);
+        return this.setExpression((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ExplicitConstructorInvocationStmt clone() {
-        return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
+        return (ExplicitConstructorInvocationStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -232,24 +236,25 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.set(i, (Expression) replacementNode);
+        }
+        for (int i = 0; i < this.arguments.size(); i++) {
+            if (this.arguments.get(i) == node) {
+                this.arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        if (expression != null) {
-            if (node == expression) {
-                setExpression((Expression) replacementNode);
+        if (this.expression != null) {
+            if (node == this.expression) {
+                this.setExpression((Expression) replacementNode);
                 return true;
             }
         }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.set(i, (Type) replacementNode);
+        if (this.typeArguments != null) {
+            for (int i = 0; i < this.typeArguments.size(); i++) {
+                if (this.typeArguments.get(i) == node) {
+                    this.typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }
@@ -269,6 +274,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
         action.accept(this);

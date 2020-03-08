@@ -65,9 +65,9 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
         super(tokenRange);
-        setCondition(condition);
-        setBody(body);
-        customInitialization();
+        this.setCondition(condition);
+        this.setBody(body);
+        this.customInitialization();
     }
 
     @Override
@@ -84,25 +84,26 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return body;
+        return this.body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
-        return condition;
+        return this.condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (WhileStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
+        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null) {
             this.body.setParentNode(null);
+        }
         this.body = body;
-        setAsParentNodeOf(body);
+        this.setAsParentNodeOf(body);
         return this;
     }
 
@@ -110,28 +111,30 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     public WhileStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
-            return (WhileStmt) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
+        this.notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null) {
             this.condition.setParentNode(null);
+        }
         this.condition = condition;
-        setAsParentNodeOf(condition);
+        this.setAsParentNodeOf(condition);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WhileStmt clone() {
-        return (WhileStmt) accept(new CloneVisitor(), null);
+        return (WhileStmt) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -143,14 +146,15 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == body) {
-            setBody((Statement) replacementNode);
+        }
+        if (node == this.body) {
+            this.setBody((Statement) replacementNode);
             return true;
         }
-        if (node == condition) {
-            setCondition((Expression) replacementNode);
+        if (node == this.condition) {
+            this.setCondition((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -168,6 +172,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWhileStmt(Consumer<WhileStmt> action) {
         action.accept(this);

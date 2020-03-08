@@ -60,8 +60,8 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SimpleName(TokenRange tokenRange, String identifier) {
         super(tokenRange);
-        setIdentifier(identifier);
-        customInitialization();
+        this.setIdentifier(identifier);
+        this.customInitialization();
     }
 
     @Override
@@ -78,16 +78,16 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
-            return (SimpleName) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
@@ -95,8 +95,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
@@ -107,7 +108,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SimpleName clone() {
-        return (SimpleName) accept(new CloneVisitor(), null);
+        return (SimpleName) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -119,8 +120,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 }

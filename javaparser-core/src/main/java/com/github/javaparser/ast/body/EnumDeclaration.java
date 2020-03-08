@@ -71,9 +71,9 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnumDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
-        setImplementedTypes(implementedTypes);
-        setEntries(entries);
-        customInitialization();
+        this.setImplementedTypes(implementedTypes);
+        this.setEntries(entries);
+        this.customInitialization();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<EnumConstantDeclaration> getEntries() {
-        return entries;
+        return this.entries;
     }
 
     public EnumConstantDeclaration getEntry(int i) {
@@ -109,20 +109,21 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
-        return implementedTypes;
+        return this.implementedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (EnumDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
-        if (this.entries != null)
+        this.notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
+        if (this.entries != null) {
             this.entries.setParentNode(null);
+        }
         this.entries = entries;
-        setAsParentNodeOf(entries);
+        this.setAsParentNodeOf(entries);
         return this;
     }
 
@@ -130,13 +131,14 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (EnumDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
-        if (this.implementedTypes != null)
+        this.notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
+        if (this.implementedTypes != null) {
             this.implementedTypes.setParentNode(null);
+        }
         this.implementedTypes = implementedTypes;
-        setAsParentNodeOf(implementedTypes);
+        this.setAsParentNodeOf(implementedTypes);
         return this;
     }
 
@@ -150,17 +152,18 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < entries.size(); i++) {
-            if (entries.get(i) == node) {
-                entries.remove(i);
+        }
+        for (int i = 0; i < this.entries.size(); i++) {
+            if (this.entries.get(i) == node) {
+                this.entries.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < implementedTypes.size(); i++) {
-            if (implementedTypes.get(i) == node) {
-                implementedTypes.remove(i);
+        for (int i = 0; i < this.implementedTypes.size(); i++) {
+            if (this.implementedTypes.get(i) == node) {
+                this.implementedTypes.remove(i);
                 return true;
             }
         }
@@ -170,7 +173,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnumDeclaration clone() {
-        return (EnumDeclaration) accept(new CloneVisitor(), null);
+        return (EnumDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -182,17 +185,18 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < entries.size(); i++) {
-            if (entries.get(i) == node) {
-                entries.set(i, (EnumConstantDeclaration) replacementNode);
+        }
+        for (int i = 0; i < this.entries.size(); i++) {
+            if (this.entries.get(i) == node) {
+                this.entries.set(i, (EnumConstantDeclaration) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < implementedTypes.size(); i++) {
-            if (implementedTypes.get(i) == node) {
-                implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
+        for (int i = 0; i < this.implementedTypes.size(); i++) {
+            if (this.implementedTypes.get(i) == node) {
+                this.implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
@@ -211,6 +215,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
         action.accept(this);

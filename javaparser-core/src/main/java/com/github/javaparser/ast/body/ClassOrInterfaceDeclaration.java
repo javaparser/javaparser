@@ -81,11 +81,11 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
-        setInterface(isInterface);
-        setTypeParameters(typeParameters);
-        setExtendedTypes(extendedTypes);
-        setImplementedTypes(implementedTypes);
-        customInitialization();
+        this.setInterface(isInterface);
+        this.setTypeParameters(typeParameters);
+        this.setExtendedTypes(extendedTypes);
+        this.setImplementedTypes(implementedTypes);
+        this.customInitialization();
     }
 
     @Override
@@ -102,35 +102,36 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getExtendedTypes() {
-        return extendedTypes;
+        return this.extendedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
-        return implementedTypes;
+        return this.implementedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
-        return typeParameters;
+        return this.typeParameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
-        return isInterface;
+        return this.isInterface;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
-        if (this.extendedTypes != null)
+        this.notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
+        if (this.extendedTypes != null) {
             this.extendedTypes.setParentNode(null);
+        }
         this.extendedTypes = extendedTypes;
-        setAsParentNodeOf(extendedTypes);
+        this.setAsParentNodeOf(extendedTypes);
         return this;
     }
 
@@ -138,22 +139,23 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
-        if (this.implementedTypes != null)
+        this.notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
+        if (this.implementedTypes != null) {
             this.implementedTypes.setParentNode(null);
+        }
         this.implementedTypes = implementedTypes;
-        setAsParentNodeOf(implementedTypes);
+        this.setAsParentNodeOf(implementedTypes);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
         if (isInterface == this.isInterface) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
+        this.notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
         this.isInterface = isInterface;
         return this;
     }
@@ -162,36 +164,38 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
+        if (this.typeParameters != null) {
             this.typeParameters.setParentNode(null);
+        }
         this.typeParameters = typeParameters;
-        setAsParentNodeOf(typeParameters);
+        this.setAsParentNodeOf(typeParameters);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < extendedTypes.size(); i++) {
-            if (extendedTypes.get(i) == node) {
-                extendedTypes.remove(i);
+        }
+        for (int i = 0; i < this.extendedTypes.size(); i++) {
+            if (this.extendedTypes.get(i) == node) {
+                this.extendedTypes.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < implementedTypes.size(); i++) {
-            if (implementedTypes.get(i) == node) {
-                implementedTypes.remove(i);
+        for (int i = 0; i < this.implementedTypes.size(); i++) {
+            if (this.implementedTypes.get(i) == node) {
+                this.implementedTypes.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < typeParameters.size(); i++) {
-            if (typeParameters.get(i) == node) {
-                typeParameters.remove(i);
+        for (int i = 0; i < this.typeParameters.size(); i++) {
+            if (this.typeParameters.get(i) == node) {
+                this.typeParameters.remove(i);
                 return true;
             }
         }
@@ -224,7 +228,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceDeclaration clone() {
-        return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
+        return (ClassOrInterfaceDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -236,23 +240,24 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < extendedTypes.size(); i++) {
-            if (extendedTypes.get(i) == node) {
-                extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);
+        }
+        for (int i = 0; i < this.extendedTypes.size(); i++) {
+            if (this.extendedTypes.get(i) == node) {
+                this.extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < implementedTypes.size(); i++) {
-            if (implementedTypes.get(i) == node) {
-                implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
+        for (int i = 0; i < this.implementedTypes.size(); i++) {
+            if (this.implementedTypes.get(i) == node) {
+                this.implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < typeParameters.size(); i++) {
-            if (typeParameters.get(i) == node) {
-                typeParameters.set(i, (TypeParameter) replacementNode);
+        for (int i = 0; i < this.typeParameters.size(); i++) {
+            if (this.typeParameters.get(i) == node) {
+                this.typeParameters.set(i, (TypeParameter) replacementNode);
                 return true;
             }
         }
@@ -271,6 +276,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
         action.accept(this);

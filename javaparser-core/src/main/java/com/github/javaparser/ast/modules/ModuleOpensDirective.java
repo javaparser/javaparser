@@ -61,9 +61,9 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleOpensDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
         super(tokenRange);
-        setName(name);
-        setModuleNames(moduleNames);
-        customInitialization();
+        this.setName(name);
+        this.setModuleNames(moduleNames);
+        this.customInitialization();
     }
 
     @Override
@@ -81,11 +81,12 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < moduleNames.size(); i++) {
-            if (moduleNames.get(i) == node) {
-                moduleNames.remove(i);
+        }
+        for (int i = 0; i < this.moduleNames.size(); i++) {
+            if (this.moduleNames.get(i) == node) {
+                this.moduleNames.remove(i);
                 return true;
             }
         }
@@ -94,85 +95,84 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleOpensDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleOpensDirective) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> getModuleNames() {
-        return moduleNames;
+        return this.moduleNames;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleOpensDirective setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {
-            return (ModuleOpensDirective) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
-        if (this.moduleNames != null)
+        this.notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
+        if (this.moduleNames != null) {
             this.moduleNames.setParentNode(null);
+        }
         this.moduleNames = moduleNames;
-        setAsParentNodeOf(moduleNames);
+        this.setAsParentNodeOf(moduleNames);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleOpensDirective clone() {
-        return (ModuleOpensDirective) accept(new CloneVisitor(), null);
+        return (ModuleOpensDirective) this.accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        for (int i = 0; i < moduleNames.size(); i++) {
-            if (moduleNames.get(i) == node) {
-                moduleNames.set(i, (Name) replacementNode);
+        }
+        for (int i = 0; i < this.moduleNames.size(); i++) {
+            if (this.moduleNames.get(i) == node) {
+                this.moduleNames.set(i, (Name) replacementNode);
                 return true;
             }
         }
-        if (node == name) {
-            setName((Name) replacementNode);
+        if (node == this.name) {
+            this.setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleOpensStmt() {
         return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensDirective asModuleOpensStmt() {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {
         action.accept(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleOpensDirective> toModuleOpensStmt() {
         return Optional.of(this);
     }
@@ -195,6 +195,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleOpensDirective(Consumer<ModuleOpensDirective> action) {
         action.accept(this);

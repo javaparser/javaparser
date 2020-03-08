@@ -136,8 +136,8 @@ public class Modifier extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Modifier(TokenRange tokenRange, Keyword keyword) {
         super(tokenRange);
-        setKeyword(keyword);
-        customInitialization();
+        this.setKeyword(keyword);
+        this.customInitialization();
     }
 
     @Override
@@ -154,16 +154,16 @@ public class Modifier extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Keyword getKeyword() {
-        return keyword;
+        return this.keyword;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Modifier setKeyword(final Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
-            return (Modifier) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
+        this.notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
         this.keyword = keyword;
         return this;
     }
@@ -179,23 +179,25 @@ public class Modifier extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.replace(node, replacementNode);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Modifier clone() {
-        return (Modifier) accept(new CloneVisitor(), null);
+        return (Modifier) this.accept(new CloneVisitor(), null);
     }
 
     @Override

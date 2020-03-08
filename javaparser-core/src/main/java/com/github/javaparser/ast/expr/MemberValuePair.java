@@ -64,9 +64,9 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MemberValuePair(TokenRange tokenRange, SimpleName name, Expression value) {
         super(tokenRange);
-        setName(name);
-        setValue(value);
-        customInitialization();
+        this.setName(name);
+        this.setValue(value);
+        this.customInitialization();
     }
 
     @Override
@@ -83,25 +83,26 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return name;
+        return this.name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getValue() {
-        return value;
+        return this.value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MemberValuePair setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (MemberValuePair) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
@@ -109,28 +110,30 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     public MemberValuePair setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {
-            return (MemberValuePair) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null)
+        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        if (this.value != null) {
             this.value.setParentNode(null);
+        }
         this.value = value;
-        setAsParentNodeOf(value);
+        this.setAsParentNodeOf(value);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MemberValuePair clone() {
-        return (MemberValuePair) accept(new CloneVisitor(), null);
+        return (MemberValuePair) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -142,14 +145,15 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((SimpleName) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == value) {
-            setValue((Expression) replacementNode);
+        if (node == this.value) {
+            this.setValue((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

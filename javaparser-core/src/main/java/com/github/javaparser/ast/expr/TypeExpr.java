@@ -63,8 +63,8 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
-        setType(type);
-        customInitialization();
+        this.setType(type);
+        this.customInitialization();
     }
 
     @Override
@@ -81,35 +81,37 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (TypeExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
+        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) {
             this.type.setParentNode(null);
+        }
         this.type = type;
-        setAsParentNodeOf(type);
+        this.setAsParentNodeOf(type);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeExpr clone() {
-        return (TypeExpr) accept(new CloneVisitor(), null);
+        return (TypeExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -121,10 +123,11 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == type) {
-            setType((Type) replacementNode);
+        }
+        if (node == this.type) {
+            this.setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -142,6 +145,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeExpr(Consumer<TypeExpr> action) {
         action.accept(this);

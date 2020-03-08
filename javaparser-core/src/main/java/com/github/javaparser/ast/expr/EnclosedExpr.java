@@ -59,8 +59,8 @@ public class EnclosedExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnclosedExpr(TokenRange tokenRange, Expression inner) {
         super(tokenRange);
-        setInner(inner);
-        customInitialization();
+        this.setInner(inner);
+        this.customInitialization();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class EnclosedExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getInner() {
-        return inner;
+        return this.inner;
     }
 
     /**
@@ -90,28 +90,30 @@ public class EnclosedExpr extends Expression {
     public EnclosedExpr setInner(final Expression inner) {
         assertNotNull(inner);
         if (inner == this.inner) {
-            return (EnclosedExpr) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
-        if (this.inner != null)
+        this.notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
+        if (this.inner != null) {
             this.inner.setParentNode(null);
+        }
         this.inner = inner;
-        setAsParentNodeOf(inner);
+        this.setAsParentNodeOf(inner);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnclosedExpr clone() {
-        return (EnclosedExpr) accept(new CloneVisitor(), null);
+        return (EnclosedExpr) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -123,10 +125,11 @@ public class EnclosedExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == inner) {
-            setInner((Expression) replacementNode);
+        }
+        if (node == this.inner) {
+            this.setInner((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -144,6 +147,7 @@ public class EnclosedExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
         action.accept(this);

@@ -72,10 +72,10 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
         super(tokenRange);
-        setName(name);
-        setStatic(isStatic);
-        setAsterisk(isAsterisk);
-        customInitialization();
+        this.setName(name);
+        this.setStatic(isStatic);
+        this.setAsterisk(isAsterisk);
+        this.customInitialization();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -103,20 +103,20 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
-        return isAsterisk;
+        return this.isAsterisk;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
-        return isStatic;
+        return this.isStatic;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setAsterisk(final boolean isAsterisk) {
         if (isAsterisk == this.isAsterisk) {
-            return (ImportDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.ASTERISK, this.isAsterisk, isAsterisk);
+        this.notifyPropertyChange(ObservableProperty.ASTERISK, this.isAsterisk, isAsterisk);
         this.isAsterisk = isAsterisk;
         return this;
     }
@@ -125,22 +125,23 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ImportDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
+        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null) {
             this.name.setParentNode(null);
+        }
         this.name = name;
-        setAsParentNodeOf(name);
+        this.setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setStatic(final boolean isStatic) {
         if (isStatic == this.isStatic) {
-            return (ImportDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
+        this.notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }
@@ -148,15 +149,16 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ImportDeclaration clone() {
-        return (ImportDeclaration) accept(new CloneVisitor(), null);
+        return (ImportDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -168,10 +170,11 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == name) {
-            setName((Name) replacementNode);
+        }
+        if (node == this.name) {
+            this.setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

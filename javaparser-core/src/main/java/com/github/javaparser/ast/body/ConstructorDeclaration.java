@@ -82,8 +82,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
-        setBody(body);
-        customInitialization();
+        this.setBody(body);
+        this.customInitialization();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
-        return body;
+        return this.body;
     }
 
     /**
@@ -113,13 +113,14 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (ConstructorDeclaration) this;
+            return this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
+        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null) {
             this.body.setParentNode(null);
+        }
         this.body = body;
-        setAsParentNodeOf(body);
+        this.setAsParentNodeOf(body);
         return this;
     }
 
@@ -184,15 +185,16 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         return super.remove(node);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConstructorDeclaration clone() {
-        return (ConstructorDeclaration) accept(new CloneVisitor(), null);
+        return (ConstructorDeclaration) this.accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -204,10 +206,11 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
-        if (node == body) {
-            setBody((BlockStmt) replacementNode);
+        }
+        if (node == this.body) {
+            this.setBody((BlockStmt) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -225,6 +228,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
         action.accept(this);
