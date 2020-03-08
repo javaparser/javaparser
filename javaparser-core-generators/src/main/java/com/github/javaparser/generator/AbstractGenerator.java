@@ -50,6 +50,49 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  */
 public abstract class AbstractGenerator {
 
+    public static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
+            " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
+            " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+            " *\n" +
+            " * This file is part of JavaParser.\n" +
+            " *\n" +
+            " * JavaParser can be used either under the terms of\n" +
+            " * a) the GNU Lesser General Public License as published by\n" +
+            " *     the Free Software Foundation, either version 3 of the License, or\n" +
+            " *     (at your option) any later version.\n" +
+            " * b) the terms of the Apache License\n" +
+            " *\n" +
+            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+            " * LICENCE.APACHE. Please refer to those files for details.\n" +
+            " *\n" +
+            " * JavaParser is distributed in the hope that it will be useful,\n" +
+            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+            " * GNU Lesser General Public License for more details.\n" +
+            " ";
+
+    public static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
+            " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
+            " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
+            " *\n" +
+            " * This file is part of JavaParser.\n" +
+            " *\n" +
+            " * JavaParser can be used either under the terms of\n" +
+            " * a) the GNU Lesser General Public License as published by\n" +
+            " *     the Free Software Foundation, either version 3 of the License, or\n" +
+            " *     (at your option) any later version.\n" +
+            " * b) the terms of the Apache License\n" +
+            " *\n" +
+            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+            " * LICENCE.APACHE. Please refer to those files for details.\n" +
+            " *\n" +
+            " * JavaParser is distributed in the hope that it will be useful,\n" +
+            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+            " * GNU Lesser General Public License for more details.\n" +
+            " ";
+
+
     protected final SourceRoot sourceRoot;
     protected List<CompilationUnit> editedCus;
 
@@ -77,26 +120,27 @@ public abstract class AbstractGenerator {
 
     /**
      * @param node The node to which the {@code @Annotated} annotation will be added.
+     * @param qualifiedGeneratorName
      * @param <T>
      */
-    protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
-        this.annotate(node, Generated.class, new StringLiteralExpr(this.getClass().getName()));
-//        this.annotateWithTimestamp(node, Generated.class, new StringLiteralExpr(this.getClass().getName()));
+    public static <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node, String qualifiedGeneratorName) {
+        AbstractGenerator.annotate(node, Generated.class, new StringLiteralExpr(qualifiedGeneratorName));
+//        this.annotateWithTimestamp(node, Generated.class, new StringLiteralExpr(qualifiedGeneratorName));
     }
 
     /**
      * @param node The node to which the {@code @SuppressWarnings} annotation will be added.
      * @param <T>
      */
-    protected <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
-        this.annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
+    public static <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
+        AbstractGenerator.annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
     }
 
     /**
      * @param method The node to which the {@code @Override} annotation will be added.
      */
-    protected void annotateOverridden(MethodDeclaration method) {
-        this.annotate(method, Override.class, null);
+    public static void annotateOverridden(MethodDeclaration method) {
+        AbstractGenerator.annotate(method, Override.class, null);
     }
 
     /**
@@ -105,7 +149,7 @@ public abstract class AbstractGenerator {
      * @param content    Where an annotation has content, it is passed here (otherwise null).
      * @param <T>
      */
-    private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
+    public static <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
         node.setAnnotations(
                 node.getAnnotations()
                         .stream()
@@ -156,7 +200,7 @@ public abstract class AbstractGenerator {
      */
     protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
         this.addOrReplaceMethod(containingClassOrInterface, callable, () -> {
-            this.annotateGenerated(callable);
+            AbstractGenerator.annotateGenerated(callable, this.getClass().getName());
             containingClassOrInterface.addMember(callable);
         });
     }
@@ -194,7 +238,7 @@ public abstract class AbstractGenerator {
             callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
 
             // Mark the method as having been fully/partially generated.
-            this.annotateGenerated(callable);
+            AbstractGenerator.annotateGenerated(callable, this.getClass().getName());
 
             // Do the replacement.
             containingClassOrInterface.getMembers().replace(existingCallable, callable);

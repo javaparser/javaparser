@@ -93,7 +93,7 @@ public abstract class VisitorGenerator extends AbstractGenerator {
 
         if (existingVisitMethod.isPresent()) {
             this.generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
-            this.annotateGenerated(existingVisitMethod.get());
+            AbstractGenerator.annotateGenerated(existingVisitMethod.get(), this.getClass().getName());
         } else if (this.createMissingVisitMethods) {
             MethodDeclaration newVisitMethod = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
@@ -105,7 +105,7 @@ public abstract class VisitorGenerator extends AbstractGenerator {
                         .addModifier(PUBLIC);
             }
             this.generateVisitMethodBody(node, newVisitMethod, compilationUnit);
-            this.annotateGenerated(newVisitMethod);
+            AbstractGenerator.annotateGenerated(newVisitMethod, this.getClass().getName());
         }
     }
 

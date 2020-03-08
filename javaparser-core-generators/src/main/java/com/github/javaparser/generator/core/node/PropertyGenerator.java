@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -119,7 +120,7 @@ public class PropertyGenerator extends NodeGenerator {
         }
         this.addOrReplaceWhenSameSignature(nodeCoid, setter);
         if (property.getContainingNodeMetaModel().hasWildcard()) {
-            this.annotateSuppressWarnings(setter);
+            AbstractGenerator.annotateSuppressWarnings(setter);
         }
     }
 

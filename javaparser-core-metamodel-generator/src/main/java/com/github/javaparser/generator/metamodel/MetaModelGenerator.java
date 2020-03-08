@@ -33,6 +33,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
@@ -47,50 +48,12 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
+
     static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
 
-    static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
-        " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-        " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
-        " *\n" +
-        " * This file is part of JavaParser.\n" +
-        " *\n" +
-        " * JavaParser can be used either under the terms of\n" +
-        " * a) the GNU Lesser General Public License as published by\n" +
-        " *     the Free Software Foundation, either version 3 of the License, or\n" +
-        " *     (at your option) any later version.\n" +
-        " * b) the terms of the Apache License\n" +
-        " *\n" +
-        " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-        " * LICENCE.APACHE. Please refer to those files for details.\n" +
-        " *\n" +
-        " * JavaParser is distributed in the hope that it will be useful,\n" +
-        " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-        " * GNU Lesser General Public License for more details.\n" +
-        " ";
+    static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
-    static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
-        " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
-        " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
-        " *\n" +
-        " * This file is part of JavaParser.\n" +
-        " *\n" +
-        " * JavaParser can be used either under the terms of\n" +
-        " * a) the GNU Lesser General Public License as published by\n" +
-        " *     the Free Software Foundation, either version 3 of the License, or\n" +
-        " *     (at your option) any later version.\n" +
-        " * b) the terms of the Apache License\n" +
-        " *\n" +
-        " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-        " * LICENCE.APACHE. Please refer to those files for details.\n" +
-        " *\n" +
-        " * JavaParser is distributed in the hope that it will be useful,\n" +
-        " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-        " * GNU Lesser General Public License for more details.\n" +
-        " ";
-
+    // Manually maintained..?
     private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
@@ -218,8 +181,6 @@ public class MetaModelGenerator {
         add(ModuleOpensDirective.class);
     }};
 
-    static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
-
     public static void main(String[] args) throws NoSuchMethodException {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
@@ -239,26 +200,51 @@ public class MetaModelGenerator {
 
     private void run(SourceRoot sourceRoot) throws NoSuchMethodException {
         final CompilationUnit javaParserMetaModelCu = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java");
-        javaParserMetaModelCu.setBlockComment(COPYRIGHT_NOTICE_JP_CORE);
+        javaParserMetaModelCu.setBlockComment(AbstractGenerator.COPYRIGHT_NOTICE_JP_CORE);
 
         generateNodeMetaModels(javaParserMetaModelCu, sourceRoot);
     }
 
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
         final ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        final NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
-        final NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
-        final NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
+
+        // Initialiser methods
+        final MethodDeclaration initializeNodeMetaModelsMethod = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0);
+        final MethodDeclaration initializePropertyMetaModelsMethod = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0);
+        final MethodDeclaration initializeConstructorParametersVariable = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0);
+
+        // Ensure annotation `@Generated` is added to indicate the contents of each are generated.
+        AbstractGenerator.annotateGenerated(initializeNodeMetaModelsMethod, this.getClass().getName());
+        AbstractGenerator.annotateGenerated(initializePropertyMetaModelsMethod, this.getClass().getName());
+        AbstractGenerator.annotateGenerated(initializeConstructorParametersVariable, this.getClass().getName());
+
+        // Empty the body of the initialiser methods, to be (re-)generated below.
+        final NodeList<Statement> initializeNodeMetaModelsStatements = initializeNodeMetaModelsMethod.getBody().get().getStatements();
+        final NodeList<Statement> initializePropertyMetaModelsStatements = initializePropertyMetaModelsMethod.getBody().get().getStatements();
+        final NodeList<Statement> initializeConstructorParametersStatements = initializeConstructorParametersVariable.getBody().get().getStatements();
         initializeNodeMetaModelsStatements.clear();
         initializePropertyMetaModelsStatements.clear();
         initializeConstructorParametersStatements.clear();
 
-        metaModelCoid.getFields().stream().filter(f -> f.getVariable(0).getNameAsString().endsWith("MetaModel")).forEach(Node::remove);
+        // Remove fields, to be (re-)generated  below.
+        metaModelCoid.getFields().stream()
+                .filter(f -> f.getVariable(0).getNameAsString().endsWith("MetaModel"))
+                .forEach(Node::remove);
+
+        // Do the generation of each node metamodel class.
         final NodeMetaModelGenerator nodeMetaModelGenerator = new NodeMetaModelGenerator();
         for (Class<? extends Node> nodeClass : ALL_NODE_CLASSES) {
-            nodeMetaModelGenerator.generate(nodeClass, metaModelCoid, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);
+            nodeMetaModelGenerator.generate(
+                    nodeClass,
+                    metaModelCoid,
+                    initializeNodeMetaModelsStatements,
+                    initializePropertyMetaModelsStatements,
+                    initializeConstructorParametersStatements,
+                    sourceRoot
+            );
         }
 
+        // Sort??
         initializeNodeMetaModelsStatements.sort(Comparator.comparing(Node::toString));
     }
 

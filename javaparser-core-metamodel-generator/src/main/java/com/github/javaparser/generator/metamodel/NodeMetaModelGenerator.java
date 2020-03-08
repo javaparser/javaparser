@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.utils.SourceRoot;
@@ -66,7 +67,7 @@ public class NodeMetaModelGenerator {
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(MetaModelGenerator.METAMODEL_PACKAGE);
-        classMetaModelJavaFile.setBlockComment(MetaModelGenerator.COPYRIGHT_NOTICE_JP_CORE);
+        classMetaModelJavaFile.setBlockComment(AbstractGenerator.COPYRIGHT_NOTICE_JP_CORE);
         classMetaModelJavaFile.addImport("java.util.Optional");
         sourceRoot.add(MetaModelGenerator.METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
         final ClassOrInterfaceDeclaration nodeMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);

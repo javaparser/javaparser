@@ -16,6 +16,11 @@
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core-generators</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

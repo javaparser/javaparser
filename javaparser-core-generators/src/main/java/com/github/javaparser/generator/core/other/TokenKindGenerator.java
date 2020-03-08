@@ -60,7 +60,7 @@ public class TokenKindGenerator extends AbstractGenerator {
         final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind")).orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
         kindEnum.getEntries().clear();
-        this.annotateGenerated(kindEnum);
+        AbstractGenerator.annotateGenerated(kindEnum, this.getClass().getName());
 
         final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
         valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
