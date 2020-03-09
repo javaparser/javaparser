@@ -25,6 +25,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.BndGenerator;
+import com.github.javaparser.generator.core.other.RemoveGeneratorAnnotations;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
@@ -41,6 +42,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
  * You may want to run_metamodel_generator.sh before that.
  */
 public class CoreGenerator {
+
     private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
@@ -64,6 +66,10 @@ public class CoreGenerator {
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 
+        // First remove `@Generated` annotations -- these should be regenerated.
+        new RemoveGeneratorAnnotations(sourceRoot).generate();
+
+        // Now run generators.
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
         sourceRoot.saveAll();
