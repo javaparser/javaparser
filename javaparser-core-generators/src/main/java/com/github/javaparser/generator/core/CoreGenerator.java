@@ -123,7 +123,7 @@ public class CoreGenerator {
             try {
                 final List<CompilationUnit> thisTouchedCus = new RemoveGeneratorAnnotations(sourceRoot).generate();
                 allTouchedCus.addAll(thisTouchedCus);
-                System.out.println(f(
+                Log.info(f(
                         "\n" +
                                 "\nFinished running %s for sourceRoot %s" +
                                 "\nsetup touched %d files within %s %n" +
@@ -131,20 +131,20 @@ public class CoreGenerator {
                         , description, sourceRoot, thisTouchedCus.size(), sourceRoot)
                 );
             } catch (Exception e) {
-                System.out.println(f("ERROR:: running %s for sourceRoot %s", description, sourceRoot));
+                Log.info(f("ERROR:: running %s for sourceRoot %s", description, sourceRoot));
                 e.printStackTrace();
                 throw new RuntimeException(f("ERROR:: running %s for sourceRoot %s", description, sourceRoot), e);
             }
         }
 
         // Save the files after removing the annotations.
-        System.out.println(f("Finished %s for all sourceRoots", description));
+        Log.info(f("Finished %s for all sourceRoots", description));
         allTouchedCus.forEach(compilationUnit -> compilationUnit.getStorage().orElseThrow(IllegalStateException::new).save());
 
     }
 
     private void x(String a, Set<CompilationUnit> y, List<CompilationUnit> z) {
-        System.out.println(a + ": " + "adding " + z.size() + " cus -- now totalling " + y.size());
+        Log.info(a + ": " + "adding " + z.size() + " cus -- now totalling " + y.size());
         y.addAll(z);
     }
 

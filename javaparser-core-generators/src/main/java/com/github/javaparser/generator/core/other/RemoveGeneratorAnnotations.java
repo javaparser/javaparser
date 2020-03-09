@@ -44,7 +44,7 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
         try {
             List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
 
-            System.out.println("parsedCus.size() = " + parsedCus.size());
+            Log.info("parsedCus.size() = " + parsedCus.size());
             parsedCus.forEach(compilationUnit -> {
                 List<AnnotationExpr> allAnnotations = compilationUnit.findAll(AnnotationExpr.class);
                 allAnnotations.stream()
@@ -60,8 +60,8 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
 //                compilationUnit.getImports().removeIf(importDeclaration -> importDeclaration.getName().asString().equals(Generated.class.getCanonicalName()));
 //                for (ImportDeclaration importDeclaration : compilationUnit.getImports()) {
 //                    if (importDeclaration.getName().asString().equals(Generated.class.getCanonicalName())) {
-//                        System.out.println("importDeclaration.getName().asString() = " + importDeclaration.getName().asString());
-//                        System.out.println("Generated.class.getCanonicalName()     = " + Generated.class.getCanonicalName());
+//                        Log.info("importDeclaration.getName().asString() = " + importDeclaration.getName().asString());
+//                        Log.info("Generated.class.getCanonicalName()     = " + Generated.class.getCanonicalName());
 //                        importDeclaration.remove();
 //
 //                        // Mark this CU as having been edited.

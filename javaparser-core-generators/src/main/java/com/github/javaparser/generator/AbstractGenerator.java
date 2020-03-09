@@ -34,6 +34,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.generator.core.CoreGenerator;
+import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
@@ -222,15 +223,15 @@ public abstract class AbstractGenerator {
             for (int i = 0; i < problemResults.size(); i++) {
                 ParseResult<CompilationUnit> parseResult = problemResults.get(i);
                 List<Problem> problems = parseResult.getProblems();
-                System.out.println();
-                System.out.println("Problems (" + (i + 1) + " of " + problemResults.size() + "): ");
-                System.out.println(problems);
+                Log.info("");
+                Log.info("Problems (" + (i + 1) + " of " + problemResults.size() + "): ");
+                Log.info(problems.toString());
             }
 
             throw new IllegalStateException("Expected all files to parse.");
         }
 
-        System.out.println("parseResults.size() = " + parseResults.size());
+        Log.info("parseResults.size() = " + parseResults.size());
 
         return parseResults.stream()
                 .map(ParseResult::getResult)
