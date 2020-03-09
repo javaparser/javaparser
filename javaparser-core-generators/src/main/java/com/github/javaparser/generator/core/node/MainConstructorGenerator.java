@@ -70,7 +70,7 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.addStatement("this.customInitialization();");
 
-        this.addOrReplaceWhenSameSignature(nodeCoid, constructor);
+        addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
     }
 }

@@ -53,7 +53,7 @@ public class CloneVisitorGenerator extends VisitorGenerator {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional() && field.isNodeList()) {
-                    body.addStatement(f("NodeList<%s> %s = this.cloneList(n.%s.orElse(null), arg);", field.getTypeNameGenerified(), field.getName(), getter));
+                    body.addStatement(f("NodeList<%s> %s = testcasePrNumbercloneList(n.%s.orElse(null), arg);", field.getTypeNameGenerified(), field.getName(), getter));
                 } else if (field.isNodeList()) {
                     body.addStatement(f("NodeList<%s> %s = this.cloneList(n.%s, arg);", field.getTypeNameGenerified(), field.getName(), getter));
                 } else {

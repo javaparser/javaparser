@@ -39,10 +39,10 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
 
     @Override
     public List<CompilationUnit> generate() {
-        Log.info("Running %s", () -> this.getClass().getSimpleName());
+        Log.info("Running %s", () -> getClass().getSimpleName());
 
         try {
-            List<CompilationUnit> parsedCus = this.getParsedCompilationUnitsFromSourceRoot(this.sourceRoot);
+            List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
 
             System.out.println("parsedCus.size() = " + parsedCus.size());
             parsedCus.forEach(compilationUnit -> {
@@ -53,7 +53,7 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
                             // Remove the annotation -- TODO: should likely be a replace operation.
                             annotationExpr.remove();
                             // Mark this CU as having been edited.
-                            this.editedCus.add(compilationUnit);
+                            editedCus.add(compilationUnit);
                         });
 
 //                // Remove the import. -- TODO: Fix this (causes java.util.ConcurrentModificationException)
@@ -71,9 +71,9 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
 
             });
 
-            this.after();
+            after();
 
-            return this.editedCus;
+            return editedCus;
 
         } catch (IOException e) {
             e.printStackTrace();

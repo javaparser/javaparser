@@ -46,7 +46,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration removeNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean remove(Node node) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> this.annotateOverridden(removeNodeMethod));
+        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(removeNodeMethod));
 
         final BlockStmt body = removeNodeMethod.getBody().get();
 
@@ -58,13 +58,13 @@ public class RemoveMethodGenerator extends NodeGenerator {
             }
             String check;
             if (property.isNodeList()) {
-                check = this.nodeListCheck(property);
+                check = nodeListCheck(property);
             } else {
                 if (property.isRequired()) {
                     continue;
                 }
-                String removeAttributeMethodName = this.generateRemoveMethodForAttribute(nodeCoid, nodeMetaModel, property);
-                check = this.attributeCheck(property, removeAttributeMethodName);
+                String removeAttributeMethodName = generateRemoveMethodForAttribute(nodeCoid, nodeMetaModel, property);
+                check = attributeCheck(property, removeAttributeMethodName);
             }
             if (property.isOptional()) {
                 check = f("if (this.%s != null) { %s }", property.getName(), check);
@@ -77,7 +77,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
             body.addStatement("return false;");
         }
 
-        this.addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
@@ -103,7 +103,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
         final BlockStmt block = removeMethod.getBody().get();
         block.addStatement(f("return this.%s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
 
-        this.addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
         return methodName;
     }
 }

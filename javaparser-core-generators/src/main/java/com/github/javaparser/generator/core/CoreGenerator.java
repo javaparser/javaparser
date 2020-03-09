@@ -69,21 +69,21 @@ public class CoreGenerator {
 
     public CoreGenerator(Path projectRoot) {
         // Setup source roots
-        this.jpCoreSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-core");
-        this.jssLogicSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-logic");
-        this.jssModelSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-model");
-        this.jssSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-core");
+        jpCoreSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-core");
+        jssLogicSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-logic");
+        jssModelSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-model");
+        jssSourceRoot = getSourceRootForJpModule(projectRoot, "javaparser-symbol-solver-core");
 
         final Path generatedJavaCcRoot = projectRoot.resolve("javaparser-core").resolve("target").resolve("generated-sources").resolve("javacc");
-        this.generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration);
+        generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration);
 
         // Setup collection for later iteration
-        this.sourceRoots = new ArrayList<>(7);
-        this.sourceRoots.add(this.jpCoreSourceRoot);
-        this.sourceRoots.add(this.jssLogicSourceRoot);
-        this.sourceRoots.add(this.jssModelSourceRoot);
-        this.sourceRoots.add(this.jssSourceRoot);
-        this.sourceRoots.add(this.generatedJavaCcSourceRoot);
+        sourceRoots = new ArrayList<>(7);
+        sourceRoots.add(jpCoreSourceRoot);
+        sourceRoots.add(jssLogicSourceRoot);
+        sourceRoots.add(jssModelSourceRoot);
+        sourceRoots.add(jssSourceRoot);
+        sourceRoots.add(generatedJavaCcSourceRoot);
     }
 
     public static void main(String[] args) {
@@ -111,7 +111,7 @@ public class CoreGenerator {
     }
 
     public void runner() {
-        this.run(this.jpCoreSourceRoot, this.generatedJavaCcSourceRoot);
+        run(jpCoreSourceRoot, generatedJavaCcSourceRoot);
     }
 
     public void deleteAllGeneratorAnnotations(List<SourceRoot> sourceRoots) {
@@ -152,33 +152,33 @@ public class CoreGenerator {
         Set<CompilationUnit> touchedCus = new HashSet<>();
 
         // Visitors generators
-        this.x("CloneVisitorGenerator", touchedCus, new CloneVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("EqualsVisitorGenerator", touchedCus, new EqualsVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("GenericListVisitorAdapterGenerator", touchedCus, new GenericListVisitorAdapterGenerator(jpCoreSourceRoot).generate());
-        this.x("GenericVisitorAdapterGenerator", touchedCus, new GenericVisitorAdapterGenerator(jpCoreSourceRoot).generate());
-        this.x("GenericVisitorGenerator", touchedCus, new GenericVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("GenericVisitorWithDefaultsGenerator", touchedCus, new GenericVisitorWithDefaultsGenerator(jpCoreSourceRoot).generate());
-        this.x("HashCodeVisitorGenerator", touchedCus, new HashCodeVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("ModifierVisitorGenerator", touchedCus, new ModifierVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("NoCommentEqualsVisitorGenerator", touchedCus, new NoCommentEqualsVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("NoCommentHashCodeVisitorGenerator", touchedCus, new NoCommentHashCodeVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("ObjectIdentityEqualsVisitorGenerator", touchedCus, new ObjectIdentityEqualsVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("ObjectIdentityHashCodeVisitorGenerator", touchedCus, new ObjectIdentityHashCodeVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("VoidVisitorAdapterGenerator", touchedCus, new VoidVisitorAdapterGenerator(jpCoreSourceRoot).generate());
-        this.x("VoidVisitorGenerator", touchedCus, new VoidVisitorGenerator(jpCoreSourceRoot).generate());
-        this.x("VoidVisitorWithDefaultsGenerator", touchedCus, new VoidVisitorWithDefaultsGenerator(jpCoreSourceRoot).generate());
+        x("CloneVisitorGenerator", touchedCus, new CloneVisitorGenerator(jpCoreSourceRoot).generate());
+        x("EqualsVisitorGenerator", touchedCus, new EqualsVisitorGenerator(jpCoreSourceRoot).generate());
+        x("GenericListVisitorAdapterGenerator", touchedCus, new GenericListVisitorAdapterGenerator(jpCoreSourceRoot).generate());
+        x("GenericVisitorAdapterGenerator", touchedCus, new GenericVisitorAdapterGenerator(jpCoreSourceRoot).generate());
+        x("GenericVisitorGenerator", touchedCus, new GenericVisitorGenerator(jpCoreSourceRoot).generate());
+        x("GenericVisitorWithDefaultsGenerator", touchedCus, new GenericVisitorWithDefaultsGenerator(jpCoreSourceRoot).generate());
+        x("HashCodeVisitorGenerator", touchedCus, new HashCodeVisitorGenerator(jpCoreSourceRoot).generate());
+        x("ModifierVisitorGenerator", touchedCus, new ModifierVisitorGenerator(jpCoreSourceRoot).generate());
+        x("NoCommentEqualsVisitorGenerator", touchedCus, new NoCommentEqualsVisitorGenerator(jpCoreSourceRoot).generate());
+        x("NoCommentHashCodeVisitorGenerator", touchedCus, new NoCommentHashCodeVisitorGenerator(jpCoreSourceRoot).generate());
+        x("ObjectIdentityEqualsVisitorGenerator", touchedCus, new ObjectIdentityEqualsVisitorGenerator(jpCoreSourceRoot).generate());
+        x("ObjectIdentityHashCodeVisitorGenerator", touchedCus, new ObjectIdentityHashCodeVisitorGenerator(jpCoreSourceRoot).generate());
+        x("VoidVisitorAdapterGenerator", touchedCus, new VoidVisitorAdapterGenerator(jpCoreSourceRoot).generate());
+        x("VoidVisitorGenerator", touchedCus, new VoidVisitorGenerator(jpCoreSourceRoot).generate());
+        x("VoidVisitorWithDefaultsGenerator", touchedCus, new VoidVisitorWithDefaultsGenerator(jpCoreSourceRoot).generate());
 
         // Non-Visitor generators
-        this.x("AcceptGenerator", touchedCus, new AcceptGenerator(jpCoreSourceRoot).generate());
-        this.x("CloneGenerator", touchedCus, new CloneGenerator(jpCoreSourceRoot).generate());
-        this.x("GetMetaModelGenerator", touchedCus, new GetMetaModelGenerator(jpCoreSourceRoot).generate());
-        this.x("MainConstructorGenerator", touchedCus, new MainConstructorGenerator(jpCoreSourceRoot).generate());
-        this.x("NodeModifierGenerator", touchedCus, new NodeModifierGenerator(jpCoreSourceRoot).generate());
-        this.x("PropertyGenerator", touchedCus, new PropertyGenerator(jpCoreSourceRoot).generate());
-        this.x("RemoveMethodGenerator", touchedCus, new RemoveMethodGenerator(jpCoreSourceRoot).generate());
-        this.x("ReplaceMethodGenerator", touchedCus, new ReplaceMethodGenerator(jpCoreSourceRoot).generate());
-        this.x("TokenKindGenerator", touchedCus, new TokenKindGenerator(jpCoreSourceRoot, generatedJavaCcSourceRoot).generate());
-        this.x("TypeCastingGenerator", touchedCus, new TypeCastingGenerator(jpCoreSourceRoot).generate());
+        x("AcceptGenerator", touchedCus, new AcceptGenerator(jpCoreSourceRoot).generate());
+        x("CloneGenerator", touchedCus, new CloneGenerator(jpCoreSourceRoot).generate());
+        x("GetMetaModelGenerator", touchedCus, new GetMetaModelGenerator(jpCoreSourceRoot).generate());
+        x("MainConstructorGenerator", touchedCus, new MainConstructorGenerator(jpCoreSourceRoot).generate());
+        x("NodeModifierGenerator", touchedCus, new NodeModifierGenerator(jpCoreSourceRoot).generate());
+        x("PropertyGenerator", touchedCus, new PropertyGenerator(jpCoreSourceRoot).generate());
+        x("RemoveMethodGenerator", touchedCus, new RemoveMethodGenerator(jpCoreSourceRoot).generate());
+        x("ReplaceMethodGenerator", touchedCus, new ReplaceMethodGenerator(jpCoreSourceRoot).generate());
+        x("TokenKindGenerator", touchedCus, new TokenKindGenerator(jpCoreSourceRoot, generatedJavaCcSourceRoot).generate());
+        x("TypeCastingGenerator", touchedCus, new TypeCastingGenerator(jpCoreSourceRoot).generate());
 
         // Do saving of java files
         System.out.printf("run touched %d files in %s %n -- about to trigger saving", touchedCus.size(), jpCoreSourceRoot);

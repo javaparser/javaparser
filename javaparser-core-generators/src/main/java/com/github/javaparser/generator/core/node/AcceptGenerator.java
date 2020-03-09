@@ -39,8 +39,8 @@ public class AcceptGenerator extends NodeGenerator {
 
     public AcceptGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
-        this.genericAccept = parseBodyDeclaration("@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) { return v.visit(this, arg); }").asMethodDeclaration();
-        this.voidAccept = parseBodyDeclaration("@Override public <A> void accept(final VoidVisitor<A> v, final A arg) { v.visit(this, arg); }").asMethodDeclaration();
+        genericAccept = parseBodyDeclaration("@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) { return v.visit(this, arg); }").asMethodDeclaration();
+        voidAccept = parseBodyDeclaration("@Override public <A> void accept(final VoidVisitor<A> v, final A arg) { v.visit(this, arg); }").asMethodDeclaration();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AcceptGenerator extends NodeGenerator {
         }
         nodeCu.addImport(GenericVisitor.class);
         nodeCu.addImport(VoidVisitor.class);
-        this.addOrReplaceWhenSameSignature(nodeCoid, this.genericAccept);
-        this.addOrReplaceWhenSameSignature(nodeCoid, this.voidAccept);
+        addOrReplaceWhenSameSignature(nodeCoid, genericAccept);
+        addOrReplaceWhenSameSignature(nodeCoid, voidAccept);
     }
 }

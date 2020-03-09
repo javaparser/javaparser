@@ -59,17 +59,17 @@ public class PropertyGenerator extends NodeGenerator {
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
-            this.generateGetter(nodeMetaModel, nodeCoid, property);
-            this.generateSetter(nodeMetaModel, nodeCoid, property);
+            generateGetter(nodeMetaModel, nodeCoid, property);
+            generateSetter(nodeMetaModel, nodeCoid, property);
         }
-        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> this.derivedProperties.put(p.getName(), p));
+        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
         final String name = property.getName();
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        this.declaredProperties.put(observableName, property);
+        declaredProperties.put(observableName, property);
 
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
@@ -117,9 +117,9 @@ public class PropertyGenerator extends NodeGenerator {
         } else {
             body.addStatement(f("return this;"));
         }
-        this.addOrReplaceWhenSameSignature(nodeCoid, setter);
+        addOrReplaceWhenSameSignature(nodeCoid, setter);
         if (property.getContainingNodeMetaModel().hasWildcard()) {
-            this.annotateSuppressWarnings(setter);
+            annotateSuppressWarnings(setter);
         }
     }
 
@@ -132,7 +132,7 @@ public class PropertyGenerator extends NodeGenerator {
         } else {
             body.addStatement(f("return this.%s;", property.getName()));
         }
-        this.addOrReplaceWhenSameSignature(nodeCoid, getter);
+        addOrReplaceWhenSameSignature(nodeCoid, getter);
     }
 
     private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
@@ -158,18 +158,18 @@ public class PropertyGenerator extends NodeGenerator {
     protected void after() {
 
         try {
-            CompilationUnit observablePropertyCu = this.sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
+            CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
             EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
             observablePropertyEnum.getEntries().clear();
-            List<String> observablePropertyNames = new LinkedList<>(this.declaredProperties.keySet());
+            List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
             observablePropertyNames.sort(String::compareTo);
             for (String propName : observablePropertyNames) {
-                this.generateObservableProperty(observablePropertyEnum, this.declaredProperties.get(propName), false);
+                generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
             }
-            List<String> derivedPropertyNames = new LinkedList<>(this.derivedProperties.keySet());
+            List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
             derivedPropertyNames.sort(String::compareTo);
             for (String propName : derivedPropertyNames) {
-                this.generateObservableProperty(observablePropertyEnum, this.derivedProperties.get(propName), true);
+                generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
             }
             observablePropertyEnum.addEnumConstant("RANGE");
             observablePropertyEnum.addEnumConstant("COMMENTED_NODE");

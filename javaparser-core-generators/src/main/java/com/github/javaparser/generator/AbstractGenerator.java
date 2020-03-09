@@ -58,7 +58,7 @@ public abstract class AbstractGenerator {
      */
     protected AbstractGenerator(SourceRoot sourceRoot) {
         this.sourceRoot = sourceRoot;
-        this.editedCus = new ArrayList<>();
+        editedCus = new ArrayList<>();
     }
 
     protected void before() {
@@ -80,7 +80,7 @@ public abstract class AbstractGenerator {
      * @param <T>
      */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
-        this.annotate(node, Generated.class, new StringLiteralExpr(this.getClass().getName()));
+        annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
 //        this.annotateWithTimestamp(node, Generated.class, new StringLiteralExpr(this.getClass().getName()));
     }
 
@@ -89,14 +89,14 @@ public abstract class AbstractGenerator {
      * @param <T>
      */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
-        this.annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
+        annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
     }
 
     /**
      * @param method The node to which the {@code @Override} annotation will be added.
      */
     protected void annotateOverridden(MethodDeclaration method) {
-        this.annotate(method, Override.class, null);
+        annotate(method, Override.class, null);
     }
 
     /**
@@ -155,8 +155,8 @@ public abstract class AbstractGenerator {
      * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
     protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        this.addOrReplaceMethod(containingClassOrInterface, callable, () -> {
-            this.annotateGenerated(callable);
+        addOrReplaceMethod(containingClassOrInterface, callable, () -> {
+            annotateGenerated(callable);
             containingClassOrInterface.addMember(callable);
         });
     }
@@ -167,7 +167,7 @@ public abstract class AbstractGenerator {
      * method or constructor is annotated with the generator class.
      */
     protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        this.addOrReplaceMethod(containingClassOrInterface, callable,
+        addOrReplaceMethod(containingClassOrInterface, callable,
                 () -> {
                     throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
                 });
@@ -194,7 +194,7 @@ public abstract class AbstractGenerator {
             callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
 
             // Mark the method as having been fully/partially generated.
-            this.annotateGenerated(callable);
+            annotateGenerated(callable);
 
             // Do the replacement.
             containingClassOrInterface.getMembers().replace(existingCallable, callable);
@@ -241,8 +241,8 @@ public abstract class AbstractGenerator {
     @Override
     public String toString() {
         return "AbstractGenerator{" +
-                "sourceRoot=" + this.sourceRoot +
-                ", editedCus=" + this.editedCus +
+                "sourceRoot=" + sourceRoot +
+                ", editedCus=" + editedCus +
                 '}';
     }
 }

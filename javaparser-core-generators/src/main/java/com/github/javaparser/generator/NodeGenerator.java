@@ -43,24 +43,24 @@ public abstract class NodeGenerator extends AbstractGenerator {
 
     @Override
     public final List<CompilationUnit> generate() {
-        Log.info("Running %s", () -> this.getClass().getSimpleName());
-        this.before();
+        Log.info("Running %s", () -> getClass().getSimpleName());
+        before();
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            final Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = this.parseNode(nodeMetaModel);
+            final Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = parseNode(nodeMetaModel);
             final CompilationUnit nodeCu = result.a;
             final ClassOrInterfaceDeclaration nodeCoid = result.b;
 
-            this.generateNode(nodeMetaModel, nodeCu, nodeCoid);
-            this.editedCus.add(nodeCu);
+            generateNode(nodeMetaModel, nodeCu, nodeCoid);
+            editedCus.add(nodeCu);
         }
 
-        this.after();
+        after();
 
-        return this.editedCus;
+        return editedCus;
     }
 
     protected Pair<CompilationUnit, ClassOrInterfaceDeclaration> parseNode(BaseNodeMetaModel nodeMetaModel) {
-        final CompilationUnit nodeCu = this.sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
+        final CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
         final ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
     }

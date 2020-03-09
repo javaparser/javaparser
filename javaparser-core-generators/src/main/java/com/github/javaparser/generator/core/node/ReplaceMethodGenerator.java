@@ -44,7 +44,7 @@ public class ReplaceMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration replaceNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean replace(Node node, Node replacementNode) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> this.annotateOverridden(replaceNodeMethod));
+        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(replaceNodeMethod));
 
         final BlockStmt body = replaceNodeMethod.getBody().get();
 
@@ -56,9 +56,9 @@ public class ReplaceMethodGenerator extends NodeGenerator {
             }
             String check;
             if (property.isNodeList()) {
-                check = this.nodeListCheck(property);
+                check = nodeListCheck(property);
             } else {
-                check = this.attributeCheck(property, property.getSetterMethodName());
+                check = attributeCheck(property, property.getSetterMethodName());
             }
             if (property.isOptional()) {
                 check = f("if (this.%s != null) { %s }", property.getName(), check);
@@ -71,7 +71,7 @@ public class ReplaceMethodGenerator extends NodeGenerator {
             body.addStatement("return false;");
         }
 
-        this.addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {

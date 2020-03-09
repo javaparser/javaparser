@@ -44,7 +44,7 @@ public class TypeCastingGenerator extends NodeGenerator {
 
     public TypeCastingGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
-        this.baseNodes = set(
+        baseNodes = set(
                 JavaParserMetaModel.statementMetaModel,
                 JavaParserMetaModel.expressionMetaModel,
                 JavaParserMetaModel.typeMetaModel,
@@ -59,13 +59,13 @@ public class TypeCastingGenerator extends NodeGenerator {
         Pair<CompilationUnit, ClassOrInterfaceDeclaration> baseCode = null;
 
 
-        for (BaseNodeMetaModel baseNode : this.baseNodes) {
+        for (BaseNodeMetaModel baseNode : baseNodes) {
             if (nodeMetaModel == baseNode) {
                 // We adjust the base models from the child nodes, so do not do anything when we *are* the base model.
                 return;
             }
             if (nodeMetaModel.isInstanceOfMetaModel(baseNode)) {
-                baseCode = this.parseNode(baseNode);
+                baseCode = parseNode(baseNode);
             }
         }
 
@@ -78,10 +78,10 @@ public class TypeCastingGenerator extends NodeGenerator {
         final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
         final CompilationUnit baseCu = baseCode.a;
 
-        this.generateIsType(baseCu, nodeCoid, baseCoid, typeName);
-        this.generateAsType(baseCu, nodeCoid, baseCoid, typeName);
-        this.generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
-        this.generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+        generateIsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateAsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+        generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
     }
 
 
@@ -89,8 +89,8 @@ public class TypeCastingGenerator extends NodeGenerator {
         final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
         final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
 
-        this.addOrReplaceWhenSameSignature(nodeCoid, overriddenIsTypeMethod);
-        this.addOrReplaceWhenSameSignature(baseCoid, baseIsTypeMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, overriddenIsTypeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, baseIsTypeMethod);
     }
 
     private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
@@ -99,8 +99,8 @@ public class TypeCastingGenerator extends NodeGenerator {
         final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not an %s\", this)); }", typeName, typeName, typeName));
         final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
 
-        this.addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
-        this.addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
     }
 
     private void generateToType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
@@ -110,8 +110,8 @@ public class TypeCastingGenerator extends NodeGenerator {
         final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
         final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
 
-        this.addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
-        this.addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
     }
 
     private void generateIfType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
@@ -121,15 +121,15 @@ public class TypeCastingGenerator extends NodeGenerator {
         final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
         final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
 
-        this.addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
-        this.addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
     }
 
     @Override
     public String toString() {
         return "TypeCastingGenerator{" +
-                "baseNodes=" + this.baseNodes +
-                ", sourceRoot=" + this.sourceRoot +
+                "baseNodes=" + baseNodes +
+                ", sourceRoot=" + sourceRoot +
                 '}';
     }
 }
