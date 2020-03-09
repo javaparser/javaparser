@@ -292,7 +292,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final ClassOrInterfaceType n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         ClassOrInterfaceType scope = cloneNode(n.getScope(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ClassOrInterfaceType r = new ClassOrInterfaceType(n.getTokenRange().orElse(null), scope, name, typeArguments, annotations);
@@ -525,7 +525,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final FieldAccessExpr n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         FieldAccessExpr r = new FieldAccessExpr(n.getTokenRange().orElse(null), scope, typeArguments, name);
         r.setComment(comment);
@@ -630,7 +630,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         MethodCallExpr r = new MethodCallExpr(n.getTokenRange().orElse(null), scope, typeArguments, name, arguments);
         r.setComment(comment);
@@ -654,11 +654,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final ObjectCreationExpr n, final Object arg) {
-        NodeList<BodyDeclaration<?>> anonymousClassBody = testcasePrNumbercloneList(n.getAnonymousClassBody().orElse(null), arg);
+        NodeList<BodyDeclaration<?>> anonymousClassBody = cloneList(n.getAnonymousClassBody().orElse(null), arg);
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
         ClassOrInterfaceType type = cloneNode(n.getType(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ObjectCreationExpr r = new ObjectCreationExpr(n.getTokenRange().orElse(null), scope, type, typeArguments, arguments, anonymousClassBody);
         r.setComment(comment);
@@ -796,7 +796,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Expression expression = cloneNode(n.getExpression(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(n.getTokenRange().orElse(null), typeArguments, n.isThis(), expression, arguments);
         r.setComment(comment);
@@ -1079,7 +1079,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final MethodReferenceExpr n, final Object arg) {
         Expression scope = cloneNode(n.getScope(), arg);
-        NodeList<Type> typeArguments = testcasePrNumbercloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         MethodReferenceExpr r = new MethodReferenceExpr(n.getTokenRange().orElse(null), scope, typeArguments, n.getIdentifier());
         r.setComment(comment);
