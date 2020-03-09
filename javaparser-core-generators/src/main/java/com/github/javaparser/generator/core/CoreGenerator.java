@@ -25,7 +25,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.BndGenerator;
-import com.github.javaparser.generator.core.other.RemoveGeneratorAnnotations;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
@@ -65,10 +64,6 @@ public class CoreGenerator {
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 
-        // First remove `@Generated` annotations -- these should be regenerated.
-        new RemoveGeneratorAnnotations(sourceRoot).generate();
-
-        // Now run generators.
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
         sourceRoot.saveAll();
