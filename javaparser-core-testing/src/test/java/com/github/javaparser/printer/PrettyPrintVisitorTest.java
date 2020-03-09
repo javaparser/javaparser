@@ -80,7 +80,7 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR0(){
-        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
     }
@@ -117,19 +117,19 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR2(){
-        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
 
-        PrettyPrinterConfiguration conf2 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        PrettyPrinterConfiguration conf2 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
         Statement statement2 = parseStatement("a=1+1;");
         assertEquals("a=1+1;", print(statement2, conf2));
 
-        PrettyPrinterConfiguration conf3 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(true);
+        PrettyPrinterConfiguration conf3 = new PrettyPrinterConfiguration().setSpaceAroundOperators(true);
         Statement statement3 = parseStatement("a = 1 + 1;");
         assertEquals("a = 1 + 1;", print(statement3, conf3));
 
-        PrettyPrinterConfiguration conf4 = new PrettyPrinterConfiguration().setSpacesBetweenOperators(true);
+        PrettyPrinterConfiguration conf4 = new PrettyPrinterConfiguration().setSpaceAroundOperators(true);
         Statement statement4 = parseStatement("a=1+1;");
         assertEquals("a = 1 + 1;", print(statement4, conf4));
 
@@ -137,7 +137,7 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printOperatorA(){
-        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
         Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
         assertEquals("if (1>2&&1<3||1<3) {" + EOL
                 + "}", print(statement6, conf));
@@ -146,7 +146,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printOperator2(){
         Expression expression = parseExpression("1+1");
-        PrettyPrinterConfiguration spaces = new PrettyPrinterConfiguration().setSpacesBetweenOperators(false);
+        PrettyPrinterConfiguration spaces = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
         assertEquals("1+1", print(expression, spaces));
     }
 
