@@ -18,14 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import static com.github.javaparser.utils.Utils.capitalize;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
@@ -33,6 +31,7 @@ import static com.github.javaparser.utils.Utils.decapitalize;
  * Utilities that can be useful when generating code.
  */
 public final class CodeGenerationUtils {
+
     private CodeGenerationUtils() {
     }
 

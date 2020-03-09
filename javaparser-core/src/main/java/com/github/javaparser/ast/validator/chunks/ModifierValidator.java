@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.chunks;
 
 import com.github.javaparser.ast.Modifier;
@@ -32,24 +31,26 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static java.util.Arrays.asList;
-
 
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+
+    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[] { PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP };
+
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[] { PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT };
+
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[] { PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT };
 
     private final boolean hasStrictfp;
+
     private final boolean hasDefaultAndStaticInterfaceMethods;
+
     private final boolean hasPrivateInterfaceMethods;
 
     public ModifierValidator(boolean hasStrictfp, boolean hasDefaultAndStaticInterfaceMethods, boolean hasPrivateInterfaceMethods) {
@@ -228,5 +229,4 @@ public class ModifierValidator extends VisitorValidator {
             reporter.report(t, builder.toString());
         }
     }
-
 }

@@ -18,13 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.javadoc.description.JavadocDescription;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.nextWord;
 import static com.github.javaparser.utils.Utils.screamingToCamelCase;
 
@@ -45,6 +42,7 @@ public class JavadocBlockTag {
      * an unknown tag.
      */
     public enum Type {
+
         AUTHOR,
         DEPRECATED,
         EXCEPTION,
@@ -77,12 +75,14 @@ public class JavadocBlockTag {
             }
             return UNKNOWN;
         }
-
     }
 
     private Type type;
+
     private JavadocDescription content;
+
     private Optional<String> name = Optional.empty();
+
     private String tagName;
 
     public JavadocBlockTag(Type type, String content) {
@@ -134,13 +134,15 @@ public class JavadocBlockTag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocBlockTag that = (JavadocBlockTag) o;
-
-        if (type != that.type) return false;
-        if (!content.equals(that.content)) return false;
+        if (type != that.type)
+            return false;
+        if (!content.equals(that.content))
+            return false;
         return name.equals(that.name);
     }
 
@@ -154,10 +156,6 @@ public class JavadocBlockTag {
 
     @Override
     public String toString() {
-        return "JavadocBlockTag{" +
-                "type=" + type +
-                ", content='" + content + '\'' +
-                ", name=" + name +
-                '}';
+        return "JavadocBlockTag{" + "type=" + type + ", content='" + content + '\'' + ", name=" + name + '}';
     }
 }

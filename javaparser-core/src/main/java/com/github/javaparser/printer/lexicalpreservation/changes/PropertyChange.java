@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
@@ -28,8 +27,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  * The change in value of a property.
  */
 public class PropertyChange implements Change {
+
     private final ObservableProperty property;
+
     private final Object oldValue;
+
     private final Object newValue;
 
     public ObservableProperty getProperty() {

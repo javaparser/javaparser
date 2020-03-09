@@ -18,17 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.utils.Utils.*;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.github.javaparser.ParseResult.PostProcessor;
 import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
@@ -45,7 +42,9 @@ import com.github.javaparser.version.*;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+
     public enum LanguageLevel {
+
         /**
          * Java 1.0
          */
@@ -111,20 +110,24 @@ public class ParserConfiguration {
          * Does no post processing or validation. Only for people wanting the fastest parsing.
          */
         public static LanguageLevel RAW = null;
+
         /**
          * The most used Java version.
          */
         public static LanguageLevel POPULAR = JAVA_8;
+
         /**
          * The latest Java version that is available.
          */
         public static LanguageLevel CURRENT = JAVA_13;
+
         /**
          * The newest Java features supported.
          */
         public static LanguageLevel BLEEDING_EDGE = JAVA_14;
 
         final Validator validator;
+
         final ParseResult.PostProcessor postProcessor;
 
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
@@ -134,21 +137,32 @@ public class ParserConfiguration {
     }
 
     private boolean storeTokens = true;
+
     private boolean attributeComments = true;
+
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
+
     private boolean ignoreAnnotationsWhenAttributingComments = false;
+
     private boolean lexicalPreservationEnabled = false;
+
     private boolean preprocessUnicodeEscapes = false;
+
     private SymbolResolver symbolResolver = null;
+
     private int tabSize = 1;
+
     private LanguageLevel languageLevel = JAVA_8;
+
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
+
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
         class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
+
             private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
             @Override
@@ -161,19 +175,14 @@ public class ParserConfiguration {
             }
 
             @Override
-            public void process(ParseResult<? extends Node> result,
-                                ParserConfiguration configuration) {
+            public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (isPreprocessUnicodeEscapes()) {
-                    result.getResult().ifPresent(
-                            root -> {
-                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-                                if (!mapping.isEmpty()) {
-                                    root.walk(
-                                            node -> node.getRange().ifPresent(
-                                                    range -> node.setRange(mapping.transform(range))));
-                                }
-                            }
-                    );
+                    result.getResult().ifPresent(root -> {
+                        PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                        if (!mapping.isEmpty()) {
+                            root.walk(node -> node.getRange().ifPresent(range -> node.setRange(mapping.transform(range))));
+                        }
+                    });
                 }
             }
         }
@@ -182,9 +191,7 @@ public class ParserConfiguration {
         postProcessors.add(unicodeProcessor);
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
-                result.ifSuccessful(resultNode -> result
-                        .getCommentsCollection().ifPresent(comments ->
-                                new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+                result.ifSuccessful(resultNode -> result.getCommentsCollection().ifPresent(comments -> new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
             }
         });
         postProcessors.add((result, configuration) -> {
@@ -198,13 +205,11 @@ public class ParserConfiguration {
                 }
             }
         });
-        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
-                result.ifSuccessful(resultNode -> {
-                    if (resultNode instanceof CompilationUnit) {
-                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
-                    }
-                })
-        ));
+        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver -> result.ifSuccessful(resultNode -> {
+            if (resultNode instanceof CompilationUnit) {
+                resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+            }
+        })));
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
@@ -341,5 +346,4 @@ public class ParserConfiguration {
         this.characterEncoding = characterEncoding;
         return this;
     }
-
 }

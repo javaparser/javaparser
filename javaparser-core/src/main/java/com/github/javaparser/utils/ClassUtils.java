@@ -18,13 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ClassUtils {
+
     /**
      * Maps primitive {@code Class}es to their corresponding wrapper {@code Class}.
      */

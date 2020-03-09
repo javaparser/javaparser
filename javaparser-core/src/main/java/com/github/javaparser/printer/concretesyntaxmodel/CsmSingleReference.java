@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
@@ -27,6 +26,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmSingleReference implements CsmElement {
+
     private final ObservableProperty property;
 
     public ObservableProperty getProperty() {

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
@@ -29,8 +28,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  * The Addition of an element to a list.
  */
 public class ListAdditionChange implements Change {
+
     private final ObservableProperty observableProperty;
+
     private final int index;
+
     private final Node nodeAdded;
 
     public ListAdditionChange(ObservableProperty observableProperty, int index, Node nodeAdded) {
@@ -43,12 +45,12 @@ public class ListAdditionChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             NodeList<Node> nodeList = new NodeList<>();
-	    nodeList.setParentNode(node);
+            nodeList.setParentNode(node);
             Object currentRawValue = new NoChange().getValue(property, node);
-            if (!(currentRawValue instanceof NodeList)){
+            if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList<?> currentNodeList = (NodeList<?>)(currentRawValue);
+            NodeList<?> currentNodeList = (NodeList<?>) (currentRawValue);
             nodeList.addAll(currentNodeList);
             nodeList.add(index, nodeAdded);
             return nodeList;

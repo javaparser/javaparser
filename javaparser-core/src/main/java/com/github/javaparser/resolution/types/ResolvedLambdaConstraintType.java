@@ -18,10 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 public class ResolvedLambdaConstraintType implements ResolvedType {
+
     private ResolvedType bound;
 
     private ResolvedLambdaConstraintType(ResolvedType bound) {
@@ -47,7 +47,7 @@ public class ResolvedLambdaConstraintType implements ResolvedType {
         return this;
     }
 
-    public static ResolvedLambdaConstraintType bound(ResolvedType bound){
+    public static ResolvedLambdaConstraintType bound(ResolvedType bound) {
         return new ResolvedLambdaConstraintType(bound);
     }
 
@@ -58,8 +58,6 @@ public class ResolvedLambdaConstraintType implements ResolvedType {
 
     @Override
     public String toString() {
-        return "LambdaConstraintType{" +
-                "bound=" + bound +
-                '}';
+        return "LambdaConstraintType{" + "bound=" + bound + '}';
     }
 }

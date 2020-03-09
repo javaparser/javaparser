@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import java.util.List;
@@ -45,5 +44,4 @@ public interface ResolvedTypeParametrizable {
     default boolean isGeneric() {
         return !getTypeParameters().isEmpty();
     }
-
 }

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
@@ -27,7 +26,6 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
@@ -44,7 +42,6 @@ import java.util.concurrent.RecursiveAction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
@@ -62,9 +59,12 @@ import static java.nio.file.FileVisitResult.*;
  * </ul>
  */
 public class SourceRoot {
+
     @FunctionalInterface
     public interface Callback {
+
         enum Result {
+
             SAVE, DONT_SAVE, TERMINATE
         }
 
@@ -77,9 +77,13 @@ public class SourceRoot {
     }
 
     private final Path root;
+
     private final Map<Path, ParseResult<CompilationUnit>> cache = new ConcurrentHashMap<>();
+
     private ParserConfiguration parserConfiguration = new ParserConfiguration();
+
     private Function<CompilationUnit, String> printer = new PrettyPrinter()::print;
+
     private static final Pattern JAVA_IDENTIFIER = Pattern.compile("\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*");
 
     /**
@@ -122,8 +126,7 @@ public class SourceRoot {
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", () -> path);
-        final ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+        final ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         cache.put(relativePath, result);
         return result;
@@ -154,6 +157,7 @@ public class SourceRoot {
         logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
@@ -213,10 +217,7 @@ public class SourceRoot {
             if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
                 Path relative = root.relativize(file.getParent());
                 try {
-                    tryToParse(
-                            relative.toString(),
-                            file.getFileName().toString(),
-                            parserConfiguration);
+                    tryToParse(relative.toString(), file.getFileName().toString(), parserConfiguration);
                 } catch (IOException e) {
                     Log.error(e);
                 }
@@ -269,7 +270,7 @@ public class SourceRoot {
         Log.trace("Parsing %s", () -> localPath);
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
-        switch (callback.process(localPath, absolutePath, result)) {
+        switch(callback.process(localPath, absolutePath, result)) {
             case SAVE:
                 result.getResult().ifPresent(cu -> save(cu, absolutePath));
             case DONT_SAVE:
@@ -288,8 +289,7 @@ public class SourceRoot {
      * @param startPackage The package containing the file
      * @param filename The name of the file
      */
-    public SourceRoot parse(String startPackage, String filename, ParserConfiguration configuration, Callback
-            callback) throws IOException {
+    public SourceRoot parse(String startPackage, String filename, ParserConfiguration configuration, Callback callback) throws IOException {
         assertNotNull(startPackage);
         assertNotNull(filename);
         assertNotNull(configuration);
@@ -321,6 +321,7 @@ public class SourceRoot {
         final Path path = packageAbsolutePath(root, startPackage);
         if (Files.exists(path)) {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
                 @Override
                 public FileVisitResult visitFile(Path absolutePath, BasicFileAttributes attrs) throws IOException {
                     if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
@@ -418,10 +419,7 @@ public class SourceRoot {
         assertNotNull(compilationUnit);
         Log.trace("Adding new file %s.%s", () -> startPackage, () -> filename);
         final Path path = fileInPackageRelativePath(startPackage, filename);
-        final ParseResult<CompilationUnit> parseResult = new ParseResult<>(
-                compilationUnit,
-                new ArrayList<>(),
-                null);
+        final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null);
         cache.put(path, parseResult);
         return this;
     }
@@ -435,10 +433,7 @@ public class SourceRoot {
         if (compilationUnit.getStorage().isPresent()) {
             final Path path = compilationUnit.getStorage().get().getPath();
             Log.trace("Adding new file %s", () -> path);
-            final ParseResult<CompilationUnit> parseResult = new ParseResult<>(
-                    compilationUnit,
-                    new ArrayList<>(),
-                    null);
+            final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null);
             cache.put(path, parseResult);
         } else {
             throw new AssertionError("Files added with this method should have their path set.");
@@ -522,10 +517,7 @@ public class SourceRoot {
      * added manually.
      */
     public List<CompilationUnit> getCompilationUnits() {
-        return cache.values().stream()
-                .filter(ParseResult::isSuccessful)
-                .map(p -> p.getResult().get())
-                .collect(Collectors.toList());
+        return cache.values().stream().filter(ParseResult::isSuccessful).map(p -> p.getResult().get()).collect(Collectors.toList());
     }
 
     /**
@@ -573,7 +565,9 @@ public class SourceRoot {
     private static class ParallelParse extends RecursiveAction {
 
         private static final long serialVersionUID = 1L;
+
         private final Path path;
+
         private final VisitFileCallback callback;
 
         ParallelParse(Path path, VisitFileCallback callback) {
@@ -586,6 +580,7 @@ public class SourceRoot {
             final List<ParallelParse> walks = new ArrayList<>();
             try {
                 Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                         if (!SourceRoot.isSensibleDirectoryToEnter(dir)) {
@@ -609,13 +604,13 @@ public class SourceRoot {
             } catch (IOException e) {
                 Log.error(e);
             }
-
             for (ParallelParse w : walks) {
                 w.join();
             }
         }
 
         interface VisitFileCallback {
+
             FileVisitResult process(Path file, BasicFileAttributes attrs);
         }
     }

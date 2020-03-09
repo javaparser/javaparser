@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -38,11 +37,9 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
@@ -55,6 +52,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see StaticJavaParser
  */
 public final class JavaParser {
+
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
@@ -91,7 +89,7 @@ public final class JavaParser {
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
         if (configuration.getLanguageLevel() != null) {
-            switch (configuration.getLanguageLevel()) {
+            switch(configuration.getLanguageLevel()) {
                 case JAVA_13:
                 case JAVA_14:
                     astParser.setYieldSupported();
@@ -113,21 +111,15 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-
         for (PreProcessor preProcessor : configuration.getPreProcessors()) {
             provider = preProcessor.process(provider);
         }
-
         final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
-
-            configuration.getPostProcessors().forEach(postProcessor ->
-                    postProcessor.process(result, configuration));
-
+            configuration.getPostProcessors().forEach(postProcessor -> postProcessor.process(result, configuration));
             result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
-
             return result;
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
@@ -137,7 +129,7 @@ public final class JavaParser {
             try {
                 provider.close();
             } catch (IOException e) {
-                // Since we're done parsing and have our result, we don't care about any errors.
+            // Since we're done parsing and have our result, we don't care about any errors.
             }
         }
     }
@@ -515,7 +507,6 @@ public final class JavaParser {
         return parse(MODULE_DIRECTIVE, provider(moduleDirective));
     }
 
-
     /**
      * Parses a type parameter and returns it as a TypeParameter
      *
@@ -538,5 +529,4 @@ public final class JavaParser {
     public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
         return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
-
 }

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -27,8 +26,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
-
-
 import java.util.*;
 
 /**
@@ -38,10 +35,15 @@ import java.util.*;
  * @author Federico Tomassetti
  */
 public class MethodUsage implements ResolvedTypeParametrized {
+
     private ResolvedMethodDeclaration declaration;
+
     private List<ResolvedType> paramTypes = new ArrayList<>();
+
     private List<ResolvedType> exceptionTypes = new ArrayList<>();
+
     private ResolvedType returnType;
+
     private ResolvedTypeParametersMap typeParametersMap;
 
     public MethodUsage(ResolvedMethodDeclaration declaration) {
@@ -56,19 +58,15 @@ public class MethodUsage implements ResolvedTypeParametrized {
         returnType = declaration.getReturnType();
     }
 
-    public MethodUsage(ResolvedMethodDeclaration declaration,
-                       List<ResolvedType> paramTypes, ResolvedType returnType) {
-        this(declaration, paramTypes, returnType, declaration.getSpecifiedExceptions(),
-                ResolvedTypeParametersMap.empty());
+    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType) {
+        this(declaration, paramTypes, returnType, declaration.getSpecifiedExceptions(), ResolvedTypeParametersMap.empty());
     }
 
-    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType,
-                       List<ResolvedType> exceptionTypes) {
+    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes) {
         this(declaration, paramTypes, returnType, exceptionTypes, ResolvedTypeParametersMap.empty());
     }
 
-    private MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType,
-                        List<ResolvedType> exceptionTypes, ResolvedTypeParametersMap typeParametersMap) {
+    private MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes, ResolvedTypeParametersMap typeParametersMap) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
@@ -78,10 +76,7 @@ public class MethodUsage implements ResolvedTypeParametrized {
 
     @Override
     public String toString() {
-        return "MethodUsage{" +
-                "declaration=" + declaration +
-                ", paramTypes=" + paramTypes +
-                '}';
+        return "MethodUsage{" + "declaration=" + declaration + ", paramTypes=" + paramTypes + '}';
     }
 
     public ResolvedMethodDeclaration getDeclaration() {
@@ -154,11 +149,8 @@ public class MethodUsage implements ResolvedTypeParametrized {
         if (type == null) {
             throw new IllegalArgumentException();
         }
-
         // TODO if the method declaration has a type param with that name ignore this call
-        MethodUsage res = new MethodUsage(declaration, paramTypes, returnType, exceptionTypes,
-                typeParametersMap.toBuilder().setValue(typeParameter, type).build());
-
+        MethodUsage res = new MethodUsage(declaration, paramTypes, returnType, exceptionTypes, typeParametersMap.toBuilder().setValue(typeParameter, type).build());
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (int i = 0; i < paramTypes.size(); i++) {
             ResolvedType originalParamType = paramTypes.get(i);

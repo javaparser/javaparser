@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
@@ -31,6 +30,7 @@ class TextElementMatchers {
 
     static TextElementMatcher byNode(final Node node) {
         return new TextElementMatcher() {
+
             @Override
             public boolean match(TextElement textElement) {
                 return textElement.isNode(node);
