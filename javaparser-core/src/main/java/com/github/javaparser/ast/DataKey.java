@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 /**
@@ -41,6 +40,7 @@ package com.github.javaparser.ast;
  * @see Node#getData(DataKey)
  */
 public abstract class DataKey<T> {
+
     @Override
     public int hashCode() {
         return getClass().hashCode();

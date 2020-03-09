@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.type.VarType;
@@ -34,7 +33,7 @@ public class Java10Validator extends Java9Validator {
     public Java10Validator() {
         super();
         add(varOnlyOnLocalVariableDefinitionAndForAndTry);
-        /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
+    /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
            because that is done by the Java10 postprocessor. You can add it by hand, but that is obscure enough to ignore. */
     }
 }

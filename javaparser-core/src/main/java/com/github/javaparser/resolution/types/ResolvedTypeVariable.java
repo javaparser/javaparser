@@ -18,11 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.List;
 import java.util.Map;
 
@@ -51,15 +49,17 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedTypeVariable that = (ResolvedTypeVariable) o;
-
-        if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
-        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
-        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
-
+        if (!typeParameter.getName().equals(that.typeParameter.getName()))
+            return false;
+        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType())
+            return false;
+        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod())
+            return false;
         return true;
     }
 
@@ -80,7 +80,7 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
-        if(tpToBeReplaced.getName().equals(this.typeParameter.getName())){
+        if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
         } else {

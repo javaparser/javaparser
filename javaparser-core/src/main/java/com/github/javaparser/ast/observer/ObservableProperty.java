@@ -32,7 +32,6 @@ import java.util.Arrays;
 /**
  * Properties considered by the AstObserver
  */
-@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
 public enum ObservableProperty {
 
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),

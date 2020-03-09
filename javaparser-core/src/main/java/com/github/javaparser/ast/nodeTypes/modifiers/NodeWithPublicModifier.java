@@ -18,18 +18,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 
 /**
  * A node that can be public.
  */
 public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
+
     default boolean isPublic() {
         return hasModifier(PUBLIC);
     }
@@ -38,5 +37,4 @@ public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifier
     default N setPublic(boolean set) {
         return setModifier(PUBLIC, set);
     }
-
 }

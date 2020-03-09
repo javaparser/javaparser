@@ -18,12 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,6 +30,7 @@ import java.util.stream.Collectors;
  * A group of elements that could be in any order.
  */
 public class CsmMix implements CsmElement {
+
     private List<CsmElement> elements;
 
     public CsmMix(List<CsmElement> elements) {
@@ -55,11 +54,11 @@ public class CsmMix implements CsmElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         CsmMix csmMix = (CsmMix) o;
-
         return elements != null ? elements.equals(csmMix.elements) : csmMix.elements == null;
     }
 

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.javadoc.description;
 
 import static com.github.javaparser.utils.Utils.nextWord;
@@ -50,6 +49,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
      * an unknown tag.
      */
     public enum Type {
+
         CODE,
         DOC_ROOT,
         INHERIT_DOC,
@@ -74,11 +74,12 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
             }
             return UNKNOWN;
         }
-
     }
 
     private String tagName;
+
     private Type type;
+
     private String content;
 
     public JavadocInlineTag(String tagName, Type type, String content) {
@@ -101,18 +102,20 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toText() {
-        return "{@" + tagName + this.content +"}";
+        return "{@" + tagName + this.content + "}";
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocInlineTag that = (JavadocInlineTag) o;
-
-        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null) return false;
-        if (type != that.type) return false;
+        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null)
+            return false;
+        if (type != that.type)
+            return false;
         return content != null ? content.equals(that.content) : that.content == null;
     }
 
@@ -126,10 +129,6 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toString() {
-        return "JavadocInlineTag{" +
-                "tagName='" + tagName + '\'' +
-                ", type=" + type +
-                ", content='" + content + '\'' +
-                '}';
+        return "JavadocInlineTag{" + "tagName='" + tagName + '\'' + ", type=" + type + ", content='" + content + '\'' + '}';
     }
 }

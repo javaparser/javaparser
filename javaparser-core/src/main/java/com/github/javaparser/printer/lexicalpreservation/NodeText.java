@@ -18,11 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,14 +29,14 @@ import java.util.List;
  * It is basically a list of tokens and children.
  */
 class NodeText {
+
     private final List<TextElement> elements;
 
     public static final int NOT_FOUND = -1;
 
-    //
+    // 
     // Constructors
-    //
-
+    // 
     NodeText(List<TextElement> elements) {
         this.elements = elements;
     }
@@ -50,10 +48,9 @@ class NodeText {
         this(new LinkedList<>());
     }
 
-    //
+    // 
     // Adding elements
-    //
-
+    // 
     /**
      * Add an element at the end.
      */
@@ -84,10 +81,9 @@ class NodeText {
         elements.add(index, new TokenTextElement(tokenKind, text));
     }
 
-    //
+    // 
     // Finding elements
-    //
-
+    // 
     int findElement(TextElementMatcher matcher) {
         return findElement(matcher, 0);
     }
@@ -95,8 +91,7 @@ class NodeText {
     int findElement(TextElementMatcher matcher, int from) {
         int res = tryToFindElement(matcher, from);
         if (res == NOT_FOUND) {
-            throw new IllegalArgumentException(
-                    String.format("I could not find child '%s' from position %d. Elements: %s", matcher, from, elements));
+            throw new IllegalArgumentException(String.format("I could not find child '%s' from position %d. Elements: %s", matcher, from, elements));
         }
         return res;
     }
@@ -127,10 +122,9 @@ class NodeText {
         return tryToFindElement(TextElementMatchers.byNode(child), from);
     }
 
-    //
+    // 
     // Removing single elements
-    //
-
+    // 
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
         int i = 0;
         for (TextElement e : elements) {
@@ -151,34 +145,30 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    //
+    // 
     // Removing sequences
-    //
-
+    // 
     void removeElement(int index) {
         elements.remove(index);
     }
 
-    //
+    // 
     // Replacing elements
-    //
-
+    // 
     void replace(TextElementMatcher position, TextElement newElement) {
         int index = findElement(position, 0);
         elements.remove(index);
         elements.add(index, newElement);
     }
 
-    //
+    // 
     // Other methods
-    //
-
+    // 
     /**
      * Generate the corresponding string.
      */
     String expand() {
         StringBuffer sb = new StringBuffer();
-
         elements.forEach(e -> sb.append(e.expand()));
         return sb.toString();
     }
@@ -202,5 +192,4 @@ class NodeText {
     public String toString() {
         return "NodeText{" + elements + '}';
     }
-
 }

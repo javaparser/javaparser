@@ -18,16 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-
 import java.util.List;
 import java.util.Objects;
 
 public class CsmSequence implements CsmElement {
+
     private List<CsmElement> elements;
 
     public CsmSequence(List<CsmElement> elements) {

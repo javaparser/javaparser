@@ -82,7 +82,6 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
         return super.remove(node);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleUsesDirective setType(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -103,24 +102,20 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleUsesStmt() {
         return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesDirective asModuleUsesStmt() {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {
         action.accept(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleUsesDirective> toModuleUsesStmt() {
         return Optional.of(this);
     }

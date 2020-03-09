@@ -18,18 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.FileNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 
 /**
@@ -42,8 +39,7 @@ public interface CollectionStrategy {
 
     default Optional<Path> getRoot(Path file) throws FileNotFoundException {
         try {
-            return parse(file.toFile()).getStorage()
-                    .map(CompilationUnit.Storage::getSourceRoot);
+            return parse(file.toFile()).getStorage().map(CompilationUnit.Storage::getSourceRoot);
         } catch (ParseProblemException e) {
             Log.info("Problem parsing file %s", () -> file);
         } catch (RuntimeException e) {

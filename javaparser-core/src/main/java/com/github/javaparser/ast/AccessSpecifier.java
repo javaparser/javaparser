@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 /**
@@ -30,10 +29,7 @@ package com.github.javaparser.ast;
  */
 public enum AccessSpecifier {
 
-    PUBLIC("public"),
-    PRIVATE("private"),
-    PROTECTED("protected"),
-    PACKAGE_PRIVATE("");
+    PUBLIC("public"), PRIVATE("private"), PROTECTED("protected"), PACKAGE_PRIVATE("");
 
     private String codeRepresenation;
 

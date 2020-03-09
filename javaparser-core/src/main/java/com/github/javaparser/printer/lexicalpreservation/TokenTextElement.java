@@ -18,17 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
 
 class TokenTextElement extends TextElement {
+
     private final JavaToken token;
 
     TokenTextElement(JavaToken token) {
@@ -63,11 +62,11 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         TokenTextElement that = (TokenTextElement) o;
-
         return token.equals(that.token);
     }
 
@@ -105,7 +104,7 @@ class TokenTextElement extends TextElement {
     public boolean isComment() {
         return token.getCategory().isComment();
     }
-    
+
     @Override
     public boolean isSeparator() {
         return token.getCategory().isSeparator();
@@ -120,12 +119,12 @@ class TokenTextElement extends TextElement {
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
     }
-    
+
     @Override
     public boolean isPrimitive() {
         return Kind.valueOf(getTokenKind()).isPrimitive();

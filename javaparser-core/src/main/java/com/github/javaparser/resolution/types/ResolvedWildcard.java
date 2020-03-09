@@ -18,11 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +38,7 @@ public class ResolvedWildcard implements ResolvedType {
     public static ResolvedWildcard UNBOUNDED = new ResolvedWildcard(null, null);
 
     private BoundType type;
+
     private ResolvedType boundedType;
 
     private ResolvedWildcard(BoundType type, ResolvedType boundedType) {
@@ -63,10 +62,7 @@ public class ResolvedWildcard implements ResolvedType {
 
     @Override
     public String toString() {
-        return "WildcardUsage{" +
-                "type=" + type +
-                ", boundedType=" + boundedType +
-                '}';
+        return "WildcardUsage{" + "type=" + type + ", boundedType=" + boundedType + '}';
     }
 
     public boolean isWildcard() {
@@ -79,14 +75,15 @@ public class ResolvedWildcard implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedWildcard)) return false;
-
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedWildcard))
+            return false;
         ResolvedWildcard that = (ResolvedWildcard) o;
-
-        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
-        if (type != that.type) return false;
-
+        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null)
+            return false;
+        if (type != that.type)
+            return false;
         return true;
     }
 
@@ -132,7 +129,7 @@ public class ResolvedWildcard implements ResolvedType {
     @Override
     public boolean isAssignableBy(ResolvedType other) {
         if (boundedType == null) {
-            //return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
+            // return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
         } else if (type == BoundType.SUPER) {
             return boundedType.isAssignableBy(other);
@@ -176,8 +173,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public enum BoundType {
-        SUPER,
-        EXTENDS
-    }
 
+        SUPER, EXTENDS
+    }
 }

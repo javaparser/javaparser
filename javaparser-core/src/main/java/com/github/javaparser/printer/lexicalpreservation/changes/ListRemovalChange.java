@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
@@ -29,7 +28,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  * The removal of an element in a list.
  */
 public class ListRemovalChange implements Change {
+
     private final ObservableProperty observableProperty;
+
     private final int index;
 
     public ListRemovalChange(ObservableProperty observableProperty, int index) {
@@ -42,10 +43,10 @@ public class ListRemovalChange implements Change {
         if (property == observableProperty) {
             NodeList<Node> nodeList = new NodeList<>();
             Object currentRawValue = new NoChange().getValue(property, node);
-            if (!(currentRawValue instanceof NodeList)){
+            if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList<?> currentNodeList = (NodeList<?>)currentRawValue;
+            NodeList<?> currentNodeList = (NodeList<?>) currentRawValue;
             // fix #2187 set the parent node in the new list
             nodeList.setParentNode(node);
             nodeList.addAll(currentNodeList);

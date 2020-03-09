@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
@@ -28,7 +27,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InternalProperty;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
@@ -45,6 +43,7 @@ import java.util.stream.Stream;
  * @param <N> the type of nodes contained.
  */
 public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
+
     @InternalProperty
     private List<N> innerList = new ArrayList<>(0);
 
@@ -138,8 +137,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public N set(int index, N element) {
         if (index < 0 || index >= innerList.size()) {
-            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
-                    + " excluded. It is instead " + index);
+            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size() + " excluded. It is instead " + index);
         }
         if (element == innerList.get(index)) {
             return element;
@@ -225,7 +223,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         add(i, node);
         return this;
     }
-
 
     @Override
     public Optional<Node> getParentNode() {
@@ -481,7 +478,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void register(AstObserver observer) {
-        if(!this.observers.contains(observer)) {
+        if (!this.observers.contains(observer)) {
             this.observers.add(observer);
         }
     }

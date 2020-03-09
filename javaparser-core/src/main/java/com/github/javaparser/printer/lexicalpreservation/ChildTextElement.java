@@ -18,19 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-
 import java.util.Optional;
 
 /**
  * Represent the position of a child node in the NodeText of its parent.
  */
 class ChildTextElement extends TextElement {
+
     private final Node child;
 
     ChildTextElement(Node child) {
@@ -61,13 +60,12 @@ class ChildTextElement extends TextElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ChildTextElement that = (ChildTextElement) o;
-
         return child.equals(that.child);
-
     }
 
     @Override
@@ -99,17 +97,17 @@ class ChildTextElement extends TextElement {
     public boolean isComment() {
         return child instanceof Comment;
     }
-    
+
     @Override
     public boolean isSeparator() {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return false;
     }
-    
+
     @Override
     public boolean isPrimitive() {
         return false;

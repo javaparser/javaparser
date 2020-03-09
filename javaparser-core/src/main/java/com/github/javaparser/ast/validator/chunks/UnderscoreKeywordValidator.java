@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.chunks;
 
 import com.github.javaparser.ast.Node;
@@ -28,6 +27,7 @@ import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 
 public class UnderscoreKeywordValidator extends VisitorValidator {
+
     @Override
     public void visit(Name n, ProblemReporter arg) {
         validateIdentifier(n, n.getIdentifier(), arg);
