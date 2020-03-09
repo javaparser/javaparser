@@ -65,13 +65,13 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public YieldStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
-        this.setExpression(expression);
-        this.customInitialization();
+        setExpression(expression);
+        customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return this.expression;
+        return expression;
     }
 
     /**
@@ -86,12 +86,12 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -146,8 +146,8 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         if (node == null) {
             return false;
         }
-        if (node == this.expression) {
-            this.setExpression((Expression) replacementNode);
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -156,7 +156,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public YieldStmt clone() {
-        return (YieldStmt) this.accept(new CloneVisitor(), null);
+        return (YieldStmt) accept(new CloneVisitor(), null);
     }
 
     @Override

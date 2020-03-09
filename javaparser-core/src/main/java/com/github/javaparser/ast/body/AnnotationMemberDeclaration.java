@@ -87,11 +87,11 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationMemberDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         super(tokenRange, annotations);
-        this.setModifiers(modifiers);
-        this.setType(type);
-        this.setName(name);
-        this.setDefaultValue(defaultValue);
-        this.customInitialization();
+        setModifiers(modifiers);
+        setType(type);
+        setName(name);
+        setDefaultValue(defaultValue);
+        customInitialization();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getDefaultValue() {
-        return Optional.ofNullable(this.defaultValue);
+        return Optional.ofNullable(defaultValue);
     }
 
     /**
@@ -119,22 +119,22 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return this.modifiers;
+        return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AnnotationMemberDeclaration removeDefaultValue() {
-        return this.setDefaultValue((Expression) null);
+        return setDefaultValue((Expression) null);
     }
 
     /**
@@ -148,12 +148,12 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (defaultValue == this.defaultValue) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
-        if (this.defaultValue != null) {
-            this.defaultValue.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, defaultValue, defaultValue);
+        if (defaultValue != null) {
+            defaultValue.setParentNode(null);
         }
         this.defaultValue = defaultValue;
-        this.setAsParentNodeOf(defaultValue);
+        setAsParentNodeOf(defaultValue);
         return this;
     }
 
@@ -163,12 +163,12 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (modifiers == this.modifiers) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) {
-            this.modifiers.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, modifiers, modifiers);
+        if (modifiers != null) {
+            modifiers.setParentNode(null);
         }
         this.modifiers = modifiers;
-        this.setAsParentNodeOf(modifiers);
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -178,12 +178,12 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -193,12 +193,12 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) {
-            this.type.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
+        if (type != null) {
+            type.setParentNode(null);
         }
         this.type = type;
-        this.setAsParentNodeOf(type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -208,15 +208,15 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (node == null) {
             return false;
         }
-        if (this.defaultValue != null) {
-            if (node == this.defaultValue) {
-                this.removeDefaultValue();
+        if (defaultValue != null) {
+            if (node == defaultValue) {
+                removeDefaultValue();
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.remove(i);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
@@ -226,7 +226,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationMemberDeclaration clone() {
-        return (AnnotationMemberDeclaration) this.accept(new CloneVisitor(), null);
+        return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -241,24 +241,24 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         if (node == null) {
             return false;
         }
-        if (this.defaultValue != null) {
-            if (node == this.defaultValue) {
-                this.setDefaultValue((Expression) replacementNode);
+        if (defaultValue != null) {
+            if (node == defaultValue) {
+                setDefaultValue((Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == this.type) {
-            this.setType((Type) replacementNode);
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

@@ -62,8 +62,8 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
-        this.setType(type);
-        this.customInitialization();
+        setType(type);
+        customInitialization();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -89,12 +89,12 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) {
-            this.type.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
+        if (type != null) {
+            type.setParentNode(null);
         }
         this.type = type;
-        this.setAsParentNodeOf(type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassExpr clone() {
-        return (ClassExpr) this.accept(new CloneVisitor(), null);
+        return (ClassExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -125,8 +125,8 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
         if (node == null) {
             return false;
         }
-        if (node == this.type) {
-            this.setType((Type) replacementNode);
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

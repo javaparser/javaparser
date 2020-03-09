@@ -95,10 +95,10 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.setScope(scope);
-        this.setName(name);
-        this.setTypeArguments(typeArguments);
-        this.customInitialization();
+        setScope(scope);
+        setName(name);
+        setTypeArguments(typeArguments);
+        customInitialization();
     }
 
     @Override
@@ -115,12 +115,12 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ClassOrInterfaceType> getScope() {
-        return Optional.ofNullable(this.scope);
+        return Optional.ofNullable(scope);
     }
 
     public boolean isBoxedType() {
@@ -140,12 +140,12 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -160,18 +160,18 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         if (scope == this.scope) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null) {
-            this.scope.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.SCOPE, scope, scope);
+        if (scope != null) {
+            scope.setParentNode(null);
         }
         this.scope = scope;
-        this.setAsParentNodeOf(scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(this.typeArguments);
+        return Optional.ofNullable(typeArguments);
     }
 
     /**
@@ -185,12 +185,12 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         if (typeArguments == this.typeArguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) {
-            this.typeArguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, typeArguments, typeArguments);
+        if (typeArguments != null) {
+            typeArguments.setParentNode(null);
         }
         this.typeArguments = typeArguments;
-        this.setAsParentNodeOf(typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -205,16 +205,16 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         if (node == null) {
             return false;
         }
-        if (this.scope != null) {
-            if (node == this.scope) {
-                this.removeScope();
+        if (scope != null) {
+            if (node == scope) {
+                removeScope();
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.remove(i);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
                     return true;
                 }
             }
@@ -233,13 +233,13 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
-        return this.setScope((ClassOrInterfaceType) null);
+        return setScope((ClassOrInterfaceType) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceType clone() {
-        return (ClassOrInterfaceType) this.accept(new CloneVisitor(), null);
+        return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -254,20 +254,20 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
-        if (this.scope != null) {
-            if (node == this.scope) {
-                this.setScope((ClassOrInterfaceType) replacementNode);
+        if (scope != null) {
+            if (node == scope) {
+                setScope((ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.set(i, (Type) replacementNode);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }

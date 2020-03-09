@@ -102,11 +102,11 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodCallExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name, NodeList<Expression> arguments) {
         super(tokenRange);
-        this.setScope(scope);
-        this.setTypeArguments(typeArguments);
-        this.setName(name);
-        this.setArguments(arguments);
-        this.customInitialization();
+        setScope(scope);
+        setTypeArguments(typeArguments);
+        setName(name);
+        setArguments(arguments);
+        customInitialization();
     }
 
     @Override
@@ -123,17 +123,17 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
-        return this.arguments;
+        return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getScope() {
-        return Optional.ofNullable(this.scope);
+        return Optional.ofNullable(scope);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -142,12 +142,12 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (arguments == this.arguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null) {
-            this.arguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, arguments, arguments);
+        if (arguments != null) {
+            arguments.setParentNode(null);
         }
         this.arguments = arguments;
-        this.setAsParentNodeOf(arguments);
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -157,12 +157,12 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -171,18 +171,18 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (scope == this.scope) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null) {
-            this.scope.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.SCOPE, scope, scope);
+        if (scope != null) {
+            scope.setParentNode(null);
         }
         this.scope = scope;
-        this.setAsParentNodeOf(scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(this.typeArguments);
+        return Optional.ofNullable(typeArguments);
     }
 
     /**
@@ -196,12 +196,12 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (typeArguments == this.typeArguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) {
-            this.typeArguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, typeArguments, typeArguments);
+        if (typeArguments != null) {
+            typeArguments.setParentNode(null);
         }
         this.typeArguments = typeArguments;
-        this.setAsParentNodeOf(typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -211,22 +211,22 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.remove(i);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
                 return true;
             }
         }
-        if (this.scope != null) {
-            if (node == this.scope) {
-                this.removeScope();
+        if (scope != null) {
+            if (node == scope) {
+                removeScope();
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.remove(i);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
                     return true;
                 }
             }
@@ -236,13 +236,13 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodCallExpr removeScope() {
-        return this.setScope((Expression) null);
+        return setScope((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodCallExpr clone() {
-        return (MethodCallExpr) this.accept(new CloneVisitor(), null);
+        return (MethodCallExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -257,26 +257,26 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.set(i, (Expression) replacementNode);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
-        if (this.scope != null) {
-            if (node == this.scope) {
-                this.setScope((Expression) replacementNode);
+        if (scope != null) {
+            if (node == scope) {
+                setScope((Expression) replacementNode);
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.set(i, (Type) replacementNode);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }

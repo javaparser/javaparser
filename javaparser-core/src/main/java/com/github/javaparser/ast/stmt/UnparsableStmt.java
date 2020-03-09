@@ -50,7 +50,7 @@ public class UnparsableStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnparsableStmt(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class UnparsableStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnparsableStmt clone() {
-        return (UnparsableStmt) this.accept(new CloneVisitor(), null);
+        return (UnparsableStmt) accept(new CloneVisitor(), null);
     }
 
     @Override

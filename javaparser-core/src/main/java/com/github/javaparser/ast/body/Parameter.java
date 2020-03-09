@@ -102,13 +102,13 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Parameter(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
         super(tokenRange);
-        this.setModifiers(modifiers);
-        this.setAnnotations(annotations);
-        this.setType(type);
-        this.setVarArgs(isVarArgs);
-        this.setVarArgsAnnotations(varArgsAnnotations);
-        this.setName(name);
-        this.customInitialization();
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setType(type);
+        setVarArgs(isVarArgs);
+        setVarArgsAnnotations(varArgsAnnotations);
+        setName(name);
+        customInitialization();
     }
 
     @Override
@@ -125,12 +125,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
-        return this.isVarArgs;
+        return isVarArgs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -139,12 +139,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) {
-            this.type.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
+        if (type != null) {
+            type.setParentNode(null);
         }
         this.type = type;
-        this.setAsParentNodeOf(type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -153,7 +153,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (isVarArgs == this.isVarArgs) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
+        notifyPropertyChange(ObservableProperty.VAR_ARGS, isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
     }
@@ -163,12 +163,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -179,7 +179,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return this.modifiers;
+        return modifiers;
     }
 
     /**
@@ -192,12 +192,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (annotations == this.annotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return this;
     }
 
@@ -207,12 +207,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -222,12 +222,12 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (modifiers == this.modifiers) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) {
-            this.modifiers.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, modifiers, modifiers);
+        if (modifiers != null) {
+            modifiers.setParentNode(null);
         }
         this.modifiers = modifiers;
-        this.setAsParentNodeOf(modifiers);
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -237,21 +237,21 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.remove(i);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.varArgsAnnotations.size(); i++) {
-            if (this.varArgsAnnotations.get(i) == node) {
-                this.varArgsAnnotations.remove(i);
+        for (int i = 0; i < varArgsAnnotations.size(); i++) {
+            if (varArgsAnnotations.get(i) == node) {
+                varArgsAnnotations.remove(i);
                 return true;
             }
         }
@@ -260,7 +260,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getVarArgsAnnotations() {
-        return this.varArgsAnnotations;
+        return varArgsAnnotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -269,19 +269,19 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (varArgsAnnotations == this.varArgsAnnotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, this.varArgsAnnotations, varArgsAnnotations);
-        if (this.varArgsAnnotations != null) {
-            this.varArgsAnnotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, varArgsAnnotations, varArgsAnnotations);
+        if (varArgsAnnotations != null) {
+            varArgsAnnotations.setParentNode(null);
         }
         this.varArgsAnnotations = varArgsAnnotations;
-        this.setAsParentNodeOf(varArgsAnnotations);
+        setAsParentNodeOf(varArgsAnnotations);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Parameter clone() {
-        return (Parameter) this.accept(new CloneVisitor(), null);
+        return (Parameter) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -296,29 +296,29 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == this.type) {
-            this.setType((Type) replacementNode);
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
-        for (int i = 0; i < this.varArgsAnnotations.size(); i++) {
-            if (this.varArgsAnnotations.get(i) == node) {
-                this.varArgsAnnotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < varArgsAnnotations.size(); i++) {
+            if (varArgsAnnotations.get(i) == node) {
+                varArgsAnnotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }

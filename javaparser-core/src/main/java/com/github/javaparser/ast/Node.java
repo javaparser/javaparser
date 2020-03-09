@@ -194,7 +194,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Comment> getComment() {
-        return Optional.ofNullable(this.comment);
+        return Optional.ofNullable(comment);
     }
 
     /**
@@ -622,9 +622,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (node == null) {
             return false;
         }
-        if (this.comment != null) {
-            if (node == this.comment) {
-                this.removeComment();
+        if (comment != null) {
+            if (node == comment) {
+                removeComment();
                 return true;
             }
         }
@@ -633,13 +633,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Node removeComment() {
-        return this.setComment((Comment) null);
+        return setComment((Comment) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Node clone() {
-        return (Node) this.accept(new CloneVisitor(), null);
+        return (Node) accept(new CloneVisitor(), null);
     }
 
     /**
@@ -679,9 +679,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (node == null) {
             return false;
         }
-        if (this.comment != null) {
-            if (node == this.comment) {
-                this.setComment((Comment) replacementNode);
+        if (comment != null) {
+            if (node == comment) {
+                setComment((Comment) replacementNode);
                 return true;
             }
         }

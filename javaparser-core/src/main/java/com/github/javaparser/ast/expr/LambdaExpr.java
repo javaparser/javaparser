@@ -109,15 +109,15 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LambdaExpr(TokenRange tokenRange, NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
         super(tokenRange);
-        this.setParameters(parameters);
-        this.setBody(body);
-        this.setEnclosingParameters(isEnclosingParameters);
-        this.customInitialization();
+        setParameters(parameters);
+        setBody(body);
+        setEnclosingParameters(isEnclosingParameters);
+        customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
-        return this.parameters;
+        return parameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -126,12 +126,12 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (parameters == this.parameters) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null) {
-            this.parameters.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.PARAMETERS, parameters, parameters);
+        if (parameters != null) {
+            parameters.setParentNode(null);
         }
         this.parameters = parameters;
-        this.setAsParentNodeOf(parameters);
+        setAsParentNodeOf(parameters);
         return this;
     }
 
@@ -140,7 +140,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -149,12 +149,12 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -172,7 +172,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
-        return this.isEnclosingParameters;
+        return isEnclosingParameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -180,7 +180,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (isEnclosingParameters == this.isEnclosingParameters) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, isEnclosingParameters);
+        notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, isEnclosingParameters, isEnclosingParameters);
         this.isEnclosingParameters = isEnclosingParameters;
         return this;
     }
@@ -191,9 +191,9 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.parameters.size(); i++) {
-            if (this.parameters.get(i) == node) {
-                this.parameters.remove(i);
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.remove(i);
                 return true;
             }
         }
@@ -216,7 +216,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LambdaExpr clone() {
-        return (LambdaExpr) this.accept(new CloneVisitor(), null);
+        return (LambdaExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -231,13 +231,13 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((Statement) replacementNode);
+        if (node == body) {
+            setBody((Statement) replacementNode);
             return true;
         }
-        for (int i = 0; i < this.parameters.size(); i++) {
-            if (this.parameters.get(i) == node) {
-                this.parameters.set(i, (Parameter) replacementNode);
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.set(i, (Parameter) replacementNode);
                 return true;
             }
         }

@@ -128,10 +128,10 @@ public class BinaryExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BinaryExpr(TokenRange tokenRange, Expression left, Expression right, Operator operator) {
         super(tokenRange);
-        this.setLeft(left);
-        this.setRight(right);
-        this.setOperator(operator);
-        this.customInitialization();
+        setLeft(left);
+        setRight(right);
+        setOperator(operator);
+        customInitialization();
     }
 
     @Override
@@ -148,17 +148,17 @@ public class BinaryExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getLeft() {
-        return this.left;
+        return left;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
-        return this.operator;
+        return operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getRight() {
-        return this.right;
+        return right;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -167,12 +167,12 @@ public class BinaryExpr extends Expression {
         if (left == this.left) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
-        if (this.left != null) {
-            this.left.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.LEFT, left, left);
+        if (left != null) {
+            left.setParentNode(null);
         }
         this.left = left;
-        this.setAsParentNodeOf(left);
+        setAsParentNodeOf(left);
         return this;
     }
 
@@ -182,7 +182,7 @@ public class BinaryExpr extends Expression {
         if (operator == this.operator) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, operator, operator);
         this.operator = operator;
         return this;
     }
@@ -193,12 +193,12 @@ public class BinaryExpr extends Expression {
         if (right == this.right) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
-        if (this.right != null) {
-            this.right.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.RIGHT, right, right);
+        if (right != null) {
+            right.setParentNode(null);
         }
         this.right = right;
-        this.setAsParentNodeOf(right);
+        setAsParentNodeOf(right);
         return this;
     }
 
@@ -214,7 +214,7 @@ public class BinaryExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BinaryExpr clone() {
-        return (BinaryExpr) this.accept(new CloneVisitor(), null);
+        return (BinaryExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -229,12 +229,12 @@ public class BinaryExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (node == this.left) {
-            this.setLeft((Expression) replacementNode);
+        if (node == left) {
+            setLeft((Expression) replacementNode);
             return true;
         }
-        if (node == this.right) {
-            this.setRight((Expression) replacementNode);
+        if (node == right) {
+            setRight((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

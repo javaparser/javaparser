@@ -60,7 +60,7 @@ public class MarkerAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MarkerAnnotationExpr(TokenRange tokenRange, Name name) {
         super(tokenRange, name);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MarkerAnnotationExpr extends AnnotationExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MarkerAnnotationExpr clone() {
-        return (MarkerAnnotationExpr) this.accept(new CloneVisitor(), null);
+        return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

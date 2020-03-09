@@ -83,9 +83,9 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeParameter(TokenRange tokenRange, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.setName(name);
-        this.setTypeBound(typeBound);
-        this.customInitialization();
+        setName(name);
+        setTypeBound(typeBound);
+        customInitialization();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -118,7 +118,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getTypeBound() {
-        return this.typeBound;
+        return typeBound;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -127,12 +127,12 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -142,12 +142,12 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         if (typeBound == this.typeBound) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
-        if (this.typeBound != null) {
-            this.typeBound.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_BOUND, typeBound, typeBound);
+        if (typeBound != null) {
+            typeBound.setParentNode(null);
         }
         this.typeBound = typeBound;
-        this.setAsParentNodeOf(typeBound);
+        setAsParentNodeOf(typeBound);
         return this;
     }
 
@@ -163,9 +163,9 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.typeBound.size(); i++) {
-            if (this.typeBound.get(i) == node) {
-                this.typeBound.remove(i);
+        for (int i = 0; i < typeBound.size(); i++) {
+            if (typeBound.get(i) == node) {
+                typeBound.remove(i);
                 return true;
             }
         }
@@ -182,7 +182,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeParameter clone() {
-        return (TypeParameter) this.accept(new CloneVisitor(), null);
+        return (TypeParameter) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -197,13 +197,13 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
-        for (int i = 0; i < this.typeBound.size(); i++) {
-            if (this.typeBound.get(i) == node) {
-                this.typeBound.set(i, (ClassOrInterfaceType) replacementNode);
+        for (int i = 0; i < typeBound.size(); i++) {
+            if (typeBound.get(i) == node) {
+                typeBound.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }

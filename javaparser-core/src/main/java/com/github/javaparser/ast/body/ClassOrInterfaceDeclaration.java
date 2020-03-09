@@ -81,11 +81,11 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
-        this.setInterface(isInterface);
-        this.setTypeParameters(typeParameters);
-        this.setExtendedTypes(extendedTypes);
-        this.setImplementedTypes(implementedTypes);
-        this.customInitialization();
+        setInterface(isInterface);
+        setTypeParameters(typeParameters);
+        setExtendedTypes(extendedTypes);
+        setImplementedTypes(implementedTypes);
+        customInitialization();
     }
 
     @Override
@@ -102,22 +102,22 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getExtendedTypes() {
-        return this.extendedTypes;
+        return extendedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
-        return this.implementedTypes;
+        return implementedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
-        return this.typeParameters;
+        return typeParameters;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
-        return this.isInterface;
+        return isInterface;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -126,12 +126,12 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (extendedTypes == this.extendedTypes) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
-        if (this.extendedTypes != null) {
-            this.extendedTypes.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, extendedTypes, extendedTypes);
+        if (extendedTypes != null) {
+            extendedTypes.setParentNode(null);
         }
         this.extendedTypes = extendedTypes;
-        this.setAsParentNodeOf(extendedTypes);
+        setAsParentNodeOf(extendedTypes);
         return this;
     }
 
@@ -141,12 +141,12 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (implementedTypes == this.implementedTypes) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
-        if (this.implementedTypes != null) {
-            this.implementedTypes.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, implementedTypes, implementedTypes);
+        if (implementedTypes != null) {
+            implementedTypes.setParentNode(null);
         }
         this.implementedTypes = implementedTypes;
-        this.setAsParentNodeOf(implementedTypes);
+        setAsParentNodeOf(implementedTypes);
         return this;
     }
 
@@ -155,7 +155,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (isInterface == this.isInterface) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
+        notifyPropertyChange(ObservableProperty.INTERFACE, isInterface, isInterface);
         this.isInterface = isInterface;
         return this;
     }
@@ -166,12 +166,12 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (typeParameters == this.typeParameters) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null) {
-            this.typeParameters.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, typeParameters, typeParameters);
+        if (typeParameters != null) {
+            typeParameters.setParentNode(null);
         }
         this.typeParameters = typeParameters;
-        this.setAsParentNodeOf(typeParameters);
+        setAsParentNodeOf(typeParameters);
         return this;
     }
 
@@ -181,21 +181,21 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.extendedTypes.size(); i++) {
-            if (this.extendedTypes.get(i) == node) {
-                this.extendedTypes.remove(i);
+        for (int i = 0; i < extendedTypes.size(); i++) {
+            if (extendedTypes.get(i) == node) {
+                extendedTypes.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.implementedTypes.size(); i++) {
-            if (this.implementedTypes.get(i) == node) {
-                this.implementedTypes.remove(i);
+        for (int i = 0; i < implementedTypes.size(); i++) {
+            if (implementedTypes.get(i) == node) {
+                implementedTypes.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.typeParameters.size(); i++) {
-            if (this.typeParameters.get(i) == node) {
-                this.typeParameters.remove(i);
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.remove(i);
                 return true;
             }
         }
@@ -228,7 +228,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceDeclaration clone() {
-        return (ClassOrInterfaceDeclaration) this.accept(new CloneVisitor(), null);
+        return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -243,21 +243,21 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.extendedTypes.size(); i++) {
-            if (this.extendedTypes.get(i) == node) {
-                this.extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);
+        for (int i = 0; i < extendedTypes.size(); i++) {
+            if (extendedTypes.get(i) == node) {
+                extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.implementedTypes.size(); i++) {
-            if (this.implementedTypes.get(i) == node) {
-                this.implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
+        for (int i = 0; i < implementedTypes.size(); i++) {
+            if (implementedTypes.get(i) == node) {
+                implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.typeParameters.size(); i++) {
-            if (this.typeParameters.get(i) == node) {
-                this.typeParameters.set(i, (TypeParameter) replacementNode);
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.set(i, (TypeParameter) replacementNode);
                 return true;
             }
         }

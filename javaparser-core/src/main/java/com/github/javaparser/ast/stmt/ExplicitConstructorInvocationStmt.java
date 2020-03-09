@@ -83,11 +83,11 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ExplicitConstructorInvocationStmt(TokenRange tokenRange, NodeList<Type> typeArguments, boolean isThis, Expression expression, NodeList<Expression> arguments) {
         super(tokenRange);
-        this.setTypeArguments(typeArguments);
-        this.setThis(isThis);
-        this.setExpression(expression);
-        this.setArguments(arguments);
-        this.customInitialization();
+        setTypeArguments(typeArguments);
+        setThis(isThis);
+        setExpression(expression);
+        setArguments(arguments);
+        customInitialization();
     }
 
     @Override
@@ -104,17 +104,17 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
-        return this.arguments;
+        return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
-        return Optional.ofNullable(this.expression);
+        return Optional.ofNullable(expression);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
-        return this.isThis;
+        return isThis;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -123,12 +123,12 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (arguments == this.arguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null) {
-            this.arguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, arguments, arguments);
+        if (arguments != null) {
+            arguments.setParentNode(null);
         }
         this.arguments = arguments;
-        this.setAsParentNodeOf(arguments);
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -143,12 +143,12 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -157,14 +157,14 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (isThis == this.isThis) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
+        notifyPropertyChange(ObservableProperty.THIS, isThis, isThis);
         this.isThis = isThis;
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(this.typeArguments);
+        return Optional.ofNullable(typeArguments);
     }
 
     /**
@@ -178,12 +178,12 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (typeArguments == this.typeArguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) {
-            this.typeArguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, typeArguments, typeArguments);
+        if (typeArguments != null) {
+            typeArguments.setParentNode(null);
         }
         this.typeArguments = typeArguments;
-        this.setAsParentNodeOf(typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -193,22 +193,22 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.remove(i);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
                 return true;
             }
         }
-        if (this.expression != null) {
-            if (node == this.expression) {
-                this.removeExpression();
+        if (expression != null) {
+            if (node == expression) {
+                removeExpression();
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.remove(i);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
                     return true;
                 }
             }
@@ -218,13 +218,13 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ExplicitConstructorInvocationStmt removeExpression() {
-        return this.setExpression((Expression) null);
+        return setExpression((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ExplicitConstructorInvocationStmt clone() {
-        return (ExplicitConstructorInvocationStmt) this.accept(new CloneVisitor(), null);
+        return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -239,22 +239,22 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.set(i, (Expression) replacementNode);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        if (this.expression != null) {
-            if (node == this.expression) {
-                this.setExpression((Expression) replacementNode);
+        if (expression != null) {
+            if (node == expression) {
+                setExpression((Expression) replacementNode);
                 return true;
             }
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.set(i, (Type) replacementNode);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }

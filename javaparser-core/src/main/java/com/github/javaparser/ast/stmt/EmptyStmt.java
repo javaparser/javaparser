@@ -49,7 +49,7 @@ public class EmptyStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EmptyStmt(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EmptyStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EmptyStmt clone() {
-        return (EmptyStmt) this.accept(new CloneVisitor(), null);
+        return (EmptyStmt) accept(new CloneVisitor(), null);
     }
 
     @Override

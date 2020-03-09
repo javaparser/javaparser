@@ -47,7 +47,7 @@ public abstract class ModuleDirective extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleDirective(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class ModuleDirective extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleDirective clone() {
-        return (ModuleDirective) this.accept(new CloneVisitor(), null);
+        return (ModuleDirective) accept(new CloneVisitor(), null);
     }
 
     @Override

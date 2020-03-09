@@ -66,7 +66,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TextBlockLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TextBlockLiteralExpr clone() {
-        return (TextBlockLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (TextBlockLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

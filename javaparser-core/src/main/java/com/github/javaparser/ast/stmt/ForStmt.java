@@ -92,11 +92,11 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
         super(tokenRange);
-        this.setInitialization(initialization);
-        this.setCompare(compare);
-        this.setUpdate(update);
-        this.setBody(body);
-        this.customInitialization();
+        setInitialization(initialization);
+        setCompare(compare);
+        setUpdate(update);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -113,22 +113,22 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getCompare() {
-        return Optional.ofNullable(this.compare);
+        return Optional.ofNullable(compare);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getInitialization() {
-        return this.initialization;
+        return initialization;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getUpdate() {
-        return this.update;
+        return update;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -137,12 +137,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -157,12 +157,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (compare == this.compare) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
-        if (this.compare != null) {
-            this.compare.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.COMPARE, compare, compare);
+        if (compare != null) {
+            compare.setParentNode(null);
         }
         this.compare = compare;
-        this.setAsParentNodeOf(compare);
+        setAsParentNodeOf(compare);
         return this;
     }
 
@@ -172,12 +172,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (initialization == this.initialization) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
-        if (this.initialization != null) {
-            this.initialization.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.INITIALIZATION, initialization, initialization);
+        if (initialization != null) {
+            initialization.setParentNode(null);
         }
         this.initialization = initialization;
-        this.setAsParentNodeOf(initialization);
+        setAsParentNodeOf(initialization);
         return this;
     }
 
@@ -187,12 +187,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (update == this.update) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
-        if (this.update != null) {
-            this.update.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.UPDATE, update, update);
+        if (update != null) {
+            update.setParentNode(null);
         }
         this.update = update;
-        this.setAsParentNodeOf(update);
+        setAsParentNodeOf(update);
         return this;
     }
 
@@ -202,21 +202,21 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (node == null) {
             return false;
         }
-        if (this.compare != null) {
-            if (node == this.compare) {
-                this.removeCompare();
+        if (compare != null) {
+            if (node == compare) {
+                removeCompare();
                 return true;
             }
         }
-        for (int i = 0; i < this.initialization.size(); i++) {
-            if (this.initialization.get(i) == node) {
-                this.initialization.remove(i);
+        for (int i = 0; i < initialization.size(); i++) {
+            if (initialization.get(i) == node) {
+                initialization.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.update.size(); i++) {
-            if (this.update.get(i) == node) {
-                this.update.remove(i);
+        for (int i = 0; i < update.size(); i++) {
+            if (update.get(i) == node) {
+                update.remove(i);
                 return true;
             }
         }
@@ -225,13 +225,13 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ForStmt removeCompare() {
-        return this.setCompare((Expression) null);
+        return setCompare((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForStmt clone() {
-        return (ForStmt) this.accept(new CloneVisitor(), null);
+        return (ForStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -246,25 +246,25 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((Statement) replacementNode);
+        if (node == body) {
+            setBody((Statement) replacementNode);
             return true;
         }
-        if (this.compare != null) {
-            if (node == this.compare) {
-                this.setCompare((Expression) replacementNode);
+        if (compare != null) {
+            if (node == compare) {
+                setCompare((Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.initialization.size(); i++) {
-            if (this.initialization.get(i) == node) {
-                this.initialization.set(i, (Expression) replacementNode);
+        for (int i = 0; i < initialization.size(); i++) {
+            if (initialization.get(i) == node) {
+                initialization.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.update.size(); i++) {
-            if (this.update.get(i) == node) {
-                this.update.set(i, (Expression) replacementNode);
+        for (int i = 0; i < update.size(); i++) {
+            if (update.get(i) == node) {
+                update.set(i, (Expression) replacementNode);
                 return true;
             }
         }

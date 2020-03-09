@@ -58,8 +58,8 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
         super(tokenRange, name);
-        this.setMemberValue(memberValue);
-        this.customInitialization();
+        setMemberValue(memberValue);
+        customInitialization();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getMemberValue() {
-        return this.memberValue;
+        return memberValue;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -85,12 +85,12 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         if (memberValue == this.memberValue) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
-        if (this.memberValue != null) {
-            this.memberValue.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MEMBER_VALUE, memberValue, memberValue);
+        if (memberValue != null) {
+            memberValue.setParentNode(null);
         }
         this.memberValue = memberValue;
-        this.setAsParentNodeOf(memberValue);
+        setAsParentNodeOf(memberValue);
         return this;
     }
 
@@ -106,7 +106,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SingleMemberAnnotationExpr clone() {
-        return (SingleMemberAnnotationExpr) this.accept(new CloneVisitor(), null);
+        return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -121,8 +121,8 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         if (node == null) {
             return false;
         }
-        if (node == this.memberValue) {
-            this.setMemberValue((Expression) replacementNode);
+        if (node == memberValue) {
+            setMemberValue((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

@@ -62,8 +62,8 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThrowStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
-        this.setExpression(expression);
-        this.customInitialization();
+        setExpression(expression);
+        customInitialization();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return this.expression;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -89,12 +89,12 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThrowStmt clone() {
-        return (ThrowStmt) this.accept(new CloneVisitor(), null);
+        return (ThrowStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -125,8 +125,8 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
         if (node == null) {
             return false;
         }
-        if (node == this.expression) {
-            this.setExpression((Expression) replacementNode);
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

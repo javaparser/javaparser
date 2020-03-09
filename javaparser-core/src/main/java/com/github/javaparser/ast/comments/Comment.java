@@ -60,8 +60,8 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Comment(TokenRange tokenRange, String content) {
         super(tokenRange);
-        this.setContent(content);
-        this.customInitialization();
+        setContent(content);
+        customInitialization();
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class Comment extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getContent() {
-        return this.content;
+        return content;
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class Comment extends Node {
         if (content == this.content) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
+        notifyPropertyChange(ObservableProperty.CONTENT, content, content);
         this.content = content;
         return this;
     }
@@ -174,7 +174,7 @@ public abstract class Comment extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Comment clone() {
-        return (Comment) this.accept(new CloneVisitor(), null);
+        return (Comment) accept(new CloneVisitor(), null);
     }
 
     @Override

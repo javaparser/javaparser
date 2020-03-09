@@ -60,8 +60,8 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
         super(tokenRange);
-        this.setStatements(statements);
-        this.customInitialization();
+        setStatements(statements);
+        customInitialization();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
-        return this.statements;
+        return statements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -87,12 +87,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (statements == this.statements) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        if (this.statements != null) {
-            this.statements.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.STATEMENTS, statements, statements);
+        if (statements != null) {
+            statements.setParentNode(null);
         }
         this.statements = statements;
-        this.setAsParentNodeOf(statements);
+        setAsParentNodeOf(statements);
         return this;
     }
 
@@ -102,9 +102,9 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.statements.size(); i++) {
-            if (this.statements.get(i) == node) {
-                this.statements.remove(i);
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.remove(i);
                 return true;
             }
         }
@@ -114,7 +114,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockStmt clone() {
-        return (BlockStmt) this.accept(new CloneVisitor(), null);
+        return (BlockStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -129,9 +129,9 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.statements.size(); i++) {
-            if (this.statements.get(i) == node) {
-                this.statements.set(i, (Statement) replacementNode);
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.set(i, (Statement) replacementNode);
                 return true;
             }
         }

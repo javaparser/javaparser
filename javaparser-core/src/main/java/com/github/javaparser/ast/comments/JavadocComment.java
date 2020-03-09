@@ -56,7 +56,7 @@ public class JavadocComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JavadocComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class JavadocComment extends Comment {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JavadocComment clone() {
-        return (JavadocComment) this.accept(new CloneVisitor(), null);
+        return (JavadocComment) accept(new CloneVisitor(), null);
     }
 
     @Override

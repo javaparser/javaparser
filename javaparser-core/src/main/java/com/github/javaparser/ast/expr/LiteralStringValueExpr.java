@@ -50,13 +50,13 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LiteralStringValueExpr(TokenRange tokenRange, String value) {
         super(tokenRange);
-        this.setValue(value);
-        this.customInitialization();
+        setValue(value);
+        customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getValue() {
-        return this.value;
+        return value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -65,7 +65,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         if (value == this.value) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        notifyPropertyChange(ObservableProperty.VALUE, value, value);
         this.value = value;
         return this;
     }
@@ -82,7 +82,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralStringValueExpr clone() {
-        return (LiteralStringValueExpr) this.accept(new CloneVisitor(), null);
+        return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

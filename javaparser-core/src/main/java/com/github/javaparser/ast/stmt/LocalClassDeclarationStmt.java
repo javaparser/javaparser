@@ -65,8 +65,8 @@ public class LocalClassDeclarationStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LocalClassDeclarationStmt(TokenRange tokenRange, ClassOrInterfaceDeclaration classDeclaration) {
         super(tokenRange);
-        this.setClassDeclaration(classDeclaration);
-        this.customInitialization();
+        setClassDeclaration(classDeclaration);
+        customInitialization();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class LocalClassDeclarationStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration getClassDeclaration() {
-        return this.classDeclaration;
+        return classDeclaration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -92,12 +92,12 @@ public class LocalClassDeclarationStmt extends Statement {
         if (classDeclaration == this.classDeclaration) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        if (this.classDeclaration != null) {
-            this.classDeclaration.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, classDeclaration, classDeclaration);
+        if (classDeclaration != null) {
+            classDeclaration.setParentNode(null);
         }
         this.classDeclaration = classDeclaration;
-        this.setAsParentNodeOf(classDeclaration);
+        setAsParentNodeOf(classDeclaration);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class LocalClassDeclarationStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LocalClassDeclarationStmt clone() {
-        return (LocalClassDeclarationStmt) this.accept(new CloneVisitor(), null);
+        return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class LocalClassDeclarationStmt extends Statement {
         if (node == null) {
             return false;
         }
-        if (node == this.classDeclaration) {
-            this.setClassDeclaration((ClassOrInterfaceDeclaration) replacementNode);
+        if (node == classDeclaration) {
+            setClassDeclaration((ClassOrInterfaceDeclaration) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

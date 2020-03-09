@@ -64,9 +64,9 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleRequiresDirective(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name) {
         super(tokenRange);
-        this.setModifiers(modifiers);
-        this.setName(name);
-        this.customInitialization();
+        setModifiers(modifiers);
+        setName(name);
+        customInitialization();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return this.modifiers;
+        return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -92,18 +92,18 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         if (modifiers == this.modifiers) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) {
-            this.modifiers.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, modifiers, modifiers);
+        if (modifiers != null) {
+            modifiers.setParentNode(null);
         }
         this.modifiers = modifiers;
-        this.setAsParentNodeOf(modifiers);
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -112,12 +112,12 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -135,9 +135,9 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.remove(i);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
@@ -147,7 +147,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleRequiresDirective clone() {
-        return (ModuleRequiresDirective) this.accept(new CloneVisitor(), null);
+        return (ModuleRequiresDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -156,14 +156,14 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

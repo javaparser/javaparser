@@ -48,7 +48,7 @@ public abstract class LiteralExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LiteralExpr(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class LiteralExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralExpr clone() {
-        return (LiteralExpr) this.accept(new CloneVisitor(), null);
+        return (LiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

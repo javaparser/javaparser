@@ -66,7 +66,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationDeclaration clone() {
-        return (AnnotationDeclaration) this.accept(new CloneVisitor(), null);
+        return (AnnotationDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override

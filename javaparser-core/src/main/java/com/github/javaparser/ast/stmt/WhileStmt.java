@@ -65,9 +65,9 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
         super(tokenRange);
-        this.setCondition(condition);
-        this.setBody(body);
-        this.customInitialization();
+        setCondition(condition);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -84,12 +84,12 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
-        return this.condition;
+        return condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -98,12 +98,12 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -113,12 +113,12 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         if (condition == this.condition) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null) {
-            this.condition.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CONDITION, condition, condition);
+        if (condition != null) {
+            condition.setParentNode(null);
         }
         this.condition = condition;
-        this.setAsParentNodeOf(condition);
+        setAsParentNodeOf(condition);
         return this;
     }
 
@@ -134,7 +134,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WhileStmt clone() {
-        return (WhileStmt) this.accept(new CloneVisitor(), null);
+        return (WhileStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -149,12 +149,12 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((Statement) replacementNode);
+        if (node == body) {
+            setBody((Statement) replacementNode);
             return true;
         }
-        if (node == this.condition) {
-            this.setCondition((Expression) replacementNode);
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

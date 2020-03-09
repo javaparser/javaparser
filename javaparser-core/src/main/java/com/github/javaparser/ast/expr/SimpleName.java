@@ -60,8 +60,8 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SimpleName(TokenRange tokenRange, String identifier) {
         super(tokenRange);
-        this.setIdentifier(identifier);
-        this.customInitialization();
+        setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
-        return this.identifier;
+        return identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -87,7 +87,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         if (identifier == this.identifier) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, identifier, identifier);
         this.identifier = identifier;
         return this;
     }
@@ -108,7 +108,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SimpleName clone() {
-        return (SimpleName) this.accept(new CloneVisitor(), null);
+        return (SimpleName) accept(new CloneVisitor(), null);
     }
 
     @Override

@@ -68,8 +68,8 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);
-        this.setElements(elements);
-        this.customInitialization();
+        setElements(elements);
+        customInitialization();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getElements() {
-        return this.elements;
+        return elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -95,12 +95,12 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         if (elements == this.elements) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        if (this.elements != null) {
-            this.elements.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ELEMENTS, elements, elements);
+        if (elements != null) {
+            elements.setParentNode(null);
         }
         this.elements = elements;
-        this.setAsParentNodeOf(elements);
+        setAsParentNodeOf(elements);
         return this;
     }
 
@@ -115,9 +115,9 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.elements.size(); i++) {
-            if (this.elements.get(i) == node) {
-                this.elements.remove(i);
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.remove(i);
                 return true;
             }
         }
@@ -132,7 +132,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntersectionType clone() {
-        return (IntersectionType) this.accept(new CloneVisitor(), null);
+        return (IntersectionType) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -147,9 +147,9 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.elements.size(); i++) {
-            if (this.elements.get(i) == node) {
-                this.elements.set(i, (ReferenceType) replacementNode);
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.set(i, (ReferenceType) replacementNode);
                 return true;
             }
         }

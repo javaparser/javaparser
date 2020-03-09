@@ -67,7 +67,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntegerLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        this.customInitialization();
+        customInitialization();
     }
 
     /**
@@ -162,7 +162,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntegerLiteralExpr clone() {
-        return (IntegerLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

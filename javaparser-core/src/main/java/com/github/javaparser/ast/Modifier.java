@@ -136,8 +136,8 @@ public class Modifier extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Modifier(TokenRange tokenRange, Keyword keyword) {
         super(tokenRange);
-        this.setKeyword(keyword);
-        this.customInitialization();
+        setKeyword(keyword);
+        customInitialization();
     }
 
     @Override
@@ -154,7 +154,7 @@ public class Modifier extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Keyword getKeyword() {
-        return this.keyword;
+        return keyword;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -163,7 +163,7 @@ public class Modifier extends Node {
         if (keyword == this.keyword) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
+        notifyPropertyChange(ObservableProperty.KEYWORD, keyword, keyword);
         this.keyword = keyword;
         return this;
     }
@@ -197,7 +197,7 @@ public class Modifier extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Modifier clone() {
-        return (Modifier) this.accept(new CloneVisitor(), null);
+        return (Modifier) accept(new CloneVisitor(), null);
     }
 
     @Override

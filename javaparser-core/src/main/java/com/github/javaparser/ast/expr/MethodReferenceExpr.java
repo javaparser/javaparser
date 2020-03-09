@@ -79,10 +79,10 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodReferenceExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(tokenRange);
-        this.setScope(scope);
-        this.setTypeArguments(typeArguments);
-        this.setIdentifier(identifier);
-        this.customInitialization();
+        setScope(scope);
+        setTypeArguments(typeArguments);
+        setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getScope() {
-        return this.scope;
+        return scope;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -108,18 +108,18 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         if (scope == this.scope) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null) {
-            this.scope.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.SCOPE, scope, scope);
+        if (scope != null) {
+            scope.setParentNode(null);
         }
         this.scope = scope;
-        this.setAsParentNodeOf(scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
-        return Optional.ofNullable(this.typeArguments);
+        return Optional.ofNullable(typeArguments);
     }
 
     /**
@@ -133,18 +133,18 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         if (typeArguments == this.typeArguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) {
-            this.typeArguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, typeArguments, typeArguments);
+        if (typeArguments != null) {
+            typeArguments.setParentNode(null);
         }
         this.typeArguments = typeArguments;
-        this.setAsParentNodeOf(typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
-        return this.identifier;
+        return identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -153,7 +153,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         if (identifier == this.identifier) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, identifier, identifier);
         this.identifier = identifier;
         return this;
     }
@@ -164,10 +164,10 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         if (node == null) {
             return false;
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.remove(i);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
                     return true;
                 }
             }
@@ -178,7 +178,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodReferenceExpr clone() {
-        return (MethodReferenceExpr) this.accept(new CloneVisitor(), null);
+        return (MethodReferenceExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -193,14 +193,14 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         if (node == null) {
             return false;
         }
-        if (node == this.scope) {
-            this.setScope((Expression) replacementNode);
+        if (node == scope) {
+            setScope((Expression) replacementNode);
             return true;
         }
-        if (this.typeArguments != null) {
-            for (int i = 0; i < this.typeArguments.size(); i++) {
-                if (this.typeArguments.get(i) == node) {
-                    this.typeArguments.set(i, (Type) replacementNode);
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
                     return true;
                 }
             }

@@ -61,9 +61,9 @@ public class ArrayAccessExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayAccessExpr(TokenRange tokenRange, Expression name, Expression index) {
         super(tokenRange);
-        this.setName(name);
-        this.setIndex(index);
-        this.customInitialization();
+        setName(name);
+        setIndex(index);
+        customInitialization();
     }
 
     @Override
@@ -80,12 +80,12 @@ public class ArrayAccessExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIndex() {
-        return this.index;
+        return index;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -94,12 +94,12 @@ public class ArrayAccessExpr extends Expression {
         if (index == this.index) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
-        if (this.index != null) {
-            this.index.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.INDEX, index, index);
+        if (index != null) {
+            index.setParentNode(null);
         }
         this.index = index;
-        this.setAsParentNodeOf(index);
+        setAsParentNodeOf(index);
         return this;
     }
 
@@ -109,12 +109,12 @@ public class ArrayAccessExpr extends Expression {
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -130,7 +130,7 @@ public class ArrayAccessExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayAccessExpr clone() {
-        return (ArrayAccessExpr) this.accept(new CloneVisitor(), null);
+        return (ArrayAccessExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -145,12 +145,12 @@ public class ArrayAccessExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (node == this.index) {
-            this.setIndex((Expression) replacementNode);
+        if (node == index) {
+            setIndex((Expression) replacementNode);
             return true;
         }
-        if (node == this.name) {
-            this.setName((Expression) replacementNode);
+        if (node == name) {
+            setName((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

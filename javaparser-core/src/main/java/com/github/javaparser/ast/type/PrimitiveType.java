@@ -140,8 +140,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.setType(type);
-        this.customInitialization();
+        setType(type);
+        customInitialization();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive getType() {
-        return this.type;
+        return type;
     }
 
     public ClassOrInterfaceType toBoxedType() {
@@ -171,7 +171,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
         this.type = type;
         return this;
     }
@@ -198,7 +198,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PrimitiveType clone() {
-        return (PrimitiveType) this.accept(new CloneVisitor(), null);
+        return (PrimitiveType) accept(new CloneVisitor(), null);
     }
 
     @Override

@@ -49,7 +49,7 @@ public abstract class Statement extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Statement(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class Statement extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Statement clone() {
-        return (Statement) this.accept(new CloneVisitor(), null);
+        return (Statement) accept(new CloneVisitor(), null);
     }
 
     @Override

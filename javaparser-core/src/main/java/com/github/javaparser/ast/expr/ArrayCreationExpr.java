@@ -77,10 +77,10 @@ public class ArrayCreationExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayCreationExpr(TokenRange tokenRange, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         super(tokenRange);
-        this.setElementType(elementType);
-        this.setLevels(levels);
-        this.setInitializer(initializer);
-        this.customInitialization();
+        setElementType(elementType);
+        setLevels(levels);
+        setInitializer(initializer);
+        customInitialization();
     }
 
     @Override
@@ -97,12 +97,12 @@ public class ArrayCreationExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ArrayInitializerExpr> getInitializer() {
-        return Optional.ofNullable(this.initializer);
+        return Optional.ofNullable(initializer);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getElementType() {
-        return this.elementType;
+        return elementType;
     }
 
     /**
@@ -116,12 +116,12 @@ public class ArrayCreationExpr extends Expression {
         if (initializer == this.initializer) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
-        if (this.initializer != null) {
-            this.initializer.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.INITIALIZER, initializer, initializer);
+        if (initializer != null) {
+            initializer.setParentNode(null);
         }
         this.initializer = initializer;
-        this.setAsParentNodeOf(initializer);
+        setAsParentNodeOf(initializer);
         return this;
     }
 
@@ -131,18 +131,18 @@ public class ArrayCreationExpr extends Expression {
         if (elementType == this.elementType) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        if (this.elementType != null) {
-            this.elementType.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, elementType, elementType);
+        if (elementType != null) {
+            elementType.setParentNode(null);
         }
         this.elementType = elementType;
-        this.setAsParentNodeOf(elementType);
+        setAsParentNodeOf(elementType);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ArrayCreationLevel> getLevels() {
-        return this.levels;
+        return levels;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -151,12 +151,12 @@ public class ArrayCreationExpr extends Expression {
         if (levels == this.levels) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null) {
-            this.levels.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.LEVELS, levels, levels);
+        if (levels != null) {
+            levels.setParentNode(null);
         }
         this.levels = levels;
-        this.setAsParentNodeOf(levels);
+        setAsParentNodeOf(levels);
         return this;
     }
 
@@ -192,15 +192,15 @@ public class ArrayCreationExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (this.initializer != null) {
-            if (node == this.initializer) {
-                this.removeInitializer();
+        if (initializer != null) {
+            if (node == initializer) {
+                removeInitializer();
                 return true;
             }
         }
-        for (int i = 0; i < this.levels.size(); i++) {
-            if (this.levels.get(i) == node) {
-                this.levels.remove(i);
+        for (int i = 0; i < levels.size(); i++) {
+            if (levels.get(i) == node) {
+                levels.remove(i);
                 return true;
             }
         }
@@ -209,13 +209,13 @@ public class ArrayCreationExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationExpr removeInitializer() {
-        return this.setInitializer((ArrayInitializerExpr) null);
+        return setInitializer((ArrayInitializerExpr) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayCreationExpr clone() {
-        return (ArrayCreationExpr) this.accept(new CloneVisitor(), null);
+        return (ArrayCreationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -230,19 +230,19 @@ public class ArrayCreationExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (node == this.elementType) {
-            this.setElementType((Type) replacementNode);
+        if (node == elementType) {
+            setElementType((Type) replacementNode);
             return true;
         }
-        if (this.initializer != null) {
-            if (node == this.initializer) {
-                this.setInitializer((ArrayInitializerExpr) replacementNode);
+        if (initializer != null) {
+            if (node == initializer) {
+                setInitializer((ArrayInitializerExpr) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.levels.size(); i++) {
-            if (this.levels.get(i) == node) {
-                this.levels.set(i, (ArrayCreationLevel) replacementNode);
+        for (int i = 0; i < levels.size(); i++) {
+            if (levels.get(i) == node) {
+                levels.set(i, (ArrayCreationLevel) replacementNode);
                 return true;
             }
         }

@@ -68,9 +68,9 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CatchClause(TokenRange tokenRange, Parameter parameter, BlockStmt body) {
         super(tokenRange);
-        this.setParameter(parameter);
-        this.setBody(body);
-        this.customInitialization();
+        setParameter(parameter);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter getParameter() {
-        return this.parameter;
+        return parameter;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -101,18 +101,18 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
         if (parameter == this.parameter) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
-        if (this.parameter != null) {
-            this.parameter.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.PARAMETER, parameter, parameter);
+        if (parameter != null) {
+            parameter.setParentNode(null);
         }
         this.parameter = parameter;
-        this.setAsParentNodeOf(parameter);
+        setAsParentNodeOf(parameter);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -121,12 +121,12 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -142,7 +142,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CatchClause clone() {
-        return (CatchClause) this.accept(new CloneVisitor(), null);
+        return (CatchClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -157,12 +157,12 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((BlockStmt) replacementNode);
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
             return true;
         }
-        if (node == this.parameter) {
-            this.setParameter((Parameter) replacementNode);
+        if (node == parameter) {
+            setParameter((Parameter) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

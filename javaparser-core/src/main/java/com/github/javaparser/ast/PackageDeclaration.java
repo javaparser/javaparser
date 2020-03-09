@@ -67,9 +67,9 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
         super(tokenRange);
-        this.setAnnotations(annotations);
-        this.setName(name);
-        this.customInitialization();
+        setAnnotations(annotations);
+        setName(name);
+        customInitialization();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     /**
@@ -102,7 +102,7 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -114,12 +114,12 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
         if (annotations == this.annotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return this;
     }
 
@@ -134,12 +134,12 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -149,9 +149,9 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
@@ -161,7 +161,7 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PackageDeclaration clone() {
-        return (PackageDeclaration) this.accept(new CloneVisitor(), null);
+        return (PackageDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -176,14 +176,14 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

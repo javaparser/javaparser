@@ -82,8 +82,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
-        this.setBody(body);
-        this.customInitialization();
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
-        return this.body;
+        return body;
     }
 
     /**
@@ -115,12 +115,12 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -194,7 +194,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConstructorDeclaration clone() {
-        return (ConstructorDeclaration) this.accept(new CloneVisitor(), null);
+        return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -209,8 +209,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((BlockStmt) replacementNode);
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

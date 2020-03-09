@@ -56,7 +56,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VoidType(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VoidType clone() {
-        return (VoidType) this.accept(new CloneVisitor(), null);
+        return (VoidType) accept(new CloneVisitor(), null);
     }
 
     @Override

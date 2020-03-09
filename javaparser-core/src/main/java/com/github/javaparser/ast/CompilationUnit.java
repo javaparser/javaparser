@@ -115,11 +115,11 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(tokenRange);
-        this.setPackageDeclaration(packageDeclaration);
-        this.setImports(imports);
-        this.setTypes(types);
-        this.setModule(module);
-        this.customInitialization();
+        setPackageDeclaration(packageDeclaration);
+        setImports(imports);
+        setTypes(types);
+        setModule(module);
+        customInitialization();
     }
 
     @Override
@@ -171,7 +171,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
-        return this.imports;
+        return imports;
     }
 
     public ImportDeclaration getImport(int i) {
@@ -187,7 +187,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
-        return Optional.ofNullable(this.packageDeclaration);
+        return Optional.ofNullable(packageDeclaration);
     }
 
     /**
@@ -201,7 +201,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> getTypes() {
-        return this.types;
+        return types;
     }
 
     /**
@@ -226,12 +226,12 @@ public class CompilationUnit extends Node {
         if (imports == this.imports) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
-        if (this.imports != null) {
-            this.imports.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.IMPORTS, imports, imports);
+        if (imports != null) {
+            imports.setParentNode(null);
         }
         this.imports = imports;
-        this.setAsParentNodeOf(imports);
+        setAsParentNodeOf(imports);
         return this;
     }
 
@@ -294,12 +294,12 @@ public class CompilationUnit extends Node {
         if (packageDeclaration == this.packageDeclaration) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
-        if (this.packageDeclaration != null) {
-            this.packageDeclaration.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, packageDeclaration, packageDeclaration);
+        if (packageDeclaration != null) {
+            packageDeclaration.setParentNode(null);
         }
         this.packageDeclaration = packageDeclaration;
-        this.setAsParentNodeOf(packageDeclaration);
+        setAsParentNodeOf(packageDeclaration);
         return this;
     }
 
@@ -312,12 +312,12 @@ public class CompilationUnit extends Node {
         if (types == this.types) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
-        if (this.types != null) {
-            this.types.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPES, types, types);
+        if (types != null) {
+            types.setParentNode(null);
         }
         this.types = types;
-        this.setAsParentNodeOf(types);
+        setAsParentNodeOf(types);
         return this;
     }
 
@@ -554,27 +554,27 @@ public class CompilationUnit extends Node {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.imports.size(); i++) {
-            if (this.imports.get(i) == node) {
-                this.imports.remove(i);
+        for (int i = 0; i < imports.size(); i++) {
+            if (imports.get(i) == node) {
+                imports.remove(i);
                 return true;
             }
         }
-        if (this.module != null) {
-            if (node == this.module) {
-                this.removeModule();
+        if (module != null) {
+            if (node == module) {
+                removeModule();
                 return true;
             }
         }
-        if (this.packageDeclaration != null) {
-            if (node == this.packageDeclaration) {
-                this.removePackageDeclaration();
+        if (packageDeclaration != null) {
+            if (node == packageDeclaration) {
+                removePackageDeclaration();
                 return true;
             }
         }
-        for (int i = 0; i < this.types.size(); i++) {
-            if (this.types.get(i) == node) {
-                this.types.remove(i);
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.remove(i);
                 return true;
             }
         }
@@ -583,7 +583,7 @@ public class CompilationUnit extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removePackageDeclaration() {
-        return this.setPackageDeclaration((PackageDeclaration) null);
+        return setPackageDeclaration((PackageDeclaration) null);
     }
 
     /**
@@ -591,7 +591,7 @@ public class CompilationUnit extends Node {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
-        return Optional.ofNullable(this.module);
+        return Optional.ofNullable(module);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -599,18 +599,18 @@ public class CompilationUnit extends Node {
         if (module == this.module) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
-        if (this.module != null) {
-            this.module.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODULE, module, module);
+        if (module != null) {
+            module.setParentNode(null);
         }
         this.module = module;
-        this.setAsParentNodeOf(module);
+        setAsParentNodeOf(module);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
-        return this.setModule((ModuleDeclaration) null);
+        return setModule((ModuleDeclaration) null);
     }
 
     /**
@@ -771,7 +771,7 @@ public class CompilationUnit extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CompilationUnit clone() {
-        return (CompilationUnit) this.accept(new CloneVisitor(), null);
+        return (CompilationUnit) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -786,27 +786,27 @@ public class CompilationUnit extends Node {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.imports.size(); i++) {
-            if (this.imports.get(i) == node) {
-                this.imports.set(i, (ImportDeclaration) replacementNode);
+        for (int i = 0; i < imports.size(); i++) {
+            if (imports.get(i) == node) {
+                imports.set(i, (ImportDeclaration) replacementNode);
                 return true;
             }
         }
-        if (this.module != null) {
-            if (node == this.module) {
-                this.setModule((ModuleDeclaration) replacementNode);
+        if (module != null) {
+            if (node == module) {
+                setModule((ModuleDeclaration) replacementNode);
                 return true;
             }
         }
-        if (this.packageDeclaration != null) {
-            if (node == this.packageDeclaration) {
-                this.setPackageDeclaration((PackageDeclaration) replacementNode);
+        if (packageDeclaration != null) {
+            if (node == packageDeclaration) {
+                setPackageDeclaration((PackageDeclaration) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.types.size(); i++) {
-            if (this.types.get(i) == node) {
-                this.types.set(i, (TypeDeclaration) replacementNode);
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.set(i, (TypeDeclaration) replacementNode);
                 return true;
             }
         }

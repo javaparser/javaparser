@@ -75,10 +75,10 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnumConstantDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> classBody) {
         super(tokenRange, annotations);
-        this.setName(name);
-        this.setArguments(arguments);
-        this.setClassBody(classBody);
-        this.customInitialization();
+        setName(name);
+        setArguments(arguments);
+        setClassBody(classBody);
+        customInitialization();
     }
 
     @Override
@@ -95,17 +95,17 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
-        return this.arguments;
+        return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<BodyDeclaration<?>> getClassBody() {
-        return this.classBody;
+        return classBody;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -114,12 +114,12 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         if (arguments == this.arguments) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null) {
-            this.arguments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, arguments, arguments);
+        if (arguments != null) {
+            arguments.setParentNode(null);
         }
         this.arguments = arguments;
-        this.setAsParentNodeOf(arguments);
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -129,12 +129,12 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         if (classBody == this.classBody) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
-        if (this.classBody != null) {
-            this.classBody.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CLASS_BODY, classBody, classBody);
+        if (classBody != null) {
+            classBody.setParentNode(null);
         }
         this.classBody = classBody;
-        this.setAsParentNodeOf(classBody);
+        setAsParentNodeOf(classBody);
         return this;
     }
 
@@ -144,12 +144,12 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -159,15 +159,15 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.remove(i);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.classBody.size(); i++) {
-            if (this.classBody.get(i) == node) {
-                this.classBody.remove(i);
+        for (int i = 0; i < classBody.size(); i++) {
+            if (classBody.get(i) == node) {
+                classBody.remove(i);
                 return true;
             }
         }
@@ -177,7 +177,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnumConstantDeclaration clone() {
-        return (EnumConstantDeclaration) this.accept(new CloneVisitor(), null);
+        return (EnumConstantDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -192,20 +192,20 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.arguments.size(); i++) {
-            if (this.arguments.get(i) == node) {
-                this.arguments.set(i, (Expression) replacementNode);
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.classBody.size(); i++) {
-            if (this.classBody.get(i) == node) {
-                this.classBody.set(i, (BodyDeclaration) replacementNode);
+        for (int i = 0; i < classBody.size(); i++) {
+            if (classBody.get(i) == node) {
+                classBody.set(i, (BodyDeclaration) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

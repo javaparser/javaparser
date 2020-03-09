@@ -75,9 +75,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Name(TokenRange tokenRange, Name qualifier, String identifier) {
         super(tokenRange);
-        this.setQualifier(qualifier);
-        this.setIdentifier(identifier);
-        this.customInitialization();
+        setQualifier(qualifier);
+        setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
-        return this.identifier;
+        return identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -103,7 +103,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         if (identifier == this.identifier) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, identifier, identifier);
         this.identifier = identifier;
         return this;
     }
@@ -120,7 +120,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
-        return Optional.ofNullable(this.qualifier);
+        return Optional.ofNullable(qualifier);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -128,12 +128,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         if (qualifier == this.qualifier) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
-        if (this.qualifier != null) {
-            this.qualifier.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.QUALIFIER, qualifier, qualifier);
+        if (qualifier != null) {
+            qualifier.setParentNode(null);
         }
         this.qualifier = qualifier;
-        this.setAsParentNodeOf(qualifier);
+        setAsParentNodeOf(qualifier);
         return this;
     }
 
@@ -143,9 +143,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         if (node == null) {
             return false;
         }
-        if (this.qualifier != null) {
-            if (node == this.qualifier) {
-                this.removeQualifier();
+        if (qualifier != null) {
+            if (node == qualifier) {
+                removeQualifier();
                 return true;
             }
         }
@@ -154,13 +154,13 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Name removeQualifier() {
-        return this.setQualifier((Name) null);
+        return setQualifier((Name) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Name clone() {
-        return (Name) this.accept(new CloneVisitor(), null);
+        return (Name) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -175,9 +175,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         if (node == null) {
             return false;
         }
-        if (this.qualifier != null) {
-            if (node == this.qualifier) {
-                this.setQualifier((Name) replacementNode);
+        if (qualifier != null) {
+            if (node == qualifier) {
+                setQualifier((Name) replacementNode);
                 return true;
             }
         }

@@ -58,7 +58,7 @@ public class BlockComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BlockComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class BlockComment extends Comment {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockComment clone() {
-        return (BlockComment) this.accept(new CloneVisitor(), null);
+        return (BlockComment) accept(new CloneVisitor(), null);
     }
 
     @Override

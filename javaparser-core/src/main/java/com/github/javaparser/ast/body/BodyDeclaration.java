@@ -60,8 +60,8 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BodyDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange);
-        this.setAnnotations(annotations);
-        this.customInitialization();
+        setAnnotations(annotations);
+        customInitialization();
     }
 
     protected BodyDeclaration(TokenRange range) {
@@ -70,7 +70,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -80,12 +80,12 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         if (annotations == this.annotations) {
             return (T) this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return (T) this;
     }
 
@@ -95,9 +95,9 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
@@ -107,7 +107,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BodyDeclaration<?> clone() {
-        return (BodyDeclaration<?>) this.accept(new CloneVisitor(), null);
+        return (BodyDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -122,9 +122,9 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }

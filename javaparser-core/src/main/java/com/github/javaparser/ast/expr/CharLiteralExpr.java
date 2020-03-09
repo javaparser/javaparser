@@ -70,7 +70,7 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CharLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        this.customInitialization();
+        customInitialization();
     }
 
     /**
@@ -122,7 +122,7 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CharLiteralExpr clone() {
-        return (CharLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (CharLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

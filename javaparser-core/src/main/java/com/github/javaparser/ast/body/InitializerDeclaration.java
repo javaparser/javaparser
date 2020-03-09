@@ -63,9 +63,9 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
         super(tokenRange);
-        this.setStatic(isStatic);
-        this.setBody(body);
-        this.customInitialization();
+        setStatic(isStatic);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -82,12 +82,12 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
-        return this.isStatic;
+        return isStatic;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -96,12 +96,12 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         if (isStatic == this.isStatic) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
+        notifyPropertyChange(ObservableProperty.STATIC, isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }
@@ -127,7 +127,7 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public InitializerDeclaration clone() {
-        return (InitializerDeclaration) this.accept(new CloneVisitor(), null);
+        return (InitializerDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -142,8 +142,8 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((BlockStmt) replacementNode);
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

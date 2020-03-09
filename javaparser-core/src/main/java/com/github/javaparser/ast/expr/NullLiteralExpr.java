@@ -51,7 +51,7 @@ public class NullLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NullLiteralExpr(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class NullLiteralExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NullLiteralExpr clone() {
-        return (NullLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

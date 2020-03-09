@@ -90,9 +90,9 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public FieldDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange, annotations);
-        this.setModifiers(modifiers);
-        this.setVariables(variables);
-        this.customInitialization();
+        setModifiers(modifiers);
+        setVariables(variables);
+        customInitialization();
     }
 
     /**
@@ -126,12 +126,12 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return this.modifiers;
+        return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
-        return this.variables;
+        return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -140,12 +140,12 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         if (modifiers == this.modifiers) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) {
-            this.modifiers.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, modifiers, modifiers);
+        if (modifiers != null) {
+            modifiers.setParentNode(null);
         }
         this.modifiers = modifiers;
-        this.setAsParentNodeOf(modifiers);
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -155,12 +155,12 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         if (variables == this.variables) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null) {
-            this.variables.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.VARIABLES, variables, variables);
+        if (variables != null) {
+            variables.setParentNode(null);
         }
         this.variables = variables;
-        this.setAsParentNodeOf(variables);
+        setAsParentNodeOf(variables);
         return this;
     }
 
@@ -241,15 +241,15 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.remove(i);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.variables.size(); i++) {
-            if (this.variables.get(i) == node) {
-                this.variables.remove(i);
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
                 return true;
             }
         }
@@ -259,7 +259,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldDeclaration clone() {
-        return (FieldDeclaration) this.accept(new CloneVisitor(), null);
+        return (FieldDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -274,15 +274,15 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.variables.size(); i++) {
-            if (this.variables.get(i) == node) {
-                this.variables.set(i, (VariableDeclarator) replacementNode);
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.set(i, (VariableDeclarator) replacementNode);
                 return true;
             }
         }

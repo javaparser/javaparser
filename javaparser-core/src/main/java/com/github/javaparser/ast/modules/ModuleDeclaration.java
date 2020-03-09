@@ -70,11 +70,11 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
         super(tokenRange);
-        this.setAnnotations(annotations);
-        this.setName(name);
-        this.setOpen(isOpen);
-        this.setDirectives(directives);
-        this.customInitialization();
+        setAnnotations(annotations);
+        setName(name);
+        setOpen(isOpen);
+        setDirectives(directives);
+        customInitialization();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -100,18 +100,18 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -120,12 +120,12 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (annotations == this.annotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return this;
     }
 
@@ -135,15 +135,15 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.directives.size(); i++) {
-            if (this.directives.get(i) == node) {
-                this.directives.remove(i);
+        for (int i = 0; i < directives.size(); i++) {
+            if (directives.get(i) == node) {
+                directives.remove(i);
                 return true;
             }
         }
@@ -152,7 +152,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
-        return this.isOpen;
+        return isOpen;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -160,14 +160,14 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (isOpen == this.isOpen) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.OPEN, this.isOpen, isOpen);
+        notifyPropertyChange(ObservableProperty.OPEN, isOpen, isOpen);
         this.isOpen = isOpen;
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ModuleDirective> getDirectives() {
-        return this.directives;
+        return directives;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -176,19 +176,19 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (directives == this.directives) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.DIRECTIVES, this.directives, directives);
-        if (this.directives != null) {
-            this.directives.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.DIRECTIVES, directives, directives);
+        if (directives != null) {
+            directives.setParentNode(null);
         }
         this.directives = directives;
-        this.setAsParentNodeOf(directives);
+        setAsParentNodeOf(directives);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleDeclaration clone() {
-        return (ModuleDeclaration) this.accept(new CloneVisitor(), null);
+        return (ModuleDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -203,20 +203,20 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.directives.size(); i++) {
-            if (this.directives.get(i) == node) {
-                this.directives.set(i, (ModuleDirective) replacementNode);
+        for (int i = 0; i < directives.size(); i++) {
+            if (directives.get(i) == node) {
+                directives.set(i, (ModuleDirective) replacementNode);
                 return true;
             }
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

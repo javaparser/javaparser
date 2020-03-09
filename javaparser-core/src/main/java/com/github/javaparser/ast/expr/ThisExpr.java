@@ -67,8 +67,8 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThisExpr(TokenRange tokenRange, Name typeName) {
         super(tokenRange);
-        this.setTypeName(typeName);
-        this.customInitialization();
+        setTypeName(typeName);
+        customInitialization();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getTypeName() {
-        return Optional.ofNullable(this.typeName);
+        return Optional.ofNullable(typeName);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -93,12 +93,12 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         if (typeName == this.typeName) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null) {
-            this.typeName.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE_NAME, typeName, typeName);
+        if (typeName != null) {
+            typeName.setParentNode(null);
         }
         this.typeName = typeName;
-        this.setAsParentNodeOf(typeName);
+        setAsParentNodeOf(typeName);
         return this;
     }
 
@@ -108,9 +108,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         if (node == null) {
             return false;
         }
-        if (this.typeName != null) {
-            if (node == this.typeName) {
-                this.removeTypeName();
+        if (typeName != null) {
+            if (node == typeName) {
+                removeTypeName();
                 return true;
             }
         }
@@ -124,7 +124,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThisExpr clone() {
-        return (ThisExpr) this.accept(new CloneVisitor(), null);
+        return (ThisExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -139,9 +139,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         if (node == null) {
             return false;
         }
-        if (this.typeName != null) {
-            if (node == this.typeName) {
-                this.setTypeName((Name) replacementNode);
+        if (typeName != null) {
+            if (node == typeName) {
+                setTypeName((Name) replacementNode);
                 return true;
             }
         }
@@ -179,6 +179,6 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeTypeName() {
-        return this.setTypeName((Name) null);
+        return setTypeName((Name) null);
     }
 }

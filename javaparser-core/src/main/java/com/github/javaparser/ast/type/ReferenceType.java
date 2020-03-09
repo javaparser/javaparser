@@ -54,7 +54,7 @@ public abstract class ReferenceType extends Type {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class ReferenceType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReferenceType clone() {
-        return (ReferenceType) this.accept(new CloneVisitor(), null);
+        return (ReferenceType) accept(new CloneVisitor(), null);
     }
 
     @Override

@@ -58,8 +58,8 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleUsesDirective(TokenRange tokenRange, Name name) {
         super(tokenRange);
-        this.setName(name);
-        this.customInitialization();
+        setName(name);
+        customInitialization();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleUsesDirective clone() {
-        return (ModuleUsesDirective) this.accept(new CloneVisitor(), null);
+        return (ModuleUsesDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -132,12 +132,12 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -147,8 +147,8 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

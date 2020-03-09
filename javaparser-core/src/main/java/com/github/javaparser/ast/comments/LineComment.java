@@ -57,7 +57,7 @@ public class LineComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LineComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class LineComment extends Comment {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LineComment clone() {
-        return (LineComment) this.accept(new CloneVisitor(), null);
+        return (LineComment) accept(new CloneVisitor(), null);
     }
 
     @Override

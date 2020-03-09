@@ -68,9 +68,9 @@ public class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
         super(tokenRange);
-        this.setCheck(check);
-        this.setMessage(message);
-        this.customInitialization();
+        setCheck(check);
+        setMessage(message);
+        customInitialization();
     }
 
     @Override
@@ -87,12 +87,12 @@ public class AssertStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCheck() {
-        return this.check;
+        return check;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getMessage() {
-        return Optional.ofNullable(this.message);
+        return Optional.ofNullable(message);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -101,12 +101,12 @@ public class AssertStmt extends Statement {
         if (check == this.check) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
-        if (this.check != null) {
-            this.check.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CHECK, check, check);
+        if (check != null) {
+            check.setParentNode(null);
         }
         this.check = check;
-        this.setAsParentNodeOf(check);
+        setAsParentNodeOf(check);
         return this;
     }
 
@@ -121,12 +121,12 @@ public class AssertStmt extends Statement {
         if (message == this.message) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);
-        if (this.message != null) {
-            this.message.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MESSAGE, message, message);
+        if (message != null) {
+            message.setParentNode(null);
         }
         this.message = message;
-        this.setAsParentNodeOf(message);
+        setAsParentNodeOf(message);
         return this;
     }
 
@@ -136,9 +136,9 @@ public class AssertStmt extends Statement {
         if (node == null) {
             return false;
         }
-        if (this.message != null) {
-            if (node == this.message) {
-                this.removeMessage();
+        if (message != null) {
+            if (node == message) {
+                removeMessage();
                 return true;
             }
         }
@@ -147,13 +147,13 @@ public class AssertStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AssertStmt removeMessage() {
-        return this.setMessage((Expression) null);
+        return setMessage((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssertStmt clone() {
-        return (AssertStmt) this.accept(new CloneVisitor(), null);
+        return (AssertStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -168,13 +168,13 @@ public class AssertStmt extends Statement {
         if (node == null) {
             return false;
         }
-        if (node == this.check) {
-            this.setCheck((Expression) replacementNode);
+        if (node == check) {
+            setCheck((Expression) replacementNode);
             return true;
         }
-        if (this.message != null) {
-            if (node == this.message) {
-                this.setMessage((Expression) replacementNode);
+        if (message != null) {
+            if (node == message) {
+                setMessage((Expression) replacementNode);
                 return true;
             }
         }

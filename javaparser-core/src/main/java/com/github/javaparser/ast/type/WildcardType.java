@@ -73,9 +73,9 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.setExtendedType(extendedType);
-        this.setSuperType(superType);
-        this.customInitialization();
+        setExtendedType(extendedType);
+        setSuperType(superType);
+        customInitialization();
     }
 
     @Override
@@ -92,12 +92,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getExtendedType() {
-        return Optional.ofNullable(this.extendedType);
+        return Optional.ofNullable(extendedType);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getSuperType() {
-        return Optional.ofNullable(this.superType);
+        return Optional.ofNullable(superType);
     }
 
     /**
@@ -111,12 +111,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         if (extendedType == this.extendedType) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
-        if (this.extendedType != null) {
-            this.extendedType.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, extendedType, extendedType);
+        if (extendedType != null) {
+            extendedType.setParentNode(null);
         }
         this.extendedType = extendedType;
-        this.setAsParentNodeOf(extendedType);
+        setAsParentNodeOf(extendedType);
         return this;
     }
 
@@ -131,12 +131,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         if (superType == this.superType) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
-        if (this.superType != null) {
-            this.superType.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.SUPER_TYPE, superType, superType);
+        if (superType != null) {
+            superType.setParentNode(null);
         }
         this.superType = superType;
-        this.setAsParentNodeOf(superType);
+        setAsParentNodeOf(superType);
         return this;
     }
 
@@ -151,15 +151,15 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         if (node == null) {
             return false;
         }
-        if (this.extendedType != null) {
-            if (node == this.extendedType) {
-                this.removeExtendedType();
+        if (extendedType != null) {
+            if (node == extendedType) {
+                removeExtendedType();
                 return true;
             }
         }
-        if (this.superType != null) {
-            if (node == this.superType) {
-                this.removeSuperType();
+        if (superType != null) {
+            if (node == superType) {
+                removeSuperType();
                 return true;
             }
         }
@@ -176,18 +176,18 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeExtendedType() {
-        return this.setExtendedType((ReferenceType) null);
+        return setExtendedType((ReferenceType) null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeSuperType() {
-        return this.setSuperType((ReferenceType) null);
+        return setSuperType((ReferenceType) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WildcardType clone() {
-        return (WildcardType) this.accept(new CloneVisitor(), null);
+        return (WildcardType) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -202,15 +202,15 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         if (node == null) {
             return false;
         }
-        if (this.extendedType != null) {
-            if (node == this.extendedType) {
-                this.setExtendedType((ReferenceType) replacementNode);
+        if (extendedType != null) {
+            if (node == extendedType) {
+                setExtendedType((ReferenceType) replacementNode);
                 return true;
             }
         }
-        if (this.superType != null) {
-            if (node == this.superType) {
-                this.setSuperType((ReferenceType) replacementNode);
+        if (superType != null) {
+            if (node == superType) {
+                setSuperType((ReferenceType) replacementNode);
                 return true;
             }
         }

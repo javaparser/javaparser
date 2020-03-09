@@ -61,8 +61,8 @@ public class ReturnStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReturnStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
-        this.setExpression(expression);
-        this.customInitialization();
+        setExpression(expression);
+        customInitialization();
     }
 
     /**
@@ -86,7 +86,7 @@ public class ReturnStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
-        return Optional.ofNullable(this.expression);
+        return Optional.ofNullable(expression);
     }
 
     /**
@@ -100,12 +100,12 @@ public class ReturnStmt extends Statement {
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -115,9 +115,9 @@ public class ReturnStmt extends Statement {
         if (node == null) {
             return false;
         }
-        if (this.expression != null) {
-            if (node == this.expression) {
-                this.removeExpression();
+        if (expression != null) {
+            if (node == expression) {
+                removeExpression();
                 return true;
             }
         }
@@ -126,13 +126,13 @@ public class ReturnStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ReturnStmt removeExpression() {
-        return this.setExpression((Expression) null);
+        return setExpression((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReturnStmt clone() {
-        return (ReturnStmt) this.accept(new CloneVisitor(), null);
+        return (ReturnStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -147,9 +147,9 @@ public class ReturnStmt extends Statement {
         if (node == null) {
             return false;
         }
-        if (this.expression != null) {
-            if (node == this.expression) {
-                this.setExpression((Expression) replacementNode);
+        if (expression != null) {
+            if (node == expression) {
+                setExpression((Expression) replacementNode);
                 return true;
             }
         }

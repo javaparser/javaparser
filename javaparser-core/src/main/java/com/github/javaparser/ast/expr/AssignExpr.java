@@ -123,10 +123,10 @@ public class AssignExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
         super(tokenRange);
-        this.setTarget(target);
-        this.setValue(value);
-        this.setOperator(operator);
-        this.customInitialization();
+        setTarget(target);
+        setValue(value);
+        setOperator(operator);
+        customInitialization();
     }
 
     @Override
@@ -143,17 +143,17 @@ public class AssignExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
-        return this.operator;
+        return operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getTarget() {
-        return this.target;
+        return target;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getValue() {
-        return this.value;
+        return value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -162,7 +162,7 @@ public class AssignExpr extends Expression {
         if (operator == this.operator) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, operator, operator);
         this.operator = operator;
         return this;
     }
@@ -173,12 +173,12 @@ public class AssignExpr extends Expression {
         if (target == this.target) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
-        if (this.target != null) {
-            this.target.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TARGET, target, target);
+        if (target != null) {
+            target.setParentNode(null);
         }
         this.target = target;
-        this.setAsParentNodeOf(target);
+        setAsParentNodeOf(target);
         return this;
     }
 
@@ -188,12 +188,12 @@ public class AssignExpr extends Expression {
         if (value == this.value) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null) {
-            this.value.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.VALUE, value, value);
+        if (value != null) {
+            value.setParentNode(null);
         }
         this.value = value;
-        this.setAsParentNodeOf(value);
+        setAsParentNodeOf(value);
         return this;
     }
 
@@ -209,7 +209,7 @@ public class AssignExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssignExpr clone() {
-        return (AssignExpr) this.accept(new CloneVisitor(), null);
+        return (AssignExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -224,12 +224,12 @@ public class AssignExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (node == this.target) {
-            this.setTarget((Expression) replacementNode);
+        if (node == target) {
+            setTarget((Expression) replacementNode);
             return true;
         }
-        if (node == this.value) {
-            this.setValue((Expression) replacementNode);
+        if (node == value) {
+            setValue((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

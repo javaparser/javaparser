@@ -57,7 +57,7 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DoubleLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        this.customInitialization();
+        customInitialization();
     }
 
     public DoubleLiteralExpr(final double value) {
@@ -104,7 +104,7 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoubleLiteralExpr clone() {
-        return (DoubleLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

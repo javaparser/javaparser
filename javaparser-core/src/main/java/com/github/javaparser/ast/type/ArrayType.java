@@ -87,9 +87,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(TokenRange tokenRange, Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
-        this.setComponentType(componentType);
-        this.setOrigin(origin);
-        this.customInitialization();
+        setComponentType(componentType);
+        setOrigin(origin);
+        customInitialization();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getComponentType() {
-        return this.componentType;
+        return componentType;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -115,12 +115,12 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         if (componentType == this.componentType) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
-        if (this.componentType != null) {
-            this.componentType.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, componentType, componentType);
+        if (componentType != null) {
+            componentType.setParentNode(null);
         }
         this.componentType = componentType;
-        this.setAsParentNodeOf(componentType);
+        setAsParentNodeOf(componentType);
         return this;
     }
 
@@ -218,7 +218,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Origin getOrigin() {
-        return this.origin;
+        return origin;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -227,7 +227,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         if (origin == this.origin) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
+        notifyPropertyChange(ObservableProperty.ORIGIN, origin, origin);
         this.origin = origin;
         return this;
     }
@@ -249,7 +249,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayType clone() {
-        return (ArrayType) this.accept(new CloneVisitor(), null);
+        return (ArrayType) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -264,8 +264,8 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         if (node == null) {
             return false;
         }
-        if (node == this.componentType) {
-            this.setComponentType((Type) replacementNode);
+        if (node == componentType) {
+            setComponentType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

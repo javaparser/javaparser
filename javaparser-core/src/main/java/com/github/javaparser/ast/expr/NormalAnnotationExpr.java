@@ -58,8 +58,8 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
         super(tokenRange, name);
-        this.setPairs(pairs);
-        this.customInitialization();
+        setPairs(pairs);
+        customInitialization();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<MemberValuePair> getPairs() {
-        return this.pairs;
+        return pairs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -85,12 +85,12 @@ public class NormalAnnotationExpr extends AnnotationExpr {
         if (pairs == this.pairs) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
-        if (this.pairs != null) {
-            this.pairs.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.PAIRS, pairs, pairs);
+        if (pairs != null) {
+            pairs.setParentNode(null);
         }
         this.pairs = pairs;
-        this.setAsParentNodeOf(pairs);
+        setAsParentNodeOf(pairs);
         return this;
     }
 
@@ -120,9 +120,9 @@ public class NormalAnnotationExpr extends AnnotationExpr {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.pairs.size(); i++) {
-            if (this.pairs.get(i) == node) {
-                this.pairs.remove(i);
+        for (int i = 0; i < pairs.size(); i++) {
+            if (pairs.get(i) == node) {
+                pairs.remove(i);
                 return true;
             }
         }
@@ -132,7 +132,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NormalAnnotationExpr clone() {
-        return (NormalAnnotationExpr) this.accept(new CloneVisitor(), null);
+        return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -147,9 +147,9 @@ public class NormalAnnotationExpr extends AnnotationExpr {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.pairs.size(); i++) {
-            if (this.pairs.get(i) == node) {
-                this.pairs.set(i, (MemberValuePair) replacementNode);
+        for (int i = 0; i < pairs.size(); i++) {
+            if (pairs.get(i) == node) {
+                pairs.set(i, (MemberValuePair) replacementNode);
                 return true;
             }
         }

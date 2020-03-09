@@ -65,9 +65,9 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
         super(tokenRange);
-        this.setBody(body);
-        this.setCondition(condition);
-        this.customInitialization();
+        setBody(body);
+        setCondition(condition);
+        customInitialization();
     }
 
     @Override
@@ -84,12 +84,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
-        return this.condition;
+        return condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -98,12 +98,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -113,12 +113,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         if (condition == this.condition) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null) {
-            this.condition.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CONDITION, condition, condition);
+        if (condition != null) {
+            condition.setParentNode(null);
         }
         this.condition = condition;
-        this.setAsParentNodeOf(condition);
+        setAsParentNodeOf(condition);
         return this;
     }
 
@@ -134,7 +134,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoStmt clone() {
-        return (DoStmt) this.accept(new CloneVisitor(), null);
+        return (DoStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -149,12 +149,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((Statement) replacementNode);
+        if (node == body) {
+            setBody((Statement) replacementNode);
             return true;
         }
-        if (node == this.condition) {
-            this.setCondition((Expression) replacementNode);
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

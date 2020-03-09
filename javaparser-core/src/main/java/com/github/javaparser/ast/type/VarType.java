@@ -56,7 +56,7 @@ public class VarType extends Type {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VarType(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class VarType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VarType clone() {
-        return (VarType) this.accept(new CloneVisitor(), null);
+        return (VarType) accept(new CloneVisitor(), null);
     }
 
     @Override

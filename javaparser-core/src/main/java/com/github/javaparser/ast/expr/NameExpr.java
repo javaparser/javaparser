@@ -69,8 +69,8 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NameExpr(TokenRange tokenRange, SimpleName name) {
         super(tokenRange);
-        this.setName(name);
-        this.customInitialization();
+        setName(name);
+        customInitialization();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -96,12 +96,12 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -117,7 +117,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NameExpr clone() {
-        return (NameExpr) this.accept(new CloneVisitor(), null);
+        return (NameExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -132,8 +132,8 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((SimpleName) replacementNode);
+        if (node == name) {
+            setName((SimpleName) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

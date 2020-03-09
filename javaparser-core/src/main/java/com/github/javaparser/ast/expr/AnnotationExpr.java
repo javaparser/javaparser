@@ -60,13 +60,13 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationExpr(TokenRange tokenRange, Name name) {
         super(tokenRange);
-        this.setName(name);
-        this.customInitialization();
+        setName(name);
+        customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -75,12 +75,12 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -96,7 +96,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationExpr clone() {
-        return (AnnotationExpr) this.accept(new CloneVisitor(), null);
+        return (AnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -111,8 +111,8 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

@@ -64,9 +64,9 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CastExpr(TokenRange tokenRange, Type type, Expression expression) {
         super(tokenRange);
-        this.setType(type);
-        this.setExpression(expression);
-        this.customInitialization();
+        setType(type);
+        setExpression(expression);
+        customInitialization();
     }
 
     @Override
@@ -83,12 +83,12 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return this.expression;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -97,12 +97,12 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -112,12 +112,12 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) {
-            this.type.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
+        if (type != null) {
+            type.setParentNode(null);
         }
         this.type = type;
-        this.setAsParentNodeOf(type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -133,7 +133,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CastExpr clone() {
-        return (CastExpr) this.accept(new CloneVisitor(), null);
+        return (CastExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -148,12 +148,12 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         if (node == null) {
             return false;
         }
-        if (node == this.expression) {
-            this.setExpression((Expression) replacementNode);
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
             return true;
         }
-        if (node == this.type) {
-            this.setType((Type) replacementNode);
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

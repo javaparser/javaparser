@@ -72,9 +72,9 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayCreationLevel(TokenRange tokenRange, Expression dimension, NodeList<AnnotationExpr> annotations) {
         super(tokenRange);
-        this.setDimension(dimension);
-        this.setAnnotations(annotations);
-        this.customInitialization();
+        setDimension(dimension);
+        setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override
@@ -100,23 +100,23 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         if (dimension == this.dimension) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.DIMENSION, this.dimension, dimension);
-        if (this.dimension != null) {
-            this.dimension.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.DIMENSION, dimension, dimension);
+        if (dimension != null) {
+            dimension.setParentNode(null);
         }
         this.dimension = dimension;
-        this.setAsParentNodeOf(dimension);
+        setAsParentNodeOf(dimension);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getDimension() {
-        return Optional.ofNullable(this.dimension);
+        return Optional.ofNullable(dimension);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -125,18 +125,18 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         if (annotations == this.annotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationLevel removeDimension() {
-        return this.setDimension((Expression) null);
+        return setDimension((Expression) null);
     }
 
     @Override
@@ -145,15 +145,15 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
-        if (this.dimension != null) {
-            if (node == this.dimension) {
-                this.removeDimension();
+        if (dimension != null) {
+            if (node == dimension) {
+                removeDimension();
                 return true;
             }
         }
@@ -163,7 +163,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayCreationLevel clone() {
-        return (ArrayCreationLevel) this.accept(new CloneVisitor(), null);
+        return (ArrayCreationLevel) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -178,15 +178,15 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        if (this.dimension != null) {
-            if (node == this.dimension) {
-                this.setDimension((Expression) replacementNode);
+        if (dimension != null) {
+            if (node == dimension) {
+                setDimension((Expression) replacementNode);
                 return true;
             }
         }

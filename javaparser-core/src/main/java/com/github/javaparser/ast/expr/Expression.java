@@ -50,7 +50,7 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Expression(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract class Expression extends Node {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Expression clone() {
-        return (Expression) this.accept(new CloneVisitor(), null);
+        return (Expression) accept(new CloneVisitor(), null);
     }
 
     @Override

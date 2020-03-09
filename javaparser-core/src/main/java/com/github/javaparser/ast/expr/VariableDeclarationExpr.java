@@ -104,10 +104,10 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarationExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange);
-        this.setModifiers(modifiers);
-        this.setAnnotations(annotations);
-        this.setVariables(variables);
-        this.customInitialization();
+        setModifiers(modifiers);
+        setAnnotations(annotations);
+        setVariables(variables);
+        customInitialization();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
-        return this.annotations;
+        return annotations;
     }
 
     /**
@@ -135,12 +135,12 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return this.modifiers;
+        return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
-        return this.variables;
+        return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -149,12 +149,12 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         if (annotations == this.annotations) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) {
-            this.annotations.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, annotations, annotations);
+        if (annotations != null) {
+            annotations.setParentNode(null);
         }
         this.annotations = annotations;
-        this.setAsParentNodeOf(annotations);
+        setAsParentNodeOf(annotations);
         return this;
     }
 
@@ -164,12 +164,12 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         if (modifiers == this.modifiers) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) {
-            this.modifiers.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, modifiers, modifiers);
+        if (modifiers != null) {
+            modifiers.setParentNode(null);
         }
         this.modifiers = modifiers;
-        this.setAsParentNodeOf(modifiers);
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -179,12 +179,12 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         if (variables == this.variables) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null) {
-            this.variables.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.VARIABLES, variables, variables);
+        if (variables != null) {
+            variables.setParentNode(null);
         }
         this.variables = variables;
-        this.setAsParentNodeOf(variables);
+        setAsParentNodeOf(variables);
         return this;
     }
 
@@ -194,21 +194,21 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.remove(i);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.remove(i);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < this.variables.size(); i++) {
-            if (this.variables.get(i) == node) {
-                this.variables.remove(i);
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
                 return true;
             }
         }
@@ -218,7 +218,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarationExpr clone() {
-        return (VariableDeclarationExpr) this.accept(new CloneVisitor(), null);
+        return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -233,21 +233,21 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.annotations.size(); i++) {
-            if (this.annotations.get(i) == node) {
-                this.annotations.set(i, (AnnotationExpr) replacementNode);
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.modifiers.size(); i++) {
-            if (this.modifiers.get(i) == node) {
-                this.modifiers.set(i, (Modifier) replacementNode);
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.variables.size(); i++) {
-            if (this.variables.get(i) == node) {
-                this.variables.set(i, (VariableDeclarator) replacementNode);
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.set(i, (VariableDeclarator) replacementNode);
                 return true;
             }
         }

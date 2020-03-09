@@ -70,10 +70,10 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(tokenRange);
-        this.setVariable(variable);
-        this.setIterable(iterable);
-        this.setBody(body);
-        this.customInitialization();
+        setVariable(variable);
+        setIterable(iterable);
+        setBody(body);
+        customInitialization();
     }
 
     public ForEachStmt(VariableDeclarationExpr variable, String iterable, BlockStmt body) {
@@ -94,17 +94,17 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIterable() {
-        return this.iterable;
+        return iterable;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr getVariable() {
-        return this.variable;
+        return variable;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -113,12 +113,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -128,12 +128,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         if (iterable == this.iterable) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
-        if (this.iterable != null) {
-            this.iterable.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ITERABLE, iterable, iterable);
+        if (iterable != null) {
+            iterable.setParentNode(null);
         }
         this.iterable = iterable;
-        this.setAsParentNodeOf(iterable);
+        setAsParentNodeOf(iterable);
         return this;
     }
 
@@ -143,12 +143,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         if (variable == this.variable) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
-        if (this.variable != null) {
-            this.variable.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.VARIABLE, variable, variable);
+        if (variable != null) {
+            variable.setParentNode(null);
         }
         this.variable = variable;
-        this.setAsParentNodeOf(variable);
+        setAsParentNodeOf(variable);
         return this;
     }
 
@@ -193,7 +193,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForEachStmt clone() {
-        return (ForEachStmt) this.accept(new CloneVisitor(), null);
+        return (ForEachStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -202,16 +202,16 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((Statement) replacementNode);
+        if (node == body) {
+            setBody((Statement) replacementNode);
             return true;
         }
-        if (node == this.iterable) {
-            this.setIterable((Expression) replacementNode);
+        if (node == iterable) {
+            setIterable((Expression) replacementNode);
             return true;
         }
-        if (node == this.variable) {
-            this.setVariable((VariableDeclarationExpr) replacementNode);
+        if (node == variable) {
+            setVariable((VariableDeclarationExpr) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

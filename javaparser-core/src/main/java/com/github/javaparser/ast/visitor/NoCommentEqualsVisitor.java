@@ -92,16 +92,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final CompilationUnit n, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
-        if (!this.nodesEquals(n.getImports(), n2.getImports())) {
+        if (!nodesEquals(n.getImports(), n2.getImports())) {
             return false;
         }
-        if (!this.nodeEquals(n.getModule(), n2.getModule())) {
+        if (!nodeEquals(n.getModule(), n2.getModule())) {
             return false;
         }
-        if (!this.nodeEquals(n.getPackageDeclaration(), n2.getPackageDeclaration())) {
+        if (!nodeEquals(n.getPackageDeclaration(), n2.getPackageDeclaration())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypes(), n2.getTypes())) {
+        if (!nodesEquals(n.getTypes(), n2.getTypes())) {
             return false;
         }
         return true;
@@ -111,10 +111,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final PackageDeclaration n, final Visitable arg) {
         final PackageDeclaration n2 = (PackageDeclaration) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -124,13 +124,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final TypeParameter n, final Visitable arg) {
         final TypeParameter n2 = (TypeParameter) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeBound(), n2.getTypeBound())) {
+        if (!nodesEquals(n.getTypeBound(), n2.getTypeBound())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -152,28 +152,28 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ClassOrInterfaceDeclaration n, final Visitable arg) {
         final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg;
-        if (!this.nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes())) {
+        if (!nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes())) {
             return false;
         }
-        if (!this.nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) {
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
-        if (!this.objEquals(n.isInterface(), n2.isInterface())) {
+        if (!objEquals(n.isInterface(), n2.isInterface())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
             return false;
         }
-        if (!this.nodesEquals(n.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n.getMembers(), n2.getMembers())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -183,22 +183,22 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
-        if (!this.nodesEquals(n.getEntries(), n2.getEntries())) {
+        if (!nodesEquals(n.getEntries(), n2.getEntries())) {
             return false;
         }
-        if (!this.nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) {
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
-        if (!this.nodesEquals(n.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n.getMembers(), n2.getMembers())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -208,16 +208,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final EnumConstantDeclaration n, final Visitable arg) {
         final EnumConstantDeclaration n2 = (EnumConstantDeclaration) arg;
-        if (!this.nodesEquals(n.getArguments(), n2.getArguments())) {
+        if (!nodesEquals(n.getArguments(), n2.getArguments())) {
             return false;
         }
-        if (!this.nodesEquals(n.getClassBody(), n2.getClassBody())) {
+        if (!nodesEquals(n.getClassBody(), n2.getClassBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -227,16 +227,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final AnnotationDeclaration n, final Visitable arg) {
         final AnnotationDeclaration n2 = (AnnotationDeclaration) arg;
-        if (!this.nodesEquals(n.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n.getMembers(), n2.getMembers())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -246,19 +246,19 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final AnnotationMemberDeclaration n, final Visitable arg) {
         final AnnotationMemberDeclaration n2 = (AnnotationMemberDeclaration) arg;
-        if (!this.nodeEquals(n.getDefaultValue(), n2.getDefaultValue())) {
+        if (!nodeEquals(n.getDefaultValue(), n2.getDefaultValue())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -268,13 +268,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final FieldDeclaration n, final Visitable arg) {
         final FieldDeclaration n2 = (FieldDeclaration) arg;
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodesEquals(n.getVariables(), n2.getVariables())) {
+        if (!nodesEquals(n.getVariables(), n2.getVariables())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -284,13 +284,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final VariableDeclarator n, final Visitable arg) {
         final VariableDeclarator n2 = (VariableDeclarator) arg;
-        if (!this.nodeEquals(n.getInitializer(), n2.getInitializer())) {
+        if (!nodeEquals(n.getInitializer(), n2.getInitializer())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -300,28 +300,28 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ConstructorDeclaration n, final Visitable arg) {
         final ConstructorDeclaration n2 = (ConstructorDeclaration) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getParameters(), n2.getParameters())) {
+        if (!nodesEquals(n.getParameters(), n2.getParameters())) {
             return false;
         }
-        if (!this.nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter())) {
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter())) {
             return false;
         }
-        if (!this.nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions())) {
+        if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -331,31 +331,31 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final MethodDeclaration n, final Visitable arg) {
         final MethodDeclaration n2 = (MethodDeclaration) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getParameters(), n2.getParameters())) {
+        if (!nodesEquals(n.getParameters(), n2.getParameters())) {
             return false;
         }
-        if (!this.nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter())) {
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter())) {
             return false;
         }
-        if (!this.nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions())) {
+        if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -365,22 +365,22 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final Parameter n, final Visitable arg) {
         final Parameter n2 = (Parameter) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.objEquals(n.isVarArgs(), n2.isVarArgs())) {
+        if (!objEquals(n.isVarArgs(), n2.isVarArgs())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getVarArgsAnnotations(), n2.getVarArgsAnnotations())) {
+        if (!nodesEquals(n.getVarArgsAnnotations(), n2.getVarArgsAnnotations())) {
             return false;
         }
         return true;
@@ -390,13 +390,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final InitializerDeclaration n, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.objEquals(n.isStatic(), n2.isStatic())) {
+        if (!objEquals(n.isStatic(), n2.isStatic())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -412,16 +412,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ClassOrInterfaceType n, final Visitable arg) {
         final ClassOrInterfaceType n2 = (ClassOrInterfaceType) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getScope(), n2.getScope())) {
+        if (!nodeEquals(n.getScope(), n2.getScope())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -431,10 +431,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final PrimitiveType n, final Visitable arg) {
         final PrimitiveType n2 = (PrimitiveType) arg;
-        if (!this.objEquals(n.getType(), n2.getType())) {
+        if (!objEquals(n.getType(), n2.getType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -444,13 +444,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ArrayType n, final Visitable arg) {
         final ArrayType n2 = (ArrayType) arg;
-        if (!this.nodeEquals(n.getComponentType(), n2.getComponentType())) {
+        if (!nodeEquals(n.getComponentType(), n2.getComponentType())) {
             return false;
         }
-        if (!this.objEquals(n.getOrigin(), n2.getOrigin())) {
+        if (!objEquals(n.getOrigin(), n2.getOrigin())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -460,10 +460,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ArrayCreationLevel n, final Visitable arg) {
         final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.nodeEquals(n.getDimension(), n2.getDimension())) {
+        if (!nodeEquals(n.getDimension(), n2.getDimension())) {
             return false;
         }
         return true;
@@ -473,10 +473,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final IntersectionType n, final Visitable arg) {
         final IntersectionType n2 = (IntersectionType) arg;
-        if (!this.nodesEquals(n.getElements(), n2.getElements())) {
+        if (!nodesEquals(n.getElements(), n2.getElements())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -486,10 +486,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final UnionType n, final Visitable arg) {
         final UnionType n2 = (UnionType) arg;
-        if (!this.nodesEquals(n.getElements(), n2.getElements())) {
+        if (!nodesEquals(n.getElements(), n2.getElements())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -499,7 +499,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final VoidType n, final Visitable arg) {
         final VoidType n2 = (VoidType) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -509,13 +509,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final WildcardType n, final Visitable arg) {
         final WildcardType n2 = (WildcardType) arg;
-        if (!this.nodeEquals(n.getExtendedType(), n2.getExtendedType())) {
+        if (!nodeEquals(n.getExtendedType(), n2.getExtendedType())) {
             return false;
         }
-        if (!this.nodeEquals(n.getSuperType(), n2.getSuperType())) {
+        if (!nodeEquals(n.getSuperType(), n2.getSuperType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -525,7 +525,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final UnknownType n, final Visitable arg) {
         final UnknownType n2 = (UnknownType) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -535,10 +535,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ArrayAccessExpr n, final Visitable arg) {
         final ArrayAccessExpr n2 = (ArrayAccessExpr) arg;
-        if (!this.nodeEquals(n.getIndex(), n2.getIndex())) {
+        if (!nodeEquals(n.getIndex(), n2.getIndex())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -548,13 +548,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ArrayCreationExpr n, final Visitable arg) {
         final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
-        if (!this.nodeEquals(n.getElementType(), n2.getElementType())) {
+        if (!nodeEquals(n.getElementType(), n2.getElementType())) {
             return false;
         }
-        if (!this.nodeEquals(n.getInitializer(), n2.getInitializer())) {
+        if (!nodeEquals(n.getInitializer(), n2.getInitializer())) {
             return false;
         }
-        if (!this.nodesEquals(n.getLevels(), n2.getLevels())) {
+        if (!nodesEquals(n.getLevels(), n2.getLevels())) {
             return false;
         }
         return true;
@@ -564,7 +564,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ArrayInitializerExpr n, final Visitable arg) {
         final ArrayInitializerExpr n2 = (ArrayInitializerExpr) arg;
-        if (!this.nodesEquals(n.getValues(), n2.getValues())) {
+        if (!nodesEquals(n.getValues(), n2.getValues())) {
             return false;
         }
         return true;
@@ -574,13 +574,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final AssignExpr n, final Visitable arg) {
         final AssignExpr n2 = (AssignExpr) arg;
-        if (!this.objEquals(n.getOperator(), n2.getOperator())) {
+        if (!objEquals(n.getOperator(), n2.getOperator())) {
             return false;
         }
-        if (!this.nodeEquals(n.getTarget(), n2.getTarget())) {
+        if (!nodeEquals(n.getTarget(), n2.getTarget())) {
             return false;
         }
-        if (!this.nodeEquals(n.getValue(), n2.getValue())) {
+        if (!nodeEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -590,13 +590,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final BinaryExpr n, final Visitable arg) {
         final BinaryExpr n2 = (BinaryExpr) arg;
-        if (!this.nodeEquals(n.getLeft(), n2.getLeft())) {
+        if (!nodeEquals(n.getLeft(), n2.getLeft())) {
             return false;
         }
-        if (!this.objEquals(n.getOperator(), n2.getOperator())) {
+        if (!objEquals(n.getOperator(), n2.getOperator())) {
             return false;
         }
-        if (!this.nodeEquals(n.getRight(), n2.getRight())) {
+        if (!nodeEquals(n.getRight(), n2.getRight())) {
             return false;
         }
         return true;
@@ -606,10 +606,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final CastExpr n, final Visitable arg) {
         final CastExpr n2 = (CastExpr) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -619,7 +619,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ClassExpr n, final Visitable arg) {
         final ClassExpr n2 = (ClassExpr) arg;
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -629,13 +629,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ConditionalExpr n, final Visitable arg) {
         final ConditionalExpr n2 = (ConditionalExpr) arg;
-        if (!this.nodeEquals(n.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n.getCondition(), n2.getCondition())) {
             return false;
         }
-        if (!this.nodeEquals(n.getElseExpr(), n2.getElseExpr())) {
+        if (!nodeEquals(n.getElseExpr(), n2.getElseExpr())) {
             return false;
         }
-        if (!this.nodeEquals(n.getThenExpr(), n2.getThenExpr())) {
+        if (!nodeEquals(n.getThenExpr(), n2.getThenExpr())) {
             return false;
         }
         return true;
@@ -645,7 +645,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final EnclosedExpr n, final Visitable arg) {
         final EnclosedExpr n2 = (EnclosedExpr) arg;
-        if (!this.nodeEquals(n.getInner(), n2.getInner())) {
+        if (!nodeEquals(n.getInner(), n2.getInner())) {
             return false;
         }
         return true;
@@ -655,13 +655,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final FieldAccessExpr n, final Visitable arg) {
         final FieldAccessExpr n2 = (FieldAccessExpr) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getScope(), n2.getScope())) {
+        if (!nodeEquals(n.getScope(), n2.getScope())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         return true;
@@ -671,10 +671,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final InstanceOfExpr n, final Visitable arg) {
         final InstanceOfExpr n2 = (InstanceOfExpr) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -684,7 +684,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final StringLiteralExpr n, final Visitable arg) {
         final StringLiteralExpr n2 = (StringLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -694,7 +694,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final IntegerLiteralExpr n, final Visitable arg) {
         final IntegerLiteralExpr n2 = (IntegerLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -704,7 +704,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final LongLiteralExpr n, final Visitable arg) {
         final LongLiteralExpr n2 = (LongLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -714,7 +714,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final CharLiteralExpr n, final Visitable arg) {
         final CharLiteralExpr n2 = (CharLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -724,7 +724,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final DoubleLiteralExpr n, final Visitable arg) {
         final DoubleLiteralExpr n2 = (DoubleLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -734,7 +734,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final BooleanLiteralExpr n, final Visitable arg) {
         final BooleanLiteralExpr n2 = (BooleanLiteralExpr) arg;
-        if (!this.objEquals(n.isValue(), n2.isValue())) {
+        if (!objEquals(n.isValue(), n2.isValue())) {
             return false;
         }
         return true;
@@ -750,16 +750,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final MethodCallExpr n, final Visitable arg) {
         final MethodCallExpr n2 = (MethodCallExpr) arg;
-        if (!this.nodesEquals(n.getArguments(), n2.getArguments())) {
+        if (!nodesEquals(n.getArguments(), n2.getArguments())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getScope(), n2.getScope())) {
+        if (!nodeEquals(n.getScope(), n2.getScope())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         return true;
@@ -769,7 +769,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final NameExpr n, final Visitable arg) {
         final NameExpr n2 = (NameExpr) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -779,19 +779,19 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ObjectCreationExpr n, final Visitable arg) {
         final ObjectCreationExpr n2 = (ObjectCreationExpr) arg;
-        if (!this.nodesEquals(n.getAnonymousClassBody(), n2.getAnonymousClassBody())) {
+        if (!nodesEquals(n.getAnonymousClassBody(), n2.getAnonymousClassBody())) {
             return false;
         }
-        if (!this.nodesEquals(n.getArguments(), n2.getArguments())) {
+        if (!nodesEquals(n.getArguments(), n2.getArguments())) {
             return false;
         }
-        if (!this.nodeEquals(n.getScope(), n2.getScope())) {
+        if (!nodeEquals(n.getScope(), n2.getScope())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         return true;
@@ -801,10 +801,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final Name n, final Visitable arg) {
         final Name n2 = (Name) arg;
-        if (!this.objEquals(n.getIdentifier(), n2.getIdentifier())) {
+        if (!objEquals(n.getIdentifier(), n2.getIdentifier())) {
             return false;
         }
-        if (!this.nodeEquals(n.getQualifier(), n2.getQualifier())) {
+        if (!nodeEquals(n.getQualifier(), n2.getQualifier())) {
             return false;
         }
         return true;
@@ -814,7 +814,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SimpleName n, final Visitable arg) {
         final SimpleName n2 = (SimpleName) arg;
-        if (!this.objEquals(n.getIdentifier(), n2.getIdentifier())) {
+        if (!objEquals(n.getIdentifier(), n2.getIdentifier())) {
             return false;
         }
         return true;
@@ -824,7 +824,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ThisExpr n, final Visitable arg) {
         final ThisExpr n2 = (ThisExpr) arg;
-        if (!this.nodeEquals(n.getTypeName(), n2.getTypeName())) {
+        if (!nodeEquals(n.getTypeName(), n2.getTypeName())) {
             return false;
         }
         return true;
@@ -834,7 +834,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SuperExpr n, final Visitable arg) {
         final SuperExpr n2 = (SuperExpr) arg;
-        if (!this.nodeEquals(n.getTypeName(), n2.getTypeName())) {
+        if (!nodeEquals(n.getTypeName(), n2.getTypeName())) {
             return false;
         }
         return true;
@@ -844,10 +844,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final UnaryExpr n, final Visitable arg) {
         final UnaryExpr n2 = (UnaryExpr) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
-        if (!this.objEquals(n.getOperator(), n2.getOperator())) {
+        if (!objEquals(n.getOperator(), n2.getOperator())) {
             return false;
         }
         return true;
@@ -857,13 +857,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final VariableDeclarationExpr n, final Visitable arg) {
         final VariableDeclarationExpr n2 = (VariableDeclarationExpr) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodesEquals(n.getVariables(), n2.getVariables())) {
+        if (!nodesEquals(n.getVariables(), n2.getVariables())) {
             return false;
         }
         return true;
@@ -873,7 +873,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final MarkerAnnotationExpr n, final Visitable arg) {
         final MarkerAnnotationExpr n2 = (MarkerAnnotationExpr) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -883,10 +883,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SingleMemberAnnotationExpr n, final Visitable arg) {
         final SingleMemberAnnotationExpr n2 = (SingleMemberAnnotationExpr) arg;
-        if (!this.nodeEquals(n.getMemberValue(), n2.getMemberValue())) {
+        if (!nodeEquals(n.getMemberValue(), n2.getMemberValue())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -896,10 +896,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final NormalAnnotationExpr n, final Visitable arg) {
         final NormalAnnotationExpr n2 = (NormalAnnotationExpr) arg;
-        if (!this.nodesEquals(n.getPairs(), n2.getPairs())) {
+        if (!nodesEquals(n.getPairs(), n2.getPairs())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -909,10 +909,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final MemberValuePair n, final Visitable arg) {
         final MemberValuePair n2 = (MemberValuePair) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getValue(), n2.getValue())) {
+        if (!nodeEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;
@@ -922,16 +922,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ExplicitConstructorInvocationStmt n, final Visitable arg) {
         final ExplicitConstructorInvocationStmt n2 = (ExplicitConstructorInvocationStmt) arg;
-        if (!this.nodesEquals(n.getArguments(), n2.getArguments())) {
+        if (!nodesEquals(n.getArguments(), n2.getArguments())) {
             return false;
         }
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
-        if (!this.objEquals(n.isThis(), n2.isThis())) {
+        if (!objEquals(n.isThis(), n2.isThis())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         return true;
@@ -941,7 +941,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final LocalClassDeclarationStmt n, final Visitable arg) {
         final LocalClassDeclarationStmt n2 = (LocalClassDeclarationStmt) arg;
-        if (!this.nodeEquals(n.getClassDeclaration(), n2.getClassDeclaration())) {
+        if (!nodeEquals(n.getClassDeclaration(), n2.getClassDeclaration())) {
             return false;
         }
         return true;
@@ -951,10 +951,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final AssertStmt n, final Visitable arg) {
         final AssertStmt n2 = (AssertStmt) arg;
-        if (!this.nodeEquals(n.getCheck(), n2.getCheck())) {
+        if (!nodeEquals(n.getCheck(), n2.getCheck())) {
             return false;
         }
-        if (!this.nodeEquals(n.getMessage(), n2.getMessage())) {
+        if (!nodeEquals(n.getMessage(), n2.getMessage())) {
             return false;
         }
         return true;
@@ -964,7 +964,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final BlockStmt n, final Visitable arg) {
         final BlockStmt n2 = (BlockStmt) arg;
-        if (!this.nodesEquals(n.getStatements(), n2.getStatements())) {
+        if (!nodesEquals(n.getStatements(), n2.getStatements())) {
             return false;
         }
         return true;
@@ -974,10 +974,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final LabeledStmt n, final Visitable arg) {
         final LabeledStmt n2 = (LabeledStmt) arg;
-        if (!this.nodeEquals(n.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n.getLabel(), n2.getLabel())) {
             return false;
         }
-        if (!this.nodeEquals(n.getStatement(), n2.getStatement())) {
+        if (!nodeEquals(n.getStatement(), n2.getStatement())) {
             return false;
         }
         return true;
@@ -993,7 +993,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ExpressionStmt n, final Visitable arg) {
         final ExpressionStmt n2 = (ExpressionStmt) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
         return true;
@@ -1003,10 +1003,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SwitchStmt n, final Visitable arg) {
         final SwitchStmt n2 = (SwitchStmt) arg;
-        if (!this.nodesEquals(n.getEntries(), n2.getEntries())) {
+        if (!nodesEquals(n.getEntries(), n2.getEntries())) {
             return false;
         }
-        if (!this.nodeEquals(n.getSelector(), n2.getSelector())) {
+        if (!nodeEquals(n.getSelector(), n2.getSelector())) {
             return false;
         }
         return true;
@@ -1016,13 +1016,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SwitchEntry n, final Visitable arg) {
         final SwitchEntry n2 = (SwitchEntry) arg;
-        if (!this.nodesEquals(n.getLabels(), n2.getLabels())) {
+        if (!nodesEquals(n.getLabels(), n2.getLabels())) {
             return false;
         }
-        if (!this.nodesEquals(n.getStatements(), n2.getStatements())) {
+        if (!nodesEquals(n.getStatements(), n2.getStatements())) {
             return false;
         }
-        if (!this.objEquals(n.getType(), n2.getType())) {
+        if (!objEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -1032,7 +1032,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final BreakStmt n, final Visitable arg) {
         final BreakStmt n2 = (BreakStmt) arg;
-        if (!this.nodeEquals(n.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n.getLabel(), n2.getLabel())) {
             return false;
         }
         return true;
@@ -1042,7 +1042,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ReturnStmt n, final Visitable arg) {
         final ReturnStmt n2 = (ReturnStmt) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
         return true;
@@ -1052,13 +1052,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final IfStmt n, final Visitable arg) {
         final IfStmt n2 = (IfStmt) arg;
-        if (!this.nodeEquals(n.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n.getCondition(), n2.getCondition())) {
             return false;
         }
-        if (!this.nodeEquals(n.getElseStmt(), n2.getElseStmt())) {
+        if (!nodeEquals(n.getElseStmt(), n2.getElseStmt())) {
             return false;
         }
-        if (!this.nodeEquals(n.getThenStmt(), n2.getThenStmt())) {
+        if (!nodeEquals(n.getThenStmt(), n2.getThenStmt())) {
             return false;
         }
         return true;
@@ -1068,10 +1068,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final WhileStmt n, final Visitable arg) {
         final WhileStmt n2 = (WhileStmt) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n.getCondition(), n2.getCondition())) {
             return false;
         }
         return true;
@@ -1081,7 +1081,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ContinueStmt n, final Visitable arg) {
         final ContinueStmt n2 = (ContinueStmt) arg;
-        if (!this.nodeEquals(n.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n.getLabel(), n2.getLabel())) {
             return false;
         }
         return true;
@@ -1091,10 +1091,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final DoStmt n, final Visitable arg) {
         final DoStmt n2 = (DoStmt) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n.getCondition(), n2.getCondition())) {
             return false;
         }
         return true;
@@ -1104,13 +1104,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ForEachStmt n, final Visitable arg) {
         final ForEachStmt n2 = (ForEachStmt) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getIterable(), n2.getIterable())) {
+        if (!nodeEquals(n.getIterable(), n2.getIterable())) {
             return false;
         }
-        if (!this.nodeEquals(n.getVariable(), n2.getVariable())) {
+        if (!nodeEquals(n.getVariable(), n2.getVariable())) {
             return false;
         }
         return true;
@@ -1120,16 +1120,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ForStmt n, final Visitable arg) {
         final ForStmt n2 = (ForStmt) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getCompare(), n2.getCompare())) {
+        if (!nodeEquals(n.getCompare(), n2.getCompare())) {
             return false;
         }
-        if (!this.nodesEquals(n.getInitialization(), n2.getInitialization())) {
+        if (!nodesEquals(n.getInitialization(), n2.getInitialization())) {
             return false;
         }
-        if (!this.nodesEquals(n.getUpdate(), n2.getUpdate())) {
+        if (!nodesEquals(n.getUpdate(), n2.getUpdate())) {
             return false;
         }
         return true;
@@ -1139,7 +1139,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ThrowStmt n, final Visitable arg) {
         final ThrowStmt n2 = (ThrowStmt) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
         return true;
@@ -1149,10 +1149,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SynchronizedStmt n, final Visitable arg) {
         final SynchronizedStmt n2 = (SynchronizedStmt) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
         return true;
@@ -1162,16 +1162,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final TryStmt n, final Visitable arg) {
         final TryStmt n2 = (TryStmt) arg;
-        if (!this.nodesEquals(n.getCatchClauses(), n2.getCatchClauses())) {
+        if (!nodesEquals(n.getCatchClauses(), n2.getCatchClauses())) {
             return false;
         }
-        if (!this.nodeEquals(n.getFinallyBlock(), n2.getFinallyBlock())) {
+        if (!nodeEquals(n.getFinallyBlock(), n2.getFinallyBlock())) {
             return false;
         }
-        if (!this.nodesEquals(n.getResources(), n2.getResources())) {
+        if (!nodesEquals(n.getResources(), n2.getResources())) {
             return false;
         }
-        if (!this.nodeEquals(n.getTryBlock(), n2.getTryBlock())) {
+        if (!nodeEquals(n.getTryBlock(), n2.getTryBlock())) {
             return false;
         }
         return true;
@@ -1181,10 +1181,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final CatchClause n, final Visitable arg) {
         final CatchClause n2 = (CatchClause) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.nodeEquals(n.getParameter(), n2.getParameter())) {
+        if (!nodeEquals(n.getParameter(), n2.getParameter())) {
             return false;
         }
         return true;
@@ -1194,13 +1194,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final LambdaExpr n, final Visitable arg) {
         final LambdaExpr n2 = (LambdaExpr) arg;
-        if (!this.nodeEquals(n.getBody(), n2.getBody())) {
+        if (!nodeEquals(n.getBody(), n2.getBody())) {
             return false;
         }
-        if (!this.objEquals(n.isEnclosingParameters(), n2.isEnclosingParameters())) {
+        if (!objEquals(n.isEnclosingParameters(), n2.isEnclosingParameters())) {
             return false;
         }
-        if (!this.nodesEquals(n.getParameters(), n2.getParameters())) {
+        if (!nodesEquals(n.getParameters(), n2.getParameters())) {
             return false;
         }
         return true;
@@ -1210,13 +1210,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final MethodReferenceExpr n, final Visitable arg) {
         final MethodReferenceExpr n2 = (MethodReferenceExpr) arg;
-        if (!this.objEquals(n.getIdentifier(), n2.getIdentifier())) {
+        if (!objEquals(n.getIdentifier(), n2.getIdentifier())) {
             return false;
         }
-        if (!this.nodeEquals(n.getScope(), n2.getScope())) {
+        if (!nodeEquals(n.getScope(), n2.getScope())) {
             return false;
         }
-        if (!this.nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         return true;
@@ -1226,7 +1226,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final TypeExpr n, final Visitable arg) {
         final TypeExpr n2 = (TypeExpr) arg;
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -1236,13 +1236,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ImportDeclaration n, final Visitable arg) {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
-        if (!this.objEquals(n.isAsterisk(), n2.isAsterisk())) {
+        if (!objEquals(n.isAsterisk(), n2.isAsterisk())) {
             return false;
         }
-        if (!this.objEquals(n.isStatic(), n2.isStatic())) {
+        if (!objEquals(n.isStatic(), n2.isStatic())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1257,16 +1257,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleDeclaration n, final Visitable arg) {
         final ModuleDeclaration n2 = (ModuleDeclaration) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.nodesEquals(n.getDirectives(), n2.getDirectives())) {
+        if (!nodesEquals(n.getDirectives(), n2.getDirectives())) {
             return false;
         }
-        if (!this.objEquals(n.isOpen(), n2.isOpen())) {
+        if (!objEquals(n.isOpen(), n2.isOpen())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1276,10 +1276,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleRequiresDirective n, final Visitable arg) {
         final ModuleRequiresDirective n2 = (ModuleRequiresDirective) arg;
-        if (!this.nodesEquals(n.getModifiers(), n2.getModifiers())) {
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1289,10 +1289,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleExportsDirective n, final Visitable arg) {
         final ModuleExportsDirective n2 = (ModuleExportsDirective) arg;
-        if (!this.nodesEquals(n.getModuleNames(), n2.getModuleNames())) {
+        if (!nodesEquals(n.getModuleNames(), n2.getModuleNames())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1302,10 +1302,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleProvidesDirective n, final Visitable arg) {
         final ModuleProvidesDirective n2 = (ModuleProvidesDirective) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodesEquals(n.getWith(), n2.getWith())) {
+        if (!nodesEquals(n.getWith(), n2.getWith())) {
             return false;
         }
         return true;
@@ -1315,7 +1315,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleUsesDirective n, final Visitable arg) {
         final ModuleUsesDirective n2 = (ModuleUsesDirective) arg;
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1325,10 +1325,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ModuleOpensDirective n, final Visitable arg) {
         final ModuleOpensDirective n2 = (ModuleOpensDirective) arg;
-        if (!this.nodesEquals(n.getModuleNames(), n2.getModuleNames())) {
+        if (!nodesEquals(n.getModuleNames(), n2.getModuleNames())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
         return true;
@@ -1344,13 +1344,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final ReceiverParameter n, final Visitable arg) {
         final ReceiverParameter n2 = (ReceiverParameter) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
-        if (!this.nodeEquals(n.getName(), n2.getName())) {
+        if (!nodeEquals(n.getName(), n2.getName())) {
             return false;
         }
-        if (!this.nodeEquals(n.getType(), n2.getType())) {
+        if (!nodeEquals(n.getType(), n2.getType())) {
             return false;
         }
         return true;
@@ -1360,7 +1360,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final VarType n, final Visitable arg) {
         final VarType n2 = (VarType) arg;
-        if (!this.nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) {
             return false;
         }
         return true;
@@ -1370,7 +1370,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final Modifier n, final Visitable arg) {
         final Modifier n2 = (Modifier) arg;
-        if (!this.objEquals(n.getKeyword(), n2.getKeyword())) {
+        if (!objEquals(n.getKeyword(), n2.getKeyword())) {
             return false;
         }
         return true;
@@ -1380,10 +1380,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final SwitchExpr n, final Visitable arg) {
         final SwitchExpr n2 = (SwitchExpr) arg;
-        if (!this.nodesEquals(n.getEntries(), n2.getEntries())) {
+        if (!nodesEquals(n.getEntries(), n2.getEntries())) {
             return false;
         }
-        if (!this.nodeEquals(n.getSelector(), n2.getSelector())) {
+        if (!nodeEquals(n.getSelector(), n2.getSelector())) {
             return false;
         }
         return true;
@@ -1393,7 +1393,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final YieldStmt n, final Visitable arg) {
         final YieldStmt n2 = (YieldStmt) arg;
-        if (!this.nodeEquals(n.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) {
             return false;
         }
         return true;
@@ -1403,7 +1403,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Generated("com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator")
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
-        if (!this.objEquals(n.getValue(), n2.getValue())) {
+        if (!objEquals(n.getValue(), n2.getValue())) {
             return false;
         }
         return true;

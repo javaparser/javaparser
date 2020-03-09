@@ -96,9 +96,9 @@ public class SwitchStmt extends Statement implements SwitchNode {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SwitchStmt(TokenRange tokenRange, Expression selector, NodeList<SwitchEntry> entries) {
         super(tokenRange);
-        this.setSelector(selector);
-        this.setEntries(entries);
-        this.customInitialization();
+        setSelector(selector);
+        setEntries(entries);
+        customInitialization();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SwitchEntry> getEntries() {
-        return this.entries;
+        return entries;
     }
 
     public SwitchEntry getEntry(int i) {
@@ -124,7 +124,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getSelector() {
-        return this.selector;
+        return selector;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -133,12 +133,12 @@ public class SwitchStmt extends Statement implements SwitchNode {
         if (entries == this.entries) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
-        if (this.entries != null) {
-            this.entries.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ENTRIES, entries, entries);
+        if (entries != null) {
+            entries.setParentNode(null);
         }
         this.entries = entries;
-        this.setAsParentNodeOf(entries);
+        setAsParentNodeOf(entries);
         return this;
     }
 
@@ -148,12 +148,12 @@ public class SwitchStmt extends Statement implements SwitchNode {
         if (selector == this.selector) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
-        if (this.selector != null) {
-            this.selector.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.SELECTOR, selector, selector);
+        if (selector != null) {
+            selector.setParentNode(null);
         }
         this.selector = selector;
-        this.setAsParentNodeOf(selector);
+        setAsParentNodeOf(selector);
         return this;
     }
 
@@ -163,9 +163,9 @@ public class SwitchStmt extends Statement implements SwitchNode {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.entries.size(); i++) {
-            if (this.entries.get(i) == node) {
-                this.entries.remove(i);
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i) == node) {
+                entries.remove(i);
                 return true;
             }
         }
@@ -175,7 +175,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SwitchStmt clone() {
-        return (SwitchStmt) this.accept(new CloneVisitor(), null);
+        return (SwitchStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -190,14 +190,14 @@ public class SwitchStmt extends Statement implements SwitchNode {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.entries.size(); i++) {
-            if (this.entries.get(i) == node) {
-                this.entries.set(i, (SwitchEntry) replacementNode);
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i) == node) {
+                entries.set(i, (SwitchEntry) replacementNode);
                 return true;
             }
         }
-        if (node == this.selector) {
-            this.setSelector((Expression) replacementNode);
+        if (node == selector) {
+            setSelector((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

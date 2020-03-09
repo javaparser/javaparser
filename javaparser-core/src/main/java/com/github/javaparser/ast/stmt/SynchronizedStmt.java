@@ -65,9 +65,9 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SynchronizedStmt(TokenRange tokenRange, Expression expression, BlockStmt body) {
         super(tokenRange);
-        this.setExpression(expression);
-        this.setBody(body);
-        this.customInitialization();
+        setExpression(expression);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return this.expression;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -93,18 +93,18 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
-        return this.body;
+        return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -113,12 +113,12 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -134,7 +134,7 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SynchronizedStmt clone() {
-        return (SynchronizedStmt) this.accept(new CloneVisitor(), null);
+        return (SynchronizedStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -149,12 +149,12 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
         if (node == null) {
             return false;
         }
-        if (node == this.body) {
-            this.setBody((BlockStmt) replacementNode);
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
             return true;
         }
-        if (node == this.expression) {
-            this.setExpression((Expression) replacementNode);
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

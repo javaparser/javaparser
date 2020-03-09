@@ -89,9 +89,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
-        this.setType(type);
-        this.setBody(body);
-        this.customInitialization();
+        setType(type);
+        setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
-        return Optional.ofNullable(this.body);
+        return Optional.ofNullable(body);
     }
 
     /**
@@ -122,18 +122,18 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         if (body == this.body) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) {
-            this.body.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.BODY, body, body);
+        if (body != null) {
+            body.setParentNode(null);
         }
         this.body = body;
-        this.setAsParentNodeOf(body);
+        setAsParentNodeOf(body);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -142,12 +142,12 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         if (type == this.type) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) {
-            this.type.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TYPE, type, type);
+        if (type != null) {
+            type.setParentNode(null);
         }
         this.type = type;
-        this.setAsParentNodeOf(type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -262,9 +262,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         if (node == null) {
             return false;
         }
-        if (this.body != null) {
-            if (node == this.body) {
-                this.removeBody();
+        if (body != null) {
+            if (node == body) {
+                removeBody();
                 return true;
             }
         }
@@ -273,13 +273,13 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
-        return this.setBody((BlockStmt) null);
+        return setBody((BlockStmt) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodDeclaration clone() {
-        return (MethodDeclaration) this.accept(new CloneVisitor(), null);
+        return (MethodDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -294,14 +294,14 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         if (node == null) {
             return false;
         }
-        if (this.body != null) {
-            if (node == this.body) {
-                this.setBody((BlockStmt) replacementNode);
+        if (body != null) {
+            if (node == body) {
+                setBody((BlockStmt) replacementNode);
                 return true;
             }
         }
-        if (node == this.type) {
-            this.setType((Type) replacementNode);
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

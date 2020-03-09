@@ -59,8 +59,8 @@ public class BooleanLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BooleanLiteralExpr(TokenRange tokenRange, boolean value) {
         super(tokenRange);
-        this.setValue(value);
-        this.customInitialization();
+        setValue(value);
+        customInitialization();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isValue() {
-        return this.value;
+        return value;
     }
 
     public boolean getValue() {
@@ -93,7 +93,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
         if (value == this.value) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        notifyPropertyChange(ObservableProperty.VALUE, value, value);
         this.value = value;
         return this;
     }
@@ -110,7 +110,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BooleanLiteralExpr clone() {
-        return (BooleanLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (BooleanLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

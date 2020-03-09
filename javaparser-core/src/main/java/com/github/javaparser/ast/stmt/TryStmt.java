@@ -122,11 +122,11 @@ public class TryStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TryStmt(TokenRange tokenRange, NodeList<Expression> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
         super(tokenRange);
-        this.setResources(resources);
-        this.setTryBlock(tryBlock);
-        this.setCatchClauses(catchClauses);
-        this.setFinallyBlock(finallyBlock);
-        this.customInitialization();
+        setResources(resources);
+        setTryBlock(tryBlock);
+        setCatchClauses(catchClauses);
+        setFinallyBlock(finallyBlock);
+        customInitialization();
     }
 
     @Override
@@ -143,22 +143,22 @@ public class TryStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<CatchClause> getCatchClauses() {
-        return this.catchClauses;
+        return catchClauses;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getFinallyBlock() {
-        return Optional.ofNullable(this.finallyBlock);
+        return Optional.ofNullable(finallyBlock);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getTryBlock() {
-        return this.tryBlock;
+        return tryBlock;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getResources() {
-        return this.resources;
+        return resources;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -167,12 +167,12 @@ public class TryStmt extends Statement {
         if (catchClauses == this.catchClauses) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
-        if (this.catchClauses != null) {
-            this.catchClauses.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, catchClauses, catchClauses);
+        if (catchClauses != null) {
+            catchClauses.setParentNode(null);
         }
         this.catchClauses = catchClauses;
-        this.setAsParentNodeOf(catchClauses);
+        setAsParentNodeOf(catchClauses);
         return this;
     }
 
@@ -181,12 +181,12 @@ public class TryStmt extends Statement {
         if (finallyBlock == this.finallyBlock) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
-        if (this.finallyBlock != null) {
-            this.finallyBlock.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, finallyBlock, finallyBlock);
+        if (finallyBlock != null) {
+            finallyBlock.setParentNode(null);
         }
         this.finallyBlock = finallyBlock;
-        this.setAsParentNodeOf(finallyBlock);
+        setAsParentNodeOf(finallyBlock);
         return this;
     }
 
@@ -196,12 +196,12 @@ public class TryStmt extends Statement {
         if (tryBlock == this.tryBlock) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
-        if (this.tryBlock != null) {
-            this.tryBlock.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.TRY_BLOCK, tryBlock, tryBlock);
+        if (tryBlock != null) {
+            tryBlock.setParentNode(null);
         }
         this.tryBlock = tryBlock;
-        this.setAsParentNodeOf(tryBlock);
+        setAsParentNodeOf(tryBlock);
         return this;
     }
 
@@ -211,12 +211,12 @@ public class TryStmt extends Statement {
         if (resources == this.resources) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
-        if (this.resources != null) {
-            this.resources.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.RESOURCES, resources, resources);
+        if (resources != null) {
+            resources.setParentNode(null);
         }
         this.resources = resources;
-        this.setAsParentNodeOf(resources);
+        setAsParentNodeOf(resources);
         return this;
     }
 
@@ -226,21 +226,21 @@ public class TryStmt extends Statement {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.catchClauses.size(); i++) {
-            if (this.catchClauses.get(i) == node) {
-                this.catchClauses.remove(i);
+        for (int i = 0; i < catchClauses.size(); i++) {
+            if (catchClauses.get(i) == node) {
+                catchClauses.remove(i);
                 return true;
             }
         }
-        if (this.finallyBlock != null) {
-            if (node == this.finallyBlock) {
-                this.removeFinallyBlock();
+        if (finallyBlock != null) {
+            if (node == finallyBlock) {
+                removeFinallyBlock();
                 return true;
             }
         }
-        for (int i = 0; i < this.resources.size(); i++) {
-            if (this.resources.get(i) == node) {
-                this.resources.remove(i);
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i) == node) {
+                resources.remove(i);
                 return true;
             }
         }
@@ -249,13 +249,13 @@ public class TryStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public TryStmt removeFinallyBlock() {
-        return this.setFinallyBlock((BlockStmt) null);
+        return setFinallyBlock((BlockStmt) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TryStmt clone() {
-        return (TryStmt) this.accept(new CloneVisitor(), null);
+        return (TryStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -270,26 +270,26 @@ public class TryStmt extends Statement {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.catchClauses.size(); i++) {
-            if (this.catchClauses.get(i) == node) {
-                this.catchClauses.set(i, (CatchClause) replacementNode);
+        for (int i = 0; i < catchClauses.size(); i++) {
+            if (catchClauses.get(i) == node) {
+                catchClauses.set(i, (CatchClause) replacementNode);
                 return true;
             }
         }
-        if (this.finallyBlock != null) {
-            if (node == this.finallyBlock) {
-                this.setFinallyBlock((BlockStmt) replacementNode);
+        if (finallyBlock != null) {
+            if (node == finallyBlock) {
+                setFinallyBlock((BlockStmt) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < this.resources.size(); i++) {
-            if (this.resources.get(i) == node) {
-                this.resources.set(i, (Expression) replacementNode);
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i) == node) {
+                resources.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        if (node == this.tryBlock) {
-            this.setTryBlock((BlockStmt) replacementNode);
+        if (node == tryBlock) {
+            setTryBlock((BlockStmt) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

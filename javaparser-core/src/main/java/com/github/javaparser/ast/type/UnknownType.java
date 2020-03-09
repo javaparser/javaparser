@@ -58,7 +58,7 @@ public class UnknownType extends Type {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnknownType(TokenRange tokenRange) {
         super(tokenRange);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class UnknownType extends Type {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnknownType clone() {
-        return (UnknownType) this.accept(new CloneVisitor(), null);
+        return (UnknownType) accept(new CloneVisitor(), null);
     }
 
     @Override

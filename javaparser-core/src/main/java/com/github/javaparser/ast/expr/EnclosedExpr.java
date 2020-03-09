@@ -59,8 +59,8 @@ public class EnclosedExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnclosedExpr(TokenRange tokenRange, Expression inner) {
         super(tokenRange);
-        this.setInner(inner);
-        this.customInitialization();
+        setInner(inner);
+        customInitialization();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class EnclosedExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getInner() {
-        return this.inner;
+        return inner;
     }
 
     /**
@@ -92,12 +92,12 @@ public class EnclosedExpr extends Expression {
         if (inner == this.inner) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
-        if (this.inner != null) {
-            this.inner.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.INNER, inner, inner);
+        if (inner != null) {
+            inner.setParentNode(null);
         }
         this.inner = inner;
-        this.setAsParentNodeOf(inner);
+        setAsParentNodeOf(inner);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class EnclosedExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnclosedExpr clone() {
-        return (EnclosedExpr) this.accept(new CloneVisitor(), null);
+        return (EnclosedExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class EnclosedExpr extends Expression {
         if (node == null) {
             return false;
         }
-        if (node == this.inner) {
-            this.setInner((Expression) replacementNode);
+        if (node == inner) {
+            setInner((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

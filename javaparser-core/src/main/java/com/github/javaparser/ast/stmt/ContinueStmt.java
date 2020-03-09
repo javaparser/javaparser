@@ -67,8 +67,8 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ContinueStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);
-        this.setLabel(label);
-        this.customInitialization();
+        setLabel(label);
+        customInitialization();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getLabel() {
-        return Optional.ofNullable(this.label);
+        return Optional.ofNullable(label);
     }
 
     /**
@@ -99,12 +99,12 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
         if (label == this.label) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null) {
-            this.label.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.LABEL, label, label);
+        if (label != null) {
+            label.setParentNode(null);
         }
         this.label = label;
-        this.setAsParentNodeOf(label);
+        setAsParentNodeOf(label);
         return this;
     }
 
@@ -114,9 +114,9 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
         if (node == null) {
             return false;
         }
-        if (this.label != null) {
-            if (node == this.label) {
-                this.removeLabel();
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
                 return true;
             }
         }
@@ -125,13 +125,13 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ContinueStmt removeLabel() {
-        return this.setLabel((SimpleName) null);
+        return setLabel((SimpleName) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ContinueStmt clone() {
-        return (ContinueStmt) this.accept(new CloneVisitor(), null);
+        return (ContinueStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -146,9 +146,9 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
         if (node == null) {
             return false;
         }
-        if (this.label != null) {
-            if (node == this.label) {
-                this.setLabel((SimpleName) replacementNode);
+        if (label != null) {
+            if (node == label) {
+                setLabel((SimpleName) replacementNode);
                 return true;
             }
         }

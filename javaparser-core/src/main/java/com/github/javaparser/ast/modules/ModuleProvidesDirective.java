@@ -61,9 +61,9 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleProvidesDirective(TokenRange tokenRange, Name name, NodeList<Name> with) {
         super(tokenRange);
-        this.setName(name);
-        this.setWith(with);
-        this.customInitialization();
+        setName(name);
+        setWith(with);
+        customInitialization();
     }
 
     @Override
@@ -84,9 +84,9 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < this.with.size(); i++) {
-            if (this.with.get(i) == node) {
-                this.with.remove(i);
+        for (int i = 0; i < with.size(); i++) {
+            if (with.get(i) == node) {
+                with.remove(i);
                 return true;
             }
         }
@@ -96,7 +96,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleProvidesDirective clone() {
-        return (ModuleProvidesDirective) this.accept(new CloneVisitor(), null);
+        return (ModuleProvidesDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
-        return this.name;
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -129,12 +129,12 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         if (name == this.name) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) {
-            this.name.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.NAME, name, name);
+        if (name != null) {
+            name.setParentNode(null);
         }
         this.name = name;
-        this.setAsParentNodeOf(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -144,18 +144,18 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         if (with == this.with) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.WITH, this.with, with);
-        if (this.with != null) {
-            this.with.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.WITH, with, with);
+        if (with != null) {
+            with.setParentNode(null);
         }
         this.with = with;
-        this.setAsParentNodeOf(with);
+        setAsParentNodeOf(with);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> getWith() {
-        return this.with;
+        return with;
     }
 
     @Override
@@ -164,13 +164,13 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         if (node == null) {
             return false;
         }
-        if (node == this.name) {
-            this.setName((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
-        for (int i = 0; i < this.with.size(); i++) {
-            if (this.with.get(i) == node) {
-                this.with.set(i, (Name) replacementNode);
+        for (int i = 0; i < with.size(); i++) {
+            if (with.get(i) == node) {
+                with.set(i, (Name) replacementNode);
                 return true;
             }
         }

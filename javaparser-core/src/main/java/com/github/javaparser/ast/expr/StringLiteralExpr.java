@@ -67,7 +67,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public StringLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
-        this.customInitialization();
+        customInitialization();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public StringLiteralExpr clone() {
-        return (StringLiteralExpr) this.accept(new CloneVisitor(), null);
+        return (StringLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override

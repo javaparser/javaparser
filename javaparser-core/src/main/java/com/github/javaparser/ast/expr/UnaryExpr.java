@@ -101,9 +101,9 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
         super(tokenRange);
-        this.setExpression(expression);
-        this.setOperator(operator);
-        this.customInitialization();
+        setExpression(expression);
+        setOperator(operator);
+        customInitialization();
     }
 
     @Override
@@ -120,12 +120,12 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return this.expression;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
-        return this.operator;
+        return operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -134,12 +134,12 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         if (expression == this.expression) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) {
-            this.expression.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, expression, expression);
+        if (expression != null) {
+            expression.setParentNode(null);
         }
         this.expression = expression;
-        this.setAsParentNodeOf(expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -149,7 +149,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         if (operator == this.operator) {
             return this;
         }
-        this.notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, operator, operator);
         this.operator = operator;
         return this;
     }
@@ -176,7 +176,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnaryExpr clone() {
-        return (UnaryExpr) this.accept(new CloneVisitor(), null);
+        return (UnaryExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -191,8 +191,8 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         if (node == null) {
             return false;
         }
-        if (node == this.expression) {
-            this.setExpression((Expression) replacementNode);
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
