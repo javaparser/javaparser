@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -26,7 +27,6 @@ import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithBody<N extends Node> {
-
     Statement getBody();
 
     N setBody(final Statement body);
@@ -42,6 +42,8 @@ public interface NodeWithBody<N extends Node> {
      */
     default boolean hasEmptyBody() {
         Statement body = getBody();
-        return body.toBlockStmt().map(bs -> bs.isEmpty()).orElse(body.isEmptyStmt());
+        return body.toBlockStmt().map(bs -> bs.isEmpty())
+                .orElse(body.isEmptyStmt());
     }
+
 }

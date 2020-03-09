@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.printer.Printable;
@@ -26,7 +27,7 @@ class PrintingHelper {
 
     static String printToString(Object value) {
         if (value instanceof Printable) {
-            return ((Printable) value).asString();
+            return ((Printable)value).asString();
         }
         if (value instanceof Enum) {
             return ((Enum) value).name().toLowerCase();

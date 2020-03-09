@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.ast.Node;
@@ -37,7 +38,6 @@ public abstract class PropagatingAstObserver implements AstObserver {
             return (PropagatingAstObserver) observer;
         }
         return new PropagatingAstObserver() {
-
             @Override
             public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 observer.propertyChange(observedNode, property, oldValue, newValue);
@@ -83,20 +83,20 @@ public abstract class PropagatingAstObserver implements AstObserver {
     }
 
     public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-    // do nothing
+        // do nothing
     }
 
     public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-    // do nothing
+        // do nothing
     }
 
     public void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
-    // do nothing
+        // do nothing
     }
 
     @Override
     public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-    // do nothing
+        // do nothing
     }
 
     private void considerRemoving(Object element) {
@@ -114,4 +114,5 @@ public abstract class PropagatingAstObserver implements AstObserver {
             ((Observable) element).register(this);
         }
     }
+
 }

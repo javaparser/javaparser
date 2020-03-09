@@ -166,20 +166,24 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleRequiresStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleRequiresDirective asModuleRequiresStmt() {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
         return Optional.of(this);
     }

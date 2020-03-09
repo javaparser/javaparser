@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.Iterator;
@@ -27,26 +28,21 @@ import java.util.List;
 class TextElementIteratorsFactory {
 
     static class CascadingIterator<E> implements Iterator<E> {
-
         interface Provider<E> {
-
             Iterator<E> provide();
         }
 
         private final Provider<E> nextProvider;
-
         private Iterator<E> current;
-
         private Iterator<E> next;
-
         private boolean lastReturnedFromCurrent = false;
-
         private boolean lastReturnedFromNext = false;
 
         public CascadingIterator(Iterator<E> current, Provider<E> nextProvider) {
             this.nextProvider = nextProvider;
             this.current = current;
         }
+
 
         @Override
         public boolean hasNext() {
@@ -89,7 +85,6 @@ class TextElementIteratorsFactory {
     }
 
     static class EmptyIterator<E> implements Iterator<E> {
-
         @Override
         public boolean hasNext() {
             return false;
@@ -102,9 +97,7 @@ class TextElementIteratorsFactory {
     }
 
     private static class SingleElementIterator<E> implements Iterator<E> {
-
         private final E element;
-
         private boolean returned;
 
         SingleElementIterator(E element) {
@@ -124,13 +117,12 @@ class TextElementIteratorsFactory {
 
         @Override
         public void remove() {
+
         }
     }
 
     static class ComposedIterator<E> implements Iterator<E> {
-
         private final List<Iterator<E>> elements;
-
         private int currIndex;
 
         ComposedIterator(List<Iterator<E>> elements) {
@@ -143,7 +135,7 @@ class TextElementIteratorsFactory {
             if (currIndex >= elements.size()) {
                 return false;
             }
-            if (elements.get(currIndex).hasNext()) {
+            if (elements.get(currIndex).hasNext()){
                 return true;
             }
             currIndex++;
@@ -167,15 +159,14 @@ class TextElementIteratorsFactory {
     private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
         TextElement textElement = nodeText.getTextElement(index);
         if (textElement instanceof TokenTextElement) {
-            return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
-
+            return new SingleElementIterator<TokenTextElement>((TokenTextElement)textElement) {
                 @Override
                 public void remove() {
                     nodeText.removeElement(index);
                 }
             };
         } else if (textElement instanceof ChildTextElement) {
-            ChildTextElement childTextElement = (ChildTextElement) textElement;
+            ChildTextElement childTextElement = (ChildTextElement)textElement;
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
             return reverseIterator(textForChild);
         } else {
@@ -189,9 +180,10 @@ class TextElementIteratorsFactory {
 
     public static Iterator<TokenTextElement> partialReverseIterator(NodeText nodeText, int fromIndex) {
         List<Iterator<TokenTextElement>> elements = new LinkedList<>();
-        for (int i = fromIndex; i >= 0; i--) {
+        for (int i=fromIndex;i>=0;i--) {
             elements.add(reverseIterator(nodeText, i));
         }
         return new ComposedIterator<>(elements);
     }
+
 }

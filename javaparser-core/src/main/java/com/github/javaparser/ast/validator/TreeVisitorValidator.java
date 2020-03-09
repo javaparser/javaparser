@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -26,7 +27,6 @@ import com.github.javaparser.ast.Node;
  * A validator that walks the whole tree, visiting every node.
  */
 public class TreeVisitorValidator implements Validator {
-
     private final Validator validator;
 
     public TreeVisitorValidator(Validator validator) {

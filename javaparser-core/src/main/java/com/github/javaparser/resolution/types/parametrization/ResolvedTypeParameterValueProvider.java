@@ -18,11 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.types.parametrization;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
+
 import java.util.Optional;
 
 /**
@@ -50,6 +52,7 @@ public interface ResolvedTypeParameterValueProvider {
                 }
             }
         }
+
         if (type.isWildcard() && type.asWildcard().isBounded()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
@@ -57,9 +60,11 @@ public interface ResolvedTypeParameterValueProvider {
                 return ResolvedWildcard.superBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
             }
         }
+
         if (type.isReferenceType()) {
             type = type.asReferenceType().transformTypeParameters(this::useThisTypeParametersOnTheGivenType);
         }
+
         return type;
     }
 

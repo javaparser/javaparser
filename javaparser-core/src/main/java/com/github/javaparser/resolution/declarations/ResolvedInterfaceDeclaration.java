@@ -18,10 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,8 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedInterfaceDeclaration extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<ClassOrInterfaceDeclaration> {
+public interface ResolvedInterfaceDeclaration extends ResolvedReferenceTypeDeclaration,
+        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<ClassOrInterfaceDeclaration> {
 
     @Override
     default boolean isInterface() {

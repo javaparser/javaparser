@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
@@ -25,19 +26,16 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.utils.Utils;
+
 import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isSpaceOrTab;
 
 public class CsmToken implements CsmElement {
-
     private final int tokenType;
-
     private String content;
-
     private TokenContentCalculator tokenContentCalculator;
 
     public interface TokenContentCalculator {
-
         String calculate(Node node);
     }
 
@@ -91,15 +89,13 @@ public class CsmToken implements CsmElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         CsmToken csmToken = (CsmToken) o;
-        if (tokenType != csmToken.tokenType)
-            return false;
-        if (content != null ? !content.equals(csmToken.content) : csmToken.content != null)
-            return false;
+
+        if (tokenType != csmToken.tokenType) return false;
+        if (content != null ? !content.equals(csmToken.content) : csmToken.content != null) return false;
         return tokenContentCalculator != null ? tokenContentCalculator.equals(csmToken.tokenContentCalculator) : csmToken.tokenContentCalculator == null;
     }
 

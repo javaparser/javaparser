@@ -18,11 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -31,7 +33,6 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
  */
 public interface NodeWithSimpleName<N extends Node> {
-
     SimpleName getName();
 
     N setName(SimpleName name);

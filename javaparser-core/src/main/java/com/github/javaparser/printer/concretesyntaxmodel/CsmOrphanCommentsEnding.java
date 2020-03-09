@@ -18,13 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.SourcePrinter;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 public class CsmOrphanCommentsEnding implements CsmElement {
@@ -37,6 +40,7 @@ public class CsmOrphanCommentsEnding implements CsmElement {
         if (everything.isEmpty()) {
             return;
         }
+
         int commentsAtEnd = 0;
         boolean findingComments = true;
         while (findingComments && commentsAtEnd < everything.size()) {
@@ -47,8 +51,9 @@ public class CsmOrphanCommentsEnding implements CsmElement {
             }
         }
         for (int i = 0; i < commentsAtEnd; i++) {
-            Comment c = (Comment) everything.get(everything.size() - commentsAtEnd + i);
+            Comment c = (Comment)everything.get(everything.size() - commentsAtEnd + i);
             CsmComment.process(c, printer);
         }
     }
+
 }

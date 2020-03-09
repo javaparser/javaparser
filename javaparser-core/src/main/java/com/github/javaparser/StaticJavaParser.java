@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -38,6 +39,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -46,7 +48,6 @@ import java.nio.file.Path;
  * A simpler, static API than {@link JavaParser}.
  */
 public final class StaticJavaParser {
-
     private static ParserConfiguration configuration = new ParserConfiguration();
 
     private StaticJavaParser() {
@@ -455,6 +456,7 @@ public final class StaticJavaParser {
         return handleResult(newParser().parseModuleDirective(moduleDirective));
     }
 
+
     /**
      * Parses a type parameter and returns it as a TypeParameter
      *
@@ -477,4 +479,5 @@ public final class StaticJavaParser {
     public static MethodDeclaration parseMethodDeclaration(String methodDeclaration) {
         return handleResult(newParser().parseMethodDeclaration(methodDeclaration));
     }
+
 }

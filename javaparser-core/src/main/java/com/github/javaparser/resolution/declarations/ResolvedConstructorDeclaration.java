@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -27,7 +28,8 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration, AssociableToAST<ConstructorDeclaration> {
+public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration,
+        AssociableToAST<ConstructorDeclaration> {
 
     /**
      * A constructor can be declared in a class or an enum.

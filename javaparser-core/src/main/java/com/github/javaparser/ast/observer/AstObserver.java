@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.ast.Node;
@@ -32,8 +33,8 @@ public interface AstObserver {
      * Type of change occurring on a List
      */
     enum ListChangeType {
-
-        ADDITION, REMOVAL
+        ADDITION,
+        REMOVAL
     }
 
     /**

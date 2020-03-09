@@ -18,9 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.javadoc.description;
 
 import com.github.javaparser.utils.Pair;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,6 +71,7 @@ public class JavadocDescription {
 
     public JavadocDescription(List<JavadocDescriptionElement> elements) {
         this();
+
         this.elements.addAll(elements);
     }
 
@@ -92,12 +95,13 @@ public class JavadocDescription {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         JavadocDescription that = (JavadocDescription) o;
+
         return elements.equals(that.elements);
+
     }
 
     @Override
@@ -107,6 +111,9 @@ public class JavadocDescription {
 
     @Override
     public String toString() {
-        return "JavadocDescription{" + "elements=" + elements + '}';
+        return "JavadocDescription{" +
+                "elements=" + elements +
+                '}';
     }
+
 }

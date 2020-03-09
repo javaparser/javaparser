@@ -18,13 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
+
 import java.lang.annotation.Annotation;
 import java.util.Optional;
+
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.StaticJavaParser.parseName;
 
@@ -35,7 +38,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
  * @since July 2014
  */
 public interface NodeWithAnnotations<N extends Node> {
-
     NodeList<AnnotationExpr> getAnnotations();
 
     N setAnnotations(NodeList<AnnotationExpr> annotations);
@@ -66,7 +68,8 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addAnnotation(String name) {
-        NormalAnnotationExpr annotation = new NormalAnnotationExpr(parseName(name), new NodeList<>());
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                parseName(name), new NodeList<>());
         addAnnotation(annotation);
         return (N) this;
     }
@@ -79,7 +82,8 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default NormalAnnotationExpr addAndGetAnnotation(String name) {
-        NormalAnnotationExpr annotation = new NormalAnnotationExpr(parseName(name), new NodeList<>());
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                parseName(name), new NodeList<>());
         addAnnotation(annotation);
         return annotation;
     }
@@ -114,7 +118,8 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
-        MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(parseName(name));
+        MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
+                parseName(name));
         addAnnotation(markerAnnotationExpr);
         return (N) this;
     }
@@ -139,7 +144,8 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, Expression expression) {
-        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(parseName(name), expression);
+        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
+                parseName(name), expression);
         return addAnnotation(singleMemberAnnotationExpr);
     }
 
@@ -173,7 +179,8 @@ public interface NodeWithAnnotations<N extends Node> {
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
-    default N addSingleMemberAnnotation(Class<? extends Annotation> clazz, String value) {
+    default N addSingleMemberAnnotation(Class<? extends Annotation> clazz,
+                                        String value) {
         tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }

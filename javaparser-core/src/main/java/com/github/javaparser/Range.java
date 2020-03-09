@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser;
 
 import static com.github.javaparser.Position.pos;
@@ -26,9 +27,7 @@ import static com.github.javaparser.Position.pos;
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
 public class Range {
-
     public final Position begin;
-
     public final Position end;
 
     /**
@@ -47,6 +46,7 @@ public class Range {
         if (end == null) {
             throw new IllegalArgumentException("end can't be null");
         }
+
         // Force `begin` to be the position that is earliest within the document:
         if (begin.isBefore(end)) {
             this.begin = begin;
@@ -118,6 +118,7 @@ public class Range {
         return range(begin, end.withLine(endLine));
     }
 
+
     /**
      * @param begin The value used to replace the current begin position.
      * @return A copy of this `Range` object, but with the begin position replaced with the given position.
@@ -141,7 +142,8 @@ public class Range {
      * In these cases, the `other` range is not strictly "inside" of this range.
      */
     public boolean contains(Range other) {
-        return (begin.isBefore(other.begin) || begin.equals(other.begin)) && (end.isAfter(other.end) || end.equals(other.end));
+        return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
+                (end.isAfter(other.end) || end.equals(other.end));
     }
 
     /**
@@ -188,7 +190,8 @@ public class Range {
      * Range 2:   CDE</pre>
      */
     public boolean overlapsWith(Range other) {
-        return (contains(other.begin) || contains(other.end)) || (other.contains(begin) || other.contains(end));
+        return (contains(other.begin) || contains(other.end)) ||
+                (other.contains(begin) || other.contains(end));
     }
 
     /**
@@ -209,10 +212,9 @@ public class Range {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Range range = (Range) o;
         return begin.equals(range.begin) && end.equals(range.end);
     }

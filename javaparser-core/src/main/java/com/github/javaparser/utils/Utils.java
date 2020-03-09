@@ -18,16 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.UnaryExpr;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Function;
+
 import static java.util.Arrays.*;
 
 /**
@@ -36,7 +39,6 @@ import static java.util.Arrays.*;
  * @author Federico Tomassetti
  */
 public class Utils {
-
     public static final String EOL = System.getProperty("line.separator");
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
@@ -77,7 +79,7 @@ public class Utils {
     public static String escapeEndOfLines(String string) {
         StringBuilder escapedString = new StringBuilder();
         for (char c : string.toCharArray()) {
-            switch(c) {
+            switch (c) {
                 case '\n':
                     escapedString.append("\\n");
                     break;
@@ -95,9 +97,11 @@ public class Utils {
         final StringBuilder result = new StringBuilder();
         final char[] buffer = new char[8 * 1024];
         int numChars;
+
         while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
             result.append(buffer, 0, numChars);
         }
+
         return result.toString();
     }
 
@@ -121,6 +125,7 @@ public class Utils {
         }
         return sb.toString();
     }
+
 
     /**
      * @param input "aCamelCaseString"
@@ -179,7 +184,8 @@ public class Utils {
         if (s.isEmpty()) {
             throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
         }
-        return transformation.apply(s.substring(0, 1)) + s.substring(1);
+        return transformation.apply(s.substring(0, 1)) +
+                s.substring(1);
     }
 
     /**
@@ -265,7 +271,8 @@ public class Utils {
      * @return content with all kinds of EOL characters replaced by endOfLineCharacter
      */
     public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
-        return content.replaceAll("\\R", endOfLineCharacter);
+        return content
+                .replaceAll("\\R", endOfLineCharacter);
     }
 
     /**
@@ -275,6 +282,7 @@ public class Utils {
         int extensionIndex = filename.lastIndexOf(".");
         if (extensionIndex == -1)
             return filename;
+
         return filename.substring(0, extensionIndex);
     }
 
@@ -292,6 +300,11 @@ public class Utils {
      * Checks, if the parent is a unary expression with a minus operator. Used to check for negative literals.
      */
     public static boolean hasUnaryMinusAsParent(Node n) {
-        return n.getParentNode().filter(parent -> parent instanceof UnaryExpr).map(parent -> (UnaryExpr) parent).map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS).orElse(false);
+        return n.getParentNode()
+                .filter(parent -> parent instanceof UnaryExpr)
+                .map(parent -> (UnaryExpr) parent)
+                .map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS)
+                .orElse(false);
     }
+
 }

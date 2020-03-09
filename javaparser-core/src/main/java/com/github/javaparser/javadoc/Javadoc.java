@@ -18,12 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.*;
 
 /**
@@ -37,7 +40,6 @@ import static com.github.javaparser.utils.Utils.*;
 public class Javadoc {
 
     private JavadocDescription description;
-
     private List<JavadocBlockTag> blockTags;
 
     public Javadoc(JavadocDescription description) {
@@ -138,12 +140,13 @@ public class Javadoc {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Javadoc document = (Javadoc) o;
+
         return description.equals(document.description) && blockTags.equals(document.blockTags);
+
     }
 
     @Override
@@ -155,6 +158,10 @@ public class Javadoc {
 
     @Override
     public String toString() {
-        return "Javadoc{" + "description=" + description + ", blockTags=" + blockTags + '}';
+        return "Javadoc{" +
+                "description=" + description +
+                ", blockTags=" + blockTags +
+                '}';
     }
+
 }

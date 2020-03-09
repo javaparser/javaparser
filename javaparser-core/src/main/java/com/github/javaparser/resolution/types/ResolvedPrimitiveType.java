@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.types;
 
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import java.util.List;
  */
 public enum ResolvedPrimitiveType implements ResolvedType {
 
+
     BYTE("byte", Byte.class.getCanonicalName(), Collections.emptyList()),
     SHORT("short", Short.class.getCanonicalName(), Collections.singletonList(BYTE)),
     CHAR("char", Character.class.getCanonicalName(), Collections.emptyList()),
@@ -38,13 +40,12 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     FLOAT("float", Float.class.getCanonicalName(), Arrays.asList(LONG, INT, SHORT, BYTE, CHAR)),
     DOUBLE("double", Double.class.getCanonicalName(), Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
 
-    // /
-    // / Fields
-    // /
+    ///
+    /// Fields
+    ///
+
     private String name;
-
     private String boxTypeQName;
-
     private List<ResolvedPrimitiveType> promotionTypes;
 
     ResolvedPrimitiveType(String name, String boxTypeQName, List<ResolvedPrimitiveType> promotionTypes) {
@@ -65,7 +66,9 @@ public enum ResolvedPrimitiveType implements ResolvedType {
 
     @Override
     public String toString() {
-        return "PrimitiveTypeUsage{" + "name='" + name + '\'' + '}';
+        return "PrimitiveTypeUsage{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     public ResolvedPrimitiveType asPrimitive() {

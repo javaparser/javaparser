@@ -18,17 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+
 import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
 
 /**
  * A node that can be final.
  */
 public interface NodeWithFinalModifier<N extends Node> extends NodeWithModifiers<N> {
-
     default boolean isFinal() {
         return hasModifier(FINAL);
     }

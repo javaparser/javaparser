@@ -156,20 +156,24 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleExportsStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleExportsDirective asModuleExportsStmt() {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleExportsDirective> toModuleExportsStmt() {
         return Optional.of(this);
     }

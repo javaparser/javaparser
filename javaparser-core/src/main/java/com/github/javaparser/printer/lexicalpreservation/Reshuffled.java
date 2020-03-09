@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -27,9 +28,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
  * some new elements have been added or removed to the mix.
  */
 public class Reshuffled implements DifferenceElement {
-
     private final CsmMix previousOrder;
-
     private final CsmMix nextOrder;
 
     Reshuffled(CsmMix previousOrder, CsmMix nextOrder) {
@@ -39,18 +38,17 @@ public class Reshuffled implements DifferenceElement {
 
     @Override
     public String toString() {
-        return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
+        return "Reshuffled{" + nextOrder + ", previous="+ previousOrder+ '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Reshuffled that = (Reshuffled) o;
-        if (!previousOrder.equals(that.previousOrder))
-            return false;
+
+        if (!previousOrder.equals(that.previousOrder)) return false;
         return nextOrder.equals(that.nextOrder);
     }
 

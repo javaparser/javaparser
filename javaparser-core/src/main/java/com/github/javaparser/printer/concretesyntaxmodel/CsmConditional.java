@@ -18,23 +18,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class CsmConditional implements CsmElement {
-
     private final Condition condition;
-
     private final List<ObservableProperty> properties;
-
     private final CsmElement thenElement;
-
     private final CsmElement elseElement;
 
     public Condition getCondition() {
@@ -47,7 +45,7 @@ public class CsmConditional implements CsmElement {
         }
         return properties.get(0);
     }
-
+    
     public List<ObservableProperty> getProperties() {
         return properties;
     }
@@ -61,10 +59,12 @@ public class CsmConditional implements CsmElement {
     }
 
     public enum Condition {
+        IS_EMPTY,
+        IS_NOT_EMPTY,
+        IS_PRESENT,
+        FLAG;
 
-        IS_EMPTY, IS_NOT_EMPTY, IS_PRESENT, FLAG;
-
-        boolean evaluate(Node node, ObservableProperty property) {
+        boolean evaluate(Node node, ObservableProperty property){
             if (this == IS_PRESENT) {
                 return !property.isNullOrNotPresent(node);
             }

@@ -148,6 +148,7 @@ public class SuperExpr extends Expression {
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeClassName() {
         return setTypeName((Name) null);
     }

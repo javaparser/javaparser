@@ -18,19 +18,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.Problem;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
+
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A simple interface where validators can report found problems.
  */
 public class ProblemReporter {
-
     private final Consumer<Problem> problemConsumer;
 
     public ProblemReporter(Consumer<Problem> problemConsumer) {

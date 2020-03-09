@@ -18,14 +18,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+
 import java.util.Arrays;
 import java.util.List;
+
 import static com.github.javaparser.TokenTypes.*;
 import static com.github.javaparser.utils.Utils.EOL;
 
@@ -93,9 +96,7 @@ public interface CsmElement {
         return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
     }
 
-    static CsmElement comment() {
-        return new CsmComment();
-    }
+    static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
         return new CsmToken(eolTokenKind(), EOL);

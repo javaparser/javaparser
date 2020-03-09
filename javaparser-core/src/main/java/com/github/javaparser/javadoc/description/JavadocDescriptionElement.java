@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.javadoc.description;
 
 /**
@@ -26,6 +27,5 @@ package com.github.javaparser.javadoc.description;
  * So for example <code>a text</code> or <code>{@link String}</code> could be valid description elements.
  */
 public interface JavadocDescriptionElement {
-
     String toText();
 }

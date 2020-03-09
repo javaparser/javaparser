@@ -18,18 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
-
     public final int line;
-
     public final int column;
 
     /**
@@ -99,20 +99,19 @@ public class Position implements Comparable<Position> {
 
     public boolean isAfter(Position position) {
         assertNotNull(position);
-        if (position.line == Node.ABSOLUTE_BEGIN_LINE)
-            return true;
+        if (position.line == Node.ABSOLUTE_BEGIN_LINE) return true;
         if (line > position.line) {
             return true;
         } else if (line == position.line) {
             return column > position.column;
         }
         return false;
+
     }
 
     public boolean isBefore(Position position) {
         assertNotNull(position);
-        if (position.line == Node.ABSOLUTE_END_LINE)
-            return true;
+        if (position.line == Node.ABSOLUTE_END_LINE) return true;
         if (line < position.line) {
             return true;
         } else if (line == position.line) {
@@ -135,11 +134,11 @@ public class Position implements Comparable<Position> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Position position = (Position) o;
+
         return line == position.line && column == position.column;
     }
 

@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.utils;
 
 import com.github.javaparser.Position;
@@ -31,13 +32,15 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
+
 import java.util.List;
+
 import static java.lang.Integer.signum;
 
 public final class PositionUtils {
 
     private PositionUtils() {
-    // prevent instantiation
+        // prevent instantiation
     }
 
     public static <T extends Node> void sortByBeginPosition(List<T> nodes) {
@@ -61,10 +64,10 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
-        if (a.getRange().isPresent() && !b.getRange().isPresent()) {
+        if(a.getRange().isPresent() && !b.getRange().isPresent()) {
             return -1;
         }
-        if (!a.getRange().isPresent() && b.getRange().isPresent()) {
+        if(!a.getRange().isPresent() && b.getRange().isPresent()) {
             return 1;
         }
         if (!a.getRange().isPresent() && !b.getRange().isPresent()) {
@@ -78,8 +81,10 @@ public final class PositionUtils {
                 return signLine;
             }
         }
+
         Position aBegin = a.getBegin().get();
         Position bBegin = b.getBegin().get();
+
         int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {
             return signum(aBegin.column - bBegin.column);
@@ -104,6 +109,7 @@ public final class PositionUtils {
     private static int beginLineWithoutConsideringAnnotation(Node node) {
         return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.line;
     }
+
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
         return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.column;
@@ -135,15 +141,13 @@ public final class PositionUtils {
         if (container instanceof NodeWithAnnotations) {
             int bl = beginLineWithoutConsideringAnnotation(container);
             int bc = beginColumnWithoutConsideringAnnotation(container);
-            if (bl > containedRange.begin.line)
-                return false;
-            if (bl == containedRange.begin.line && bc > containedRange.begin.column)
-                return false;
-            if (containerRange.end.line < containedRange.end.line)
-                return false;
+            if (bl > containedRange.begin.line) return false;
+            if (bl == containedRange.begin.line && bc > containedRange.begin.column) return false;
+            if (containerRange.end.line < containedRange.end.line) return false;
             // TODO < or <= ?
             return !(containerRange.end.line == containedRange.end.line && containerRange.end.column < containedRange.end.column);
         }
         return true;
     }
+
 }

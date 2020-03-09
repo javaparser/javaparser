@@ -18,21 +18,23 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.version;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.Node;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static com.github.javaparser.ParseResult.PostProcessor;
 
 /**
  * A post processor that will call a collection of post processors.
  */
 public class PostProcessors implements PostProcessor {
-
     private final List<PostProcessor> postProcessors = new ArrayList<>();
 
     public PostProcessors(PostProcessor... postProcessors) {

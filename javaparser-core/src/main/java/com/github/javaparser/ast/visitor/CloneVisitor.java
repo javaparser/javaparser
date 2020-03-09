@@ -35,6 +35,7 @@ import java.util.Optional;
 public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final CompilationUnit n, final Object arg) {
         NodeList<ImportDeclaration> imports = cloneList(n.getImports(), arg);
         ModuleDeclaration module = cloneNode(n.getModule(), arg);
@@ -50,6 +51,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final PackageDeclaration n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name name = cloneNode(n.getName(), arg);

@@ -216,6 +216,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType) {
         super(tokenRange);
         setExtendedType(extendedType);

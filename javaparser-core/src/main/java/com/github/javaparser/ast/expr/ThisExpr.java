@@ -115,6 +115,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassName() {
         return setTypeName((Name) null);
     }

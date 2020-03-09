@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
@@ -26,11 +27,9 @@ import com.github.javaparser.ast.validator.chunks.ModifierValidator;
  * This validator validates according to Java 1.2 syntax rules.
  */
 public class Java1_2Validator extends Java1_1Validator {
-
     final Validator modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods = new ModifierValidator(true, false, false);
-
     final Validator strictfpNotAllowed = new ReservedKeywordValidator("strictfp");
-
+    
     public Java1_2Validator() {
         super();
         replace(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods, modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);

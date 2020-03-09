@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.ast.Node;
@@ -27,21 +28,21 @@ public abstract class AstObserverAdapter implements AstObserver {
 
     @Override
     public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-    // do nothing
+        // do nothing
     }
 
     @Override
     public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-    // do nothing
+        // do nothing
     }
 
     @Override
     public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-    // do nothing
+        // do nothing
     }
 
     @Override
     public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
-    // do nothing
+        // do nothing
     }
 }

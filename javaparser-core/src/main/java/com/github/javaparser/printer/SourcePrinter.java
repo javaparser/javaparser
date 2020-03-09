@@ -18,38 +18,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
 import com.github.javaparser.utils.Utils;
+
 import java.util.Deque;
 import java.util.LinkedList;
+
 import static com.github.javaparser.Position.*;
 
 /**
  * A support class for code that outputs formatted source code.
  */
 public class SourcePrinter {
-
     private final String endOfLineCharacter;
-
     private final String indentation;
-
     private final int tabWidth;
-
     private final IndentType indentType;
 
     private final Deque<String> indents = new LinkedList<>();
-
     private final Deque<String> reindentedIndents = new LinkedList<>();
-
     private String lastPrintedIndent = "";
-
     private final StringBuilder buf = new StringBuilder();
-
     private Position cursor = new Position(1, 0);
-
     private boolean indented = false;
 
     SourcePrinter() {
@@ -70,14 +64,16 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch(indentType) {
+        switch (indentType) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 indents.push(currentIndent + indentation);
                 break;
+
             case TABS:
                 indents.push(indentation + currentIndent);
                 break;
+
             default:
                 throw new AssertionError("Unhandled indent type");
         }
@@ -94,17 +90,19 @@ public class SourcePrinter {
     }
 
     private String calculateIndentWithAlignTo(int column) {
-        if (column < lastPrintedIndent.length()) {
+        if (column < lastPrintedIndent.length()){
             throw new IllegalStateException("Attempt to indent less than the previous indent.");
         }
+
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch(indentType) {
+        switch (indentType) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
                     newIndent.append(' ');
                 }
                 break;
+
             case TABS:
                 int logicalIndentLength = newIndent.length();
                 while ((logicalIndentLength + tabWidth) <= column) {
@@ -116,18 +114,21 @@ public class SourcePrinter {
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
-                for (int i = 0; i < tabWidth; i++) {
+                for(int i=0; i<tabWidth; i++){
                     fullTab.append(' ');
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= tabWidth) && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
+                if ((newIndent.length() >= tabWidth)
+                        && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
                     newIndent.replace(i, i + tabWidth, "\t");
                 }
                 break;
+
             default:
                 throw new AssertionError("Unhandled indent type");
         }
+
         return newIndent.toString();
     }
 

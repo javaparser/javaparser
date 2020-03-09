@@ -155,20 +155,24 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleOpensStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensDirective asModuleOpensStmt() {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleOpensDirective> toModuleOpensStmt() {
         return Optional.of(this);
     }

@@ -18,9 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser;
 
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
@@ -29,7 +31,6 @@ import static java.util.Collections.singletonList;
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
  */
 public class ParseProblemException extends RuntimeException {
-
     /**
      * The problems that were encountered during parsing
      */

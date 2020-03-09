@@ -141,7 +141,7 @@ public class CompilationUnit extends Node {
      */
     @Deprecated
     public List<Comment> getComments() {
-        List<Comment> comments = this.getAllContainedComments();
+        List<Comment> comments =  this.getAllContainedComments();
         this.getComment().ifPresent(comments::add);
         return comments;
     }
@@ -158,7 +158,7 @@ public class CompilationUnit extends Node {
      * @see com.github.javaparser.ast.comments.BlockComment
      */
     public List<Comment> getAllComments() {
-        List<Comment> comments = this.getAllContainedComments();
+        List<Comment> comments =  this.getAllContainedComments();
         this.getComment().ifPresent(comments::add);
         return comments;
     }

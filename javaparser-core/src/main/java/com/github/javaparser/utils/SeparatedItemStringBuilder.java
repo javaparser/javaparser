@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.utils;
 
 /**
@@ -26,19 +27,16 @@ package com.github.javaparser.utils;
  * <p/>Java 8 offers the very nice Collectors.joining(String, String, String) which does the same thing.
  */
 public class SeparatedItemStringBuilder {
-
     private final String separator;
-
     private final String postfix;
-
     private boolean hasItems = false;
-
     private StringBuilder builder;
 
     public SeparatedItemStringBuilder(String prefix, String separator, String postfix) {
         builder = new StringBuilder(prefix);
         this.separator = separator;
         this.postfix = postfix;
+
     }
 
     /**
