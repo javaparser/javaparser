@@ -1,3 +1,17 @@
+Version 3.15.15
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/168?closed=1)
+
+* Often requested, finally implemented by [ReallyLiri](https://github.com/ReallyLiri):
+configurable cache sizes for the symbol solver.
+
+Version 3.15.14 (buggy)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/167?closed=1)
+
+* a suggestion for a new Javadoc parsing API was merged too quickly,
+causing issues parsing Javadoc while parsing Java normally. 
+
 Version 3.15.13
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/166?closed=1)
