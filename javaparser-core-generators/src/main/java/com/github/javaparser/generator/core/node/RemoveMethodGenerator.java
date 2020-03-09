@@ -67,7 +67,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
                 check = attributeCheck(property, removeAttributeMethodName);
             }
             if (property.isOptional()) {
-                check = f("if (this.%s != null) { %s }", property.getName(), check);
+                check = f("if (%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
         }
@@ -81,16 +81,16 @@ public class RemoveMethodGenerator extends NodeGenerator {
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
-        return f("if (node == this.%s) {" +
-                "    this.%s();" +
+        return f("if (node == %s) {" +
+                "    %s();" +
                 "    return true;\n" +
                 "}", property.getName(), removeAttributeMethodName);
     }
 
     private String nodeListCheck(PropertyMetaModel property) {
-        return f("for (int i = 0; i < this.%s.size(); i++) {" +
-                "  if (this.%s.get(i) == node) {" +
-                "    this.%s.remove(i);" +
+        return f("for (int i = 0; i < %s.size(); i++) {" +
+                "  if (%s.get(i) == node) {" +
+                "    %s.remove(i);" +
                 "    return true;" +
                 "  }" +
                 "}", property.getName(), property.getName(), property.getName());
@@ -101,7 +101,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
         final MethodDeclaration removeMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName));
 
         final BlockStmt block = removeMethod.getBody().get();
-        block.addStatement(f("return this.%s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
+        block.addStatement(f("return %s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
 
         addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
         return methodName;

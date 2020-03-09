@@ -44,6 +44,6 @@ public class VoidVisitorWithDefaultsGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        body.addStatement("this.defaultAction(n, arg);");
+        body.addStatement("defaultAction(n, arg);");
     }
 }

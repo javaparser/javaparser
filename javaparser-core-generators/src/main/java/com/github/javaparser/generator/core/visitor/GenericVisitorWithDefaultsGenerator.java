@@ -44,6 +44,6 @@ public class GenericVisitorWithDefaultsGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        body.addStatement("return this.defaultAction(n, arg);");
+        body.addStatement("return defaultAction(n, arg);");
     }
 }

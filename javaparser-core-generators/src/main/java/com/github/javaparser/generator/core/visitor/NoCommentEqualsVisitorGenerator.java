@@ -57,12 +57,12 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
                     continue;
                 if (field.getNodeReference().isPresent()) {
                     if (field.isNodeList()) {
-                        body.addStatement(f("if (!this.nodesEquals(n.%s, n2.%s)) { return false; }", getter, getter));
+                        body.addStatement(f("if (!nodesEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                     } else {
-                        body.addStatement(f("if (!this.nodeEquals(n.%s, n2.%s)) { return false; }", getter, getter));
+                        body.addStatement(f("if (!nodeEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                     }
                 } else {
-                    body.addStatement(f("if (!this.objEquals(n.%s, n2.%s)) { return false; }", getter, getter));
+                    body.addStatement(f("if (!objEquals(n.%s, n2.%s)) { return false; }", getter, getter));
                 }
             }
             if (body.getStatements().size() == 1) {

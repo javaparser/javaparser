@@ -42,7 +42,7 @@ public class CloneGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         nodeCu.addImport(CloneVisitor.class);
         MethodDeclaration cloneMethod = (MethodDeclaration) parseBodyDeclaration(f(
-                "@Override public %s clone() { return (%s) this.accept(new CloneVisitor(), null); }",
+                "@Override public %s clone() { return (%s) accept(new CloneVisitor(), null); }",
                 nodeMetaModel.getTypeNameGenerified(),
                 nodeMetaModel.getTypeNameGenerified()
         ));

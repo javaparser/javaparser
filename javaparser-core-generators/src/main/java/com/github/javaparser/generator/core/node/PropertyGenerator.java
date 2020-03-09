@@ -104,13 +104,13 @@ public class PropertyGenerator extends NodeGenerator {
                 castValue
         ));
 
-        body.addStatement(f("this.notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
+        body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, %s, %s);", observableName, name, name));
         if (property.isNode()) {
-            body.addStatement(f("if (this.%s != null) { this.%s.setParentNode(null); }", name, name));
+            body.addStatement(f("if (%s != null) { %s.setParentNode(null); }", name, name));
         }
         body.addStatement(f("this.%s = %s;", name, name));
         if (property.isNode()) {
-            body.addStatement(f("this.setAsParentNodeOf(%s);", name));
+            body.addStatement(f("setAsParentNodeOf(%s);", name));
         }
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             body.addStatement(f("return (T) this;"));
@@ -128,9 +128,9 @@ public class PropertyGenerator extends NodeGenerator {
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
         if (property.isOptional()) {
-            body.addStatement(f("return Optional.ofNullable(this.%s);", property.getName()));
+            body.addStatement(f("return Optional.ofNullable(%s);", property.getName()));
         } else {
-            body.addStatement(f("return this.%s;", property.getName()));
+            body.addStatement(f("return %s;", property.getName()));
         }
         addOrReplaceWhenSameSignature(nodeCoid, getter);
     }

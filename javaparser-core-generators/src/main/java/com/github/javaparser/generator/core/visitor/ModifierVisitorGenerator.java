@@ -49,7 +49,7 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
             if (property.isNode()) {
                 if (property.isNodeList()) {
-                    body.addStatement(f("NodeList<%s> %s = this.modifyList(n.%s(), arg);",
+                    body.addStatement(f("NodeList<%s> %s = modifyList(n.%s(), arg);",
                             property.getTypeNameGenerified(),
                             property.getName(),
                             property.getGetterMethodName()));
