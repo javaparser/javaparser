@@ -610,11 +610,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getTarget().accept(this, arg);
-        if (configuration.isSpacesBetweenOperators()) {
+        if (configuration.isSpaceAroundOperators()) {
             printer.print(" ");
         }
         printer.print(n.getOperator().asString());
-        if (configuration.isSpacesBetweenOperators()) {
+        if (configuration.isSpaceAroundOperators()) {
             printer.print(" ");
         }
         n.getValue().accept(this, arg);
@@ -631,11 +631,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getLeft().accept(this, arg);
-        if (configuration.isSpacesBetweenOperators()) {
+        if (configuration.isSpaceAroundOperators()) {
             printer.print(" ");
         }
         printer.print(n.getOperator().asString());
-        if (configuration.isSpacesBetweenOperators()) {
+        if (configuration.isSpaceAroundOperators()) {
             printer.print(" ");
         }
         n.getRight().accept(this, arg);
