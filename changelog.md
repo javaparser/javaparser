@@ -1,3 +1,9 @@
+Next Release
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/169?closed=1)
+
+* MAINTENANCE: All dependencies updated
+
 Version 3.15.15
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/168?closed=1)
