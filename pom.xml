@@ -7,8 +7,6 @@
         <module>javaparser-core-generators</module>
         <module>javaparser-core-metamodel-generator</module>
         <module>javaparser-core-serialization</module>
-        <module>javaparser-symbol-solver-model</module>
-        <module>javaparser-symbol-solver-logic</module>
         <module>javaparser-symbol-solver-core</module>
         <module>javaparser-symbol-solver-testing</module>
     </modules>
