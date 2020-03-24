@@ -40,7 +40,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEqualCompressingWhiteSpace.equalToCompressingWhiteSpace;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SharedSteps {
@@ -127,7 +127,7 @@ public class SharedSteps {
     @Then("the expected source should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertThat(compilationUnit.toString(), CoreMatchers.is(equalToCompressingWhiteSpace(classSrc)));
+        assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
     public static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {

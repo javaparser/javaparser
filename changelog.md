@@ -2,7 +2,6 @@ Next Release
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/169?closed=1)
 
-* MAINTENANCE: All dependencies updated
 * CHANGED: Merged symbol solver modules, for java 9 module compatibility
 * CHANGED: Renamed the pretty printer configuration option `isSpacesBetweenOperators` to `isSpaceAroundOperators` 
 
