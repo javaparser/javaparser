@@ -29,5 +29,5 @@ WORKDIR /javaparser
 #CMD mvn package
 #CMD mvn test
 
-CMD mvn --batch-mode -Darguments="-DskipTests" release:clean release:prepare release:perform
+CMD mvn -e --batch-mode -Darguments="-DskipTests" release:clean release:prepare release:perform
 
