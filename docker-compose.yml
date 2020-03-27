@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+      args:
+        LANGUAGE: en 
+    volumes:
+      - ./:/javaparser
