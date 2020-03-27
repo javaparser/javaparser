@@ -22,4 +22,5 @@ WORKDIR /javaparser
 # (do something about the version number prompt. You will need to attach a console for that right now)
 #CMD mvn clean 
 #CMD mvn package
-CMD mvn --batch-mode release:clean release:prepare release:perform 
+CMD mvn test
+#CMD mvn --batch-mode -Darguments="-Dskiptests" release:clean release:prepare release:perform
