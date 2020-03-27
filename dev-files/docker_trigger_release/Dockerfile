@@ -20,6 +20,6 @@ RUN ls -al
 WORKDIR /javaparser
 # start a release: (can be overridden with --run from the command line)
 # (do something about the version number prompt. You will need to attach a console for that right now)
-CMD mvn clean 
+#CMD mvn clean 
 #CMD mvn package
-#CMD mvn --batch-mode release:clean release:prepare release:perform 
+CMD mvn --batch-mode release:clean release:prepare release:perform 
