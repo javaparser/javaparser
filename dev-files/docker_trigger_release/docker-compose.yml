@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  docs:
+  trigger_release:
     build:
       context: .
       dockerfile: Dockerfile
