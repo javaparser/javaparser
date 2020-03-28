@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+mvn -e --batch-mode release:clean release:prepare -DdryRun=true 
