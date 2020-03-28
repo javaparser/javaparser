@@ -146,7 +146,7 @@
         <repository>
             <id>bintray-javaparser-JavaParser</id>
             <name>javaparser-JavaParser</name>
-            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/;publish=1</url>
+            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/;publish=1;override=1</url>
         </repository>
     </distributionManagement>
 
