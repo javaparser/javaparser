@@ -21,7 +21,12 @@
 
 package com.github.javaparser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,13 +50,7 @@ public final class Providers {
     public static Provider provider(InputStream input, Charset encoding) {
         assertNotNull(input);
         assertNotNull(encoding);
-        try {
-            return new StreamProvider(input, encoding.name());
-        } catch (IOException e) {
-            // The only one that is thrown is UnsupportedCharacterEncodingException,
-            // and that's a fundamental problem, so runtime exception.
-            throw new RuntimeException(e);
-        }
+        return new StreamProvider(input, encoding);
     }
 
     public static Provider provider(InputStream input) {

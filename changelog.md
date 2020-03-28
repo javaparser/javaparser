@@ -2,6 +2,8 @@ Next Release
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/170?closed=1)
 
+* CHANGED: Dependencies should now all be up-to-date. 
+  - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset if using an InputStream source.
 
 Version 3.15.17
 ------------------
