@@ -33,17 +33,21 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.*;
-import static java.nio.charset.StandardCharsets.*;
-import static java.util.Arrays.*;
+import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtils {
@@ -191,5 +195,12 @@ public class TestUtils {
      */
     public static void assertEqualsNoEol(String expected, String actual) {
         assertEquals(normalizeEolInTextBlock(expected, EOL), actual);
+    }
+
+    /**
+     * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
+     */
+    public static void assertEqualsNoEol(String expected, String actual, String message) {
+        assertEquals(normalizeEolInTextBlock(expected, EOL), actual, message);
     }
 }
