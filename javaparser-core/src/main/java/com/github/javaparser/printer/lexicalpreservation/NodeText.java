@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,10 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This contains the lexical information for a single node.
@@ -36,12 +34,6 @@ class NodeText {
     private final List<TextElement> elements;
 
     public static final int NOT_FOUND = -1;
-
-    enum Option {
-        REMOVE_SPACE_IMMEDIATELY_AFTER,
-        EXCLUDE_START,
-        EXCLUDE_END
-    }
 
     //
     // Constructors
@@ -104,15 +96,13 @@ class NodeText {
         int res = tryToFindElement(matcher, from);
         if (res == NOT_FOUND) {
             throw new IllegalArgumentException(
-                    String.format("I could not find child '%s' from position %d. Elements: %s",
-                            matcher, from, elements));
-        } else {
-            return res;
+                    String.format("I could not find child '%s' from position %d. Elements: %s", matcher, from, elements));
         }
+        return res;
     }
 
     int tryToFindElement(TextElementMatcher matcher, int from) {
-        for (int i=from; i<elements.size(); i++) {
+        for (int i = from; i < elements.size(); i++) {
             TextElement element = elements.get(i);
             if (matcher.match(element)) {
                 return i;
@@ -141,12 +131,8 @@ class NodeText {
     // Removing single elements
     //
 
-    void remove(TextElementMatcher matcher) {
-        elements.removeIf(matcher::match);
-    }
-
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
-        int i=0;
+        int i = 0;
         for (TextElement e : elements) {
             if (matcher.match(e)) {
                 elements.remove(e);
@@ -217,22 +203,4 @@ class NodeText {
         return "NodeText{" + elements + '}';
     }
 
-    public boolean endWithSpace() {
-        if (elements.isEmpty()) {
-            return false;
-        }
-        TextElement lastElement = elements.get(elements.size() - 1);
-        if (lastElement instanceof TokenTextElement) {
-            return ((TokenTextElement)lastElement).getTokenKind() == GeneratedJavaParserConstants.SPACE;
-        } else {
-            return false;
-        }
-    }
-
-    public void removeLastElement() {
-        if (elements.isEmpty()) {
-            throw new IllegalStateException();
-        }
-        elements.remove(elements.size() - 1);
-    }
 }

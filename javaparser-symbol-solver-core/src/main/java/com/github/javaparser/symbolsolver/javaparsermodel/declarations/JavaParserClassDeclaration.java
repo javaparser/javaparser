@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
@@ -237,10 +242,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         }
         ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
         if (superclass != null) {
-            // We want to avoid infinite recursion in case of Object having Object as ancestor
-            if (Object.class.getCanonicalName().equals(superclass.getQualifiedName())) {
-                return true;
-            }
             if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
@@ -411,6 +412,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+
+        // If unable to solve by the class name alone, attempt to qualify it.
         if (!ref.isSolved()) {
             Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
             if (localScope.isPresent()) {
@@ -418,12 +421,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                 ref = solveType(localName);
             }
         }
+
+        // If still unable to resolve, throw an exception.
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
+
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
                                                               .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                                                               .collect(Collectors.toList());

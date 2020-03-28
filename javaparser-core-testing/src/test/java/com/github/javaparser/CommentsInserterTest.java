@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseResource;
+import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CommentsInserterTest {
     private String makeFilename(String sampleName) {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
+    }
+
+    private String makeExpectedFilename(String sampleName) {
+        return "/com/github/javaparser/issue_samples/" + sampleName + ".java.expected.txt";
     }
 
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
@@ -101,4 +106,10 @@ class CommentsInserterTest {
                 "}\n", cu.toString());
     }
 
+
+    @Test
+    void issue412() throws IOException {
+        CompilationUnit cu = parseSample("Issue412").getResult().get();
+        assertEqualToTextResource(makeExpectedFilename("Issue412"), cu.toString());
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2017 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,11 @@ package com.github.javaparser.ast.expr;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
+
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("OctalInteger")
 class LiteralStringValueExprTest {
@@ -88,6 +91,23 @@ class LiteralStringValueExprTest {
         assertThat(negHex.asInt()).isEqualTo(0xffff_ffff);
         assertThat(posBin.asInt()).isEqualTo(0b0111_1111_1111_1111_1111_1111_1111_1111);
         assertThat(negBin.asInt()).isEqualTo(0b1000_0000_0000_0000_0000_0000_0000_0000);
+    }
+
+    @Test
+    void negativeLiteralValues() {
+        UnaryExpr unaryIntExpr = parseExpression("-2147483648"); // valid, Integer.MIN_VALUE
+        IntegerLiteralExpr literalIntExpr = (IntegerLiteralExpr) unaryIntExpr.getExpression();
+        IntegerLiteralExpr notValidIntExpr = parseExpression("2147483648"); // not valid
+
+        UnaryExpr unaryLongExpr = parseExpression("-9223372036854775808L"); // valid, Long.MIN_VALUE
+        LongLiteralExpr literalLongExpr = (LongLiteralExpr) unaryLongExpr.getExpression();
+        LongLiteralExpr notValidLongExpr = parseExpression("9223372036854775808L"); // not valid
+
+        assertThat(literalIntExpr.asNumber()).isEqualTo(2147483648L);
+        assertThat(literalLongExpr.asNumber()).isEqualTo(new BigInteger("9223372036854775808"));
+
+        assertThatThrownBy(notValidIntExpr::asNumber).isInstanceOf(NumberFormatException.class);
+        assertThatThrownBy(notValidLongExpr::asNumber).isInstanceOf(NumberFormatException.class);
     }
 
     @Test

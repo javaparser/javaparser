@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -179,11 +179,19 @@ public class Range {
     /**
      * Does the other 'Range' overlap with this 'Range'?
      * <p>
-     * If two ranges overlap, this range or the other range strictlyContains the begin or the end of the other range.
+     * If two ranges overlap, this range or the other range contains the begin or the end of the other range.
+     * <p>
+     * Note that if the ends are "touching" (i.e. a begin position == end position), this counts as an overlap
+     * because the positions refer to characters, as opposed to boundary between characters.
+     * <p>
+     * For example, there is an overlap at "C" in the following ranges, with "C" existing within both ranges:
+     * <pre>
+     * Range 1: ABC
+     * Range 2:   CDE</pre>
      */
     public boolean overlapsWith(Range other) {
-        return strictlyContains(other.begin) || strictlyContains(other.end)
-                || other.strictlyContains(begin) || other.strictlyContains(end);
+        return (contains(other.begin) || contains(other.end)) ||
+                (other.contains(begin) || other.contains(end));
     }
 
     /**

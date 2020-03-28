@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.StaticJavaParser.parse;
@@ -15,14 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.*;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -31,6 +46,7 @@ import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
@@ -1302,5 +1318,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         compilationUnit.findFirst(BlockStmt.class).get().addStatement(ifStmt);
         String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
         assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+    }
+
+    @Test
+    void commentAddedAtTopLevel() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+        CompilationUnit cu = javaParser.parse("package x;class X{}").getResult().get();
+
+        cu.setComment(new LineComment("Bla"));
+        assertEqualsNoEol("//Bla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+
+        cu.setComment(new LineComment("BlaBla"));
+        assertEqualsNoEol("//BlaBla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+
+        cu.removeComment();
+        assertEqualsNoEol("package x;class X{}", LexicalPreservingPrinter.print(cu));
     }
 }

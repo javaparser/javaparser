@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
@@ -20,10 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
@@ -900,4 +902,37 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     // Set<TypeDeclaration> internalTypes()
 
     // Optional<TypeDeclaration> containerType()
+
+
+    @Test
+    void testCanBeAssignedTo() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        ResolvedReferenceTypeDeclaration stringTypeDeclaration = typeSolver.solveType("java.lang.String");
+        ResolvedReferenceTypeDeclaration objectTypeDeclaration = typeSolver.solveType("java.lang.Object");
+        ResolvedReferenceTypeDeclaration cloneableTypeDeclaration = typeSolver.solveType("java.lang.Cloneable");
+        ResolvedReferenceTypeDeclaration serializableTypeDeclaration = typeSolver.solveType("java.io.Serializable");
+
+        // Assign "UP" (implicit) -- Assign to implicitly state ancestor (java.lang.Object) -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(objectTypeDeclaration),"CompilationUnit should be reported as assignable to Object");
+
+        // Assign "UP" (explicit) -- Assign to explicitly stated ancestors (extends/implements) -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(cloneableTypeDeclaration),"CompilationUnit should be reported as assignable to Cloneable, because it extends Node which implements Cloneable");
+
+        // Assign "SELF" -- Assign to self -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(compilationUnit),"CompilationUnit should not be reported as assignable to CompilationUnit");
+        assertTrue(stringTypeDeclaration.canBeAssignedTo(stringTypeDeclaration),"String should not be reported as assignable to String");
+        assertTrue(objectTypeDeclaration.canBeAssignedTo(objectTypeDeclaration),"Object should be reported as assignable to Object");
+
+
+        // Assign "DOWN" -- Assign ancestor to descendent -- should be rejected
+        assertFalse(cloneableTypeDeclaration.canBeAssignedTo(compilationUnit),"CloneableTypeDeclaration should not be reported as assignable to CompilationUnit");
+        assertFalse(objectTypeDeclaration.canBeAssignedTo(compilationUnit),"Object should not be reported as assignable to CompilationUnit");
+
+        // Assign "independent" -- Assign to a class with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
+        assertFalse(compilationUnit.canBeAssignedTo(stringTypeDeclaration),"CompilationUnit should not be reported as assignable to String");
+
+        // Assign "independent" -- Assign to a interface with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
+        assertFalse(compilationUnit.canBeAssignedTo(serializableTypeDeclaration), "CompilationUnit should not be reported as assignable to Serializable");
+    }
+
 }
