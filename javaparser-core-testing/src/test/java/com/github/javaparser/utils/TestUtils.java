@@ -54,7 +54,7 @@ public class TestUtils {
     /**
      * Takes care of setting all the end of line character to platform specific ones.
      */
-    public static String readResource(String resourceName) throws IOException {
+    public static String readResource(String resourceName) {
         if (resourceName.startsWith("/")) {
             resourceName = resourceName.substring(1);
         }
@@ -71,7 +71,15 @@ public class TestUtils {
                 }
                 return builder.toString();
             }
+        } catch (IOException e) {
+            fail(e);
+            return null;
         }
+    }
+    
+    public static void assertEqualToTextResource(String resourceName, String actual){
+        String expected = readResource(resourceName);
+        assertEquals(expected, actual);
     }
 
     public static String readTextResource(Class<?> relativeClass, String resourceName) {
