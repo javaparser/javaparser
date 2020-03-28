@@ -1,6 +1,32 @@
-Version 3.15.14
+Next Release
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/170?closed=1)
+
+
+Version 3.15.17
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/169?closed=1)
+
+* CHANGED: Merged symbol solver modules, for java 9 module compatibility
+* CHANGED: Renamed the pretty printer configuration option `isSpacesBetweenOperators` to `isSpaceAroundOperators` 
+
+Version 3.15.16
+------------------
+_Version skipped_
+
+Version 3.15.15
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/168?closed=1)
+
+* Often requested, finally implemented by [ReallyLiri](https://github.com/ReallyLiri):
+configurable cache sizes for the symbol solver.
+
+Version 3.15.14 (buggy)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/167?closed=1)
+
+* a suggestion for a new Javadoc parsing API was merged too quickly,
+causing issues parsing Javadoc while parsing Java normally. 
 
 Version 3.15.13
 ------------------
