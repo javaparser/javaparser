@@ -4,6 +4,11 @@ Next Release
 
 * CHANGED: Dependencies should now all be up-to-date. 
   - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset if using an InputStream source.
+* FIXED (possible CHANGED/BREAKING): Improvements have been made to method `PositionUtils#nodeContains()` for clarity and precision in behaviour.
+  - It is believed that there are no changes to behaviour, but if you do see anything please do reach out.
+  - See some thoughts #2502
+* ADDED: `NodeList#getFirst(): Optional<Node>`
+* ADDED: `NodeList#getLast(): Optional<Node>`
 
 Version 3.15.17
 ------------------
