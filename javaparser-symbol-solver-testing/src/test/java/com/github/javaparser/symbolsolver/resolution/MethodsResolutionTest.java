@@ -31,7 +31,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -122,7 +121,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    void testt() {
+    void testSuperMethodCallAnonymousClass() {
         JavaParser parser = new JavaParser();
         parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = parser.parse("public class X { java.util.List x() { return new java.util.ArrayList() { public int size() { return super.size(); } }; } }").getResult().get();
