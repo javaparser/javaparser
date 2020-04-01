@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,6 +31,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -117,6 +119,17 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
+    }
+
+    @Test
+    void testt() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("public class X { java.util.List x() { return new java.util.ArrayList() { public int size() { return super.size(); } }; } }").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "size").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("size", methodUsage.getName());
     }
 
     @Test
