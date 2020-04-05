@@ -10,6 +10,8 @@ Next Release (3.15.18)
   ([#2502](https://github.com/javaparser/javaparser/pull/2502))
   - It is believed that there are no changes to behaviour, but if you do see anything please do reach out.
   - See some additional commentary/thoughts in #2502
+* FIXED: Resolving super methodcalls in anonymous inner classes (fixes #1962)
+    ([#2585](https://github.com/javaparser/javaparser/pull/2585))
 * ADDED: `NodeList#getFirst(): Optional<Node>`
     ([#2502](https://github.com/javaparser/javaparser/pull/2502))
 * ADDED: `NodeList#getLast(): Optional<Node>`
