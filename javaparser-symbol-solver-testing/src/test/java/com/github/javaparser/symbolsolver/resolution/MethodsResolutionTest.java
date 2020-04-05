@@ -124,7 +124,17 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     void testSuperMethodCallAnonymousClass() {
         JavaParser parser = new JavaParser();
         parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        CompilationUnit cu = parser.parse("public class X { java.util.List x() { return new java.util.ArrayList() { public int size() { return super.size(); } }; } }").getResult().get();
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    java.util.List x() { \n" +
+                "        return new java.util.ArrayList() { \n" +
+                "            public int size() { \n" +
+                "                return super.size(); \n" +
+                "            } \n" +
+                "        }; \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
 
         MethodCallExpr expression = Navigator.findMethodCall(cu, "size").get();
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);

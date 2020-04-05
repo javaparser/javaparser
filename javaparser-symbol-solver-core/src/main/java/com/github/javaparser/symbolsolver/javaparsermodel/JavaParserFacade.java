@@ -485,6 +485,19 @@ public class JavaParserFacade {
         return node.accept(typeExtractor, solveLambdas);
     }
 
+    /**
+     * Where a node has an interface/class/enum declaration as its ancestor, return the nearest one.
+     * <p>
+     * NOTE: See {@link #findContainingTypeDeclOrObjectCreationExpr} if wanting to include anonymous inner classes.
+     * <p>
+     * For example, these all return X:
+     * {@code public interface X { ... node here ... }}
+     * {@code public class X { ... node here ... }}
+     * {@code public enum X { ... node here ... }}
+     *
+     * @param node The Node whose ancestors will be traversed,
+     * @return The first class/interface/enum declaration in the Node's ancestry.
+     */
     protected com.github.javaparser.ast.body.TypeDeclaration<?> findContainingTypeDecl(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             return (ClassOrInterfaceDeclaration) node;
@@ -496,6 +509,30 @@ public class JavaParserFacade {
 
     }
 
+    /**
+     * Where a node has an interface/class/enum declaration -- or an object creation expression (anonymous inner class) -- as its ancestor, return the nearest one.
+     * <p>
+     * NOTE: See {@link #findContainingTypeDecl} if wanting to not include anonymous inner classes.
+     * <p>
+     * For example, these all return X:
+     * <ul>
+     *     <li>{@code public interface X { ... node here ... }}</li>
+     *     <li>{@code public class X { ... node here ... }}</li>
+     *     <li>{@code public enum X { ... node here ... }}</li>
+     *     <li><pre>{@code
+     *     new ActionListener() {
+     *          ... node here ...
+     *          public void actionPerformed(ActionEvent e) {
+     *               ... or node here ...
+     *          }
+     *     }
+     *     }</pre></li>
+     * </ul>
+     * <p>
+     *
+     * @param node The Node whose ancestors will be traversed,
+     * @return The first class/interface/enum declaration -- or object creation expression (anonymous inner class) -- in the Node's ancestry.
+     */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             return node;
