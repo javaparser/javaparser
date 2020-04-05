@@ -1,20 +1,15 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -27,26 +22,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  *
  * MyInterface.super.defaultMethod();
  * </pre>
- *
  */
-public class Issue1949Test {
+public class Issue1949Test extends AbstractSymbolResolutionTest {
 
-    private static List<TypeSolver> getTypeSolvers() {
-        List<TypeSolver> solvers = new ArrayList<>();
-        solvers.add(new JavaParserTypeSolver("src/main/java"));
-        solvers.add(new ReflectionTypeSolver(false));
-        return solvers;
-    }
+    @Test
+    public void testReflectionFirst() throws FileNotFoundException {
 
-    @ParameterizedTest
-    @MethodSource("getTypeSolvers")
-    public void testReflectionFirst(TypeSolver typeSolver) throws FileNotFoundException {
-        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+        // Paths to the relevant source root and class/interface
+        Path dir = adaptPath("src/test/resources/issue1949");
+        Path file_method = adaptPath("src/test/resources/issue1949/main/MyClass.java");
+        Path file_interface = adaptPath("src/test/resources/issue1949/main/MyInterface.java");
 
-        CompilationUnit source = StaticJavaParser.parse(new File("src/main/java/main/MyClass.java"));
+        // Setup typesolver
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new JavaParserTypeSolver(dir));
+        typeSolver.add(new ReflectionTypeSolver(false));
+
+        // Setup JP and parse the class
+        JavaParser javaParser = new JavaParser();
+        javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit source = javaParser.parse(file_method.toFile()).getResult().get();
+
+
+        // Iterate through all method calls and verify that it can be resolved.
         boolean failed = false;
-
         for (MethodCallExpr mce : source.findAll(MethodCallExpr.class)) {
             System.out.println("Solving at " + source.getType(0).getNameAsString() + " " + mce.getBegin().get() + ": " + mce.getNameAsString());
 
