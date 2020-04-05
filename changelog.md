@@ -1,4 +1,8 @@
-Next Release (3.15.18)
+Next Release (3.15.19)
+------------------
+
+
+Version 3.15.18
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/170?closed=1)
 
