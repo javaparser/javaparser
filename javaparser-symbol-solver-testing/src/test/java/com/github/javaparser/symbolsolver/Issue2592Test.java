@@ -18,8 +18,11 @@ public class Issue2592Test {
     @Test
     public void testLPP() {
 
+//        // Either do this before parsing, or manually pass the node to `LexicalPreservingPrinter.setup(node);`
+//        StaticJavaParser.getConfiguration().setLexicalPreservationEnabled(true);
+
         String s = "public class A {" +
-                "  public void m(final int a, int b) {" +
+                "  public void m(final int a_original, int b) {" +
                 "  }" +
                 "} ";
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -31,25 +34,32 @@ public class Issue2592Test {
         LexicalPreservingPrinter.setup(cu);
 
         //all parameters have parent nodes here
+        System.out.println("");
+        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
 
-        md.get().addParameter("Added", "a");
+
+        //add a third parameter
+        md.get().addParameter("String", "c_brand_new");
 
         //seems like we can add a parameter fine (and all of the parents still assigned)
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
 
 
+        System.out.println("");
         md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         Parameter p1 = md.get().getParameter(0);
-        Parameter p2 = new Parameter(p1.getModifiers(), p1.getType(), new SimpleName("a1"));
+        Parameter p2 = new Parameter(p1.getModifiers(), p1.getType(), new SimpleName("a_renamed"));
 
         //here we replace a parameter
         boolean isReplaced = md.get().replace(p1, p2);
         assertTrue(isReplaced); //the replacement seemed to work
+        System.out.println("");
         System.out.println(cu.toString()); //this looks right
 
 
         //...however when we replaced the parent nodes (for the replaced node AND the added node (after the replaced node) now null
+        System.out.println("");
         md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
     }
