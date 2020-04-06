@@ -53,9 +53,13 @@ public class ListReplacementChange implements Change {
             if (!(currentRawValue instanceof NodeList)){
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList currentNodeList = (NodeList)currentRawValue;
+
+            // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's parent before adding children (#2592).
+            NodeList currentNodeList = (NodeList) currentRawValue;
+            nodeList.setParentNode(currentNodeList.getParentNodeForChildren());
             nodeList.addAll(currentNodeList);
             nodeList.set(index, newValue);
+
             return nodeList;
         } else {
             return new NoChange().getValue(property, node);
