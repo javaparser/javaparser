@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -66,8 +67,13 @@ public final class FunctionalInterfaceLogic {
                 .collect(Collectors.toSet());
 
         if (methods.size() == 1) {
+            // Only one match - return that
             return Optional.of(methods.iterator().next());
+        } else if (methods.size() > 1) {
+            // Multiple matches - must disambiguate / select the "most appropriate" per JLS ....
+            throw new UnsupportedOperationException("TODO: Not yet implemented.");
         } else {
+            // No matches - return empty
             return Optional.empty();
         }
     }
