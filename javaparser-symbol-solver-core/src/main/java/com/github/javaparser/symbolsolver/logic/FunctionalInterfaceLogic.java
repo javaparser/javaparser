@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -71,7 +70,10 @@ public final class FunctionalInterfaceLogic {
         if (methods.size() == 1) {
             // Only one match - return that
             return Optional.of(methods.iterator().next());
-        } else if (methods.size() > 1) {
+        } else if (methods.isEmpty()) {
+            // No matches - return empty
+            return Optional.empty();
+        } else {
             // Multiple matches - must disambiguate / select the "most appropriate" per JLS ....
 
             List<MethodUsage> exactMatches = new ArrayList<>();
@@ -80,19 +82,16 @@ public final class FunctionalInterfaceLogic {
                 final ResolvedMethodDeclaration declaration = methodUsage.getDeclaration();
 //                boolean isInTypeDeclaration = resolvedMethodDeclaration.equals(declaration);
                 boolean isInTypeDeclaration = resolvedMethodDeclaration.toString().equals(declaration.toString()); // FIXME: WARNING - super-hacky....
-                if(isInTypeDeclaration) {
+                if (isInTypeDeclaration) {
                     exactMatches.add(methodUsage);
                 }
             });
 
-            if(exactMatches.size() == 1) {
+            if (exactMatches.size() == 1) {
                 return Optional.of(methods.iterator().next());
             } else {
                 throw new UnsupportedOperationException("TODO: Not yet implemented.");
             }
-        } else {
-            // No matches - return empty
-            return Optional.empty();
         }
     }
 
