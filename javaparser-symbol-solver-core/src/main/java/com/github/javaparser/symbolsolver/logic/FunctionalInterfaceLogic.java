@@ -22,11 +22,13 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +73,23 @@ public final class FunctionalInterfaceLogic {
             return Optional.of(methods.iterator().next());
         } else if (methods.size() > 1) {
             // Multiple matches - must disambiguate / select the "most appropriate" per JLS ....
-            throw new UnsupportedOperationException("TODO: Not yet implemented.");
+
+            List<MethodUsage> exactMatches = new ArrayList<>();
+            methods.forEach(methodUsage -> {
+                final ResolvedMethodDeclaration resolvedMethodDeclaration = new ArrayList<>(typeDeclaration.getDeclaredMethods()).get(0);
+                final ResolvedMethodDeclaration declaration = methodUsage.getDeclaration();
+//                boolean isInTypeDeclaration = resolvedMethodDeclaration.equals(declaration);
+                boolean isInTypeDeclaration = resolvedMethodDeclaration.toString().equals(declaration.toString()); // FIXME: WARNING - super-hacky....
+                if(isInTypeDeclaration) {
+                    exactMatches.add(methodUsage);
+                }
+            });
+
+            if(exactMatches.size() == 1) {
+                return Optional.of(methods.iterator().next());
+            } else {
+                throw new UnsupportedOperationException("TODO: Not yet implemented.");
+            }
         } else {
             // No matches - return empty
             return Optional.empty();
