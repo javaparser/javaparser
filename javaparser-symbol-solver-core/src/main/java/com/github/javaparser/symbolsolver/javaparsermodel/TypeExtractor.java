@@ -350,7 +350,26 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(SuperExpr node, Boolean solveLambdas) {
-        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDecl(node));
+        // If 'super' is prefixed by a class eg. MyClass.this
+        if (node.getTypeName().isPresent()) {
+            String className = node.getTypeName().get().asString();
+            SymbolReference<ResolvedTypeDeclaration> resolvedTypeNameRef = JavaParserFactory.getContext(node, typeSolver).solveType(className);
+            if (resolvedTypeNameRef.isSolved()) {
+                // Cfr JLS $15.12.1
+                ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
+                if (resolvedTypeName.isInterface()) {
+                    return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
+                } else if (resolvedTypeName.isClass()) {
+                    return resolvedTypeName.asClass().getSuperClass();
+                } else {
+                    throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+                }
+            } else {
+                throw new UnsolvedSymbolException(className);
+            }
+        }
+
+        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
             return ((ResolvedClassDeclaration) typeOfNode).getSuperClass();
         } else {

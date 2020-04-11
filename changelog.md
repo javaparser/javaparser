@@ -1,14 +1,35 @@
-Next Release
+Next Release (3.15.19)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
+
+
+Version 3.15.18
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/170?closed=1)
 
+* CHANGED: Dependencies should now all be up-to-date. 
+  ([#2572](https://github.com/javaparser/javaparser/pull/2572) / [#2581](https://github.com/javaparser/javaparser/pull/2581))
+  - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset if using an InputStream source.
+* FIXED (possible CHANGED/BREAKING): 
+  Improvements have been made to method `PositionUtils#nodeContains()` for clarity and precision in behaviour.
+  ([#2502](https://github.com/javaparser/javaparser/pull/2502))
+  - It is believed that there are no changes to behaviour, but if you do see anything please do reach out.
+  - See some additional commentary/thoughts in #2502
+* FIXED: Resolving super methodcalls in anonymous inner classes (fixes #1962)
+    ([#2585](https://github.com/javaparser/javaparser/pull/2585))
+* ADDED: `NodeList#getFirst(): Optional<Node>`
+    ([#2502](https://github.com/javaparser/javaparser/pull/2502))
+* ADDED: `NodeList#getLast(): Optional<Node>`
+    ([#2502](https://github.com/javaparser/javaparser/pull/2502))
 
 Version 3.15.17
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/169?closed=1)
 
 * CHANGED: Merged symbol solver modules, for java 9 module compatibility
+    ([#2564](https://github.com/javaparser/javaparser/pull/2564))
 * CHANGED: Renamed the pretty printer configuration option `isSpacesBetweenOperators` to `isSpaceAroundOperators` 
+    ([#2555](https://github.com/javaparser/javaparser/pull/2555))
 
 Version 3.15.16
 ------------------
