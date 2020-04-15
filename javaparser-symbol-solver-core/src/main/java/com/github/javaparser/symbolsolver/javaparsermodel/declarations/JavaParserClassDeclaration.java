@@ -241,7 +241,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             return true;
         }
         ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
+        if (superclass != null && superclass != this ) {
             if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
