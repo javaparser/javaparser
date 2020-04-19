@@ -99,8 +99,6 @@ class BulkParseTest {
                 "javaparser-core-generators/src/main/java",
                 "javaparser-core-metamodel-generator/src/main/java",
                 "javaparser-symbol-solver-core/src/main/java",
-                "javaparser-symbol-solver-logic/src/main/java",
-                "javaparser-symbol-solver-model/src/main/java",
                 "javaparser-symbol-solver-testing/src/test/java"
         };
         for (String root : roots) {

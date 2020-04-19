@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -117,6 +118,49 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
+    }
+
+    @Test
+    void testSuperMethodCallAnonymousClass() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    java.util.List x() { \n" +
+                "        return new java.util.ArrayList() { \n" +
+                "            public int size() { \n" +
+                "                return super.size(); \n" +
+                "            } \n" +
+                "        }; \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "size").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("size", methodUsage.getName());
+    }
+
+    @Test
+    void testSuperMethodCallDefaultMethod() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    public interface Y { \n" +
+                "        default void foo() {} \n" +
+                "    } \n" +
+                "    public class Z implements Y { \n" +
+                "        public void foo() { \n" +
+                "            Y.super.foo(); \n" +
+                "        } \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "foo").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("foo", methodUsage.getName());
     }
 
     @Test
