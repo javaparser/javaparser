@@ -20,6 +20,12 @@ public @interface MyAnnotationWithElements {
     String str();
 }
 
+public @interface MyAnnotationWithInnerClass {
+    MyInnerClass value();
+    class MyInnerClass {
+    }
+}
+
 @MyAnnotation
 class CA {
     @Override

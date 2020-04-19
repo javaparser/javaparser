@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,7 +37,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -64,21 +64,21 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
             throw new UnsolvedSymbolException("Unable to solve qualified object creation expression in the context of expression of type " + scopeType.describe());
         }
         // find first parent node that is not an object creation expression to avoid stack overflow errors, see #1711
-        Node parentNode = requireParentNode(wrappedNode);
+        Node parentNode = demandParentNode(wrappedNode);
         while (parentNode instanceof ObjectCreationExpr) {
-            parentNode = requireParentNode(parentNode);
+            parentNode = demandParentNode(parentNode);
         }
         return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name);
     }
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveSymbol(name);
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveMethod(name, argumentsTypes, false);
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveMethod(name, argumentsTypes, false);
     }
 
 }
