@@ -1,25 +1,32 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
@@ -31,6 +38,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -45,7 +53,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("SwitchOnEnum");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
-        SwitchStmt switchStmt = Navigator.findSwitch(method);
+        SwitchStmt switchStmt = Navigator.demandSwitch(method);
         Expression expression = switchStmt.getEntries().get(0).getLabels().get(0);
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
@@ -87,6 +95,29 @@ class EnumResolutionTest extends AbstractResolutionTest {
             assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
             assertTrue(resolvedEnumConstantDeclaration.isEnumConstant());
             assertTrue(resolvedEnumConstantDeclaration.hasName());
+        } finally {
+            StaticJavaParser.setConfiguration(new ParserConfiguration());
+        }
+    }
+
+    @Test
+    void enumAccessSpecifier() {
+        try {
+            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+            CompilationUnit cu = parseSample("EnumAccessSpecifier");
+            ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
+
+            EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic").get().toEnumDeclaration().get();
+            assertEquals(AccessSpecifier.PUBLIC, ((JavaParserEnumDeclaration) ed_public.resolve()).accessSpecifier());
+
+            EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected").get().toEnumDeclaration().get();
+            assertEquals(AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
+
+            EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate").get().toEnumDeclaration().get();
+            assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
+
+            EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault").get().toEnumDeclaration().get();
+            assertEquals(AccessSpecifier.PACKAGE_PRIVATE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
         }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -53,11 +53,11 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isNewline();
 
     public abstract boolean isComment();
-    
+
     public abstract boolean isSeparator();
-    
+
     public abstract boolean isIdentifier();
-    
+
     public abstract boolean isPrimitive();
 
     public final boolean isWhiteSpaceOrComment() {
@@ -83,14 +83,11 @@ public abstract class TextElement implements TextElementMatcher {
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (TextElement textElement) -> {
-            Optional<Range> range1 = this.getRange();
-            Optional<Range> range2 = textElement.getRange();
-            if (range1.isPresent() && range2.isPresent()) {
-                return range1.get().equals(range2.get());
-            }
-
-            return false;
-        };
+        return (TextElement textElement) ->
+                getRange()
+                        .flatMap(r1 -> textElement.getRange()
+                                .map(r1::equals))
+                        // We're missing range information. This may happen when a node is manually instantiated. Don't be too harsh on that:
+                        .orElse(true);
     }
 }
