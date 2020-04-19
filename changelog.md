@@ -10,6 +10,8 @@ Next Release (3.15.19)
     ([#2594](https://github.com/javaparser/javaparser/pull/2594))
 * FIXED: Fix JavaParserClassDeclaration canBeAssignedTo() to not cause a recursion when a node is its own parent (e.g. `java.lang.Object`)
     ([#2608](https://github.com/javaparser/javaparser/pull/2608))
+* FIXED: Fix replacing an expression preceded by a comment (`LexicalPreservation` would previously throw an `UnsupportedOperation`)
+    ([#2611](https://github.com/javaparser/javaparser/pull/2611))
 
 
 Version 3.15.18
