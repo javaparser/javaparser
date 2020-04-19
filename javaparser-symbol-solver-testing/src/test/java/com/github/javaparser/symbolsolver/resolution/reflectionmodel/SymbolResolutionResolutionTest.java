@@ -67,7 +67,7 @@ class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("JreConditionalExpression");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         Expression expression = returnStmt.getExpression().get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();

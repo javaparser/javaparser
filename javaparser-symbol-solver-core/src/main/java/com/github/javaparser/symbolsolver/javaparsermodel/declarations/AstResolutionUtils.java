@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -77,6 +77,14 @@ class AstResolutionUtils {
         } else if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
             String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
+        } else if (container instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
+            String b = getClassName(base, container.getParentNode().orElse(null));
+            String cn = ((com.github.javaparser.ast.body.AnnotationDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
             } else {

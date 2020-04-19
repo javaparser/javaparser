@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -59,17 +59,17 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
             }
         }
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveSymbol(name);
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveType(name);
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveType(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false);
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false);
     }
 
     @Override

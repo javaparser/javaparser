@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -466,6 +466,8 @@ public class Difference {
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
+        } else if (kept.isChild() && ((CsmChild)kept.getElement()).getChild() instanceof Comment ) {
+            diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
             diffIndex++;
             originalIndex++;

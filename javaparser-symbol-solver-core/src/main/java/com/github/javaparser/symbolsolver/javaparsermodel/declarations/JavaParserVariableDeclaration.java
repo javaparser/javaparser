@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,7 +28,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -45,10 +45,10 @@ public class JavaParserVariableDeclaration implements ResolvedValueDeclaration {
         }
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(requireParentNode(variableDeclarator) instanceof VariableDeclarationExpr)) {
-            throw new IllegalStateException(requireParentNode(variableDeclarator).getClass().getCanonicalName());
+        if (!(demandParentNode(variableDeclarator) instanceof VariableDeclarationExpr)) {
+            throw new IllegalStateException(demandParentNode(variableDeclarator).getClass().getCanonicalName());
         }
-        this.wrappedNode = (VariableDeclarationExpr) requireParentNode(variableDeclarator);
+        this.wrappedNode = (VariableDeclarationExpr) demandParentNode(variableDeclarator);
     }
 
     @Override

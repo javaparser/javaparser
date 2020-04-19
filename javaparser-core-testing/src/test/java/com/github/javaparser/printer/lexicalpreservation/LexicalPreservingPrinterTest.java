@@ -36,13 +36,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.expr.*
+import com.github.javaparser.ast.stmt.*
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
@@ -1331,5 +1330,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         compilationUnit.findFirst(BlockStmt.class).get().addStatement(ifStmt);
         String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
         assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+    }
+
+    @Test
+    void commentAddedAtTopLevel() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+        CompilationUnit cu = javaParser.parse("package x;class X{}").getResult().get();
+
+        cu.setComment(new LineComment("Bla"));
+        assertEqualsNoEol("//Bla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+
+        cu.setComment(new LineComment("BlaBla"));
+        assertEqualsNoEol("//BlaBla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+
+        cu.removeComment();
+        assertEqualsNoEol("package x;class X{}", LexicalPreservingPrinter.print(cu));
     }
 }

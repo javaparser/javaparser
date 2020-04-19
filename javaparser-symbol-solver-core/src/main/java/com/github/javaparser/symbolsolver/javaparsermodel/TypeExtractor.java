@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -60,7 +60,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
@@ -75,12 +75,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof FieldDeclaration) {
+        if (demandParentNode(node) instanceof FieldDeclaration) {
             return facade.convertToUsageVariableType(node);
-        } else if (requireParentNode(node) instanceof VariableDeclarationExpr) {
+        } else if (demandParentNode(node) instanceof VariableDeclarationExpr) {
             return facade.convertToUsageVariableType(node);
         }
-        throw new UnsupportedOperationException(requireParentNode(node).getClass().getCanonicalName());
+        throw new UnsupportedOperationException(demandParentNode(node).getClass().getCanonicalName());
     }
 
     @Override
@@ -350,7 +350,26 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(SuperExpr node, Boolean solveLambdas) {
-        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDecl(node));
+        // If 'super' is prefixed by a class eg. MyClass.this
+        if (node.getTypeName().isPresent()) {
+            String className = node.getTypeName().get().asString();
+            SymbolReference<ResolvedTypeDeclaration> resolvedTypeNameRef = JavaParserFactory.getContext(node, typeSolver).solveType(className);
+            if (resolvedTypeNameRef.isSolved()) {
+                // Cfr JLS $15.12.1
+                ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
+                if (resolvedTypeName.isInterface()) {
+                    return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
+                } else if (resolvedTypeName.isClass()) {
+                    return resolvedTypeName.asClass().getSuperClass();
+                } else {
+                    throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+                }
+            } else {
+                throw new UnsolvedSymbolException(className);
+            }
+        }
+
+        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
             return ((ResolvedClassDeclaration) typeOfNode).getSuperClass();
         } else {
@@ -388,12 +407,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
+                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
@@ -499,12 +518,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(requireParentNode(node).toString(), callExpr.getName().getId());
+                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {

@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -66,7 +67,7 @@ class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
         JavaParser javaParser = new JavaParser(pc);
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file))).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
         
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override

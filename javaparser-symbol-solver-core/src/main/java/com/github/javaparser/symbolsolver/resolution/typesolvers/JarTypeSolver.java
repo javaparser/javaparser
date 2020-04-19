@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,6 +46,7 @@ import java.util.jar.JarFile;
  */
 public class JarTypeSolver implements TypeSolver {
 
+    @Deprecated
     private static JarTypeSolver instance;
 
     private TypeSolver parent;
@@ -68,6 +69,13 @@ public class JarTypeSolver implements TypeSolver {
         addPathToJar(jarInputStream);
     }
 
+    /**
+     * Suitable for being called only once. If called multiple times, it will cause an IllegalStateException per #2547 .
+     *
+     * @deprecated Use of this static method / singleton pattern is strongly discouraged and will be removed (#2547).
+     * Instead, a new instance should be created for each jar (consistent with the other type solvers e.g. AarTypeSolver, JavaParserTypeSolver, ClassLoaderTypeSolver).
+     */
+    @Deprecated
     public static JarTypeSolver getJarTypeSolver(String pathToJar) throws IOException {
         if (instance == null) {
             instance = new JarTypeSolver(pathToJar);

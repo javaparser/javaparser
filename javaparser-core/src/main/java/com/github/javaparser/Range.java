@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -142,8 +142,9 @@ public class Range {
      * In these cases, the `other` range is not strictly "inside" of this range.
      */
     public boolean contains(Range other) {
-        return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
-                (end.isAfter(other.end) || end.equals(other.end));
+        boolean beginResult = (begin.isBeforeOrEqual(other.begin));
+        boolean endResult = (end.isAfterOrEqual(other.end));
+        return beginResult && endResult;
     }
 
     /**
@@ -164,7 +165,9 @@ public class Range {
      * It means that this has to be larger than other and it has to start before other and end after other.
      */
     public boolean strictlyContains(Range other) {
-        return begin.isBefore(other.begin) && end.isAfter(other.end);
+        boolean beginResult = (begin.isBefore(other.begin));
+        boolean endResult = (end.isAfter(other.end));
+        return beginResult && endResult;
     }
 
     /**

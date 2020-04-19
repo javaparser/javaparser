@@ -25,10 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
@@ -905,4 +902,37 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     // Set<TypeDeclaration> internalTypes()
 
     // Optional<TypeDeclaration> containerType()
+
+
+    @Test
+    void testCanBeAssignedTo() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        ResolvedReferenceTypeDeclaration stringTypeDeclaration = typeSolver.solveType("java.lang.String");
+        ResolvedReferenceTypeDeclaration objectTypeDeclaration = typeSolver.solveType("java.lang.Object");
+        ResolvedReferenceTypeDeclaration cloneableTypeDeclaration = typeSolver.solveType("java.lang.Cloneable");
+        ResolvedReferenceTypeDeclaration serializableTypeDeclaration = typeSolver.solveType("java.io.Serializable");
+
+        // Assign "UP" (implicit) -- Assign to implicitly state ancestor (java.lang.Object) -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(objectTypeDeclaration),"CompilationUnit should be reported as assignable to Object");
+
+        // Assign "UP" (explicit) -- Assign to explicitly stated ancestors (extends/implements) -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(cloneableTypeDeclaration),"CompilationUnit should be reported as assignable to Cloneable, because it extends Node which implements Cloneable");
+
+        // Assign "SELF" -- Assign to self -- should be permitted
+        assertTrue(compilationUnit.canBeAssignedTo(compilationUnit),"CompilationUnit should not be reported as assignable to CompilationUnit");
+        assertTrue(stringTypeDeclaration.canBeAssignedTo(stringTypeDeclaration),"String should not be reported as assignable to String");
+        assertTrue(objectTypeDeclaration.canBeAssignedTo(objectTypeDeclaration),"Object should be reported as assignable to Object");
+
+
+        // Assign "DOWN" -- Assign ancestor to descendent -- should be rejected
+        assertFalse(cloneableTypeDeclaration.canBeAssignedTo(compilationUnit),"CloneableTypeDeclaration should not be reported as assignable to CompilationUnit");
+        assertFalse(objectTypeDeclaration.canBeAssignedTo(compilationUnit),"Object should not be reported as assignable to CompilationUnit");
+
+        // Assign "independent" -- Assign to a class with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
+        assertFalse(compilationUnit.canBeAssignedTo(stringTypeDeclaration),"CompilationUnit should not be reported as assignable to String");
+
+        // Assign "independent" -- Assign to a interface with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
+        assertFalse(compilationUnit.canBeAssignedTo(serializableTypeDeclaration), "CompilationUnit should not be reported as assignable to Serializable");
+    }
+
 }

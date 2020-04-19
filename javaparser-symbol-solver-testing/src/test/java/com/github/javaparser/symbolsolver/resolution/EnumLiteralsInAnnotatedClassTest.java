@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,7 +56,7 @@ class EnumLiteralsInAnnotatedClassTest {
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
         JavaParser parser = new JavaParser(parserConfiguration);
-        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass), StandardCharsets.UTF_8);
 
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 4);
@@ -78,7 +79,7 @@ class EnumLiteralsInAnnotatedClassTest {
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
         JavaParser parser = new JavaParser(parserConfiguration);
-        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass), StandardCharsets.UTF_8);
 
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 5);
@@ -101,7 +102,7 @@ class EnumLiteralsInAnnotatedClassTest {
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
         JavaParser parser = new JavaParser(parserConfiguration);
-        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass), StandardCharsets.UTF_8);
 
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("BinaryExpr.Operator.OR") && n.getRange().get().begin.line == 6);
@@ -124,7 +125,7 @@ class EnumLiteralsInAnnotatedClassTest {
 
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(localCts));
         JavaParser parser = new JavaParser(parserConfiguration);
-        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass));
+        StreamProvider classProvider = new StreamProvider(new FileInputStream(aClass), StandardCharsets.UTF_8);
 
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, classProvider).getResult().get();
         Optional<FieldAccessExpr> fae = cu.findFirst(FieldAccessExpr.class, n -> n.toString().equals("foo.bar.BinaryExpr.Operator.AND") && n.getRange().get().begin.line == 7);

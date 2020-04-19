@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,7 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
@@ -62,7 +62,7 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
             }
         }
 
-        if (requireParentNode(wrappedNode) instanceof NodeWithStatements) {
+        if (demandParentNode(wrappedNode) instanceof NodeWithStatements) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name);
