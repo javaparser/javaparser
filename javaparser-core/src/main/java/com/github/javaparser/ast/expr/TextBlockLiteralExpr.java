@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
+import static com.github.javaparser.utils.StringEscapeUtils.unescapeJavaTextBlock;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 
@@ -163,10 +163,10 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     }
 
     /**
-     * @return The algorithm ffrom String::translateEscapes in JDK 13.
+     * @return The algorithm from String::translateEscapes in JDK 13.
      */
     public String translateEscapes() {
-        return unescapeJava(stripIndent());
+        return unescapeJavaTextBlock(stripIndent());
     }
 
     /**

@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
@@ -32,7 +37,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.
@@ -67,7 +72,7 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     public static int getParamPos(Parameter parameter) {
         int pos = 0;
-        for (Node node : requireParentNode(parameter).getChildNodes()) {
+        for (Node node : demandParentNode(parameter).getChildNodes()) {
             if (node == parameter) {
                 return pos;
             } else if (node instanceof Parameter) {
@@ -78,8 +83,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     }
 
     public static int getParamPos(Node node) {
-        if (requireParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) requireParentNode(node);
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
             for (int i = 0; i < call.getArguments().size(); i++) {
                 if (call.getArguments().get(i) == node) return i;
             }
@@ -120,9 +125,9 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     public ResolvedType getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
-            if (requireParentNode(wrappedNode) instanceof LambdaExpr) {
+            if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(requireParentNode(wrappedNode));
+                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(demandParentNode(wrappedNode));
 
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
@@ -142,9 +147,9 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
             }
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode;
-            if (requireParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
+            if (demandParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
-            } else if (requireParentNode(wrappedNode) instanceof FieldDeclaration) {
+            } else if (demandParentNode(wrappedNode) instanceof FieldDeclaration) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             }
         }

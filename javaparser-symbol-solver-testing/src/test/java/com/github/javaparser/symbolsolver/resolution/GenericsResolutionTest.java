@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.resolution;
@@ -198,6 +203,19 @@ class GenericsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void resolveUsageOfMethodOfGenericClassWithGenericReturnType() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodCalls.Derived");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "get").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("get", methodUsage.getName());
+        assertEquals("java.lang.String", methodUsage.returnType().describe());
+    }
+
+    @Test
     void resolveUsageOfMethodOfGenericClassWithUnboundedWildcard() {
         CompilationUnit cu = parseSample("GenericsWildcard");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
@@ -221,6 +239,20 @@ class GenericsResolutionTest extends AbstractResolutionTest {
 
         assertEquals("bar", methodUsage.getName());
         assertEquals("GenericsWildcard.Foo", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClassWithBoxing() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodBoxing");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "foo").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("foo", methodUsage.getName());
+        assertEquals("GenericMethodBoxing", methodUsage.declaringType().getName());
+        assertEquals("java.lang.Long", methodUsage.returnType().describe());
     }
 
     @Test
@@ -302,7 +334,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ClassCast");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassCast");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpression().get());
 
@@ -315,7 +347,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("TypeParamOnReturnType");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
-        ThisExpr thisExpr = Navigator.findNodeOfGivenClass(method, ThisExpr.class);
+        ThisExpr thisExpr = Navigator.demandNodeOfGivenClass(method, ThisExpr.class);
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpr);
 
@@ -355,7 +387,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("TypeParamOnReturnType");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpression().get());
 
@@ -422,7 +454,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("GenericCollectionWithExtension");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         Expression returnStmtExpr = returnStmt.getExpression().get();
@@ -454,7 +486,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("GenericCollection");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         Expression returnStmtExpr = returnStmt.getExpression().get();

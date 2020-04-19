@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -109,6 +109,11 @@ public class Position implements Comparable<Position> {
 
     }
 
+    public boolean isAfterOrEqual(Position position) {
+        assertNotNull(position);
+        return isAfter(position) || equals(position);
+    }
+
     public boolean isBefore(Position position) {
         assertNotNull(position);
         if (position.line == Node.ABSOLUTE_END_LINE) return true;
@@ -118,6 +123,11 @@ public class Position implements Comparable<Position> {
             return column < position.column;
         }
         return false;
+    }
+
+    public boolean isBeforeOrEqual(Position position) {
+        assertNotNull(position);
+        return isBefore(position) || equals(position);
     }
 
     @Override
