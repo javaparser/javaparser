@@ -3,7 +3,11 @@ Next Release (3.15.19)
 [issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
 
 * DEPRECATED: Deprecated and documented `JarTypeSolver#getJarTypeSolver(String)`, with a view to later removal.
-  ([#2598](https://github.com/javaparser/javaparser/pull/2598))
+    ([#2598](https://github.com/javaparser/javaparser/pull/2598))
+* FIXED: Fix issue #2552 : UnsupportedOperationException caused by resolving inner annotation
+    ([#2553](https://github.com/javaparser/javaparser/pull/2553))
+* FIXED: Parents of `NodeList`s now correctly retain their parent when a child is replaced 
+    ([#2594](https://github.com/javaparser/javaparser/pull/2594))
 
 Version 3.15.18
 ------------------
