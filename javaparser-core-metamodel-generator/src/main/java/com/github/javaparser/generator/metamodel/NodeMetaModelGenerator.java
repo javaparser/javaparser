@@ -39,38 +39,39 @@ import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class NodeMetaModelGenerator {
+
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
     private final InitializeConstructorParametersStatementsGenerator initializeConstructorParametersStatementsGenerator = new InitializeConstructorParametersStatementsGenerator();
 
     public void generate(Class<? extends Node> nodeClass, ClassOrInterfaceDeclaration metaModelCoid, NodeList<Statement> initializeNodeMetaModelsStatements, NodeList<Statement> initializePropertyMetaModelsStatements, NodeList<Statement> initializeConstructorParametersStatements, SourceRoot sourceRoot) throws NoSuchMethodException {
-        final String className = nodeMetaModelName(nodeClass);
+        final String className = MetaModelGenerator.nodeMetaModelName(nodeClass);
         final String nodeMetaModelFieldName = decapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
 
         final FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
 
         final Class<?> superclass = nodeClass.getSuperclass();
-        final String superNodeMetaModel = nodeMetaModelName(superclass);
+        final String superNodeMetaModel = MetaModelGenerator.nodeMetaModelName(superclass);
 
-        boolean isRootNode = !isNode(superclass);
+        boolean isRootNode = !MetaModelGenerator.isNode(superclass);
         nodeField.getVariable(0).setInitializer(parseExpression(f("new %s(%s)",
                 className,
                 optionalOf(decapitalize(superNodeMetaModel), !isRootNode))));
 
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
-        final CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
+        final CompilationUnit classMetaModelJavaFile = new CompilationUnit(MetaModelGenerator.METAMODEL_PACKAGE);
+        classMetaModelJavaFile.setBlockComment(MetaModelGenerator.COPYRIGHT_NOTICE_JP_CORE);
         classMetaModelJavaFile.addImport("java.util.Optional");
-        sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
+        sourceRoot.add(MetaModelGenerator.METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
         final ClassOrInterfaceDeclaration nodeMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
         if (isRootNode) {
-            nodeMetaModelClass.addExtendedType(BASE_NODE_META_MODEL);
+            nodeMetaModelClass.addExtendedType(MetaModelGenerator.BASE_NODE_META_MODEL);
         } else {
             nodeMetaModelClass.addExtendedType(superNodeMetaModel);
         }
@@ -79,16 +80,16 @@ public class NodeMetaModelGenerator {
 
         final ConstructorDeclaration classMMConstructor = nodeMetaModelClass
                 .addConstructor()
-                .addParameter("Optional<" + BASE_NODE_META_MODEL + ">", "super" + BASE_NODE_META_MODEL);
+                .addParameter("Optional<" + MetaModelGenerator.BASE_NODE_META_MODEL + ">", "super" + MetaModelGenerator.BASE_NODE_META_MODEL);
         classMMConstructor
                 .getBody()
                 .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
-                        BASE_NODE_META_MODEL,
-                        nodeClass.getName(),
-                        nodeClass.getSimpleName(),
-                        nodeClass.getPackage().getName(),
-                        typeAnalysis.isAbstract,
-                        typeAnalysis.isSelfType)));
+                                                                       MetaModelGenerator.BASE_NODE_META_MODEL,
+                                                                       nodeClass.getName(),
+                                                                       nodeClass.getSimpleName(),
+                                                                       nodeClass.getPackage().getName(),
+                                                                       typeAnalysis.isAbstract,
+                                                                       typeAnalysis.isSelfType)));
 
         if (typeAnalysis.isAbstract) {
             classMetaModelJavaFile.addImport(Node.class);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -47,7 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 
 /**
@@ -128,7 +128,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             if (found) {
                 Node notMethod = parent;
                 while (notMethod instanceof MethodCallExpr) {
-                    notMethod = requireParentNode(notMethod);
+                    notMethod = demandParentNode(notMethod);
                 }
                 return JavaParserFactory.getContext(notMethod, typeSolver);
             }
