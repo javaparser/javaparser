@@ -242,6 +242,20 @@ class GenericsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void resolveUsageOfMethodOfGenericClassWithBoxing() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodBoxing");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "foo").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("foo", methodUsage.getName());
+        assertEquals("GenericMethodBoxing", methodUsage.declaringType().getName());
+        assertEquals("java.lang.Long", methodUsage.returnType().describe());
+    }
+
+    @Test
     void resolveElementOfList() {
         CompilationUnit cu = parseSample("ElementOfList");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");
