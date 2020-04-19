@@ -25,10 +25,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 
+import java.util.Optional;
+
 /**
- * The removal of an element in a list.
+ * The removal of an element from a list.
  */
 public class ListRemovalChange implements Change {
+
     private final ObservableProperty observableProperty;
     private final int index;
 
@@ -40,17 +43,25 @@ public class ListRemovalChange implements Change {
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList<Node> nodeList = new NodeList<>();
             Object currentRawValue = new NoChange().getValue(property, node);
-            if (!(currentRawValue instanceof NodeList)){
+            if (currentRawValue instanceof Optional) {
+                Optional<?> optional = (Optional<?>) currentRawValue;
+                currentRawValue = optional.orElseGet(null);
+            }
+            if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList<?> currentNodeList = (NodeList<?>)currentRawValue;
-            // fix #2187 set the parent node in the new list
-            nodeList.setParentNode(node);
-            nodeList.addAll(currentNodeList);
-            nodeList.remove(index);
-            return nodeList;
+            NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
+
+            // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's parent before adding children (#2592).
+            NodeList<Node> newNodeList = new NodeList<>();
+            newNodeList.setParentNode(currentNodeList.getParentNodeForChildren()); // fix #2187 set the parent node in the new list
+            newNodeList.addAll(currentNodeList);
+
+            // Perform modification -- remove an item from the list
+            newNodeList.remove(index);
+
+            return newNodeList;
         } else {
             return new NoChange().getValue(property, node);
         }
