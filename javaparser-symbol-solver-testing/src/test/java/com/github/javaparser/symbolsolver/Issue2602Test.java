@@ -6,23 +6,16 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue2602Test extends AbstractSymbolResolutionTest {
 
@@ -65,10 +58,10 @@ public class Issue2602Test extends AbstractSymbolResolutionTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(this.typeSolver);
 
-        for(TypeDeclaration t : this.cu.getTypes() ) {
-            JavaParserClassDeclaration classDecl = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration)t,this.typeSolver);
+        for (TypeDeclaration t : this.cu.getTypes()) {
+            JavaParserClassDeclaration classDecl = new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) t, this.typeSolver);
 
-            this.typeSolver.addDeclaration((String)t.getFullyQualifiedName().get(),classDecl);
+            this.typeSolver.addDeclaration((String) t.getFullyQualifiedName().get(), classDecl);
         }
     }
 
@@ -79,7 +72,7 @@ public class Issue2602Test extends AbstractSymbolResolutionTest {
         ResolvedReferenceTypeDeclaration thisDeclaration = typeSolver.solveType("java.lang.A");
         ResolvedReferenceTypeDeclaration secondDeclaration = typeSolver.solveType("java.lang.B");
 
-        assertFalse(thisDeclaration.canBeAssignedTo(secondDeclaration),"Both types should not be assignable");
+        assertFalse(thisDeclaration.canBeAssignedTo(secondDeclaration), "Both types should not be assignable");
     }
 
 
