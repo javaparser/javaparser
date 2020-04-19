@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -98,18 +98,29 @@ class CommentsInserter {
                 .filter(n -> !(n instanceof Modifier))
                 .collect(toList());
 
+        boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             commentsInsideChild.addAll(
                     commentsToAttribute.stream()
-                            .filter(c -> c.getRange().isPresent())
-                            .filter(c -> PositionUtils.nodeContains(child, c,
-                                    configuration.isIgnoreAnnotationsWhenAttributingComments())).collect(toList()));
+                            .filter(comment -> comment.getRange().isPresent())
+                            .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
+                            .collect(toList())
+            );
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
 
         attributeLineCommentsOnSameLine(commentsToAttribute, children);
+
+        /* if a comment is on the line right before a node it should belong
+        to that node*/
+        if (!commentsToAttribute.isEmpty()) {
+            if (commentIsOnNextLine(node, commentsToAttribute.first())) {
+                node.setComment(commentsToAttribute.first());
+                commentsToAttribute.remove(commentsToAttribute.first());
+            }
+        }
 
         /* at this point I create an ordered list of all remaining comments and
          children */
@@ -213,6 +224,11 @@ class CommentsInserter {
         }
         int endOfA = a.getEnd().get().line;
         return b.getBegin().get().line > endOfA + 1;
+    }
+
+    private boolean commentIsOnNextLine(Node a, Comment c) {
+        if (!c.getRange().isPresent() || !a.getRange().isPresent()) return false;
+        return c.getRange().get().end.line + 1 == a.getRange().get().begin.line;
     }
 
 }

@@ -21,20 +21,11 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.observer.AstObserver;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,6 +48,7 @@ class NodeListTest {
     void toStringTest() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
+        assertEquals(3, list.size());
         assertEquals("[abc, bcd, cde]", list.toString());
     }
 
@@ -66,6 +58,7 @@ class NodeListTest {
 
         list.addFirst(new Name("xxx"));
 
+        assertEquals(4, list.size());
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
 
@@ -75,6 +68,7 @@ class NodeListTest {
 
         list.addLast(new Name("xxx"));
 
+        assertEquals(4, list.size());
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 
@@ -85,6 +79,7 @@ class NodeListTest {
 
         list.addBefore(new Name("xxx"), n);
 
+        assertEquals(4, list.size());
         assertEquals("[abc, xxx, bcd, cde]", list.toString());
     }
 
@@ -95,6 +90,7 @@ class NodeListTest {
 
         list.addAfter(new Name("xxx"), n);
 
+        assertEquals(4, list.size());
         assertEquals("[abc, bcd, xxx, cde]", list.toString());
     }
 
@@ -105,6 +101,7 @@ class NodeListTest {
 
         list.addBefore(new Name("xxx"), abc);
 
+        assertEquals(4, list.size());
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
 
@@ -115,6 +112,47 @@ class NodeListTest {
 
         list.addAfter(new Name("xxx"), cde);
 
+        assertEquals(4, list.size());
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
+    }
+
+
+    @Test
+    public void getFirstWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> first = list.getFirst();
+
+        assertFalse(first.isPresent());
+        assertEquals("Optional.empty", first.toString());
+    }
+
+    @Test
+    public void getFirstWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> first = list.getFirst();
+
+        assertTrue(first.isPresent());
+        assertEquals("Optional[abc]", first.toString());
+    }
+    @Test
+    public void getLastWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> last = list.getLast();
+
+        assertFalse(last.isPresent());
+        assertEquals("Optional.empty", last.toString());
+    }
+
+    @Test
+    public void getLastWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> last = list.getLast();
+
+        assertTrue(last.isPresent());
+        assertEquals("Optional[cde]", last.toString());
     }
 }

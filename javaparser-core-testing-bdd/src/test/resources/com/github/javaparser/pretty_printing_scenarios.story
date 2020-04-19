@@ -193,14 +193,14 @@ package a.b.c;
 Scenario: we can parse blocks
 Given the block:
 {
-    a=2;
-    b=3;
+    a=2+1;
+    b=3+1;
 }
 When the block is parsed by the Java parser
 Then it is printed as:
 {
-    a = 2;
-    b = 3;
+    a = 2 + 1;
+    b = 3 + 1;
 }
 
 Scenario: we can parse statements
