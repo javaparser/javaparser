@@ -31,6 +31,7 @@ import java.util.Optional;
  * The replacement of an element in a list.
  */
 public class ListReplacementChange implements Change {
+
     private final ObservableProperty observableProperty;
     private final int index;
     private final Node newValue;
@@ -44,19 +45,25 @@ public class ListReplacementChange implements Change {
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList nodeList = new NodeList();
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
-                Optional optional = (Optional)currentRawValue;
+                Optional<?> optional = (Optional<?>) currentRawValue;
                 currentRawValue = optional.orElseGet(null);
             }
-            if (!(currentRawValue instanceof NodeList)){
+            if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList currentNodeList = (NodeList)currentRawValue;
-            nodeList.addAll(currentNodeList);
-            nodeList.set(index, newValue);
-            return nodeList;
+            NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
+
+            // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's parent before adding children (#2592).
+            NodeList<Node> newNodeList = new NodeList<>();
+            newNodeList.setParentNode(currentNodeList.getParentNodeForChildren());
+            newNodeList.addAll(currentNodeList);
+
+            // Perform modification -- replace an item in the list
+            newNodeList.set(index, newValue);
+
+            return newNodeList;
         } else {
             return new NoChange().getValue(property, node);
         }

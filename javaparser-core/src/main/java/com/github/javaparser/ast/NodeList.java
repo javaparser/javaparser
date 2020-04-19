@@ -30,7 +30,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InternalProperty;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -226,6 +228,26 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return this;
     }
 
+
+    /**
+     * @return the first node, or empty if the list is empty.
+     */
+    public Optional<N> getFirst() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(get(0));
+    }
+
+    /**
+     * @return the last node, or empty if the list is empty.
+     */
+    public Optional<N> getLast() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(get(size() - 1));
+    }
 
     @Override
     public Optional<Node> getParentNode() {
@@ -481,7 +503,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void register(AstObserver observer) {
-        if(!this.observers.contains(observer)) {
+        if (!this.observers.contains(observer)) {
             this.observers.add(observer);
         }
     }

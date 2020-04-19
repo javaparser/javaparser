@@ -144,35 +144,44 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solve(ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt, boolean solveLambdas) {
-        List<ResolvedType> argumentTypes = new LinkedList<>();
-        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
-
-        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
-
-        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
-        if (!optAncestor.isPresent()) {
+        // Constructor invocation must exist within a class (not interface).
+        Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
+        if (!optAncestorClassOrInterfaceNode.isPresent()) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
-        ClassOrInterfaceDeclaration classNode = optAncestor.get();
+
+        ClassOrInterfaceDeclaration classOrInterfaceNode = optAncestorClassOrInterfaceNode.get();
+        ResolvedReferenceTypeDeclaration resolvedClassNode = classOrInterfaceNode.resolve();
+        if (!resolvedClassNode.isClass()) {
+            throw new IllegalStateException("Expected to be a class -- cannot call this() or super() within an interface.");
+        }
+
         ResolvedTypeDeclaration typeDecl = null;
-        if (!explicitConstructorInvocationStmt.isThis()) {
-            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
-            }
+        if (explicitConstructorInvocationStmt.isThis()) {
+            // this()
+            typeDecl = resolvedClassNode.asReferenceType();
         } else {
-            SymbolReference<ResolvedTypeDeclaration> sr = JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString());
-            if (sr.isSolved()) {
-                typeDecl = sr.getCorrespondingDeclaration();
+            // super()
+            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
+            if (superClass != null) {
+                typeDecl = superClass.getTypeDeclaration();
             }
         }
         if (typeDecl == null) {
             return unsolved(ResolvedConstructorDeclaration.class);
         }
+
+        // Solve each of the arguments being passed into this constructor invocation.
+        List<ResolvedType> argumentTypes = new LinkedList<>();
+        List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
+        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
+
+        // Determine which constructor is referred to, and return it.
         SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
+
         return res;
     }
 
@@ -237,7 +246,7 @@ public class JavaParserFacade {
             } else {
                 try {
                     argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
-                } catch (com.github.javaparser.resolution.UnsolvedSymbolException e) {
+                } catch (UnsolvedSymbolException e) {
                     throw e;
                 } catch (Exception e) {
                     throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
@@ -386,7 +395,7 @@ public class JavaParserFacade {
             throw new UnsupportedOperationException();
         }
         TypeExpr typeExpr = (TypeExpr) methodReferenceExpr.getScope();
-        if (!(typeExpr.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
+        if (!(typeExpr.getType() instanceof ClassOrInterfaceType)) {
             throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
@@ -475,7 +484,20 @@ public class JavaParserFacade {
         return node.accept(typeExtractor, solveLambdas);
     }
 
-    protected com.github.javaparser.ast.body.TypeDeclaration<?> findContainingTypeDecl(Node node) {
+    /**
+     * Where a node has an interface/class/enum declaration as its ancestor, return the nearest one.
+     * <p>
+     * NOTE: See {@link #findContainingTypeDeclOrObjectCreationExpr} if wanting to include anonymous inner classes.
+     * <p>
+     * For example, these all return X:
+     * {@code public interface X { ... node here ... }}
+     * {@code public class X { ... node here ... }}
+     * {@code public enum X { ... node here ... }}
+     *
+     * @param node The Node whose ancestors will be traversed,
+     * @return The first class/interface/enum declaration in the Node's ancestry.
+     */
+    protected TypeDeclaration<?> findContainingTypeDecl(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             return (ClassOrInterfaceDeclaration) node;
         }
@@ -486,6 +508,32 @@ public class JavaParserFacade {
 
     }
 
+    /**
+     * Where a node has an interface/class/enum declaration -- or an object creation expression (anonymous inner class)
+     * -- as its ancestor, return the nearest one.
+     * <p>
+     * NOTE: See {@link #findContainingTypeDecl} if wanting to not include anonymous inner classes.
+     * <p>
+     * For example, these all return X:
+     * <ul>
+     *     <li>{@code public interface X { ... node here ... }}</li>
+     *     <li>{@code public class X { ... node here ... }}</li>
+     *     <li>{@code public enum X { ... node here ... }}</li>
+     *     <li><pre>{@code
+     *     new ActionListener() {
+     *          ... node here ...
+     *          public void actionPerformed(ActionEvent e) {
+     *               ... or node here ...
+     *          }
+     *     }
+     *     }</pre></li>
+     * </ul>
+     * <p>
+     *
+     * @param node The Node whose ancestors will be traversed,
+     * @return The first class/interface/enum declaration -- or object creation expression (anonymous inner class) -- in
+     * the Node's ancestry.
+     */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             return node;
@@ -504,14 +552,14 @@ public class JavaParserFacade {
         return get(typeSolver).convertToUsage(var.getType(), var);
     }
 
-    public ResolvedType convertToUsage(com.github.javaparser.ast.type.Type type, Node context) {
+    public ResolvedType convertToUsage(Type type, Node context) {
         if (type.isUnknownType()) {
             throw new IllegalArgumentException("Inferred lambda parameter type");
         }
         return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
     }
 
-    public ResolvedType convertToUsage(com.github.javaparser.ast.type.Type type) {
+    public ResolvedType convertToUsage(Type type) {
         return convertToUsage(type, type);
     }
 
@@ -524,7 +572,7 @@ public class JavaParserFacade {
         return name;
     }
 
-    protected ResolvedType convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
+    protected ResolvedType convertToUsage(Type type, Context context) {
         if (context == null) {
             throw new NullPointerException("Context should not be null");
         }
@@ -550,8 +598,8 @@ public class JavaParserFacade {
             } else {
                 return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters, typeSolver);
             }
-        } else if (type instanceof com.github.javaparser.ast.type.PrimitiveType) {
-            return ResolvedPrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());
+        } else if (type instanceof PrimitiveType) {
+            return ResolvedPrimitiveType.byName(((PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
@@ -563,10 +611,10 @@ public class JavaParserFacade {
             } else {
                 throw new UnsupportedOperationException(wildcardType.toString());
             }
-        } else if (type instanceof com.github.javaparser.ast.type.VoidType) {
+        } else if (type instanceof VoidType) {
             return ResolvedVoidType.INSTANCE;
-        } else if (type instanceof com.github.javaparser.ast.type.ArrayType) {
-            com.github.javaparser.ast.type.ArrayType jpArrayType = (com.github.javaparser.ast.type.ArrayType) type;
+        } else if (type instanceof ArrayType) {
+            ArrayType jpArrayType = (ArrayType) type;
             return new ResolvedArrayType(convertToUsage(jpArrayType.getComponentType(), context));
         } else if (type instanceof UnionType) {
             UnionType unionType = (UnionType) type;
@@ -590,7 +638,7 @@ public class JavaParserFacade {
         return convert(type, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public ResolvedType convert(com.github.javaparser.ast.type.Type type, Context context) {
+    public ResolvedType convert(Type type, Context context) {
         return convertToUsage(type, context);
     }
 
@@ -647,7 +695,7 @@ public class JavaParserFacade {
         return getTypeOfThisIn(demandParentNode(node));
     }
 
-    public ResolvedReferenceTypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?> typeDeclaration) {
+    public ResolvedReferenceTypeDeclaration getTypeDeclaration(TypeDeclaration<?> typeDeclaration) {
         return JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver);
     }
 
