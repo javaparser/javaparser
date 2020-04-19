@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,9 +28,10 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
- * A node that extends other types.
+ * A node that explicitly extends other types, using the <code>extends</code> keyword.
  */
 public interface NodeWithExtends<N extends Node> {
+
     NodeList<ClassOrInterfaceType> getExtendedTypes();
 
     void tryAddImportToParentCompilationUnit(Class<?> clazz);
@@ -56,6 +57,7 @@ public interface NodeWithExtends<N extends Node> {
     /**
      * @deprecated use addExtendedType
      */
+    @Deprecated
     default N addExtends(Class<?> clazz) {
         return addExtendedType(clazz);
     }
@@ -63,6 +65,7 @@ public interface NodeWithExtends<N extends Node> {
     /**
      * @deprecated use addExtendedType
      */
+    @Deprecated
     default N addExtends(String name) {
         return addExtendedType(name);
     }
@@ -70,7 +73,7 @@ public interface NodeWithExtends<N extends Node> {
     /**
      * Add an "extends" to this and automatically add the import
      *
-     * @param clazz the class to extand from
+     * @param clazz the class to extend from
      * @return this
      */
     default N addExtendedType(Class<?> clazz) {
@@ -89,4 +92,5 @@ public interface NodeWithExtends<N extends Node> {
         getExtendedTypes().add(parseClassOrInterfaceType(name));
         return (N) this;
     }
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,12 +37,12 @@ public abstract class AstObserverAdapter implements AstObserver {
     }
 
     @Override
-    public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+    public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         // do nothing
     }
 
     @Override
-    public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+    public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
         // do nothing
     }
 }

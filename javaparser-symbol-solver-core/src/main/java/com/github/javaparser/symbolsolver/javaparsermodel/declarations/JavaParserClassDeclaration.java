@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -83,9 +83,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
         JavaParserClassDeclaration that = (JavaParserClassDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -96,8 +94,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     @Override
     public String toString() {
         return "JavaParserClassDeclaration{" +
-               "wrappedNode=" + wrappedNode +
-               '}';
+                "wrappedNode=" + wrappedNode +
+                '}';
     }
 
     ///
@@ -241,11 +239,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             return true;
         }
         ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
-            // We want to avoid infinite recursion in case of Object having Object as ancestor
-            if (Object.class.getCanonicalName().equals(superclass.getQualifiedName())) {
-                return true;
-            }
+        if (superclass != null && superclass != this) {
             if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
@@ -416,6 +410,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+
+        // If unable to solve by the class name alone, attempt to qualify it.
         if (!ref.isSolved()) {
             Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
             if (localScope.isPresent()) {
@@ -423,15 +419,21 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                 ref = solveType(localName);
             }
         }
+
+        // If still unable to resolve, throw an exception.
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
+
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
-                                                              .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
-                                                              .collect(Collectors.toList());
+                .stream()
+                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
+                .collect(Collectors.toList());
+
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
     }
 }

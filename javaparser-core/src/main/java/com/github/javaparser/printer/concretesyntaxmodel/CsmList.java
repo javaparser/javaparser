@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -8,7 +8,7 @@
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -76,7 +76,7 @@ public class CsmList implements CsmElement {
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (property.isAboutNodes()) {
-            NodeList nodeList = property.getValueAsMultipleReference(node);
+            NodeList<? extends Node> nodeList = property.getValueAsMultipleReference(node);
             if (nodeList == null) {
                 return;
             }
@@ -103,7 +103,7 @@ public class CsmList implements CsmElement {
             if (!values.isEmpty() && preceeding != null) {
                 preceeding.prettyPrint(node, printer);
             }
-            for (Iterator it = values.iterator(); it.hasNext(); ) {
+            for (Iterator<?> it = values.iterator(); it.hasNext(); ) {
                 if (separatorPre != null && it.hasNext()) {
                     separatorPre.prettyPrint(node, printer);
                 }

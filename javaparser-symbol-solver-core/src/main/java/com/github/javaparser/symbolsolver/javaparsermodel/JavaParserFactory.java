@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,7 +38,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSy
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -48,6 +48,8 @@ public class JavaParserFactory {
     public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
             throw new NullPointerException("Node should not be null");
+        } else if (node instanceof AnnotationDeclaration) {
+            return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof BlockStmt) {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
@@ -99,11 +101,11 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            final Node parentNode = requireParentNode(node);
+            final Node parentNode = demandParentNode(node);
             if (parentNode instanceof ObjectCreationExpr
                     && (node == ((ObjectCreationExpr) parentNode).getType()
                         || ((ObjectCreationExpr) parentNode).getArguments().contains(node))) {
-                return getContext(requireParentNode(parentNode), typeSolver);
+                return getContext(demandParentNode(parentNode), typeSolver);
             }
             if (parentNode == null) {
                 throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");

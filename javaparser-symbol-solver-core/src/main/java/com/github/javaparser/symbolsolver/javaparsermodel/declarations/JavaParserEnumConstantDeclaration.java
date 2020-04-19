@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,7 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -44,7 +44,7 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
 
     @Override
     public ResolvedType getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) requireParentNode(wrappedNode), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver), typeSolver);
     }
 
     @Override

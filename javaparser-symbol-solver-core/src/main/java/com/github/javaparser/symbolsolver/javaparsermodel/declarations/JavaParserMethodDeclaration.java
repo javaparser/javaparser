@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -43,7 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -68,11 +67,11 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public ResolvedReferenceTypeDeclaration declaringType() {
-        if (requireParentNode(wrappedNode) instanceof ObjectCreationExpr) {
-            ObjectCreationExpr parentNode = (ObjectCreationExpr) requireParentNode(wrappedNode);
+        if (demandParentNode(wrappedNode) instanceof ObjectCreationExpr) {
+            ObjectCreationExpr parentNode = (ObjectCreationExpr) demandParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
         }
-        return JavaParserFactory.toTypeDeclaration(requireParentNode(wrappedNode), typeSolver);
+        return JavaParserFactory.toTypeDeclaration(demandParentNode(wrappedNode), typeSolver);
     }
 
     @Override

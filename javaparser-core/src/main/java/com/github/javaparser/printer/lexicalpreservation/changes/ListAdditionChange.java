@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,10 +25,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 
+import java.util.Optional;
+
 /**
  * The Addition of an element to a list.
  */
 public class ListAdditionChange implements Change {
+
     private final ObservableProperty observableProperty;
     private final int index;
     private final Node nodeAdded;
@@ -42,16 +45,25 @@ public class ListAdditionChange implements Change {
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList<Node> nodeList = new NodeList<>();
-	    nodeList.setParentNode(node);
             Object currentRawValue = new NoChange().getValue(property, node);
-            if (!(currentRawValue instanceof NodeList)){
+            if (currentRawValue instanceof Optional) {
+                Optional<?> optional = (Optional<?>) currentRawValue;
+                currentRawValue = optional.orElseGet(null);
+            }
+            if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
-            NodeList<?> currentNodeList = (NodeList<?>)(currentRawValue);
-            nodeList.addAll(currentNodeList);
-            nodeList.add(index, nodeAdded);
-            return nodeList;
+            NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
+
+            // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's parent before adding children (#2592).
+            NodeList<Node> newNodeList = new NodeList<>();
+            newNodeList.setParentNode(currentNodeList.getParentNodeForChildren());
+            newNodeList.addAll(currentNodeList);
+
+            // Perform modification -- add to the list
+            newNodeList.add(index, nodeAdded);
+
+            return newNodeList;
         } else {
             return new NoChange().getValue(property, node);
         }
