@@ -49,3 +49,15 @@ public final class GenericMethodCalls {
     }
 
 }
+
+public final class GenericMethodBoxing {
+
+    public <T> T foo(T... t) {
+        return null;
+    }
+
+    public void bar() {
+        foo(5L);
+    }
+
+}

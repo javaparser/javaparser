@@ -34,6 +34,7 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -54,7 +55,7 @@ class Issue1485Test extends AbstractSymbolResolutionTest {
         javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file))).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
 
         MethodCallExpr methodCallExpr = unit.findFirst(MethodCallExpr.class, m -> m.getName().getIdentifier().equals("println")).get();
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();

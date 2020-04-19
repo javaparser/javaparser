@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -37,17 +38,10 @@ class ParserCollectionStrategyTest {
 
     @Test
     void getSourceRoots() {
-        assertFalse(projectRoot.getSourceRoots().size() == 0);
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java")));
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve
-                ("javaparser-core-generators/src/main/java")));
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve
-                ("javaparser-core-metamodel-generator/src/main/java")));
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve
-                ("javaparser-symbol-solver-core/src/main/java")));
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve
-                ("javaparser-symbol-solver-logic/src/main/java")));
-        assertNotEquals(Optional.empty(), projectRoot.getSourceRoot(root.resolve
-                ("javaparser-symbol-solver-model/src/main/java")));
+        assertThat(projectRoot.getSourceRoots()).isNotEmpty();
+        assertThat(projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java"))).isNotEmpty();
+        assertThat(projectRoot.getSourceRoot(root.resolve("javaparser-core-generators/src/main/java"))).isNotEmpty();
+        assertThat(projectRoot.getSourceRoot(root.resolve("javaparser-core-metamodel-generator/src/main/java"))).isNotEmpty();
+        assertThat(projectRoot.getSourceRoot(root.resolve("javaparser-symbol-solver-core/src/main/java"))).isNotEmpty();
     }
 }

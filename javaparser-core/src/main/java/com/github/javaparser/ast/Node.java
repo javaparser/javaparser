@@ -170,7 +170,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Comment comment;
 
     @InternalProperty
-    private List<AstObserver> observers = new ArrayList<>();
+    private Set<AstObserver> observers = new HashSet<>();
 
     @InternalProperty
     private Parsedness parsed = PARSED;
