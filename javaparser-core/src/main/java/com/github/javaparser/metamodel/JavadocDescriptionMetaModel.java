@@ -22,11 +22,11 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class JavadocCommentMetaModel extends CommentMetaModel {
+public class JavadocDescriptionMetaModel extends NodeMetaModel {
 
-    JavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.JavadocComment.class, "JavadocComment", "com.github.javaparser.ast.comments", false, false);
+    JavadocDescriptionMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.JavadocDescription.class, "JavadocDescription", "com.github.javaparser.ast.comments", false, false);
     }
 
-    public PropertyMetaModel contentNodePropertyMetaModel;
+    public PropertyMetaModel elementsPropertyMetaModel;
 }
