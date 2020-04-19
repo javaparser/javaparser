@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
@@ -33,7 +38,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSy
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -43,6 +48,8 @@ public class JavaParserFactory {
     public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
             throw new NullPointerException("Node should not be null");
+        } else if (node instanceof AnnotationDeclaration) {
+            return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof BlockStmt) {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
@@ -61,6 +68,8 @@ public class JavaParserFactory {
             return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration) node, typeSolver);
         } else if (node instanceof MethodCallExpr) {
             return new MethodCallExprContext((MethodCallExpr) node, typeSolver);
+        } else if (node instanceof MethodReferenceExpr) {
+            return new MethodReferenceExprContext((MethodReferenceExpr) node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
@@ -92,11 +101,11 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            final Node parentNode = requireParentNode(node);
+            final Node parentNode = demandParentNode(node);
             if (parentNode instanceof ObjectCreationExpr
                     && (node == ((ObjectCreationExpr) parentNode).getType()
                         || ((ObjectCreationExpr) parentNode).getArguments().contains(node))) {
-                return getContext(requireParentNode(parentNode), typeSolver);
+                return getContext(demandParentNode(parentNode), typeSolver);
             }
             if (parentNode == null) {
                 throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");

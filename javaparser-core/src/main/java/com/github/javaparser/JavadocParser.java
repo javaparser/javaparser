@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -101,6 +101,10 @@ class JavadocParser {
 
     private static List<String> cleanLines(String content) {
         String[] lines = content.split(EOL);
+        if (lines.length == 0) {
+            return Collections.emptyList();
+        }
+
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
             int asteriskIndex = startsWithAsterisk(l);
             if (asteriskIndex == -1) {

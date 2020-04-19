@@ -1,21 +1,27 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -112,6 +118,49 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
+    }
+
+    @Test
+    void testSuperMethodCallAnonymousClass() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    java.util.List x() { \n" +
+                "        return new java.util.ArrayList() { \n" +
+                "            public int size() { \n" +
+                "                return super.size(); \n" +
+                "            } \n" +
+                "        }; \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "size").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("size", methodUsage.getName());
+    }
+
+    @Test
+    void testSuperMethodCallDefaultMethod() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    public interface Y { \n" +
+                "        default void foo() {} \n" +
+                "    } \n" +
+                "    public class Z implements Y { \n" +
+                "        public void foo() { \n" +
+                "            Y.super.foo(); \n" +
+                "        } \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "foo").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("foo", methodUsage.getName());
     }
 
     @Test
@@ -416,7 +465,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ThisInAnonymousClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
 
-        ThisExpr thisExpression = Navigator.findNodeOfGivenClass(clazz, ThisExpr.class);
+        ThisExpr thisExpression = Navigator.demandNodeOfGivenClass(clazz, ThisExpr.class);
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
         assertEquals(true, type.isReferenceType());

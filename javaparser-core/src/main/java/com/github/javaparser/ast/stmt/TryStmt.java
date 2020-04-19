@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -245,11 +245,6 @@ public class TryStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public TryStmt removeFinallyBlock() {
         return setFinallyBlock((BlockStmt) null);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public TryStmt removeTryBlock() {
-        return setTryBlock((BlockStmt) null);
     }
 
     @Override

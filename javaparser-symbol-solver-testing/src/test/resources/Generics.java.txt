@@ -33,14 +33,31 @@ public final class GenericMethodCalls {
         public void callee(T data) {
         }
 
+        public T get() {
+            return null;
+        }
+
     }
 
     public class Derived extends Base<String> {
 
         public void caller() {
             callee("test");
+            get();
         }
 
+    }
+
+}
+
+public final class GenericMethodBoxing {
+
+    public <T> T foo(T... t) {
+        return null;
+    }
+
+    public void bar() {
+        foo(5L);
     }
 
 }

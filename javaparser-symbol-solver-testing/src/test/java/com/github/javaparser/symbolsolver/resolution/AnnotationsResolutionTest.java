@@ -1,7 +1,29 @@
+/*
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -9,6 +31,9 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -22,6 +47,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -237,4 +263,57 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertTrue(resolved.hasDirectlyAnnotation("java.lang.annotation.Retention"));
         assertFalse(resolved.hasDirectlyAnnotation("java.lang.annotation.Documented"));
     }
+
+    @Test
+    void solveQualifiedAnnotation() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CE");
+        AnnotationExpr annotationOnClass = clazz.getAnnotation(0);
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testSomething");
+        AnnotationExpr annotationOnMethod = method.getAnnotation(0);
+
+        ResolvedAnnotationDeclaration resolvedAnnotationOnClass = annotationOnClass.resolve();
+        ResolvedAnnotationDeclaration resolvedAnnotationOnMethod = annotationOnMethod.resolve();
+
+        assertEquals("foo.bar.MyAnnotation", resolvedAnnotationOnClass.getQualifiedName());
+        assertEquals("org.junit.Ignore", resolvedAnnotationOnMethod.getQualifiedName());
+    }
+
+    @Test
+    void solveQualifiedAnnotationWithReferenceTypeHasAnnotationAsWell() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CE");
+        ResolvedReferenceTypeDeclaration referenceType = clazz.resolve();
+
+        boolean hasAnnotation = referenceType.hasAnnotation("org.junit.runner.RunWith");
+
+        assertTrue(hasAnnotation, "org.junit.runner.RunWith not found on reference type");
+    }
+
+    @Test
+    void solveAnnotationAncestor() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotation").get().asAnnotationDeclaration();
+        ResolvedReferenceTypeDeclaration referenceType = ad.resolve();
+
+        List<ResolvedReferenceType> ancestors = referenceType.getAncestors();
+        assertEquals(ancestors.size(), 1);
+        assertEquals(ancestors.get(0).getQualifiedName(), "java.lang.annotation.Annotation");
+    }
+
+    @Test
+    void solvePrimitiveAnnotationMember() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithSingleValue").get().asAnnotationDeclaration();
+        assertEquals(ad.getMember(0).asAnnotationMemberDeclaration().resolve().getType().asPrimitive().describe(), "int");
+    }
+
+    @Test
+    void solveInnerClassAnnotationMember() throws IOException {
+        CompilationUnit cu = parseSample("Annotations");
+        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithInnerClass").get().asAnnotationDeclaration();
+        ResolvedAnnotationMemberDeclaration am = ad.getMember(0).asAnnotationMemberDeclaration().resolve();
+        assertEquals(am.getType().asReferenceType().getQualifiedName(), "foo.bar.MyAnnotationWithInnerClass.MyInnerClass");
+    }
+
 }
