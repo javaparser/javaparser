@@ -117,6 +117,7 @@ public class LexicalPreservingPrinter {
     }
 
     private static class Observer extends PropagatingAstObserver {
+
         @Override
         public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
             if (oldValue == newValue) {
@@ -275,7 +276,7 @@ public class LexicalPreservingPrinter {
          * at the position of {@code index}, the new comment and the node will have the same indent.
          *
          * @param nodeText The text of the node
-         * @param index The position where a new comment will be added to
+         * @param index    The position where a new comment will be added to
          */
         private void fixIndentOfMovedNode(NodeText nodeText, int index) {
             if (index <= 0) {
@@ -296,7 +297,7 @@ public class LexicalPreservingPrinter {
         }
 
         @Override
-        public void concreteListChange(NodeList<?> changedList, AstObserver.ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        public void concreteListChange(NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {

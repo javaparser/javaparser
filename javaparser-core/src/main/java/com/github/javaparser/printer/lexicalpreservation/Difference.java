@@ -466,6 +466,8 @@ public class Difference {
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
+        } else if (kept.isChild() && ((CsmChild)kept.getElement()).getChild() instanceof Comment ) {
+            diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
             diffIndex++;
             originalIndex++;

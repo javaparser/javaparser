@@ -27,7 +27,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.utils.Utils;
 
 /**
- * This represent a change happened to a specific Node.
+ * This represents a change that has happened to a specific Node.
  */
 public interface Change {
 
