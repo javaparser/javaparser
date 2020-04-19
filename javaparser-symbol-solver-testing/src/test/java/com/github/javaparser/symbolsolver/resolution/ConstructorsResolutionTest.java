@@ -246,7 +246,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
 	@Test
 	public void solveParametrizedParametersConstructor() {
-		JavaParser.getStaticConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+		StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
 		CompilationUnit cu = parseSample("ParametrizedParametersConstructor");
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ParametrizedParametersConstructor");
@@ -257,7 +257,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 		ResolvedConstructorDeclaration resolvedConstructorDeclaration = objectCreationExpr.resolve();
 	}
 
-  @Test
+    @Test
     void testGenericParentContructorJavassist() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
