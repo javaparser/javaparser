@@ -14,7 +14,7 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.15.18-SNAPSHOT</version>
+    <version>3.15.19-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -167,7 +167,7 @@
                     <execution>
                         <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -325,19 +325,19 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.6.1</version>
+                <version>5.6.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>5.6.1</version>
+                <version>5.6.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.vintage</groupId>
                 <artifactId>junit-vintage-engine</artifactId>
-                <version>5.6.1</version>
+                <version>5.6.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
