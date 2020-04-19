@@ -1,0 +1,37 @@
+
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      #      - 'v[0-9]+.[0-9]+.[0-9]+' # Push events to matching pattern -- updated to use regex for a semantic versioning version number
+      - 'javaparser-parent-[0-9].*' # Push events to matching pattern -- loosened pattern to be v followed by at least one number, then anything else after (this allows for e.g. "-DRAFT" and "-SNAPSHOT" as a suffix, and shorter version numbers such as "v2")
+
+name: Create Release from semantic versioning tag push
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          ## Body content doesn't yet seem to appear in the Github UI
+          body: |
+            Bug Fixes:
+            - TODO: Describe any bug fixes
+
+            Enhancements:
+            - TODO: Describe any new features or enhancements
+          ## Option -- trigger as a draft release, followed by the addition of any key release notes and manual approval?
+          ## Alternative -- replace the above body with a link to the changelog? We can always edit release after the fact to add in e.g. notes about breaking changes.
+          draft: false
+          prerelease: false

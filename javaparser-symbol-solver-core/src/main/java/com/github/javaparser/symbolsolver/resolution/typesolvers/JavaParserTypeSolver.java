@@ -1,17 +1,22 @@
 /*
- * Copyright 2016 Federico Tomassetti
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file is part of JavaParser.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
@@ -35,6 +40,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -55,9 +61,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
 
-    private final Cache<Path, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
-    private final Cache<Path, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
-    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
+    private final Cache<Path, Optional<CompilationUnit>> parsedFiles;
+    private final Cache<Path, List<CompilationUnit>> parsedDirectories;
+    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes;
+    private static final int CACHE_SIZE_UNSET = -1;
 
     public JavaParserTypeSolver(File srcDir) {
         this(srcDir.toPath());
@@ -65,6 +72,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     public JavaParserTypeSolver(String srcDir) {
         this(new File(srcDir));
+    }
+
+    public JavaParserTypeSolver(Path srcDir) {
+        this(srcDir, new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
     }
 
     public JavaParserTypeSolver(File srcDir, ParserConfiguration parserConfiguration) {
@@ -76,17 +87,33 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration) {
+        this(srcDir, parserConfiguration, CACHE_SIZE_UNSET);
+    }
+
+    private <TKey, TValue> Cache<TKey, TValue> BuildCache(long cacheSizeLimit) {
+        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().softValues();
+        if (cacheSizeLimit != CACHE_SIZE_UNSET) {
+            cacheBuilder.maximumSize(cacheSizeLimit);
+        }
+        return cacheBuilder.build();
+    }
+
+    /**
+     * @param srcDir is the source code directory for the type solver.
+     * @param parserConfiguration is the configuration the solver should use when inspecting source code files.
+     * @param cacheSizeLimit is an optional size limit to the internal caches used by this solver.
+     *        Be advised that setting the size too low might lead to noticeable performance degradation.
+     *        However, using a size limit is advised when solving symbols in large code sources. In such cases, internal caches might consume large amounts of heap space.
+     */
+    public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration, long cacheSizeLimit) {
         if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir);
         }
         this.srcDir = srcDir;
         javaParser = new JavaParser(parserConfiguration);
-    }
-
-    public JavaParserTypeSolver(Path srcDir) {
-        this(srcDir,
-                new ParserConfiguration()
-                        .setLanguageLevel(BLEEDING_EDGE));
+        parsedFiles = BuildCache(cacheSizeLimit);
+        parsedDirectories = BuildCache(cacheSizeLimit);
+        foundTypes = BuildCache(cacheSizeLimit);
     }
 
     @Override
@@ -104,6 +131,13 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        Objects.requireNonNull(parent);
+        if (this.parent != null) {
+            throw new IllegalStateException("This TypeSolver already has a parent.");
+        }
+        if (parent == this) {
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        }
         this.parent = parent;
     }
 
@@ -142,7 +176,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         try {
             return parsedDirectories.get(srcDirectory.toAbsolutePath(), () -> {
                 List<CompilationUnit> units = new ArrayList<>();
-                if(Files.exists(srcDirectory)) {
+                if (Files.exists(srcDirectory)) {
                     try (DirectoryStream<Path> srcDirectoryStream = Files.newDirectoryStream(srcDirectory)) {
                         srcDirectoryStream
                                 .forEach(file -> {
@@ -164,8 +198,6 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
-        // TODO support enums
-        // TODO support interfaces
         try {
             return foundTypes.get(name, () -> {
                 SymbolReference<ResolvedReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);

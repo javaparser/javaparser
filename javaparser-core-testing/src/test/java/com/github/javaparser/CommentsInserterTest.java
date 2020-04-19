@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,12 +23,15 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseResource;
+import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,9 +41,12 @@ class CommentsInserterTest {
         return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
     }
 
+    private String makeExpectedFilename(String sampleName) {
+        return "/com/github/javaparser/issue_samples/" + sampleName + ".java.expected.txt";
+    }
+
     private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
-        Provider p = Providers.resourceProvider(
-                makeFilename(sampleName));
+        Provider p = Providers.resourceProvider(makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
 
@@ -49,21 +55,21 @@ class CommentsInserterTest {
      */
     @Test
     void issue290() throws IOException {
-        ParseResult result = parseSample("Issue290");
-        CommentsCollection cc = (CommentsCollection) result.getCommentsCollection().get();
+        ParseResult<CompilationUnit> result = this.parseSample("Issue290");
+        CommentsCollection cc = result.getCommentsCollection().get();
         assertEquals(1, cc.getLineComments().size());
         assertEquals(1, cc.getJavadocComments().size());
     }
 
     @Test
     void issue624() throws IOException {
-        parseResource(makeFilename("Issue624"));
+        this.parseSample("Issue624");
         // Should not fail
     }
 
     @Test
     void issue200EnumConstantsWithCommentsForceVerticalAlignment() {
-        CompilationUnit cu = parse("public enum X {" + EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("public enum X {" + EOL +
                 "    /** const1 javadoc */" + EOL +
                 "    BORDER_CONSTANT," + EOL +
                 "    /** const2 javadoc */" + EOL +
@@ -84,7 +90,7 @@ class CommentsInserterTest {
 
     @Test
     void issue234LosingCommentsInArrayInitializerExpr() {
-        CompilationUnit cu = parse("@Anno(stuff={" + EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("@Anno(stuff={" + EOL +
                 "    // Just," + EOL +
                 "    // an," + EOL +
                 "    // example" + EOL +
@@ -101,4 +107,10 @@ class CommentsInserterTest {
                 "}\n", cu.toString());
     }
 
+
+    @Test
+    void issue412() throws IOException {
+        CompilationUnit cu = parseSample("Issue412").getResult().get();
+        assertEqualToTextResource(makeExpectedFilename("Issue412"), cu.toString());
+    }
 }
