@@ -128,6 +128,7 @@ class CommentsInserterTest {
                 "        System.out.println(\"Hello\");\n" +
                 "    }\n" +
                 "}\n", cu.toString());
+    }
 
     @Test
     void issue412() throws IOException {
