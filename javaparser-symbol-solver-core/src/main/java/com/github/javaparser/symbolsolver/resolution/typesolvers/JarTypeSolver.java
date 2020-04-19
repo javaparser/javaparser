@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -45,6 +46,7 @@ import java.util.jar.JarFile;
  */
 public class JarTypeSolver implements TypeSolver {
 
+    @Deprecated
     private static JarTypeSolver instance;
 
     private TypeSolver parent;
@@ -67,6 +69,13 @@ public class JarTypeSolver implements TypeSolver {
         addPathToJar(jarInputStream);
     }
 
+    /**
+     * Suitable for being called only once. If called multiple times, it will cause an IllegalStateException per #2547 .
+     *
+     * @deprecated Use of this static method / singleton pattern is strongly discouraged and will be removed (#2547).
+     * Instead, a new instance should be created for each jar (consistent with the other type solvers e.g. AarTypeSolver, JavaParserTypeSolver, ClassLoaderTypeSolver).
+     */
+    @Deprecated
     public static JarTypeSolver getJarTypeSolver(String pathToJar) throws IOException {
         if (instance == null) {
             instance = new JarTypeSolver(pathToJar);
@@ -123,6 +132,13 @@ public class JarTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        Objects.requireNonNull(parent);
+        if (this.parent != null) {
+            throw new IllegalStateException("This TypeSolver already has a parent.");
+        }
+        if (parent == this) {
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        }
         this.parent = parent;
     }
 

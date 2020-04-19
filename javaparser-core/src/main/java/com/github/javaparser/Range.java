@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -142,8 +142,9 @@ public class Range {
      * In these cases, the `other` range is not strictly "inside" of this range.
      */
     public boolean contains(Range other) {
-        return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
-                (end.isAfter(other.end) || end.equals(other.end));
+        boolean beginResult = (begin.isBeforeOrEqual(other.begin));
+        boolean endResult = (end.isAfterOrEqual(other.end));
+        return beginResult && endResult;
     }
 
     /**
@@ -164,7 +165,9 @@ public class Range {
      * It means that this has to be larger than other and it has to start before other and end after other.
      */
     public boolean strictlyContains(Range other) {
-        return begin.isBefore(other.begin) && end.isAfter(other.end);
+        boolean beginResult = (begin.isBefore(other.begin));
+        boolean endResult = (end.isAfter(other.end));
+        return beginResult && endResult;
     }
 
     /**
@@ -179,11 +182,19 @@ public class Range {
     /**
      * Does the other 'Range' overlap with this 'Range'?
      * <p>
-     * If two ranges overlap, this range or the other range strictlyContains the begin or the end of the other range.
+     * If two ranges overlap, this range or the other range contains the begin or the end of the other range.
+     * <p>
+     * Note that if the ends are "touching" (i.e. a begin position == end position), this counts as an overlap
+     * because the positions refer to characters, as opposed to boundary between characters.
+     * <p>
+     * For example, there is an overlap at "C" in the following ranges, with "C" existing within both ranges:
+     * <pre>
+     * Range 1: ABC
+     * Range 2:   CDE</pre>
      */
     public boolean overlapsWith(Range other) {
-        return strictlyContains(other.begin) || strictlyContains(other.end)
-                || other.strictlyContains(begin) || other.strictlyContains(end);
+        return (contains(other.begin) || contains(other.end)) ||
+                (other.contains(begin) || other.contains(end));
     }
 
     /**

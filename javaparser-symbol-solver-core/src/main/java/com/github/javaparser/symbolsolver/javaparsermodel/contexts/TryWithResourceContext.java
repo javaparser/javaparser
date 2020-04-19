@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
@@ -63,7 +63,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             }
         }
 
-        if (requireParentNode(wrappedNode) instanceof BlockStmt) {
+        if (demandParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbolAsValue(name);
@@ -82,7 +82,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             }
         }
 
-        if (requireParentNode(wrappedNode) instanceof BlockStmt) {
+        if (demandParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name);

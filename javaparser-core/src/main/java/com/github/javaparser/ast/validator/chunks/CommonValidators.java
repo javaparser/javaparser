@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -75,7 +75,7 @@ public class CommonValidators extends Validators {
                     for (PropertyMetaModel ppm : mm.getAllPropertyMetaModels()) {
                         if (ppm.isNonEmpty()) {
                             if (ppm.isNodeList()) {
-                                NodeList value = (NodeList) ppm.getValue(node);
+                                NodeList<?> value = (NodeList<?>) ppm.getValue(node);
                                 if (value.isEmpty()) {
                                     problemReporter.report(node, "%s.%s can not be empty.", mm.getTypeName(), ppm.getName());
                                 }

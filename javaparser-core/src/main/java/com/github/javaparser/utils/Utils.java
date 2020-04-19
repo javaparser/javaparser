@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 
 package com.github.javaparser.utils;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.UnaryExpr;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -291,6 +294,17 @@ public class Utils {
             line = line.substring(0, line.length() - 1);
         }
         return line;
+    }
+
+    /**
+     * Checks, if the parent is a unary expression with a minus operator. Used to check for negative literals.
+     */
+    public static boolean hasUnaryMinusAsParent(Node n) {
+        return n.getParentNode()
+                .filter(parent -> parent instanceof UnaryExpr)
+                .map(parent -> (UnaryExpr) parent)
+                .map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS)
+                .orElse(false);
     }
 
 }

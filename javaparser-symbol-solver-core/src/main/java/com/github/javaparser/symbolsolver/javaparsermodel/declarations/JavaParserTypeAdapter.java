@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -132,6 +133,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                         }
                     } else if (internalType instanceof EnumDeclaration) {
                         return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
+                    } else if (internalType instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -144,6 +147,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                         }
                     } else if (internalType instanceof EnumDeclaration) {
                         return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
+                    } else if (internalType instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     } else {
                         throw new UnsupportedOperationException();
                     }

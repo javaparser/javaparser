@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -64,7 +64,7 @@ public interface AstObserver {
      * @param index position at which the changed occurred
      * @param nodeAddedOrRemoved element added or removed
      */
-    void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
+    void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
 
-    void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode);
+    void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode);
 }

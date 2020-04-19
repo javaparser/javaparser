@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -26,6 +26,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -51,6 +52,13 @@ public class ClassLoaderTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        Objects.requireNonNull(parent);
+        if (this.parent != null) {
+            throw new IllegalStateException("This TypeSolver already has a parent.");
+        }
+        if (parent == this) {
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        }
         this.parent = parent;
     }
 

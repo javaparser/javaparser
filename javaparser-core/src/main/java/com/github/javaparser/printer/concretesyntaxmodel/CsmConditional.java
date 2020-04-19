@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -72,11 +72,11 @@ public class CsmConditional implements CsmElement {
                 return property.getValueAsBooleanAttribute(node);
             }
             if (this == IS_EMPTY) {
-                NodeList value = property.getValueAsMultipleReference(node);
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                NodeList value = property.getValueAsMultipleReference(node);
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());
