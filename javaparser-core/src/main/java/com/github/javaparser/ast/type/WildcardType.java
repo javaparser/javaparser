@@ -39,10 +39,10 @@ import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 
 /**
- * A wildcard type argument.
- * <br><code>void printCollection(Collection&lt;<b>?</b>> c) { ... }</code>
- * <br><code>boolean addAll(Collection&lt;<b>? extends E</b>> c)</code>
- * <br><code>Reference(T referent, ReferenceQueue&lt;<b>? super T</b>> queue)</code>
+ * A wildcard type argument. Examples:
+ * <br>{@code void printCollection(Collection<}<b>{@code ?}</b>{@code > c) { ... }}
+ * <br>{@code boolean addAll(Collection<}<b>{@code ? extends E}</b>{@code > c)}
+ * <br>{@code Reference(T referent, ReferenceQueue<}<b>{@code ? super T}</b>{@code > queue)}
  *
  * @author Julio Vilmar Gesser
  */

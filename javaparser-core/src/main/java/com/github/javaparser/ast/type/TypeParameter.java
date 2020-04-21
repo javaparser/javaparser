@@ -43,9 +43,9 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A type parameter.
- * <br><code>&lt;<b>U</b>> U getU() { ... }</code>
- * <br><code>class D &lt;<b>@Brain T extends B & A & @Tripe C</b>> { ... }</code>
+ * A type parameter. Examples:
+ * <br>{@code <}<b>{@code U}</b>{@code > U getU() { ... }}
+ * <br>{@code class D <}<b>{@code @Brain T extends B & A & @Tripe C}</b>{@code > { ... }}
  * <p>U and T are type parameter names.
  * <br>B, A, and C are type parameter bounds.
  * <br>Tripe is an annotation on type parameter bound C.
