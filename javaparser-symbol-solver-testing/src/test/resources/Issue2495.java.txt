@@ -1,0 +1,28 @@
+public class OuterClass {
+
+  public void test() {
+    System.out.println("Test from OuterClass");
+  }
+
+  public void onlyOuter() {
+    System.out.println("Only available on the outer");
+  }
+
+  public class NestedClass {
+
+    public void test() {
+      System.out.println("Test from NestedClass");
+    }
+
+  }
+
+  protected void foo() {
+    NestedClass n = new NestedClass();
+    test(); // method from OuterClass
+    n.test(); // method from NestedClass
+
+    onlyOuter(); // method from OuterClass
+    n.onlyOuter(); // not valid!
+  }
+
+}

@@ -26,9 +26,12 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
@@ -53,6 +56,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Malte Langkabel
@@ -147,5 +151,38 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		assertEquals(2, expressions.size());
 		ResolvedType r = expressions.get(1).calculateResolvedType();
 		assertTrue(ResolvedVoidType.class.isAssignableFrom(r.getClass()));
+	}
+
+	@Test
+	public void testIssue2495() {
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("Issue2495");
+
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OuterClass");
+		MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
+
+		List<MethodCallExpr> methodCallExprs = methodDeclaration.findAll(MethodCallExpr.class);
+		assertEquals(4, methodCallExprs.size());
+
+		ResolvedMethodDeclaration resolvedMethodDecl = methodCallExprs.get(0).resolve();
+		assertEquals("test", resolvedMethodDecl.getName());
+		assertEquals("OuterClass", resolvedMethodDecl.declaringType().getQualifiedName());
+
+		resolvedMethodDecl = methodCallExprs.get(1).resolve();
+		assertEquals("test", resolvedMethodDecl.getName());
+		assertEquals("OuterClass.NestedClass", resolvedMethodDecl.declaringType().getQualifiedName());
+
+		resolvedMethodDecl = methodCallExprs.get(2).resolve();
+		assertEquals("onlyOuter", resolvedMethodDecl.getName());
+		assertEquals("OuterClass", resolvedMethodDecl.declaringType().getQualifiedName());
+
+		try {
+			methodCallExprs.get(3).resolve();
+			fail("UnsolvedSymbolException not thrown");
+		} catch (UnsolvedSymbolException e) {
+			// expected
+		}
 	}
 }
