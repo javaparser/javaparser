@@ -55,7 +55,7 @@ import com.github.javaparser.ast.Generated;
  * The declaration of a field in a class. "private static int a=15*15;" in this example: {@code class X { private static
  * int a=15*15; }}
  *
- * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * <br>All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser

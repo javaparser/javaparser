@@ -38,7 +38,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The catch part of a try-catch-finally. <br/>In {@code try { ... } catch (Exception e) { ... }} the CatchClause
+ * The catch part of a try-catch-finally. <br>In {@code try { ... } catch (Exception e) { ... }} the CatchClause
  * is {@code catch (Exception e) { ... }}. Exception e is the parameter. The { ... } is the body.
  *
  * @author Julio Vilmar Gesser

@@ -37,8 +37,8 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A package declaration.
- * <br/>{@code package com.github.javaparser.ast;}
- * <br/>{@code @Wonderful package anything.can.be.annotated.nowadays;}
+ * <br>{@code package com.github.javaparser.ast;}
+ * <br>{@code @Wonderful package anything.can.be.annotated.nowadays;}
  *
  * @author Julio Vilmar Gesser
  */

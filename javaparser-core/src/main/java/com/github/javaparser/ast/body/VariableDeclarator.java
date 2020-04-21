@@ -50,7 +50,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The declaration of a variable.<br/>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
+ * The declaration of a variable.<br>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.
  * <p/>The type is on all of the variable declarators because, thanks to array brackets, each variable can have a different type.
  *

@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An if-then-else statement. The else is optional.
- * <br/>In {@code if(a==5) hurray() else boo();} the condition is a==5,
+ * <br>In {@code if(a==5) hurray() else boo();} the condition is a==5,
  * hurray() is the thenStmt, and boo() is the elseStmt.
  *
  * @author Julio Vilmar Gesser

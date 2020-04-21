@@ -37,11 +37,11 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
- * <br/>{@code a=5}
- * <br/>{@code time+=500}
- * <br/>{@code watch.time+=500}
- * <br/>{@code (((time)))=100*60}
- * <br/>{@code peanut[a]=true}
+ * <br>{@code a=5}
+ * <br>{@code time+=500}
+ * <br>{@code watch.time+=500}
+ * <br>{@code (((time)))=100*60}
+ * <br>{@code peanut[a]=true}
  *
  * @author Julio Vilmar Gesser
  */

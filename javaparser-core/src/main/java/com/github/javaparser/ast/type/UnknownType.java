@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Generated;
  * lambda parameters that have no explicit type declared. As such, it has no
  * lexical representation and hence gets no comment attributed.
  * <p>
- * <br/>In <code>DoubleToIntFunction d = <b>x</b> -> (int)x + 1;</code> the x parameter in bold has type UnknownType.
+ * <br>In <code>DoubleToIntFunction d = <b>x</b> -> (int)x + 1;</code> the x parameter in bold has type UnknownType.
  *
  * @author Didier Villevalois
  */

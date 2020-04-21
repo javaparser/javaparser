@@ -48,12 +48,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Does not exist.
  * <h2>Java 8+</h2>
  * {@code (a, b) -> a + b}
- * <br/>{@code a -> ...}
- * <br/>{@code (Long a) -> { println(a); }}
- * <p/>The parameters are on the left side of the ->.
+ * <br>{@code a -> ...}
+ * <br>{@code (Long a) -> { println(a); }}
+ * <p/>The parameters are on the left side of the -&gt;.
  * If a parameter uses type inference (it has no type specified) then its type is set to {@code UnknownType}.
  * If they are in ( ), "isEnclosingParameters" is true.
- * <br/>The body is to the right of the ->.
+ * <br>The body is to the right of the -&gt;.
  * The body is either a BlockStmt when it is in { } braces, or an ExpressionStmt when it is not in braces.
  *
  * @author Raquel Pau

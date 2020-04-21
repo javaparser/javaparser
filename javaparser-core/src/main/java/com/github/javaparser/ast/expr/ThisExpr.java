@@ -37,9 +37,9 @@ import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
 
 /**
- * An occurrence of the "this" keyword. <br/>
+ * An occurrence of the "this" keyword. <br>
  * {@code World.this.greet()} is a MethodCallExpr of method name greet,
- * and scope "World.this" which is a ThisExpr with typeName "World". <br/>
+ * and scope "World.this" which is a ThisExpr with typeName "World". <br>
  * {@code this.name} is a FieldAccessExpr of field greet, and a ThisExpr as its scope.
  * This ThisExpr has no typeName.
  *

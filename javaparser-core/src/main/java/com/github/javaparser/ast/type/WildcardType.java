@@ -40,9 +40,9 @@ import java.util.function.Consumer;
 
 /**
  * A wildcard type argument.
- * <br/><code>void printCollection(Collection&lt;<b>?</b>> c) { ... }</code>
- * <br/><code>boolean addAll(Collection&lt;<b>? extends E</b>> c)</code>
- * <br/><code>Reference(T referent, ReferenceQueue&lt;<b>? super T</b>> queue)</code>
+ * <br><code>void printCollection(Collection&lt;<b>?</b>> c) { ... }</code>
+ * <br><code>boolean addAll(Collection&lt;<b>? extends E</b>> c)</code>
+ * <br><code>Reference(T referent, ReferenceQueue&lt;<b>? super T</b>> queue)</code>
  *
  * @author Julio Vilmar Gesser
  */

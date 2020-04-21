@@ -46,11 +46,11 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
- * <br/>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
- * are different from arguments.</a> <br/>"String x" and "float y" are the parameters in {@code int abc(String x, float
+ * <br>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
+ * are different from arguments.</a> <br>"String x" and "float y" are the parameters in {@code int abc(String x, float
  * y) {...}}
  *
- * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * <br>All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the parameter or the type.
  *
  * @author Julio Vilmar Gesser

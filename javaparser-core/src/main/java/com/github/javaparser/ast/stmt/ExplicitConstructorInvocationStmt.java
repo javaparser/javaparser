@@ -45,8 +45,8 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A call to super or this in a constructor or initializer.
- * <br/>{@code class X { X() { super(15); } }}
- * <br/>{@code class X { X() { this(1, 2); } }}
+ * <br>{@code class X { X() { super(15); } }}
+ * <br>{@code class X { X() { this(1, 2); } }}
  *
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.expr.SuperExpr

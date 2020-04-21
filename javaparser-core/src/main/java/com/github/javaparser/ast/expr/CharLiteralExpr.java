@@ -36,11 +36,11 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A literal character.
- * <br/>{@code 'a'}
- * <br/>{@code '\t'}
- * <br/>{@code 'Ω'}
- * <br/>{@code '\177'}
- * <br/>{@code '💩'}
+ * <br>{@code 'a'}
+ * <br>{@code '\t'}
+ * <br>{@code 'Ω'}
+ * <br>{@code '\177'}
+ * <br>{@code '💩'}
  *
  * @author Julio Vilmar Gesser
  */

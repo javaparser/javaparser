@@ -35,8 +35,8 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * The boolean literals.
- * <br/>{@code true}
- * <br/>{@code false}
+ * <br>{@code true}
+ * <br>{@code false}
  *
  * @author Julio Vilmar Gesser
  */

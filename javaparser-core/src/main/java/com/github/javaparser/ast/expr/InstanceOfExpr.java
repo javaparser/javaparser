@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * Usage of the instanceof operator.
- * <br/>{@code tool instanceof Drill}
+ * <br>{@code tool instanceof Drill}
  *
  * @author Julio Vilmar Gesser
  */

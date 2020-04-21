@@ -46,12 +46,12 @@ import com.github.javaparser.metamodel.SwitchExprMetaModel;
  * <h2>Java 12</h2>
  * Like {@link com.github.javaparser.ast.stmt.SwitchStmt},
  * but can also be used as an expression.
- * <br/>
- * <br/>{@code int a = switch(x) { case 5,6 -> 20; case 9 -> 30; default -> 40; };}
- * <br/>{@code int a = switch(x) { case 5,6: break 20; default: break 5+5; };}
+ * <br>
+ * <br>{@code int a = switch(x) { case 5,6 -> 20; case 9 -> 30; default -> 40; };}
+ * <br>{@code int a = switch(x) { case 5,6: break 20; default: break 5+5; };}
  * <h2>Java 13</h2>
  * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.
- * <br/>{@code int a = switch(x) { case 5,6: yield 20; default: yield 5+5; };}
+ * <br>{@code int a = switch(x) { case 5,6: yield 20; default: yield 5+5; };}
  *
  * @see SwitchEntry
  * @see com.github.javaparser.ast.stmt.SwitchStmt

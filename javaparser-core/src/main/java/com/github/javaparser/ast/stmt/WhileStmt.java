@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A while statement.
- * <br/>{@code while(true) { ... }}
+ * <br>{@code while(true) { ... }}
  *
  * @author Julio Vilmar Gesser
  */

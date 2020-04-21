@@ -42,9 +42,9 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A primitive type.
- * <br/>{@code int}
- * <br/>{@code boolean}
- * <br/>{@code short}
+ * <br>{@code int}
+ * <br>{@code boolean}
+ * <br>{@code short}
  *
  * @author Julio Vilmar Gesser
  */

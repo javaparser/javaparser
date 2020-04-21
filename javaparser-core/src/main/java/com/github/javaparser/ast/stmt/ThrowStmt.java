@@ -39,7 +39,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * Usage of the throw statement.
- * <br/>{@code throw new Exception()}
+ * <br>{@code throw new Exception()}
  *
  * @author Julio Vilmar Gesser
  */

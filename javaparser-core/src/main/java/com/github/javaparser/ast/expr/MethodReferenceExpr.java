@@ -47,9 +47,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * Note that the field "identifier", indicating the word to the right of the ::, is not always a method name,
  * it can be "new".
- * <br/>In {@code System.out::println;} the scope is System.out and the identifier is "println"
- * <br/>{@code (test ? stream.map(String::trim) : stream)::toArray;}
- * <br/>In {@code Bar<String>::<Integer>new} the String type argument is on the scope,
+ * <br>In {@code System.out::println;} the scope is System.out and the identifier is "println"
+ * <br>{@code (test ? stream.map(String::trim) : stream)::toArray;}
+ * <br>In {@code Bar<String>::<Integer>new} the String type argument is on the scope,
  * and the Integer type argument is on this MethodReferenceExpr.
  *
  * @author Raquel Pau
