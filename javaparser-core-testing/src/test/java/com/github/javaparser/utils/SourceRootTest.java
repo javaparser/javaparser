@@ -51,7 +51,7 @@ class SourceRootTest {
         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
-        assertEquals(2, units.size());
+        assertEquals(5, units.size());
         assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
         assertTrue(parseResults.stream().noneMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source.root")));
     }
