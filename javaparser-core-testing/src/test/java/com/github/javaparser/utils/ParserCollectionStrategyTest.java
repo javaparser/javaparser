@@ -80,10 +80,8 @@ class ParserCollectionStrategyTest {
 
     @Test
     void rootsAreFound_withModuleInfoInRootAndJavaFileInPackage() {
-        StaticJavaParser.setConfiguration(parserConfig_java9);
-
         final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
@@ -94,10 +92,8 @@ class ParserCollectionStrategyTest {
 
     @Test
     void rootsAreFound_parentOfMultipleSourceRootsWithAndWithoutModuleInfo() {
-        StaticJavaParser.setConfiguration(parserConfig_java9);
-
         final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
 
@@ -113,7 +109,7 @@ class ParserCollectionStrategyTest {
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_parentOfMultipleSourceRootsWithAndWithoutModuleInfo() {
         final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
 
         Callback cb = new Callback();
 
@@ -175,11 +171,8 @@ class ParserCollectionStrategyTest {
 
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_withModuleInfoInRootAndJavaFileInPackage() {
-        StaticJavaParser.setConfiguration(parserConfig_java9);
-
         final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
-//        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
 
         Callback cb = new Callback();
 
