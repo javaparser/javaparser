@@ -49,11 +49,11 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A constructor call.
- * <br/>In <code>new HashMap.Entry&lt;String, Long>(15) {public String getKey() {return null;}};</code>
+ * <br/>In {@code new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};}
  * HashMap.Entry is the type, String and Long are type arguments, 15 is an argument, and everything in { }
  * is the anonymous class body.
- * <p/>In <code>class B { class C { public void a() { new B().new C(); } } }</code> the scope is <code>new B()</code>
- * of ObjectCreationExpr <code>new B().new C()</code>
+ * <p/>In {@code class B { class C { public void a() { new B().new C(); } } }} the scope is {@code new B()}
+ * of ObjectCreationExpr {@code new B().new C()}
  *
  * @author Julio Vilmar Gesser
  */

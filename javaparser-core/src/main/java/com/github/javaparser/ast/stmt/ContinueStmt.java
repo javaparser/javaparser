@@ -38,8 +38,8 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A continue statement with an optional label;
- * <br/><code>continue brains;</code>
- * <br/><code>continue;</code>
+ * <br/>{@code continue brains;}
+ * <br/>{@code continue;}
  *
  * @author Julio Vilmar Gesser
  */

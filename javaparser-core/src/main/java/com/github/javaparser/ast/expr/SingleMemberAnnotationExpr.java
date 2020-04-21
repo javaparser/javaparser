@@ -35,7 +35,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * An annotation that has a single value. <br/><code>@Count(15)</code>
+ * An annotation that has a single value. <br/>{@code @Count(15)}
  *
  * @author Julio Vilmar Gesser
  */

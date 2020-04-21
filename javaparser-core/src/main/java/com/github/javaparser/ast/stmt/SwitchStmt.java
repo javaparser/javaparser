@@ -44,8 +44,8 @@ import com.github.javaparser.ast.Generated;
  * <h2>Java 1.0-1.4</h2>
  * The basic C-like switch statement.
  * It can switch only on integers.
- * <br/><code>switch(x) { case 5: case 6: a=100; break; case 9: a=33; break; default: throw new IllegalStateException(); };</code>
- * <br/>In <code>switch(a) { ... }</code> the selector is "a",
+ * <br/>{@code switch(x) { case 5: case 6: a=100; break; case 9: a=33; break; default: throw new IllegalStateException(); };}
+ * <br/>In {@code switch(a) { ... }} the selector is "a",
  * and the contents of the { ... } are the entries.
  *
  * <h2>Java 5-6</h2>
@@ -62,8 +62,8 @@ import com.github.javaparser.ast.Generated;
  * <li>break can take any expression (usable in the {@link com.github.javaparser.ast.expr.SwitchExpr})
  * <li>switch can be used as an expression (it becomes a {@link com.github.javaparser.ast.expr.SwitchExpr})
  * </ul>
- * <code>switch(x) { case BANANA,PEAR: b=10; break; default: b=5; };</code>
- * <br/><code>switch(x) { case 5,6 -> println("uhuh"); default -> println("nope"); };</code>
+ * {@code switch(x) { case BANANA,PEAR: b=10; break; default: b=5; };}
+ * <br/>{@code switch(x) { case 5,6 -> println("uhuh"); default -> println("nope"); };}
  *
  * <h2>Java 13</h2>
  * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.

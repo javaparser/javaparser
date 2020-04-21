@@ -40,10 +40,10 @@ import com.github.javaparser.ast.Generated;
 /**
  * An expression where an operator is applied to a single expression.
  * It supports the operators that are found in the UnaryExpr.Operator enum.
- * <br/><code>11++</code>
- * <br/><code>++11</code>
- * <br/><code>~1</code>
- * <br/><code>-333</code>
+ * <br/>{@code 11++}
+ * <br/>{@code ++11}
+ * <br/>{@code ~1}
+ * <br/>{@code -333}
  *
  * @author Julio Vilmar Gesser
  */

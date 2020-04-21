@@ -39,11 +39,11 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  * All ways to specify a long literal.
  *
  * <ul>
- * <li><code>8934l</code></li>
- * <li><code>0x01L</code></li>
- * <li><code>022l</code></li>
- * <li><code>0B10101010L</code></li>
- * <li><code>99999999L</code></li>
+ * <li>{@code 8934l}</li>
+ * <li>{@code 0x01L}</li>
+ * <li>{@code 022l}</li>
+ * <li>{@code 0B10101010L}</li>
+ * <li>{@code 99999999L}</li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -128,16 +128,16 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * This function returns a representation of the literal value as a number. This will return a long, except for the
-     * case when the literal has the value <code>9223372036854775808L</code>. This special literal is only allowed in
-     * the expression <code>-9223372036854775808L</code> which represents <code>Long.MIN_VALUE</code>). However
+     * case when the literal has the value {@code 9223372036854775808L}. This special literal is only allowed in
+     * the expression {@code -9223372036854775808L} which represents <code>Long.MIN_VALUE</code>). However
      * 9223372036854775808 (2^63) is out of range of long, which is -(2^63) to (2^63)-1 and thus a BigInteger must be
      * returned.
      *
      * <p>Note, that this function will NOT return a negative number if the literal was specified in decimal, since
-     * according to the language specification (chapter 3.10.1) an expression such as <code>-1L</code> is represented by
-     * a unary * expression with a minus operator and the literal <code>1L</code>. It is however possible to represent
+     * according to the language specification (chapter 3.10.1) an expression such as {@code -1L} is represented by
+     * a unary * expression with a minus operator and the literal {@code 1L}. It is however possible to represent
      * negative * numbers in a literal directly,  i.e. by using the binary or hexadecimal representation. For example
-     * <code> 0xffff_ffff_ffff_ffffL</code> represents the value <code>-1L</code>.
+     * {@code 0xffff_ffff_ffff_ffffL} represents the value <code>-1L</code>.
      *
      * @return the literal value as a number while respecting different number representations
      */

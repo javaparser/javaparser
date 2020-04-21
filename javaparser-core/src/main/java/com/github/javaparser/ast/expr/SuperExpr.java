@@ -36,9 +36,9 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An occurrence of the "super" keyword. <br/>
- * <code>World.super.greet()</code> is a MethodCallExpr of method name greet,
+ * {@code World.super.greet()} is a MethodCallExpr of method name greet,
  * and scope "World.super" which is a SuperExpr with typeName "World". <br/>
- * <code>super.name</code> is a FieldAccessExpr of field greet, and a SuperExpr as its scope.
+ * {@code super.name} is a FieldAccessExpr of field greet, and a SuperExpr as its scope.
  * This SuperExpr has no typeName.
  *
  * @author Julio Vilmar Gesser

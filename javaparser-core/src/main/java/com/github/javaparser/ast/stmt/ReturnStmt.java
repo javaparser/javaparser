@@ -38,7 +38,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * The return statement, with an optional expression to return.
- * <br/><code>return 5 * 5;</code>
+ * <br/>{@code return 5 * 5;}
  * @author Julio Vilmar Gesser
  */
 public class ReturnStmt extends Statement {

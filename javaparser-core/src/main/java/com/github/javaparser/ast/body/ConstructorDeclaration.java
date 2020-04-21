@@ -44,7 +44,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
+ * A constructor declaration: {@code class X { X() { } }} where X(){} is the constructor declaration.
  * <p>
  * <br/>All annotations preceding the name will be set on this object, not on the class.
  * JavaParser doesn't know if it they are applicable to the method or the class.

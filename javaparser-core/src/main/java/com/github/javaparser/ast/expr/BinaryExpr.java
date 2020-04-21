@@ -38,8 +38,8 @@ import com.github.javaparser.ast.Generated;
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
  * It supports the operators that are found the the BinaryExpr.Operator enum.
- * <br/><code>a && b</code>
- * <br/><code>155 * 33</code>
+ * <br/>{@code a && b}
+ * <br/>{@code 155 * 33}
  *
  * @author Julio Vilmar Gesser
  */

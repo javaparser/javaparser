@@ -34,7 +34,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A literal "null".
- * <br/><code>null</code>
+ * <br/>{@code null}
  *
  * @author Julio Vilmar Gesser
  */
