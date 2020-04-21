@@ -12,6 +12,8 @@ Next Release (3.15.19)
     ([#2608](https://github.com/javaparser/javaparser/pull/2608))
 * FIXED: Fix replacing an expression preceded by a comment (`LexicalPreservation` would previously throw an `UnsupportedOperation`)
     ([#2611](https://github.com/javaparser/javaparser/pull/2611))
+* FIXED: The collection strategies now correctly take into account the parser configuration that is passed in via the constructor.
+    ([#2619](https://github.com/javaparser/javaparser/pull/2619))
 
 
 Version 3.15.18
