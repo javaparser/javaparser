@@ -42,7 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A for-each statement.
- * <br/><code>for(Object o: objects) { ... }</code>
+ * <br>{@code for(Object o: objects) { ... }}
  * It was introduced in Java 5.
  *
  * @author Julio Vilmar Gesser

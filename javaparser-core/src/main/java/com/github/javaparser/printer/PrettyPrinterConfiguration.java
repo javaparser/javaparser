@@ -57,7 +57,7 @@ public class PrettyPrinterConfiguration {
          *
          * \tvoid bar() {
          * \t\tfoo().bar()
-         * \t\t......baz(() -> {
+         * \t\t......baz(() -*&gt; {
          * \t\t..........\tboo().baa()
          * \t\t..........\t......bee(a,
          * \t\t..........\t..........b,

@@ -74,7 +74,7 @@ public class ParseResult<T> {
     }
 
     /**
-     * @return the <code>i</code>'th encountered parsing problem. May throw <code>IndexOutOfBoundsException</code>.
+     * @return the {@code i}'th encountered parsing problem. May throw <code>IndexOutOfBoundsException</code>.
      */
     public Problem getProblem(int i) {
         return getProblems().get(i);
