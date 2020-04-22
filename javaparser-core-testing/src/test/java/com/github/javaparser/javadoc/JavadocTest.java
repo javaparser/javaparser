@@ -29,6 +29,7 @@ import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
@@ -89,7 +90,8 @@ class JavadocTest {
     @Test
     void inlineTagsAreParsable() {
         String docText =
-                "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
+                "{@inheritDoc}" + EOL +
+                        "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
                         "{@link TOVersion}. Set {@systemProperty JAVA_HOME} correctly." + EOL +
                         "" + EOL +
                         "@param versionID the id of the {@link TOVersion}." + EOL +
@@ -102,16 +104,28 @@ class JavadocTest {
                 .map(element -> (JavadocInlineTag) element)
                 .collect(toList());
 
-        assertEquals("link", inlineTags.get(0).getName());
-        assertEquals(" TOFilename", inlineTags.get(0).getContent());
-        assertEquals(LINK, inlineTags.get(0).getType());
-        assertEquals("link", inlineTags.get(1).getName());
-        assertEquals(" TOVersion", inlineTags.get(1).getContent());
-        assertEquals(LINK, inlineTags.get(1).getType());
-        assertEquals("systemProperty", inlineTags.get(2).getName());
-        assertEquals(" JAVA_HOME", inlineTags.get(2).getContent());
-        assertEquals(SYSTEM_PROPERTY, inlineTags.get(2).getType());
-        
+        Iterator<JavadocInlineTag> inlineTagIterator = inlineTags.iterator();
+
+        JavadocInlineTag tag = inlineTagIterator.next();
+        assertEquals("inheritDoc", tag.getName());
+        assertEquals("", tag.getContent());
+        assertEquals(INHERIT_DOC, tag.getType());
+
+        tag = inlineTagIterator.next();
+        assertEquals("link", tag.getName());
+        assertEquals("TOFilename", tag.getContent());
+        assertEquals(LINK, tag.getType());
+
+        tag = inlineTagIterator.next();
+        assertEquals("link", tag.getName());
+        assertEquals("TOVersion", tag.getContent());
+        assertEquals(LINK, tag.getType());
+
+        tag = inlineTagIterator.next();
+        assertEquals("systemProperty", tag.getName());
+        assertEquals("JAVA_HOME", tag.getContent());
+        assertEquals(SYSTEM_PROPERTY, tag.getType());
+
         String javadocText = javadoc.toText();
         assertTrue(javadocText.contains("{@link TOVersion}"));
     }
@@ -166,7 +180,7 @@ class JavadocTest {
         List<JavadocDescriptionElement> elements = compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
         assertEquals(3, elements.size());
         assertEquals(new JavadocSnippet("hallo "), elements.get(0));
-        assertEquals(new JavadocInlineTag("link", LINK, " Foo"), elements.get(1));
+        assertEquals(new JavadocInlineTag("link", LINK, "Foo"), elements.get(1));
         assertEquals(new JavadocSnippet(" welt"), elements.get(2));
     }
 }
