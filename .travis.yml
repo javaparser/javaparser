@@ -1,7 +1,7 @@
 sudo: false
 language: java
 install: mvn -B install -DskipTests=true
-script: mvn -B test -P AlsoSlowTests
+script: mvn -e -T 40 -B test -P AlsoSlowTests
 cache:
   directories:
     - $HOME/.ivy2
