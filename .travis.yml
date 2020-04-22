@@ -5,6 +5,7 @@ script: mvn -e -T 40 -B test -P AlsoSlowTests
 cache:
   directories:
     - $HOME/.ivy2
+    - $HOME/.m2
 jdk:
   - openjdk11
 notifications:
