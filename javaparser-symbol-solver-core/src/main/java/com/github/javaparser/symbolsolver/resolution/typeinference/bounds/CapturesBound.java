@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Capture(G<A1, ..., An>): The variables α1, ..., αn represent the result of capture conversion (§5.1.10)
- * applied to G<A1, ..., An> (where A1, ..., An may be types or wildcards and may mention inference variables).
+ * Capture(G&lt;A1, ..., An&gt;): The variables α1, ..., αn represent the result of capture conversion (§5.1.10)
+ * applied to G&lt;A1, ..., An&gt; (where A1, ..., An may be types or wildcards and may mention inference variables).
  *
  * @author Federico Tomassetti
  */
