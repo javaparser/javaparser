@@ -185,4 +185,22 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 			// expected
 		}
 	}
+
+	@Test
+	public void testIssue2495b() {
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("Issue2495");
+
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OuterClass.NestedClass");
+		MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
+
+		List<MethodCallExpr> methodCallExprs = methodDeclaration.findAll(MethodCallExpr.class);
+		assertEquals(1, methodCallExprs.size());
+
+		ResolvedMethodDeclaration resolvedMethodDecl = methodCallExprs.get(0).resolve();
+		assertEquals("onlyOuter", resolvedMethodDecl.getName());
+		assertEquals("OuterClass", resolvedMethodDecl.declaringType().getQualifiedName());
+	}
 }

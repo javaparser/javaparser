@@ -14,6 +14,9 @@ public class OuterClass {
       System.out.println("Test from NestedClass");
     }
 
+    public void bar() {
+        onlyOuter();
+    }
   }
 
   protected void foo() {
