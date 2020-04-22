@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
- * A node that explicitly extends other types, using the <code>extends</code> keyword.
+ * A node that explicitly extends other types, using the {@code extends} keyword.
  */
 public interface NodeWithExtends<N extends Node> {
 
