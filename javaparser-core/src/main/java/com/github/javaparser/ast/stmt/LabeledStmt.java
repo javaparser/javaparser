@@ -36,7 +36,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A statement that is labeled, like <code>label123: println("continuing");</code>
+ * A statement that is labeled, like {@code label123: println("continuing");}
  *
  * @author Julio Vilmar Gesser
  */

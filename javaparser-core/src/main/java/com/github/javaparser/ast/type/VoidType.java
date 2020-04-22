@@ -39,7 +39,7 @@ import com.github.javaparser.ast.Generated;
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
  * when it returns void.
- * <br/><code><b>void</b> helloWorld() { ... }</code>
+ * <br><code><b>void</b> helloWorld() { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */

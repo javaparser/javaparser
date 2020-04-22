@@ -39,7 +39,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A typecast. The (long) in <code>(long)15</code>
+ * A typecast. The (long) in {@code (long)15}
  *
  * @author Julio Vilmar Gesser
  */

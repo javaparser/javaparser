@@ -57,7 +57,7 @@ public class PrettyPrinterConfiguration {
          *
          * \tvoid bar() {
          * \t\tfoo().bar()
-         * \t\t......baz(() -> {
+         * \t\t......baz(() -*&gt; {
          * \t\t..........\tboo().baa()
          * \t\t..........\t......bee(a,
          * \t\t..........\t..........b,
@@ -76,7 +76,7 @@ public class PrettyPrinterConfiguration {
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
-    private boolean spacesBetweenOperators = true;
+    private boolean spaceAroundOperators = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
     /**
@@ -177,7 +177,7 @@ public class PrettyPrinterConfiguration {
         return !printComments;
     }
     
-    public boolean isSpacesBetweenOperators() { return spacesBetweenOperators; }
+    public boolean isSpaceAroundOperators() { return spaceAroundOperators; }
 
     public boolean isPrintJavadoc() {
         return printJavadoc;
@@ -214,8 +214,8 @@ public class PrettyPrinterConfiguration {
     /**
      * Set if there should be spaces between operators
      */
-    public PrettyPrinterConfiguration setSpacesBetweenOperators(boolean spacesBetweenOperators){
-        this.spacesBetweenOperators = spacesBetweenOperators;
+    public PrettyPrinterConfiguration setSpaceAroundOperators(boolean spaceAroundOperators){
+        this.spaceAroundOperators = spaceAroundOperators;
         return this;
     }
 

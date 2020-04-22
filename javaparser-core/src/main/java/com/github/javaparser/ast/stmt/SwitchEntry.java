@@ -39,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <h1>One case in a switch statement</h1>
  * The main Javadoc is in {@link SwitchStmt}
  * <h2>Java 1.0-11</h2>
- * <pre>
+ * <pre>{@code
  * switch (i) {
  *   case 1:
  *   case 2:
@@ -48,30 +48,33 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *   default:
  *     System.out.println(0);
  * }
- * </pre>
- * This contains three SwitchEntrys.
- * <br/>The first one has label 1 and no statements.
- * <br/>The second has label 2 and two statements (the println and the break).
- * <br/>The third, the default, has no label and one statement.
- * <br/>All of them are of type STATEMENT_GROUP.
+ * }</pre>
+ * <br>
+ * This contains three SwitchEntrys. All of them are of type STATEMENT_GROUP.
+ * <ul>
+ *     <li>The first one has label 1 and no statements.</li>
+ *     <li>The second has label 2 and two statements (the println and the break).</li>
+ *     <li>The third, the default, has no label and one statement.</li>
+ * </ul>
  * <h2>Java 12-</h2>
- * <pre>
+ * <pre>{@code
  *     case 1 -> 15*15;
  *     case 2 -> { a++; b++; }
  *     case 3 -> throw new Exception();
- * </pre>
+ * }</pre>
  * These are three new variants.
- * <br/>The first one is of type EXPRESSION and stores its {@link Expression} in an {@link ExpressionStmt}
- * which is stored as the first and only statement in statements.
- * <br/>The second one is of type BLOCK and stores its {@link BlockStmt} as the first and only statement in statements.
- * <br/>The third one is of type THROWS_STATEMENT and stores its {@link ThrowStmt} as the first and only statement in statements.
- * <pre>
+ * <ul>
+ *     <li>The first one is of type EXPRESSION and stores its {@link Expression} in an {@link ExpressionStmt} which is stored as the first and only statement in statements.</li>
+ *     <li>The second one is of type BLOCK and stores its {@link BlockStmt} as the first and only statement in statements.</li>
+ *     <li>The third one is of type THROWS_STATEMENT and stores its {@link ThrowStmt} as the first and only statement in statements.</li>
+ * </ul>
+ * <pre>{@code
  *     case MONDAY, FRIDAY, SUNDAY -> 6;
- * </pre>
+ * }</pre>
  * Multiple case labels are now allowed.
- * <pre>
+ * <pre>{@code
  *     case 16*16, 10+10 -> 6;
- * </pre>
+ * }</pre>
  * Many kinds of expressions are now allowed.
  *
  * @author Julio Vilmar Gesser

@@ -96,7 +96,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
      * <p>
-     * In "<code>int[] a[];</code>", the element type is int.
+     * In "{@code int[] a[];}", the element type is int.
      */
     public Type getElementType() {
         if (this instanceof ArrayType) {

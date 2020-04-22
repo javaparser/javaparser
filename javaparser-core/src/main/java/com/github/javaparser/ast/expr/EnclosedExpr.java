@@ -36,7 +36,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An expression between ( ).
- * <br/><code>(1+1)</code>
+ * <br>{@code (1+1)}
  *
  * @author Julio Vilmar Gesser
  */

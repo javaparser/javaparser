@@ -49,9 +49,9 @@ import com.github.javaparser.ast.Generated;
  * A declaration of variables.
  * It is an expression, so it can be put in places like the initializer of a for loop,
  * or the resources part of the try statement.
- * <br/><code>final int x=3, y=55</code>
+ * <br>{@code final int x=3, y=55}
  *
- * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * <br>All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser

@@ -41,7 +41,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A require directive in module-info.java. <code>require a.b.C;</code>
+ * A require directive in module-info.java. {@code require a.b.C;}
  */
 public class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 

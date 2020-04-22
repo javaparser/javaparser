@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
  * Examples:
  * <ol>
  * <li><b>var</b> a = 1;</li>
- * <li><b>var</b> a = new ArrayList&lt;String>();</li>
+ * <li><b>var</b> a = new ArrayList&lt;String&gt;();</li>
  * </ol>
  */
 public class VarType extends Type {

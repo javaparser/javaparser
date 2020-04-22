@@ -38,10 +38,10 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  * All ways to specify an int literal.
  *
  * <ul>
- * <li><code>8934</code></li>
- * <li><code>0x01</code></li>
- * <li><code>022</code></li>
- * <li><code>0B10101010</code></li>
+ * <li>{@code 8934}</li>
+ * <li>{@code 0x01}</li>
+ * <li>{@code 022}</li>
+ * <li>{@code 0B10101010}</li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -123,15 +123,15 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     /**
      * This function returns a representation of the literal value as a number. This will return an integer, except for
-     * the case when the literal has the value <code>2147483648</code>. This special literal is only allowed in the
-     * expression <code>-2147483648</code> which represents <code>Integer.MIN_VALUE</code>). However 2147483648 (2^31)
+     * the case when the literal has the value {@code 2147483648}. This special literal is only allowed in the
+     * expression {@code -2147483648} which represents <code>Integer.MIN_VALUE</code>). However 2147483648 (2^31)
      * is out of range of int, which is -(2^31) to (2^31)-1 and thus a long must be returned.
      *
      * <p>Note, that this function will NOT return a negative number if the literal was specified in decimal, since
-     * according to the language specification (chapter 3.10.1) an expression such as <code>-1</code> is represented by
-     * a unary expression with a minus operator and the literal <code>1</code>. It is however possible to represent
+     * according to the language specification (chapter 3.10.1) an expression such as {@code -1} is represented by
+     * a unary expression with a minus operator and the literal {@code 1}. It is however possible to represent
      * negative numbers in a literal directly, i.e. by using the binary or hexadecimal representation. For example
-     * <code>0xffff_ffff</code> represents the value <code> -1</code>.
+     * {@code 0xffff_ffff} represents the value <code> -1</code>.
      *
      * @return the literal value as a number while respecting different number representations
      */

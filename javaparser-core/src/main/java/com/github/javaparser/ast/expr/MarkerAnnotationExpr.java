@@ -35,7 +35,7 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 
 /**
  * An annotation that uses only the annotation type name.
- * <br/><code>@Override</code>
+ * <br>{@code @Override}
  *
  * @author Julio Vilmar Gesser
  */

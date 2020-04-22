@@ -35,7 +35,7 @@ import com.github.javaparser.ast.Generated;
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
- * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
+ * A Javadoc comment. {@code /&#42;&#42; a comment &#42;/}
  *
  * @author Julio Vilmar Gesser
  */

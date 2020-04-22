@@ -34,9 +34,9 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
- * <br/><code>100.1f</code>
- * <br/><code>23958D</code>
- * <br/><code>0x4.5p1f</code>
+ * <br>{@code 100.1f}
+ * <br>{@code 23958D}
+ * <br>{@code 0x4.5p1f}
  *
  * @author Julio Vilmar Gesser
  */

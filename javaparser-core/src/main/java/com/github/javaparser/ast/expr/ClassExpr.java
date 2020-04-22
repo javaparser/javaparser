@@ -39,7 +39,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * Defines an expression that accesses the class of a type.
- * <br/><code>Object.class</code>
+ * <br>{@code Object.class}
  *
  * @author Julio Vilmar Gesser
  */

@@ -40,7 +40,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A do-while.
- * <br/><code>do { ... } while ( a==0 );</code>
+ * <br>{@code do { ... } while ( a==0 );}
  *
  * @author Julio Vilmar Gesser
  */

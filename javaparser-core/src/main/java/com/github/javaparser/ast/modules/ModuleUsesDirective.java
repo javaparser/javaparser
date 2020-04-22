@@ -37,7 +37,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A uses directive in module-info.java. <code>uses V.W;</code>
+ * A uses directive in module-info.java. {@code uses V.W;}
  */
 public class ModuleUsesDirective extends ModuleDirective implements NodeWithName<ModuleUsesDirective> {
 

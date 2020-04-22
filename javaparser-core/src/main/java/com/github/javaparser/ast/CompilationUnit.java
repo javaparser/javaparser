@@ -165,9 +165,9 @@ public class CompilationUnit extends Node {
 
     /**
      * Retrieves the list of imports declared in this compilation unit or
-     * <code>null</code> if there is no import.
+     * {@code null} if there is no import.
      *
-     * @return the list of imports or <code>none</code> if there is no import
+     * @return the list of imports or {@code none} if there is no import
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
@@ -181,9 +181,9 @@ public class CompilationUnit extends Node {
     /**
      * Retrieves the package declaration of this compilation unit.<br>
      * If this compilation unit has no package declaration (default package),
-     * <code>Optional.none()</code> is returned.
+     * {@code Optional.none()} is returned.
      *
-     * @return the package declaration or <code>none</code>
+     * @return the package declaration or {@code none}
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
@@ -192,9 +192,9 @@ public class CompilationUnit extends Node {
 
     /**
      * Return the list of top level types declared in this compilation unit.<br>
-     * If there are no types declared, <code>none</code> is returned.
+     * If there are no types declared, {@code none} is returned.
      *
-     * @return the list of types or <code>none</code> null if there is no type
+     * @return the list of types or {@code none} null if there is no type
      * @see AnnotationDeclaration
      * @see ClassOrInterfaceDeclaration
      * @see EnumDeclaration
@@ -205,8 +205,8 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Convenience method that wraps <code>getTypes()</code>.<br>
-     * If <code>i</code> is out of bounds, throws <code>IndexOutOfBoundsException.</code>
+     * Convenience method that wraps {@code getTypes()}.<br>
+     * If {@code i} is out of bounds, throws <code>IndexOutOfBoundsException.</code>
      *
      * @param i the index of the type declaration to retrieve
      */
@@ -216,7 +216,7 @@ public class CompilationUnit extends Node {
 
     /**
      * Sets the list of imports of this compilation unit. The list is initially
-     * <code>null</code>.
+     * {@code null}.
      *
      * @param imports the list of imports
      */
@@ -245,7 +245,7 @@ public class CompilationUnit extends Node {
      * added before. Asterisk imports overrule the other imports within the same package.
      *
      * @param importDeclaration
-     * @return <code>this</code>
+     * @return {@code this}
      */
     public CompilationUnit addImport(ImportDeclaration importDeclaration) {
         if (importDeclaration.isAsterisk()) {
@@ -259,7 +259,7 @@ public class CompilationUnit extends Node {
 
     /**
      * @param importDeclaration
-     * @return <code>true</code>, if the import is implicit
+     * @return {@code true}, if the import is implicit
      */
     private boolean isImplicitImport(ImportDeclaration importDeclaration) {
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
@@ -287,7 +287,7 @@ public class CompilationUnit extends Node {
     /**
      * Sets or clear the package declarations of this compilation unit.
      *
-     * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
+     * @param packageDeclaration the packageDeclaration declaration to set or {@code null} to default package
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
