@@ -33,5 +33,5 @@ jobs:
             - TODO: Describe any new features or enhancements
           ## Option -- trigger as a draft release, followed by the addition of any key release notes and manual approval?
           ## Alternative -- replace the above body with a link to the changelog? We can always edit release after the fact to add in e.g. notes about breaking changes.
-          draft: false
+          draft: true
           prerelease: false
