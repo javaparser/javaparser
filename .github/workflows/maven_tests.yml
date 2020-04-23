@@ -1,7 +1,7 @@
 name: Build and test (using maven)
 
-#on: [push, pull_request]
-on: [pull_request]
+on: [push, pull_request]
+#on: [pull_request]
 
 jobs:
   maven_test:
