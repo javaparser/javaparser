@@ -309,7 +309,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>28.2-jre</version>
+                <version>29.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -344,7 +344,7 @@
             <dependency>
                 <groupId>org.junit-pioneer</groupId>
                 <artifactId>junit-pioneer</artifactId>
-                <version>0.5.4</version>
+                <version>0.5.6</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
