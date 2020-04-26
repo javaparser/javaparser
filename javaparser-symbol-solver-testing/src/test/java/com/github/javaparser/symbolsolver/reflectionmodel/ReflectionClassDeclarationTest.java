@@ -42,14 +42,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
-    private class FieldsTestObject {
-
-        private int a;
-        private String b;
-        private float c;
-
-    }
-
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
     @Test
@@ -297,8 +289,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(FieldsTestObject.class, typeResolver);
-        assertEquals(ImmutableSet.of("a", "b", "c", "this$0"),
+        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(ReflectionTestObject.class, typeResolver);
+        assertEquals(ImmutableSet.of("a", "b", "c"),
                 testObject.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
     }
 
