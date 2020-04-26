@@ -123,10 +123,11 @@ public final class JavaParser {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
 
-            configuration.getPostProcessors().forEach(postProcessor ->
-                    postProcessor.process(result, configuration));
+            configuration.getPostProcessors()
+                    .forEach(postProcessor -> postProcessor.process(result, configuration));
 
-            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
+            result.getProblems()
+                    .sort(PROBLEM_BY_BEGIN_POSITION);
 
             return result;
         } catch (Exception e) {
