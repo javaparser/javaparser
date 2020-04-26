@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -42,6 +41,14 @@ import static java.util.Comparator.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
+
+    private class FieldsTestObject {
+
+        private int a;
+        private String b;
+        private float c;
+
+    }
 
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
@@ -290,9 +297,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
-                arraylist.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(FieldsTestObject.class, typeResolver);
+        assertEquals(ImmutableSet.of("a", "b", "c", "this$0"),
+                testObject.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
     }
 
     ///
