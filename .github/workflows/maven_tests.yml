@@ -1,0 +1,50 @@
+name: Build and test (using maven)
+
+on: [push, pull_request]
+#on: [pull_request]
+
+jobs:
+  maven_test:
+    strategy:
+      ## Optionally cancel all other combinations if one fails
+      fail-fast: false
+      matrix:
+        ## Different OSs have different default line-endings -- test on all combinations.
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
+        ### exclude pre-8 (min development version jdk8)
+        ### exclude post-12 (changes to jdk causes reflection tests to fail due to added methods #1701 )
+        jdk: [8,9,10,11,12] # [8,9,10,11,12,13,14,15-ea]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      ## Checkout the current version of the code from the repo.
+      - name: Checkout latest code
+        uses: actions/checkout@v2
+
+      ## Setup the specified version of Java (includes maven/gradle).
+      - name: Set up JDK ${{ matrix.jdk }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.jdk }}
+
+      ## Given that the build matrix only specifies the major version (configurable), output the precise version used.
+      - name: Echo exact java version being used
+        run: java -version
+
+      ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
+      ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      ## Actually perform the tests. Unsuccessful tests will indicate a failed build.
+      ### -e : show traces where any errors occur
+      ### -B test : run the maven lifecycle stage `test`
+      ### -P AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
+      - name: Test with Maven (incl. slow tests)
+        run: mvn -e -B test -P AlsoSlowTests
