@@ -30,8 +30,8 @@ public class Issue2627Test {
 
     private static Stream<Arguments> arguments_minimal() {
         return Stream.of(
-                Arguments.of("methodA", 195, 196),
-                Arguments.of("methodB", 94, 95),
+                Arguments.of("methodA", 258, 260),
+                Arguments.of("methodB", 163, 164),
                 Arguments.of("methodC", 3, 4)
         );
     }
@@ -74,7 +74,7 @@ public class Issue2627Test {
         int lineCount = cuRange.end.line - cuRange.begin.line;
         System.out.println("lineCount = " + lineCount);
 
-        assertNodeInExpectedLines(cu, 1, 288);
+        assertNodeInExpectedLines(cu, 1, 265);
     }
 
     @Test
