@@ -365,6 +365,11 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     }
 
     @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(ctClass.getModifiers());
+    }
+
+    @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return javassistTypeDeclarationAdapter.getConstructors();
     }

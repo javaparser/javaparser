@@ -203,4 +203,25 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		assertEquals("onlyOuter", resolvedMethodDecl.getName());
 		assertEquals("OuterClass", resolvedMethodDecl.declaringType().getQualifiedName());
 	}
+
+	@Test
+	public void testIssue2495c() {
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("Issue2495");
+
+		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OuterClass.StaticNestedClass");
+		MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
+
+		List<MethodCallExpr> methodCallExprs = methodDeclaration.findAll(MethodCallExpr.class);
+		assertEquals(1, methodCallExprs.size());
+
+		try {
+			methodCallExprs.get(0).resolve();
+			fail("UnsolvedSymbolException not thrown");
+		} catch (UnsolvedSymbolException e) {
+			// expected
+		}
+	}
 }

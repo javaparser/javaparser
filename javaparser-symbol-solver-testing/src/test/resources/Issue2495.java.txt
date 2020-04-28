@@ -1,3 +1,5 @@
+import static java.util.Collections.singletonList;
+
 public class OuterClass {
 
   public void test() {
@@ -16,6 +18,17 @@ public class OuterClass {
 
     public void bar() {
         onlyOuter();
+    }
+  }
+
+  public static class StaticNestedClass {
+
+    public void test() {
+      System.out.println("Test from NestedClass");
+    }
+
+    public void bar() {
+        onlyOuter(); // not valid!
     }
   }
 

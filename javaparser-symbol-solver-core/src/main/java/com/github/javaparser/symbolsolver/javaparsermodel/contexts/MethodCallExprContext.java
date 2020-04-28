@@ -21,15 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -45,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -78,31 +83,47 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
-        ResolvedType typeOfScope;
-        if (wrappedNode.getScope().isPresent()) {
-            Expression scope = wrappedNode.getScope().get();
-            // Consider static method calls
-            if (scope instanceof NameExpr) {
-                String className = ((NameExpr) scope).getName().getId();
-                SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
-                if (ref.isSolved()) {
-                    SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
-                    if (m.isSolved()) {
-                        MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
-                        methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
-                        methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
-                        return Optional.of(methodUsage);
-                    } else {
-                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
-                                "Method '" + name + "' with parameterTypes " + argumentsTypes);
-                    }
+        Optional<Expression> optScope = wrappedNode.getScope();
+        if (!optScope.isPresent()) {
+            List<Node> interestingParentNodes = wrappedNode.stream(Node.TreeTraversal.PARENTS)
+                    .filter(node -> (node instanceof ClassOrInterfaceDeclaration)
+                            || (node instanceof EnumDeclaration)
+                            || (node instanceof ObjectCreationExpr))
+                    .collect(Collectors.toList());
+
+            Context context = this;
+            for (Node parentNode : interestingParentNodes) {
+                context = JavaParserFactory.getContext(parentNode, typeSolver);
+
+                Optional<MethodUsage> res = context.solveMethodAsUsage(name, argumentsTypes);
+                if (res.isPresent()) {
+                    return res;
                 }
             }
 
-            typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
-        } else {
-            typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+            return context.getParent().solveMethodAsUsage(name, argumentsTypes);
         }
+
+        Expression scope = optScope.get();
+        // Consider static method calls
+        if (scope instanceof NameExpr) {
+            String className = ((NameExpr) scope).getName().getId();
+            SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+            if (ref.isSolved()) {
+                SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
+                if (m.isSolved()) {
+                    MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
+                    methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+                    methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+                    return Optional.of(methodUsage);
+                } else {
+                    throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+                            "Method '" + name + "' with parameterTypes " + argumentsTypes);
+                }
+            }
+        }
+
+        ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
 
         // we can replace the parameter types from the scope into the typeParametersValues
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
@@ -152,7 +173,33 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+        Optional<Expression> optScope = wrappedNode.getScope();
+        if (!optScope.isPresent()) {
+            List<Node> interestingParentNodes = wrappedNode.stream(Node.TreeTraversal.PARENTS)
+                    .filter(node -> (node instanceof ClassOrInterfaceDeclaration)
+                            || (node instanceof EnumDeclaration)
+                            || (node instanceof ObjectCreationExpr))
+                    .collect(Collectors.toList());
+
+            Context context = this;
+            for (Node parentNode : interestingParentNodes) {
+                context = JavaParserFactory.getContext(parentNode, typeSolver);
+
+                SymbolReference<ResolvedMethodDeclaration> res = context.solveMethod(name, argumentsTypes, staticOnly);
+                if (res.isSolved()) {
+                    return res;
+                }
+
+                ResolvedType type = JavaParserFacade.get(typeSolver).getTypeOfThisIn(parentNode);
+                if (type.isReferenceType()) {
+                    staticOnly = staticOnly || type.asReferenceType().getTypeDeclaration().isStatic();
+                }
+            }
+
+            return context.getParent().solveMethod(name, argumentsTypes, staticOnly);
+        }
+
+        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(optScope);
 
         if (rrtds.isEmpty()) {
             // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"

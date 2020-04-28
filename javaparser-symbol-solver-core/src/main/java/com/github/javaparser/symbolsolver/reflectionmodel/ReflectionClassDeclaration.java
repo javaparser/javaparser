@@ -317,6 +317,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(clazz.getModifiers());
+    }
+
+    @Override
     public ReferenceTypeImpl getSuperClass() {
         return reflectionClassAdapter.getSuperClass();
     }

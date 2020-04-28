@@ -39,7 +39,6 @@ import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -157,17 +156,6 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        if (candidateMethods.isEmpty()) {
-            // Search for static imports
-            Optional<CompilationUnitContext> cu = findCompilationUnitContext();
-            if (cu.isPresent()) {
-                SymbolReference<ResolvedMethodDeclaration> parentSolution = cu.get().solveMethod(name, argumentsTypes, staticOnly);
-                if (parentSolution.isSolved()) {
-                    candidateMethods.add(parentSolution.getCorrespondingDeclaration());
-                }
-            }
-        }
-
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false);
@@ -177,20 +165,6 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
-    }
-
-    private Optional<CompilationUnitContext> findCompilationUnitContext() {
-        Context result = context;
-
-        while (result != null) {
-            if (result instanceof CompilationUnitContext) {
-                return Optional.of((CompilationUnitContext) result);
-            }
-
-            result = result.getParent();
-        }
-
-        return Optional.empty();
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {

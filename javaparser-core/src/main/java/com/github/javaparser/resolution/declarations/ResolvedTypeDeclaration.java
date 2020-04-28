@@ -108,6 +108,10 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
         return true;
     }
 
+    default boolean isStatic() {
+        return false;
+    }
+
     /**
      * Is this type declaration corresponding to an anonymous class?
      *

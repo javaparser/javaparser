@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -367,6 +366,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     @Override
     public AccessSpecifier accessSpecifier() {
         return wrappedNode.getAccessSpecifier();
+    }
+
+    @Override
+    public boolean isStatic() {
+        return wrappedNode.isStatic();
     }
 
     @Override
