@@ -1337,6 +1337,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    public void testReplaceStringLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        final String code = "\"asd\"";
+        final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
+        LexicalPreservingPrinter.setup(b);
+
+        assertTrue(b.isStringLiteralExpr());
+        StringLiteralExpr sle = (StringLiteralExpr) b;
+        sle.setValue("REPLACEMENT");
+
+        final String expected = "\"REPLACEMENT\"";
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testReplaceClassName() {
         final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
 
