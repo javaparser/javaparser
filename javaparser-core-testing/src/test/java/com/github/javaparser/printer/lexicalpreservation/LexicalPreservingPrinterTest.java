@@ -1334,4 +1334,21 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.removeComment();
         assertEqualsNoEol("package x;class X{}", LexicalPreservingPrinter.print(cu));
     }
+
+    @Test
+    public void testReplaceClassName() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        final String code = "class A {}";
+        final CompilationUnit b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
+        LexicalPreservingPrinter.setup(b);
+
+        assertEquals(1, b.findAll(ClassOrInterfaceDeclaration.class).size());
+        b.findAll(ClassOrInterfaceDeclaration.class).forEach(coid -> coid.setName("B"));
+
+        final String expected = "class B {}";
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
 }
