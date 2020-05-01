@@ -49,7 +49,7 @@ class DifferenceElementCalculator {
             if (b instanceof CsmToken) {
                 CsmToken childA = (CsmToken)a;
                 CsmToken childB = (CsmToken)b;
-                return childA.getTokenType() == childB.getTokenType();
+                return childA.equals(childB);
             } else if (b instanceof CsmChild) {
                 return false;
             } else if (b instanceof CsmIndent) {

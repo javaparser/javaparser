@@ -51,6 +51,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -1347,6 +1348,23 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         b.findAll(ClassOrInterfaceDeclaration.class).forEach(coid -> coid.setName("B"));
 
         final String expected = "class B {}";
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceIntLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        final String code = "5";
+        final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
+        LexicalPreservingPrinter.setup(b);
+
+        assertTrue(b.isIntegerLiteralExpr());
+        ((IntegerLiteralExpr) b).setValue("10");
+
+        final String expected = "10";
 
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
