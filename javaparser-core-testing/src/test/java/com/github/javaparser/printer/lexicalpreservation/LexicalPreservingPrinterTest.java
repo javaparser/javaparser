@@ -21,44 +21,20 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.github.javaparser.*;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.OpenIssueTest;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -71,6 +47,19 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -1319,6 +1308,40 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
         assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
     }
+
+    @OpenIssueTest(issueNumber = {2137}, testcasePrNumber = {2186})
+    @Test
+    void issue2137() {
+        String code = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        String expected = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod3() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+
+        ClassOrInterfaceDeclaration type = cu.getClassByName("Foo").get();
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName("mymethod3");
+        methodDeclaration.setType(new VoidType());
+        type.getMembers().add(1, methodDeclaration);
+
+        assertEqualsNoEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+
 
     @Test
     void commentAddedAtTopLevel() {

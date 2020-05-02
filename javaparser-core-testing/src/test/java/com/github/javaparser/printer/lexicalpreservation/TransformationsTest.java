@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.OpenIssueTest;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,6 +37,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.VoidType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -309,4 +311,54 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "}";
         assertEqualsNoEol(expected, s);
     }
+
+
+    @OpenIssueTest(issueNumber = {2137}, testcasePrNumber = {2186})
+    @Test
+    void issue2137() {
+        String code = "public class Foo {" + EOL +
+                "    void mymethod1() {" + EOL +
+                "        value1.something();" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "        value2.something();" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+        String expected1 =  "public class Foo {\n" +
+                "    void mymethod1() {\n" +
+                "        value1.something();\n" +
+                "    }\n" +
+                "    void mymethod2() {\n" +
+                "        value2.something();\n" +
+                "    }\n" +
+                "\n" +
+                "}";
+
+        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(code));
+        assertEqualsNoEol(expected1, LexicalPreservingPrinter.print(cu));
+        LexicalPreservingPrinter.setup(cu);
+
+        ClassOrInterfaceDeclaration type = cu.getClassByName("Foo").get();
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName("mymethod3");
+        methodDeclaration.setType(new VoidType());
+        type.getMembers().add(1, methodDeclaration);
+
+        String expected2 = "public class Foo {" + EOL +
+                EOL +
+                "    void mymethod1() {" + EOL +
+                "        value1.something();" + EOL +
+                "    }" + EOL +
+                "    void mymethod3() {" + EOL +
+                "    }" + EOL +
+                "    void mymethod2() {" + EOL +
+                "        value2.something();" + EOL +
+                "    }" + EOL +
+                EOL +
+                "}";
+
+        assertEqualsNoEol(expected2, LexicalPreservingPrinter.print(cu));
+    }
+
 }

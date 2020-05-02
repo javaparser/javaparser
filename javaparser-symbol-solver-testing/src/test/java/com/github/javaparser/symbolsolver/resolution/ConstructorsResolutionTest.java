@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.OpenIssueTest;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,6 +31,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -241,6 +243,20 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         assertEquals(1, cd.getNumberOfParams());
         assertEquals(ResolvedPrimitiveType.INT, cd.getParam(0).getType());
         assertEquals("java.lang.AbstractStringBuilder", cd.declaringType().getQualifiedName());
+    }
+
+    @OpenIssueTest(issueNumber = {1827}, testcasePrNumber = 1828)
+    @Test
+    public void solveParametrizedParametersConstructor() {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("ParametrizedParametersConstructor");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ParametrizedParametersConstructor");
+        MethodDeclaration fooMethod = Navigator.demandMethod(clazz, "foo");
+        Statement stmt = fooMethod.getBody().get().getStatement(1);
+        ObjectCreationExpr objectCreationExpr = stmt.asExpressionStmt().getExpression().asVariableDeclarationExpr()
+                .getVariable(0).getInitializer().get().asObjectCreationExpr();
+        ResolvedConstructorDeclaration resolvedConstructorDeclaration = objectCreationExpr.resolve();
     }
 
     @Test

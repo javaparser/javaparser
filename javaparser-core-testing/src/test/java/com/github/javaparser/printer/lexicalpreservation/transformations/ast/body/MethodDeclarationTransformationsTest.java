@@ -21,6 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.OpenIssueTest;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -210,6 +212,32 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         assertTransformedToString("void A(){}", it);
     }
 
+
+    @OpenIssueTest(testcasePrNumber = 2009)
+    @Test
+    void wrapMethodBodyIntoAssertThrows() {
+        MethodDeclaration it = consider("void m(){\n" +
+                "    List<Byte> bytes=new ArrayList<>();\n" +
+                "    bytes.add((byte)'a');\n" +
+                "}");
+
+        it.getBody().ifPresent(body -> {
+            Statement statement = StaticJavaParser.parseStatement("assertThrows(IllegalArgumentException.class, ()->"
+                    + body.toString()
+                    + ");\n");
+            NodeList<Statement> statements = new NodeList<>();
+            statements.add(statement);
+            body.setStatements(statements);
+        });
+
+        assertTransformedToString("void m(){\n" +
+                "                assertThrows(IllegalArgumentException.class, () -> {\n" +
+                "                    List<Byte> bytes = new ArrayList<>();\n" +
+                "                    bytes.add((byte) 'a');\n" +
+                "                });\n" +
+                "    }", it);
+    }
+
     @Test
     void removingModifiersWithExistingAnnotationsShort() {
         MethodDeclaration it = consider("@Override public void A(){}");
@@ -244,6 +272,26 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 "}\n", result);
     }
 
+    @OpenIssueTest(testcasePrNumber = 2027)
+    @Test
+    void removingModifiersWithExistingAnnotations_preserveIndentation() {
+        considerCode(
+                "class X {" + EOL +
+                        "  @Test" + EOL +
+                        "  public void testCase() {" + EOL +
+                        "  }" + EOL +
+                        "}" + EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsNoEol("class X {\n" +
+                "  @Test\n" +
+                "  void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
     @Test
     void replacingModifiers() {
         MethodDeclaration it = consider("public void A(){}");
