@@ -764,7 +764,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Walks the AST, calling the consumer for every node, with traversal algorithm "traversal".
-     * <br/>This is the most general walk method. All other walk and findAll methods are based on this.
+     * <br>This is the most general walk method. All other walk and findAll methods are based on this.
      */
     public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
         // Could be implemented as a call to the above walk method, but this is a little more efficient.
@@ -814,7 +814,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Walks the AST, applying the function for every node, with traversal algorithm "traversal". If the function
-     * returns something else than null, the traversal is stopped and the function result is returned. <br/>This is the
+     * returns something else than null, the traversal is stopped and the function result is returned. <br>This is the
      * most general findFirst method. All other findFirst methods are based on this.
      */
     public <T> Optional<T> findFirst(TreeTraversal traversal, Function<Node, Optional<T>> consumer) {
