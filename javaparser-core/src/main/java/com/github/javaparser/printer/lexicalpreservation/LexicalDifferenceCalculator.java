@@ -272,6 +272,10 @@ class LexicalDifferenceCalculator {
             }
             elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString(), text), text));
         } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {
+            // fix #2382:
+            // This method calculates the syntax model _after_ the change has been applied.
+            // If the given change is a PropertyChange, the returned model should
+            // contain the new value, otherwise the original/current value should be used.
             if (change instanceof PropertyChange) {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
                         "\"" + ((PropertyChange) change).getNewValue() + "\""));

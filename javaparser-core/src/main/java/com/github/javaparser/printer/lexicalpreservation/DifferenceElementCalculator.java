@@ -47,6 +47,10 @@ class DifferenceElementCalculator {
             }
         } else if (a instanceof CsmToken) {
             if (b instanceof CsmToken) {
+                // fix #2382:
+                // Tokens are described by their type AND their content
+                // and TokenContentCalculator. By using .equals(), all
+                // three values are compared.
                 CsmToken childA = (CsmToken)a;
                 CsmToken childB = (CsmToken)b;
                 return childA.equals(childB);
