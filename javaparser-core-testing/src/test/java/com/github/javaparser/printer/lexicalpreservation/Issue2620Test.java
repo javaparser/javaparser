@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,23 +52,27 @@ public class Issue2620Test {
     @Test
     public void test() {
         String expected = 
-                "public class Foo { //comment\n" +
-                "  private String b;\n" +
-                "  private String a;\n" +
-                "}\n";
+                "public class Foo { //comment" + EOL +
+                "private String b;" + EOL +
+                EOL +
+                "  private String a;" + EOL +
+                "}";
       
         CompilationUnit cu = StaticJavaParser.parse(
-                "public class Foo { //comment\n" +
-                "  private String a;\n" +
-                "}\n"
+                "public class Foo { //comment" + EOL +
+                "  private String a;" + EOL +
+                "}"
                 );
         LexicalPreservingPrinter.setup(cu);
+        System.out.println("original:\n"+LexicalPreservingPrinter.print(cu));
+        System.out.println("expected:\n"+expected);
         // create a new field declaration
         VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "b");
         FieldDeclaration fd = new FieldDeclaration(new NodeList(Modifier.privateModifier()), variable);
         Optional<ClassOrInterfaceDeclaration> cid = cu.findFirst(ClassOrInterfaceDeclaration.class);
         // add the new variable
         cid.get().getMembers().addFirst(fd);
+        System.out.println("generated:\n"+LexicalPreservingPrinter.print(cu));
         assertTrue(LexicalPreservingPrinter.print(cu).equals(expected));
     }
 }

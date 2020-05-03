@@ -708,6 +708,16 @@ public class Difference {
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 originalIndex++; // Now we can increment
+            } else 
+                // try to manage the case where we want to add an element after an expression which is followed by a comment on the same line
+                // this is not the same case as the one who handles the trailing comments because in this case the node text element is a new line (not a comment)
+                // for exemple : private String a; // this is a
+            if (nodeText.getTextElement(originalIndex).isNewline() && originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment()) {
+                originalIndex++; // insert after new line
+                // We want to adjust the indentation while considering the new element that we added
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
+                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+                originalIndex++; // Now we can increment
             } else {
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
