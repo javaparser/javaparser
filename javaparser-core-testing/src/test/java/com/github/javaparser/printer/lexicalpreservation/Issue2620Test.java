@@ -45,34 +45,44 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public class Issue2620Test {
-    
+
+    private static final String CR = "\r";
+    private static final String LF = "\n";
+    private static final String CRLF = CR + LF;
+
+
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
     @Test
     public void test() {
+        String eol = LF;
+        
         String expected = 
-                "public class Foo { //comment" + EOL +
-                "private String b;" + EOL +
-                EOL +
-                "  private String a;" + EOL +
+                "public class Foo { //comment" + eol +
+                "private String b;" + eol +
+                eol +
+                "  private String a;" + eol +
                 "}";
       
         CompilationUnit cu = StaticJavaParser.parse(
-                "public class Foo { //comment" + EOL +
-                "  private String a;" + EOL +
+                "public class Foo { //comment" + eol +
+                "  private String a;" + eol +
                 "}"
-                );
+        );
         LexicalPreservingPrinter.setup(cu);
         System.out.println("original:\n"+LexicalPreservingPrinter.print(cu));
         System.out.println("expected:\n"+expected);
+        
         // create a new field declaration
         VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "b");
         FieldDeclaration fd = new FieldDeclaration(new NodeList(Modifier.privateModifier()), variable);
         Optional<ClassOrInterfaceDeclaration> cid = cu.findFirst(ClassOrInterfaceDeclaration.class);
+        
         // add the new variable
         cid.get().getMembers().addFirst(fd);
         System.out.println("generated:\n"+LexicalPreservingPrinter.print(cu));
-        assertTrue(LexicalPreservingPrinter.print(cu).equals(expected));
+        
+        assertEquals(expected, LexicalPreservingPrinter.print(cu));
     }
 }
