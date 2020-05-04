@@ -117,9 +117,9 @@ class CompilationUnitTest {
 
     private static Stream<Arguments> cuRangeProvider() {
         return Stream.of(
-                Arguments.of("class X{}", new Position(1, 1), new Position(1, 9)),
-                Arguments.of("class X{}\n", new Position(1, 1), new Position(2, 1)),
-                Arguments.of("class X{}\n\n", new Position(1, 1), new Position(3, 1))
+                Arguments.of("class X{}", new Position(1, 1), new Position(1, 9)),     // PASSES
+                Arguments.of("class X{}\n", new Position(1, 1), new Position(2, 1)),   // FAILS -- actual: (line 1,col 10)
+                Arguments.of("class X{}\n\n", new Position(1, 1), new Position(3, 1))  // FAILS -- actual: (line 2,col 1)
         );
     }
 
