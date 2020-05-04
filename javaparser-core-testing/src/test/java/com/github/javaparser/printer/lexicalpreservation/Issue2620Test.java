@@ -76,13 +76,13 @@ public class Issue2620Test {
         // Note: Expect the platform's EOL character when printing
         // FIXME: Indentation is bad here.
         String expected = "" +
-                "    public class Foo { //comment" + EOL +
-                "    private String newField;" + EOL +
-                "    " + EOL +
-                "    private String a;" + EOL +
-                "        private String b;" + EOL +
-                "        private String c;" + EOL +
-                "        private String d;" + EOL +
+                "    public class Foo { //comment" + eol +
+                "    private String newField;" + eol +
+                "    " + eol +
+                "    private String a;" + eol +
+                "        private String b;" + eol +
+                "        private String c;" + eol +
+                "        private String d;" + eol +
                 "    }";
 
 
@@ -106,8 +106,17 @@ public class Issue2620Test {
         System.out.println("\n\nActual:\n" + actual);
 
 
-        assertEqualsNoEol(expected, actual);
+        assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
+        assertEqualsNoEol(escapeNewlines(expected), escapeNewlines(actual));
         assertEquals(expected, actual, "Failed due to EOL differences.");
     }
 
+    private String escapeNewlines(String input) {
+        return input
+                .replaceAll("\\r", "\\\\r")
+                .replaceAll("\\n", "\\\\n");
+    }
+    private String normaliseNewlines(String input) {
+        return input.replaceAll("\\r\\n|\\r|\\n", "\\\\n");
+    }
 }
