@@ -21,17 +21,24 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompilationUnitTest {
+
     @Test
     void issue578TheFirstCommentIsWithinTheCompilationUnit() {
         CompilationUnit compilationUnit = parse("// This is my class, with my comment\n" +
@@ -56,12 +63,12 @@ class CompilationUnitTest {
     void testGetSourceRootWithBadPackageDeclaration() {
         assertThrows(RuntimeException.class, () -> {
             Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
-        CompilationUnit cu = parse(testFile);
-        cu.getStorage().get().getSourceRoot();
-    });
-        
-        }
+            Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
+            CompilationUnit cu = parse(testFile);
+            cu.getStorage().get().getSourceRoot();
+        });
+
+    }
 
     @Test
     void testGetSourceRootInDefaultPackage() throws IOException {
@@ -72,13 +79,13 @@ class CompilationUnitTest {
         Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
         assertEquals(sourceRoot, sourceRoot1);
     }
-    
+
     @Test
     void testGetPrimaryTypeName() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
-        
+
         assertEquals("PrimaryType", cu.getPrimaryTypeName().get());
     }
 
@@ -88,13 +95,14 @@ class CompilationUnitTest {
 
         assertFalse(cu.getPrimaryTypeName().isPresent());
     }
+
     @Test
     void testGetPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
 
-        assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
+        assertEquals("PrimaryType", cu.getPrimaryType().get().getNameAsString());
     }
 
     @Test
@@ -104,6 +112,25 @@ class CompilationUnitTest {
         CompilationUnit cu = parse(testFile);
 
         assertFalse(cu.getPrimaryType().isPresent());
+    }
+
+
+    private static Stream<Arguments> cuRangeProvider() {
+        return Stream.of(
+                Arguments.of("class X{}", new Position(1, 1), new Position(1, 9)),
+                Arguments.of("class X{}\n", new Position(1, 1), new Position(2, 1)),
+                Arguments.of("class X{}\n\n", new Position(1, 1), new Position(3, 1))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("cuRangeProvider")
+    void test(String x, Position expectedRangeBegin, Position expectedRangeEnd) {
+        final CompilationUnit cu = parse(x);
+        final Range range = cu.getRange().get();
+
+        assertEquals(expectedRangeBegin, range.begin);
+        assertEquals(expectedRangeEnd, range.end);
     }
 
 }
