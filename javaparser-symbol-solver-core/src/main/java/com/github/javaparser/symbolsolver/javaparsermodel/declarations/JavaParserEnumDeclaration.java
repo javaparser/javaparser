@@ -423,22 +423,26 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedParameterDeclaration getParam(int i) {
-            return new ResolvedParameterDeclaration() {
-                @Override
-                public String getName() {
-                    return "name";
-                }
+            if (i == 0) {
+                return new ResolvedParameterDeclaration() {
+                    @Override
+                    public String getName() {
+                        return "name";
+                    }
 
-                @Override
-                public ResolvedType getType() {
-                    return new ReferenceTypeImpl(typeSolver.solveType("java.lang.String"), typeSolver);
-                }
+                    @Override
+                    public ResolvedType getType() {
+                        return new ReferenceTypeImpl(typeSolver.solveType("java.lang.String"), typeSolver);
+                    }
 
-                @Override
-                public boolean isVariadic() {
-                    return false;
-                }
-            };
+                    @Override
+                    public boolean isVariadic() {
+                        return false;
+                    }
+                };
+            }
+
+            throw new IllegalArgumentException("Invalid parameter index!");
         }
 
         public MethodUsage getUsage(Node node) {
