@@ -83,9 +83,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
         JavaParserClassDeclaration that = (JavaParserClassDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -96,8 +94,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     @Override
     public String toString() {
         return "JavaParserClassDeclaration{" +
-               "wrappedNode=" + wrappedNode +
-               '}';
+                "wrappedNode=" + wrappedNode +
+                '}';
     }
 
     ///
@@ -241,7 +239,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             return true;
         }
         ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-        if (superclass != null) {
+        if (superclass != null && superclass != this) {
             if (superclass.canBeAssignedTo(other)) {
                 return true;
             }
@@ -432,8 +430,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
-                                                              .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
-                                                              .collect(Collectors.toList());
+                .stream()
+                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
+                .collect(Collectors.toList());
+
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
     }
 }

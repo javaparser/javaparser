@@ -31,7 +31,7 @@ import java.util.HashSet;
  * <p>
  * Unescapes escaped chars in strings.
  */
-public class StringEscapeUtils {
+public final class StringEscapeUtils {
 
     private StringEscapeUtils() {
     }
@@ -65,9 +65,9 @@ public class StringEscapeUtils {
      * For example, it will turn a sequence of {@code '\'} and
      * {@code 'n'} into a newline character, unless the {@code '\'}
      * is preceded by another {@code '\'}.</p>
-     *
+     * <p>
      * This can be replaced by String::translateEscapes in JDK 13
-     * 
+     *
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
@@ -75,45 +75,53 @@ public class StringEscapeUtils {
         return UNESCAPE_JAVA.translate(input);
     }
 
-    private static final String[][] JAVA_CTRL_CHARS_UNESCAPE = {
+    public static String unescapeJavaTextBlock(final String input) {
+        return UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
+    }
+
+    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][]{
             {"\\b", "\b"},
             {"\\n", "\n"},
             {"\\t", "\t"},
             {"\\f", "\f"},
-            {"\\r", "\r"}
-    };
+            {"\\r", "\r"}});
 
-    private static final String[][] JAVA_CTRL_CHARS_ESCAPE = {
+    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][]{
             {"\b", "\\b"},
             {"\n", "\\n"},
             {"\t", "\\t"},
             {"\f", "\\f"},
-            {"\r", "\\r"}
-    };
+            {"\r", "\\r"}});
 
-    private static final CharSequenceTranslator ESCAPE_JAVA =
-            new AggregateTranslator(
-                    new LookupTranslator(
-                            new String[][]{
-                                    {"\"", "\\\""},
-                                    {"\\", "\\\\"},
-                            }),
-                    new LookupTranslator(JAVA_CTRL_CHARS_ESCAPE.clone())
-            );
+    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
+            new LookupTranslator(
+                    new String[][]{
+                            {"\"", "\\\""},
+                            {"\\", "\\\\"},
+                    }),
+            JAVA_CTRL_CHARS_ESCAPE);
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA =
-            new AggregateTranslator(
-                    new OctalUnescaper(),
-                    new UnicodeUnescaper(),
-                    new LookupTranslator(JAVA_CTRL_CHARS_UNESCAPE.clone()),
-                    new LookupTranslator(
-                            new String[][]{
-                                    {"\\\\", "\\"},
-                                    {"\\\"", "\""},
-                                    {"\\'", "'"},
-                                    {"\\", ""}
-                            })
-            );
+    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(new String[][]{
+                    {"\\\\", "\\"},
+                    {"\\\"", "\""},
+                    {"\\'", "'"},
+                    {"\\", ""}}));
+
+    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(new String[][]{
+                    {"\\\\", "\\"},
+                    {"\\\"", "\""},
+                    {"\\'", "'"},
+                    {"\\", ""},
+                    {"\\s", " "},
+                    {"\\\n", ""}}));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -138,7 +146,7 @@ public class StringEscapeUtils {
          * @return int count of codepoints consumed
          * @throws IOException if and only if the Writer produces an IOException
          */
-        public abstract int translate(CharSequence input, int index, Writer out) throws IOException;
+        protected abstract int translate(CharSequence input, int index, Writer out) throws IOException;
 
         /**
          * Helper for non-Writer usage.
@@ -146,7 +154,7 @@ public class StringEscapeUtils {
          * @param input CharSequence to be translated
          * @return String output of translation
          */
-        public final String translate(final CharSequence input) {
+        private String translate(final CharSequence input) {
             if (input == null) {
                 return null;
             }
@@ -168,7 +176,7 @@ public class StringEscapeUtils {
          * @param out Writer to translate the text to
          * @throws IOException if and only if the Writer produces an IOException
          */
-        public final void translate(final CharSequence input, final Writer out) throws IOException {
+        private void translate(final CharSequence input, final Writer out) throws IOException {
             if (out == null) {
                 throw new IllegalArgumentException("The Writer must not be null");
             }
@@ -201,21 +209,6 @@ public class StringEscapeUtils {
                 }
             }
         }
-
-        /**
-         * Helper method to create a merger of this translator with another set of
-         * translators. Useful in customizing the standard functionality.
-         *
-         * @param translators CharSequenceTranslator array of translators to merge with this one
-         * @return CharSequenceTranslator merging this translator with the others
-         */
-        public final CharSequenceTranslator with(final CharSequenceTranslator... translators) {
-            final CharSequenceTranslator[] newArray = new CharSequenceTranslator[translators.length + 1];
-            newArray[0] = this;
-            System.arraycopy(translators, 0, newArray, 1, translators.length);
-            return new AggregateTranslator(newArray);
-        }
-
     }
 
     /**
@@ -241,7 +234,7 @@ public class StringEscapeUtils {
          *
          * @param lookup CharSequence[][] table of size [*][2]
          */
-        public LookupTranslator(final CharSequence[]... lookup) {
+        private LookupTranslator(final CharSequence[]... lookup) {
             lookupMap = new HashMap<>();
             prefixSet = new HashSet<>();
             int _shortest = Integer.MAX_VALUE;
@@ -267,7 +260,7 @@ public class StringEscapeUtils {
          * {@inheritDoc}
          */
         @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+        protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
             // check if translation exists for the input at position index
             if (prefixSet.contains(input.charAt(index))) {
                 int max = longest;
@@ -306,7 +299,7 @@ public class StringEscapeUtils {
          *
          * @param translators CharSequenceTranslator array to aggregate
          */
-        public AggregateTranslator(final CharSequenceTranslator... translators) {
+        private AggregateTranslator(final CharSequenceTranslator... translators) {
             this.translators = translators == null ? null : translators.clone();
         }
 
@@ -316,7 +309,7 @@ public class StringEscapeUtils {
          * {@inheritDoc}
          */
         @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+        protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
             for (final CharSequenceTranslator translator : translators) {
                 final int consumed = translator.translate(input, index, out);
                 if (consumed != 0) {
@@ -346,7 +339,7 @@ public class StringEscapeUtils {
          * {@inheritDoc}
          */
         @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+        protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
             final int remaining = input.length() - index - 1; // how many characters left, ignoring the first \
             final StringBuilder builder = new StringBuilder();
             if (input.charAt(index) == '\\' && remaining > 0 && isOctalDigit(input.charAt(index + 1))) {
@@ -407,7 +400,7 @@ public class StringEscapeUtils {
          * {@inheritDoc}
          */
         @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+        protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
             if (input.charAt(index) == '\\' && index + 1 < input.length() && input.charAt(index + 1) == 'u') {
                 // consume optional additional 'u' chars
                 int i = 2;

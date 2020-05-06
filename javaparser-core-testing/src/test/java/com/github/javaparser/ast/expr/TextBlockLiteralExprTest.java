@@ -166,4 +166,30 @@ class TextBlockLiteralExprTest {
         assertEquals("The quick brown fox  \n" +
                 "jumps over the lazy dog\n", textBlock.translateEscapes());
     }
+
+    @Test
+    void escapeLineTerminator() {
+        TextBlockLiteralExpr textBlock = parseStatement("String text = \"\"\"\n" +
+                "                Lorem ipsum dolor sit amet, consectetur adipiscing \\\n" +
+                "                elit, sed do eiusmod tempor incididunt ut labore \\\n" +
+                "                et dolore magna aliqua.\\\n" +
+                "                \"\"\";").findFirst(TextBlockLiteralExpr.class).get();
+
+        assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing " +
+                "elit, sed do eiusmod tempor incididunt ut labore " +
+                "et dolore magna aliqua.", textBlock.translateEscapes());
+    }
+
+    @Test
+    void escapeSpace() {
+        TextBlockLiteralExpr textBlock = parseStatement("String colors = \"\"\"\n" +
+                "    red  \\s\n" +
+                "    green\\s\n" +
+                "    blue \\s\n" +
+                "    \"\"\";").findFirst(TextBlockLiteralExpr.class).get();
+
+        assertEquals("red   \n" +
+                "green \n" +
+                "blue  \n", textBlock.translateEscapes());
+    }
 }

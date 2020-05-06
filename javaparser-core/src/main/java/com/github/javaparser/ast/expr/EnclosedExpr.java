@@ -36,7 +36,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An expression between ( ).
- * <br/><code>(1+1)</code>
+ * <br>{@code (1+1)}
  *
  * @author Julio Vilmar Gesser
  */
@@ -106,11 +106,6 @@ public class EnclosedExpr extends Expression {
         if (node == null)
             return false;
         return super.remove(node);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public EnclosedExpr removeInner() {
-        return setInner((Expression) null);
     }
 
     @Override

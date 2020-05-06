@@ -322,7 +322,7 @@ public class Difference {
     /**
      * Maps all Removed elements as keys to their corresponding RemovedGroup.
      * A RemovedGroup contains all consecutive Removed elements.
-     * <br/>
+     * <br>
      * Example:
      * <pre>
      * Elements: Kept|Removed1|Removed2|Kept|Removed3|Added|Removed4
@@ -466,6 +466,8 @@ public class Difference {
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
+        } else if (kept.isChild() && ((CsmChild)kept.getElement()).getChild() instanceof Comment ) {
+            diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
             diffIndex++;
             originalIndex++;
