@@ -404,11 +404,25 @@ public class JavaParserFacade {
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
-        List<MethodUsage> methodUsages = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration())
-                .getAllMethods()
-                .stream()
+
+        Set<MethodUsage> allMethods = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods();
+
+        // static methods should match all params
+        List<MethodUsage> methodUsages = allMethods.stream()
+                .filter(it -> it.getDeclaration().isStatic())
                 .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
                 .collect(Collectors.toList());
+
+        if (!paramTypes.isEmpty()) {
+            // instance methods are called on the first param and should match all other params
+            List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+            instanceMethodParamTypes.remove(0); // remove the first one
+
+            methodUsages = allMethods.stream()
+                    .filter(it -> !it.getDeclaration().isStatic())
+                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
+                    .collect(Collectors.toList());
+        }
 
         switch (methodUsages.size()) {
             case 0:
