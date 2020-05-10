@@ -23,12 +23,15 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -373,5 +376,43 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         // check that the expected method declaration equals the resolved method declaration
         assertEquals("SuperClass.isEqualAsStrings(java.lang.Integer, java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
+
+    @Test
+    public void resolveOverloadedMethodReference() {
+        String s =
+                "import java.util.HashSet;\n" +
+                "import java.util.Set;\n" +
+                "import java.util.stream.Collectors;\n" +
+                "\n" +
+                "public class StreamTest {\n" +
+                "    \n" +
+                "    public void streamTest () {\n" +
+                "        Set<Integer> intSet = new HashSet<Integer>() {{\n" +
+                "           add(1);\n" +
+                "           add(2);\n" +
+                "        }};\n" +
+                "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n" +
+                "    }\n" +
+                "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "StreamTest");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "streamTest");
+        MethodReferenceExpr methodReferenceExpr = method.findFirst(MethodReferenceExpr.class).get();
+
+        // resolve method reference expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
+
+        // check that the expected method declaration equals the resolved method declaration
+        assertEquals("java.lang.String.valueOf(java.lang.Object)", resolvedMethodDeclaration.getQualifiedSignature());
+
+        // resolve parent method call (cfr issue #2657)
+        MethodCallExpr methodCallExpr = (MethodCallExpr) methodReferenceExpr.getParentNode().get();
+        ResolvedMethodDeclaration callMethodDeclaration = methodCallExpr.resolve();
+        assertEquals("java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)", callMethodDeclaration.getQualifiedSignature());
+    }
+
 
 }

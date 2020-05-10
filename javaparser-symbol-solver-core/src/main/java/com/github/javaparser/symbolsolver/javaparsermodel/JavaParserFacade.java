@@ -46,6 +46,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
 
@@ -390,7 +391,7 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
-    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
+    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
         if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
             throw new UnsupportedOperationException();
         }
@@ -403,7 +404,12 @@ public class JavaParserFacade {
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
-        List<MethodUsage> methodUsages = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
+        List<MethodUsage> methodUsages = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration())
+                .getAllMethods()
+                .stream()
+                .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
+                .collect(Collectors.toList());
+
         switch (methodUsages.size()) {
             case 0:
                 throw new UnsupportedOperationException();
