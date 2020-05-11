@@ -55,7 +55,7 @@ class Issue1485Test extends AbstractSymbolResolutionTest {
         javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
 
         MethodCallExpr methodCallExpr = unit.findFirst(MethodCallExpr.class, m -> m.getName().getIdentifier().equals("println")).get();
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
