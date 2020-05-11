@@ -541,7 +541,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     MethodUsage functionalMethod = functionalMethodOpt.get();
 
                     ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes()).returnType();
-                    ResolvedType formalType = FunctionalInterfaceLogic.getFunctionalMethod(result).get().returnType();
+                    ResolvedType formalType = functionalMethod.returnType();
 
                     InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
                     inferenceContext.addPair(formalType, actualType);
