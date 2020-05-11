@@ -1,4 +1,22 @@
-Next Release (3.15.19)
+Next Release (Version 3.15.23)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
+
+Version 3.15.22
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/173?closed=1)
+* REVERT: Rollback of upgrade to `ph-javacc-maven-plugin` from v4.1.3 to v4.1.2 
+    _(this undoes the transitive dependency update `parser-generator-cc` from v1.1.2 to v1.1.1, which appears to have isuse with handling tokens longer than the buffer length)_  
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* ADDED: Support resolving an enum's `valueOf` method
+    ([#2652](https://github.com/javaparser/javaparser/pull/2652))
+* FIXED: Fixed build warning -- bnd-maven-plugin flagging missing id 
+    ([#2605](https://github.com/javaparser/javaparser/pull/2605))
+* FIXED: Fixed cases where nodes added after a trailing comment would incorrectly be added to the same line (thus be part of the comment)
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+
+
+Version 3.15.21
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
 
@@ -16,6 +34,14 @@ Next Release (3.15.19)
 * FIXED: The collection strategies now correctly take into account the parser configuration that is passed in via the constructor.
     ([#2619](https://github.com/javaparser/javaparser/pull/2619))
 
+
+Version 3.15.20
+------------------
+_skipped_
+
+Version 3.15.19
+------------------
+_skipped_
 
 Version 3.15.18
 ------------------
