@@ -536,11 +536,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 //We should find out which is the functional method (e.g., apply) and replace the params of the
                 //solveLambdas with it, to derive so the values. We should also consider the value returned by the
                 //lambdas
-                if (FunctionalInterfaceLogic.getFunctionalMethod(result).isPresent()) {
-                    MethodReferenceExpr methodReferenceExpr = node;
+                Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(result);
+                if (functionalMethodOpt.isPresent()) {
+                    MethodUsage functionalMethod = functionalMethodOpt.get();
 
-                    ResolvedType actualType = facade.toMethodUsage(methodReferenceExpr).returnType();
-                    ResolvedType formalType = FunctionalInterfaceLogic.getFunctionalMethod(result).get().returnType();
+                    ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes()).returnType();
+                    ResolvedType formalType = functionalMethod.returnType();
 
                     InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
                     inferenceContext.addPair(formalType, actualType);
