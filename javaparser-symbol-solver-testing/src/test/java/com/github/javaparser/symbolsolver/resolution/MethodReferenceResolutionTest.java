@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -440,11 +441,21 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
 
+        int errorCount = 0;
+
         Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
         for (MethodCallExpr expr : methodCallExpr) {
-            ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println("\t Solved : " + rd.getQualifiedSignature());
+            try {
+                ResolvedMethodDeclaration rd = expr.resolve();
+                System.out.println("\t Solved : " + rd.getQualifiedSignature());
+            } catch (UnsolvedSymbolException e) {
+                System.out.println("\t UNSOLVED: " + expr.toString());
+                e.printStackTrace();
+                errorCount++;
+            }
         }
+
+        assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
     }
 
 }
