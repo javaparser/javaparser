@@ -36,6 +36,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MethodReferenceResolutionTest extends AbstractResolutionTest {
@@ -414,5 +417,34 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals("java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)", callMethodDeclaration.getQualifiedSignature());
     }
 
+
+    @Test
+    public void issue2657Test_StringValueOfInStream() {
+        String s =
+                "import java.util.HashSet;\n" +
+                        "import java.util.Set;\n" +
+                        "import java.util.stream.Collectors;\n" +
+                        "\n" +
+                        "public class StreamTest {\n" +
+                        "    \n" +
+                        "    public void streamTest () {\n" +
+                        "        Set<Integer> intSet = new HashSet<Integer>() {{\n" +
+                        "           add(1);\n" +
+                        "           add(2);\n" +
+                        "        }};\n" +
+                        "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n" +
+                        "    }\n" +
+                        "}";
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+
+        Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
+        for (MethodCallExpr expr : methodCallExpr) {
+            ResolvedMethodDeclaration rd = expr.resolve();
+            System.out.println("\t Solved : " + rd.getQualifiedSignature());
+        }
+    }
 
 }
