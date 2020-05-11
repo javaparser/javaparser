@@ -418,10 +418,10 @@ public class JavaParserFacade {
             List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
             instanceMethodParamTypes.remove(0); // remove the first one
 
-            methodUsages = allMethods.stream()
+            methodUsages.addAll(allMethods.stream()
                     .filter(it -> !it.getDeclaration().isStatic())
                     .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()));
         }
 
         switch (methodUsages.size()) {
