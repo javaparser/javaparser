@@ -27,6 +27,7 @@ public class Issue2627Test {
     private static final String RESOURCE_PATH_STRING_CRLF = "com/github/javaparser/issue_samples/issue_2627/Ops_crlf.java";
     private static final String RESOURCE_PATH_STRING_MINIMAL = "com/github/javaparser/issue_samples/issue_2627/Ops_minimal.java";
     private static final String RESOURCE_PATH_STRING_ORIGINAL = "com/github/javaparser/issue_samples/issue_2627/Ops.java";
+    private static final String RESOURCE_PATH_GROOVY_ORIGINAL = "com/github/javaparser/issue_samples/issue_2627/DefaultStrategy.java";
 
     private static Stream<Arguments> arguments_minimal() {
         return Stream.of(
@@ -41,6 +42,12 @@ public class Issue2627Test {
                 Arguments.of("batchToSpace", 796, 799),
                 Arguments.of("batchToSpaceNd", 911, 914),
                 Arguments.of("placeholder", 3686, 3689)
+        );
+    }
+
+    private static Stream<Arguments> arguments_groovy_original() {
+        return Stream.of(
+                Arguments.of("buildMethod", 180, 193)
         );
     }
 
@@ -142,6 +149,14 @@ public class Issue2627Test {
     @MethodSource("arguments_original")
     public void method_original_lf(String name, int expectedStart, int expectedEnd) throws IOException {
         CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_LF);
+        assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("arguments_groovy_original")
+    public void method_groovy_original(String name, int expectedStart, int expectedEnd) throws IOException {
+        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_GROOVY_ORIGINAL);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
