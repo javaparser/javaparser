@@ -311,7 +311,17 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 .collect(Collectors.toList());
     }
 
-    // Needed by ContextHelper
+
+    /**
+     * Needed by ContextHelper
+     *
+     * An implicitly declared method {@code public static E[] values()}, which returns an array containing the
+     * enum constants of {@code E}, in the same order as they appear in the body of the declaration of E.
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     */
     public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
         private JavaParserEnumDeclaration enumDeclaration;
@@ -396,6 +406,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
     }
 
+
+    /**
+     * Needed by ContextHelper
+     * An implicitly declared method {@code public static E valueOf(String name)}, which returns the
+     * enum constant of {@code E} with the specified name.
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     */
     public static class ValueOfMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
         private JavaParserEnumDeclaration enumDeclaration;
