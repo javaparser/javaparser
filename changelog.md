@@ -14,6 +14,8 @@ Version 3.15.22
     ([#2605](https://github.com/javaparser/javaparser/pull/2605))
 * FIXED: Fixed cases where nodes added after a trailing comment would incorrectly be added to the same line (thus be part of the comment)
     ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* FIXED: Fixed resolving overloaded static method references (e.g. `String::valueOf` in a stream map/filter)
+    ([#2662](https://github.com/javaparser/javaparser/pull/2662))
 
 
 Version 3.15.21
