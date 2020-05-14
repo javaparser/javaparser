@@ -23,14 +23,13 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.utils.Pair;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +46,15 @@ public final class FunctionalInterfaceLogic {
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
-            return getFunctionalMethod(type.asReferenceType().getTypeDeclaration());
+            Optional<MethodUsage> result = getFunctionalMethod(type.asReferenceType().getTypeDeclaration());
+            if (result.isPresent()) {
+                MethodUsage method = result.get();
+                for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamDecl : type.asReferenceType().getTypeParametersMap()) {
+                    method = method.replaceTypeParameter(typeParamDecl.a, typeParamDecl.b);
+                }
+                return Optional.of(method);
+            }
+            return Optional.empty();
         } else {
             return Optional.empty();
         }

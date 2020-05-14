@@ -392,36 +392,36 @@ public class JavaParserFacade {
     }
 
     protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
-        if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
-            throw new UnsupportedOperationException();
-        }
-        TypeExpr typeExpr = (TypeExpr) methodReferenceExpr.getScope();
-        if (!(typeExpr.getType() instanceof ClassOrInterfaceType)) {
-            throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
-        }
-        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new UnsupportedOperationException();
+        Expression scope = methodReferenceExpr.getScope();
+        ResolvedType typeOfScope = getType(methodReferenceExpr.getScope());
+        if (!typeOfScope.isReferenceType()) {
+            throw new UnsupportedOperationException(typeOfScope.getClass().getCanonicalName());
         }
 
-        Set<MethodUsage> allMethods = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods();
+        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration().getAllMethods();
 
-        // static methods should match all params
-        List<MethodUsage> methodUsages = allMethods.stream()
-                .filter(it -> it.getDeclaration().isStatic())
-                .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
-                .collect(Collectors.toList());
+        List<MethodUsage> methodUsages = null;
+        if (scope instanceof TypeExpr) {
+            // static methods should match all params
+            methodUsages = allMethods.stream()
+                    .filter(it -> it.getDeclaration().isStatic())
+                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
+                    .collect(Collectors.toList());
 
-        if (!paramTypes.isEmpty()) {
-            // instance methods are called on the first param and should match all other params
-            List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
-            instanceMethodParamTypes.remove(0); // remove the first one
+            if (!paramTypes.isEmpty()) {
+                // instance methods are called on the first param and should match all other params
+                List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+                instanceMethodParamTypes.remove(0); // remove the first one
 
-            methodUsages.addAll(allMethods.stream()
-                    .filter(it -> !it.getDeclaration().isStatic())
-                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
-                    .collect(Collectors.toList()));
+                methodUsages.addAll(allMethods.stream()
+                        .filter(it -> !it.getDeclaration().isStatic())
+                        .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
+                        .collect(Collectors.toList()));
+            }
+        } else {
+            methodUsages = allMethods.stream()
+                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
+                    .collect(Collectors.toList());
         }
 
         switch (methodUsages.size()) {
