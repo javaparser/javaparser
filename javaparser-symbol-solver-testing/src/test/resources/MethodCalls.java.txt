@@ -31,7 +31,9 @@ class MethodCalls {
 
     void variadicTest(){
         String[] varArg = new String[2];
+        foobar();
         foobar("a");
+        foobar("a", "a");
         foobar(varArg);
     }
 

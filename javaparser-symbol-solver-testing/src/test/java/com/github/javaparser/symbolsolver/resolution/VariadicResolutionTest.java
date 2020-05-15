@@ -103,8 +103,12 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0));
         MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1));
-        assertEquals("int", call1.returnType().describe());
-        assertEquals("void", call2.returnType().describe());
+        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(2));
+        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(3));
+        assertEquals("void", call1.returnType().describe());
+        assertEquals("int", call2.returnType().describe());
+        assertEquals("void", call3.returnType().describe());
+        assertEquals("void", call4.returnType().describe());
     }
 
 }
