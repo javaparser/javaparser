@@ -86,16 +86,6 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       }
     }
 
-    // We want to avoid infinite recursion when a class is using its own method
-    // see issue #75
-    if (candidateMethods.isEmpty()) {
-      SymbolReference<ResolvedMethodDeclaration> parentSolution =
-          getParent().solveMethod(name, argumentsTypes, staticOnly);
-      if (parentSolution.isSolved()) {
-        candidateMethods.add(parentSolution.getCorrespondingDeclaration());
-      }
-    }
-
     // if is interface and candidate method list is empty, we should check the Object Methods
     if (candidateMethods.isEmpty() && myDeclaration.getSuperTypeDeclaration().isInterface()) {
       SymbolReference<ResolvedMethodDeclaration> res =
