@@ -430,11 +430,11 @@ public class JavaParserFacade {
                 }
             }
         } else {
-            List<MethodUsage> methods = allMethods.stream()
-                    .filter(it -> !it.getDeclaration().isStatic())
-                    .collect(Collectors.toList());
+            result = MethodResolutionLogic.findMostApplicableUsage(new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
 
-            result = MethodResolutionLogic.findMostApplicableUsage(methods, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            if (result.isPresent() && result.get().getDeclaration().isStatic()) {
+                throw new RuntimeException("Invalid static method reference " + methodReferenceExpr.getIdentifier());
+            }
         }
 
         if (!result.isPresent()) {
