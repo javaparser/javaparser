@@ -413,13 +413,14 @@ public class JavaParserFacade {
             if (!paramTypes.isEmpty()) {
                 // instance methods are called on the first param and should match all other params
                 List<MethodUsage> instanceMethodUsages = allMethods.stream()
-                        .filter(it -> it.getDeclaration().isStatic())
+                        .filter(it -> !it.getDeclaration().isStatic())
                         .collect(Collectors.toList());
 
                 List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
                 instanceMethodParamTypes.remove(0); // remove the first one
 
-                Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(staticMethodUsages, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver);
+                Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
+                        instanceMethodUsages, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver);
                 if (result.isPresent() && instanceResult.isPresent()) {
                     throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method for " + methodReferenceExpr.getIdentifier());
                 }
