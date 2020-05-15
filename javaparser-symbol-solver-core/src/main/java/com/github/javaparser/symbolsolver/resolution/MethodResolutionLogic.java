@@ -560,13 +560,18 @@ public class MethodResolutionLogic {
             boolean aIsAssignableByB = tdA.isAssignableBy(tdB);
             boolean bIsAssignableByA = tdB.isAssignableBy(tdA);
 
-            // B is more specific
+            // A is more specific
             if (bIsAssignableByA && !aIsAssignableByB) {
                 oneMoreSpecificFound = true;
             }
-            // A is more specific
+            // B is more specific
             if (aIsAssignableByB && !bIsAssignableByA) {
                 return false;
+            }
+
+            // If B is vararg and A is not, A is more specific
+            if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
+                oneMoreSpecificFound = true;
             }
         }
         return oneMoreSpecificFound;
