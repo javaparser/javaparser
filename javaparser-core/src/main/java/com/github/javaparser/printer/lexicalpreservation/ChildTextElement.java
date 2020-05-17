@@ -116,6 +116,11 @@ class ChildTextElement extends TextElement {
     }
 
     @Override
+    public boolean isLiteral() {
+        return false;
+    }
+
+    @Override
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return nodeClass.isInstance(child);
     }
