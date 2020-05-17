@@ -264,7 +264,8 @@ public class MethodResolutionLogic {
         }
         boolean hasVariadicParam = method.getDeclaration().hasVariadicParameter();
         if (method.getNoParams() != argumentsTypes.size()
-                && (!hasVariadicParam || method.getNoParams() - 1 > argumentsTypes.size())) {
+//                && (!hasVariadicParam || method.getNoParams() - 1 > argumentsTypes.size())
+        ) {
             return false;
         }
         for (int i = 0; i < argumentsTypes.size(); i++) {
