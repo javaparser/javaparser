@@ -1453,4 +1453,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testReplaceCharLiteralUnicode() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "char x = 'a';";
+        String expected = "char x = '\\u0000';";
+
+        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
+            charLiteralExpr.setValue("\\u0000");
+        });
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
 }
