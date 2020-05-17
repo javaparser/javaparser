@@ -1483,8 +1483,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "     \"\"\";";
 
         final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
-            charLiteralExpr.setValue("\n    REPLACEMENT\n    ");
+        b.findAll(TextBlockLiteralExpr.class).forEach(textblockLiteralExpr -> {
+            textblockLiteralExpr.setValue("\n     REPLACEMENT\n     ");
         });
 
         final String actual = LexicalPreservingPrinter.print(b);
