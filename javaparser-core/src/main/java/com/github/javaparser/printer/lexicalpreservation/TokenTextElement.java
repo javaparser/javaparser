@@ -125,6 +125,11 @@ class TokenTextElement extends TextElement {
     public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
     }
+
+    @Override
+    public boolean isLiteral() {
+        return getToken().getCategory().isLiteral();
+    }
     
     @Override
     public boolean isPrimitive() {
