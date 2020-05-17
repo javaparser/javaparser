@@ -268,8 +268,9 @@ public class MethodResolutionLogic {
         ) {
             return false;
         }
-        for (int i = 0; i < argumentsTypes.size(); i++) {
-            ResolvedType expectedType = method.getParamType(i);
+//        for (int i = 0; i < argumentsTypes.size(); i++) {
+        for (int i = 0; i < method.getNoParams(); i++) {
+                ResolvedType expectedType = method.getParamType(i);
 //            ResolvedType expectedType;
 //            boolean reachedVariadicParam = hasVariadicParam && i >= method.getNoParams() - 1;
 //            if (reachedVariadicParam) {
