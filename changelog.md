@@ -1,6 +1,14 @@
 Next Release (Version 3.15.23)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
+* FIXED: Edits to the value of a string value are now correctly handled for use with Lexical Preservation 
+    (PR [#2646](https://github.com/javaparser/javaparser/pull/2646), by [@lemoncurry](https://github.com/lemoncurry))
+* FIXED: Edits to the value of other literal values also now handled 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+* BREAKING CHANGE: Tokens relating to literal values now have the category of `JavaToken.Category.LITERAL` (previously `JavaToken.Category.KEYWORD`) 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+
+
 
 Version 3.15.22
 ------------------
