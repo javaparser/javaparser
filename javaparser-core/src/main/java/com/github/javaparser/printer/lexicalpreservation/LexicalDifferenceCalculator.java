@@ -286,6 +286,7 @@ class LexicalDifferenceCalculator {
                         "\"" + ((StringLiteralExpr) node).getValue() + "\""));
             }
         } else if ((csm instanceof CsmString) && (node instanceof TextBlockLiteralExpr)) {
+            // FIXME: csm should be CsmTextBlock -- See also #2677
             if (change instanceof PropertyChange) {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL,
                         "\"\"\"" + ((PropertyChange) change).getNewValue() + "\"\"\""));
