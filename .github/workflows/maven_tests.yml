@@ -1,7 +1,19 @@
 name: Build and test (using maven)
 
-on: [push, pull_request]
+#on: [push, pull_request]
 #on: [pull_request]
+on:
+  # Trigger the workflow on push to master (ignoring .md only changes)
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+
+  # Trigger the workflow on any pull_request (ignoring .md only changes)
+  pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   maven_test:
