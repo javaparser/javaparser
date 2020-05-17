@@ -47,19 +47,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -1341,17 +1329,32 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
 
         final String code = "\"asd\"";
+        final String expected = "\"REPLACEMENT\"";
+
         final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
-        LexicalPreservingPrinter.setup(b);
 
         assertTrue(b.isStringLiteralExpr());
         StringLiteralExpr sle = (StringLiteralExpr) b;
         sle.setValue("REPLACEMENT");
 
-        final String expected = "\"REPLACEMENT\"";
-
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceStringLiteralWithinStatement() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "String str = \"aaa\";";
+        String expected = "String str = \"REPLACEMENT\";";
+
+        Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(StringLiteralExpr.class).forEach(stringLiteralExpr -> {
+            stringLiteralExpr.setValue("REPLACEMENT");
+        });
+
+        assertEquals(expected, LexicalPreservingPrinter.print(b));
+        assertEquals(expected, b.toString());
     }
 
     @Test
@@ -1376,13 +1379,60 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
 
         final String code = "5";
+        final String expected = "10";
+
         final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
-        LexicalPreservingPrinter.setup(b);
 
         assertTrue(b.isIntegerLiteralExpr());
         ((IntegerLiteralExpr) b).setValue("10");
 
-        final String expected = "10";
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceLongLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "long x = 5L;";
+        String expected = "long x = 10L;";
+
+        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(LongLiteralExpr.class).forEach(longLiteralExpr -> {
+            longLiteralExpr.setValue("10L");
+        });
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceBooleanLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "boolean x = true;";
+        String expected = "boolean x = false;";
+
+        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(BooleanLiteralExpr.class).forEach(booleanLiteralExpr -> {
+            booleanLiteralExpr.setValue(false);
+        });
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceDoubleLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "double x = 5.0;";
+        String expected = "double x = 10.0;";
+
+        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(DoubleLiteralExpr.class).forEach(doubleLiteralExpr -> {
+            doubleLiteralExpr.setValue("10.0");
+        });
 
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
