@@ -1426,12 +1426,28 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     public void testReplaceDoubleLiteral() {
         final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
 
-        String code = "double x = 5.0;";
-        String expected = "double x = 10.0;";
+        String code = "double x = 5.0D;";
+        String expected = "double x = 10.0D;";
 
         final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
         b.findAll(DoubleLiteralExpr.class).forEach(doubleLiteralExpr -> {
-            doubleLiteralExpr.setValue("10.0");
+            doubleLiteralExpr.setValue("10.0D");
+        });
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testReplaceCharLiteral() {
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+
+        String code = "char x = 'a';";
+        String expected = "char x = 'b';";
+
+        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        b.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
+            charLiteralExpr.setValue("b");
         });
 
         final String actual = LexicalPreservingPrinter.print(b);

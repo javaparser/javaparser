@@ -26,6 +26,7 @@ import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -282,6 +283,14 @@ class LexicalDifferenceCalculator {
             } else {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
                         "\"" + ((StringLiteralExpr) node).getValue() + "\""));
+            }
+        } else if ((csm instanceof CsmChar) && (node instanceof CharLiteralExpr)) {
+            if (change instanceof PropertyChange) {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.CHAR,
+                        "'" + ((PropertyChange) change).getNewValue() + "'"));
+            } else {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.CHAR,
+                        "'" + ((CharLiteralExpr) node).getValue() + "'"));
             }
         } else if (csm instanceof CsmMix) {
             CsmMix csmMix = (CsmMix)csm;
