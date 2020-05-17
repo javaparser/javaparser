@@ -1,4 +1,5 @@
 import java.util.List;
+import java.lang.Class;
 
 class MethodCalls {
 
@@ -22,6 +23,10 @@ class MethodCalls {
     int bar2()
     {
         return getSelf().m;
+    }
+
+    void getDeclaredConstructorTest() {
+        Class.forName("").getDeclaredConstructor();
     }
 
     void inheritedInterfaceMethod(){

@@ -264,24 +264,22 @@ public class MethodResolutionLogic {
         }
         boolean hasVariadicParam = method.getDeclaration().hasVariadicParameter();
         if (method.getNoParams() != argumentsTypes.size()
-//                && (!hasVariadicParam || method.getNoParams() - 1 > argumentsTypes.size())
+                && (!hasVariadicParam || method.getNoParams() - 1 > argumentsTypes.size())
         ) {
             return false;
         }
-//        for (int i = 0; i < argumentsTypes.size(); i++) {
-        for (int i = 0; i < method.getNoParams(); i++) {
-                ResolvedType expectedType = method.getParamType(i);
-//            ResolvedType expectedType;
-//            boolean reachedVariadicParam = hasVariadicParam && i >= method.getNoParams() - 1;
-//            if (reachedVariadicParam) {
-//                expectedType = method.getParamType(method.getNoParams() - 1);
-//                boolean argumentIsArrayOrNonSingleValue = !argumentsTypes.get(i).isArray() || method.getNoParams() != argumentsTypes.size();
-//                if (argumentIsArrayOrNonSingleValue) {
-//                    expectedType = expectedType.asArrayType().getComponentType();
-//                }
-//            } else {
-//                expectedType = method.getParamType(i);
-//            }
+        for (int i = 0; i < argumentsTypes.size(); i++) {
+            ResolvedType expectedType;
+            boolean reachedVariadicParam = hasVariadicParam && i >= method.getNoParams() - 1;
+            if (reachedVariadicParam) {
+                expectedType = method.getParamType(method.getNoParams() - 1);
+                boolean argumentIsArray = method.getNoParams() == argumentsTypes.size() && expectedType.isAssignableBy(argumentsTypes.get(i));
+                if (!argumentIsArray) {
+                    expectedType = expectedType.asArrayType().getComponentType();
+                }
+            } else {
+                expectedType = method.getParamType(i);
+            }
             ResolvedType expectedTypeWithoutSubstitutions = expectedType;
             ResolvedType expectedTypeWithInference = method.getParamType(i);
             ResolvedType actualType = argumentsTypes.get(i);
@@ -298,10 +296,10 @@ public class MethodResolutionLogic {
                 ResolvedParameterDeclaration parameter = method.getDeclaration().getParam(i);
                 ResolvedType parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
-//                    // Don't continue if a vararg parameter is reached and there are no arguments left
-//                    if (argumentsTypes.size() == j) {
-//                        break;
-//                    }
+                    // Don't continue if a vararg parameter is reached and there are no arguments left
+                    if (argumentsTypes.size() == j) {
+                        break;
+                    }
                     parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(j), parameterType, derivedValues);
@@ -574,10 +572,10 @@ public class MethodResolutionLogic {
                 return false;
             }
 
-//            // If B is vararg and A is not, A is more specific
-//            if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
-//                oneMoreSpecificFound = true;
-//            }
+            // If B is vararg and A is not, A is more specific
+            if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
+                oneMoreSpecificFound = true;
+            }
         }
         return oneMoreSpecificFound;
     }
