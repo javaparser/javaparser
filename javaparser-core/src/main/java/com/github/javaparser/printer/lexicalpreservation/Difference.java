@@ -412,6 +412,9 @@ public class Difference {
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
+        } else if (originalElement.isLiteral()) {
+            nodeText.removeElement(originalIndex);
+            diffIndex++;
         } else if (removed.isPrimitiveType()) {
             if (originalElement.isPrimitive()) {
                 nodeText.removeElement(originalIndex);
