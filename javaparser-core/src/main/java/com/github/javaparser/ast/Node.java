@@ -21,6 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
+import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -401,9 +402,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }
     }
 
-    public static final int ABSOLUTE_BEGIN_LINE = -1;
+    /**
+     * @deprecated Use {@link Position#ABSOLUTE_BEGIN_LINE}
+     */
+    @Deprecated
+    public static final int ABSOLUTE_BEGIN_LINE = Position.ABSOLUTE_BEGIN_LINE;
 
-    public static final int ABSOLUTE_END_LINE = -2;
+
+    /**
+     * @deprecated Use {@link Position#ABSOLUTE_END_LINE}
+     */
+    @Deprecated
+    public static final int ABSOLUTE_END_LINE = Position.ABSOLUTE_END_LINE;
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
         findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
