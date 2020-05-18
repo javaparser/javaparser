@@ -418,7 +418,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals("java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)", callMethodDeclaration.getQualifiedSignature());
     }
 
-
     @Test
     public void issue2657Test_StringValueOfInStream() {
         String s =
@@ -458,4 +457,37 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
     }
 
+    @Test
+    public void instanceMethodReferenceTest() {
+        // Cfr. #2666
+        String s =
+                "import java.util.stream.Stream;\n" +
+                        "import java.util.List;\n" +
+                "\n" +
+                "public class StreamTest {\n" +
+                "\n" +
+                "    public void streamTest() {\n" +
+                "        String[] arr = {\"1\", \"2\", \"3\", \"\", null};\n" +
+                        "List<String> list = null;\n" +
+                "        list.stream().filter(this::isNotEmpty).forEach(s -> System.out.println(s));\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean isNotEmpty(String s) {\n" +
+                "        return s != null && s.length() > 0;\n" +
+                "    }\n" +
+                "}\n";
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
+
+        int errorCount = 0;
+
+        for (MethodCallExpr expr : methodCallExpr) {
+            ResolvedMethodDeclaration rd = expr.resolve();
+            System.out.println("\t Solved : " + rd.getQualifiedSignature());
+        }
+
+        assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
 }
