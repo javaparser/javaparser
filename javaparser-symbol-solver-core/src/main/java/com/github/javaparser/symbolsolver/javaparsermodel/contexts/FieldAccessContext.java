@@ -93,7 +93,9 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return Optional.empty();
             }
         } else {
-            return getParent().solveSymbolAsValue(name);
+            return getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveSymbolAsValue(name);
         }
     }
 

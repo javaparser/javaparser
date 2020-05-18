@@ -25,7 +25,12 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -47,7 +52,11 @@ import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -74,7 +83,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
     }
 
     @Override
@@ -178,10 +187,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         try {
-            ResolvedReferenceType superClass = getSuperClass();
-            if (superClass != null) {
-                ancestors.add(superClass);
-            }
+            getSuperClass().ifPresent(superClass -> ancestors.add(superClass));
         } catch (UnsolvedSymbolException e) {
             if (!acceptIncompleteList) {
                 // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
@@ -219,17 +225,26 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         }
 
         // add the method declaration of the superclass to the candidates, if present
-        SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic
-                .solveMethodInType(getSuperClass().getTypeDeclaration(), name, argumentsTypes, staticOnly);
-        if (superClassMethodRef.isSolved()) {
-            candidates.add(superClassMethodRef.getCorrespondingDeclaration());
+        if (getSuperClass().isPresent()) {
+            SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
+                    getSuperClass().get().getTypeDeclaration(),
+                    name,
+                    argumentsTypes,
+                    staticOnly
+            );
+            if (superClassMethodRef.isSolved()) {
+                candidates.add(superClassMethodRef.getCorrespondingDeclaration());
+            }
         }
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef =
-                    MethodResolutionLogic.solveMethodInType(interfaceRef.getTypeDeclaration(), name, argumentsTypes,
-                                                            staticOnly);
+            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
+                    interfaceRef.getTypeDeclaration(),
+                    name,
+                    argumentsTypes,
+                    staticOnly
+            );
             if (interfaceMethodRef.isSolved()) {
                 candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
             }
@@ -309,17 +324,23 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     }
 
     @Override
-    public ResolvedReferenceType getSuperClass() {
+    public Optional<ResolvedReferenceType> getSuperClass() {
         try {
-            if (ctClass.getClassFile().getSuperclass() == null) {
-                return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+            if ("java.lang.Object".equals(ctClass.getClassFile().getName())) {
+                // If this is java.lang.Object, ignore the presence of any superclass
+                return Optional.empty();
             }
             if (ctClass.getGenericSignature() == null) {
-                return new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())), typeSolver);
+                // If generic signature is missing...? TODO: Add explanation here...
+                return Optional.of(new ReferenceTypeImpl(
+                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName( ctClass.getClassFile().getSuperclass())),
+                        typeSolver
+                ));
             }
 
+            // TODO: Add an explanation here...
             SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-            return JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType();
+            return Optional.ofNullable(JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }

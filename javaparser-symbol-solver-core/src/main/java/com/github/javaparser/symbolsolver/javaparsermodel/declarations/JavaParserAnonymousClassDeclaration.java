@@ -26,7 +26,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -40,7 +45,11 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -88,7 +97,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
       return Collections.emptyList();
     }
   }
-  
+
   public Context getContext() {
       return JavaParserFactory.getContext(wrappedNode, typeSolver);
   }
@@ -107,16 +116,16 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   protected ResolvedReferenceType object() {
-    return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+    return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
   }
 
   @Override
-  public ResolvedReferenceType getSuperClass() {
+  public Optional<ResolvedReferenceType> getSuperClass() {
     ResolvedReferenceTypeDeclaration superRRTD = superTypeDeclaration.asReferenceType();
     if (superRRTD == null) {
-      throw new RuntimeException("The super ResolvedReferenceTypeDeclaration is not expected to be null");
+      return Optional.empty();
     }
-    return new ReferenceTypeImpl(superRRTD, typeSolver);
+    return Optional.of(new ReferenceTypeImpl(superRRTD, typeSolver));
   }
 
   @Override
@@ -142,15 +151,18 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     return AccessSpecifier.PRIVATE;
   }
 
-  @Override
-  public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-    return
-        ImmutableList.
-            <ResolvedReferenceType>builder()
-            .add(getSuperClass())
-            .addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList))
-            .build();
-  }
+    @Override
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
+        ImmutableList.Builder<ResolvedReferenceType> builder = ImmutableList.builder();
+
+        // Only add the super type if it is present (e.g. java.lang.Object has no super class)
+        getSuperClass().ifPresent(builder::add);
+
+        // All all ancestors of the super type..? TODO: Does this need to be wrapped in a presence check?
+        builder.addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList));
+
+        return builder.build();
+    }
 
   @Override
   public List<ResolvedFieldDeclaration> getAllFields() {
@@ -160,12 +172,14 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
             .stream()
             .flatMap(field ->
                          field.getVariables().stream()
-                              .map(variable -> new JavaParserFieldDeclaration(variable,
-                                                                              typeSolver)))
+                              .map(variable -> new JavaParserFieldDeclaration(variable, typeSolver)))
             .collect(Collectors.toList());
 
-    List<ResolvedFieldDeclaration> superClassFields =
-        getSuperClass().getTypeDeclaration().getAllFields();
+
+    List<ResolvedFieldDeclaration> superClassFields = getSuperClass()
+            .orElseThrow(() -> new RuntimeException("super class unexpectedly empty"))
+            .getTypeDeclaration()
+            .getAllFields();
 
     List<ResolvedFieldDeclaration> interfaceFields =
         getInterfaces().stream()

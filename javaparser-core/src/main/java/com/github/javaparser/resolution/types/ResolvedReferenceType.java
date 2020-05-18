@@ -32,10 +32,14 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -294,6 +298,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     /**
      * Corresponding TypeDeclaration
+     * TODO: Convert to Optional
      */
     public final ResolvedReferenceTypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
@@ -504,4 +509,20 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);
+
+
+    /**
+     * We don't make this _ex_plicit in the data representation because that would affect codegen
+     * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
+     *
+     * @return true, if this represents {@code java.lang.Object}
+     * @see ResolvedReferenceTypeDeclaration#isJavaLangObject()
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
+     */
+    public boolean isJavaLangObject() {
+        return this.isReferenceType()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+    }
+
 }

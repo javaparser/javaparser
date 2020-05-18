@@ -88,6 +88,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look among statically imported values
+        // TODO: Is null check required?
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl.isStatic()) {

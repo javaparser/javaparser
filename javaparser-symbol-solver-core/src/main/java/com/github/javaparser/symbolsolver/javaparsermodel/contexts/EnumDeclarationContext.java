@@ -64,7 +64,9 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         }
 
         // then to parent
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override

@@ -143,12 +143,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        Context parentContext = getParent();
+        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
         return parentContext.solveSymbolAsValue(name);
     }
 
@@ -161,7 +163,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // we don't make this _ex_plicit in the data representation because that would affect codegen
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
+            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
         }
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {

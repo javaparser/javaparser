@@ -104,16 +104,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        Context parent = getParent();
-        if (parent == null) {
+        Optional<Context> optionalParent = getParent();
+        if (!optionalParent.isPresent()) {
             return Optional.empty();
-        } else {
-            return parent.solveGenericType(name);
         }
+        return optionalParent.get().solveGenericType(name);
     }
 
     @Override
-    public final Context getParent() {
+    public final Optional<Context> getParent() {
         Node parent = wrappedNode.getParentNode().orElse(null);
         if (parent instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) parent;
@@ -122,6 +121,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 for (Expression expression : parentCall.getArguments()) {
                     if (expression == wrappedNode) {
                         found = true;
+                        break;
                     }
                 }
             }
@@ -130,7 +130,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 while (notMethod instanceof MethodCallExpr) {
                     notMethod = demandParentNode(notMethod);
                 }
-                return JavaParserFactory.getContext(notMethod, typeSolver);
+                return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
             }
         }
         Node notMethod = parent;
@@ -138,9 +138,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             notMethod = notMethod.getParentNode().orElse(null);
         }
         if (notMethod == null) {
-            return null;
+            return Optional.empty();
         }
-        return JavaParserFactory.getContext(notMethod, typeSolver);
+        return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
     }
 
     ///

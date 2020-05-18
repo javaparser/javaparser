@@ -70,7 +70,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             .filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic()))
             .collect(Collectors.toList());
 
-    if (!Object.class.getCanonicalName().equals(myDeclaration.getQualifiedName())) {
+    if (!myDeclaration.isJavaLangObject()) {
       for (ResolvedReferenceType ancestor : myDeclaration.getAncestors()) {
         SymbolReference<ResolvedMethodDeclaration> res =
             MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(),
@@ -90,7 +90,9 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     // see issue #75
     if (candidateMethods.isEmpty()) {
       SymbolReference<ResolvedMethodDeclaration> parentSolution =
-          getParent().solveMethod(name, argumentsTypes, staticOnly);
+          getParent()
+                  .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                  .solveMethod(name, argumentsTypes, staticOnly);
       if (parentSolution.isSolved()) {
         candidateMethods.add(parentSolution.getCorrespondingDeclaration());
       }
@@ -184,8 +186,10 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         // just continue using the next ancestor
       }
     }
-    
-    return getParent().solveType(name);
+
+    return getParent()
+            .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+            .solveType(name);
   }
 
   @Override
@@ -196,7 +200,9 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       return SymbolReference.solved(myDeclaration.getVisibleField(name));
     }
 
-    return getParent().solveSymbol(name);
+    return getParent()
+            .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+            .solveSymbol(name);
   }
 
 }

@@ -32,6 +32,9 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
  */
 public interface NodeWithExtends<N extends Node> {
 
+    /**
+     * @return All extended types, through to (but excluding java.lang.Object)
+     */
     NodeList<ClassOrInterfaceType> getExtendedTypes();
 
     void tryAddImportToParentCompilationUnit(Class<?> clazz);

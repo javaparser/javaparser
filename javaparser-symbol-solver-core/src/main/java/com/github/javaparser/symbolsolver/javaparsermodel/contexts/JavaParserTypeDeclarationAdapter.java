@@ -91,7 +91,14 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Look into extended classes and implemented interfaces
         ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
-        return ((type != null) ? SymbolReference.solved(type) : context.getParent().solveType(name));
+        if (type != null) {
+            return SymbolReference.solved(type);
+        }
+
+        // Else check parents
+        return context.getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     /**
@@ -164,7 +171,9 @@ public class JavaParserTypeDeclarationAdapter {
         // This is relevant e.g. with nested classes.
         // Note that we want to avoid infinite recursion when a class is using its own method - see issue #75
         if (candidateMethods.isEmpty()) {
-            SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, staticOnly);
+            SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveMethod(name, argumentsTypes, staticOnly);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }

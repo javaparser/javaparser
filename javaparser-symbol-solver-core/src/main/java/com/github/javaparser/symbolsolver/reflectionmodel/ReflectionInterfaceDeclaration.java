@@ -192,7 +192,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        if (other.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (other.isJavaLangObject()) {
+            // Everything can be assigned to {@code java.lang.Object}
             return true;
         }
 

@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,12 +96,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return !this.isPrimitive();
         }
         // everything is assignable to Object except void
-        if (!other.isVoid() && this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (!other.isVoid() && this.isJavaLangObject()) {
             return true;
         }
         // consider boxing
         if (other.isPrimitive()) {
-            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            if (this.isJavaLangObject()) {
                 return true;
             } else {
                 // Check if 'other' can be boxed to match this type
@@ -136,7 +137,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         } else if (other.isConstraint()){
             return isAssignableBy(other.asConstraintType().getBound());
         } else if (other.isWildcard()) {
-            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            if (this.isJavaLangObject()) {
                 return true;
             } else if (other.asWildcard().isExtends()) {
                 return isAssignableBy(other.asWildcard().getBoundedType());
@@ -203,13 +204,36 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .collect(Collectors.toList());
 
         // Avoid repetitions of Object
-        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-        ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ResolvedReferenceType objectRef = create(objectType);
-        ancestors.add(objectRef);
+        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+        ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
+        ancestors.add(create(objectType));
+
         return ancestors;
     }
 
+    private boolean hasSuperClassDifferentToSelf(ResolvedReferenceTypeDeclaration typeDeclaration) {
+        if(!typeDeclaration.isClass()) {
+            // If self is not a class, there is no super class
+            return false;
+        }
+
+        if(!typeDeclaration.asClass().getSuperClass().isPresent()) {
+            // If there is no super class, cannot get super class
+            return false;
+        }
+
+        // Note must compare the qualified name strings because the superclass could contain type typeParametersValues (see javadoc for details)
+        if(Objects.equals(
+                typeDeclaration.asClass().getSuperClass().get().getQualifiedName(),
+                typeDeclaration.asClass().getQualifiedName()
+        )) {
+            // If super class exists, but is the same as self, cannot go "up" (otherwise would lead to infinite loop)
+            return false;
+        }
+
+        // Above checks all pass, thus must be true...
+        return true;
+    }
     public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parametes
 
@@ -220,13 +244,11 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .collect(Collectors.toList());
 
         // Avoid repetitions of Object
-        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-        boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
-                && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
-                        !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName())
-                || this.getTypeDeclaration().asClass().getQualifiedName().equals(Object.class.getCanonicalName()));
-        if (!isClassWithSuperClassOrObject) {
-            ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+
+        // If This is not java.lang.Object, then add it as an implicit super type.
+        if (!this.getTypeDeclaration().isJavaLangObject()) {
+            ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
             ResolvedReferenceType objectRef = create(objectType);
             ancestors.add(objectRef);
         }

@@ -287,7 +287,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             return ref;
         }
 
-        return getContext().getParent().solveType(name);
+        return getContext().getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     @Override

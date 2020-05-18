@@ -163,9 +163,9 @@ public class JavaParserFacade {
             typeDecl = resolvedClassNode.asReferenceType();
         } else {
             // super()
-            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
-            if (superClass != null) {
-                typeDecl = superClass.getTypeDeclaration();
+            Optional<ResolvedReferenceType> superClass = resolvedClassNode.asClass().getSuperClass();
+            if (superClass.isPresent()) {
+                typeDecl = superClass.get().getTypeDeclaration();
             }
         }
         if (typeDecl == null) {

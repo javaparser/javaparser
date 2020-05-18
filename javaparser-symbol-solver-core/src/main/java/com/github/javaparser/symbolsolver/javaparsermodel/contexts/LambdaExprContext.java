@@ -47,7 +47,11 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
@@ -171,7 +175,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbolAsValue(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbolAsValue(name);
     }
 
     @Override
@@ -185,18 +191,23 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return getParent().solveType(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 
     @Override

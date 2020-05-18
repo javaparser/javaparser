@@ -27,8 +27,16 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -45,8 +53,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 class ReferenceTypeTest {
 
@@ -246,10 +259,10 @@ class ReferenceTypeTest {
 
     @Test
     void testGetAllAncestorsConsideringTypeParameters() {
-        assertTrue(linkedListOfString.getAllAncestors().contains(object));
-        assertTrue(linkedListOfString.getAllAncestors().contains(listOfStrings));
-        assertTrue(linkedListOfString.getAllAncestors().contains(collectionOfString));
-        assertFalse(linkedListOfString.getAllAncestors().contains(listOfA));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(object));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(listOfStrings));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(collectionOfString));
+        assertThat(linkedListOfString.getAllAncestors(), not(hasItem(listOfA)));
     }
 
     class Foo {
@@ -333,7 +346,9 @@ class ReferenceTypeTest {
 
         // To debug the following
         List<ResolvedReferenceType> ancestors = right.getAllAncestors();
-        ResolvedReferenceType moreBazzingAncestor = ancestors.stream().filter(a -> a.getQualifiedName().endsWith("Bazzer")).findFirst().get();
+        ResolvedReferenceType moreBazzingAncestor = ancestors.stream()
+                .filter(a -> a.getQualifiedName().endsWith("Bazzer"))
+                .findFirst().get();
 
         assertEquals(true, left.isAssignableBy(right));
 
@@ -410,6 +425,7 @@ class ReferenceTypeTest {
     @Test
     void testGetFieldTypeExisting() {
         class Foo<A> {
+
             List<A> elements;
         }
 
@@ -438,6 +454,7 @@ class ReferenceTypeTest {
     @Test
     void testGetFieldTypeUnexisting() {
         class Foo<A> {
+
             List<A> elements;
         }
 
@@ -641,36 +658,57 @@ class ReferenceTypeTest {
 
     @Test
     void testDirectAncestorsOfClassWithoutSuperClassOrInterfaces() {
-        ResolvedReferenceType buffer = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
-        Set<String> ancestors = buffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertEquals(new HashSet<>(Arrays.asList("java.lang.Object")), ancestors);
+        ResolvedReferenceType buffer = new ReferenceTypeImpl(new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = buffer.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        assertThat(ancestors, equalTo(new HashSet<>(Arrays.asList("java.lang.Object"))));
     }
 
     @Test
     void testDirectAncestorsOfObjectClass() {
-        ResolvedReferenceType object = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        Set<String> ancestors = object.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        ResolvedReferenceType object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        Set<String> ancestors = object.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
         assertEquals(new HashSet<>(), ancestors);
     }
 
     @Test
     void testDirectAncestorsOfClassWithSuperClass() {
-        ResolvedReferenceType charbuffer = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
-        Set<String> ancestors = charbuffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertEquals(new HashSet<>(Arrays.asList("java.lang.CharSequence", "java.lang.Appendable",
-                "java.nio.Buffer", "java.lang.Readable", "java.lang.Comparable<java.nio.CharBuffer>")), ancestors);
+        ResolvedReferenceType charbuffer = new ReferenceTypeImpl(new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = charbuffer.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        assertThat(ancestors, containsInAnyOrder(
+                "java.lang.Object",
+                "java.lang.CharSequence",
+                "java.lang.Appendable",
+                "java.nio.Buffer",
+                "java.lang.Readable",
+                "java.lang.Comparable<java.nio.CharBuffer>"
+        ));
     }
 
     @Test
     void testDirectAncestorsOfClassWithInterfaces() {
-        Set<String> ancestors = string.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertTrue(ancestors.containsAll(Arrays.asList("java.lang.CharSequence",
+        Set<String> ancestors = string.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        assertThat(ancestors, containsInAnyOrder(
+                "java.lang.CharSequence",
                 "java.lang.Object",
                 "java.lang.Comparable<java.lang.String>",
-                "java.io.Serializable")));
+                "java.io.Serializable"
+        ));
     }
 
     @Test

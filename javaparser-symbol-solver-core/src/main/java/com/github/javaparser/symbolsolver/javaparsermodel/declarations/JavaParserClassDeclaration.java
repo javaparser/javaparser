@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -55,14 +54,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     ///
 
     private TypeSolver typeSolver;
-    private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
+    private ClassOrInterfaceDeclaration wrappedNode;
     private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     ///
     /// Constructors
     ///
 
-    public JavaParserClassDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode,
+    public JavaParserClassDeclaration(ClassOrInterfaceDeclaration wrappedNode,
                                       TypeSolver typeSolver) {
         if (wrappedNode.isInterface()) {
             throw new IllegalArgumentException("Interface given");
@@ -173,11 +172,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
-    public ResolvedReferenceType getSuperClass() {
-        if (wrappedNode.getExtendedTypes().isEmpty()) {
-            return object();
+    public Optional<ResolvedReferenceType> getSuperClass() {
+        if(isJavaLangObject()) {
+            // If this is java.lang.Object, it has no super class.
+            return Optional.empty();
+        } else if (wrappedNode.getExtendedTypes().isEmpty()) {
+            // All objects implicitly extend java.lang.Object -- inject it here (only when this isn't java.lang.Object)
+            return Optional.of(object());
         } else {
-            return toReferenceType(wrappedNode.getExtendedTypes().get(0));
+            // Otherwise, return the first ancestor (n.b.: we know it's not empty due to check above).
+            return Optional.of(toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
         }
     }
 
@@ -238,10 +242,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        ResolvedClassDeclaration superclass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
-        if (superclass != null && superclass != this) {
-            if (superclass.canBeAssignedTo(other)) {
-                return true;
+
+        Optional<ResolvedReferenceType> optionalSuperClass = getSuperClass();
+        if(optionalSuperClass.isPresent()) {
+            ResolvedClassDeclaration superclassTypeDeclaration = (ResolvedClassDeclaration) optionalSuperClass.get().getTypeDeclaration();
+            if (superclassTypeDeclaration != null && superclassTypeDeclaration != this) {
+                if (superclassTypeDeclaration.canBeAssignedTo(other)) {
+                    return true;
+                }
             }
         }
 
@@ -282,7 +290,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
 
-        return getContext().getParent().solveType(name);
+        return getContext().getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     @Override
@@ -296,10 +306,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+        if (!this.isJavaLangObject()) {
             ResolvedReferenceType superclass;
             try {
-                superclass = getSuperClass();
+                // TODO: Meaningful presence check on getSuperClass()
+                superclass = getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
             } catch (UnsolvedSymbolException e) {
                 if (acceptIncompleteList) {
                     // in case we could not resolve the super class, we may still be able to resolve (some of) the
@@ -341,8 +352,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         Set<ResolvedMethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
+            if (member instanceof MethodDeclaration) {
+                methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
             }
         }
         return methods;
@@ -360,7 +371,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
      *
      * @return A visitable JavaParser node wrapped by this object.
      */
-    public com.github.javaparser.ast.body.ClassOrInterfaceDeclaration getWrappedNode() {
+    public ClassOrInterfaceDeclaration getWrappedNode() {
         return wrappedNode;
     }
 
@@ -380,15 +391,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+        ResolvedReferenceTypeDeclaration solvedJavaLangObject = typeSolver.getSolvedJavaLangObject();
+        return new ReferenceTypeImpl(solvedJavaLangObject, typeSolver);
     }
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration) member));
+            if (member instanceof TypeDeclaration) {
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((TypeDeclaration) member));
             }
         }
         return res;

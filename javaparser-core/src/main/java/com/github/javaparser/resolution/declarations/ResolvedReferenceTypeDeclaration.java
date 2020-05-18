@@ -274,4 +274,21 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     }
 
     List<ResolvedConstructorDeclaration> getConstructors();
+
+
+    /**
+     * We don't make this _ex_plicit in the data representation because that would affect codegen
+     * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
+     *
+     * @return true, if this represents {@code java.lang.Object}
+     * @see ResolvedReferenceType#isJavaLangObject()
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
+     */
+    default boolean isJavaLangObject() {
+        return this.isClass()
+                && !isAnonymousClass()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+    }
+
 }

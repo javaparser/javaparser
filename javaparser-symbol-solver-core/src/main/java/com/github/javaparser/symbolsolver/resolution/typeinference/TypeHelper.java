@@ -349,7 +349,7 @@ public class TypeHelper {
         // Let P1...Pn be the type parameters of I with corresponding bounds B1...Bn. For all i (1 ≤ i ≤ n),
         // Ti is derived according to the form of Ai:
 
-        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
 
         for (int i=0;i<AIs.size();i++) {
             ResolvedType Ai = AIs.get(i);

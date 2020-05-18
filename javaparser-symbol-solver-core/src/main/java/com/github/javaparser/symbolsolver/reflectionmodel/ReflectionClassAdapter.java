@@ -53,9 +53,10 @@ class ReflectionClassAdapter {
         this.typeDeclaration = typeDeclaration;
     }
 
-    public ReferenceTypeImpl getSuperClass() {
+    public Optional<ReferenceTypeImpl> getSuperClass() {
         if (clazz.getGenericSuperclass() == null) {
-            return null;
+            // There isn't a super class (e.g. when this refers to java.lang.Object)
+            return Optional.empty();
         }
         java.lang.reflect.Type superType = clazz.getGenericSuperclass();
         if (superType instanceof ParameterizedType) {
@@ -63,9 +64,9 @@ class ReflectionClassAdapter {
             List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver);
+            return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver));
         }
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver);
+        return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver));
     }
 
     public List<ResolvedReferenceType> getInterfaces() {
@@ -86,17 +87,18 @@ class ReflectionClassAdapter {
 
     public List<ResolvedReferenceType> getAncestors() {
         List<ResolvedReferenceType> ancestors = new LinkedList<>();
-        if (getSuperClass() != null) {
-            ReferenceTypeImpl superClass = getSuperClass();
+        if (getSuperClass().isPresent()) {
+            ReferenceTypeImpl superClass = getSuperClass().get();
             ancestors.add(superClass);
         } else {
+            // Inject the implicitly added extends java.lang.Object
             ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             ancestors.add(object);
         }
         ancestors.addAll(getInterfaces());
         for (int i = 0; i < ancestors.size(); i++) {
             ResolvedReferenceType ancestor = ancestors.get(i);
-            if (ancestor.hasName() && ancestor.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            if (ancestor.hasName() && ancestor.isJavaLangObject()) {
                 ancestors.remove(i);
                 i--;
             }
