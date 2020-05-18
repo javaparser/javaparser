@@ -513,4 +513,9 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     public ResolvedType visit(TextBlockLiteralExpr node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
+
+    @Override
+    public ResolvedType visit(RecordDeclaration node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
 }

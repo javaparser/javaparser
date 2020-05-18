@@ -233,4 +233,6 @@ public interface GenericVisitor<R, A> {
     R visit(YieldStmt n, A arg);
 
     R visit(TextBlockLiteralExpr n, A arg);
+
+    R visit(RecordDeclaration n, A arg);
 }

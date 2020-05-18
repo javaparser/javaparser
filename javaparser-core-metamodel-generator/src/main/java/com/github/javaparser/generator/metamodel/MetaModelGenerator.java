@@ -125,6 +125,7 @@ public class MetaModelGenerator {
         add(ClassOrInterfaceDeclaration.class);
         add(ConstructorDeclaration.class);
         add(EnumConstantDeclaration.class);
+        add(RecordDeclaration.class);
         add(EnumDeclaration.class);
         add(FieldDeclaration.class);
         add(InitializerDeclaration.class);

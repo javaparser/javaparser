@@ -336,4 +336,19 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.empty();
     }
+
+    public boolean isRecordDeclaration() {
+        return false;
+    }
+
+    public RecordDeclaration asRecordDeclaration() {
+        throw new IllegalStateException(f("%s is not an RecordDeclaration", this));
+    }
+
+    public Optional<RecordDeclaration> toRecordDeclaration() {
+        return Optional.empty();
+    }
+
+    public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
+    }
 }

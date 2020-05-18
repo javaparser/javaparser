@@ -92,8 +92,9 @@ public final class JavaParser {
         astParser.setStoreTokens(configuration.isStoreTokens());
         if (configuration.getLanguageLevel() != null) {
             switch (configuration.getLanguageLevel()) {
-                case JAVA_13:
                 case JAVA_14:
+                    astParser.setRecordsSupported();
+                case JAVA_13:
                     astParser.setYieldSupported();
             }
         }

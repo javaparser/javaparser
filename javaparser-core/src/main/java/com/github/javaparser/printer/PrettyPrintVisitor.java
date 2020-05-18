@@ -319,6 +319,42 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(RecordDeclaration n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printer.print("record ");
+
+        n.getName().accept(this, arg);
+
+        printTypeParameters(n.getTypeParameters(), arg);
+
+        if (!n.getImplementedTypes().isEmpty()) {
+            printer.print(" implements ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+
+        printer.println(" {");
+        printer.indent();
+        if (!isNullOrEmpty(n.getMembers())) {
+            printMembers(n.getMembers(), arg);
+        }
+
+        printOrphanCommentsEnding(n);
+
+        printer.unindent();
+        printer.print("}");
+    }
+
+    @Override
     public void visit(final JavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
@@ -622,7 +658,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         n.getValue().accept(this, arg);
     }
-
 
 
     /**
@@ -1818,12 +1853,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             everything.get(everything.size() - commentsAtEnd + i).accept(this, null);
         }
     }
-     private void indentIf(boolean expr){
-        if(expr)
+
+    private void indentIf(boolean expr) {
+        if (expr)
             printer.indent();
-     }
-    private void unindentIf(boolean expr){
-        if(expr)
+    }
+
+    private void unindentIf(boolean expr) {
+        if (expr)
             printer.unindent();
     }
 }

@@ -649,6 +649,8 @@ CompilationUnit CompilationUnit():
                 |
                     module = ModuleDeclaration(modifier)
                 |
+                    tn = RecordDeclaration(modifier)  { types = add(types, tn); }
+                |
                     ";"
                 )
             )
@@ -746,6 +748,27 @@ ModifierHolder Modifiers():
 /*
  * Declaration syntax follows.
  */
+
+RecordDeclaration RecordDeclaration(ModifierHolder modifier):
+{
+    SimpleName name;
+    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyList());
+    NodeList<ClassOrInterfaceType> impList = emptyList();
+    NodeList<BodyDeclaration<?>> members = emptyList();
+    JavaToken begin = modifier.begin;
+}
+{
+    LOOKAHEAD({ getToken(1).image.equals("record") && recordsSupported }) <IDENTIFIER> { begin = orIfInvalid(begin, token());
+ // TODO set token type to RECORD
+ }
+  name = SimpleName()
+  [ typePar = TypeParameters() ]
+  [ impList = ImplementsList() ]
+  members = ClassOrInterfaceBody()
+
+	{ return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, typePar.list, impList, members); }
+}
+
 
 ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {

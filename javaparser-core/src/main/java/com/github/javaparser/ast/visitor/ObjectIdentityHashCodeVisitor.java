@@ -436,4 +436,9 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
         return n.hashCode();
     }
+
+    @Override
+    public Integer visit(final RecordDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
 }

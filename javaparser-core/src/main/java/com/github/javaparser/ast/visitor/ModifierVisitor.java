@@ -1257,4 +1257,25 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final RecordDeclaration n, final A arg) {
+        NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
+        NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setImplementedTypes(implementedTypes);
+        n.setTypeParameters(typeParameters);
+        n.setMembers(members);
+        n.setModifiers(modifiers);
+        n.setName(name);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
 }
