@@ -26,9 +26,7 @@ import com.github.javaparser.ast.expr.UnaryExpr;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.function.Function;
 
 import static java.util.Arrays.*;
@@ -39,7 +37,13 @@ import static java.util.Arrays.*;
  * @author Federico Tomassetti
  */
 public class Utils {
-    public static final String EOL = System.getProperty("line.separator");
+
+    /**
+     * @deprecated Use {@link LineEnding#SYSTEM} if referring to the current host system's line separator,
+     *  else {@link LineEnding#CR} or {@link LineEnding#LF} or {@link LineEnding#CRLF} if referring to a specific style of line separator.
+     */
+    @Deprecated
+    public static final String EOL = LineEnding.SYSTEM.toString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -108,6 +112,7 @@ public class Utils {
     /**
      * @deprecated use screamingToCamelCase
      */
+    @Deprecated
     public static String toCamelCase(String original) {
         return screamingToCamelCase(original);
     }
@@ -268,11 +273,17 @@ public class Utils {
     }
 
     /**
-     * @return content with all kinds of EOL characters replaced by endOfLineCharacter
+     * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
      */
-    public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
-        return content
-                .replaceAll("\\R", endOfLineCharacter);
+    public static String normalizeEolInTextBlock(String content, String desiredEndOfLineCharacter) {
+        return content.replaceAll("\\R", desiredEndOfLineCharacter);
+    }
+
+    /**
+     * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
+     */
+    public static String normalizeEolInTextBlock(String content, LineEnding desiredEndOfLineCharacter) {
+        return content.replaceAll("\\R", desiredEndOfLineCharacter.toString());
     }
 
     /**
