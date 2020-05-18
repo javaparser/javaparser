@@ -21,14 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.Utils.*;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ParseResult.PostProcessor;
 import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
@@ -37,7 +29,19 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.version.*;
+import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.version.Java10PostProcessor;
+import com.github.javaparser.version.Java11PostProcessor;
+import com.github.javaparser.version.Java12PostProcessor;
+import com.github.javaparser.version.Java13PostProcessor;
+import com.github.javaparser.version.Java14PostProcessor;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
 
 /**
  * The configuration that is used by the parser.

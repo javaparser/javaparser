@@ -35,10 +35,20 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.Printable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
-import com.github.javaparser.printer.lexicalpreservation.changes.*;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.printer.lexicalpreservation.changes.Change;
+import com.github.javaparser.printer.lexicalpreservation.changes.ListAdditionChange;
+import com.github.javaparser.printer.lexicalpreservation.changes.ListRemovalChange;
+import com.github.javaparser.printer.lexicalpreservation.changes.ListReplacementChange;
+import com.github.javaparser.printer.lexicalpreservation.changes.NoChange;
+import com.github.javaparser.printer.lexicalpreservation.changes.PropertyChange;
+import com.github.javaparser.utils.LineEnding;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 class LexicalDifferenceCalculator {
 
@@ -123,7 +133,29 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListAddition(element, observableProperty, nodeList, index, nodeAdded);
-        return DifferenceElementCalculator.calculate(original, after);
+
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+
+        // If the container has the line ending specified / detected,
+        if(container.containsData(Node.LINE_ENDING_KEY)) {
+            LineEnding lineEnding = container.getData(Node.LINE_ENDING_KEY);
+            if (lineEnding.isStandardEol()) { // TODO: Is this check necessary?
+                replaceEolTokens(differenceElements, lineEnding);
+            }
+        }
+
+        return differenceElements;
+    }
+
+    private void replaceEolTokens(List<DifferenceElement> differenceElements, LineEnding lineEnding) {
+        for (int i = 0; i < differenceElements.size(); i++) {
+            DifferenceElement differenceElement = differenceElements.get(i);
+            if (differenceElement.isAdded()) {
+                if (differenceElement.getElement() instanceof CsmToken) {
+                    differenceElements.set(i, new Added(CsmElement.newline(lineEnding)));
+                }
+            }
+        }
     }
 
     List<DifferenceElement> calculateListReplacementDifference(ObservableProperty observableProperty, NodeList<?> nodeList, int index, Node newValue) {
@@ -183,7 +215,7 @@ class LexicalDifferenceCalculator {
                 // like this [class // This is my class, with my comment A {}]
                 if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
                     elements.add(new CsmChild(node.getComment().get()));
-                    elements.add(new CsmToken(Kind.EOF.getKind(), Utils.EOL));
+                    elements.add(new CsmToken(Kind.EOF.getKind(), node.getData(Node.LINE_ENDING_KEY).toString()));
                 }
                 elements.add(new CsmChild(child));
             }

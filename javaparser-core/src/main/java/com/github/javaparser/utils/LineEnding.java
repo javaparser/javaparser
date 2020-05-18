@@ -28,8 +28,8 @@ public enum LineEnding {
      */
     SYSTEM(System.getProperty("line.separator")),
     /**
-     * The ARBITRARY line ending can be used where we do not care about the line separator, only that we use the same
-     * one consistently
+     * The ARBITRARY line ending can be used where we do not care about the line separator,
+     * only that we use the same one consistently
      */
     ARBITRARY("\n"),
     /**
@@ -51,6 +51,15 @@ public enum LineEnding {
 
     LineEnding(String text) {
         this.text = text;
+    }
+
+    public boolean isStandardEol() {
+        // Compare based on the strings to allow for e.g. LineEnding.SYSTEM
+        if (equalsString(LineEnding.CR) ||equalsString(LineEnding.LF) || equalsString(LineEnding.CRLF)) {
+            return true;
+        }
+
+        return false;
     }
 
     public String escaped() {
@@ -118,6 +127,10 @@ public enum LineEnding {
     @Override
     public String toString() {
         return text;
+    }
+
+    public boolean equalsString(LineEnding lineEnding) {
+        return text.equals(lineEnding.toString());
     }
 
 }

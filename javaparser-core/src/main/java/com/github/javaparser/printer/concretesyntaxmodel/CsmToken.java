@@ -22,10 +22,10 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.TokenTypes;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.LineEnding;
 
 import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isSpaceOrTab;
@@ -57,7 +57,7 @@ public class CsmToken implements CsmElement {
             content = content.substring(1, content.length() - 1);
         }
         if (isEndOfLineToken(tokenType)) {
-            content = Utils.EOL;
+            content = LineEnding.lookup(this.content).toString();
         } else if (isSpaceOrTab(tokenType)) {
             content = " ";
         }

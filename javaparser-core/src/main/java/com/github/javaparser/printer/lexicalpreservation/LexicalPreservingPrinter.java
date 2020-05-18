@@ -39,8 +39,8 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.utils.LineEnding;
 import com.github.javaparser.utils.Pair;
-import com.github.javaparser.utils.Utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -49,7 +49,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
@@ -143,8 +142,9 @@ public class LexicalPreservingPrinter {
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
 
+                    LineEnding lineEnding = observedNode.getData(Node.LINE_ENDING_KEY);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
-                    nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
+                    nodeText.addToken(index + 1, eolTokenKind(lineEnding), lineEnding.toString());
                 } else if (newValue == null) {
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {

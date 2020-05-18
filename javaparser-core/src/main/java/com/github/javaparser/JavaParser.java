@@ -38,6 +38,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.utils.LineEnding;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -114,6 +115,23 @@ public final class JavaParser {
         assertNotNull(start);
         assertNotNull(provider);
 
+        // FIXME: Surely there's a better way...?
+        StringBuilder sb = new StringBuilder();
+        char[] buffer = new char[1];
+        try {
+            while(provider.read(buffer, 0, 1) != -1) {
+                sb.append(buffer[0]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // FIXME: Surely there's a better way...?
+        String x = sb.toString();
+        provider = new StringProvider(x);
+        LineEnding detectedLineEnding = LineEnding.detect(x);
+
+
         for (PreProcessor preProcessor : configuration.getPreProcessors()) {
             provider = preProcessor.process(provider);
         }
@@ -122,6 +140,10 @@ public final class JavaParser {
         try {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
+
+            resultNode.setData(Node.LINE_ENDING_KEY, detectedLineEnding);
+            resultNode.findAll(Node.class)
+                    .forEach(node -> node.setData(Node.LINE_ENDING_KEY, detectedLineEnding));
 
             configuration.getPostProcessors()
                     .forEach(postProcessor -> postProcessor.process(result, configuration));

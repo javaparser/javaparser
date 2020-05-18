@@ -25,12 +25,12 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.utils.LineEnding;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.github.javaparser.TokenTypes.*;
-import static com.github.javaparser.utils.Utils.EOL;
 
 public interface CsmElement {
 
@@ -99,7 +99,11 @@ public interface CsmElement {
     static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
-        return new CsmToken(eolTokenKind(), EOL);
+        return newline(LineEnding.SYSTEM);
+    }
+
+    static CsmElement newline(LineEnding lineEnding) {
+        return new CsmToken(eolTokenKind(lineEnding), lineEnding.toString());
     }
 
     static CsmElement none() {

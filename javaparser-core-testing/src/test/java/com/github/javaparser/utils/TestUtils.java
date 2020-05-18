@@ -194,13 +194,13 @@ public class TestUtils {
      * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
      */
     public static void assertEqualsNoEol(String expected, String actual) {
-        assertEquals(normalizeEolInTextBlock(expected, EOL), actual);
+        assertEquals(normalizeEolInTextBlock(expected, EOL), normalizeEolInTextBlock(actual, EOL));
     }
 
     /**
      * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
      */
     public static void assertEqualsNoEol(String expected, String actual, String message) {
-        assertEquals(normalizeEolInTextBlock(expected, EOL), actual, message);
+        assertEquals(normalizeEolInTextBlock(expected, EOL), normalizeEolInTextBlock(actual, EOL), message);
     }
 }

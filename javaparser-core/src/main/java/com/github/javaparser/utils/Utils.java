@@ -283,7 +283,7 @@ public class Utils {
      * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
      */
     public static String normalizeEolInTextBlock(String content, LineEnding desiredEndOfLineCharacter) {
-        return content.replaceAll("\\R", desiredEndOfLineCharacter.toString());
+        return normalizeEolInTextBlock(content, desiredEndOfLineCharacter.toString());
     }
 
     /**
