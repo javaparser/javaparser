@@ -75,7 +75,7 @@ public class CommonValidators extends Validators {
                     for (PropertyMetaModel ppm : mm.getAllPropertyMetaModels()) {
                         if (ppm.isNonEmpty()) {
                             if (ppm.isNodeList()) {
-                                NodeList value = (NodeList) ppm.getValue(node);
+                                NodeList<?> value = (NodeList<?>) ppm.getValue(node);
                                 if (value.isEmpty()) {
                                     problemReporter.report(node, "%s.%s can not be empty.", mm.getTypeName(), ppm.getName());
                                 }

@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -55,7 +56,7 @@ class Issue2362Test extends AbstractSymbolResolutionTest {
         JavaParser javaParser = new JavaParser(pc);
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file))).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
         
         ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
         assertEquals(oce.resolve().getSignature(), "InnerClass(int)");

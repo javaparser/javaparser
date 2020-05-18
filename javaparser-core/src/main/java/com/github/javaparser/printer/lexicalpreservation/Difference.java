@@ -21,10 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-
-import java.util.*;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -40,6 +36,10 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+
+import java.util.*;
+
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -322,7 +322,7 @@ public class Difference {
     /**
      * Maps all Removed elements as keys to their corresponding RemovedGroup.
      * A RemovedGroup contains all consecutive Removed elements.
-     * <br/>
+     * <br>
      * Example:
      * <pre>
      * Elements: Kept|Removed1|Removed2|Kept|Removed3|Added|Removed4
@@ -412,6 +412,9 @@ public class Difference {
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
+        } else if (originalElement.isLiteral()) {
+            nodeText.removeElement(originalIndex);
+            diffIndex++;
         } else if (removed.isPrimitiveType()) {
             if (originalElement.isPrimitive()) {
                 nodeText.removeElement(originalIndex);
@@ -466,6 +469,8 @@ public class Difference {
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
+        } else if (kept.isChild() && ((CsmChild)kept.getElement()).getChild() instanceof Comment ) {
+            diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
             diffIndex++;
             originalIndex++;
@@ -659,7 +664,8 @@ public class Difference {
 
         TextElement addedTextElement = added.toTextElement();
         boolean used = false;
-        if (originalIndex > 0 && originalElements.get(originalIndex - 1).isNewline()) {
+        boolean isPreviousElementNewline = (originalIndex > 0) && originalElements.get(originalIndex - 1).isNewline();
+        if (isPreviousElementNewline) {
             List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             for (TextElement e : elements) {
@@ -698,14 +704,32 @@ public class Difference {
 
         if (!used) {
             // Handling trailing comments
-            if(nodeText.numberOfElements() > originalIndex + 1 &&
-                    nodeText.getTextElement(originalIndex).isComment()) {
+            boolean sufficientTokensRemainToSkip = nodeText.numberOfElements() > originalIndex + 2;
+            boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
+            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
+            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
+
+            if (sufficientTokensRemainToSkip && currentIsAComment) {
                 // Need to get behind the comment:
-                originalIndex += 2;
+                originalIndex += 2; // FIXME: Why 2? This comment and the next newline?
                 nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 originalIndex++; // Now we can increment
+            } else if (currentIsNewline && previousIsAComment) {
+                /*
+                 * Manage the case where we want to add an element, after an expression which is followed by a comment on the same line.
+                 * This is not the same case as the one who handles the trailing comments, because in this case the node text element is a new line (not a comment)
+                 * For example : {@code private String a; // this is a }
+                 */
+                originalIndex++; // Insert after the new line which follows this comment.
+
+                // We want to adjust the indentation while considering the new element that we added
+                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
+                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+
+                originalIndex++; // Now we can increment.
             } else {
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
@@ -722,6 +746,10 @@ public class Difference {
         }
 
         diffIndex++;
+    }
+
+    private String tokenDescription(int kind) {
+        return GeneratedJavaParserConstants.tokenImage[kind];
     }
 
     private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {

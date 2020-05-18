@@ -30,9 +30,9 @@ import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
 /**
  * A node that can have type parameters.
  * <pre>
- *     class X {}        --> typeParameters == []
- *     class X&lt;> {}      --> does not occur.
- *     class X&lt;C,D> {}   --> typeParameters = [C,D]
+ *     class X {}        --&gt; typeParameters == []
+ *     class X&lt;&gt; {}      --&gt; does not occur.
+ *     class X&lt;C,D&gt; {}   --&gt; typeParameters = [C,D]
  * </pre>
  */
 public interface NodeWithTypeParameters<N extends Node> {
@@ -55,7 +55,7 @@ public interface NodeWithTypeParameters<N extends Node> {
     }
 
     /**
-     * Adds a type parameter like "X extends Serializable"
+     * Adds a type parameter like {@code X extends Serializable}
      */
     default N addTypeParameter(String typeParameter) {
         return addTypeParameter(parseTypeParameter(typeParameter));

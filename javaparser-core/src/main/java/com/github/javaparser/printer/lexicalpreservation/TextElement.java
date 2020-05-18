@@ -46,6 +46,8 @@ public abstract class TextElement implements TextElementMatcher {
 
     abstract boolean isNode(Node node);
 
+    public abstract boolean isLiteral();
+
     public abstract boolean isWhiteSpace();
 
     public abstract boolean isSpaceOrTab();
@@ -53,11 +55,11 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isNewline();
 
     public abstract boolean isComment();
-    
+
     public abstract boolean isSeparator();
-    
+
     public abstract boolean isIdentifier();
-    
+
     public abstract boolean isPrimitive();
 
     public final boolean isWhiteSpaceOrComment() {
@@ -76,21 +78,18 @@ public abstract class TextElement implements TextElementMatcher {
     abstract Optional<Range> getRange();
 
     /**
-     * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br/>
-     * This can be used to curry another TextElementMatcher.<br/>
+     * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br>
+     * This can be used to curry another TextElementMatcher.<br>
      * e.g. {@code someTextElementMatcher.and(textElement.matchByRange());}
      *
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (TextElement textElement) -> {
-            Optional<Range> range1 = this.getRange();
-            Optional<Range> range2 = textElement.getRange();
-            if (range1.isPresent() && range2.isPresent()) {
-                return range1.get().equals(range2.get());
-            }
-
-            return false;
-        };
+        return (TextElement textElement) ->
+                getRange()
+                        .flatMap(r1 -> textElement.getRange()
+                                .map(r1::equals))
+                        // We're missing range information. This may happen when a node is manually instantiated. Don't be too harsh on that:
+                        .orElse(true);
     }
 }

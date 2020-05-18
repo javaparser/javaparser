@@ -30,7 +30,11 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -45,8 +49,6 @@ import java.util.jar.JarFile;
  * @author Federico Tomassetti
  */
 public class JarTypeSolver implements TypeSolver {
-
-    private static JarTypeSolver instance;
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
@@ -68,13 +70,14 @@ public class JarTypeSolver implements TypeSolver {
         addPathToJar(jarInputStream);
     }
 
+    /**
+     * @deprecated Use of this static method (previously following singleton pattern) is strongly discouraged
+     * and will be removed in a future version. For now, it has been modified to return a new instance to
+     * prevent the IllegalStateException being thrown (as reported in #2547), allowing it to be called multiple times.
+     */
+    @Deprecated
     public static JarTypeSolver getJarTypeSolver(String pathToJar) throws IOException {
-        if (instance == null) {
-            instance = new JarTypeSolver(pathToJar);
-        } else {
-            instance.addPathToJar(pathToJar);
-        }
-        return instance;
+        return new JarTypeSolver(pathToJar);
     }
 
     private File dumpToTempFile(InputStream inputStream) throws IOException {
@@ -169,6 +172,7 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     private class ClasspathElement {
+
         private JarFile jarFile;
         private JarEntry entry;
 

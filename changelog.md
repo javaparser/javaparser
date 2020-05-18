@@ -1,3 +1,116 @@
+Next Release (Version 3.15.23)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
+* FIXED: Edits to the value of a string value are now correctly handled for use with Lexical Preservation 
+    (PR [#2646](https://github.com/javaparser/javaparser/pull/2646), by [@lemoncurry](https://github.com/lemoncurry))
+* FIXED: Edits to the value of other literal values also now handled 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+* BREAKING CHANGE: Tokens relating to literal values now have the category of `JavaToken.Category.LITERAL` (previously `JavaToken.Category.KEYWORD`) 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+
+
+
+Version 3.15.22
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/173?closed=1)
+* REVERT: Rollback of upgrade to `ph-javacc-maven-plugin` from v4.1.3 to v4.1.2 
+    _(this undoes the transitive dependency update `parser-generator-cc` from v1.1.2 to v1.1.1, which appears to have isuse with handling tokens longer than the buffer length)_  
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* ADDED: Support resolving an enum's `valueOf` method
+    ([#2652](https://github.com/javaparser/javaparser/pull/2652))
+* FIXED: Fixed build warning -- bnd-maven-plugin flagging missing id 
+    ([#2605](https://github.com/javaparser/javaparser/pull/2605))
+* FIXED: Fixed cases where nodes added after a trailing comment would incorrectly be added to the same line (thus be part of the comment)
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* FIXED: Fixed resolving overloaded static method references (e.g. `String::valueOf` in a stream map/filter)
+    ([#2662](https://github.com/javaparser/javaparser/pull/2662))
+
+
+Version 3.15.21
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
+
+* DEPRECATED: Deprecated and documented `JarTypeSolver#getJarTypeSolver(String)`, with a view to later removal.
+    ([#2598](https://github.com/javaparser/javaparser/pull/2598))
+    ([#2622](https://github.com/javaparser/javaparser/pull/2622))
+* FIXED: Fix issue #2552 : UnsupportedOperationException caused by resolving inner annotation
+    ([#2553](https://github.com/javaparser/javaparser/pull/2553))
+* FIXED: Parents of `NodeList`s now correctly retain their parent when a child is replaced 
+    ([#2594](https://github.com/javaparser/javaparser/pull/2594))
+* FIXED: Fix JavaParserClassDeclaration canBeAssignedTo() to not cause a recursion when a node is its own parent (e.g. `java.lang.Object`)
+    ([#2608](https://github.com/javaparser/javaparser/pull/2608))
+* FIXED: Fix replacing an expression preceded by a comment (`LexicalPreservation` would previously throw an `UnsupportedOperation`)
+    ([#2611](https://github.com/javaparser/javaparser/pull/2611))
+* FIXED: The collection strategies now correctly take into account the parser configuration that is passed in via the constructor.
+    ([#2619](https://github.com/javaparser/javaparser/pull/2619))
+
+
+Version 3.15.20
+------------------
+_skipped_
+
+Version 3.15.19
+------------------
+_skipped_
+
+Version 3.15.18
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/170?closed=1)
+
+* CHANGED: Dependencies should now all be up-to-date. 
+  ([#2572](https://github.com/javaparser/javaparser/pull/2572) / [#2581](https://github.com/javaparser/javaparser/pull/2581))
+  - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset if using an InputStream source.
+* FIXED (possible CHANGED/BREAKING): 
+  Improvements have been made to method `PositionUtils#nodeContains()` for clarity and precision in behaviour.
+  ([#2502](https://github.com/javaparser/javaparser/pull/2502))
+  - It is believed that there are no changes to behaviour, but if you do see anything please do reach out.
+  - See some additional commentary/thoughts in #2502
+* FIXED: Resolving super methodcalls in anonymous inner classes (fixes #1962)
+    ([#2585](https://github.com/javaparser/javaparser/pull/2585))
+* ADDED: `NodeList#getFirst(): Optional<Node>`
+    ([#2502](https://github.com/javaparser/javaparser/pull/2502))
+* ADDED: `NodeList#getLast(): Optional<Node>`
+    ([#2502](https://github.com/javaparser/javaparser/pull/2502))
+
+Version 3.15.17
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/169?closed=1)
+
+* CHANGED: Merged symbol solver modules, for java 9 module compatibility
+    ([#2564](https://github.com/javaparser/javaparser/pull/2564))
+* CHANGED: Renamed the pretty printer configuration option `isSpacesBetweenOperators` to `isSpaceAroundOperators` 
+    ([#2555](https://github.com/javaparser/javaparser/pull/2555))
+
+Version 3.15.16
+------------------
+_Version skipped_
+
+Version 3.15.15
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/168?closed=1)
+
+* Often requested, finally implemented by [ReallyLiri](https://github.com/ReallyLiri):
+configurable cache sizes for the symbol solver.
+
+Version 3.15.14 (buggy)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/167?closed=1)
+
+* a suggestion for a new Javadoc parsing API was merged too quickly,
+causing issues parsing Javadoc while parsing Java normally. 
+
+Version 3.15.13
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/166?closed=1)
+
+Version 3.15.12
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/165?closed=1)
+
+Version 3.15.11
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/164?closed=1)
+
 Version 3.15.10
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/163?closed=1)

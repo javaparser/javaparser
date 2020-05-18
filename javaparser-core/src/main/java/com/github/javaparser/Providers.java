@@ -21,7 +21,12 @@
 
 package com.github.javaparser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,7 +85,7 @@ public final class Providers {
 
 
     /**
-     * Provide a Provider from the resource found in class loader with the provided encoding.<br/> As resource is
+     * Provide a Provider from the resource found in class loader with the provided encoding.<br> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
     public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) throws IOException {
@@ -92,7 +97,7 @@ public final class Providers {
     }
 
     /**
-     * Provide a Provider from the resource found in the current class loader with the provided encoding.<br/> As
+     * Provide a Provider from the resource found in the current class loader with the provided encoding.<br> As
      * resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
     public static Provider resourceProvider(String pathToResource, Charset encoding) throws IOException {
@@ -101,7 +106,7 @@ public final class Providers {
     }
 
     /**
-     * Provide a Provider from the resource found in the current class loader with UTF-8 encoding.<br/> As resource is
+     * Provide a Provider from the resource found in the current class loader with UTF-8 encoding.<br> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
     public static Provider resourceProvider(String pathToResource) throws IOException {

@@ -206,6 +206,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (name.equals("values") && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
+        if (name.equals("valueOf") && argumentsTypes.size() == 1) {
+            ResolvedType argument = argumentsTypes.get(0);
+            if (argument.isReferenceType() && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
+                return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
+            }
+        }
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
@@ -305,7 +311,17 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 .collect(Collectors.toList());
     }
 
-    // Needed by ContextHelper
+
+    /**
+     * Needed by ContextHelper
+     *
+     * An implicitly declared method {@code public static E[] values()}, which returns an array containing the
+     * enum constants of {@code E}, in the same order as they appear in the body of the declaration of E.
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     */
     public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
         private JavaParserEnumDeclaration enumDeclaration;
@@ -390,9 +406,123 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
     }
 
+
+    /**
+     * Needed by ContextHelper
+     * An implicitly declared method {@code public static E valueOf(String name)}, which returns the
+     * enum constant of {@code E} with the specified name.
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     */
+    public static class ValueOfMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
+
+        private JavaParserEnumDeclaration enumDeclaration;
+        private TypeSolver typeSolver;
+
+        public ValueOfMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
+            this.enumDeclaration = enumDeclaration;
+            this.typeSolver = typeSolver;
+        }
+
+        @Override
+        public ResolvedReferenceTypeDeclaration declaringType() {
+            return enumDeclaration;
+        }
+
+        @Override
+        public ResolvedType getReturnType() {
+            return new ReferenceTypeImpl(enumDeclaration, typeSolver);
+        }
+
+        @Override
+        public int getNumberOfParams() {
+            return 1;
+        }
+
+        @Override
+        public ResolvedParameterDeclaration getParam(int i) {
+            if (i == 0) {
+                return new ResolvedParameterDeclaration() {
+                    @Override
+                    public String getName() {
+                        return "name";
+                    }
+
+                    @Override
+                    public ResolvedType getType() {
+                        return new ReferenceTypeImpl(typeSolver.solveType("java.lang.String"), typeSolver);
+                    }
+
+                    @Override
+                    public boolean isVariadic() {
+                        return false;
+                    }
+                };
+            }
+
+            throw new IllegalArgumentException("Invalid parameter index!");
+        }
+
+        public MethodUsage getUsage(Node node) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
+            return new MethodUsage(this);
+        }
+
+        @Override
+        public boolean isAbstract() {
+            return false;
+        }
+
+        @Override
+        public boolean isDefaultMethod() {
+            return false;
+        }
+
+        @Override
+        public boolean isStatic() {
+            return true;
+        }
+
+        @Override
+        public String getName() {
+            return "valueOf";
+        }
+
+        @Override
+        public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public AccessSpecifier accessSpecifier() {
+            return AccessSpecifier.PUBLIC;
+        }
+
+        @Override
+        public int getNumberOfSpecifiedExceptions() {
+            return 0;
+        }
+
+        @Override
+        public ResolvedType getSpecifiedException(int index) {
+            throw new UnsupportedOperationException("The valueOf method of an enum does not throw any exception");
+        }
+
+        @Override
+        public Optional<MethodDeclaration> toAst() {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public AccessSpecifier accessSpecifier() {
-        throw new UnsupportedOperationException();
+        return wrappedNode.getAccessSpecifier();
     }
 
     @Override

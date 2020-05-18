@@ -350,7 +350,26 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(SuperExpr node, Boolean solveLambdas) {
-        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDecl(node));
+        // If 'super' is prefixed by a class eg. MyClass.this
+        if (node.getTypeName().isPresent()) {
+            String className = node.getTypeName().get().asString();
+            SymbolReference<ResolvedTypeDeclaration> resolvedTypeNameRef = JavaParserFactory.getContext(node, typeSolver).solveType(className);
+            if (resolvedTypeNameRef.isSolved()) {
+                // Cfr JLS $15.12.1
+                ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
+                if (resolvedTypeName.isInterface()) {
+                    return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
+                } else if (resolvedTypeName.isClass()) {
+                    return resolvedTypeName.asClass().getSuperClass();
+                } else {
+                    throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+                }
+            } else {
+                throw new UnsolvedSymbolException(className);
+            }
+        }
+
+        ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
             return ((ResolvedClassDeclaration) typeOfNode).getSuperClass();
         } else {
@@ -517,11 +536,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 //We should find out which is the functional method (e.g., apply) and replace the params of the
                 //solveLambdas with it, to derive so the values. We should also consider the value returned by the
                 //lambdas
-                if (FunctionalInterfaceLogic.getFunctionalMethod(result).isPresent()) {
-                    MethodReferenceExpr methodReferenceExpr = node;
+                Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(result);
+                if (functionalMethodOpt.isPresent()) {
+                    MethodUsage functionalMethod = functionalMethodOpt.get();
 
-                    ResolvedType actualType = facade.toMethodUsage(methodReferenceExpr).returnType();
-                    ResolvedType formalType = FunctionalInterfaceLogic.getFunctionalMethod(result).get().returnType();
+                    ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes()).returnType();
+                    ResolvedType formalType = functionalMethod.returnType();
 
                     InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
                     inferenceContext.addPair(formalType, actualType);
