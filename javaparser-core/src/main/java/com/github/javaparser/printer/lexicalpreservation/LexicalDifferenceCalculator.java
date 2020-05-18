@@ -26,7 +26,9 @@ import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
@@ -272,8 +274,34 @@ class LexicalDifferenceCalculator {
             }
             elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString(), text), text));
         } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {
-            elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
-                    "\"" + ((StringLiteralExpr) node).getValue() + "\""));
+            // fix #2382:
+            // This method calculates the syntax model _after_ the change has been applied.
+            // If the given change is a PropertyChange, the returned model should
+            // contain the new value, otherwise the original/current value should be used.
+            if (change instanceof PropertyChange) {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
+                        "\"" + ((PropertyChange) change).getNewValue() + "\""));
+            } else {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
+                        "\"" + ((StringLiteralExpr) node).getValue() + "\""));
+            }
+        } else if ((csm instanceof CsmString) && (node instanceof TextBlockLiteralExpr)) {
+            // FIXME: csm should be CsmTextBlock -- See also #2677
+            if (change instanceof PropertyChange) {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL,
+                        "\"\"\"" + ((PropertyChange) change).getNewValue() + "\"\"\""));
+            } else {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL,
+                        "\"\"\"" + ((TextBlockLiteralExpr) node).getValue() + "\"\"\""));
+            }
+        } else if ((csm instanceof CsmChar) && (node instanceof CharLiteralExpr)) {
+            if (change instanceof PropertyChange) {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.CHAR,
+                        "'" + ((PropertyChange) change).getNewValue() + "'"));
+            } else {
+                elements.add(new CsmToken(GeneratedJavaParserConstants.CHAR,
+                        "'" + ((CharLiteralExpr) node).getValue() + "'"));
+            }
         } else if (csm instanceof CsmMix) {
             CsmMix csmMix = (CsmMix)csm;
             List<CsmElement> mixElements = new LinkedList<>();
