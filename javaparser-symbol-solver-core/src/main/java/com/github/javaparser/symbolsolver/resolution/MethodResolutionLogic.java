@@ -275,6 +275,10 @@ public class MethodResolutionLogic {
             List<ResolvedTypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
 
+            if (expectedType.describe().equals(actualType.describe())) {
+                continue;
+            }
+
             Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
             for (int j = 0; j < method.getParamTypes().size(); j++) {
                 ResolvedParameterDeclaration parameter = method.getDeclaration().getParam(i);
