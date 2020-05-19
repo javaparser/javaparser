@@ -714,6 +714,27 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Optional.empty();
     }
 
+    public LineEnding getLineEndingStyle() {
+        Node current = this;
+
+        // First check this node
+        if(current.containsData(Node.LINE_ENDING_KEY)) {
+            LineEnding lineEnding = current.getData(Node.LINE_ENDING_KEY);
+            return lineEnding;
+        }
+
+        // Then check parent/ancestor nodes
+        while(current.getParentNode().isPresent()) {
+            current = current.getParentNode().get();
+            if(current.containsData(Node.LINE_ENDING_KEY)) {
+                return current.getData(Node.LINE_ENDING_KEY);
+            }
+        }
+
+        // Default to the system line separator if it's not already set within the parsed node/code.
+        return LineEnding.SYSTEM;
+    }
+
     protected SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {

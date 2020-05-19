@@ -21,7 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -38,7 +39,11 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.utils.LineEnding;
 import com.github.javaparser.utils.Pair;
 
@@ -48,14 +53,20 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.*;
-import static java.util.stream.Collectors.*;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -142,7 +153,10 @@ public class LexicalPreservingPrinter {
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
 
-                    LineEnding lineEnding = observedNode.getData(Node.LINE_ENDING_KEY);
+                    LineEnding lineEnding = observedNode.getLineEndingStyle();
+                    if(!lineEnding.isStandardEol()) {
+                        lineEnding = LineEnding.SYSTEM;
+                    }
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
                     nodeText.addToken(index + 1, eolTokenKind(lineEnding), lineEnding.toString());
                 } else if (newValue == null) {

@@ -35,7 +35,10 @@ public class CsmTextBlock implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        LineEnding lineEnding = node.getData(Node.LINE_ENDING_KEY);
+        LineEnding lineEnding = node.getLineEndingStyle();
+        if(!lineEnding.isStandardEol()) {
+            lineEnding = LineEnding.SYSTEM;
+        }
         printer.print("\"\"\"" + lineEnding.toString());
         printer.print(property.getValueAsStringAttribute(node));
         printer.print("\"\"\"");
