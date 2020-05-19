@@ -94,9 +94,11 @@ public final class JavaParserMetaModel {
         recordDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.modifiersPropertyMetaModel);
         recordDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         recordDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.namePropertyMetaModel);
+        recordDeclarationMetaModel.getConstructorParameters().add(recordDeclarationMetaModel.parametersPropertyMetaModel);
         recordDeclarationMetaModel.getConstructorParameters().add(recordDeclarationMetaModel.typeParametersPropertyMetaModel);
         recordDeclarationMetaModel.getConstructorParameters().add(recordDeclarationMetaModel.implementedTypesPropertyMetaModel);
         recordDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.membersPropertyMetaModel);
+        recordDeclarationMetaModel.getConstructorParameters().add(recordDeclarationMetaModel.receiverParameterPropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.modifiersPropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         enumDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.namePropertyMetaModel);
@@ -470,6 +472,10 @@ public final class JavaParserMetaModel {
         enumConstantDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumConstantDeclarationMetaModel.namePropertyMetaModel);
         recordDeclarationMetaModel.implementedTypesPropertyMetaModel = new PropertyMetaModel(recordDeclarationMetaModel, "implementedTypes", com.github.javaparser.ast.type.ClassOrInterfaceType.class, Optional.of(classOrInterfaceTypeMetaModel), false, false, true, false);
         recordDeclarationMetaModel.getDeclaredPropertyMetaModels().add(recordDeclarationMetaModel.implementedTypesPropertyMetaModel);
+        recordDeclarationMetaModel.parametersPropertyMetaModel = new PropertyMetaModel(recordDeclarationMetaModel, "parameters", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), false, false, true, false);
+        recordDeclarationMetaModel.getDeclaredPropertyMetaModels().add(recordDeclarationMetaModel.parametersPropertyMetaModel);
+        recordDeclarationMetaModel.receiverParameterPropertyMetaModel = new PropertyMetaModel(recordDeclarationMetaModel, "receiverParameter", com.github.javaparser.ast.body.ReceiverParameter.class, Optional.of(receiverParameterMetaModel), true, false, false, false);
+        recordDeclarationMetaModel.getDeclaredPropertyMetaModels().add(recordDeclarationMetaModel.receiverParameterPropertyMetaModel);
         recordDeclarationMetaModel.typeParametersPropertyMetaModel = new PropertyMetaModel(recordDeclarationMetaModel, "typeParameters", com.github.javaparser.ast.type.TypeParameter.class, Optional.of(typeParameterMetaModel), false, false, true, false);
         recordDeclarationMetaModel.getDeclaredPropertyMetaModels().add(recordDeclarationMetaModel.typeParametersPropertyMetaModel);
         enumDeclarationMetaModel.entriesPropertyMetaModel = new PropertyMetaModel(enumDeclarationMetaModel, "entries", com.github.javaparser.ast.body.EnumConstantDeclaration.class, Optional.of(enumConstantDeclarationMetaModel), false, false, true, false);

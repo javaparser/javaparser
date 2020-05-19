@@ -93,7 +93,6 @@ public final class JavaParser {
         if (configuration.getLanguageLevel() != null) {
             switch (configuration.getLanguageLevel()) {
                 case JAVA_14:
-                    astParser.setRecordsSupported();
                 case JAVA_13:
                     astParser.setYieldSupported();
             }

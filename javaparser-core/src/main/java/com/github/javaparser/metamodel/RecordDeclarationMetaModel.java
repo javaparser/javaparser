@@ -30,5 +30,9 @@ public class RecordDeclarationMetaModel extends TypeDeclarationMetaModel {
 
     public PropertyMetaModel implementedTypesPropertyMetaModel;
 
+    public PropertyMetaModel parametersPropertyMetaModel;
+
+    public PropertyMetaModel receiverParameterPropertyMetaModel;
+
     public PropertyMetaModel typeParametersPropertyMetaModel;
 }

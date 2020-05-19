@@ -752,21 +752,23 @@ ModifierHolder Modifiers():
 RecordDeclaration RecordDeclaration(ModifierHolder modifier):
 {
     SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters;
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyList());
     NodeList<ClassOrInterfaceType> impList = emptyList();
     NodeList<BodyDeclaration<?>> members = emptyList();
     JavaToken begin = modifier.begin;
 }
 {
-    LOOKAHEAD({ getToken(1).image.equals("record") && recordsSupported }) <IDENTIFIER> { begin = orIfInvalid(begin, token());
+    LOOKAHEAD({ getToken(1).image.equals("record") }) <IDENTIFIER> { begin = orIfInvalid(begin, token());
  // TODO set token type to RECORD
- }
+  }
   name = SimpleName()
+  parameters = Parameters()
   [ typePar = TypeParameters() ]
   [ impList = ImplementsList() ]
   members = ClassOrInterfaceBody()
 
-	{ return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, typePar.list, impList, members); }
+	{ return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, parameters.a, typePar.list, impList, members, parameters.b); }
 }
 
 

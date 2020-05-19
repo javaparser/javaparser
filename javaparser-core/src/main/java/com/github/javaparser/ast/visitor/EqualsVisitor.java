@@ -1343,6 +1343,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final RecordDeclaration n2 = (RecordDeclaration) arg;
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
             return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
             return false;
         if (!nodesEquals(n.getMembers(), n2.getMembers()))

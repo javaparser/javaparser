@@ -1261,6 +1261,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final RecordDeclaration n, final A arg) {
         NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
@@ -1270,6 +1272,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         if (name == null)
             return null;
         n.setImplementedTypes(implementedTypes);
+        n.setParameters(parameters);
+        n.setReceiverParameter(receiverParameter);
         n.setTypeParameters(typeParameters);
         n.setMembers(members);
         n.setModifiers(modifiers);

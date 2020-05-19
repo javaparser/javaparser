@@ -60,8 +60,6 @@ abstract class GeneratedJavaParserBase {
     List<Problem> problems = new ArrayList<>();
     /* Configuration flag whether we store tokens and tokenranges */
     boolean storeTokens;
-    /* Configuration flag whether record syntax should be recognized */
-    boolean recordsSupported;
 
     /* Resets the parser for reuse, gaining a little performance */
     void reset(Provider provider) {
@@ -407,10 +405,6 @@ abstract class GeneratedJavaParserBase {
             start++;
         }
         return s.substring(start, s.length() - 3);
-    }
-
-    void setRecordsSupported() {
-        recordsSupported = true;
     }
 
     void setYieldSupported() {

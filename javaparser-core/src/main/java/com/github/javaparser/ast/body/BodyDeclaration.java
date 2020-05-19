@@ -337,18 +337,22 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isRecordDeclaration() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public RecordDeclaration asRecordDeclaration() {
         throw new IllegalStateException(f("%s is not an RecordDeclaration", this));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<RecordDeclaration> toRecordDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
     }
 }
