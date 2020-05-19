@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -149,7 +148,9 @@ class LexicalDifferenceCalculator {
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement differenceElement = differenceElements.get(i);
             if (differenceElement.isAdded()) {
-                if (differenceElement.getElement() instanceof CsmToken) {
+                CsmElement element = differenceElement.getElement();
+                boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
+                if (isWhitespaceToken) {
                     differenceElements.set(i, new Added(CsmElement.newline(lineEnding)));
                 }
             }
