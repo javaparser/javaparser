@@ -24,10 +24,35 @@ class LineEndingTest {
         assertEquals(LineEnding.CRLF, LineEnding.lookup("\r\n").get());
 
         assertFalse(LineEnding.lookup("").isPresent());
+        assertFalse(LineEnding.lookup(" ").isPresent());
         assertFalse(LineEnding.lookup("\\r").isPresent());
         assertFalse(LineEnding.lookup("\\n").isPresent());
+        assertFalse(LineEnding.lookup(" \\r").isPresent());
+        assertFalse(LineEnding.lookup(" \\n").isPresent());
+        assertFalse(LineEnding.lookup("\\r ").isPresent());
+        assertFalse(LineEnding.lookup("\\n ").isPresent());
         assertFalse(LineEnding.lookup("test 123 123").isPresent());
         assertFalse(LineEnding.lookup("\r \n").isPresent());
+        assertFalse(LineEnding.lookup("\\r \\n").isPresent());
+    }
+    
+    @Test
+    void lookupEscaped() {
+        assertEquals(LineEnding.CR, LineEnding.lookupEscaped("\\r").get());
+        assertEquals(LineEnding.LF, LineEnding.lookupEscaped("\\n").get());
+        assertEquals(LineEnding.CRLF, LineEnding.lookupEscaped("\\r\\n").get());
+
+        assertFalse(LineEnding.lookupEscaped("").isPresent());
+        assertFalse(LineEnding.lookupEscaped(" ").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\r").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\n").isPresent());
+        assertFalse(LineEnding.lookupEscaped(" \r").isPresent());
+        assertFalse(LineEnding.lookupEscaped(" \n").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\r ").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\n ").isPresent());
+        assertFalse(LineEnding.lookupEscaped("test 123 123").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\r \n").isPresent());
+        assertFalse(LineEnding.lookupEscaped("\\r \\n").isPresent());
     }
 
     @Test

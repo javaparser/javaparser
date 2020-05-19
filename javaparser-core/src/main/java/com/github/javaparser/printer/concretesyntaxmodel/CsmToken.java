@@ -27,8 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineEnding;
 
-import static com.github.javaparser.TokenTypes.isEndOfLineToken;
-import static com.github.javaparser.TokenTypes.isSpaceOrTab;
+import static com.github.javaparser.TokenTypes.*;
 
 public class CsmToken implements CsmElement {
     private final int tokenType;
@@ -56,9 +55,13 @@ public class CsmToken implements CsmElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
+
+        // Replace "raw" values with escaped textual counterparts (e.g. newlines {@code \r\n})
+        //  and "placeholder" values ({@code <SPACE>}) with their textual counterparts
         if (isEndOfLineToken(tokenType)) {
-            content = LineEnding.lookup(this.content).toString();
-        } else if (isSpaceOrTab(tokenType)) {
+            // Use the unescaped version
+            content = LineEnding.lookupEscaped(this.content).get().toString();
+        } else if (isWhitespaceButNotEndOfLine(tokenType)) {
             content = " ";
         }
     }

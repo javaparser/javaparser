@@ -87,6 +87,18 @@ public enum LineEnding {
         }
     }
 
+    public static Optional<LineEnding> lookupEscaped(String ending) {
+        if (CR.escaped().equals(ending)) {
+            return Optional.of(CR);
+        } else if (LF.escaped().equals(ending)) {
+            return Optional.of(LF);
+        } else if (CRLF.escaped().equals(ending)) {
+            return Optional.of(CRLF);
+        } else {
+            return Optional.empty();
+        }
+    }
+
     /**
      * @return The number of times that the given needle is found within the haystack.
      */
