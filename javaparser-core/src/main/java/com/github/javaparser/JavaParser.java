@@ -101,6 +101,23 @@ public final class JavaParser {
         return astParser;
     }
 
+    private String providerToString(Provider provider) {
+        // FIXME: Surely there's a better way...?
+        StringBuilder sb = new StringBuilder();
+        char[] buffer = new char[1];
+        try {
+            while(provider.read(buffer, 0, 1) != -1) {
+                sb.append(buffer[0]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//
+        // FIXME: Surely there's a better way...?
+        String x = sb.toString();
+        return x;
+    }
+
     /**
      * Parses source code.
      * It takes the source code from a Provider.
@@ -116,18 +133,13 @@ public final class JavaParser {
         assertNotNull(provider);
 
         // FIXME: Surely there's a better way...?
-        StringBuilder sb = new StringBuilder();
-        char[] buffer = new char[1];
+        String x = providerToString(provider);
+        // close the old provider then open a new one...
         try {
-            while(provider.read(buffer, 0, 1) != -1) {
-                sb.append(buffer[0]);
-            }
+            provider.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // FIXME: Surely there's a better way...?
-        String x = sb.toString();
         provider = new StringProvider(x);
         LineEnding detectedLineEnding = LineEnding.detect(x);
 
