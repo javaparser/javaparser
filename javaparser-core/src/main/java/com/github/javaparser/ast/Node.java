@@ -714,6 +714,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Optional.empty();
     }
 
+    public LineEnding getLineEndingStyleOrDefault(LineEnding defaultLineEnding) {
+        if (getLineEndingStyle().isStandardEol()) {
+            return getLineEndingStyle();
+        }
+        return defaultLineEnding;
+    }
+
     public LineEnding getLineEndingStyle() {
         Node current = this;
 

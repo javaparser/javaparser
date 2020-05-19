@@ -153,10 +153,7 @@ public class LexicalPreservingPrinter {
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
 
-                    LineEnding lineEnding = observedNode.getLineEndingStyle();
-                    if(!lineEnding.isStandardEol()) {
-                        lineEnding = LineEnding.SYSTEM;
-                    }
+                    LineEnding lineEnding = observedNode.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
                     nodeText.addToken(index + 1, eolTokenKind(lineEnding), lineEnding.toString());
                 } else if (newValue == null) {

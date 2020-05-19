@@ -139,10 +139,8 @@ class LexicalDifferenceCalculator {
         List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
 
         // Set the line separator character tokens
-        LineEnding lineEnding = container.getLineEndingStyle();
-        if (lineEnding.isStandardEol()) { // TODO: Is this check necessary?
-            replaceEolTokens(differenceElements, lineEnding);
-        }
+        LineEnding lineEnding = container.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
+        replaceEolTokens(differenceElements, lineEnding);
 
         return differenceElements;
     }
@@ -214,10 +212,7 @@ class LexicalDifferenceCalculator {
                 // So if we don't care that the node is an ExpressionStmt we could try to generate a wrong definition
                 // like this [class // This is my class, with my comment A {}]
                 if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
-                    LineEnding lineEnding = node.getLineEndingStyle();
-                    if(!lineEnding.isStandardEol()) {
-                        lineEnding = LineEnding.SYSTEM;
-                    }
+                    LineEnding lineEnding = node.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
                     elements.add(new CsmChild(node.getComment().get()));
                     elements.add(new CsmToken(eolTokenKind(lineEnding), lineEnding.toString()));
                 }
