@@ -99,8 +99,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
+            // Scope is present -- search/solve within that type
             typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
         } else {
+            // Scope not present -- search/solve within itself.
             typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
         }
 

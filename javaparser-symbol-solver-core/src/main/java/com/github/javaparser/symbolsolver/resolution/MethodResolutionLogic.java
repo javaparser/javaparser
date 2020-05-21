@@ -143,10 +143,12 @@ public class MethodResolutionLogic {
                 if(finalArgumentIsArray) {
                     // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
                     expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
+                    // no need to do anything
+//                    needleArgumentTypes.set(lastMethodParameterIndex, expectedVariadicParameterType);
                 } else {
                     // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
 //                    needleArgumentTypes.set(lastMethodParameterIndex, actualArgumentType.asArrayType().getComponentType());
-                    expectedVariadicParameterType = actualArgumentType;
+                    needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
                 }
             } else {
                 // Should be unreachable.
@@ -353,7 +355,7 @@ public class MethodResolutionLogic {
         boolean methodIsDeclaredWithVariadicParameter = methodUsage.getDeclaration().hasVariadicParameter();
 
         // If the counts do not match and the method is not variadic, this is not a match.
-        if (!(needleParameterCount == countOfMethodUsageArgumentsPassed) && !methodIsDeclaredWithVariadicParameter) {
+        if (!methodIsDeclaredWithVariadicParameter && !(needleParameterCount == countOfMethodUsageArgumentsPassed)) {
             return false;
         }
 
