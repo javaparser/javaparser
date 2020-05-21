@@ -75,12 +75,12 @@ Source: https://openjdk.java.net/projects/jdk/11/
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
 | [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
-| [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed [^JEP327]_                                                 | _Unicode 10_                                                      |
-| [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed [^JEP181]_                                                 | _Nest-Based Access Control_                                       |
+| [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed <sup id="a_11_JEP327">[JEP327](#f_11_JEP327)_              | _Unicode 10_                                                      |
+| [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed <sup id="a_11_JEP181">[JEP181](#f_11_JEP181)_              | _Nest-Based Access Control_                                       |
 | [JEP 309](https://openjdk.java.net/jeps/309) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic Class-File Constants~~                                  |
 | [JEP 315](https://openjdk.java.net/jeps/315) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Improve Aarch64 Intrinsics~~                                    |
 | [JEP 318](https://openjdk.java.net/jeps/318) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Epsilon: A No-Op Garbage Collector~~                            |
-| [JEP 320](https://openjdk.java.net/jeps/320) |  ~~_Release_~~   | ~~_Not Applicable (NA) [^JEP320]_~~                                           | ~~Remove the Java EE and CORBA Modules~~                          |
+| [JEP 320](https://openjdk.java.net/jeps/320) |  ~~_Release_~~   | ~~_Not Applicable (NA) <sup id="a_11_JEP320">[JEP320](#f_11_JEP320)_~~        | ~~Remove the Java EE and CORBA Modules~~                          |
 | [JEP 321](https://openjdk.java.net/jeps/321) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~HTTP Client (Standard)~~                                        |
 | [JEP 324](https://openjdk.java.net/jeps/324) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Key Agreement with Curve25519 and Curve448~~                    |
 | [JEP 328](https://openjdk.java.net/jeps/328) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Flight Recorder~~                                               |
@@ -92,15 +92,16 @@ Source: https://openjdk.java.net/projects/jdk/11/
 | [JEP 335](https://openjdk.java.net/jeps/335) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Nashorn JavaScript Engine~~                       |
 | [JEP 336](https://openjdk.java.net/jeps/336) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Pack200 Tools and API~~                           |
 
-**Notes:**
+##### Footnotes:
 
-[^JEP181]: Based on a cursory reading of this JEP, it is unclear if this is a change that affects JavaParser. Comments/discussion on this are welcomed.
+- <b id="f_11_JEP181">JEP181</b> - Based on a cursory reading of this JEP, it is unclear if this is a change that affects JavaParser. 
+                                      Comments/discussion on this are welcomed. [↩](#a_11_JEP181)
+- <b id="f_11_JEP327">JEP327</b> - Based on a cursory reading of this JEP, it is unclear if this is a change that affects JavaParser. 
+                                     Comments/discussion on this are welcomed. [↩](#a_11_JEP327)
+- <b id="f_11_JEP320">JEP320</b> - JEP 320 is marked as NA. This is because JavaParser does not make use of classes within these packages, 
+                                       and any users of JavaParser will need to provide the relevant files in order to do parsing/solving 
+                                       (e.g. as source files, a jar, or via reflection). [↩](#a_11_JEP320) 
 
-[^JEP327]: Based on a cursory reading of this JEP, it is unclear if this is a change that affects JavaParser. Comments/discussion on this are welcomed.
-
-[^JEP320]: JEP 320 is marked as NA. This is because JavaParser does not make use of classes within these packages, 
-    and any users of JavaParser will need to provide the relevant files in order to do parsing/solving 
-    (e.g. as source files, a jar, or via reflection). 
 
 ## JDK 12 - March 2019
 Source: https://openjdk.java.net/projects/jdk/12/
@@ -138,7 +139,7 @@ Source: https://openjdk.java.net/projects/jdk/14/
 | [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Text Blocks (Second Preview)**                                |
 | [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | **Pattern Matching for instanceof (Preview)**                   |
 | [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | **Records (Preview)**                                           |
-| [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)[^JEP343]_~~                                            | ~~Packaging Tool (Incubator)~~                                  |
+| [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)<sup id="a_14_JEP343">[JEP343](#f_14_JEP343)_~~         | ~~Packaging Tool (Incubator)~~                                  |
 | [JEP 345](https://openjdk.java.net/jeps/345) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~NUMA-Aware Memory Allocation for G1~~                         |
 | [JEP 349](https://openjdk.java.net/jeps/349) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JFR Event Streaming~~                                         |
 | [JEP 352](https://openjdk.java.net/jeps/352) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Non-Volatile Mapped Byte Buffers~~                            |
@@ -151,13 +152,15 @@ Source: https://openjdk.java.net/projects/jdk/14/
 | [JEP 367](https://openjdk.java.net/jeps/367) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Pack200 Tools and API~~                            |
 | [JEP 370](https://openjdk.java.net/jeps/370) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Foreign-Memory Access API (Incubator)~~                       |
 
-**Notes:**
+##### Footnotes:
 
-[^JEP320]: JEP 343 is marked as not applicable, as it relates to packaging of apps - e.g. as `.exe`/`.msi`/`.deb`/`.rpm`/`.pkg`/`.dmg`. 
-  The JEP describes the layout/structure of the output file, suggesting that _maybe_ in the future the files may be examined, 
-  and _potentially_ used similarly to a `.jar` or set of `.class` files. 
-  This is not going to be actively pursued (_especially_ since this is still in the incubator stage), 
-  though tested PRs are always welcome.
+- <b id="f_14_JEP343">JEP343</b> - JEP 343 is marked as not applicable, as it relates to packaging of apps - e.g. as `.exe`/`.msi`/`.deb`/`.rpm`/`.pkg`/`.dmg`. 
+                                     The JEP describes the layout/structure of the output file, suggesting that _maybe_ in the future the files may be examined, 
+                                       and _potentially_ used similarly to a `.jar` or set of `.class` files. 
+                                     This is not going to be actively pursued (_especially_ since this is still in the incubator stage), 
+                                       though tested PRs are always welcome. [↩](#a_14_JEP343)
+
+[^JEP320]: 
 
 ## JDK 15 - _targeted for September 2020_
 Source: https://openjdk.java.net/projects/jdk/15/
