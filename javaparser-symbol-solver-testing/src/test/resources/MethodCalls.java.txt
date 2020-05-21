@@ -40,6 +40,7 @@ class MethodCalls {
         foobar("a");
         foobar("a", "a");
         foobar(varArg);
+        foobar("a", "a", "a", true, "a");
     }
 
     int foobar(String s){

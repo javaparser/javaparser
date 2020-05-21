@@ -42,6 +42,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VariadicResolutionTest extends AbstractResolutionTest {
 
@@ -101,14 +102,19 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0));
-        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1));
-        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(2));
-        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(3));
-        assertEquals("void", call1.returnType().describe());
-        assertEquals("int", call2.returnType().describe());
-        assertEquals("void", call3.returnType().describe());
-        assertEquals("void", call4.returnType().describe());
+//        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0)); // foobar();
+//        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1)); // foobar("a");
+        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(2)); // foobar("a", "a");
+        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(3)); // foobar(varArg);
+//        assertEquals("void", call1.returnType().describe()); // foobar();
+//        assertEquals("int", call2.returnType().describe()); // foobar("a");
+        assertEquals("void", call3.returnType().describe()); // foobar("a", "a");
+        assertEquals("void", call4.returnType().describe()); // foobar(varArg);
+
+        assertThrows(RuntimeException.class, () -> {
+            MethodUsage call5 = javaParserFacade.solveMethodAsUsage(calls.get(4));
+            System.out.println("call5.returnType().describe() = " + call5.returnType().describe());
+        });
     }
 
     @Test
