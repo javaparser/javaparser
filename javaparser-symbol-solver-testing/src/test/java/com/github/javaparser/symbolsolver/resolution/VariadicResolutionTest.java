@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VariadicResolutionTest extends AbstractResolutionTest {
 
-	@Test
+    @Test
     void issue7() {
         CompilationUnit cu = parseSample("Generics_issue7");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
@@ -60,15 +60,15 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         assertEquals(List.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
         assertEquals("java.util.List<java.lang.Long>", type.describe());
     }
-	
-	@Test
+
+    @Test
     void methodCallWithReferenceTypeAsVaridicArgumentIsSolved() {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "variadicMethod");
         MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicMethod").get();
-        
+
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
