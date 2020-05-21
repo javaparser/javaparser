@@ -99,8 +99,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
+            // Scope is present -- search/solve within that type
             typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
         } else {
+            // Scope not present -- search/solve within itself.
             typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
         }
 
@@ -207,6 +209,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
                 ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
                 ResolvedType parameterType = parameter.getType();
+                // Don't continue if a vararg parameter is reached and there are no arguments left
+                if (parameter.isVariadic() && argumentsTypes.size() < methodUsage.getNoParams()) {
+                    break;
+                }
                 if (!argumentsTypes.get(i).isArray() && parameter.isVariadic()) {
                 	parameterType = parameterType.asArrayType().getComponentType();
                 }
