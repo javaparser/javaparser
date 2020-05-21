@@ -83,13 +83,14 @@ public class MethodResolutionLogic {
     /**
      * Note the specific naming here -- parameters are part of the method declaration,
      * while arguments are the values passed when calling a method.
+     * Note that "needle" refers to that value being used as a search/query term to match against.
      *
      * @return true, if the given ResolvedMethodDeclaration matches the given name/types (normally obtained from a MethodUsage)
      *
      * @see {@link MethodResolutionLogic#isApplicable(MethodUsage, String, List, TypeSolver)}
      */
-    private static boolean isApplicable(ResolvedMethodDeclaration methodDeclaration, String name, List<ResolvedType> needleArgumentTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
-        if (!methodDeclaration.getName().equals(name)) {
+    private static boolean isApplicable(ResolvedMethodDeclaration methodDeclaration, String needleName, List<ResolvedType> needleArgumentTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
+        if (!methodDeclaration.getName().equals(needleName)) {
             return false;
         }
 
@@ -145,7 +146,7 @@ public class MethodResolutionLogic {
                 } else {
                     // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
 //                    needleArgumentTypes.set(lastMethodParameterIndex, actualArgumentType.asArrayType().getComponentType());
-                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
+                    expectedVariadicParameterType = actualArgumentType;
                 }
             } else {
                 // Should be unreachable.
@@ -328,23 +329,24 @@ public class MethodResolutionLogic {
     /**
      * Note the specific naming here -- parameters are part of the method declaration,
      * while arguments are the values passed when calling a method.
+     * Note that "needle" refers to that value being used as a search/query term to match against.
      *
      * @return true, if the given MethodUsage matches the given name/types (normally obtained from a ResolvedMethodDeclaration)
      *
      * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)}  }
      * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver, boolean)}
      */
-    public static boolean isApplicable(MethodUsage methodUsage, String name, List<ResolvedType> parameterTypes, TypeSolver typeSolver) {
-        if (!methodUsage.getName().equals(name)) {
+    public static boolean isApplicable(MethodUsage methodUsage, String needleName, List<ResolvedType> needleParameterTypes, TypeSolver typeSolver) {
+        if (!methodUsage.getName().equals(needleName)) {
             return false;
         }
 
         // The index of the final method parameter (on the method declaration).
         int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
-        // The index of the final argument passed (on the method usage).
-        int needleParameterCount = parameterTypes.size();
-
         int lastMethodUsageArgumentIndex = Math.max(0, countOfMethodUsageArgumentsPassed - 1);
+
+        // The index of the final argument passed (on the method usage).
+        int needleParameterCount = needleParameterTypes.size();
         int lastNeedleParameterIndex = Math.max(0, needleParameterCount - 1);
 
         // TODO: Does the method usage have a declaration at this point..?
@@ -363,7 +365,7 @@ public class MethodResolutionLogic {
 
         // Iterate over the arguments given to the method, and compare their types against the given method's declared parameter types
         for (int i = 0; i < needleParameterCount; i++) {
-            ResolvedType actualArgumentType = parameterTypes.get(i);
+            ResolvedType actualArgumentType = needleParameterTypes.get(i);
 
             ResolvedType expectedArgumentType;
             boolean reachedVariadicParam = methodIsDeclaredWithVariadicParameter && i >= lastMethodUsageArgumentIndex;
@@ -411,7 +413,7 @@ public class MethodResolutionLogic {
                     }
                     parameterType = parameterType.asArrayType().getComponentType();
                 }
-                inferTypes(parameterTypes.get(j), parameterType, derivedValues);
+                inferTypes(needleParameterTypes.get(j), parameterType, derivedValues);
             }
 
             for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()) {
