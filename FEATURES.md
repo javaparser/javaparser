@@ -74,15 +74,15 @@ Source: https://openjdk.java.net/projects/jdk/11/
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 181](https://openjdk.java.net/jeps/181) |    Release       | **Discussion Needed [^JEP181]**                                               | Nest-Based Access Control                                         |
+| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
+| [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed [^JEP327]_                                                 | _Unicode 10_                                                      |
+| [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed [^JEP181]_                                                 | _Nest-Based Access Control_                                       |
 | [JEP 309](https://openjdk.java.net/jeps/309) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic Class-File Constants~~                                  |
 | [JEP 315](https://openjdk.java.net/jeps/315) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Improve Aarch64 Intrinsics~~                                    |
 | [JEP 318](https://openjdk.java.net/jeps/318) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Epsilon: A No-Op Garbage Collector~~                            |
 | [JEP 320](https://openjdk.java.net/jeps/320) |  ~~_Release_~~   | ~~_Not Applicable (NA) [^JEP320]_~~                                           | ~~Remove the Java EE and CORBA Modules~~                          |
 | [JEP 321](https://openjdk.java.net/jeps/321) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~HTTP Client (Standard)~~                                        |
-| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
 | [JEP 324](https://openjdk.java.net/jeps/324) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Key Agreement with Curve25519 and Curve448~~                    |
-| [JEP 327](https://openjdk.java.net/jeps/327) |   **Release**    | **Discussion Needed [^JEP327]**                                               | **Unicode 10**                                                        |
 | [JEP 328](https://openjdk.java.net/jeps/328) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Flight Recorder~~                                               |
 | [JEP 329](https://openjdk.java.net/jeps/329) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ChaCha20 and Poly1305 Cryptographic Algorithms~~                |
 | [JEP 330](https://openjdk.java.net/jeps/330) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Launch Single-File Source-Code Programs~~                       |
@@ -107,9 +107,9 @@ Source: https://openjdk.java.net/projects/jdk/12/
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
+| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Switch Expressions (Preview)                                      |
 | [JEP 189](https://openjdk.java.net/jeps/189) | ~~Experimental~~ | ~~_Not Applicable (NA)_~~                                                     | ~~Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)~~ |
 | [JEP 230](https://openjdk.java.net/jeps/230) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Microbenchmark Suite~~                                          |
-| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Switch Expressions (Preview)                                      |
 | [JEP 334](https://openjdk.java.net/jeps/334) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JVM Constants API~~                                             |
 | [JEP 340](https://openjdk.java.net/jeps/340) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~One AArch64 Port, Not Two~~                                     |
 | [JEP 341](https://openjdk.java.net/jeps/341) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Default CDS Archives~~                                          |
@@ -121,11 +121,11 @@ Source: https://openjdk.java.net/projects/jdk/13/
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
+| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Switch Expressions (Preview)                                    |
+| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Text Blocks (Preview)                                           |
 | [JEP 350](https://openjdk.java.net/jeps/350) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic CDS Archives~~                                        |
 | [JEP 351](https://openjdk.java.net/jeps/351) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC: Uncommit Unused Memory~~                                 |
 | [JEP 353](https://openjdk.java.net/jeps/353) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Reimplement the Legacy Socket API~~                           |
-| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Switch Expressions (Preview)                                    |
-| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | Text Blocks (Preview)                                           |
 
 
 
@@ -134,21 +134,21 @@ Source: https://openjdk.java.net/projects/jdk/14/
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
+| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Switch Expressions (Standard)**                               |
+| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Text Blocks (Second Preview)**                                |
 | [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | **Pattern Matching for instanceof (Preview)**                   |
+| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | **Records (Preview)**                                           |
 | [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)[^JEP343]_~~                                            | ~~Packaging Tool (Incubator)~~                                  |
 | [JEP 345](https://openjdk.java.net/jeps/345) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~NUMA-Aware Memory Allocation for G1~~                         |
 | [JEP 349](https://openjdk.java.net/jeps/349) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JFR Event Streaming~~                                         |
 | [JEP 352](https://openjdk.java.net/jeps/352) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Non-Volatile Mapped Byte Buffers~~                            |
 | [JEP 358](https://openjdk.java.net/jeps/358) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Helpful NullPointerExceptions~~                               |
-| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | **Records (Preview)**                                           |
-| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Switch Expressions (Standard)**                               |
 | [JEP 362](https://openjdk.java.net/jeps/362) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Solaris and SPARC Ports~~                       |
 | [JEP 363](https://openjdk.java.net/jeps/363) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Concurrent Mark Sweep (CMS) Garbage Collector~~    |
 | [JEP 364](https://openjdk.java.net/jeps/364) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC on macOS~~                                                |
 | [JEP 365](https://openjdk.java.net/jeps/365) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC on Windows~~                                              |
 | [JEP 366](https://openjdk.java.net/jeps/366) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the ParallelScavenge + SerialOld GC Combination~~   |
 | [JEP 367](https://openjdk.java.net/jeps/367) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Pack200 Tools and API~~                            |
-| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Text Blocks (Second Preview)**                                |
 | [JEP 370](https://openjdk.java.net/jeps/370) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Foreign-Memory Access API (Incubator)~~                       |
 
 **Notes:**
