@@ -115,8 +115,6 @@ public class MethodResolutionLogic {
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
 
             ResolvedType expectedVariadicParameterType = methodDeclaration.getLastParam().getType();
-            ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
-
             for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
                 expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
             }
@@ -146,15 +144,14 @@ public class MethodResolutionLogic {
                 }
                 needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
             } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
+                ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
                 boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
                 if(finalArgumentIsArray) {
                     // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
-                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
                     // no need to do anything
-//                    needleArgumentTypes.set(lastMethodParameterIndex, expectedVariadicParameterType);
+//                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
                 } else {
                     // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
-//                    needleArgumentTypes.set(lastMethodParameterIndex, actualArgumentType.asArrayType().getComponentType());
                     needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
                 }
             } else {
