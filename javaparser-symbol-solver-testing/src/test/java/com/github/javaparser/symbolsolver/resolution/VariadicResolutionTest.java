@@ -102,12 +102,12 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-//        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0)); // foobar();
-//        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1)); // foobar("a");
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0)); // foobar();
+        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1)); // foobar("a");
         MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(2)); // foobar("a", "a");
         MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(3)); // foobar(varArg);
-//        assertEquals("void", call1.returnType().describe()); // foobar();
-//        assertEquals("int", call2.returnType().describe()); // foobar("a");
+        assertEquals("void", call1.returnType().describe()); // foobar();
+        assertEquals("int", call2.returnType().describe()); // foobar("a");
         assertEquals("void", call3.returnType().describe()); // foobar("a", "a");
         assertEquals("void", call4.returnType().describe()); // foobar(varArg);
 

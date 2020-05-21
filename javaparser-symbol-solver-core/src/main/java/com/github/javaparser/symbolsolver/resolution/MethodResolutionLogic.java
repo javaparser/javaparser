@@ -122,10 +122,17 @@ public class MethodResolutionLogic {
             }
 
             if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
-                // If it is variadic, and the number of arguments are short by two or more -- this is not a match.
+                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
                 // Note that omitting the variadic parameter is treated as an empty array
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
                 return false;
+            } else if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+                // If it is variadic and we are short of **exactly one** parameter, this is a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+
+                // thus group the "empty" value into an empty array...
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
             } else if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
@@ -513,10 +520,12 @@ public class MethodResolutionLogic {
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
 
+        // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
 
+        // If there are multiple possible methods found, null arguments can help to eliminate some matches.
         if (applicableMethods.size() > 1) {
             List<Integer> nullParamIndexes = new ArrayList<>();
             for (int i = 0; i < argumentsTypes.size(); i++) {
@@ -524,6 +533,8 @@ public class MethodResolutionLogic {
                     nullParamIndexes.add(i);
                 }
             }
+
+            // If some null arguments have been provided, use this to eliminate some opitons.
             if (!nullParamIndexes.isEmpty()) {
                 // remove method with array param if a non array exists and arg is null
                 Set<ResolvedMethodDeclaration> removeCandidates = new HashSet<>();
@@ -534,44 +545,51 @@ public class MethodResolutionLogic {
                         }
                     }
                 }
+
+                // Where candidiates for removal are found, remove them.
                 if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
                     applicableMethods.removeAll(removeCandidates);
                 }
             }
         }
+
+        // If only one applicable method found, short-circuit and return it here.
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
-        } else {
-            ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
-            ResolvedMethodDeclaration other = null;
-            boolean possibleAmbiguity = false;
-            for (int i = 1; i < applicableMethods.size(); i++) {
-                other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
-                    possibleAmbiguity = false;
-                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
-                    possibleAmbiguity = false;
+        }
+
+        // Examine the applicable methods found, and evaluate each to determine the "best" one
+        ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
+        ResolvedMethodDeclaration other = null;
+        boolean possibleAmbiguity = false;
+        for (int i = 1; i < applicableMethods.size(); i++) {
+            other = applicableMethods.get(i);
+            if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
+                possibleAmbiguity = false;
+            } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
+                possibleAmbiguity = false;
+                winningCandidate = other;
+            } else {
+                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                    possibleAmbiguity = true;
+                } else {
+                    // we expect the methods to be ordered such that inherited methods are later in the list
+                }
+            }
+        }
+
+        if (possibleAmbiguity) {
+            // pick the first exact match if it exists
+            if (!isExactMatch(winningCandidate, argumentsTypes)) {
+                if (isExactMatch(other, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
-                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        possibleAmbiguity = true;
-                    } else {
-                        // we expect the methods to be ordered such that inherited methods are later in the list
-                    }
+                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
                 }
             }
-            if (possibleAmbiguity) {
-                // pick the first exact match if it exists
-                if (!isExactMatch(winningCandidate, argumentsTypes)) {
-                    if (isExactMatch(other, argumentsTypes)) {
-                        winningCandidate = other;
-                    } else {
-                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
-                    }
-                }
-            }
-            return SymbolReference.solved(winningCandidate);
         }
+
+        return SymbolReference.solved(winningCandidate);
     }
 
     protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
