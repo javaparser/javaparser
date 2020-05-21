@@ -59,64 +59,74 @@ Source: https://openjdk.java.net/projects/jdk/10/
 ## JDK 11 - September 2018
 Source: https://openjdk.java.net/projects/jdk/11/
 
-- JEP 181: Nest-Based Access Control
-- JEP 309: Dynamic Class-File Constants
-- JEP 315: Improve Aarch64 Intrinsics
-- JEP 318: Epsilon: A No-Op Garbage Collector
-- JEP 320: Remove the Java EE and CORBA Modules
-- JEP 321: HTTP Client (Standard)
-- JEP 323: Local-Variable Syntax for Lambda Parameters
-- JEP 324: Key Agreement with Curve25519 and Curve448
-- JEP 327: Unicode 10
-- JEP 328: Flight Recorder
-- JEP 329: ChaCha20 and Poly1305 Cryptographic Algorithms
-- JEP 330: Launch Single-File Source-Code Programs
-- JEP 331: Low-Overhead Heap Profiling
-- JEP 332: Transport Layer Security (TLS) 1.3
-- JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)
-- JEP 335: Deprecate the Nashorn JavaScript Engine
-- JEP 336: Deprecate the Pack200 Tools and API
+| JEP | Status | JavaParser Since | Description |
+| --- | --- | --- | --- |
+| [JEP 181](https://openjdk.java.net/jeps/181) |    Release       | **????**                                                                      | Nest-Based Access Control                                         |
+| [JEP 309](https://openjdk.java.net/jeps/309) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Dynamic Class-File Constants~~                                  |
+| [JEP 315](https://openjdk.java.net/jeps/315) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Improve Aarch64 Intrinsics~~                                    |
+| [JEP 318](https://openjdk.java.net/jeps/318) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Epsilon: A No-Op Garbage Collector~~                            |
+| [JEP 320](https://openjdk.java.net/jeps/320) |  ~~Release~~     | ~~_NA_~~ - JavaParser needs no knowledge of available classes/packages        | ~~Remove the Java EE and CORBA Modules~~                          |
+| [JEP 321](https://openjdk.java.net/jeps/321) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~HTTP Client (Standard)~~                                        |
+| [JEP 323](https://openjdk.java.net/jeps/323) |    Release       | **v3.TBC [#TBC]()**                                                           | Local-Variable Syntax for Lambda Parameters                       |
+| [JEP 324](https://openjdk.java.net/jeps/324) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Key Agreement with Curve25519 and Curve448~~                    |
+| [JEP 327](https://openjdk.java.net/jeps/327) |  ~~Release~~     | **????**                                                                      | Unicode 10                                                        |
+| [JEP 328](https://openjdk.java.net/jeps/328) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Flight Recorder~~                                               |
+| [JEP 329](https://openjdk.java.net/jeps/329) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~ChaCha20 and Poly1305 Cryptographic Algorithms~~                |
+| [JEP 330](https://openjdk.java.net/jeps/330) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Launch Single-File Source-Code Programs~~                       |
+| [JEP 331](https://openjdk.java.net/jeps/331) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Low-Overhead Heap Profiling~~                                   |
+| [JEP 332](https://openjdk.java.net/jeps/332) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Transport Layer Security (TLS) 1.3~~                            |
+| [JEP 333](https://openjdk.java.net/jeps/333) | ~~Experimental~~ | ~~_NA_~~                                                                      | ~~ZGC: A Scalable Low-Latency Garbage Collector (Experimental)~~  |
+| [JEP 335](https://openjdk.java.net/jeps/335) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Deprecate the Nashorn JavaScript Engine~~                       |
+| [JEP 336](https://openjdk.java.net/jeps/336) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Deprecate the Pack200 Tools and API~~                           |
 
 ## JDK 12 - March 2019
 Source: https://openjdk.java.net/projects/jdk/12/
 
-- JEP 189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)
-- JEP 230: Microbenchmark Suite
-- JEP 325: Switch Expressions (Preview)
-- JEP 334: JVM Constants API
-- JEP 340: One AArch64 Port, Not Two
-- JEP 341: Default CDS Archives
-- JEP 344: Abortable Mixed Collections for G1
-- JEP 346: Promptly Return Unused Committed Memory from G1
+| JEP | Status | JavaParser Since | Description |
+| --- | --- | --- | --- |
+| [JEP 189](https://openjdk.java.net/jeps/189) | ~~Experimental~~ | ~~_NA_~~                                                                      | ~~Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)~~ |
+| [JEP 230](https://openjdk.java.net/jeps/230) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Microbenchmark Suite~~                                          |
+| [JEP 325](https://openjdk.java.net/jeps/325) |  _Preview_       | **v3.TBC [#TBC]()**                                                           | Switch Expressions (Preview)                                      |
+| [JEP 334](https://openjdk.java.net/jeps/334) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~JVM Constants API~~                                             |
+| [JEP 340](https://openjdk.java.net/jeps/340) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~One AArch64 Port, Not Two~~                                     |
+| [JEP 341](https://openjdk.java.net/jeps/341) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Default CDS Archives~~                                          |
+| [JEP 344](https://openjdk.java.net/jeps/344) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Abortable Mixed Collections for G1~~                            |
+| [JEP 346](https://openjdk.java.net/jeps/346) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Promptly Return Unused Committed Memory from G1~~               |
 
 ## JDK 13 - September 2018
 Source: https://openjdk.java.net/projects/jdk/13/
 
-- JEP 350: Dynamic CDS Archives
-- JEP 351: ZGC: Uncommit Unused Memory
-- JEP 353: Reimplement the Legacy Socket API
-- JEP 354: Switch Expressions (Preview)
-- JEP 355: Text Blocks (Preview)
+| JEP | Status | JavaParser Since | Description |
+| --- | --- | --- | --- |
+| [JEP 350](https://openjdk.java.net/jeps/350) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Dynamic CDS Archives~~                                        |
+| [JEP 351](https://openjdk.java.net/jeps/351) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~ZGC: Uncommit Unused Memory~~                                 |
+| [JEP 353](https://openjdk.java.net/jeps/353) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Reimplement the Legacy Socket API~~                           |
+| [JEP 354](https://openjdk.java.net/jeps/354) |  _Preview_       | **v3.TBC [#TBC]()**                                                           | Switch Expressions (Preview)                                    |
+| [JEP 355](https://openjdk.java.net/jeps/355) |  _Preview_       | **v3.TBC [#TBC]()**                                                           | Text Blocks (Preview)                                           |
+
+
 
 ## JDK 14 (current) - March 2020
 Source: https://openjdk.java.net/projects/jdk/14/
 
-- JEP 305: Pattern Matching for instanceof (Preview)
-- JEP 343: Packaging Tool (Incubator)
-- JEP 345: NUMA-Aware Memory Allocation for G1
-- JEP 349: JFR Event Streaming
-- JEP 352: Non-Volatile Mapped Byte Buffers
-- JEP 358: Helpful NullPointerExceptions
-- JEP 359: Records (Preview)
-- JEP 361: Switch Expressions (Standard)
-- JEP 362: Deprecate the Solaris and SPARC Ports
-- JEP 363: Remove the Concurrent Mark Sweep (CMS) Garbage Collector
-- JEP 364: ZGC on macOS
-- JEP 365: ZGC on Windows
-- JEP 366: Deprecate the ParallelScavenge + SerialOld GC Combination
-- JEP 367: Remove the Pack200 Tools and API
-- JEP 368: Text Blocks (Second Preview)
-- JEP 370: Foreign-Memory Access API (Incubator)
+| JEP | Status | JavaParser Since | Description |
+| --- | --- | --- | --- |
+| [JEP 305](https://openjdk.java.net/jeps/305) |  _Preview_       | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | Pattern Matching for instanceof (Preview)                       |
+| [JEP 343](https://openjdk.java.net/jeps/343) |  _Incubator_     | ~~_NA_~~                                                                      | ~~Packaging Tool (Incubator)~~                                  |
+| [JEP 345](https://openjdk.java.net/jeps/345) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~NUMA-Aware Memory Allocation for G1~~                         |
+| [JEP 349](https://openjdk.java.net/jeps/349) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~JFR Event Streaming~~                                         |
+| [JEP 352](https://openjdk.java.net/jeps/352) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Non-Volatile Mapped Byte Buffers~~                            |
+| [JEP 358](https://openjdk.java.net/jeps/358) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Helpful NullPointerExceptions~~                               |
+| [JEP 359](https://openjdk.java.net/jeps/359) |  _Preview_       | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | Records (Preview)                                               |
+| [JEP 361](https://openjdk.java.net/jeps/361) |   Release        | **TBC**                                                                       | Switch Expressions (Standard)                                   |
+| [JEP 362](https://openjdk.java.net/jeps/362) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Deprecate the Solaris and SPARC Ports~~                       |
+| [JEP 363](https://openjdk.java.net/jeps/363) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Remove the Concurrent Mark Sweep (CMS) Garbage Collector~~    |
+| [JEP 364](https://openjdk.java.net/jeps/364) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~ZGC on macOS~~                                                |
+| [JEP 365](https://openjdk.java.net/jeps/365) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~ZGC on Windows~~                                              |
+| [JEP 366](https://openjdk.java.net/jeps/366) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Deprecate the ParallelScavenge + SerialOld GC Combination~~   |
+| [JEP 367](https://openjdk.java.net/jeps/367) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Remove the Pack200 Tools and API~~                            |
+| [JEP 368](https://openjdk.java.net/jeps/368) |   Release        | **v3.TBC [#TBC]()**                                                           | Text Blocks (Second Preview)                                    |
+| [JEP 370](https://openjdk.java.net/jeps/370) |  ~~Release~~     | ~~_NA_~~                                                                      | ~~Foreign-Memory Access API (Incubator)~~                       |
 
 ## JDK 15 - _targeted for September 2020_
 Source: https://openjdk.java.net/projects/jdk/15/
