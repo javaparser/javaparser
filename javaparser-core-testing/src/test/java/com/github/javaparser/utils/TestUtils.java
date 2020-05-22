@@ -100,8 +100,8 @@ public class TestUtils {
                 expected,
                 actual,
                 String.format("failed due to line separator differences -- Expected: %s, but actual: %s",
-                        LineEnding.detect(expected).toString(),
-                        LineEnding.detect(actual).toString()
+                        LineEnding.detect(expected).escaped(),
+                        LineEnding.detect(actual).escaped()
                 )
         );
     }
