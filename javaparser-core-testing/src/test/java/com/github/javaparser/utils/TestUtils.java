@@ -136,20 +136,7 @@ public class TestUtils {
      */
     public static void assertEqualToTextResource(String resourceName, String actual) {
         String expected = readResourceUsingSystemEol(resourceName);
-
-        // First test equality ignoring EOL chars
-        assertEqualsNoEol(expected, actual);
-
-        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
-        assertEquals(
-                expected,
-                actual,
-                String.format("failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
-                        LineEnding.detect(expected).escaped(),
-                        LineEnding.detect(actual).escaped(),
-                        LineEnding.SYSTEM.escaped()
-                )
-        );
+        assertEqualsString(expected, actual);
     }
 
     /**
@@ -157,7 +144,7 @@ public class TestUtils {
      */
     public static void assertEqualToTextResourceNoEol(String resourceName, String actual) {
         String expected = readResourceUsingSystemEol(resourceName);
-        assertEquals(expected, actual, "failed due to line separator differences");
+        assertEqualsNoEol(expected, actual);
     }
 
     public static String readTextResource(Class<?> relativeClass, String resourceName) {
@@ -269,16 +256,93 @@ public class TestUtils {
     }
 
     /**
-     * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
+     * Assert that "actual" equals "expected", ignoring line separators.
+     * @deprecated Use {@link #assertEqualsStringIgnoringEol(String, String)}
      */
+    @Deprecated
     public static void assertEqualsNoEol(String expected, String actual) {
-        assertEquals(normalizeEolInTextBlock(expected, LineEnding.ARBITRARY), normalizeEolInTextBlock(actual, LineEnding.ARBITRARY));
+        assertEqualsStringIgnoringEol(expected, actual);
     }
 
     /**
-     * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
+     * Assert that "actual" equals "expected", ignoring line separators.
+     * @deprecated Use {@link #assertEqualsStringIgnoringEol(String, String, String)}
      */
+    @Deprecated
     public static void assertEqualsNoEol(String expected, String actual, String message) {
-        assertEquals(normalizeEolInTextBlock(expected, LineEnding.ARBITRARY), normalizeEolInTextBlock(actual, LineEnding.ARBITRARY), message);
+        assertEqualsStringIgnoringEol(expected, actual, message);
     }
+
+
+    /**
+     * Assert that "actual" equals "expected".
+     * <br>First checks if the content is equal ignoring line separators.
+     * <br>If this passes, then we check if the content is equal - if this fails then we can
+     *  advise that the difference is <em>only</em> in the line separators.
+     */
+    public static void assertEqualsString(String expected, String actual) {
+        assertEqualsString(expected, actual, "");
+    }
+
+    /**
+     * Assert that "actual" equals "expected".
+     * <br>First checks if the content is equal ignoring line separators.
+     * <br>If this passes, then we check if the content is equal - if this fails then we can
+     *  advise that the difference is <em>only</em> in the line separators.
+     */
+    public static void assertEqualsString(String expected, String actual, String message) {
+        // First test equality ignoring EOL chars
+        assertEqualsNoEol(expected, actual, message);
+
+        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
+        assertEquals(
+                expected,
+                actual,
+                message + String.format(" -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
+                        LineEnding.detect(expected).escaped(),
+                        LineEnding.detect(actual).escaped(),
+                        LineEnding.SYSTEM.escaped()
+                )
+        );
+    }
+
+
+    /**
+     * Assert that "actual" equals "expected", ignoring line separators.
+     */
+    public static void assertEqualsStringIgnoringEol(String expected, String actual) {
+        assertEqualsString(
+                normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
+                normalizeEolInTextBlock(actual, LineEnding.ARBITRARY)
+        );
+    }
+
+    /**
+     * Assert that "actual" equals "expected", ignoring line separators.
+     */
+    public static void assertEqualsStringIgnoringEol(String expected, String actual, String message) {
+        assertEqualsString(
+                normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
+                normalizeEolInTextBlock(actual, LineEnding.ARBITRARY),
+                message
+        );
+    }
+
+
+    /**
+     * Assert that the given string is detected as having the given line separator.
+     */
+    public static void assertLineSeparator(String text, LineEnding expectedLineSeparator) {
+        LineEnding actualLineSeparator = LineEnding.detect(text);
+        assertEquals(expectedLineSeparator, actualLineSeparator);
+    }
+
+    /**
+     * Assert that the given string is detected as having the given line separator.
+     */
+    public static void assertLineSeparator(String text, LineEnding expectedLineSeparator, String message) {
+        LineEnding actualLineSeparator = LineEnding.detect(text);
+        assertEquals(expectedLineSeparator, actualLineSeparator, message);
+    }
+
 }
