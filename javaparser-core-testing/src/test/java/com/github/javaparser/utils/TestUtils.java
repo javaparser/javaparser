@@ -21,13 +21,22 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.expr.Expression;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -76,10 +85,15 @@ public class TestUtils {
             return null;
         }
     }
-    
-    public static void assertEqualToTextResource(String resourceName, String actual){
+
+    public static void assertEqualToTextResource(String resourceName, String actual) {
         String expected = readResource(resourceName);
-        assertEquals(expected, actual);
+
+        // First test equality ignoring EOL chars
+        assertEqualsNoEol(expected, actual);
+
+        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
+        assertEquals(expected, actual, "failed due to line separator differences");
     }
 
     public static String readTextResource(Class<?> relativeClass, String resourceName) {
