@@ -99,9 +99,10 @@ public class TestUtils {
         assertEquals(
                 expected,
                 actual,
-                String.format("failed due to line separator differences -- Expected: %s, but actual: %s",
+                String.format("failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
                         LineEnding.detect(expected).escaped(),
-                        LineEnding.detect(actual).escaped()
+                        LineEnding.detect(actual).escaped(),
+                        LineEnding.SYSTEM.escaped()
                 )
         );
     }
