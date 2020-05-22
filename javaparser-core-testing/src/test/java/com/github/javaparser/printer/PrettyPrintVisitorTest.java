@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestParser.*;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -233,7 +233,7 @@ class PrettyPrintVisitorTest {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = parse(code);
         String content = cu.toString();
-        assertEqualsNoEol("import x.y.z;\n" +
+        assertEqualsStringIgnoringEol("import x.y.z;\n" +
                 "import a.b.c;\n" +
                 "import static b.c.d;\n" +
                 "\n" +
@@ -247,7 +247,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = parse(code);
         PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
         String content = cu.toString(orderImports);
-        assertEqualsNoEol("import static b.c.d;\n" +
+        assertEqualsStringIgnoringEol("import static b.c.d;\n" +
                 "import a.b.c;\n" +
                 "import x.y.z;\n" +
                 "\n" +
@@ -260,7 +260,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
@@ -277,7 +277,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     */\n" +
@@ -291,7 +291,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\n ab\n\n\n cd\n\n\n");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * ab\n" +
@@ -308,7 +308,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
@@ -323,7 +323,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
@@ -341,7 +341,7 @@ class PrettyPrintVisitorTest {
                 "line2\n" +
                 "    3");
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
@@ -358,7 +358,7 @@ class PrettyPrintVisitorTest {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
 
-        assertEqualsNoEol("public class X {\n" +
+        assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
                 "    // line1\n" +
                 "    void abc() {\n" +
@@ -378,7 +378,7 @@ class PrettyPrintVisitorTest {
                 "    }\n" +
                 "}\n");
 
-        assertEqualsNoEol("class A {\n" +
+        assertEqualsStringIgnoringEol("class A {\n" +
                 "\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
                 "    // sdfsdfsdf\n" +
@@ -416,7 +416,7 @@ class PrettyPrintVisitorTest {
                 "public void add(int x, int y){}}";
 
         CompilationUnit cu_allLeadingSpaces = parse(input_allLeadingSpaces);
-        assertEqualsNoEol(expected, cu_allLeadingSpaces.toString());
+        assertEqualsStringIgnoringEol(expected, cu_allLeadingSpaces.toString());
     }
 
     @Test
@@ -432,7 +432,7 @@ class PrettyPrintVisitorTest {
                 "public void add(int x, int y){}}";
 
         CompilationUnit cu_singleMissingLeadingSpace = parse(input_singleMissingLeadingSpace);
-        assertEqualsNoEol(expected, cu_singleMissingLeadingSpace.toString());
+        assertEqualsStringIgnoringEol(expected, cu_singleMissingLeadingSpace.toString());
     }
 
     @Test
@@ -448,13 +448,13 @@ class PrettyPrintVisitorTest {
                 "public void add(int x, int y){}}";
 
         CompilationUnit cu_leadingTab = parseCompilationUnit(input_leadingTab);
-        assertEqualsNoEol(expected, cu_leadingTab.toString());
+        assertEqualsStringIgnoringEol(expected, cu_leadingTab.toString());
     }
 
     @Test
     void printYield() {
         Statement statement = parseStatement("yield 5*5;");
-        assertEqualsNoEol("yield 5 * 5;", statement.toString());
+        assertEqualsStringIgnoringEol("yield 5 * 5;", statement.toString());
     }
 
     @Test
@@ -467,7 +467,7 @@ class PrettyPrintVisitorTest {
                 "              </html>\n" +
                 "              \"\"\";}");
 
-        assertEqualsNoEol("String html = \"\"\"\n" +
+        assertEqualsStringIgnoringEol("String html = \"\"\"\n" +
                 "    <html>\n" +
                 "        <body>\n" +
                 "            <p>Hello, world</p>\n" +
@@ -482,7 +482,7 @@ class PrettyPrintVisitorTest {
                 "              <html>\n" +
                 "              </html>\"\"\";}");
 
-        assertEqualsNoEol("String html = \"\"\"\n" +
+        assertEqualsStringIgnoringEol("String html = \"\"\"\n" +
                 "    <html>\n" +
                 "    </html>\"\"\";", cu.getClassByName("X").get().getFieldByName("html").get().toString());
     }

@@ -34,15 +34,13 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 
 /**
@@ -192,7 +190,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        value.value();\n" +
                 "    }\n" +
                 "}";
-        assertEqualsNoEol(expected, s);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
     @Test
@@ -216,7 +214,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        value.value();\n" +
                 "    }\n" +
                 "}";
-        assertEqualsNoEol(expected, s);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
 
@@ -247,7 +245,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        assertEqualsNoEol(expected, s);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
     @Test
@@ -277,7 +275,7 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        }\n" +
                 "    }\n" +
                 "}";
-        assertEqualsNoEol(expected, s);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
     @Test
@@ -307,6 +305,6 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        }\n\n" +
                 "    }\n" +
                 "}";
-        assertEqualsNoEol(expected, s);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 }

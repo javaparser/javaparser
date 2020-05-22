@@ -32,7 +32,7 @@ import java.io.IOException;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -75,7 +75,7 @@ class CommentsInserterTest {
                 "    /** const2 javadoc */" + EOL +
                 "    ANOTHER_CONSTANT" + EOL +
                 "}");
-        assertEqualsNoEol("public enum X {\n" +
+        assertEqualsStringIgnoringEol("public enum X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * const1 javadoc\n" +
@@ -99,7 +99,7 @@ class CommentsInserterTest {
                 "" + EOL +
                 "}");
 
-        assertEqualsNoEol("@Anno(stuff = {// Just,\n" +
+        assertEqualsStringIgnoringEol("@Anno(stuff = {// Just,\n" +
                 "// an,\n" +
                 "// example\n" +
                 "})\n" +

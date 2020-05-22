@@ -35,7 +35,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -228,7 +228,7 @@ class ModuleDeclarationTest {
                         .addModuleName("other.bar")
                 );
 
-        assertEqualsNoEol("@SuppressWarnings(\"module\")\n" +
+        assertEqualsStringIgnoringEol("@SuppressWarnings(\"module\")\n" +
                 "module com.laamella.base {\n" +
                 "    requires transitive java.desktop;\n" +
                 "    exports com.laamella.base.entity.channel;\n" +

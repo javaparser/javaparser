@@ -31,7 +31,7 @@ import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,7 +97,7 @@ class CommentTest {
         methodDeclaration.setJavadocComment("", javadoc);
 
         // Assert
-        assertEqualsNoEol("public class MyClass {\n" +
+        assertEqualsStringIgnoringEol("public class MyClass {\n" +
                 "\n" +
                 "  /**\n" +
                 "   * Change Javadoc\n" +
@@ -138,7 +138,7 @@ class CommentTest {
         methodDeclaration.removeComment();
 
         // Assert
-        assertEqualsNoEol("public class MyClass {\n" +
+        assertEqualsStringIgnoringEol("public class MyClass {\n" +
                 "\n" +
                 "  public void oneMethod() {\n" +
                 "  }\n" +
@@ -176,7 +176,7 @@ class CommentTest {
         methodDeclaration.removeJavaDocComment();
 
         // Assert
-        assertEqualsNoEol("public class MyClass {\n" +
+        assertEqualsStringIgnoringEol("public class MyClass {\n" +
                 "\n" +
                 "  /**\n" +
                 "   * Comment A\n" +

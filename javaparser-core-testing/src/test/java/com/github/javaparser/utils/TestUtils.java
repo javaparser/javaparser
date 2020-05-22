@@ -144,7 +144,7 @@ public class TestUtils {
      */
     public static void assertEqualToTextResourceNoEol(String resourceName, String actual) {
         String expected = readResourceUsingSystemEol(resourceName);
-        assertEqualsNoEol(expected, actual);
+        assertEqualsStringIgnoringEol(expected, actual);
     }
 
     public static String readTextResource(Class<?> relativeClass, String resourceName) {
@@ -292,7 +292,7 @@ public class TestUtils {
      */
     public static void assertEqualsString(String expected, String actual, String message) {
         // First test equality ignoring EOL chars
-        assertEqualsNoEol(expected, actual, message);
+        assertEqualsStringIgnoringEol(expected, actual, message);
 
         // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
         assertEquals(
@@ -311,7 +311,7 @@ public class TestUtils {
      * Assert that "actual" equals "expected", ignoring line separators.
      */
     public static void assertEqualsStringIgnoringEol(String expected, String actual) {
-        assertEqualsString(
+        assertEquals(
                 normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
                 normalizeEolInTextBlock(actual, LineEnding.ARBITRARY)
         );
@@ -321,7 +321,7 @@ public class TestUtils {
      * Assert that "actual" equals "expected", ignoring line separators.
      */
     public static void assertEqualsStringIgnoringEol(String expected, String actual, String message) {
-        assertEqualsString(
+        assertEquals(
                 normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
                 normalizeEolInTextBlock(actual, LineEnding.ARBITRARY),
                 message

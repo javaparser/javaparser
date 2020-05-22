@@ -56,7 +56,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -175,7 +175,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.addImport("a.B");
 
-        assertEqualsNoEol("import a.A;\nimport a.B;\nclass X{}", LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol("import a.A;\nimport a.B;\nclass X{}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
@@ -1102,7 +1102,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 c.remove(method);
             }
         });
-        assertEqualsNoEol("public class Foo {\n" +
+        assertEqualsStringIgnoringEol("public class Foo {\n" +
                 "// Some comment\n\n" +
                 "}", LexicalPreservingPrinter.print(cu));
     }
@@ -1162,7 +1162,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
                 .setBlockComment("block");
-        assertEqualsNoEol("public class Foo {" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
                 "    /*block*/" + EOL +
                 "    void mymethod() {" + EOL +
                 "    }" + EOL +
@@ -1178,7 +1178,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
                 .setLineComment("line");
-        assertEqualsNoEol("public class Foo {" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
                 "    //line" + EOL +
                 "    void mymethod() {" + EOL +
                 "    }" + EOL +
@@ -1196,7 +1196,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
-        assertEqualsNoEol("public class Foo {" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
                 "void mymethod() {" + EOL +
                 "}" + EOL +
                 "}", LexicalPreservingPrinter.print(cu));
@@ -1233,7 +1233,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
-        assertEqualsNoEol("public class Foo {" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
                 "void mymethod() {" + EOL +
                 "}" + EOL +
                 "}", LexicalPreservingPrinter.print(cu));
@@ -1270,7 +1270,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();
         type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
 
-        assertEqualsNoEol("class X { X() {\n    testme();\n} private void testme() {} }",
+        assertEqualsStringIgnoringEol("class X { X() {\n    testme();\n} private void testme() {} }",
                 LexicalPreservingPrinter.print(compilationUnit));
     }
 
@@ -1283,7 +1283,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .findAll(MethodCallExpr.class)
                 .forEach(Node::removeForced);
 
-        assertEqualsNoEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+        assertEqualsStringIgnoringEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
     }
 
     @Test
@@ -1314,13 +1314,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         CompilationUnit cu = javaParser.parse("package x;class X{}").getResult().get();
 
         cu.setComment(new LineComment("Bla"));
-        assertEqualsNoEol("//Bla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol("//Bla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
 
         cu.setComment(new LineComment("BlaBla"));
-        assertEqualsNoEol("//BlaBla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol("//BlaBla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
 
         cu.removeComment();
-        assertEqualsNoEol("package x;class X{}", LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol("package x;class X{}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test

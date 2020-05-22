@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -109,7 +109,7 @@ public class Issue2620Test {
         assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
 
         // Commented out until #2661 is fixed (re: EOL characters of injected code)
-        assertEqualsNoEol(escapeNewlines(expected), escapeNewlines(actual));
+        assertEqualsStringIgnoringEol(escapeNewlines(expected), escapeNewlines(actual));
         assertEquals(expected, actual, "Failed due to EOL differences.");
     }
 
