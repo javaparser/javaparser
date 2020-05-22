@@ -24,12 +24,14 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.utils.LineEnding;
 
 import java.io.IOException;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.TestUtils.readResource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -63,7 +65,20 @@ public abstract class AbstractLexicalPreservingTest {
     protected void assertTransformed(String exampleName, Node node) throws IOException {
         String expectedCode = readExample(exampleName + "_expected");
         String actualCode = LexicalPreservingPrinter.print(node);
-        assertEquals(expectedCode, actualCode);
+
+        // First test equality ignoring EOL chars
+        assertEqualsNoEol(expectedCode, actualCode);
+
+        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
+        assertEquals(
+                expectedCode,
+                actualCode,
+                String.format("failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
+                        LineEnding.detect(expectedCode).escaped(),
+                        LineEnding.detect(actualCode).escaped(),
+                        LineEnding.SYSTEM.escaped()
+                )
+        );
     }
 
     protected void assertUnchanged(String exampleName) throws IOException {
