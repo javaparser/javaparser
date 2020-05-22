@@ -408,7 +408,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @Deprecated
     public static final int ABSOLUTE_BEGIN_LINE = Position.ABSOLUTE_BEGIN_LINE;
 
-
     /**
      * @deprecated Use {@link Position#ABSOLUTE_END_LINE}
      */
