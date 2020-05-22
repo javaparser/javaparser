@@ -24,7 +24,13 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -41,7 +47,11 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -142,40 +152,55 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        List<ResolvedMethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).filter(staticFilter)
-                                    .sorted(new MethodComparator()).collect(Collectors.toList())) {
-            if (method.isBridge() || method.isSynthetic()) continue;
-            ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-            methods.add(methodDeclaration);
 
-            // no need to search for overloaded/inherited methods if the method has no parameters
+        List<ResolvedMethodDeclaration> candidateSolvedMethods = new ArrayList<>();
+
+        // First consider the directly-declared methods.
+        List<Method> methods = Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> m.getName().equals(name))
+                .filter(staticFilter)
+                .filter(method -> !method.isBridge())
+                .filter(method -> !method.isSynthetic())
+                .sorted(new MethodComparator())
+                .collect(Collectors.toList());
+
+        // Transform into resolved method declarations
+        for (Method method : methods) {
+            ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
+            candidateSolvedMethods.add(methodDeclaration);
+
+            // no need to search for overloaded/inherited candidateSolvedMethods if the method has no parameters
             if (argumentsTypes.isEmpty() && methodDeclaration.getNumberOfParams() == 0) {
                 return SymbolReference.solved(methodDeclaration);
             }
         }
+
+        // Next consider methods declared within extended superclasses.
         if (getSuperClass() != null) {
             ResolvedClassDeclaration superClass = (ResolvedClassDeclaration) getSuperClass().getTypeDeclaration();
             SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, staticOnly);
             if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
+                candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
             }
         }
+
+        // Next consider methods declared within implemented intefaces.
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
             SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, staticOnly);
             if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
+                candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
             }
         }
+
         // When empty there is no sense in trying to find the most applicable.
         // This is useful for debugging. Performance is not affected as 
         // MethodResolutionLogic.findMostApplicable method returns very early 
-        // when methods is empty.
-        if (methods.isEmpty()) {
+        // when candidateSolvedMethods is empty.
+        if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
-        return MethodResolutionLogic.findMostApplicable(methods, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
     }
 
     @Override

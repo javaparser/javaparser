@@ -21,22 +21,14 @@
 
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.validator.chunks.VarValidator;
-
 /**
- * This validator validates according to Java 10 syntax rules.
+ * This validator validates according to Java 15 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/10/">https://openjdk.java.net/projects/jdk/10/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
  */
-public class Java10Validator extends Java9Validator {
+public class Java15Validator extends Java14Validator {
 
-    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
-
-    public Java10Validator() {
+    public Java15Validator() {
         super();
-        add(varOnlyOnLocalVariableDefinitionAndForAndTry);
-        /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
-           because that is done by the Java10 postprocessor. You can add it by hand, but that is obscure enough to ignore. */
     }
 }

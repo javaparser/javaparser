@@ -131,11 +131,15 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+
+        // Begin by locating methods declared "here"
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name))
                 .filter(m -> !staticOnly || m.isStatic())
                 .collect(Collectors.toList());
-        // We want to avoid infinite recursion in case of Object having Object as ancestor
+
+        // Next, consider methods declared within ancestors.
+        // Note that we only consider ancestors when we are not currently at java.lang.Object (avoiding infinite recursion).
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
                 // Avoid recursion on self
@@ -144,8 +148,8 @@ public class JavaParserTypeDeclarationAdapter {
                             .stream()
                             .filter(m -> m.getName().equals(name))
                             .collect(Collectors.toList()));
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic
-                            .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
+                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
+
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
@@ -155,8 +159,10 @@ public class JavaParserTypeDeclarationAdapter {
                 }
             }
         }
-        // We want to avoid infinite recursion when a class is using its own method
-        // see issue #75
+
+        // If we haven't located any candidates that are declared on this type or its ancestors, consider the parent context.
+        // This is relevant e.g. with nested classes.
+        // Note that we want to avoid infinite recursion when a class is using its own method - see issue #75
         if (candidateMethods.isEmpty()) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, staticOnly);
             if (parentSolution.isSolved()) {

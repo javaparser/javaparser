@@ -26,6 +26,8 @@ import com.github.javaparser.ast.validator.chunks.VarValidator;
 
 /**
  * This validator validates according to Java 11 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
 public class Java11Validator extends Java10Validator {
     final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
