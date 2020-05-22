@@ -86,6 +86,9 @@ public class TestUtils {
         }
     }
 
+    /**
+     * Use this assertion if line endings are important, otherwise use {@link #assertEqualToTextResourceNoEol(String, String)}
+     */
     public static void assertEqualToTextResource(String resourceName, String actual) {
         String expected = readResource(resourceName);
 
@@ -93,6 +96,21 @@ public class TestUtils {
         assertEqualsNoEol(expected, actual);
 
         // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
+        assertEquals(
+                expected,
+                actual,
+                String.format("failed due to line separator differences -- Expected: %s, but actual: %s",
+                        LineEnding.detect(expected),
+                        LineEnding.detect(actual)
+                )
+        );
+    }
+
+    /**
+     * If line endings are important, use {@link #assertEqualToTextResource(String, String)}
+     */
+    public static void assertEqualToTextResourceNoEol(String resourceName, String actual) {
+        String expected = readResource(resourceName);
         assertEquals(expected, actual, "failed due to line separator differences");
     }
 
