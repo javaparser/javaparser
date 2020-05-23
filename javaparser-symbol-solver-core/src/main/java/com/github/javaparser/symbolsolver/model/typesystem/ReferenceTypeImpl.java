@@ -216,11 +216,13 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     private boolean hasSuperClassDifferentToSelf(ResolvedReferenceTypeDeclaration typeDeclaration) {
+        // TODO: Consider enums (which implicitly extend java.lang.Enum)
         if(!typeDeclaration.isClass()) {
             // If self is not a class, there is no super class
             return false;
         }
 
+        // TODO: Consider enums (which implicitly extend java.lang.Enum)
         if(!typeDeclaration.asClass().getSuperClass().isPresent()) {
             // If there is no super class, cannot get super class
             return false;
