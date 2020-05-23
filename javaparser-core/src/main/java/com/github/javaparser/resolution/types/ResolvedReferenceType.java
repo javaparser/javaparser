@@ -540,4 +540,14 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
     }
 
+    /**
+     * @return true, if this represents {@code java.lang.Enum}
+     * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
+     */
+    public boolean isJavaLangEnum() {
+        return this.isReferenceType()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+    }
+
 }

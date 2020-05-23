@@ -293,4 +293,13 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
                 && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
     }
 
+    /**
+     * @return true, if this represents {@code java.lang.Enum}
+     * @see ResolvedReferenceType#isJavaLangEnum()
+     */
+    default boolean isJavaLangEnum() {
+        return this.isEnum()
+                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+    }
+
 }
