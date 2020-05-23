@@ -363,6 +363,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 if (resolvedTypeName.isInterface()) {
                     return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
                 } else if (resolvedTypeName.isClass()) {
+                    // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
                     return resolvedTypeName.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
                 } else {
                     throw new UnsupportedOperationException(node.getClass().getCanonicalName());
@@ -374,6 +375,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
+            // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
             return ((ResolvedClassDeclaration) typeOfNode).getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());

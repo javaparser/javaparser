@@ -87,8 +87,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
+        // null-check <strong>is</strong> required due to definition of {@code getImports()} -- see also #2695
+        // Changing this would required editing the generators to return an empty collection as opposed to null
         // Look among statically imported values
-        // TODO: Is null check required?
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl.isStatic()) {
