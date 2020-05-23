@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -177,20 +176,24 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         // Next consider methods declared within extended superclasses.
-        getSuperClass().ifPresent(superClass -> {
-            ResolvedClassDeclaration superClassTypeDeclaration = (ResolvedClassDeclaration) superClass.getTypeDeclaration();
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClassTypeDeclaration, name, argumentsTypes, staticOnly);
-            if (ref.isSolved()) {
-                candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
-            }
-        });
+        getSuperClass()
+                .flatMap(ResolvedReferenceType::getTypeDeclaration)
+                .ifPresent(superClassTypeDeclaration -> {
+                    SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClassTypeDeclaration, name, argumentsTypes, staticOnly);
+                    if (ref.isSolved()) {
+                        candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
+                    }
+                });
 
-        // Next consider methods declared within implemented intefaces.
+        // Next consider methods declared within implemented interfaces.
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, staticOnly);
-            if (ref.isSolved()) {
-                candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
-            }
+            interfaceDeclaration.getTypeDeclaration()
+                    .ifPresent(interfaceTypeDeclaration -> {
+                        SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceTypeDeclaration, name, argumentsTypes, staticOnly);
+                        if (ref.isSolved()) {
+                            candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
+                        }
+                    });
         }
 
         // When empty there is no sense in trying to find the most applicable.
@@ -243,18 +246,19 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         getSuperClass().ifPresent(superClass -> {
-            ResolvedClassDeclaration superClassTypeDeclaration = (ResolvedClassDeclaration) superClass.getTypeDeclaration();
-            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues);
-            ref.ifPresent(methodUsages::add);
+            superClass.getTypeDeclaration().ifPresent(superClassTypeDeclaration -> {
+                ContextHelper.solveMethodAsUsage(superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues)
+                        .ifPresent(methodUsages::add);
+            });
         });
 
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
-            Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, invokationContext, typeParameterValues);
-            ref.ifPresent(methodUsages::add);
+            interfaceDeclaration.getTypeDeclaration()
+                    .flatMap(superClassTypeDeclaration -> interfaceDeclaration.getTypeDeclaration())
+                    .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                    .ifPresent(methodUsages::add);
         }
-
         Optional<MethodUsage> ref = MethodResolutionLogic.findMostApplicableUsage(methodUsages, name, argumentsTypes, typeSolver);
-
         return ref;
     }
 

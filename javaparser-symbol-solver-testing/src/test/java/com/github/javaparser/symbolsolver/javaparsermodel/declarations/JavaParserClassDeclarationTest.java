@@ -825,7 +825,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         ResolvedReferenceType stringType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode);
         ResolvedReferenceType rawClassType = (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode);
-        ResolvedReferenceType classOfStringType = (ResolvedReferenceType) rawClassType.replaceTypeVariables(rawClassType.getTypeDeclaration().getTypeParameters().get(0), stringType);
+        ResolvedReferenceType classOfStringType = (ResolvedReferenceType) rawClassType.replaceTypeVariables(rawClassType.getTypeDeclaration().get().getTypeParameters().get(0), stringType);
         res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType));
         assertFalse(res.isSolved());
     }

@@ -60,7 +60,7 @@ class Issue347Test extends AbstractResolutionTest{
         FieldDeclaration fieldDeclaration = Navigator.demandNodeOfGivenClass(cu, FieldDeclaration.class);
         ResolvedType fieldType = javaParserFacade.getType(fieldDeclaration);
         assertTrue(fieldType.isReferenceType());
-        assertTrue(fieldType.asReferenceType().getTypeDeclaration().isEnum());
+        assertTrue(fieldType.asReferenceType().getTypeDeclaration().get().isEnum());
         assertEquals("foo.bar.Foo", fieldType.asReferenceType().getQualifiedName());
     }
 }

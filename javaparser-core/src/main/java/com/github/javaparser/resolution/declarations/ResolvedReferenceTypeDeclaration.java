@@ -247,7 +247,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(qualifiedName));
+        return getAllAncestors().stream()
+                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                .anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
     }
 
     /**

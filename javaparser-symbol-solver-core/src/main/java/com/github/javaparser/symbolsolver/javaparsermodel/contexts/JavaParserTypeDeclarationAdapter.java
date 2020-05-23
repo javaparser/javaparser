@@ -25,7 +25,12 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -39,6 +44,7 @@ import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -104,12 +110,18 @@ public class JavaParserTypeDeclarationAdapter {
     /**
      * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
      * to {@param name}.
+     * TODO: Edit to remove return of null (favouring a return of optional)
      * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
      */
     private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {
         for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
             try {
-                for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                ResolvedReferenceTypeDeclaration ancestorReferenceTypeDeclaration = ancestor
+                        .getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+
+                for (ResolvedTypeDeclaration internalTypeDeclaration : ancestorReferenceTypeDeclaration.internalTypes()) {
                     boolean visible = true;
                     if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
                         ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = internalTypeDeclaration.asReferenceType();
@@ -121,20 +133,21 @@ public class JavaParserTypeDeclarationAdapter {
                         if (visible) {
                             return internalTypeDeclaration;
                         } else {
-                            return null;
+                            return null; // FIXME -- Avoid returning null.
                         }
                     }
                 }
+
                 // check recursively the ancestors of this ancestor
-                ResolvedTypeDeclaration ancestorDeclaration = checkAncestorsForType(name, ancestor.getTypeDeclaration());
-                if (ancestorDeclaration != null) {
-                    return ancestorDeclaration;
+                ResolvedTypeDeclaration ancestorTypeDeclaration = checkAncestorsForType(name, ancestorReferenceTypeDeclaration);
+                if (ancestorTypeDeclaration != null) {
+                    return ancestorTypeDeclaration;
                 }
             } catch (UnsupportedOperationException e) {
                 // just continue using the next ancestor
             }
         }
-        return null;
+        return null; // FIXME -- Avoid returning null.
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
@@ -147,19 +160,22 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Next, consider methods declared within ancestors.
         // Note that we only consider ancestors when we are not currently at java.lang.Object (avoiding infinite recursion).
-        if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
+        if (!typeDeclaration.isJavaLangObject()) {
             for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
+                Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclaration = ancestor.getTypeDeclaration();
+
                 // Avoid recursion on self
-                if (typeDeclaration != ancestor.getTypeDeclaration()) {
+                if (ancestor.getTypeDeclaration().isPresent() && typeDeclaration != ancestorTypeDeclaration.get()) {
+                    // Consider methods declared on self
                     candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors()
                             .stream()
                             .filter(m -> m.getName().equals(name))
                             .collect(Collectors.toList()));
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly);
 
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
+                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
                     if (res.isSolved()) {
                         candidateMethods.add(res.getCorrespondingDeclaration());
                     }

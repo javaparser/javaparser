@@ -183,7 +183,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedReferenceType refType, String name,
                                                      List<ResolvedType> argumentsTypes,
                                                      Context invokationContext) {
-        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, invokationContext, refType.typeParametersValues());
+        if(!refType.getTypeDeclaration().isPresent()) {
+            return Optional.empty();
+        }
+
+        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration().get(), name, argumentsTypes, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 
@@ -216,7 +220,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     break;
                 }
                 if (!argumentsTypes.get(i).isArray() && parameter.isVariadic()) {
-                	parameterType = parameterType.asArrayType().getComponentType();
+                    parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }

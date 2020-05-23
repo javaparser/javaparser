@@ -182,7 +182,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
-                    return singletonList(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration());
+                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                    return singletonList(
+                            typeOfScope.asWildcard()
+                                    .getBoundedType()
+                                    .asReferenceType()
+                                    .getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                    );
                 } else {
                     return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
                 }
@@ -192,22 +199,47 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             } else if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
-                    result.add(bound.getType().asReferenceType().getTypeDeclaration());
+                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                    result.add(
+                            bound.getType()
+                                    .asReferenceType()
+                                    .getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                    );
                 }
                 return result;
             } else if (typeOfScope.isConstraint()) {
-                return singletonList(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration());
+                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                return singletonList(
+                        typeOfScope.asConstraintType()
+                                .getBound()
+                                .asReferenceType()
+                                .getTypeDeclaration()
+                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                );
             } else if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
-                        .map(ResolvedReferenceType::getTypeDeclaration)
+                        .flatMap(ResolvedReferenceType::getTypeDeclaration)
                         .map(Collections::singletonList)
-                        .orElseThrow(() -> new UnsolvedSymbolException("No common ancestor available for UnionType"
-                                + typeOfScope.describe()));
+                        .orElseThrow(() -> new UnsolvedSymbolException("No common ancestor available for UnionType" + typeOfScope.describe()));
             }
-            return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
+
+            // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+            return singletonList(
+                    typeOfScope.asReferenceType()
+                            .getTypeDeclaration()
+                            .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+            );
         }
+
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-        return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
+
+        // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+        return singletonList(
+                typeOfScope.asReferenceType()
+                        .getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+        );
     }
 
     public N getWrappedNode() {

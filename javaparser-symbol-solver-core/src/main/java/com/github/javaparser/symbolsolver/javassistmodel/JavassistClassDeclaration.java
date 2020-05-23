@@ -225,9 +225,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         }
 
         // add the method declaration of the superclass to the candidates, if present
-        if (getSuperClass().isPresent()) {
+        if (getSuperClass().isPresent() && getSuperClass().get().getTypeDeclaration().isPresent()) {
             SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
-                    getSuperClass().get().getTypeDeclaration(),
+                    getSuperClass().get().getTypeDeclaration().get(),
                     name,
                     argumentsTypes,
                     staticOnly
@@ -239,14 +239,18 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
-                    interfaceRef.getTypeDeclaration(),
-                    name,
-                    argumentsTypes,
-                    staticOnly
-            );
-            if (interfaceMethodRef.isSolved()) {
-                candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
+            if(interfaceRef.getTypeDeclaration().isPresent()) {
+                SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
+                        interfaceRef.getTypeDeclaration().get(),
+                        name,
+                        argumentsTypes,
+                        staticOnly
+                );
+                if (interfaceMethodRef.isSolved()) {
+                    candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
+                }
+            } else {
+                // Consider IllegalStateException or similar?
             }
         }
 

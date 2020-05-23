@@ -194,7 +194,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (values.contains(tpToReplace)) {
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
-            return create(result.getTypeDeclaration(), values);
+            if(result.getTypeDeclaration().isPresent()) {
+                return create(result.getTypeDeclaration().get(), values);
+            }
         }
 
         return result;
@@ -238,13 +240,15 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isInterface())
+                .filter(it -> it.getTypeDeclaration().isPresent())
+                .filter(it -> it.getTypeDeclaration().get().isInterface())
                 .collect(Collectors.toList());
     }
 
     public final List<ResolvedReferenceType> getAllClassesAncestors() {
         return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isClass())
+                .filter(it -> it.getTypeDeclaration().isPresent())
+                .filter(it -> it.getTypeDeclaration().get().isClass())
                 .collect(Collectors.toList());
     }
 
@@ -298,10 +302,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     /**
      * Corresponding TypeDeclaration
-     * TODO: Convert to Optional
      */
-    public final ResolvedReferenceTypeDeclaration getTypeDeclaration() {
-        return typeDeclaration;
+    public final Optional<ResolvedReferenceTypeDeclaration> getTypeDeclaration() {
+        return Optional.of(typeDeclaration);
     }
 
     /**
@@ -368,7 +371,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        String typeId = this.getTypeDeclaration().getId();
+        if(!this.getTypeDeclaration().isPresent()) {
+            return Optional.empty(); // TODO: Consider IllegalStateException or similar
+        }
+
+        String typeId = this.getTypeDeclaration().get().getId();
         if (typeId.equals(typeParameterDeclaration.getContainerId())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
@@ -388,9 +395,17 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(this.getTypeDeclaration().getDeclaredMethods());
-        getDirectAncestors().forEach(a ->
-                allMethods.addAll(a.getAllMethods()));
+        if(!this.getTypeDeclaration().isPresent()) {
+            return new ArrayList<>(); // empty list -- consider IllegalStateException or similar
+        }
+
+        // Get the methods declared directly on this.
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(
+                this.getTypeDeclaration().get().getDeclaredMethods()
+        );
+        // Also get methods inherited from ancestors.
+        getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods()));
+
         return allMethods;
     }
 

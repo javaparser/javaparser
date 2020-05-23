@@ -153,10 +153,14 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     public Set<MethodUsage> getDeclaredMethods() {
         // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
-        for (ResolvedMethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
-            methods.add(methodUsage);
-        }
+
+        getTypeDeclaration().ifPresent(referenceTypeDeclaration -> {
+            for (ResolvedMethodDeclaration methodDeclaration : referenceTypeDeclaration.getDeclaredMethods()) {
+                MethodUsage methodUsage = new MethodUsage(methodDeclaration);
+                methods.add(methodUsage);
+            }
+        });
+
         return methods;
     }
 
@@ -247,11 +251,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
 
         // If This is not java.lang.Object, then add it as an implicit super type.
-        if (!this.getTypeDeclaration().isJavaLangObject()) {
+        if (this.getTypeDeclaration().isPresent() && !this.getTypeDeclaration().get().isJavaLangObject()) {
             ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
             ResolvedReferenceType objectRef = create(objectType);
             ancestors.add(objectRef);
         }
+
         return ancestors;
     }
 
@@ -261,6 +266,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        return new HashSet<>(getTypeDeclaration().getDeclaredFields());
+        Set<ResolvedFieldDeclaration> allFields = new HashSet<>();
+
+        if (getTypeDeclaration().isPresent()) {
+            allFields = new HashSet<>(getTypeDeclaration().get().getDeclaredFields());
+        }
+
+        return allFields;
     }
 }

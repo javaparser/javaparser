@@ -22,7 +22,11 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
@@ -35,7 +39,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -113,36 +122,50 @@ class ReflectionClassAdapter {
             }
         }
         for (ResolvedReferenceType ancestor : typeDeclaration.getAllAncestors()) {
-            if (ancestor.getTypeDeclaration().hasField(name)) {
-                ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration) ancestor.getTypeDeclaration().getField(name);
-                return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
+            if (ancestor.getTypeDeclaration().isPresent()) {
+                ResolvedReferenceTypeDeclaration typeDeclaration = ancestor.getTypeDeclaration().get();
+                if (typeDeclaration.hasField(name)) {
+                    ReflectionFieldDeclaration reflectionFieldDeclaration = (ReflectionFieldDeclaration) typeDeclaration.getField(name);
+                    return reflectionFieldDeclaration.replaceType(ancestor.getFieldType(name).get());
+                }
             }
         }
         throw new UnsolvedSymbolException(name, "Field in " + this);
     }
 
     public boolean hasField(String name) {
+        // First consider fields declared on this class
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return true;
             }
         }
+
+        // Then consider fields inherited from ancestors
         for (ResolvedReferenceType ancestor : typeDeclaration.getAllAncestors()) {
-            if (ancestor.getTypeDeclaration().hasField(name)) {
+            if (ancestor.getTypeDeclaration().isPresent() && ancestor.getTypeDeclaration().get().hasField(name)) {
                 return true;
             }
         }
+
         return false;
     }
 
     public List<ResolvedFieldDeclaration> getAllFields() {
         ArrayList<ResolvedFieldDeclaration> fields = new ArrayList<>();
+
+        // First consider fields declared on this class
         for (Field field : clazz.getDeclaredFields()) {
             fields.add(new ReflectionFieldDeclaration(field, typeSolver));
         }
+
+        // Then consider fields inherited from ancestors
         for (ResolvedReferenceType ancestor : typeDeclaration.getAllAncestors()) {
-            fields.addAll(ancestor.getTypeDeclaration().getAllFields());
+            ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
+                fields.addAll(ancestorTypeDeclaration.getAllFields());
+            });
         }
+
         return fields;
     }
 
@@ -179,7 +202,9 @@ class ReflectionClassAdapter {
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(typeDeclaration);
+            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+                return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
+            }
         }
 
         return false;

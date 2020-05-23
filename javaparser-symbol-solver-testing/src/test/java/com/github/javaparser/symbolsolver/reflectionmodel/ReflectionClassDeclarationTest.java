@@ -88,7 +88,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
-        assertEquals("Bar", foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().getName());
+        assertEquals("Bar", foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
         assertEquals(Collections.emptyList(), foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues());
     }
 
@@ -105,7 +105,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
         ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
-        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().getName());
+        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
         assertEquals(1, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().size());
         assertEquals(String.class.getCanonicalName(), bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asReferenceType().getQualifiedName());
     }
@@ -123,7 +123,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
         ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
-        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().getName());
+        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
         assertEquals(1, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().size());
         assertEquals(true, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).isTypeVariable());
         assertEquals("E", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asTypeParameter().getName());

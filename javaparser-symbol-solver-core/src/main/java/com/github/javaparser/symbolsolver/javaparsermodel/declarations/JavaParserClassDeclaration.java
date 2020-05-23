@@ -23,11 +23,19 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -41,7 +49,11 @@ import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -105,35 +117,40 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
-        getAncestors(true).forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
-            fields.add(new ResolvedFieldDeclaration() {
+        getAncestors(true)
+                .stream()
+                .filter(ancestor -> ancestor.getTypeDeclaration().isPresent())
+                .forEach(ancestor -> ancestor.getTypeDeclaration().get().getAllFields()
+                        .forEach(f -> {
+                            fields.add(new ResolvedFieldDeclaration() {
 
-                @Override
-                public AccessSpecifier accessSpecifier() {
-                    return f.accessSpecifier();
-                }
+                                @Override
+                                public AccessSpecifier accessSpecifier() {
+                                    return f.accessSpecifier();
+                                }
 
-                @Override
-                public String getName() {
-                    return f.getName();
-                }
+                                @Override
+                                public String getName() {
+                                    return f.getName();
+                                }
 
-                @Override
-                public ResolvedType getType() {
-                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
-                }
+                                @Override
+                                public ResolvedType getType() {
+                                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
+                                }
 
-                @Override
-                public boolean isStatic() {
-                    return f.isStatic();
-                }
+                                @Override
+                                public boolean isStatic() {
+                                    return f.isStatic();
+                                }
 
-                @Override
-                public ResolvedTypeDeclaration declaringType() {
-                    return f.declaringType();
-                }
-            });
-        }));
+                                @Override
+                                public ResolvedTypeDeclaration declaringType() {
+                                    return f.declaringType();
+                                }
+                            });
+                        })
+                );
 
         return fields;
     }
@@ -188,6 +205,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     @Override
     public List<ResolvedReferenceType> getInterfaces() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        // TODO FIXME: Remove null check -- should be an empty list...
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
                 interfaces.add(toReferenceType(t));
@@ -244,15 +262,19 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         Optional<ResolvedReferenceType> optionalSuperClass = getSuperClass();
-        if(optionalSuperClass.isPresent()) {
-            ResolvedClassDeclaration superclassTypeDeclaration = (ResolvedClassDeclaration) optionalSuperClass.get().getTypeDeclaration();
-            if (superclassTypeDeclaration != null && superclassTypeDeclaration != this) {
-                if (superclassTypeDeclaration.canBeAssignedTo(other)) {
-                    return true;
+        if (optionalSuperClass.isPresent()) {
+            Optional<ResolvedReferenceTypeDeclaration> optionalSuperclassTypeDeclaration = optionalSuperClass.get().getTypeDeclaration();
+            if (optionalSuperclassTypeDeclaration.isPresent()) {
+                ResolvedReferenceTypeDeclaration superclassTypeDeclaration = optionalSuperclassTypeDeclaration.get();
+                if (superclassTypeDeclaration != this && superclassTypeDeclaration.isClass()) {
+                    if (superclassTypeDeclaration.asClass().canBeAssignedTo(other)) {
+                        return true;
+                    }
                 }
             }
         }
 
+        // TODO FIXME: Remove null check -- should be an empty list...
         if (this.wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getImplementedTypes()) {
                 ResolvedReferenceTypeDeclaration ancestor = (ResolvedReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
@@ -323,6 +345,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             if (superclass != null) {
                 ancestors.add(superclass);
             }
+
+            // TODO FIXME: Remove null check -- should be an empty list...
             if (wrappedNode.getImplementedTypes() != null) {
                 for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
                     ResolvedReferenceType ancestor;

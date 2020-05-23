@@ -219,7 +219,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
+            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+                return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
+            }
         }
 
         return false;
