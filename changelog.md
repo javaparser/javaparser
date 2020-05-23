@@ -9,6 +9,8 @@ Next Release (Version 3.15.23)
     (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
 * FIXED: Add symbol solver support for variadic parameters given zero or more than one argument, and when an array is given
     (PR [#2675](https://github.com/javaparser/javaparser/pull/2675), by [@hfreeb](https://github.com/hfreeb))
+* CHANGED: Added the keyword `synchronized` to `JavaParserFacade#get`. This is specifically in response to #2668 - JavaParser is not otherwise threadsafe.  
+    (PR [#2694](https://github.com/javaparser/javaparser/pull/2694), by [@MysterAitch](https://github.com/MysterAitch))
 
 
 
