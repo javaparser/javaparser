@@ -29,6 +29,10 @@ import java.nio.file.Paths;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    /**
+     * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
+     * <br><strong>Note that this should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+     */
     protected enum TestJdk {
         JDK8(8),
         JDK9(9),
@@ -37,8 +41,7 @@ public abstract class AbstractSymbolResolutionTest {
         JDK12(12),
         JDK13(13),
         JDK14(14),
-        JDK15(15),
-        UNKNOWN(null);
+        JDK15(15);
 
         private final Integer major;
 
@@ -54,25 +57,25 @@ public abstract class AbstractSymbolResolutionTest {
             String javaVersion = System.getProperty("java.version");
 
             // JavaParser explicitly requires a minimum of JDK8 to build.
-            if(javaVersion.equals("8") || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
+            if("8".equals(javaVersion) || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
                 return JDK8;
-            } else if(javaVersion.equals("9") || javaVersion.startsWith("9.")) {
+            } else if("9".equals(javaVersion) || javaVersion.startsWith("9.")) {
                 return JDK9;
-            } else if(javaVersion.equals("10") || javaVersion.startsWith("10.")) {
+            } else if("10".equals(javaVersion) || javaVersion.startsWith("10.")) {
                 return JDK10;
-            } else if(javaVersion.equals("11") || javaVersion.startsWith("11.")) {
+            } else if("11".equals(javaVersion) || javaVersion.startsWith("11.")) {
                 return JDK11;
-            } else if(javaVersion.equals("12") || javaVersion.startsWith("12.")) {
+            } else if("12".equals(javaVersion) || javaVersion.startsWith("12.")) {
                 return JDK12;
-            } else if(javaVersion.equals("13") || javaVersion.startsWith("13.")) {
+            } else if("13".equals(javaVersion) || javaVersion.startsWith("13.")) {
                 return JDK13;
-            } else if(javaVersion.equals("14") || javaVersion.startsWith("14.")) {
+            } else if("14".equals(javaVersion) || javaVersion.startsWith("14.")) {
                 return JDK14;
-            } else if(javaVersion.equals("15") || javaVersion.startsWith("15.")) {
+            } else if("15".equals(javaVersion) || javaVersion.startsWith("15.")) {
                 return JDK15;
             }
 
-            return UNKNOWN;
+            throw new IllegalStateException("Unable to determine the current version of java running");
         }
 
         @Override

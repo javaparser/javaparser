@@ -701,9 +701,6 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 .map(ResolvedReferenceType::describe)
                 .collect(Collectors.toSet());
 
-//        System.out.println("System.getProperty(\"java.version\") = " + System.getProperty("java.version"));
-//        System.out.println("System.getProperty(\"java.specification.version\") = " + System.getProperty("java.specification.version"));
-
         TestJdk currentJdk = TestJdk.getCurrentHostJdk();
         System.out.println("currentJdk = " + currentJdk);
         if (currentJdk.getMajorVersion() < 12) {
@@ -716,12 +713,14 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
             ));
         } else {
             // JDK 12 introduced "java.lang.constant.Constable"
+            System.out.println("ancestors = " + ancestors);
             assertThat(ancestors, containsInAnyOrder(
-                    "java.lang.constant.Constable",
                     "java.lang.CharSequence",
                     "java.lang.Object",
                     "java.lang.Comparable<java.lang.String>",
-                    "java.io.Serializable"
+                    "java.io.Serializable",
+                    "java.lang.constant.Constable",
+                    "java.lang.constant.ConstantDesc"
             ));
         }
     }
