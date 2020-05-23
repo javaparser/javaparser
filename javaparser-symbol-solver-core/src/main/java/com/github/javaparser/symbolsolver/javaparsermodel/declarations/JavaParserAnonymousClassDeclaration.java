@@ -161,7 +161,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         // Only add the super type if it is present (e.g. java.lang.Object has no super class)
         getSuperClass().ifPresent(builder::add);
 
-        // All all ancestors of the super type..? TODO: Does this need to be wrapped in a presence check?
+        // All all ancestors of the super type..?
         builder.addAll(superTypeDeclaration.asReferenceType().getAncestors(acceptIncompleteList));
 
         return builder.build();

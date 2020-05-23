@@ -225,17 +225,19 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         }
 
         // add the method declaration of the superclass to the candidates, if present
-        if (getSuperClass().isPresent() && getSuperClass().get().getTypeDeclaration().isPresent()) {
-            SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
-                    getSuperClass().get().getTypeDeclaration().get(),
-                    name,
-                    argumentsTypes,
-                    staticOnly
-            );
-            if (superClassMethodRef.isSolved()) {
-                candidates.add(superClassMethodRef.getCorrespondingDeclaration());
-            }
-        }
+        getSuperClass()
+                .flatMap(ResolvedReferenceType::getTypeDeclaration)
+                .ifPresent(superclassTypeDeclaration -> {
+                    SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
+                            superclassTypeDeclaration,
+                            name,
+                            argumentsTypes,
+                            staticOnly
+                    );
+                    if (superClassMethodRef.isSolved()) {
+                        candidates.add(superClassMethodRef.getCorrespondingDeclaration());
+                    }
+                });
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {

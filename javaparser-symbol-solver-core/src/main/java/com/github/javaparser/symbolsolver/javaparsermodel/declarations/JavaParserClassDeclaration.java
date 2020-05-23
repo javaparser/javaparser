@@ -328,43 +328,35 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!this.isJavaLangObject()) {
-            ResolvedReferenceType superclass;
-            try {
-                // TODO: Meaningful presence check on getSuperClass()
-                superclass = getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
-            } catch (UnsolvedSymbolException e) {
-                if (acceptIncompleteList) {
-                    // in case we could not resolve the super class, we may still be able to resolve (some of) the
-                    // implemented interfaces and so we continue gracefully with an (incomplete) list of ancestors
-                    superclass = null;
-                } else {
-                    throw e;
-                }
-            }
-            if (superclass != null) {
-                ancestors.add(superclass);
-            }
+        if (this.isJavaLangObject()) {
+            return ancestors;
+        }
 
-            // TODO FIXME: Remove null check -- should be an empty list...
-            if (wrappedNode.getImplementedTypes() != null) {
-                for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
-                    ResolvedReferenceType ancestor;
-                    try {
-                        ancestor = toReferenceType(implemented);
-                    } catch (UnsolvedSymbolException e) {
-                        if (acceptIncompleteList) {
-                            // in case we could not resolve some implemented interface, we may still be able to resolve the
-                            // extended class or (some of) the other implemented interfaces and so we continue gracefully
-                            // with an (incomplete) list of ancestors
-                            ancestor = null;
-                        } else {
-                            throw e;
-                        }
-                    }
-                    if (ancestor != null) {
-                        ancestors.add(ancestor);
-                    }
+        try {
+            // If a superclass is found, add it as an ancestor
+            getSuperClass().ifPresent(ancestors::add);
+        } catch (UnsolvedSymbolException e) {
+            // in case we could not resolve the super class, we may still be able to resolve (some of) the
+            // implemented interfaces and so we continue gracefully with an (incomplete) list of ancestors
+
+            if (!acceptIncompleteList) {
+                // Only throw if an incomplete ancestor list is unacceptable.
+                throw e;
+            }
+        }
+
+        for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
+            try {
+                // If an implemented interface is found, add it as an ancestor
+                ancestors.add(toReferenceType(implemented));
+            } catch (UnsolvedSymbolException e) {
+                // in case we could not resolve some implemented interface, we may still be able to resolve the
+                // extended class or (some of) the other implemented interfaces and so we continue gracefully
+                // with an (incomplete) list of ancestors
+
+                if (!acceptIncompleteList) {
+                    // Only throw if an incomplete ancestor list is unacceptable.
+                    throw e;
                 }
             }
         }
