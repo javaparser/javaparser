@@ -241,7 +241,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            if(interfaceRef.getTypeDeclaration().isPresent()) {
+            if (interfaceRef.getTypeDeclaration().isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
                         interfaceRef.getTypeDeclaration().get(),
                         name,
@@ -333,20 +333,27 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     public Optional<ResolvedReferenceType> getSuperClass() {
         try {
             if ("java.lang.Object".equals(ctClass.getClassFile().getName())) {
-                // If this is java.lang.Object, ignore the presence of any superclass
+                // If this is java.lang.Object, ignore the presence of any superclass (preventing any infinite loops).
                 return Optional.empty();
             }
             if (ctClass.getGenericSignature() == null) {
-                // If generic signature is missing...? TODO: Add explanation here...
+                // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
+                // If it is absent, then no further work is needed and we can return a reference type without generics.
                 return Optional.of(new ReferenceTypeImpl(
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName( ctClass.getClassFile().getSuperclass())),
+                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())),
                         typeSolver
                 ));
+            } else {
+                // If there is a generic signature present, solve the types and return it.
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                return Optional.ofNullable(
+                        JavassistUtils.signatureTypeToType(
+                                classSignature.getSuperClass(),
+                                typeSolver,
+                                this
+                        ).asReferenceType()
+                );
             }
-
-            // TODO: Add an explanation here...
-            SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-            return Optional.ofNullable(JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, this).asReferenceType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
