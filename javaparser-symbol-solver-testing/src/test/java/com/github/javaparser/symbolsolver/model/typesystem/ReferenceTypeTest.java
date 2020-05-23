@@ -701,6 +701,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 .map(ResolvedReferenceType::describe)
                 .collect(Collectors.toSet());
 
+        // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these tests.
         TestJdk currentJdk = TestJdk.getCurrentHostJdk();
         System.out.println("currentJdk = " + currentJdk);
         if (currentJdk.getMajorVersion() < 12) {

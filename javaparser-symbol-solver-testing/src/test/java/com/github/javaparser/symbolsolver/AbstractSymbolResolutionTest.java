@@ -31,8 +31,9 @@ public abstract class AbstractSymbolResolutionTest {
 
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
-     * <br><strong>Note that this should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+     * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
      */
+    @Deprecated
     protected enum TestJdk {
         JDK8(8),
         JDK9(9),
@@ -45,14 +46,26 @@ public abstract class AbstractSymbolResolutionTest {
 
         private final Integer major;
 
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
         TestJdk(Integer major) {
             this.major = major;
         }
 
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
         public int getMajorVersion() {
             return this.major;
         }
 
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
         public static TestJdk getCurrentHostJdk() {
             String javaVersion = System.getProperty("java.version");
 
@@ -78,6 +91,10 @@ public abstract class AbstractSymbolResolutionTest {
             throw new IllegalStateException("Unable to determine the current version of java running");
         }
 
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
         @Override
         public String toString() {
             return "TestJdk{" +
