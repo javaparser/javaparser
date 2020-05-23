@@ -33,8 +33,10 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 public interface NodeWithExtends<N extends Node> {
 
     /**
-     * @return All extended types that have been explicitly added.
+     * @return All extended types that have been explicitly added (thus exist within the AST).
+     *   Note that this can contain more than one item if this is an interface.
      *   Note that this will not include {@code java.lang.Object} unless it is explicitly added (e.g. {@code class X extends Object {}})
+     *   If you want the implicitly extended types, you will need a resolved reference.
      */
     NodeList<ClassOrInterfaceType> getExtendedTypes();
 
