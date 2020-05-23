@@ -87,7 +87,17 @@ public class JavaParserFacade {
         return symbolSolver;
     }
 
-    public static JavaParserFacade get(TypeSolver typeSolver) {
+    /**
+     * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
+     * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
+     * <br>
+     * <br>Additional discussion and context from a user attempting multithreading can be found within issue #2671 .
+     * <br>
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2668">https://github.com/javaparser/javaparser/issues/2668</a>
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
+     */
+    public synchronized static JavaParserFacade get(TypeSolver typeSolver) {
         return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
