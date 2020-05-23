@@ -88,12 +88,12 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
-     * This list does not contains duplicates with the exacting same type parameters.
+     * This list does not contains duplicates with the exact same type parameters.
      */
     default List<ResolvedReferenceType> getAllAncestors() {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+        if (!isJavaLangObject()) {
             for (ResolvedReferenceType ancestor : getAncestors()) {
                 ancestors.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {

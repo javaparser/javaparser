@@ -136,7 +136,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(Serializable.class.getCanonicalName())) {
             return true;
         }
-        if (otherName.equals(Object.class.getCanonicalName())) {
+        if (other.isJavaLangObject()) {
             return true;
         }
         return false;

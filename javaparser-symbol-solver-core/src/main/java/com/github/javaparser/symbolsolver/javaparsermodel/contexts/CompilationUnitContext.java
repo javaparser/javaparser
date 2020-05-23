@@ -87,30 +87,26 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
-        // null-check <strong>is</strong> required due to definition of {@code getImports()} -- see also #2695
-        // Changing this would required editing the generators to return an empty collection as opposed to null
         // Look among statically imported values
-        if (wrappedNode.getImports() != null) {
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl.isStatic()) {
-                    if (importDecl.isAsterisk()) {
-                        String qName = importDecl.getNameAsString();
-                        ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
-                        SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
-                        if (ref.isSolved()) {
-                            return ref;
-                        }
-                    } else {
-                        String whole = importDecl.getNameAsString();
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (importDecl.isStatic()) {
+                if (importDecl.isAsterisk()) {
+                    String qName = importDecl.getNameAsString();
+                    ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
+                    SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                    if (ref.isSolved()) {
+                        return ref;
+                    }
+                } else {
+                    String whole = importDecl.getNameAsString();
 
-                        // split in field/method name and type name
-                        String memberName = getMember(whole);
-                        String typeName = getType(whole);
+                    // split in field/method name and type name
+                    String memberName = getMember(whole);
+                    String typeName = getType(whole);
 
-                        if (memberName.equals(name)) {
-                            ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
-                            return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
-                        }
+                    if (memberName.equals(name)) {
+                        ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
+                        return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
                     }
                 }
             }
@@ -165,29 +161,27 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Inspect imports for matches, prior to inspecting other classes within the package (per issue #1526)
-        if (wrappedNode.getImports() != null) {
-            int dotPos = name.indexOf('.');
-            String prefix = null;
-            if (dotPos > -1) {
-                prefix = name.substring(0, dotPos);
-            }
-            // look into single type imports
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (!importDecl.isAsterisk()) {
-                    String qName = importDecl.getNameAsString();
-                    boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
-                    boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
-                    if (!found && prefix != null) {
-                        found = qName.endsWith("." + prefix);
-                        if (found) {
-                            qName = qName + name.substring(dotPos);
-                        }
-                    }
+        int dotPos = name.indexOf('.');
+        String prefix = null;
+        if (dotPos > -1) {
+            prefix = name.substring(0, dotPos);
+        }
+        // look into single type imports
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (!importDecl.isAsterisk()) {
+                String qName = importDecl.getNameAsString();
+                boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
+                boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
+                if (!found && prefix != null) {
+                    found = qName.endsWith("." + prefix);
                     if (found) {
-                        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                        if (ref != null && ref.isSolved()) {
-                            return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-                        }
+                        qName = qName + name.substring(dotPos);
+                    }
+                }
+                if (found) {
+                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    if (ref != null && ref.isSolved()) {
+                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                     }
                 }
             }
@@ -210,14 +204,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // look into asterisk imports on demand
-        if (wrappedNode.getImports() != null) {
-            for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl.isAsterisk()) {
-                    String qName = importDecl.getNameAsString() + "." + name;
-                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                    if (ref != null && ref.isSolved()) {
-                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
-                    }
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (importDecl.isAsterisk()) {
+                String qName = importDecl.getNameAsString() + "." + name;
+                SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                if (ref != null && ref.isSolved()) {
+                    return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                 }
             }
         }
