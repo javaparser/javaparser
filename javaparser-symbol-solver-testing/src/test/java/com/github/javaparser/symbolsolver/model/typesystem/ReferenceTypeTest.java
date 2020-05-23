@@ -37,6 +37,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -53,15 +54,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
 
-class ReferenceTypeTest {
+class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
     private ReferenceTypeImpl listOfA;
     private ReferenceTypeImpl listOfStrings;
@@ -703,12 +701,29 @@ class ReferenceTypeTest {
                 .map(ResolvedReferenceType::describe)
                 .collect(Collectors.toSet());
 
-        assertThat(ancestors, containsInAnyOrder(
-                "java.lang.CharSequence",
-                "java.lang.Object",
-                "java.lang.Comparable<java.lang.String>",
-                "java.io.Serializable"
-        ));
+//        System.out.println("System.getProperty(\"java.version\") = " + System.getProperty("java.version"));
+//        System.out.println("System.getProperty(\"java.specification.version\") = " + System.getProperty("java.specification.version"));
+
+        TestJdk currentJdk = TestJdk.getCurrentHostJdk();
+        System.out.println("currentJdk = " + currentJdk);
+        if (currentJdk.getMajorVersion() < 12) {
+            // JDK 12 introduced "java.lang.constant.Constable"
+            assertThat(ancestors, containsInAnyOrder(
+                    "java.lang.CharSequence",
+                    "java.lang.Object",
+                    "java.lang.Comparable<java.lang.String>",
+                    "java.io.Serializable"
+            ));
+        } else {
+            // JDK 12 introduced "java.lang.constant.Constable"
+            assertThat(ancestors, containsInAnyOrder(
+                    "java.lang.constant.Constable",
+                    "java.lang.CharSequence",
+                    "java.lang.Object",
+                    "java.lang.Comparable<java.lang.String>",
+                    "java.io.Serializable"
+            ));
+        }
     }
 
     @Test

@@ -29,6 +29,61 @@ import java.nio.file.Paths;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    protected enum TestJdk {
+        JDK8(8),
+        JDK9(9),
+        JDK10(10),
+        JDK11(11),
+        JDK12(12),
+        JDK13(13),
+        JDK14(14),
+        JDK15(15),
+        UNKNOWN(null);
+
+        private final Integer major;
+
+        TestJdk(Integer major) {
+            this.major = major;
+        }
+
+        public int getMajorVersion() {
+            return this.major;
+        }
+
+        public static TestJdk getCurrentHostJdk() {
+            String javaVersion = System.getProperty("java.version");
+
+            // JavaParser explicitly requires a minimum of JDK8 to build.
+            if(javaVersion.equals("8") || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
+                return JDK8;
+            } else if(javaVersion.equals("9") || javaVersion.startsWith("9.")) {
+                return JDK9;
+            } else if(javaVersion.equals("10") || javaVersion.startsWith("10.")) {
+                return JDK10;
+            } else if(javaVersion.equals("11") || javaVersion.startsWith("11.")) {
+                return JDK11;
+            } else if(javaVersion.equals("12") || javaVersion.startsWith("12.")) {
+                return JDK12;
+            } else if(javaVersion.equals("13") || javaVersion.startsWith("13.")) {
+                return JDK13;
+            } else if(javaVersion.equals("14") || javaVersion.startsWith("14.")) {
+                return JDK14;
+            } else if(javaVersion.equals("15") || javaVersion.startsWith("15.")) {
+                return JDK15;
+            }
+
+            return UNKNOWN;
+        }
+
+        @Override
+        public String toString() {
+            return "TestJdk{" +
+                    "System.getProperty(\"java.version\")=" + System.getProperty("java.version") +
+                    ",major=" + major +
+                    '}';
+        }
+    }
+
     protected static Path adaptPath(Path path) {
         if (Files.exists(path)) {
             return path.toAbsolutePath();
