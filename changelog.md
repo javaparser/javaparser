@@ -21,6 +21,8 @@ If you would like assistance with upgrading, get in touch.
     _Note that Converting to use optional should be as simple as adding `.get()`, given that any cases where returning `Optional.empty()` causes problems would  have also previously triggered a `NullPointerException`. 
     You might also use `.orElseThrow()`._  
     (PR [#2693](https://github.com/javaparser/javaparser/pull/2693), by [@MysterAitch](https://github.com/MysterAitch))
+* CHANGED: Added some temporary logic to allow tests to use slightly different expected results based on the version of java used _(e.g. `java.lang.Object.registerNatives()` removed in JDK14)_  
+    (PR [#2637](https://github.com/javaparser/javaparser/pull/2637), by [@EFregnan](https://github.com/EFregnan))
 
 
 
