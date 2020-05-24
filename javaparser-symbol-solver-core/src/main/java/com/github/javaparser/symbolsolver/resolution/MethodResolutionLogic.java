@@ -392,14 +392,6 @@ public class MethodResolutionLogic {
                 }
             }
 
-//            // If there's a match already, return true.
-//            // (n.b. won't be true in the case of an array method parameter vs many arguments, or where type parameters are used).
-//            // TODO: How can it be the case that we can confidently short-circuit the loop here..? e.g. void foo(String... s){} called with foo("a", "b", false, "c") would ignore the non-string value in the middle...
-//            if (expectedArgumentType.describe().equals(actualArgumentType.describe())) {
-//                return true;
-//            }
-
-
             // Consider type parameters directly on the method declaration, and ALSO on the enclosing type (e.g. a class)
             List<ResolvedTypeParameterDeclaration> typeParameters = methodUsage.getDeclaration().getTypeParameters();
             typeParameters.addAll(methodUsage.declaringType().getTypeParameters());
