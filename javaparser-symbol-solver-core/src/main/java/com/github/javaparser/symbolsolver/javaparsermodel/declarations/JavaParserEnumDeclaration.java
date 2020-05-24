@@ -48,7 +48,12 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -131,7 +136,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(Serializable.class.getCanonicalName())) {
             return true;
         }
-        if (otherName.equals(Object.class.getCanonicalName())) {
+        if (other.isJavaLangObject()) {
             return true;
         }
         return false;
@@ -232,10 +237,21 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
+
         ResolvedReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
-        ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
-        enumClass = enumClass.deriveTypeParameters(new ResolvedTypeParametersMap.Builder().setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver)).build());
-        ancestors.add(enumClass);
+        if(enumClass.getTypeDeclaration().isPresent()) {
+            ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().get()
+                    .getTypeParameters()
+                    .get(0);
+            enumClass = enumClass.deriveTypeParameters(new ResolvedTypeParametersMap.Builder()
+                    .setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver))
+                    .build());
+            ancestors.add(enumClass);
+        } else {
+            // Consider IllegalStateException or similar?
+        }
+
+        // TODO FIXME: Remove null check -- should be an empty list...
         if (wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
                 try {
@@ -247,6 +263,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 }
             }
         }
+
         return ancestors;
     }
 
@@ -287,7 +304,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             return ref;
         }
 
-        return getContext().getParent().solveType(name);
+        return getContext().getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     @Override

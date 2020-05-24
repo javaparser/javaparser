@@ -306,10 +306,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
         Log.trace("getType on type expr %s", ()-> node);
         if (!(node.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
+            // TODO / FIXME... e.g. System.out::println
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
+        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
+                .getContext(classOrInterfaceType, typeSolver)
+                .solveType(classOrInterfaceType.getName().getId());
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
         } else {
@@ -358,7 +361,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 if (resolvedTypeName.isInterface()) {
                     return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
                 } else if (resolvedTypeName.isClass()) {
-                    return resolvedTypeName.asClass().getSuperClass();
+                    // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
+                    return resolvedTypeName.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
                 } else {
                     throw new UnsupportedOperationException(node.getClass().getCanonicalName());
                 }
@@ -369,7 +373,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
-            return ((ResolvedClassDeclaration) typeOfNode).getSuperClass();
+            // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
+            return ((ResolvedClassDeclaration) typeOfNode).getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }

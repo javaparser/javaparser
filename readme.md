@@ -8,7 +8,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 13 Parser with advanced analysis functionalities.
+This project contains a set of libraries implementing a Java 1.0 - Java 14 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 

@@ -56,7 +56,7 @@ public class TypeInference {
             throw new NullPointerException();
         }
         this.typeSolver = typeSolver;
-        this.object = new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+        this.object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
     }
 
     ///

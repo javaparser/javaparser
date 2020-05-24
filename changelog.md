@@ -1,12 +1,26 @@
-Next Release (Version 3.15.23)
+Next Release (Version 3.16.0)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
+
+There are two breaking changes within this release. 
+If you would like assistance with upgrading, get in touch.
+
 * FIXED: Edits to the value of a string value are now correctly handled for use with Lexical Preservation 
     (PR [#2646](https://github.com/javaparser/javaparser/pull/2646), by [@lemoncurry](https://github.com/lemoncurry))
 * FIXED: Edits to the value of other literal values also now handled 
     (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
 * BREAKING CHANGE: Tokens relating to literal values now have the category of `JavaToken.Category.LITERAL` (previously `JavaToken.Category.KEYWORD`) 
     (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+* FIXED: Add symbol solver support for variadic parameters given zero or more than one argument, and when an array is given
+    (PR [#2675](https://github.com/javaparser/javaparser/pull/2675), by [@hfreeb](https://github.com/hfreeb))
+* CHANGED: Added the keyword `synchronized` to `JavaParserFacade#get`. This is specifically in response to #2668 - JavaParser is not otherwise threadsafe.  
+    (PR [#2694](https://github.com/javaparser/javaparser/pull/2694), by [@MysterAitch](https://github.com/MysterAitch))
+* BREAKING CHANGE: The following methods now return `Optional<>` _(as do all classes which implement/extend them)_:
+    `ResolvedClassDeclaration#getSuperClass()`, 
+    `ResolvedReferenceType#getTypeDeclaration()`.  
+    _Note that Converting to use optional should be as simple as adding `.get()`, given that any cases where returning `Optional.empty()` causes problems would  have also previously triggered a `NullPointerException`. 
+    You might also use `.orElseThrow()`._  
+    (PR [#2693](https://github.com/javaparser/javaparser/pull/2693), by [@MysterAitch](https://github.com/MysterAitch))
 
 
 

@@ -64,6 +64,12 @@ public class MethodDeclarationCommonLogic {
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
             ResolvedParameterDeclaration formalParamDecl = methodDeclaration.getParam(i);
             ResolvedType formalParamType = formalParamDecl.getType();
+
+            // Don't continue if a vararg parameter is reached and there are no arguments left
+            if (formalParamDecl.isVariadic() && parameterTypes.size() < methodDeclaration.getNumberOfParams()) {
+                break;
+            }
+
             ResolvedType actualParamType = parameterTypes.get(i);
 
             if (formalParamDecl.isVariadic() && !actualParamType.isArray()) {
