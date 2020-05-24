@@ -685,7 +685,6 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 .collect(Collectors.toSet());
 
         assertThat(ancestors, containsInAnyOrder(
-                "java.lang.Object",
                 "java.lang.CharSequence",
                 "java.lang.Appendable",
                 "java.nio.Buffer",

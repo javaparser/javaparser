@@ -216,7 +216,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     public List<ResolvedReferenceType> getDirectAncestors() {
-        // We need to go through the inheritance line and propagate the type parametes
+        // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
 
@@ -224,11 +224,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
-        // Avoid repetitions of Object
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-
-        // If This is not java.lang.Object, then add it as an implicit super type.
-        if (this.getTypeDeclaration().isPresent() && !this.getTypeDeclaration().get().isJavaLangObject()) {
+        // Avoid repetitions of Object -- remove them all and, if we removed any, add it back precisely once.
+        if(ancestors.removeIf(ResolvedReferenceType::isJavaLangObject)) {
+            // We only want to add it back in if we have explicitly extended Object (ignoring implicit supertypes),
+            //   thus only do this if it has been removed at least once from the ancestors.
             ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
             ResolvedReferenceType objectRef = create(objectType);
             ancestors.add(objectRef);
