@@ -410,7 +410,9 @@ public class JavaParserFacade {
         }
 
         Optional<MethodUsage> result;
-        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration().getAllMethods();
+        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                .getAllMethods();
 
         if (scope instanceof TypeExpr) {
             // static methods should match all params
