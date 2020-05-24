@@ -228,7 +228,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
 
-        // Note must compare the qualified name strings because the superclass could contain type typeParametersValues (see javadoc for details)
+        // Note must compare the qualified name strings because the superclass could contain type typeParametersValues
+        // (see javadoc for {@link ResolvedClassDeclaration#getSuperClass} details)
         if(Objects.equals(
                 typeDeclaration.asClass().getSuperClass().get().getQualifiedName(),
                 typeDeclaration.asClass().getQualifiedName()
