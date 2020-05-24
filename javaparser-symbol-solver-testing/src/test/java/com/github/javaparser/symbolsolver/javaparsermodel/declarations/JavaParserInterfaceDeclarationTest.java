@@ -54,6 +54,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -637,7 +639,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
 
-        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        ImmutableList<String> expected = ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
                 "com.github.javaparser.ast.Node.equals(java.lang.Object)",
@@ -737,7 +739,10 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Object.registerNatives()",
                 "java.lang.Object.wait()",
                 "java.lang.Object.wait(long)",
-                "java.lang.Object.wait(long, int)"), signatures);
+                "java.lang.Object.wait(long, int)");
+
+        assertThat(signatures, containsInAnyOrder(expected));
+//        assertEquals(expected, signatures);
     }
 
     ///
