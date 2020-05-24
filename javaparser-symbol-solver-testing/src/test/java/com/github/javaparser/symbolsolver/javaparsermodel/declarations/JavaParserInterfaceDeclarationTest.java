@@ -48,6 +48,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -639,7 +641,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
 
-        ImmutableList<String> expected = ImmutableList.of(
+        List<String> expected = new ArrayList<>(Arrays.asList(
                 "com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
@@ -741,7 +743,12 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Object.wait()",
                 "java.lang.Object.wait(long)",
                 "java.lang.Object.wait(long, int)"
-        );
+        ));
+
+        // Temporary workaround to allow tests to pass on JDK14
+        if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+            expected.remove("java.lang.Object.registerNatives()");
+        }
 
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
