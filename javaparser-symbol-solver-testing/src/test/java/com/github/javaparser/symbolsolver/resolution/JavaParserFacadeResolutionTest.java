@@ -57,7 +57,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
-        ResolvedReferenceType superclass = typeDeclaration.asClass().getSuperClass();
+        ResolvedReferenceType superclass = typeDeclaration.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
         assertEquals(Object.class.getCanonicalName(), superclass.getQualifiedName());
     }
 
