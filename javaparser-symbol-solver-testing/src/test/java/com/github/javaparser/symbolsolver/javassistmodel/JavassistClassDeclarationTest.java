@@ -223,20 +223,20 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetSuperclass() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
     }
 
     @Test
     void testGetSuperclassWithoutTypeParameters() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
     }
 
     @Test
     void testGetSuperclassWithTypeParameters() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals("com.github.javaparser.ast.body.BodyDeclaration", compilationUnit.getSuperClass().getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.BodyDeclaration", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
     }
 
     @Test

@@ -339,44 +339,46 @@ public class LexicalPreservingPrinter {
         // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
         // on a list but as they were organized in a tree. At each time we select only the branch corresponding to the
         // range of interest and ignore all other branches
-        for (JavaToken token : root.getTokenRange().get()) {
-            Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-            Node owner = findNodeForToken(root, tokenRange);
-            if (owner == null) {
-                throw new RuntimeException("Token without node owning it: " + token);
-            }
-            if (!tokensByNode.containsKey(owner)) {
-                tokensByNode.put(owner, new LinkedList<>());
-            }
-            tokensByNode.get(owner).add(token);
-        }
-
-        // Now that we know the tokens we use them to create the initial NodeText for each node
-        new TreeVisitor() {
-            @Override
-            public void process(Node node) {
-                if (!PhantomNodeLogic.isPhantomNode(node)) {
-                    LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+        root.getTokenRange().ifPresent(rootTokenRange -> {
+            for (JavaToken token : rootTokenRange) {
+                Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
+                Node owner = findNodeForToken(root, tokenRange).orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+                if (!tokensByNode.containsKey(owner)) {
+                    tokensByNode.put(owner, new LinkedList<>());
                 }
+                tokensByNode.get(owner).add(token);
             }
-        }.visitBreadthFirst(root);
+
+            // Now that we know the tokens we use them to create the initial NodeText for each node
+            new TreeVisitor() {
+                @Override
+                public void process(Node node) {
+                    if (!PhantomNodeLogic.isPhantomNode(node)) {
+                        LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                    }
+                }
+            }.visitBreadthFirst(root);
+        });
     }
 
-    private static Node findNodeForToken(Node node, Range tokenRange) {
+    private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
         if (PhantomNodeLogic.isPhantomNode(node)) {
-            return null;
+            return Optional.empty();
         }
-        if (node.getRange().get().contains(tokenRange)) {
-            for (Node child : node.getChildNodes()) {
-                Node found = findNodeForToken(child, tokenRange);
-                if (found != null) {
-                    return found;
-                }
+        if(!node.getRange().isPresent()) {
+            return Optional.empty();
+        }
+        if (!node.getRange().get().contains(tokenRange)) {
+            return Optional.empty();
+        }
+
+        for (Node child : node.getChildNodes()) {
+            Optional<Node> found = findNodeForToken(child, tokenRange);
+            if (found.isPresent()) {
+                return found;
             }
-            return node;
-        } else {
-            return null;
         }
+        return Optional.of(node);
     }
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {

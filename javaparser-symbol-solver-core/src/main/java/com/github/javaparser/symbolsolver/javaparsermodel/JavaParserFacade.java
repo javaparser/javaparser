@@ -173,9 +173,9 @@ public class JavaParserFacade {
             typeDecl = resolvedClassNode.asReferenceType();
         } else {
             // super()
-            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
-            if (superClass != null) {
-                typeDecl = superClass.getTypeDeclaration();
+            Optional<ResolvedReferenceType> superClass = resolvedClassNode.asClass().getSuperClass();
+            if (superClass.isPresent() && superClass.get().getTypeDeclaration().isPresent()) {
+                typeDecl = superClass.get().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
@@ -232,8 +232,8 @@ public class JavaParserFacade {
             typeDecl = new JavaParserAnonymousClassDeclaration(objectCreationExpr, typeSolver);
         } else {
             ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+            if (classDecl.isReferenceType() && classDecl.asReferenceType().getTypeDeclaration().isPresent()) {
+                typeDecl = classDecl.asReferenceType().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {

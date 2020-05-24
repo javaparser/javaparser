@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,12 +96,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return !this.isPrimitive();
         }
         // everything is assignable to Object except void
-        if (!other.isVoid() && this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (!other.isVoid() && this.isJavaLangObject()) {
             return true;
         }
         // consider boxing
         if (other.isPrimitive()) {
-            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            if (this.isJavaLangObject()) {
                 return true;
             } else {
                 // Check if 'other' can be boxed to match this type
@@ -136,7 +137,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         } else if (other.isConstraint()){
             return isAssignableBy(other.asConstraintType().getBound());
         } else if (other.isWildcard()) {
-            if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+            if (this.isJavaLangObject()) {
                 return true;
             } else if (other.asWildcard().isExtends()) {
                 return isAssignableBy(other.asWildcard().getBoundedType());
@@ -152,10 +153,14 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     public Set<MethodUsage> getDeclaredMethods() {
         // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
-        for (ResolvedMethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
-            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
-            methods.add(methodUsage);
-        }
+
+        getTypeDeclaration().ifPresent(referenceTypeDeclaration -> {
+            for (ResolvedMethodDeclaration methodDeclaration : referenceTypeDeclaration.getDeclaredMethods()) {
+                MethodUsage methodUsage = new MethodUsage(methodDeclaration);
+                methods.add(methodUsage);
+            }
+        });
+
         return methods;
     }
 
@@ -203,15 +208,15 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .collect(Collectors.toList());
 
         // Avoid repetitions of Object
-        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-        ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-        ResolvedReferenceType objectRef = create(objectType);
-        ancestors.add(objectRef);
+        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+        ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
+        ancestors.add(create(objectType));
+
         return ancestors;
     }
 
     public List<ResolvedReferenceType> getDirectAncestors() {
-        // We need to go through the inheritance line and propagate the type parametes
+        // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
 
@@ -219,17 +224,28 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
-        // Avoid repetitions of Object
-        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-        boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
-                && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
-                        !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName())
-                || this.getTypeDeclaration().asClass().getQualifiedName().equals(Object.class.getCanonicalName()));
-        if (!isClassWithSuperClassOrObject) {
-            ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-            ResolvedReferenceType objectRef = create(objectType);
-            ancestors.add(objectRef);
+
+        // Avoid repetitions of Object -- remove them all and, if appropriate, add it back precisely once.
+        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+
+        // Conditionally re-insert java.lang.Object as an ancestor.
+        if(this.getTypeDeclaration().isPresent()) {
+            ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
+            if (thisTypeDeclaration.isClass()) {
+                Optional<ResolvedReferenceType> optionalSuperClass = thisTypeDeclaration.asClass().getSuperClass();
+                boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
+                boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
+                if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
+                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+                }
+            } else {
+                // If this isn't a class (i.e. is enum or interface (or record?)), add java.lang.Object as a supertype
+                // TODO: Should we also add the implicit java.lang.Enum ancestor in the case of enums?
+                // TODO: getDirectAncestors() shouldn't be inserting implicit ancesters...? See also issue #2696
+                ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+            }
         }
+
         return ancestors;
     }
 
@@ -239,6 +255,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        return new HashSet<>(getTypeDeclaration().getDeclaredFields());
+        Set<ResolvedFieldDeclaration> allFields = new HashSet<>();
+
+        if (getTypeDeclaration().isPresent()) {
+            allFields = new HashSet<>(getTypeDeclaration().get().getDeclaredFields());
+        }
+
+        return allFields;
     }
 }
