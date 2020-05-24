@@ -23,6 +23,10 @@ If you would like assistance with upgrading, get in touch.
     (PR [#2693](https://github.com/javaparser/javaparser/pull/2693), by [@MysterAitch](https://github.com/MysterAitch))
 * CHANGED: Added some temporary logic to allow tests to use slightly different expected results based on the version of java used _(e.g. `java.lang.Object.registerNatives()` removed in JDK14)_  
     (PR [#2637](https://github.com/javaparser/javaparser/pull/2637), by [@EFregnan](https://github.com/EFregnan))
+* FIXED: Fix resolving overloaded methods of external types  
+    (PR [#2687](https://github.com/javaparser/javaparser/pull/2687), by [@maartenc](https://github.com/maartenc))
+* FIXED: Fix resolving method references on expressions other than ReferenceType::methodname  
+    (PR [#2674](https://github.com/javaparser/javaparser/pull/2674), by [@maartenc](https://github.com/maartenc))
 
 
 
