@@ -215,32 +215,6 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return ancestors;
     }
 
-    private boolean hasSuperClassDifferentToSelf(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        // TODO: Consider enums (which implicitly extend java.lang.Enum)
-        if(!typeDeclaration.isClass()) {
-            // If self is not a class, there is no super class
-            return false;
-        }
-
-        // TODO: Consider enums (which implicitly extend java.lang.Enum)
-        if(!typeDeclaration.asClass().getSuperClass().isPresent()) {
-            // If there is no super class, cannot get super class
-            return false;
-        }
-
-        // Note must compare the qualified name strings because the superclass could contain type typeParametersValues
-        // (see javadoc for {@link ResolvedClassDeclaration#getSuperClass} details)
-        if(Objects.equals(
-                typeDeclaration.asClass().getSuperClass().get().getQualifiedName(),
-                typeDeclaration.asClass().getQualifiedName()
-        )) {
-            // If super class exists, but is the same as self, cannot go "up" (otherwise would lead to infinite loop)
-            return false;
-        }
-
-        // Above checks all pass, thus must be true...
-        return true;
-    }
     public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parametes
 
