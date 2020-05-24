@@ -27,4 +27,16 @@ public class ReflectionTestObject {
     private float b;
     private String c;
 
+    public int getA() {
+        return a;
+    }
+
+    public float getB() {
+        return b;
+    }
+
+    public String getC() {
+        return c;
+    }
+
 }

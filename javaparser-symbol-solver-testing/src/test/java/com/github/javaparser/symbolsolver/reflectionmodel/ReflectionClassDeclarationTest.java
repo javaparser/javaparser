@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -284,7 +285,26 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     // solveSymbol
     // solveType
     // getDeclaredMethods
-    // getAllMethods
+
+    @Test
+    void testGetAllMethods() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(ReflectionTestObject.class, typeResolver);
+
+        ImmutableSet<String> expected = ImmutableSet.of(
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getC()",
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getB()",
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getA()"
+        );
+
+        Set<String> actual = testObject.getAllMethods()
+                .stream()
+                .map(MethodUsage::getQualifiedSignature)
+                .filter(s -> !"com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.$jacocoInit()".equals(s)) // Ignore the methods injected via reflection by jacoco -- see also #1701 and #2637
+                .collect(Collectors.toSet());
+
+        assertEquals(expected, actual);
+    }
 
     @Test
     void testGetAllFields() {
