@@ -661,7 +661,8 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
 
-        ImmutableList<String> expected = ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        ImmutableList<String> expected = ImmutableList.of(
+                "com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
                 "com.github.javaparser.ast.Node.equals(java.lang.Object)",
@@ -763,8 +764,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Object.wait(long)",
                 "java.lang.Object.wait(long, int)");
 
-        assertThat(signatures, containsInAnyOrder(expected));
-//        assertEquals(expected, signatures);
+        assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 
     ///
