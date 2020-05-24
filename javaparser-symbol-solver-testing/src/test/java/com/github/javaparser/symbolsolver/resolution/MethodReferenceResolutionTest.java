@@ -490,4 +490,48 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
     }
+
+    @Test
+    public void unboundNonStaticMethodsTest() {
+        // Example from: https://javaworld.com/article/2946534/java-101-the-essential-java-language-features-tour-part-7.html
+        String s = "import java.util.function.Function;\n" +
+                "\n" +
+                "public class MRDemo\n" +
+                "{\n" +
+                "   public static void main(String[] args)\n" +
+                "   {\n" +
+                "      print(String::toLowerCase, \"STRING TO LOWERCASE\");\n" +
+                "      print(s -> s.toLowerCase(), \"STRING TO LOWERCASE\");\n" +
+                "      print(new Function<String, String>()\n" +
+                "      {\n" +
+                "         @Override\n" +
+                "         public String apply(String s) // receives argument in parameter s;\n" +
+                "         {                             // doesn't need to close over s\n" +
+                "            return s.toLowerCase();\n" +
+                "         }\n" +
+                "      }, \"STRING TO LOWERCASE\");\n" +
+                "   }\n" +
+                "\n" +
+                "   public static void print(Function<String, String> function, String\n" +
+                "s)\n" +
+                "   {\n" +
+                "      System.out.println(function.apply(s));\n" +
+                "   }\n" +
+                "}";
+
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
+
+        int errorCount = 0;
+
+        for (MethodCallExpr expr : methodCallExpr) {
+            ResolvedMethodDeclaration rd = expr.resolve();
+            System.out.println("\t Solved : " + rd.getQualifiedSignature());
+        }
+
+        assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
+
 }
