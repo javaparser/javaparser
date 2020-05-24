@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -227,40 +228,22 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         // Avoid repetitions of Object -- remove them all and, if appropriate, add it back precisely once.
         ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
 
-        /*
-            // ORIGINAL....
-
-            // Avoid repetitions of Object
-            ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
-            boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isClass()
-                    && (this.getTypeDeclaration().asClass().getSuperClass() == null ||
-                            !this.getTypeDeclaration().asClass().getSuperClass().getQualifiedName().equals(Object.class.getCanonicalName())
-                    || this.getTypeDeclaration().asClass().getQualifiedName().equals(Object.class.getCanonicalName()));
-            if (!isClassWithSuperClassOrObject) {
-                ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
-                ResolvedReferenceType objectRef = create(objectType);
-                ancestors.add(objectRef);
+        // Conditionally re-insert java.lang.Object as an ancestor.
+        if(this.getTypeDeclaration().isPresent()) {
+            ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
+            if (thisTypeDeclaration.isClass()) {
+                Optional<ResolvedReferenceType> optionalSuperClass = thisTypeDeclaration.asClass().getSuperClass();
+                boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
+                boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
+                if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
+                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+                }
+            } else {
+                // If this isn't a class (i.e. is enum or interface (or record?)), add java.lang.Object as a supertype
+                // TODO: Should we also add the implicit java.lang.Enum ancestor in the case of enums?
+                // TODO: getDirectAncestors() shouldn't be inserting implicit ancesters...? See also issue #2696
+                ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
             }
-
-         */
-
-        /*
-//        // TODO: Figure out how this is different to the original checks.
-//        // Avoid repetitions of Object -- remove them all and, if we removed any, add it back precisely once.
-//        if(ancestors.removeIf(ResolvedReferenceType::isJavaLangObject)) {
-//            // We only want to add it back in if we have explicitly extended Object (ignoring implicit supertypes),
-//            //   thus only do this if it has been removed at least once from the ancestors.
-         */
-
-        // TODO: Document/simplify this logic...
-        boolean isClassWithSuperClassOrObject = this.getTypeDeclaration().isPresent() && this.getTypeDeclaration().get().isClass()
-                && (!this.getTypeDeclaration().get().asClass().getSuperClass().isPresent() ||
-                !this.getTypeDeclaration().get().asClass().getSuperClass().get().isJavaLangObject()
-                || this.getTypeDeclaration().get().asClass().isJavaLangObject());
-        if (!isClassWithSuperClassOrObject) {
-            ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
-            ResolvedReferenceType objectRef = create(objectType);
-            ancestors.add(objectRef);
         }
 
         return ancestors;
