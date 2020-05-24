@@ -6,14 +6,15 @@ on:
   # Trigger the workflow on push to master (ignoring .md only changes)
   push:
     branches:
-      - master
+    - master
     paths-ignore:
-      - '**.md'
+    - '**.md'
+    - '**.yml'
 
   # Trigger the workflow on any pull_request (ignoring .md only changes)
   pull_request:
     paths-ignore:
-      - '**.md'
+    - '**.yml'
 
 jobs:
   maven_test:
