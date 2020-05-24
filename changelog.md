@@ -1,4 +1,8 @@
-Next Release (Version 3.16.0)
+Next Release (Version 3.16.1)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
+
+Version 3.16.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
 
