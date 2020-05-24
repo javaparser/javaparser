@@ -46,6 +46,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
 
@@ -86,7 +87,17 @@ public class JavaParserFacade {
         return symbolSolver;
     }
 
-    public static JavaParserFacade get(TypeSolver typeSolver) {
+    /**
+     * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
+     * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
+     * <br>
+     * <br>Additional discussion and context from a user attempting multithreading can be found within issue #2671 .
+     * <br>
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2668">https://github.com/javaparser/javaparser/issues/2668</a>
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
+     */
+    public synchronized static JavaParserFacade get(TypeSolver typeSolver) {
         return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
@@ -162,9 +173,9 @@ public class JavaParserFacade {
             typeDecl = resolvedClassNode.asReferenceType();
         } else {
             // super()
-            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
-            if (superClass != null) {
-                typeDecl = superClass.getTypeDeclaration();
+            Optional<ResolvedReferenceType> superClass = resolvedClassNode.asClass().getSuperClass();
+            if (superClass.isPresent() && superClass.get().getTypeDeclaration().isPresent()) {
+                typeDecl = superClass.get().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
@@ -221,8 +232,8 @@ public class JavaParserFacade {
             typeDecl = new JavaParserAnonymousClassDeclaration(objectCreationExpr, typeSolver);
         } else {
             ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+            if (classDecl.isReferenceType() && classDecl.asReferenceType().getTypeDeclaration().isPresent()) {
+                typeDecl = classDecl.asReferenceType().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
@@ -390,7 +401,7 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
-    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
+    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
         if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
             throw new UnsupportedOperationException();
         }
@@ -403,7 +414,26 @@ public class JavaParserFacade {
         if (!typeDeclarationSymbolReference.isSolved()) {
             throw new UnsupportedOperationException();
         }
-        List<MethodUsage> methodUsages = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
+
+        Set<MethodUsage> allMethods = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods();
+
+        // static methods should match all params
+        List<MethodUsage> methodUsages = allMethods.stream()
+                .filter(it -> it.getDeclaration().isStatic())
+                .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
+                .collect(Collectors.toList());
+
+        if (!paramTypes.isEmpty()) {
+            // instance methods are called on the first param and should match all other params
+            List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+            instanceMethodParamTypes.remove(0); // remove the first one
+
+            methodUsages.addAll(allMethods.stream()
+                    .filter(it -> !it.getDeclaration().isStatic())
+                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
+                    .collect(Collectors.toList()));
+        }
+
         switch (methodUsages.size()) {
             case 0:
                 throw new UnsupportedOperationException();
