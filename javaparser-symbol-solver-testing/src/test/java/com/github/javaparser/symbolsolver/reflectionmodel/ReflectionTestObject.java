@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,17 +19,24 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.symbolsolver.reflectionmodel;
 
-/**
- * This validator validates according to Java 13 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/13/">https://openjdk.java.net/projects/jdk/13/</a>
- */
-public class Java13Validator extends Java12Validator {
+public class ReflectionTestObject {
 
-    public Java13Validator() {
-        super();
-        remove(noYield);
+    private int a;
+    private float b;
+    private String c;
+
+    public int getA() {
+        return a;
     }
+
+    public float getB() {
+        return b;
+    }
+
+    public String getC() {
+        return c;
+    }
+
 }

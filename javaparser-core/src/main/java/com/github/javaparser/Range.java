@@ -79,7 +79,7 @@ public class Range {
      * @return A new `Range` object with the given start/end position.
      */
     public static Range range(int beginLine, int beginColumn, int endLine, int endColumn) {
-        return new Range(pos(beginLine, beginColumn), pos(endLine, endColumn));
+        return new Range(new Position(beginLine, beginColumn), new Position(endLine, endColumn));
     }
 
     /**
