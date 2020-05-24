@@ -290,8 +290,15 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(ReflectionTestObject.class, typeResolver);
-        assertEquals(ImmutableSet.of("a", "b", "c"),
-                testObject.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+
+        ImmutableSet<String> expected = ImmutableSet.of("a", "b", "c");
+        Set<String> actual = testObject.getAllFields()
+                .stream()
+                .map(ResolvedDeclaration::getName)
+                .filter(s -> !"$jacocoData".equals(s)) // Ignore the fields injected via reflection by jacoco -- see also #1701 and #2637
+                .collect(Collectors.toSet());
+
+        assertEquals(expected, actual);
     }
 
     ///
