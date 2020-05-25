@@ -46,7 +46,7 @@ public class CoreGenerator {
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
-                                .setLexicalPreservationEnabled(true)
+//                                .setLexicalPreservationEnabled(true)
             ;
 
     public static void main(String[] args) throws Exception {
@@ -91,7 +91,7 @@ public class CoreGenerator {
         new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();
         new NodeModifierGenerator(sourceRoot).generate();
-//        new AcceptGenerator(sourceRoot).generate();
+        new AcceptGenerator(sourceRoot).generate();
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
         new BndGenerator(sourceRoot).generate();
     }
