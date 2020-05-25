@@ -40,14 +40,14 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
  * It will create missing visit methods on the fly,
  * and will ask you to fill in the bodies of the visit methods.
  */
-public abstract class VisitorGenerator extends AbstractGenerator {
+public abstract class AbstractVisitorGenerator extends AbstractGenerator {
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    protected VisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
+    protected AbstractVisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
         super(sourceRoot);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;

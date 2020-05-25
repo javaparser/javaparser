@@ -28,7 +28,7 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
@@ -46,7 +46,7 @@ import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
-public class PropertyGenerator extends NodeGenerator {
+public class PropertyGenerator extends AbstractNodeGenerator {
 
     private final Map<String, PropertyMetaModel> declaredProperties = new HashMap<>();
     private final Map<String, PropertyMetaModel> derivedProperties = new HashMap<>();

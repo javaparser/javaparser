@@ -26,7 +26,7 @@ import java.util.List;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
@@ -35,7 +35,7 @@ import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
-public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
+public class NoCommentHashCodeVisitorGenerator extends AbstractVisitorGenerator {
 
     public NoCommentHashCodeVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "NoCommentHashCodeVisitor", "Integer", "Void", true);

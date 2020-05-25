@@ -33,8 +33,8 @@ import com.github.javaparser.utils.SourceRoot;
  * Makes it easier to generate code in the core AST nodes. The generateNode method will get every node type passed to
  * it, ready for modification.
  */
-public abstract class NodeGenerator extends AbstractGenerator {
-    protected NodeGenerator(SourceRoot sourceRoot) {
+public abstract class AbstractNodeGenerator extends AbstractGenerator {
+    protected AbstractNodeGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 

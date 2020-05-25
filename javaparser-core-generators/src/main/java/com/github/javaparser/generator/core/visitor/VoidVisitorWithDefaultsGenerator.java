@@ -24,14 +24,14 @@ package com.github.javaparser.generator.core.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
 /**
  * Generates JavaParser's VoidVisitorWithDefaults.
  */
-public class VoidVisitorWithDefaultsGenerator extends VisitorGenerator {
+public class VoidVisitorWithDefaultsGenerator extends AbstractVisitorGenerator {
     public VoidVisitorWithDefaultsGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorWithDefaults", "void", "A", true);
     }

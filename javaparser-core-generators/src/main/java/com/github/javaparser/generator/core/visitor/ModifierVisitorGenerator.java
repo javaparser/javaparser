@@ -25,7 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
@@ -33,7 +33,7 @@ import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
-public class ModifierVisitorGenerator extends VisitorGenerator {
+public class ModifierVisitorGenerator extends AbstractVisitorGenerator {
     public ModifierVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
     }

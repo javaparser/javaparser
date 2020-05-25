@@ -26,7 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
@@ -36,7 +36,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.capitalize;
 
 
-public class RemoveMethodGenerator extends NodeGenerator {
+public class RemoveMethodGenerator extends AbstractNodeGenerator {
     public RemoveMethodGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

@@ -27,7 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
@@ -36,7 +36,7 @@ import com.github.javaparser.utils.SourceRoot;
 import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInvocationStmt;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
-public class MainConstructorGenerator extends NodeGenerator {
+public class MainConstructorGenerator extends AbstractNodeGenerator {
     public MainConstructorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

@@ -26,13 +26,13 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 
-public class AcceptGenerator extends NodeGenerator {
+public class AcceptGenerator extends AbstractNodeGenerator {
     private final MethodDeclaration genericAccept;
     private final MethodDeclaration voidAccept;
 

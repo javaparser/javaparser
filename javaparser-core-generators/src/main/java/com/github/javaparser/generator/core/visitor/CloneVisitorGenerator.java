@@ -24,7 +24,7 @@ package com.github.javaparser.generator.core.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
@@ -36,7 +36,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 /**
  * Generates JavaParser's CloneVisitor.
  */
-public class CloneVisitorGenerator extends VisitorGenerator {
+public class CloneVisitorGenerator extends AbstractVisitorGenerator {
     public CloneVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "CloneVisitor", "Visitable", "Object", true);
     }

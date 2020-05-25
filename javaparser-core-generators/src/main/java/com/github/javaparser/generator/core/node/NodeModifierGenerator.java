@@ -23,11 +23,11 @@ package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-public class NodeModifierGenerator extends NodeGenerator {
+public class NodeModifierGenerator extends AbstractNodeGenerator {
     public NodeModifierGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

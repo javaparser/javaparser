@@ -24,7 +24,7 @@ package com.github.javaparser.generator.core.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
@@ -38,7 +38,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 /**
  * Generates JavaParser's GenericListVisitorAdapter.
  */
-public class GenericListVisitorAdapterGenerator extends VisitorGenerator {
+public class GenericListVisitorAdapterGenerator extends AbstractVisitorGenerator {
     public GenericListVisitorAdapterGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "GenericListVisitorAdapter", "List<R>", "A", true);
     }
