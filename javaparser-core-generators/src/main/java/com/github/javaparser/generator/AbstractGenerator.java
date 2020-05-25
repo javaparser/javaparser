@@ -21,6 +21,9 @@
 
 package com.github.javaparser.generator;
 
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.Problem;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -31,9 +34,13 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -171,6 +178,33 @@ public abstract class AbstractGenerator {
                     throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
                 }
         );
+    }
+
+
+    protected List<CompilationUnit> getParsedCompilationUnitsFromSourceRoot(SourceRoot sourceRoot) throws IOException {
+        List<CompilationUnit> cus = sourceRoot.getCompilationUnits();
+        List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
+
+        boolean allParsed = parseResults.stream().allMatch(ParseResult::isSuccessful);
+        if (!allParsed) {
+            List<ParseResult<CompilationUnit>> problemResults = parseResults.stream().filter(compilationUnitParseResult -> !compilationUnitParseResult.isSuccessful()).collect(Collectors.toList());
+            for (int i = 0; i < problemResults.size(); i++) {
+                ParseResult<CompilationUnit> parseResult = problemResults.get(i);
+                List<Problem> problems = parseResult.getProblems();
+                Log.info("");
+                Log.info("Problems (" + (i + 1) + " of " + problemResults.size() + "): ");
+                Log.info(problems.toString());
+            }
+
+            throw new IllegalStateException("Expected all files to parse.");
+        }
+
+        Log.info("parseResults.size() = " + parseResults.size());
+
+        return parseResults.stream()
+                .map(ParseResult::getResult)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
 }

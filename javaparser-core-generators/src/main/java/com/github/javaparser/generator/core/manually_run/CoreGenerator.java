@@ -25,6 +25,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.BndGenerator;
+import com.github.javaparser.generator.core.other.RemoveGeneratorAnnotations;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
@@ -64,9 +65,17 @@ public class CoreGenerator {
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
         sourceRoot.saveAll();
+
+        // TODO: Include some form of statistics within the output.
     }
 
     private void run(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot) throws Exception {
+        // First remove all @Generated() annotations.
+        // Note that the generators below should replace them, meaning no substantial git diffs.
+        // Exceptions to this occur when e.g. a field/property is renamed/removed.
+        new RemoveGeneratorAnnotations(sourceRoot).generate();
+
+        // Do generations
         new TypeCastingGenerator(sourceRoot).generate();
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
@@ -93,6 +102,8 @@ public class CoreGenerator {
         new NodeModifierGenerator(sourceRoot).generate();
         new AcceptGenerator(sourceRoot).generate();
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
+
+        // Finally, do BndGenerator once everything is sorted.
         new BndGenerator(sourceRoot).generate();
     }
 }
