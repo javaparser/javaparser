@@ -104,6 +104,7 @@ public class EmptyStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEmptyStmt(Consumer<EmptyStmt> action) {
         action.accept(this);

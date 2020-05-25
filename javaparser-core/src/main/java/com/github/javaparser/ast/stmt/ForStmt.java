@@ -277,6 +277,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);

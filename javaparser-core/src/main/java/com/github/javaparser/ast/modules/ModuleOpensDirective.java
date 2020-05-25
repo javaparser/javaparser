@@ -195,6 +195,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleOpensDirective(Consumer<ModuleOpensDirective> action) {
         action.accept(this);

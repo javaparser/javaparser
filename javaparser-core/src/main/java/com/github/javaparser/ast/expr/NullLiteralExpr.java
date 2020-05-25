@@ -106,6 +106,7 @@ public class NullLiteralExpr extends LiteralExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
         action.accept(this);

@@ -247,6 +247,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIfStmt(Consumer<IfStmt> action) {
         action.accept(this);

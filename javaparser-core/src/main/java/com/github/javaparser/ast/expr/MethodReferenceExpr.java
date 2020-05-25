@@ -216,6 +216,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
         action.accept(this);

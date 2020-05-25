@@ -174,6 +174,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
         action.accept(this);

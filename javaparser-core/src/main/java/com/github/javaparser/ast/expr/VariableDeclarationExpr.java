@@ -261,6 +261,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
         action.accept(this);

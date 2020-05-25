@@ -207,6 +207,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnaryExpr(Consumer<UnaryExpr> action) {
         action.accept(this);

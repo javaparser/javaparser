@@ -260,6 +260,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);

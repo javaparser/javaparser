@@ -168,6 +168,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWhileStmt(Consumer<WhileStmt> action) {
         action.accept(this);

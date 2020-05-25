@@ -124,6 +124,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
         action.accept(this);

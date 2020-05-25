@@ -167,6 +167,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCastExpr(Consumer<CastExpr> action) {
         action.accept(this);

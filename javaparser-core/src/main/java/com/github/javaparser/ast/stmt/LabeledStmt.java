@@ -168,6 +168,7 @@ public class LabeledStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLabeledStmt(Consumer<LabeledStmt> action) {
         action.accept(this);

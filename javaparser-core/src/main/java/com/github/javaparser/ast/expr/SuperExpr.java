@@ -137,6 +137,7 @@ public class SuperExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSuperExpr(Consumer<SuperExpr> action) {
         action.accept(this);

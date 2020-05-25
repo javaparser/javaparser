@@ -226,6 +226,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
         action.accept(this);

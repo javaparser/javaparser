@@ -121,6 +121,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVoidType(Consumer<VoidType> action) {
         action.accept(this);

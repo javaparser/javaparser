@@ -113,6 +113,7 @@ public class BlockComment extends Comment {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockComment(Consumer<BlockComment> action) {
         action.accept(this);

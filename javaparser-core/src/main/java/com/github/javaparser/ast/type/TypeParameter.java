@@ -218,6 +218,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeParameter(Consumer<TypeParameter> action) {
         action.accept(this);

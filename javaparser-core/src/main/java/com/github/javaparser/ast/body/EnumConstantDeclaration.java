@@ -218,6 +218,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumConstantDeclaration(Consumer<EnumConstantDeclaration> action) {
         action.accept(this);

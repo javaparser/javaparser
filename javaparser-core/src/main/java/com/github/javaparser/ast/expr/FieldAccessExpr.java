@@ -228,6 +228,7 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
         action.accept(this);

@@ -110,6 +110,7 @@ public class UnparsableStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
         action.accept(this);

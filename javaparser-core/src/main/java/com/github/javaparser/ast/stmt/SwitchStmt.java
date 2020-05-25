@@ -211,6 +211,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
         action.accept(this);

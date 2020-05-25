@@ -225,6 +225,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
         action.accept(this);

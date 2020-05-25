@@ -149,6 +149,7 @@ public class ArrayInitializerExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
         action.accept(this);

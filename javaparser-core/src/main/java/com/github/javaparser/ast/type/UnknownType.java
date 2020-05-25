@@ -126,6 +126,7 @@ public class UnknownType extends Type {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnknownType(Consumer<UnknownType> action) {
         action.accept(this);

@@ -140,6 +140,7 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
         action.accept(this);

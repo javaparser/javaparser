@@ -137,6 +137,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
         action.accept(this);

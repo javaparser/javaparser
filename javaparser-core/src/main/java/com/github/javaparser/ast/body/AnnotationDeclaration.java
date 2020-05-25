@@ -121,6 +121,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
         action.accept(this);

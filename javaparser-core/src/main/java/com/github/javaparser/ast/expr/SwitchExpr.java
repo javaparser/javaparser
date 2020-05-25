@@ -195,6 +195,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchExpr(Consumer<SwitchExpr> action) {
         action.accept(this);

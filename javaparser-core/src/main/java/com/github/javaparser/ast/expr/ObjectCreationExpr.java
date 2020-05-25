@@ -341,6 +341,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
         action.accept(this);

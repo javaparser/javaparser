@@ -195,6 +195,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);

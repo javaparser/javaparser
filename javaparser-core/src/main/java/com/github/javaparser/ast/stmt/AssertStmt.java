@@ -189,6 +189,7 @@ public class AssertStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssertStmt(Consumer<AssertStmt> action) {
         action.accept(this);

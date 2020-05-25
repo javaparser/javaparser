@@ -280,6 +280,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);

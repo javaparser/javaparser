@@ -236,6 +236,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
         action.accept(this);

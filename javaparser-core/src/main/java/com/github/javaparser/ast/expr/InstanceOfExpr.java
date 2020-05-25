@@ -168,6 +168,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);

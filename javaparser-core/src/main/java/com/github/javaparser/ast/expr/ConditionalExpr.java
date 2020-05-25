@@ -191,6 +191,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
         action.accept(this);

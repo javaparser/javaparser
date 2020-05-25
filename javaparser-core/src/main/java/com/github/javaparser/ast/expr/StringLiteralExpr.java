@@ -151,6 +151,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifStringLiteralExpr(Consumer<StringLiteralExpr> action) {
         action.accept(this);

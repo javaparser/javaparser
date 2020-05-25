@@ -270,6 +270,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
         action.accept(this);

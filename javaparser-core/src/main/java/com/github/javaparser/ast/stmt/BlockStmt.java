@@ -147,6 +147,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockStmt(Consumer<BlockStmt> action) {
         action.accept(this);

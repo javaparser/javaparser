@@ -141,6 +141,7 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThrowStmt(Consumer<ThrowStmt> action) {
         action.accept(this);

@@ -201,6 +201,7 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
         action.accept(this);

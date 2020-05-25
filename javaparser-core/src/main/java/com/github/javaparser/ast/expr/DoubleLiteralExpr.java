@@ -132,6 +132,7 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoubleLiteralExpr(Consumer<DoubleLiteralExpr> action) {
         action.accept(this);

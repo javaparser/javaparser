@@ -243,6 +243,7 @@ public class AssignExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssignExpr(Consumer<AssignExpr> action) {
         action.accept(this);

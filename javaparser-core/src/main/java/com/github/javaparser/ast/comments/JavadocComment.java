@@ -115,6 +115,7 @@ public class JavadocComment extends Comment {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJavadocComment(Consumer<JavadocComment> action) {
         action.accept(this);

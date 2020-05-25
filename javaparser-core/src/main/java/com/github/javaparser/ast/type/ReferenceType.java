@@ -97,6 +97,7 @@ public abstract class ReferenceType extends Type {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReferenceType(Consumer<ReferenceType> action) {
         action.accept(this);

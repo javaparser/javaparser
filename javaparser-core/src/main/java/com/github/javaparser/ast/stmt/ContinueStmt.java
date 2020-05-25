@@ -164,6 +164,7 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifContinueStmt(Consumer<ContinueStmt> action) {
         action.accept(this);

@@ -395,6 +395,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
         action.accept(this);

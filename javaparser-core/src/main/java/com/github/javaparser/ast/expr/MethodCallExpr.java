@@ -290,6 +290,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodCallExpr(Consumer<MethodCallExpr> action) {
         action.accept(this);

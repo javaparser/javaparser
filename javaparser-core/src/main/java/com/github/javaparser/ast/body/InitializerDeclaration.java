@@ -158,6 +158,7 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
         action.accept(this);

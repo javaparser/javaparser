@@ -168,6 +168,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoStmt(Consumer<DoStmt> action) {
         action.accept(this);

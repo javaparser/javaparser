@@ -165,6 +165,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntersectionType(Consumer<IntersectionType> action) {
         action.accept(this);

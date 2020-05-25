@@ -144,6 +144,7 @@ public class LocalClassDeclarationStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
         action.accept(this);

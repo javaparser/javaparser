@@ -165,6 +165,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
         action.accept(this);

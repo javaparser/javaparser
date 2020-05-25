@@ -284,6 +284,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
         action.accept(this);

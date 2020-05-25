@@ -174,6 +174,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleUsesDirective(Consumer<ModuleUsesDirective> action) {
         action.accept(this);

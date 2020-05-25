@@ -297,6 +297,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
         action.accept(this);

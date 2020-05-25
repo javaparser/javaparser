@@ -168,6 +168,7 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
         action.accept(this);

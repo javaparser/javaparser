@@ -158,6 +158,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThisExpr(Consumer<ThisExpr> action) {
         action.accept(this);

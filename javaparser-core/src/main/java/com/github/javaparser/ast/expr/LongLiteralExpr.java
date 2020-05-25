@@ -196,6 +196,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
         action.accept(this);

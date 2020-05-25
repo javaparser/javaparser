@@ -165,6 +165,7 @@ public class ReturnStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReturnStmt(Consumer<ReturnStmt> action) {
         action.accept(this);

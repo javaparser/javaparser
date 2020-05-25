@@ -230,6 +230,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForEachStmt(Consumer<ForEachStmt> action) {
         action.accept(this);
