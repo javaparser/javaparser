@@ -34,10 +34,16 @@ import com.github.javaparser.utils.SourceRoot;
  * it, ready for modification.
  */
 public abstract class AbstractNodeGenerator extends AbstractGenerator {
+
     protected AbstractNodeGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 
+    protected void after() throws Exception {
+
+    }
+
+    @Override
     public final void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
@@ -47,15 +53,11 @@ public abstract class AbstractNodeGenerator extends AbstractGenerator {
         after();
     }
 
+    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception;
+
     protected Pair<CompilationUnit, ClassOrInterfaceDeclaration> parseNode(BaseNodeMetaModel nodeMetaModel) {
         CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
         ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
     }
-
-    protected void after() throws Exception {
-
-    }
-
-    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception;
 }

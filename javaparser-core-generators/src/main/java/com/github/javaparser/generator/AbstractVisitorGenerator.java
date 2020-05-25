@@ -41,6 +41,7 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
  * and will ask you to fill in the bodies of the visit methods.
  */
 public abstract class AbstractVisitorGenerator extends AbstractGenerator {
+
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
@@ -56,6 +57,11 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
         this.createMissingVisitMethods = createMissingVisitMethods;
     }
 
+    protected void after() throws Exception {
+
+    }
+
+    @Override
     public final void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
 
@@ -73,9 +79,7 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
         after();
     }
 
-    protected void after() throws Exception {
-
-    }
+    protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
         final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods().stream()
@@ -98,6 +102,4 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
             generateVisitMethodBody(node, newVisitMethod, compilationUnit);
         }
     }
-
-    protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 }
