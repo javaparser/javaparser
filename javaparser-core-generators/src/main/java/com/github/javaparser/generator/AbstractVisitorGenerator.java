@@ -57,9 +57,6 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
         this.createMissingVisitMethods = createMissingVisitMethods;
     }
 
-    protected void after() throws Exception {
-
-    }
 
     @Override
     public final void generate() throws Exception {
@@ -76,13 +73,16 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
         JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
                 .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
+
+        //
         after();
     }
 
     protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
-        final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods().stream()
+        final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods()
+                .stream()
                 .filter(m -> m.getNameAsString().equals("visit"))
                 .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
                 .findFirst();

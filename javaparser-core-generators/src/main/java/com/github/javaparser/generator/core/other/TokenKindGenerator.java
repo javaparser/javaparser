@@ -48,7 +48,7 @@ public class TokenKindGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void generate() {
+    public void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
         
         final CompilationUnit javaTokenCu = sourceRoot.parse("com.github.javaparser", "JavaToken.java");
@@ -77,6 +77,9 @@ public class TokenKindGenerator extends AbstractGenerator {
                         generateValueOfEntry(valueOfSwitch, name, kind);
                     });
         }
+
+        //
+        after();
     }
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {

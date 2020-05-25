@@ -39,10 +39,6 @@ public abstract class AbstractNodeGenerator extends AbstractGenerator {
         super(sourceRoot);
     }
 
-    protected void after() throws Exception {
-
-    }
-
     @Override
     public final void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
@@ -50,6 +46,8 @@ public abstract class AbstractNodeGenerator extends AbstractGenerator {
             Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = parseNode(nodeMetaModel);
             generateNode(nodeMetaModel, result.a, result.b);
         }
+
+        //
         after();
     }
 

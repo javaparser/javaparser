@@ -86,6 +86,9 @@ public abstract class AbstractGenerator {
         });
     }
 
+    protected void after() throws Exception {
+    }
+
     /**
      * @param node       The node to which the annotation will be added.
      * @param annotation The annotation to be added to the given node.
@@ -134,7 +137,7 @@ public abstract class AbstractGenerator {
     }
 
     /**
-     * @throws Exception -- TODO: Remove or narrow.
+     * @throws Exception -- TODO: Investigate removal or narrowing of this.
      */
     public abstract void generate() throws Exception;
 

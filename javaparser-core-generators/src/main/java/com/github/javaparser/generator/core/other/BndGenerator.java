@@ -40,7 +40,7 @@ public class BndGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void generate() throws IOException {
+    public void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
         Path root = sourceRoot.getRoot();
         Path projectRoot = root.getParent().getParent().getParent();
@@ -59,6 +59,9 @@ public class BndGenerator extends AbstractGenerator {
             writer.write(template.replace("{exportedPackages}", packagesList));
         }
         Log.info("Written " + output);
+
+        //
+        after();
     }
 
     private String concatPackageName(String packageName, String packageList, String lineSeparator) {
