@@ -411,21 +411,25 @@ public class LexicalPreservingPrinter {
         // There is the awfully painful case of the fake types involved in variable declarators and
         // fields or variable declaration that are, of course, an exception...
 
-        NodeText parentNodeText = getOrCreateNodeText(node.getParentNode().get());
+        Node parentNode = node.getParentNode().get();
+        NodeText parentNodeText = getOrCreateNodeText(parentNode);
         int index = parentNodeText.tryToFindChild(node);
         if (index == NodeText.NOT_FOUND) {
-            if (node.getParentNode().get() instanceof VariableDeclarator) {
-                return tokensPreceeding(node.getParentNode().get());
+            if (parentNode instanceof VariableDeclarator) {
+                return tokensPreceeding(parentNode);
             } else {
                 throw new IllegalArgumentException(
-                        String.format("I could not find child '%s' in parent '%s'. parentNodeText: %s",
-                                node, node.getParentNode().get(), parentNodeText));
+                        String.format(
+                                "I could not find child '%s' in parent '%s'. parentNodeText: %s",
+                                node, parentNode, parentNodeText
+                        )
+                );
             }
         }
 
         return new TextElementIteratorsFactory.CascadingIterator<>(
                 TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1),
-                () -> tokensPreceeding(node.getParentNode().get()));
+                () -> tokensPreceeding(parentNode));
     }
 
     //
@@ -595,8 +599,7 @@ public class LexicalPreservingPrinter {
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            if (tte.getTokenKind() == SINGLE_LINE_COMMENT
-                    || tte.isNewline()) {
+            if (tte.getTokenKind() == SINGLE_LINE_COMMENT || tte.isNewline()) {
                 break;
             } else {
                 followingNewlines.add(tte);

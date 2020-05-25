@@ -23,9 +23,11 @@ package com.github.javaparser.generator;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -80,10 +82,14 @@ public abstract class AbstractGenerator {
      * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
     protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addOrReplaceMethod(containingClassOrInterface, callable, () -> {
-            annotateGenerated(callable);
-            containingClassOrInterface.addMember(callable);
-        });
+        addOrReplaceMethod(
+                containingClassOrInterface,
+                callable,
+                () -> {
+                    annotateGenerated(callable);
+                    containingClassOrInterface.addMember(callable);
+                }
+        );
     }
 
     protected void after() throws Exception {
@@ -96,12 +102,12 @@ public abstract class AbstractGenerator {
      * @param <T>        Only accept nodes which accept annotations.
      */
     private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
-        node.setAnnotations(
-                node.getAnnotations()
-                        .stream()
-                        .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
-                        .collect(toNodeList())
-        );
+        NodeList<AnnotationExpr> annotations = node.getAnnotations()
+                .stream()
+                .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
+                .collect(toNodeList());
+
+        node.setAnnotations(annotations);
 
         if (content != null) {
             node.addSingleMemberAnnotation(annotation.getSimpleName(), content);

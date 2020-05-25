@@ -50,6 +50,7 @@ public class AcceptGenerator extends AbstractNodeGenerator {
         }
         nodeCu.addImport(GenericVisitor.class);
         nodeCu.addImport(VoidVisitor.class);
+
         addOrReplaceWhenSameSignature(nodeCoid, genericAccept);
         addOrReplaceWhenSameSignature(nodeCoid, voidAccept);
     }
