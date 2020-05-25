@@ -32,14 +32,14 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.generator.Generator;
+import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 /**
  * Generates the TokenKind enum from {@link com.github.javaparser.GeneratedJavaParserConstants}
  */
-public class TokenKindGenerator extends Generator {
+public class TokenKindGenerator extends AbstractGenerator {
     private final SourceRoot generatedJavaCcSourceRoot;
 
     public TokenKindGenerator(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot) {

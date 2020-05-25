@@ -39,10 +39,10 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 /**
  * A general pattern that the generators in this module will follow.
  */
-public abstract class Generator {
+public abstract class AbstractGenerator {
     protected final SourceRoot sourceRoot;
 
-    protected Generator(SourceRoot sourceRoot) {
+    protected AbstractGenerator(SourceRoot sourceRoot) {
         this.sourceRoot = sourceRoot;
     }
 

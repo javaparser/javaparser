@@ -21,7 +21,7 @@
 
 package com.github.javaparser.generator.core.other;
 
-import com.github.javaparser.generator.Generator;
+import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -33,7 +33,7 @@ import java.nio.file.Path;
 /**
  * Generates the bnd.bnd file in javaparser-core.
  */
-public class BndGenerator extends Generator {
+public class BndGenerator extends AbstractGenerator {
 
     public BndGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
