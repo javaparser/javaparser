@@ -1,4 +1,5 @@
 import java.util.List;
+import java.lang.Class;
 
 class MethodCalls {
 
@@ -24,6 +25,14 @@ class MethodCalls {
         return getSelf().m;
     }
 
+    void getDeclaredConstructorTest() {
+        Class<?> clazz = Class.forName("");
+        clazz.getDeclaredConstructor();
+        clazz.getDeclaredConstructor(int.class);
+        clazz.getDeclaredConstructor(int.class, int.class);
+        clazz.getDeclaredConstructor(new Class<?>[] { int.class });
+    }
+
     void inheritedInterfaceMethod(){
         List<Integer> list;
         list.toString();
@@ -31,8 +40,11 @@ class MethodCalls {
 
     void variadicTest(){
         String[] varArg = new String[2];
+        foobar();
         foobar("a");
+        foobar("a", "a");
         foobar(varArg);
+        foobar("a", "a", "a", true, "a");
     }
 
     int foobar(String s){

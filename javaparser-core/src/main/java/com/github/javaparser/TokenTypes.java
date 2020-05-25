@@ -106,7 +106,6 @@ public class TokenTypes {
             case ELSE:
             case ENUM:
             case EXTENDS:
-            case FALSE:
             case FINAL:
             case FINALLY:
             case FLOAT:
@@ -121,7 +120,6 @@ public class TokenTypes {
             case LONG:
             case NATIVE:
             case NEW:
-            case NULL:
             case PACKAGE:
             case PRIVATE:
             case PROTECTED:
@@ -137,7 +135,6 @@ public class TokenTypes {
             case THROW:
             case THROWS:
             case TRANSIENT:
-            case TRUE:
             case TRY:
             case VOID:
             case VOLATILE:
@@ -168,6 +165,9 @@ public class TokenTypes {
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
             case TEXT_BLOCK_LITERAL:
+            case TRUE:
+            case FALSE:
+            case NULL:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;

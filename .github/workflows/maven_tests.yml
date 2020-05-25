@@ -1,7 +1,20 @@
 name: Build and test (using maven)
 
-on: [push, pull_request]
+#on: [push, pull_request]
 #on: [pull_request]
+on:
+  # Trigger the workflow on push to master (ignoring .md only changes)
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - '**.md'
+    - '**.yml'
+
+  # Trigger the workflow on any pull_request (ignoring .md only changes)
+  pull_request:
+    paths-ignore:
+    - '**.yml'
 
 jobs:
   maven_test:
@@ -14,7 +27,7 @@ jobs:
         ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
         ### exclude pre-8 (min development version jdk8)
         ### exclude post-12 (changes to jdk causes reflection tests to fail due to added methods #1701 )
-        jdk: [8,9,10,11,12] # [8,9,10,11,12,13,14,15-ea]
+        jdk: [8,9,10,11,12,13,14] # [8,9,10,11,12,13,14,15-ea]
 
     runs-on: ${{ matrix.os }}
 

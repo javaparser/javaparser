@@ -26,6 +26,8 @@ import com.github.javaparser.ast.validator.chunks.VarValidator;
 
 /**
  * This validator validates according to Java 10 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/10/">https://openjdk.java.net/projects/jdk/10/</a>
  */
 public class Java10Validator extends Java9Validator {
 

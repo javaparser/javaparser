@@ -1,0 +1,10 @@
+import javaparser.JSONObject;
+
+public class ChainingTest {
+
+    public static void main (String args[]) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("k1", 1).put("k2", "v2");
+    }
+}
+

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -46,6 +47,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
 
@@ -86,7 +88,17 @@ public class JavaParserFacade {
         return symbolSolver;
     }
 
-    public static JavaParserFacade get(TypeSolver typeSolver) {
+    /**
+     * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
+     * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
+     * <br>
+     * <br>Additional discussion and context from a user attempting multithreading can be found within issue #2671 .
+     * <br>
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2668">https://github.com/javaparser/javaparser/issues/2668</a>
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
+     */
+    public synchronized static JavaParserFacade get(TypeSolver typeSolver) {
         return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
@@ -162,9 +174,9 @@ public class JavaParserFacade {
             typeDecl = resolvedClassNode.asReferenceType();
         } else {
             // super()
-            ResolvedReferenceType superClass = resolvedClassNode.asClass().getSuperClass();
-            if (superClass != null) {
-                typeDecl = superClass.getTypeDeclaration();
+            Optional<ResolvedReferenceType> superClass = resolvedClassNode.asClass().getSuperClass();
+            if (superClass.isPresent() && superClass.get().getTypeDeclaration().isPresent()) {
+                typeDecl = superClass.get().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
@@ -221,8 +233,8 @@ public class JavaParserFacade {
             typeDecl = new JavaParserAnonymousClassDeclaration(objectCreationExpr, typeSolver);
         } else {
             ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
-            if (classDecl.isReferenceType()) {
-                typeDecl = classDecl.asReferenceType().getTypeDeclaration();
+            if (classDecl.isReferenceType() && classDecl.asReferenceType().getTypeDeclaration().isPresent()) {
+                typeDecl = classDecl.asReferenceType().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
@@ -390,28 +402,58 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
-    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
-        if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
+    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
+        Expression scope = methodReferenceExpr.getScope();
+        ResolvedType typeOfScope = getType(methodReferenceExpr.getScope());
+        if (!typeOfScope.isReferenceType()) {
+            throw new UnsupportedOperationException(typeOfScope.getClass().getCanonicalName());
+        }
+
+        Optional<MethodUsage> result;
+        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                .getAllMethods();
+
+        if (scope instanceof TypeExpr) {
+            // static methods should match all params
+            List<MethodUsage> staticMethodUsages = allMethods.stream()
+                    .filter(it -> it.getDeclaration().isStatic())
+                    .collect(Collectors.toList());
+
+            result = MethodResolutionLogic.findMostApplicableUsage(staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+
+            if (!paramTypes.isEmpty()) {
+                // instance methods are called on the first param and should match all other params
+                List<MethodUsage> instanceMethodUsages = allMethods.stream()
+                        .filter(it -> !it.getDeclaration().isStatic())
+                        .collect(Collectors.toList());
+
+                List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+                instanceMethodParamTypes.remove(0); // remove the first one
+
+                Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
+                        instanceMethodUsages, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver);
+                if (result.isPresent() && instanceResult.isPresent()) {
+                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method for " + methodReferenceExpr.getIdentifier());
+                }
+
+                if (instanceResult.isPresent()) {
+                    result = instanceResult;
+                }
+            }
+        } else {
+            result = MethodResolutionLogic.findMostApplicableUsage(new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+
+            if (result.isPresent() && result.get().getDeclaration().isStatic()) {
+                throw new RuntimeException("Invalid static method reference " + methodReferenceExpr.getIdentifier());
+            }
+        }
+
+        if (!result.isPresent()) {
             throw new UnsupportedOperationException();
         }
-        TypeExpr typeExpr = (TypeExpr) methodReferenceExpr.getScope();
-        if (!(typeExpr.getType() instanceof ClassOrInterfaceType)) {
-            throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
-        }
-        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new UnsupportedOperationException();
-        }
-        List<MethodUsage> methodUsages = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList());
-        switch (methodUsages.size()) {
-            case 0:
-                throw new UnsupportedOperationException();
-            case 1:
-                return methodUsages.get(0);
-            default:
-                throw new UnsupportedOperationException();
-        }
+
+        return result.get();
     }
 
     protected ResolvedType getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas, BinaryExpr.Operator operator) {

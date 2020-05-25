@@ -79,7 +79,7 @@ public class Issue1511Test {
         JavaParser javaParser = new JavaParser(configuration);
 
         CompilationUnit foo = javaParser.parse("class A {}").getResult().orElseThrow(IllegalStateException::new);
-        ResolvedReferenceType a = foo.getClassByName("A").orElseThrow(IllegalStateException::new).resolve().asClass().getSuperClass();
+        ResolvedReferenceType a = foo.getClassByName("A").orElseThrow(IllegalStateException::new).resolve().asClass().getSuperClass().get();
         System.out.println("a = " + a);
 
         assertEquals("java.lang.Object", a.getQualifiedName());
