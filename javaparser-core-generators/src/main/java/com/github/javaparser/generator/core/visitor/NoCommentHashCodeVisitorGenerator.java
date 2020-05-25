@@ -42,8 +42,7 @@ public class NoCommentHashCodeVisitorGenerator extends AbstractVisitorGenerator 
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
-                                           CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();
@@ -53,7 +52,9 @@ public class NoCommentHashCodeVisitorGenerator extends AbstractVisitorGenerator 
         final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel) || propertyMetaModels.isEmpty()) {
+                || node.equals(JavaParserMetaModel.javadocCommentMetaModel)
+                || propertyMetaModels.isEmpty()
+        ) {
             builder.append("0");
         } else {
             for (PropertyMetaModel field : propertyMetaModels) {
