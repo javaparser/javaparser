@@ -19,12 +19,13 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.generator.core.other;
+package com.github.javaparser.generator.core.manually_run;
 
 import java.util.function.Function;
 
 /**
  * Prints the LETTER and PART_LETTER tokens. They should be inserted into the grammar manually.
+ * TODO: Investigate further
  */
 public class GrammarLetterGenerator {
     public static void main(String[] args) {
