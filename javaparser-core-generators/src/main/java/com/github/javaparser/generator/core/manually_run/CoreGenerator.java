@@ -41,6 +41,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
  * You may want to run_metamodel_generator.sh before that.
  */
 public class CoreGenerator {
+
     private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)

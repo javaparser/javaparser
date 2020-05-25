@@ -25,7 +25,8 @@ import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.io.*;
+import java.io.File;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,16 @@ public class BndGenerator extends AbstractGenerator {
 
     public BndGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
+    }
+
+    private static String getPackageName(Path root, Path path) {
+        return root.relativize(path.getParent()).toString().replace(File.separatorChar, '.');
+    }
+
+    private String concatPackageName(String packageName, String packageList, String lineSeparator) {
+        return (packageList == null ?
+                ("\\" + lineSeparator) :
+                (packageList + ", \\" + lineSeparator)) + "    " + packageName;
     }
 
     @Override
@@ -53,7 +64,7 @@ public class BndGenerator extends AbstractGenerator {
                 .reduce(null, (packageList, packageName) ->
                         concatPackageName(packageName, packageList, lineSeparator));
         Path output = projectRoot.resolve("bnd.bnd");
-        try(Writer writer = Files.newBufferedWriter(output)) {
+        try (Writer writer = Files.newBufferedWriter(output)) {
             Path templateFile = projectRoot.resolve("bnd.bnd.template");
             String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
             writer.write(template.replace("{exportedPackages}", packagesList));
@@ -62,15 +73,5 @@ public class BndGenerator extends AbstractGenerator {
 
         //
         after();
-    }
-
-    private String concatPackageName(String packageName, String packageList, String lineSeparator) {
-        return (packageList == null ?
-                ("\\" + lineSeparator) :
-                (packageList + ", \\" + lineSeparator)) + "    " + packageName;
-    }
-
-    private static String getPackageName(Path root, Path path) {
-        return root.relativize(path.getParent()).toString().replace(File.separatorChar, '.');
     }
 }

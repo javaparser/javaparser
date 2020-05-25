@@ -33,6 +33,7 @@ import com.github.javaparser.utils.SourceRoot;
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 
 public class AcceptGenerator extends AbstractNodeGenerator {
+
     private final MethodDeclaration genericAccept;
     private final MethodDeclaration voidAccept;
 
@@ -44,7 +45,7 @@ public class AcceptGenerator extends AbstractNodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        if(nodeMetaModel.isAbstract()){
+        if (nodeMetaModel.isAbstract()) {
             return;
         }
         nodeCu.addImport(GenericVisitor.class);

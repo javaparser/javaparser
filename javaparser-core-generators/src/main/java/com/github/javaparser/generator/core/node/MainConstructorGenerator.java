@@ -37,6 +37,7 @@ import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInv
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class MainConstructorGenerator extends AbstractNodeGenerator {
+
     public MainConstructorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

@@ -35,8 +35,16 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class ReplaceMethodGenerator extends AbstractNodeGenerator {
+
     public ReplaceMethodGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
+    }
+
+    private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
+        return f("if (node == %s) {" +
+                "    %s((%s) replacementNode);" +
+                "    return true;\n" +
+                "}", property.getName(), attributeSetterName, property.getTypeName());
     }
 
     @Override
@@ -69,15 +77,8 @@ public class ReplaceMethodGenerator extends AbstractNodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
-    }
 
-    private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
-        return f("if (node == %s) {" +
-                "    %s((%s) replacementNode);" +
-                "    return true;\n" +
-                "}", property.getName(), attributeSetterName, property.getTypeName());
+        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
     }
 
     private String nodeListCheck(PropertyMetaModel property) {

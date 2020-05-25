@@ -56,12 +56,62 @@ public class PropertyGenerator extends AbstractNodeGenerator {
     }
 
     @Override
+    protected void after() throws Exception {
+        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
+        EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
+        observablePropertyEnum.getEntries().clear();
+        List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
+        observablePropertyNames.sort(String::compareTo);
+        for (String propName : observablePropertyNames) {
+            generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
+        }
+        List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
+        derivedPropertyNames.sort(String::compareTo);
+        for (String propName : derivedPropertyNames) {
+            generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
+        }
+        observablePropertyEnum.addEnumConstant("RANGE");
+        observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
+    }
+
+    private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
+        final MethodDeclaration getter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
+        final BlockStmt body = getter.getBody().get();
+        body.getStatements().clear();
+        if (property.isOptional()) {
+            body.addStatement(f("return Optional.ofNullable(%s);", property.getName()));
+        } else {
+            body.addStatement(f("return %s;", property.getName()));
+        }
+        replaceWhenSameSignature(nodeCoid, getter);
+    }
+
+    @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             generateGetter(nodeMetaModel, nodeCoid, property);
             generateSetter(nodeMetaModel, nodeCoid, property);
         }
         nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
+    }
+
+    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
+        boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
+        String name = property.getName();
+        String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
+        EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
+        if (isAttribute) {
+            enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+        } else {
+            if (property.isNodeList()) {
+                enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
+            } else {
+                enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
+            }
+        }
+        if (derived) {
+            enumConstantDeclaration.addArgument("true");
+        }
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
@@ -112,55 +162,5 @@ public class PropertyGenerator extends AbstractNodeGenerator {
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             annotateSuppressWarnings(setter);
         }
-    }
-
-    private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
-        final MethodDeclaration getter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
-        final BlockStmt body = getter.getBody().get();
-        body.getStatements().clear();
-        if (property.isOptional()) {
-            body.addStatement(f("return Optional.ofNullable(%s);", property.getName()));
-        } else {
-            body.addStatement(f("return %s;", property.getName()));
-        }
-        replaceWhenSameSignature(nodeCoid, getter);
-    }
-
-    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
-        boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
-        String name = property.getName();
-        String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
-        if (isAttribute) {
-            enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
-        } else {
-            if (property.isNodeList()) {
-                enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
-            } else {
-                enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
-            }
-        }
-        if (derived) {
-            enumConstantDeclaration.addArgument("true");
-        }
-    }
-
-    @Override
-    protected void after() throws Exception {
-        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
-        EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
-        observablePropertyEnum.getEntries().clear();
-        List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
-        observablePropertyNames.sort(String::compareTo);
-        for (String propName : observablePropertyNames) {
-            generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
-        }
-        List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
-        derivedPropertyNames.sort(String::compareTo);
-        for (String propName : derivedPropertyNames) {
-            generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
-        }
-        observablePropertyEnum.addEnumConstant("RANGE");
-        observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
     }
 }

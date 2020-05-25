@@ -33,6 +33,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CloneGenerator extends AbstractNodeGenerator {
+
     public CloneGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

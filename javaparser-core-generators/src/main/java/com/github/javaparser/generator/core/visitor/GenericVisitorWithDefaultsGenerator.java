@@ -32,6 +32,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates JavaParser's GenericVisitorWithDefaults.
  */
 public class GenericVisitorWithDefaultsGenerator extends AbstractVisitorGenerator {
+
     public GenericVisitorWithDefaultsGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorWithDefaults", "R", "A", true);
     }

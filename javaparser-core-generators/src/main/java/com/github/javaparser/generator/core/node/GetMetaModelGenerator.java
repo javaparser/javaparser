@@ -33,6 +33,7 @@ import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetMetaModelGenerator extends AbstractNodeGenerator {
+
     public GetMetaModelGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }

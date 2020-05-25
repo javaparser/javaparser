@@ -40,6 +40,7 @@ import com.github.javaparser.utils.SourceRoot;
  * Generates the TokenKind enum from {@link com.github.javaparser.GeneratedJavaParserConstants}
  */
 public class TokenKindGenerator extends AbstractGenerator {
+
     private final SourceRoot generatedJavaCcSourceRoot;
 
     public TokenKindGenerator(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot) {
@@ -50,7 +51,7 @@ public class TokenKindGenerator extends AbstractGenerator {
     @Override
     public void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
-        
+
         final CompilationUnit javaTokenCu = sourceRoot.parse("com.github.javaparser", "JavaToken.java");
         final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
         final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind")).orElseThrow(() -> new AssertionError("Can't find class in java file."));
@@ -82,14 +83,14 @@ public class TokenKindGenerator extends AbstractGenerator {
         after();
     }
 
-    private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
-        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
-        valueOfSwitch.getEntries().addFirst(entry);
-    }
-
     private void generateEnumEntry(EnumDeclaration kindEnum, String name, IntegerLiteralExpr kind) {
         final EnumConstantDeclaration enumEntry = new EnumConstantDeclaration(name);
         enumEntry.getArguments().add(kind);
         kindEnum.addEntry(enumEntry);
+    }
+
+    private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
+        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
+        valueOfSwitch.getEntries().addFirst(entry);
     }
 }

@@ -25,9 +25,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.AbstractVisitorGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -35,6 +35,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's VoidVisitorAdapter.
  */
 public class GenericVisitorAdapterGenerator extends AbstractVisitorGenerator {
+
     public GenericVisitorAdapterGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorAdapter", "R", "A", true);
     }
@@ -45,7 +46,7 @@ public class GenericVisitorAdapterGenerator extends AbstractVisitorGenerator {
 
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
-        
+
         body.addStatement("R result;");
 
         final String resultCheck = "if (result != null) return result;";

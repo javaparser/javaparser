@@ -27,9 +27,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.AbstractNodeGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -37,8 +37,16 @@ import static com.github.javaparser.utils.Utils.capitalize;
 
 
 public class RemoveMethodGenerator extends AbstractNodeGenerator {
+
     public RemoveMethodGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
+    }
+
+    private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
+        return f("if (node == %s) {" +
+                "    %s();" +
+                "    return true;\n" +
+                "}", property.getName(), removeAttributeMethodName);
     }
 
     @Override
@@ -75,24 +83,8 @@ public class RemoveMethodGenerator extends AbstractNodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
+
         addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
-    }
-
-    private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
-        return f("if (node == %s) {" +
-                "    %s();" +
-                "    return true;\n" +
-                "}", property.getName(), removeAttributeMethodName);
-    }
-
-    private String nodeListCheck(PropertyMetaModel property) {
-        return f("for (int i = 0; i < %s.size(); i++) {" +
-                "  if (%s.get(i) == node) {" +
-                "    %s.remove(i);" +
-                "    return true;" +
-                "  }" +
-                "}", property.getName(), property.getName(), property.getName());
     }
 
     private String generateRemoveMethodForAttribute(ClassOrInterfaceDeclaration nodeCoid, BaseNodeMetaModel nodeMetaModel, PropertyMetaModel property) {
@@ -104,5 +96,14 @@ public class RemoveMethodGenerator extends AbstractNodeGenerator {
 
         addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
         return methodName;
+    }
+
+    private String nodeListCheck(PropertyMetaModel property) {
+        return f("for (int i = 0; i < %s.size(); i++) {" +
+                "  if (%s.get(i) == node) {" +
+                "    %s.remove(i);" +
+                "    return true;" +
+                "  }" +
+                "}", property.getName(), property.getName(), property.getName());
     }
 }
