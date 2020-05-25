@@ -46,7 +46,7 @@ public class CoreGenerator {
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
-//                                .setLexicalPreservationEnabled(true)
+                                .setLexicalPreservationEnabled(true)
             ;
 
     public static void main(String[] args) throws Exception {
@@ -55,15 +55,11 @@ public class CoreGenerator {
         }
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
-//                .setPrinter(LexicalPreservingPrinter::print)
-                ;
+        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
-        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
-//                .setPrinter(LexicalPreservingPrinter::print)
-                ;
+        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration);
 
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
@@ -95,7 +91,7 @@ public class CoreGenerator {
         new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();
         new NodeModifierGenerator(sourceRoot).generate();
-        new AcceptGenerator(sourceRoot).generate();
+//        new AcceptGenerator(sourceRoot).generate();
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
         new BndGenerator(sourceRoot).generate();
     }
