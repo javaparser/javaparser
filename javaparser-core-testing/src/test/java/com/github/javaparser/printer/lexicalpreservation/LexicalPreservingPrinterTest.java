@@ -27,6 +27,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -1490,4 +1491,238 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void test() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+        String code = "" +
+                "/*\n" +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+                " *\n" +
+                " * This file is part of JavaParser.\n" +
+                " *\n" +
+                " * JavaParser can be used either under the terms of\n" +
+                " * a) the GNU Lesser General Public License as published by\n" +
+                " *     the Free Software Foundation, either version 3 of the License, or\n" +
+                " *     (at your option) any later version.\n" +
+                " * b) the terms of the Apache License\n" +
+                " *\n" +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+                " * LICENCE.APACHE. Please refer to those files for details.\n" +
+                " *\n" +
+                " * JavaParser is distributed in the hope that it will be useful,\n" +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                " * GNU Lesser General Public License for more details.\n" +
+                " */\n" +
+                "package com.github.javaparser.ast.stmt;\n" +
+                "\n" +
+                "import com.github.javaparser.ast.AllFieldsConstructor;\n" +
+                "import com.github.javaparser.ast.expr.BooleanLiteralExpr;\n" +
+                "import com.github.javaparser.ast.expr.Expression;\n" +
+                "import com.github.javaparser.ast.observer.ObservableProperty;\n" +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;\n" +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;\n" +
+                "import java.util.Optional;\n" +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;\n" +
+                "import com.github.javaparser.ast.Node;\n" +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;\n" +
+                "import com.github.javaparser.metamodel.AssertStmtMetaModel;\n" +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;\n" +
+                "import com.github.javaparser.TokenRange;\n" +
+                "import com.github.javaparser.metamodel.OptionalProperty;\n" +
+                "import java.util.function.Consumer;\n" +
+                "import com.github.javaparser.ast.Generated;\n" +
+                "\n" +
+                "/**\n" +
+                " * A usage of the keyword \"assert\"\n" +
+                " * <br>In {@code assert dead : \"Wasn't expecting to be dead here\";} the check is \"dead\" and the message is the string.\n" +
+                " * @author Julio Vilmar Gesser\n" +
+                " */\n" +
+                "public class AssertStmt extends Statement {\n" +
+                "\n" +
+                "    private Expression check;\n" +
+                "\n" +
+                "    @OptionalProperty\n" +
+                "    private Expression message;\n" +
+                "\n" +
+                "    public AssertStmt() {\n" +
+                "        this(null, new BooleanLiteralExpr(), null);\n" +
+                "    }\n" +
+                "\n" +
+                "    public AssertStmt(final Expression check) {\n" +
+                "        this(null, check, null);\n" +
+                "    }\n" +
+                "\n" +
+                "    @AllFieldsConstructor\n" +
+                "    public AssertStmt(final Expression check, final Expression message) {\n" +
+                "        this(null, check, message);\n" +
+                "    }\n" +
+                "\n" +
+                "    /**\n" +
+                "     * This constructor is used by the parser and is considered private.\n" +
+                "     */\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")\n" +
+                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {\n" +
+                "        super(tokenRange);\n" +
+                "        setCheck(check);\n" +
+                "        setMessage(message);\n" +
+                "        customInitialization();\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")\n" +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {\n" +
+                "        return v.visit(this, arg);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")\n" +
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {\n" +
+                "        v.visit(this, arg);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "    public Expression getCheck() {\n" +
+                "        return check;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "    public Optional<Expression> getMessage() {\n" +
+                "        return Optional.ofNullable(message);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "    public AssertStmt setCheck(final Expression check) {\n" +
+                "        assertNotNull(check);\n" +
+                "        if (check == this.check) {\n" +
+                "            return (AssertStmt) this;\n" +
+                "        }\n" +
+                "        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);\n" +
+                "        if (this.check != null)\n" +
+                "            this.check.setParentNode(null);\n" +
+                "        this.check = check;\n" +
+                "        setAsParentNodeOf(check);\n" +
+                "        return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    /**\n" +
+                "     * Sets the message\n" +
+                "     *\n" +
+                "     * @param message the message, can be null\n" +
+                "     * @return this, the AssertStmt\n" +
+                "     */\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "    public AssertStmt setMessage(final Expression message) {\n" +
+                "        if (message == this.message) {\n" +
+                "            return (AssertStmt) this;\n" +
+                "        }\n" +
+                "        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);\n" +
+                "        if (this.message != null)\n" +
+                "            this.message.setParentNode(null);\n" +
+                "        this.message = message;\n" +
+                "        setAsParentNodeOf(message);\n" +
+                "        return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")\n" +
+                "    public boolean remove(Node node) {\n" +
+                "        if (node == null)\n" +
+                "            return false;\n" +
+                "        if (message != null) {\n" +
+                "            if (node == message) {\n" +
+                "                removeMessage();\n" +
+                "                return true;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        return super.remove(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")\n" +
+                "    public AssertStmt removeMessage() {\n" +
+                "        return setMessage((Expression) null);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")\n" +
+                "    public AssertStmt clone() {\n" +
+                "        return (AssertStmt) accept(new CloneVisitor(), null);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")\n" +
+                "    public AssertStmtMetaModel getMetaModel() {\n" +
+                "        return JavaParserMetaModel.assertStmtMetaModel;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")\n" +
+                "    public boolean replace(Node node, Node replacementNode) {\n" +
+                "        if (node == null)\n" +
+                "            return false;\n" +
+                "        if (node == check) {\n" +
+                "            setCheck((Expression) replacementNode);\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (message != null) {\n" +
+                "            if (node == message) {\n" +
+                "                setMessage((Expression) replacementNode);\n" +
+                "                return true;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        return super.replace(node, replacementNode);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")\n" +
+                "    public boolean isAssertStmt() {\n" +
+                "        return true;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")\n" +
+                "    public AssertStmt asAssertStmt() {\n" +
+                "        return this;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")\n" +
+                "    public void ifAssertStmt(Consumer<AssertStmt> action) {\n" +
+                "        action.accept(this);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")\n" +
+                "    public Optional<AssertStmt> toAssertStmt() {\n" +
+                "        return Optional.of(this);\n" +
+                "    }\n" +
+                "}\n" +
+                "";
+
+        final Node b = javaParser.parse(code)
+                .getResult()
+                .orElseThrow(AssertionError::new);
+
+        List<AnnotationExpr> allAnnotations = b.findAll(AnnotationExpr.class);
+        allAnnotations.stream()
+                .filter(annotationExpr -> annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
+                .forEach(annotationExpr -> {
+                    annotationExpr.remove();
+                });
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        System.out.println(actual);
+        assertEquals(code, actual);
+
+        final String actual2 = b.toString();
+        System.out.println(actual2);
+        assertEquals(code, actual2);
+    }
+
 }
