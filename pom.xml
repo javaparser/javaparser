@@ -164,6 +164,7 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
             <plugin>
