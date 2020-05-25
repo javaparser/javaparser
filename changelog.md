@@ -1,6 +1,8 @@
 Next Release (Version 3.16.1)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
+* FIXED: Fixed type 
+    (PR [#2697](https://github.com/javaparser/javaparser/pull/2697), by [@hfreeb](https://github.com/hfreeb))
 
 Version 3.16.0
 ------------------
