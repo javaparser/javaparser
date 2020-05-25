@@ -21,6 +21,7 @@
 
 package com.github.javaparser.generator;
 
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -28,7 +29,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.Generated;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.util.List;
@@ -40,37 +40,63 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * A general pattern that the generators in this module will follow.
  */
 public abstract class AbstractGenerator {
+
     protected final SourceRoot sourceRoot;
 
     protected AbstractGenerator(SourceRoot sourceRoot) {
         this.sourceRoot = sourceRoot;
     }
 
+    /**
+     * @throws Exception -- TODO: Remove or narrow.
+     */
     public abstract void generate() throws Exception;
 
+
+    /**
+     * @param node The node to which the {@code @Annotated} annotation will be added.
+     * @param <T>
+     */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
         annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
     }
 
+    /**
+     * @param node The node to which the {@code @SuppressWarnings} annotation will be added.
+     * @param <T>  Only accept nodes which accept annotations.
+     */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
         annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
     }
 
+    /**
+     * @param method The node to which the {@code @Override} annotation will be added.
+     */
     protected void annotateOverridden(MethodDeclaration method) {
         annotate(method, Override.class, null);
     }
 
+    /**
+     * @param node       The node to which the annotation will be added.
+     * @param annotation The annotation to be added to the given node.
+     * @param content    Where an annotation has content, it is passed here (otherwise null).
+     * @param <T>        Only accept nodes which accept annotations.
+     */
     private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
         node.setAnnotations(
-                node.getAnnotations().stream()
+                node.getAnnotations()
+                        .stream()
                         .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
-                        .collect(toNodeList()));
+                        .collect(toNodeList())
+        );
 
         if (content != null) {
             node.addSingleMemberAnnotation(annotation.getSimpleName(), content);
         } else {
             node.addMarkerAnnotation(annotation.getSimpleName());
         }
+
+        // The annotation class will normally need to be imported.
         node.tryAddImportToParentCompilationUnit(annotation);
     }
 
@@ -79,7 +105,10 @@ public abstract class AbstractGenerator {
      * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
     protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addMethod(containingClassOrInterface, callable, () -> containingClassOrInterface.addMember(callable));
+        addOrReplaceMethod(containingClassOrInterface, callable, () -> {
+            annotateGenerated(callable);
+            containingClassOrInterface.addMember(callable);
+        });
     }
 
     /**
@@ -88,33 +117,47 @@ public abstract class AbstractGenerator {
      * method or constructor is annotated with the generator class.
      */
     protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addMethod(containingClassOrInterface, callable,
+        addOrReplaceMethod(
+                containingClassOrInterface,
+                callable,
                 () -> {
                     throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-                });
+                }
+        );
     }
 
-    private void addMethod(
+    private void addOrReplaceMethod(
             ClassOrInterfaceDeclaration containingClassOrInterface,
             CallableDeclaration<?> callable,
-            Runnable onNoExistingMethod) {
-        List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
-        if (existingCallables.isEmpty()) {
+            Runnable onNoExistingMethod
+    ) {
+        List<CallableDeclaration<?>> existingMatchingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
+        if (existingMatchingCallables.isEmpty()) {
+            // A matching callable exists -- will now normally add/insert.
             onNoExistingMethod.run();
-            return;
+        } else {
+            // A matching callable doe NOT exist -- will now normally replace.
+            if (existingMatchingCallables.size() > 1) {
+                throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one, and unable to disambiguate.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+            }
+
+            final CallableDeclaration<?> existingCallable = existingMatchingCallables.get(0);
+
+            // Attempt to retain any existing javadoc.
+            callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+
+            // Mark the method as having been fully/partially generated.
+            annotateGenerated(callable);
+
+            // Do the replacement.
+            containingClassOrInterface.getMembers().replace(existingCallable, callable);
         }
-        if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-        }
-        final CallableDeclaration<?> existingCallable = existingCallables.get(0);
-        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
-        annotateGenerated(callable);
-        containingClassOrInterface.getMembers().replace(existingCallable, callable);
     }
 
     /**
-     * Removes all methods from containingClassOrInterface that have the same signature as callable. This is not used by
-     * any code, but it is useful when changing a generator and you need to get rid of a set of outdated methods.
+     * Removes all methods from containingClassOrInterface that have the same signature as callable.
+     * This is not currently used directly by any current generators, but may be useful when changing a generator
+     * and you need to get rid of a set of outdated methods.
      */
     protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
         for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
