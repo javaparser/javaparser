@@ -21,14 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
@@ -38,17 +38,14 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import org.junit.jupiter.api.Test;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -147,5 +144,34 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		assertEquals(2, expressions.size());
 		ResolvedType r = expressions.get(1).calculateResolvedType();
 		assertTrue(ResolvedVoidType.class.isAssignableFrom(r.getClass()));
+	}
+
+	@Test
+	public void testResolveChainedCallOnReflectionType() throws Exception {
+		Path pathToJar = adaptPath("src/test/resources/issue2667/jsonobject.jar");
+
+		CombinedTypeSolver typeSolver = createTypeSolver();
+		typeSolver.add(new ClassLoaderTypeSolver(new URLClassLoader(new URL[] {pathToJar.toUri().toURL()})));
+
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("Issue2667");
+		Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
+
+		int errorCount = 0;
+
+		for (MethodCallExpr expr : methodCallExpr) {
+			try {
+				ResolvedMethodDeclaration rd = expr.resolve();
+				System.out.println("\t Solved : " + rd.getQualifiedSignature());
+			} catch (UnsolvedSymbolException e) {
+				System.out.println("\t UNSOLVED: " + expr.toString());
+				e.printStackTrace();
+				errorCount++;
+			}
+		}
+
+		assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
 	}
 }

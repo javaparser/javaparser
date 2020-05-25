@@ -47,7 +47,11 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
@@ -67,8 +71,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             int index = 0;
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    if (demandParentNode(wrappedNode) instanceof MethodCallExpr) {
-                        MethodCallExpr methodCallExpr = (MethodCallExpr) demandParentNode(wrappedNode);
+                    Node parentNode = demandParentNode(wrappedNode);
+                    if (parentNode instanceof MethodCallExpr) {
+                        MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
@@ -81,7 +86,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                             // Resolve each type variable of the lambda, and use this later to infer the type of each
                             // implicit parameter
-                            inferenceContext.addPair(lambdaType, new ReferenceTypeImpl(lambdaType.asReferenceType().getTypeDeclaration(), typeSolver));
+                            lambdaType.asReferenceType().getTypeDeclaration().ifPresent(typeDeclaration -> {
+                                inferenceContext.addPair(
+                                        lambdaType,
+                                        new ReferenceTypeImpl(typeDeclaration, typeSolver)
+                                );
+                            });
 
                             // Find the position of this lambda argument
                             boolean found = false;
@@ -108,8 +118,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         } else{
                             return Optional.empty();
                         }
-                    } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
-                        VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
+                    } else if (parentNode instanceof VariableDeclarator) {
+                        VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
@@ -133,8 +143,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         } else {
                             throw new UnsupportedOperationException();
                         }
-                    } else if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
-                        ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
+                    } else if (parentNode instanceof ReturnStmt) {
+                        ReturnStmt returnStmt = (ReturnStmt) parentNode;
                         Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
                         if (optDeclaration.isPresent()) {
                             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
@@ -171,7 +181,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbolAsValue(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbolAsValue(name);
     }
 
     @Override
@@ -185,18 +197,23 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return getParent().solveType(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 
     @Override

@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.IfStmt;
@@ -112,18 +115,24 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return symbolReference;
         }
 
+        // If there is no parent
+        if(!getParent().isPresent()) {
+            return Optional.empty();
+        }
+        Context parentContext = getParent().get();
+
         // we should look in all the statements preceding, treating them as SymbolDeclarators
-        if (demandParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-            return getParent().solveSymbolAsValue(name);
+        if (demandParentNode(wrappedNode) instanceof MethodDeclaration) {
+            return parentContext.solveSymbolAsValue(name);
         }
         if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
-            return getParent().solveSymbolAsValue(name);
+            return parentContext.solveSymbolAsValue(name);
         }
         if (demandParentNode(wrappedNode) instanceof IfStmt) {
-            return getParent().solveSymbolAsValue(name);
+            return parentContext.solveSymbolAsValue(name);
         }
         if (!(demandParentNode(wrappedNode) instanceof NodeWithStatements)) {
-            return getParent().solveSymbolAsValue(name);
+            return parentContext.solveSymbolAsValue(name);
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) demandParentNode(wrappedNode);
         int position = -1;
@@ -144,7 +153,6 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        Context parentContext = getParent();
         return parentContext.solveSymbolAsValue(name);
     }
 
@@ -158,20 +166,24 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return symbolReference;
         }
 
+        // If no parent context / node, no point continuing... TODO: Tidy this up.
+        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
+        Node parentOfWrappedNode = demandParentNode(wrappedNode);
+
         // we should look in all the statements preceding, treating them as SymbolDeclarators
-        if (demandParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-            return getParent().solveSymbol(name);
+        if (parentOfWrappedNode instanceof MethodDeclaration) {
+            return parentContext.solveSymbol(name);
         }
-        if (demandParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
-            return getParent().solveSymbol(name);
+        if (parentOfWrappedNode instanceof ConstructorDeclaration) {
+            return parentContext.solveSymbol(name);
         }
-        if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
-            return getParent().solveSymbol(name);
+        if (parentOfWrappedNode instanceof LambdaExpr) {
+            return parentContext.solveSymbol(name);
         }
-        if (!(demandParentNode(wrappedNode) instanceof NodeWithStatements)) {
-            return getParent().solveSymbol(name);
+        if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
+            return parentContext.solveSymbol(name);
         }
-        NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) demandParentNode(wrappedNode);
+        NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
         int position = -1;
         for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
             if (nodeWithStmt.getStatements().get(i).equals(wrappedNode)) {
@@ -190,16 +202,20 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name);
+        return parentContext.solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return getParent().solveType(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name);
     }
 }
