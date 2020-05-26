@@ -141,7 +141,7 @@ public class ParserConfiguration {
 
 
     // TODO: Add a configurable option e.g. setDesiredLineEnding(...) to replace/swap out existing line endings
-    private boolean detectOriginalLineEnding = true;
+    private boolean detectOriginalLineSeparator = true;
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
@@ -193,7 +193,7 @@ public class ParserConfiguration {
 
             @Override
             public Provider process(Provider innerProvider) {
-                if (isDetectOriginalLineEnding()) {
+                if (isDetectOriginalLineSeparator()) {
                     _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
                     return _lineEndingProcessingProvider;
                 }
@@ -202,7 +202,7 @@ public class ParserConfiguration {
 
             @Override
             public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                if (isDetectOriginalLineEnding()) {
+                if (isDetectOriginalLineSeparator()) {
                     result.getResult().ifPresent(
                             rootNode -> {
                                 LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
@@ -378,13 +378,13 @@ public class ParserConfiguration {
         return preprocessUnicodeEscapes;
     }
     
-    public ParserConfiguration setDetectOriginalLineEnding(boolean detectOriginalLineEnding) {
-        this.detectOriginalLineEnding = detectOriginalLineEnding;
+    public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {
+        this.detectOriginalLineSeparator = detectOriginalLineSeparator;
         return this;
     }
 
-    public boolean isDetectOriginalLineEnding() {
-        return detectOriginalLineEnding;
+    public boolean isDetectOriginalLineSeparator() {
+        return detectOriginalLineSeparator;
     }
 
     public Charset getCharacterEncoding() {
