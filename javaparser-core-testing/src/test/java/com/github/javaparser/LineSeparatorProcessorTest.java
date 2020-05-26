@@ -23,10 +23,11 @@ public class LineSeparatorProcessorTest {
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
-    public void doTest(LineSeparator eol) {
+    public void doTest(LineSeparator lineSeparator) {
+        String eol = lineSeparator.asRawString();
 
         final String original = "" +
-                "    public class Foo { //comment" + eol.toRawString() +
+                "    public class Foo { //comment" + eol +
                 "        private String a;" + eol +
                 "        private String b;" + eol +
                 "        private String c;" + eol +

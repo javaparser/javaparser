@@ -88,7 +88,7 @@ public class TestUtils {
                 final StringBuilder builder = new StringBuilder(4096);
                 String line;
                 while ((line = br.readLine()) != null) {
-                    builder.append(line).append(lineSeparator.toRawString());
+                    builder.append(line).append(lineSeparator.asRawString());
                 }
                 return builder.toString();
             }
@@ -299,9 +299,9 @@ public class TestUtils {
                 expected,
                 actual,
                 message + String.format(" -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
-                        LineSeparator.detect(expected).toEscapedString(),
-                        LineSeparator.detect(actual).toEscapedString(),
-                        LineSeparator.SYSTEM.toEscapedString()
+                        LineSeparator.detect(expected).asEscapedString(),
+                        LineSeparator.detect(actual).asEscapedString(),
+                        LineSeparator.SYSTEM.asEscapedString()
                 )
         );
     }

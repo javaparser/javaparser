@@ -104,7 +104,7 @@ public class Issue2620Test {
         LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
 
         assertFalse(detectedLineSeparator.equals(LineSeparator.MIXED));
-        assertEquals(eol.toEscapedString(), detectedLineSeparator.toEscapedString());
+        assertEquals(eol.asEscapedString(), detectedLineSeparator.asEscapedString());
 
         assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
 

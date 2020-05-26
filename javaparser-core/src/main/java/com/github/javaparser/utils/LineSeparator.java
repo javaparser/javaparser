@@ -108,11 +108,11 @@ public enum LineSeparator {
      * return that. Otherwise an empty optional.
      */
     public static Optional<LineSeparator> lookup(String ending) {
-        if (CR.toRawString().equals(ending)) {
+        if (CR.asRawString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.toRawString().equals(ending)) {
+        } else if (LF.asRawString().equals(ending)) {
             return Optional.of(LF);
-        } else if (CRLF.toRawString().equals(ending)) {
+        } else if (CRLF.asRawString().equals(ending)) {
             return Optional.of(CRLF);
         } else {
             return Optional.empty();
@@ -120,11 +120,11 @@ public enum LineSeparator {
     }
 
     public static Optional<LineSeparator> lookupEscaped(String ending) {
-        if (CR.toEscapedString().equals(ending)) {
+        if (CR.asEscapedString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.toEscapedString().equals(ending)) {
+        } else if (LF.asEscapedString().equals(ending)) {
             return Optional.of(LF);
-        } else if (CRLF.toEscapedString().equals(ending)) {
+        } else if (CRLF.asEscapedString().equals(ending)) {
             return Optional.of(CRLF);
         } else {
             return Optional.empty();
@@ -137,7 +137,7 @@ public enum LineSeparator {
     }
 
     public boolean equalsString(LineSeparator lineSeparator) {
-        return text.equals(lineSeparator.toRawString());
+        return text.equals(lineSeparator.asRawString());
     }
 
     public boolean isStandardEol() {
@@ -145,7 +145,7 @@ public enum LineSeparator {
         return equalsString(LineSeparator.CR) || equalsString(LineSeparator.LF) || equalsString(LineSeparator.CRLF);
     }
 
-    public String toEscapedString() {
+    public String asEscapedString() {
         String result = text
                 .replace("\r", "\\r")
                 .replace("\n", "\\n");
@@ -153,13 +153,13 @@ public enum LineSeparator {
         return result;
     }
 
-    public String toRawString() {
+    public String asRawString() {
         return text;
     }
 
     @Override
     public String toString() {
-        return toRawString();
+        return asRawString();
     }
 
 }

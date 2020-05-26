@@ -284,7 +284,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public final String toString() {
         if (containsData(LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.toRawString());
+            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.asRawString());
         }
         return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }

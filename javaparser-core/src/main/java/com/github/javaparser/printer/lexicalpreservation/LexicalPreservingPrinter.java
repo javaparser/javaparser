@@ -155,7 +155,7 @@ public class LexicalPreservingPrinter {
 
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
-                    nodeText.addToken(index + 1, eolTokenKind(lineSeparator), lineSeparator.toRawString());
+                    nodeText.addToken(index + 1, eolTokenKind(lineSeparator), lineSeparator.asRawString());
                 } else if (newValue == null) {
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {

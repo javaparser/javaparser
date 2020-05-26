@@ -103,7 +103,7 @@ public interface CsmElement {
     }
 
     static CsmElement newline(LineSeparator lineSeparator) {
-        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.toRawString());
+        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString());
     }
 
     static CsmElement none() {

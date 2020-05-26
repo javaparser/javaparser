@@ -12,9 +12,9 @@ class LineSeparatorTest {
 
     @Test
     void escaped() {
-        assertEquals("\\r", LineSeparator.CR.toEscapedString());
-        assertEquals("\\n", LineSeparator.LF.toEscapedString());
-        assertEquals("\\r\\n", LineSeparator.CRLF.toEscapedString());
+        assertEquals("\\r", LineSeparator.CR.asEscapedString());
+        assertEquals("\\n", LineSeparator.LF.asEscapedString());
+        assertEquals("\\r\\n", LineSeparator.CRLF.asEscapedString());
     }
 
     @Test
@@ -69,12 +69,12 @@ class LineSeparatorTest {
 
     @Test
     void testToString() {
-        assertEquals("\r", LineSeparator.CR.toRawString());
-        assertEquals("\n", LineSeparator.LF.toRawString());
-        assertEquals("\r\n", LineSeparator.CRLF.toRawString());
+        assertEquals("\r", LineSeparator.CR.asRawString());
+        assertEquals("\n", LineSeparator.LF.asRawString());
+        assertEquals("\r\n", LineSeparator.CRLF.asRawString());
 
         // Note that this represents an "arbitrary" line ending -- this test is to highlight any time that it changes.
-        assertEquals("\n", LineSeparator.ARBITRARY.toRawString());
+        assertEquals("\n", LineSeparator.ARBITRARY.asRawString());
     }
 
     @Test
