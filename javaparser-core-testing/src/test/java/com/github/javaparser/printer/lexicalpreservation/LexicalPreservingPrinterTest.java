@@ -1497,409 +1497,409 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
-    public void test() {
+    public void removeAnnotationsTest() {
         final JavaParser javaParser = new JavaParser(
                 new ParserConfiguration()
                         .setLexicalPreservationEnabled(true)
         );
 
 //        String eol = EOL;
-        String eol = "\n"; // Fails (sometimes???) due to equalsNoEol not normalising both inputs
+        String eol = "\n"; // Fails on Windows
 
         String code = "" +
-                "/*" + EOL + 
-                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + EOL + 
-                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + EOL + 
-                " *" + EOL + 
-                " * This file is part of JavaParser." + EOL + 
-                " *" + EOL + 
-                " * JavaParser can be used either under the terms of" + EOL + 
-                " * a) the GNU Lesser General Public License as published by" + EOL + 
-                " *     the Free Software Foundation, either version 3 of the License, or" + EOL + 
-                " *     (at your option) any later version." + EOL + 
-                " * b) the terms of the Apache License" + EOL + 
-                " *" + EOL + 
-                " * You should have received a copy of both licenses in LICENCE.LGPL and" + EOL + 
-                " * LICENCE.APACHE. Please refer to those files for details." + EOL + 
-                " *" + EOL + 
-                " * JavaParser is distributed in the hope that it will be useful," + EOL + 
-                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + EOL + 
-                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + EOL + 
-                " * GNU Lesser General Public License for more details." + EOL + 
-                " */" + EOL + 
-                "package com.github.javaparser.ast.stmt;" + EOL + 
-                "" + EOL + 
-                "import com.github.javaparser.ast.AllFieldsConstructor;" + EOL + 
-                "import com.github.javaparser.ast.expr.BooleanLiteralExpr;" + EOL + 
-                "import com.github.javaparser.ast.expr.Expression;" + EOL + 
-                "import com.github.javaparser.ast.observer.ObservableProperty;" + EOL + 
-                "import com.github.javaparser.ast.visitor.GenericVisitor;" + EOL + 
-                "import com.github.javaparser.ast.visitor.VoidVisitor;" + EOL + 
-                "import java.util.Optional;" + EOL + 
-                "import static com.github.javaparser.utils.Utils.assertNotNull;" + EOL + 
-                "import com.github.javaparser.ast.Node;" + EOL + 
-                "import com.github.javaparser.ast.visitor.CloneVisitor;" + EOL + 
-                "import com.github.javaparser.metamodel.AssertStmtMetaModel;" + EOL + 
-                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + EOL + 
-                "import com.github.javaparser.TokenRange;" + EOL + 
-                "import com.github.javaparser.metamodel.OptionalProperty;" + EOL + 
-                "import java.util.function.Consumer;" + EOL + 
-                "import com.github.javaparser.ast.Generated;" + EOL + 
-                "" + EOL + 
-                "/**" + EOL + 
-                " * A usage of the keyword \"assert\"" + EOL + 
-                " * <br>In {@code assert dead : \"Wasn't expecting to be dead here\";} the check is \"dead\" and the message is the string." + EOL + 
-                " * @author Julio Vilmar Gesser" + EOL + 
-                " */" + EOL + 
-                "public class AssertStmt extends Statement {" + EOL + 
-                "" + EOL + 
-                "    private Expression check;" + EOL + 
-                "" + EOL + 
-                "    @OptionalProperty" + EOL + 
-                "    private Expression message;" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt() {" + EOL + 
-                "        this(null, new BooleanLiteralExpr(), null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt(final Expression check) {" + EOL + 
-                "        this(null, check, null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @AllFieldsConstructor" + EOL + 
-                "    public AssertStmt(final Expression check, final Expression message) {" + EOL + 
-                "        this(null, check, message);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    /**" + EOL + 
-                "     * This constructor is used by the parser and is considered private." + EOL + 
-                "     */" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + EOL + 
-                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + EOL + 
-                "        super(tokenRange);" + EOL + 
-                "        setCheck(check);" + EOL + 
-                "        setMessage(message);" + EOL + 
-                "        customInitialization();" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + EOL + 
-                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + EOL + 
-                "        return v.visit(this, arg);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + EOL + 
-                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + EOL + 
-                "        v.visit(this, arg);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + EOL + 
-                "    public Expression getCheck() {" + EOL + 
-                "        return check;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + EOL + 
-                "    public Optional<Expression> getMessage() {" + EOL + 
-                "        return Optional.ofNullable(message);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + EOL + 
-                "    public AssertStmt setCheck(final Expression check) {" + EOL + 
-                "        assertNotNull(check);" + EOL + 
-                "        if (check == this.check) {" + EOL + 
-                "            return (AssertStmt) this;" + EOL + 
-                "        }" + EOL + 
-                "        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);" + EOL + 
-                "        if (this.check != null)" + EOL + 
-                "            this.check.setParentNode(null);" + EOL + 
-                "        this.check = check;" + EOL + 
-                "        setAsParentNodeOf(check);" + EOL + 
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    /**" + EOL + 
-                "     * Sets the message" + EOL + 
-                "     *" + EOL + 
-                "     * @param message the message, can be null" + EOL + 
-                "     * @return this, the AssertStmt" + EOL + 
-                "     */" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + EOL + 
-                "    public AssertStmt setMessage(final Expression message) {" + EOL + 
-                "        if (message == this.message) {" + EOL + 
-                "            return (AssertStmt) this;" + EOL + 
-                "        }" + EOL + 
-                "        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);" + EOL + 
-                "        if (this.message != null)" + EOL + 
-                "            this.message.setParentNode(null);" + EOL + 
-                "        this.message = message;" + EOL + 
-                "        setAsParentNodeOf(message);" + EOL + 
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + EOL + 
-                "    public boolean remove(Node node) {" + EOL + 
-                "        if (node == null)" + EOL + 
-                "            return false;" + EOL + 
-                "        if (message != null) {" + EOL + 
-                "            if (node == message) {" + EOL + 
-                "                removeMessage();" + EOL + 
-                "                return true;" + EOL + 
-                "            }" + EOL + 
-                "        }" + EOL + 
-                "        return super.remove(node);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + EOL + 
-                "    public AssertStmt removeMessage() {" + EOL + 
-                "        return setMessage((Expression) null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + EOL + 
-                "    public AssertStmt clone() {" + EOL + 
-                "        return (AssertStmt) accept(new CloneVisitor(), null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + EOL + 
-                "    public AssertStmtMetaModel getMetaModel() {" + EOL + 
-                "        return JavaParserMetaModel.assertStmtMetaModel;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + EOL + 
-                "    public boolean replace(Node node, Node replacementNode) {" + EOL + 
-                "        if (node == null)" + EOL + 
-                "            return false;" + EOL + 
-                "        if (node == check) {" + EOL + 
-                "            setCheck((Expression) replacementNode);" + EOL + 
-                "            return true;" + EOL + 
-                "        }" + EOL + 
-                "        if (message != null) {" + EOL + 
-                "            if (node == message) {" + EOL + 
-                "                setMessage((Expression) replacementNode);" + EOL + 
-                "                return true;" + EOL + 
-                "            }" + EOL + 
-                "        }" + EOL + 
-                "        return super.replace(node, replacementNode);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + EOL + 
-                "    public boolean isAssertStmt() {" + EOL + 
-                "        return true;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + EOL + 
-                "    public AssertStmt asAssertStmt() {" + EOL + 
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + EOL + 
-                "    public void ifAssertStmt(Consumer<AssertStmt> action) {" + EOL + 
-                "        action.accept(this);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + EOL + 
-                "    public Optional<AssertStmt> toAssertStmt() {" + EOL + 
-                "        return Optional.of(this);" + EOL + 
-                "    }" + EOL + 
-                "}" + EOL + 
+                "/*" + eol + 
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol + 
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol + 
+                " *" + eol + 
+                " * This file is part of JavaParser." + eol + 
+                " *" + eol + 
+                " * JavaParser can be used either under the terms of" + eol + 
+                " * a) the GNU Lesser General Public License as published by" + eol + 
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol + 
+                " *     (at your option) any later version." + eol + 
+                " * b) the terms of the Apache License" + eol + 
+                " *" + eol + 
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol + 
+                " * LICENCE.APACHE. Please refer to those files for details." + eol + 
+                " *" + eol + 
+                " * JavaParser is distributed in the hope that it will be useful," + eol + 
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol + 
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol + 
+                " * GNU Lesser General Public License for more details." + eol + 
+                " */" + eol + 
+                "package com.github.javaparser.ast.stmt;" + eol + 
+                "" + eol + 
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol + 
+                "import com.github.javaparser.ast.expr.BooleanLiteralExpr;" + eol + 
+                "import com.github.javaparser.ast.expr.Expression;" + eol + 
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol + 
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol + 
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol + 
+                "import java.util.Optional;" + eol + 
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol + 
+                "import com.github.javaparser.ast.Node;" + eol + 
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol + 
+                "import com.github.javaparser.metamodel.AssertStmtMetaModel;" + eol + 
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol + 
+                "import com.github.javaparser.TokenRange;" + eol + 
+                "import com.github.javaparser.metamodel.OptionalProperty;" + eol + 
+                "import java.util.function.Consumer;" + eol + 
+                "import com.github.javaparser.ast.Generated;" + eol + 
+                "" + eol + 
+                "/**" + eol + 
+                " * A usage of the keyword \"assert\"" + eol + 
+                " * <br>In {@code assert dead : \"Wasn't expecting to be dead here\";} the check is \"dead\" and the message is the string." + eol + 
+                " * @author Julio Vilmar Gesser" + eol + 
+                " */" + eol + 
+                "public class AssertStmt extends Statement {" + eol + 
+                "" + eol + 
+                "    private Expression check;" + eol + 
+                "" + eol + 
+                "    @OptionalProperty" + eol + 
+                "    private Expression message;" + eol + 
+                "" + eol + 
+                "    public AssertStmt() {" + eol + 
+                "        this(null, new BooleanLiteralExpr(), null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public AssertStmt(final Expression check) {" + eol + 
+                "        this(null, check, null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @AllFieldsConstructor" + eol + 
+                "    public AssertStmt(final Expression check, final Expression message) {" + eol + 
+                "        this(null, check, message);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    /**" + eol + 
+                "     * This constructor is used by the parser and is considered private." + eol + 
+                "     */" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol + 
+                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + eol + 
+                "        super(tokenRange);" + eol + 
+                "        setCheck(check);" + eol + 
+                "        setMessage(message);" + eol + 
+                "        customInitialization();" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol + 
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol + 
+                "        return v.visit(this, arg);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol + 
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol + 
+                "        v.visit(this, arg);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol + 
+                "    public Expression getCheck() {" + eol + 
+                "        return check;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol + 
+                "    public Optional<Expression> getMessage() {" + eol + 
+                "        return Optional.ofNullable(message);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol + 
+                "    public AssertStmt setCheck(final Expression check) {" + eol + 
+                "        assertNotNull(check);" + eol + 
+                "        if (check == this.check) {" + eol + 
+                "            return (AssertStmt) this;" + eol + 
+                "        }" + eol + 
+                "        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);" + eol + 
+                "        if (this.check != null)" + eol + 
+                "            this.check.setParentNode(null);" + eol + 
+                "        this.check = check;" + eol + 
+                "        setAsParentNodeOf(check);" + eol + 
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    /**" + eol + 
+                "     * Sets the message" + eol + 
+                "     *" + eol + 
+                "     * @param message the message, can be null" + eol + 
+                "     * @return this, the AssertStmt" + eol + 
+                "     */" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol + 
+                "    public AssertStmt setMessage(final Expression message) {" + eol + 
+                "        if (message == this.message) {" + eol + 
+                "            return (AssertStmt) this;" + eol + 
+                "        }" + eol + 
+                "        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);" + eol + 
+                "        if (this.message != null)" + eol + 
+                "            this.message.setParentNode(null);" + eol + 
+                "        this.message = message;" + eol + 
+                "        setAsParentNodeOf(message);" + eol + 
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol + 
+                "    public boolean remove(Node node) {" + eol + 
+                "        if (node == null)" + eol + 
+                "            return false;" + eol + 
+                "        if (message != null) {" + eol + 
+                "            if (node == message) {" + eol + 
+                "                removeMessage();" + eol + 
+                "                return true;" + eol + 
+                "            }" + eol + 
+                "        }" + eol + 
+                "        return super.remove(node);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol + 
+                "    public AssertStmt removeMessage() {" + eol + 
+                "        return setMessage((Expression) null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + eol + 
+                "    public AssertStmt clone() {" + eol + 
+                "        return (AssertStmt) accept(new CloneVisitor(), null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + eol + 
+                "    public AssertStmtMetaModel getMetaModel() {" + eol + 
+                "        return JavaParserMetaModel.assertStmtMetaModel;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + eol + 
+                "    public boolean replace(Node node, Node replacementNode) {" + eol + 
+                "        if (node == null)" + eol + 
+                "            return false;" + eol + 
+                "        if (node == check) {" + eol + 
+                "            setCheck((Expression) replacementNode);" + eol + 
+                "            return true;" + eol + 
+                "        }" + eol + 
+                "        if (message != null) {" + eol + 
+                "            if (node == message) {" + eol + 
+                "                setMessage((Expression) replacementNode);" + eol + 
+                "                return true;" + eol + 
+                "            }" + eol + 
+                "        }" + eol + 
+                "        return super.replace(node, replacementNode);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol + 
+                "    public boolean isAssertStmt() {" + eol + 
+                "        return true;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol + 
+                "    public AssertStmt asAssertStmt() {" + eol + 
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol + 
+                "    public void ifAssertStmt(Consumer<AssertStmt> action) {" + eol + 
+                "        action.accept(this);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol + 
+                "    public Optional<AssertStmt> toAssertStmt() {" + eol + 
+                "        return Optional.of(this);" + eol + 
+                "    }" + eol + 
+                "}" + eol + 
 
                 "";
 
-        String expected =                 "/*" + EOL + 
-                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + EOL + 
-                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + EOL + 
-                " *" + EOL + 
-                " * This file is part of JavaParser." + EOL + 
-                " *" + EOL + 
-                " * JavaParser can be used either under the terms of" + EOL + 
-                " * a) the GNU Lesser General Public License as published by" + EOL + 
-                " *     the Free Software Foundation, either version 3 of the License, or" + EOL + 
-                " *     (at your option) any later version." + EOL + 
-                " * b) the terms of the Apache License" + EOL + 
-                " *" + EOL + 
-                " * You should have received a copy of both licenses in LICENCE.LGPL and" + EOL + 
-                " * LICENCE.APACHE. Please refer to those files for details." + EOL + 
-                " *" + EOL + 
-                " * JavaParser is distributed in the hope that it will be useful," + EOL + 
-                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + EOL + 
-                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + EOL + 
-                " * GNU Lesser General Public License for more details." + EOL + 
-                " */" + EOL + 
-                "package com.github.javaparser.ast.stmt;" + EOL + 
-                "" + EOL + 
-                "import com.github.javaparser.ast.AllFieldsConstructor;" + EOL + 
-                "import com.github.javaparser.ast.expr.BooleanLiteralExpr;" + EOL + 
-                "import com.github.javaparser.ast.expr.Expression;" + EOL + 
-                "import com.github.javaparser.ast.observer.ObservableProperty;" + EOL + 
-                "import com.github.javaparser.ast.visitor.GenericVisitor;" + EOL + 
-                "import com.github.javaparser.ast.visitor.VoidVisitor;" + EOL + 
-                "import java.util.Optional;" + EOL + 
-                "import static com.github.javaparser.utils.Utils.assertNotNull;" + EOL + 
-                "import com.github.javaparser.ast.Node;" + EOL + 
-                "import com.github.javaparser.ast.visitor.CloneVisitor;" + EOL + 
-                "import com.github.javaparser.metamodel.AssertStmtMetaModel;" + EOL + 
-                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + EOL + 
-                "import com.github.javaparser.TokenRange;" + EOL + 
-                "import com.github.javaparser.metamodel.OptionalProperty;" + EOL + 
-                "import java.util.function.Consumer;" + EOL + 
-                "import com.github.javaparser.ast.Generated;" + EOL + 
-                "" + EOL + 
-                "/**" + EOL + 
-                " * A usage of the keyword \"assert\"" + EOL + 
-                " * <br>In {@code assert dead : \"Wasn't expecting to be dead here\";} the check is \"dead\" and the message is the string." + EOL + 
-                " * @author Julio Vilmar Gesser" + EOL + 
-                " */" + EOL + 
-                "public class AssertStmt extends Statement {" + EOL + 
-                "" + EOL + 
-                "    private Expression check;" + EOL + 
-                "" + EOL + 
-                "    @OptionalProperty" + EOL + 
-                "    private Expression message;" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt() {" + EOL + 
-                "        this(null, new BooleanLiteralExpr(), null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt(final Expression check) {" + EOL + 
-                "        this(null, check, null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @AllFieldsConstructor" + EOL + 
-                "    public AssertStmt(final Expression check, final Expression message) {" + EOL + 
-                "        this(null, check, message);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    /**" + EOL + 
-                "     * This constructor is used by the parser and is considered private." + EOL + 
-                "     */" + EOL + 
-                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + EOL +
-                "        super(tokenRange);" + EOL + 
-                "        setCheck(check);" + EOL + 
-                "        setMessage(message);" + EOL + 
-                "        customInitialization();" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + EOL +
-                "        return v.visit(this, arg);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + EOL +
-                "        v.visit(this, arg);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public Expression getCheck() {" + EOL +
-                "        return check;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public Optional<Expression> getMessage() {" + EOL +
-                "        return Optional.ofNullable(message);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt setCheck(final Expression check) {" + EOL +
-                "        assertNotNull(check);" + EOL + 
-                "        if (check == this.check) {" + EOL + 
-                "            return (AssertStmt) this;" + EOL + 
-                "        }" + EOL + 
-                "        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);" + EOL + 
-                "        if (this.check != null)" + EOL + 
-                "            this.check.setParentNode(null);" + EOL + 
-                "        this.check = check;" + EOL + 
-                "        setAsParentNodeOf(check);" + EOL + 
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    /**" + EOL + 
-                "     * Sets the message" + EOL + 
-                "     *" + EOL + 
-                "     * @param message the message, can be null" + EOL + 
-                "     * @return this, the AssertStmt" + EOL + 
-                "     */" + EOL + 
-                "    public AssertStmt setMessage(final Expression message) {" + EOL +
-                "        if (message == this.message) {" + EOL + 
-                "            return (AssertStmt) this;" + EOL + 
-                "        }" + EOL + 
-                "        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);" + EOL + 
-                "        if (this.message != null)" + EOL + 
-                "            this.message.setParentNode(null);" + EOL + 
-                "        this.message = message;" + EOL + 
-                "        setAsParentNodeOf(message);" + EOL + 
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public boolean remove(Node node) {" + EOL +
-                "        if (node == null)" + EOL + 
-                "            return false;" + EOL + 
-                "        if (message != null) {" + EOL + 
-                "            if (node == message) {" + EOL + 
-                "                removeMessage();" + EOL + 
-                "                return true;" + EOL + 
-                "            }" + EOL + 
-                "        }" + EOL + 
-                "        return super.remove(node);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    public AssertStmt removeMessage() {" + EOL +
-                "        return setMessage((Expression) null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public AssertStmt clone() {" + EOL +
-                "        return (AssertStmt) accept(new CloneVisitor(), null);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public AssertStmtMetaModel getMetaModel() {" + EOL +
-                "        return JavaParserMetaModel.assertStmtMetaModel;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public boolean replace(Node node, Node replacementNode) {" + EOL +
-                "        if (node == null)" + EOL + 
-                "            return false;" + EOL + 
-                "        if (node == check) {" + EOL + 
-                "            setCheck((Expression) replacementNode);" + EOL + 
-                "            return true;" + EOL + 
-                "        }" + EOL + 
-                "        if (message != null) {" + EOL + 
-                "            if (node == message) {" + EOL + 
-                "                setMessage((Expression) replacementNode);" + EOL + 
-                "                return true;" + EOL + 
-                "            }" + EOL + 
-                "        }" + EOL + 
-                "        return super.replace(node, replacementNode);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public boolean isAssertStmt() {" + EOL +
-                "        return true;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public AssertStmt asAssertStmt() {" + EOL +
-                "        return this;" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public void ifAssertStmt(Consumer<AssertStmt> action) {" + EOL +
-                "        action.accept(this);" + EOL + 
-                "    }" + EOL + 
-                "" + EOL + 
-                "    @Override" + EOL + 
-                "    public Optional<AssertStmt> toAssertStmt() {" + EOL +
-                "        return Optional.of(this);" + EOL + 
-                "    }" + EOL + 
-                "}" + EOL + 
+        String expected =                 "/*" + eol + 
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol + 
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol + 
+                " *" + eol + 
+                " * This file is part of JavaParser." + eol + 
+                " *" + eol + 
+                " * JavaParser can be used either under the terms of" + eol + 
+                " * a) the GNU Lesser General Public License as published by" + eol + 
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol + 
+                " *     (at your option) any later version." + eol + 
+                " * b) the terms of the Apache License" + eol + 
+                " *" + eol + 
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol + 
+                " * LICENCE.APACHE. Please refer to those files for details." + eol + 
+                " *" + eol + 
+                " * JavaParser is distributed in the hope that it will be useful," + eol + 
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol + 
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol + 
+                " * GNU Lesser General Public License for more details." + eol + 
+                " */" + eol + 
+                "package com.github.javaparser.ast.stmt;" + eol + 
+                "" + eol + 
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol + 
+                "import com.github.javaparser.ast.expr.BooleanLiteralExpr;" + eol + 
+                "import com.github.javaparser.ast.expr.Expression;" + eol + 
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol + 
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol + 
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol + 
+                "import java.util.Optional;" + eol + 
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol + 
+                "import com.github.javaparser.ast.Node;" + eol + 
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol + 
+                "import com.github.javaparser.metamodel.AssertStmtMetaModel;" + eol + 
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol + 
+                "import com.github.javaparser.TokenRange;" + eol + 
+                "import com.github.javaparser.metamodel.OptionalProperty;" + eol + 
+                "import java.util.function.Consumer;" + eol + 
+                "import com.github.javaparser.ast.Generated;" + eol + 
+                "" + eol + 
+                "/**" + eol + 
+                " * A usage of the keyword \"assert\"" + eol + 
+                " * <br>In {@code assert dead : \"Wasn't expecting to be dead here\";} the check is \"dead\" and the message is the string." + eol + 
+                " * @author Julio Vilmar Gesser" + eol + 
+                " */" + eol + 
+                "public class AssertStmt extends Statement {" + eol + 
+                "" + eol + 
+                "    private Expression check;" + eol + 
+                "" + eol + 
+                "    @OptionalProperty" + eol + 
+                "    private Expression message;" + eol + 
+                "" + eol + 
+                "    public AssertStmt() {" + eol + 
+                "        this(null, new BooleanLiteralExpr(), null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public AssertStmt(final Expression check) {" + eol + 
+                "        this(null, check, null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @AllFieldsConstructor" + eol + 
+                "    public AssertStmt(final Expression check, final Expression message) {" + eol + 
+                "        this(null, check, message);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    /**" + eol + 
+                "     * This constructor is used by the parser and is considered private." + eol + 
+                "     */" + eol + 
+                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + eol +
+                "        super(tokenRange);" + eol + 
+                "        setCheck(check);" + eol + 
+                "        setMessage(message);" + eol + 
+                "        customInitialization();" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol +
+                "        v.visit(this, arg);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public Expression getCheck() {" + eol +
+                "        return check;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public Optional<Expression> getMessage() {" + eol +
+                "        return Optional.ofNullable(message);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public AssertStmt setCheck(final Expression check) {" + eol +
+                "        assertNotNull(check);" + eol + 
+                "        if (check == this.check) {" + eol + 
+                "            return (AssertStmt) this;" + eol + 
+                "        }" + eol + 
+                "        notifyPropertyChange(ObservableProperty.CHECK, this.check, check);" + eol + 
+                "        if (this.check != null)" + eol + 
+                "            this.check.setParentNode(null);" + eol + 
+                "        this.check = check;" + eol + 
+                "        setAsParentNodeOf(check);" + eol + 
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    /**" + eol + 
+                "     * Sets the message" + eol + 
+                "     *" + eol + 
+                "     * @param message the message, can be null" + eol + 
+                "     * @return this, the AssertStmt" + eol + 
+                "     */" + eol + 
+                "    public AssertStmt setMessage(final Expression message) {" + eol +
+                "        if (message == this.message) {" + eol + 
+                "            return (AssertStmt) this;" + eol + 
+                "        }" + eol + 
+                "        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);" + eol + 
+                "        if (this.message != null)" + eol + 
+                "            this.message.setParentNode(null);" + eol + 
+                "        this.message = message;" + eol + 
+                "        setAsParentNodeOf(message);" + eol + 
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public boolean remove(Node node) {" + eol +
+                "        if (node == null)" + eol + 
+                "            return false;" + eol + 
+                "        if (message != null) {" + eol + 
+                "            if (node == message) {" + eol + 
+                "                removeMessage();" + eol + 
+                "                return true;" + eol + 
+                "            }" + eol + 
+                "        }" + eol + 
+                "        return super.remove(node);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    public AssertStmt removeMessage() {" + eol +
+                "        return setMessage((Expression) null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public AssertStmt clone() {" + eol +
+                "        return (AssertStmt) accept(new CloneVisitor(), null);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public AssertStmtMetaModel getMetaModel() {" + eol +
+                "        return JavaParserMetaModel.assertStmtMetaModel;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public boolean replace(Node node, Node replacementNode) {" + eol +
+                "        if (node == null)" + eol + 
+                "            return false;" + eol + 
+                "        if (node == check) {" + eol + 
+                "            setCheck((Expression) replacementNode);" + eol + 
+                "            return true;" + eol + 
+                "        }" + eol + 
+                "        if (message != null) {" + eol + 
+                "            if (node == message) {" + eol + 
+                "                setMessage((Expression) replacementNode);" + eol + 
+                "                return true;" + eol + 
+                "            }" + eol + 
+                "        }" + eol + 
+                "        return super.replace(node, replacementNode);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public boolean isAssertStmt() {" + eol +
+                "        return true;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public AssertStmt asAssertStmt() {" + eol +
+                "        return this;" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public void ifAssertStmt(Consumer<AssertStmt> action) {" + eol +
+                "        action.accept(this);" + eol + 
+                "    }" + eol + 
+                "" + eol + 
+                "    @Override" + eol + 
+                "    public Optional<AssertStmt> toAssertStmt() {" + eol +
+                "        return Optional.of(this);" + eol + 
+                "    }" + eol + 
+                "}" + eol + 
                 "";
 
         final Node b = javaParser.parse(code)
