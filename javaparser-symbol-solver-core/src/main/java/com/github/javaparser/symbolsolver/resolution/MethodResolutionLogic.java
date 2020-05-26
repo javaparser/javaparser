@@ -397,12 +397,12 @@ public class MethodResolutionLogic {
             typeParameters.addAll(methodUsage.declaringType().getTypeParameters());
 
             ResolvedType expectedTypeWithoutSubstitutions = expectedArgumentType;
-            ResolvedType expectedTypeWithInference = methodUsage.getParamType(i);
+            ResolvedType expectedTypeWithInference = expectedArgumentType;
             Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
 
             // For each declared parameter, infer the types that will replace generics (type parameters)
             for (int j = 0; j < countOfMethodUsageArgumentsPassed; j++) {
-                ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
+                ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(j);
                 ResolvedType parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
                     // Don't continue if a vararg parameter is reached and there are no arguments left

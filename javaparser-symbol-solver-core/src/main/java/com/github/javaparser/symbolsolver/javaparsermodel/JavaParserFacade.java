@@ -32,6 +32,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -402,46 +403,57 @@ public class JavaParserFacade {
     }
 
     protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
-        if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
+        Expression scope = methodReferenceExpr.getScope();
+        ResolvedType typeOfScope = getType(methodReferenceExpr.getScope());
+        if (!typeOfScope.isReferenceType()) {
+            throw new UnsupportedOperationException(typeOfScope.getClass().getCanonicalName());
+        }
+
+        Optional<MethodUsage> result;
+        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                .getAllMethods();
+
+        if (scope instanceof TypeExpr) {
+            // static methods should match all params
+            List<MethodUsage> staticMethodUsages = allMethods.stream()
+                    .filter(it -> it.getDeclaration().isStatic())
+                    .collect(Collectors.toList());
+
+            result = MethodResolutionLogic.findMostApplicableUsage(staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+
+            if (!paramTypes.isEmpty()) {
+                // instance methods are called on the first param and should match all other params
+                List<MethodUsage> instanceMethodUsages = allMethods.stream()
+                        .filter(it -> !it.getDeclaration().isStatic())
+                        .collect(Collectors.toList());
+
+                List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+                instanceMethodParamTypes.remove(0); // remove the first one
+
+                Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
+                        instanceMethodUsages, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver);
+                if (result.isPresent() && instanceResult.isPresent()) {
+                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method for " + methodReferenceExpr.getIdentifier());
+                }
+
+                if (instanceResult.isPresent()) {
+                    result = instanceResult;
+                }
+            }
+        } else {
+            result = MethodResolutionLogic.findMostApplicableUsage(new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+
+            if (result.isPresent() && result.get().getDeclaration().isStatic()) {
+                throw new RuntimeException("Invalid static method reference " + methodReferenceExpr.getIdentifier());
+            }
+        }
+
+        if (!result.isPresent()) {
             throw new UnsupportedOperationException();
         }
-        TypeExpr typeExpr = (TypeExpr) methodReferenceExpr.getScope();
-        if (!(typeExpr.getType() instanceof ClassOrInterfaceType)) {
-            throw new UnsupportedOperationException(typeExpr.getType().getClass().getCanonicalName());
-        }
-        ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) typeExpr.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new UnsupportedOperationException();
-        }
 
-        Set<MethodUsage> allMethods = ((ResolvedReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods();
-
-        // static methods should match all params
-        List<MethodUsage> methodUsages = allMethods.stream()
-                .filter(it -> it.getDeclaration().isStatic())
-                .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver))
-                .collect(Collectors.toList());
-
-        if (!paramTypes.isEmpty()) {
-            // instance methods are called on the first param and should match all other params
-            List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
-            instanceMethodParamTypes.remove(0); // remove the first one
-
-            methodUsages.addAll(allMethods.stream()
-                    .filter(it -> !it.getDeclaration().isStatic())
-                    .filter(it -> MethodResolutionLogic.isApplicable(it, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver))
-                    .collect(Collectors.toList()));
-        }
-
-        switch (methodUsages.size()) {
-            case 0:
-                throw new UnsupportedOperationException();
-            case 1:
-                return methodUsages.get(0);
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return result.get();
     }
 
     protected ResolvedType getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas, BinaryExpr.Operator operator) {

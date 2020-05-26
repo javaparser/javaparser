@@ -126,7 +126,13 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         List<MethodCallExpr> calls = method.findAll(MethodCallExpr.class);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        MethodUsage call = javaParserFacade.solveMethodAsUsage(calls.get(0));
-        assertEquals(call.returnType().describe(), "java.lang.reflect.Constructor<? extends java.lang.Object>");
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(1));
+        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(2));
+        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(3));
+        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(4));
+        assertEquals("java.lang.reflect.Constructor", call1.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call2.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call3.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call4.returnType().asReferenceType().getQualifiedName());
     }
 }
