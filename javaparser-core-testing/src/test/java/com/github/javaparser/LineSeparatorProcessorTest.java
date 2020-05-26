@@ -76,9 +76,9 @@ public class LineSeparatorProcessorTest {
 
         // Assert that it has been detected and injected correctly.
         LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
-        assertEquals(eol, detectedLineSeparator);
-        assertEquals(eol, lineSeparator_cu);
-        assertEquals(eol, lineSeparator_fd);
+        assertEquals(lineSeparator, detectedLineSeparator);
+        assertEquals(lineSeparator, lineSeparator_cu);
+        assertEquals(lineSeparator, lineSeparator_fd);
 
         // The line ending data is injected at the root node, thus should only exist there.
         assertTrue(cu.containsData(Node.LINE_SEPARATOR_KEY), "Expected the processor provider to have set the data on the root node.");
