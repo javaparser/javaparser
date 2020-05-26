@@ -9,21 +9,21 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LineEndingProcessorTest {
+public class LineSeparatorProcessorTest {
 
     // TODO: Add more tests outside the "happy path" (e.g. mixed EOL, no EOL, etc.)
 
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
-    public void doTest(LineEnding eol) {
+    public void doTest(LineSeparator eol) {
 
         final String original = "" +
                 "    public class Foo { //comment" + eol.toRawString() +
@@ -67,37 +67,37 @@ public class LineEndingProcessorTest {
 
         // The LineEndingProcessingProvider sets the line ending to the root node.
         // Child nodes should then "inherit" then line ending style.
-        LineEnding lineEnding_cu = cu.getLineEndingStyle();
-        LineEnding lineEnding_fd = fd.getLineEndingStyle();
+        LineSeparator lineSeparator_cu = cu.getLineEndingStyle();
+        LineSeparator lineSeparator_fd = fd.getLineEndingStyle();
 
-        System.out.println("lineEnding_cu.describe() = " + lineEnding_cu.describe());
-        System.out.println("lineEnding_fd.describe() = " + lineEnding_fd.describe());
+        System.out.println("lineSeparator_cu.describe() = " + lineSeparator_cu.describe());
+        System.out.println("lineSeparator_fd.describe() = " + lineSeparator_fd.describe());
 
         // Assert that it has been detected and injected correctly.
-        LineEnding detectedLineEnding = LineEnding.detect(actual);
-        assertEquals(eol, detectedLineEnding);
-        assertEquals(eol, lineEnding_cu);
-        assertEquals(eol, lineEnding_fd);
+        LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
+        assertEquals(eol, detectedLineSeparator);
+        assertEquals(eol, lineSeparator_cu);
+        assertEquals(eol, lineSeparator_fd);
 
         // The line ending data is injected at the root node, thus should only exist there.
-        assertTrue(cu.containsData(Node.LINE_ENDING_KEY), "Expected the processor provider to have set the data on the root node.");
-        assertFalse(fd.containsData(Node.LINE_ENDING_KEY), "Expected the line ending value to have been inherited, not set directly");
+        assertTrue(cu.containsData(Node.LINE_SEPARATOR_KEY), "Expected the processor provider to have set the data on the root node.");
+        assertFalse(fd.containsData(Node.LINE_SEPARATOR_KEY), "Expected the line ending value to have been inherited, not set directly");
 
     }
 
     @Test
     public void testWithCr() {
-        doTest(LineEnding.CR);
+        doTest(LineSeparator.CR);
     }
 
     @Test
     public void testWithCrLf() {
-        doTest(LineEnding.CRLF);
+        doTest(LineSeparator.CRLF);
     }
 
     @Test
     public void testWithLf() {
-        doTest(LineEnding.LF);
+        doTest(LineSeparator.LF);
     }
 
 

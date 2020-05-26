@@ -25,7 +25,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -99,11 +99,11 @@ public interface CsmElement {
     static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
-        return newline(LineEnding.SYSTEM);
+        return newline(LineSeparator.SYSTEM);
     }
 
-    static CsmElement newline(LineEnding lineEnding) {
-        return new CsmToken(eolTokenKind(lineEnding), lineEnding.toRawString());
+    static CsmElement newline(LineSeparator lineSeparator) {
+        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.toRawString());
     }
 
     static CsmElement none() {

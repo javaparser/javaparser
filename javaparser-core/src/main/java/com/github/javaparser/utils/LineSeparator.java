@@ -10,7 +10,7 @@ import java.util.Optional;
  * @author Roger Howell
  * @see <a href="https://github.com/javaparser/javaparser/issues/2647">https://github.com/javaparser/javaparser/issues/2647</a>
  */
-public enum LineEnding {
+public enum LineSeparator {
     /**
      * The CR {@code \r} line ending is the default line separator for classic MacOS
      */
@@ -56,7 +56,7 @@ public enum LineEnding {
     private final String text;
     private final String description;
 
-    LineEnding(String text, String description) {
+    LineSeparator(String text, String description) {
         this.text = text;
         this.description = description;
     }
@@ -69,7 +69,7 @@ public enum LineEnding {
         return (haystack.length() - haystack.replaceAll(needle, "").length()) / needle.length();
     }
 
-    public static LineEnding detect(String string) {
+    public static LineSeparator detect(String string) {
         int countCr = count(string, "\r");
         int countLf = count(string, "\n");
         int countCrLf = count(string, "\r\n");
@@ -77,7 +77,7 @@ public enum LineEnding {
         return getLineEnding(countCr, countLf, countCrLf);
     }
 
-    public static LineEnding getLineEnding(int countCr, int countLf, int countCrLf) {
+    public static LineSeparator getLineEnding(int countCr, int countLf, int countCrLf) {
         boolean noLineEndings = countCr == 0 && countLf == 0 && countCrLf == 0;
         if (noLineEndings) {
             return NONE;
@@ -107,7 +107,7 @@ public enum LineEnding {
      * @return Where the given ending is a "standard" line separator (i.e. {@code \r}, {@code \n}, or {@code \r\n}),
      * return that. Otherwise an empty optional.
      */
-    public static Optional<LineEnding> lookup(String ending) {
+    public static Optional<LineSeparator> lookup(String ending) {
         if (CR.toRawString().equals(ending)) {
             return Optional.of(CR);
         } else if (LF.toRawString().equals(ending)) {
@@ -119,7 +119,7 @@ public enum LineEnding {
         }
     }
 
-    public static Optional<LineEnding> lookupEscaped(String ending) {
+    public static Optional<LineSeparator> lookupEscaped(String ending) {
         if (CR.toEscapedString().equals(ending)) {
             return Optional.of(CR);
         } else if (LF.toEscapedString().equals(ending)) {
@@ -136,13 +136,13 @@ public enum LineEnding {
         return description;
     }
 
-    public boolean equalsString(LineEnding lineEnding) {
-        return text.equals(lineEnding.toRawString());
+    public boolean equalsString(LineSeparator lineSeparator) {
+        return text.equals(lineSeparator.toRawString());
     }
 
     public boolean isStandardEol() {
-        // Compare based on the strings to allow for e.g. LineEnding.SYSTEM
-        return equalsString(LineEnding.CR) || equalsString(LineEnding.LF) || equalsString(LineEnding.CRLF);
+        // Compare based on the strings to allow for e.g. LineSeparator.SYSTEM
+        return equalsString(LineSeparator.CR) || equalsString(LineSeparator.LF) || equalsString(LineSeparator.CRLF);
     }
 
     public String toEscapedString() {

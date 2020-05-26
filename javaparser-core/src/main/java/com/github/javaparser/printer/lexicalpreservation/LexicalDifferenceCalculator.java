@@ -40,7 +40,7 @@ import com.github.javaparser.printer.lexicalpreservation.changes.ListRemovalChan
 import com.github.javaparser.printer.lexicalpreservation.changes.ListReplacementChange;
 import com.github.javaparser.printer.lexicalpreservation.changes.NoChange;
 import com.github.javaparser.printer.lexicalpreservation.changes.PropertyChange;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -138,20 +138,20 @@ class LexicalDifferenceCalculator {
         List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
 
         // Set the line separator character tokens
-        LineEnding lineEnding = container.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
-        replaceEolTokens(differenceElements, lineEnding);
+        LineSeparator lineSeparator = container.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+        replaceEolTokens(differenceElements, lineSeparator);
 
         return differenceElements;
     }
 
-    private void replaceEolTokens(List<DifferenceElement> differenceElements, LineEnding lineEnding) {
+    private void replaceEolTokens(List<DifferenceElement> differenceElements, LineSeparator lineSeparator) {
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement differenceElement = differenceElements.get(i);
             if (differenceElement.isAdded()) {
                 CsmElement element = differenceElement.getElement();
                 boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
                 if (isWhitespaceToken) {
-                    differenceElements.set(i, new Added(CsmElement.newline(lineEnding)));
+                    differenceElements.set(i, new Added(CsmElement.newline(lineSeparator)));
                 }
             }
         }
@@ -213,9 +213,9 @@ class LexicalDifferenceCalculator {
                 // So if we don't care that the node is an ExpressionStmt we could try to generate a wrong definition
                 // like this [class // This is my class, with my comment A {}]
                 if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
-                    LineEnding lineEnding = node.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
+                    LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     elements.add(new CsmChild(node.getComment().get()));
-                    elements.add(new CsmToken(eolTokenKind(lineEnding), lineEnding.toRawString()));
+                    elements.add(new CsmToken(eolTokenKind(lineSeparator), lineSeparator.toRawString()));
                 }
                 elements.add(new CsmChild(child));
             }

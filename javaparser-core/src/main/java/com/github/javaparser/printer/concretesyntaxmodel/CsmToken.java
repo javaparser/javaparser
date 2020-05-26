@@ -25,7 +25,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import static com.github.javaparser.TokenTypes.*;
 
@@ -60,7 +60,7 @@ public class CsmToken implements CsmElement {
         //  and "placeholder" values ({@code <SPACE>}) with their textual counterparts
         if (isEndOfLineToken(tokenType)) {
             // Use the unescaped version
-            content = LineEnding.lookupEscaped(this.content).get().toRawString();
+            content = LineSeparator.lookupEscaped(this.content).get().toRawString();
         } else if (isWhitespaceButNotEndOfLine(tokenType)) {
             content = " ";
         }

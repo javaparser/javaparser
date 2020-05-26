@@ -20,7 +20,7 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class LineEndingProcessingProvider implements Provider {
      */
     private int _pos = 0;
 
-    private final Map<LineEnding, Integer> eolCounts = new HashMap<>();
+    private final Map<LineSeparator, Integer> eolCounts = new HashMap<>();
 
     public LineEndingProcessingProvider(Provider input) {
         this(DEFAULT_BUFFER_SIZE, input);
@@ -81,11 +81,11 @@ public class LineEndingProcessingProvider implements Provider {
         return direct;
     }
 
-    public LineEnding getDetectedLineEnding() {
-        return LineEnding.getLineEnding(
-                eolCounts.getOrDefault(LineEnding.CR, 0),
-                eolCounts.getOrDefault(LineEnding.LF, 0),
-                eolCounts.getOrDefault(LineEnding.CRLF, 0)
+    public LineSeparator getDetectedLineEnding() {
+        return LineSeparator.getLineEnding(
+                eolCounts.getOrDefault(LineSeparator.CR, 0),
+                eolCounts.getOrDefault(LineSeparator.LF, 0),
+                eolCounts.getOrDefault(LineSeparator.CRLF, 0)
         );
     }
 
@@ -112,7 +112,7 @@ public class LineEndingProcessingProvider implements Provider {
     public int read(char[] buffer, final int offset, int len) throws IOException {
         int pos = offset;
         int stop = offset + len;
-        LineEnding previousLineSeparator = null;
+        LineSeparator previousLineSeparator = null;
         while (pos < stop) {
             int ch = nextBufferedChar();
             if (ch < 0) {
@@ -124,10 +124,10 @@ public class LineEndingProcessingProvider implements Provider {
                 }
             } else {
                 String str = String.valueOf((char) ch);
-                Optional<LineEnding> lookup = LineEnding.lookup(str);
+                Optional<LineSeparator> lookup = LineSeparator.lookup(str);
 
                 if (lookup.isPresent()) {
-                    LineEnding lineSeparator = lookup.get();
+                    LineSeparator lineSeparator = lookup.get();
 
                     // Track the number of times this character is found..
                     eolCounts.putIfAbsent(lineSeparator, 0);
@@ -135,10 +135,10 @@ public class LineEndingProcessingProvider implements Provider {
 
                     // Handle line separators of length two (specifically CRLF)
                     // TODO: Make this more generic than just CRLF (e.g. track the previous char rather than the previous line separator
-                    if (lineSeparator == LineEnding.LF) {
-                        if (previousLineSeparator == LineEnding.CR) {
-                            eolCounts.putIfAbsent(LineEnding.CRLF, 0);
-                            eolCounts.put(LineEnding.CRLF, eolCounts.get(LineEnding.CRLF) + 1);
+                    if (lineSeparator == LineSeparator.LF) {
+                        if (previousLineSeparator == LineSeparator.CR) {
+                            eolCounts.putIfAbsent(LineSeparator.CRLF, 0);
+                            eolCounts.put(LineSeparator.CRLF, eolCounts.get(LineSeparator.CRLF) + 1);
                         }
                     }
 

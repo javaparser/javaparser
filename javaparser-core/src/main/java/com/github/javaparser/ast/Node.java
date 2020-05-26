@@ -44,7 +44,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -282,9 +282,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Override
     public final String toString() {
-        if (containsData(LINE_ENDING_KEY)) {
-            LineEnding lineEnding = getLineEndingStyleOrDefault(LineEnding.SYSTEM);
-            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineEnding.toRawString());
+        if (containsData(LINE_SEPARATOR_KEY)) {
+            LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.toRawString());
         }
         return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
@@ -724,32 +724,32 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Optional.empty();
     }
 
-    public LineEnding getLineEndingStyleOrDefault(LineEnding defaultLineEnding) {
+    public LineSeparator getLineEndingStyleOrDefault(LineSeparator defaultLineSeparator) {
         if (getLineEndingStyle().isStandardEol()) {
             return getLineEndingStyle();
         }
-        return defaultLineEnding;
+        return defaultLineSeparator;
     }
 
-    public LineEnding getLineEndingStyle() {
+    public LineSeparator getLineEndingStyle() {
         Node current = this;
 
         // First check this node
-        if(current.containsData(Node.LINE_ENDING_KEY)) {
-            LineEnding lineEnding = current.getData(Node.LINE_ENDING_KEY);
-            return lineEnding;
+        if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+            LineSeparator lineSeparator = current.getData(Node.LINE_SEPARATOR_KEY);
+            return lineSeparator;
         }
 
         // Then check parent/ancestor nodes
         while(current.getParentNode().isPresent()) {
             current = current.getParentNode().get();
-            if(current.containsData(Node.LINE_ENDING_KEY)) {
-                return current.getData(Node.LINE_ENDING_KEY);
+            if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+                return current.getData(Node.LINE_SEPARATOR_KEY);
             }
         }
 
         // Default to the system line separator if it's not already set within the parsed node/code.
-        return LineEnding.SYSTEM;
+        return LineSeparator.SYSTEM;
     }
 
     protected SymbolResolver getSymbolResolver() {
@@ -766,7 +766,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
 
-    public static final DataKey<LineEnding> LINE_ENDING_KEY = new DataKey<LineEnding>() {
+    public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
     };
 
     public enum TreeTraversal {

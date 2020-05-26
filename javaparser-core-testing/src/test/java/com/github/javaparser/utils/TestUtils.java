@@ -67,7 +67,7 @@ public class TestUtils {
      * <br>If you wish to read the file as-is, use {@link #readResource(String)} which reads the file stream character-by-character.
      */
     public static String readResourceUsingSystemEol(String resourceName) {
-        return readResource(resourceName, LineEnding.SYSTEM);
+        return readResource(resourceName, LineSeparator.SYSTEM);
     }
 
     /**
@@ -75,7 +75,7 @@ public class TestUtils {
      * <br>
      * <br>If you wish to read the file as-is, use {@link #readResource(String)} which reads the file stream character-by-character.
      */
-    public static String readResource(String resourceName, LineEnding lineEnding) {
+    public static String readResource(String resourceName, LineSeparator lineSeparator) {
         if (resourceName.startsWith("/")) {
             resourceName = resourceName.substring(1);
         }
@@ -88,7 +88,7 @@ public class TestUtils {
                 final StringBuilder builder = new StringBuilder(4096);
                 String line;
                 while ((line = br.readLine()) != null) {
-                    builder.append(line).append(lineEnding.toRawString());
+                    builder.append(line).append(lineSeparator.toRawString());
                 }
                 return builder.toString();
             }
@@ -104,7 +104,7 @@ public class TestUtils {
      * <br>
      * <br>If you wish to specify the line endings,
      * use {@link #readResourceUsingSystemEol(String)}
-     * or {@link #readResource(String, LineEnding)}
+     * or {@link #readResource(String, LineSeparator)}
      */
     public static String readResource(String resourceName) {
         if (resourceName.startsWith("/")) {
@@ -221,11 +221,11 @@ public class TestUtils {
             if (actual.contains(e)) {
                 actual.remove(e);
             } else {
-                out.append("Missing: ").append(e).append(LineEnding.SYSTEM);
+                out.append("Missing: ").append(e).append(LineSeparator.SYSTEM);
             }
         }
         for (Object a : actual) {
-            out.append("Unexpected: ").append(a).append(LineEnding.SYSTEM);
+            out.append("Unexpected: ").append(a).append(LineSeparator.SYSTEM);
         }
 
         String s = out.toString();
@@ -299,9 +299,9 @@ public class TestUtils {
                 expected,
                 actual,
                 message + String.format(" -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
-                        LineEnding.detect(expected).toEscapedString(),
-                        LineEnding.detect(actual).toEscapedString(),
-                        LineEnding.SYSTEM.toEscapedString()
+                        LineSeparator.detect(expected).toEscapedString(),
+                        LineSeparator.detect(actual).toEscapedString(),
+                        LineSeparator.SYSTEM.toEscapedString()
                 )
         );
     }
@@ -312,8 +312,8 @@ public class TestUtils {
      */
     public static void assertEqualsStringIgnoringEol(String expected, String actual) {
         assertEquals(
-                normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
-                normalizeEolInTextBlock(actual, LineEnding.ARBITRARY)
+                normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
+                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY)
         );
     }
 
@@ -322,8 +322,8 @@ public class TestUtils {
      */
     public static void assertEqualsStringIgnoringEol(String expected, String actual, String message) {
         assertEquals(
-                normalizeEolInTextBlock(expected, LineEnding.ARBITRARY),
-                normalizeEolInTextBlock(actual, LineEnding.ARBITRARY),
+                normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
+                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY),
                 message
         );
     }
@@ -332,16 +332,16 @@ public class TestUtils {
     /**
      * Assert that the given string is detected as having the given line separator.
      */
-    public static void assertLineSeparator(String text, LineEnding expectedLineSeparator) {
-        LineEnding actualLineSeparator = LineEnding.detect(text);
+    public static void assertLineSeparator(String text, LineSeparator expectedLineSeparator) {
+        LineSeparator actualLineSeparator = LineSeparator.detect(text);
         assertEquals(expectedLineSeparator, actualLineSeparator);
     }
 
     /**
      * Assert that the given string is detected as having the given line separator.
      */
-    public static void assertLineSeparator(String text, LineEnding expectedLineSeparator, String message) {
-        LineEnding actualLineSeparator = LineEnding.detect(text);
+    public static void assertLineSeparator(String text, LineSeparator expectedLineSeparator, String message) {
+        LineSeparator actualLineSeparator = LineSeparator.detect(text);
         assertEquals(expectedLineSeparator, actualLineSeparator, message);
     }
 

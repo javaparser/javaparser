@@ -38,7 +38,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.utils.LineEnding;
 
 import java.io.*;
 import java.nio.charset.Charset;

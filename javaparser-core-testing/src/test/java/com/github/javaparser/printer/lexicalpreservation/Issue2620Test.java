@@ -29,7 +29,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -42,24 +42,24 @@ public class Issue2620Test {
 
     @Test
     public void testWithCr() {
-        doTest(LineEnding.CR);
+        doTest(LineSeparator.CR);
     }
 
     @Test
     public void testWithLf() {
-        doTest(LineEnding.LF);
+        doTest(LineSeparator.LF);
     }
 
     @Test
     public void testWithCrLf() {
-        doTest(LineEnding.CRLF);
+        doTest(LineSeparator.CRLF);
     }
 
 
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
-    public void doTest(LineEnding eol) {
+    public void doTest(LineSeparator eol) {
 
         final String original = "" +
                 "    public class Foo { //comment" + eol +
@@ -101,10 +101,10 @@ public class Issue2620Test {
         final String actual = LexicalPreservingPrinter.print(cu);
         System.out.println("\n\nActual:\n" + actual);
 
-        LineEnding detectedLineEnding = LineEnding.detect(actual);
+        LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
 
-        assertFalse(detectedLineEnding.equals(LineEnding.MIXED));
-        assertEquals(eol.toEscapedString(), detectedLineEnding.toEscapedString());
+        assertFalse(detectedLineSeparator.equals(LineSeparator.MIXED));
+        assertEquals(eol.toEscapedString(), detectedLineSeparator.toEscapedString());
 
         assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
 

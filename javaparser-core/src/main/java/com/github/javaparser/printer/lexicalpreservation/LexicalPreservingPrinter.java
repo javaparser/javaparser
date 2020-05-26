@@ -44,7 +44,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
 import java.io.IOException;
@@ -153,9 +153,9 @@ public class LexicalPreservingPrinter {
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
 
-                    LineEnding lineEnding = observedNode.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
+                    LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
-                    nodeText.addToken(index + 1, eolTokenKind(lineEnding), lineEnding.toRawString());
+                    nodeText.addToken(index + 1, eolTokenKind(lineSeparator), lineSeparator.toRawString());
                 } else if (newValue == null) {
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {

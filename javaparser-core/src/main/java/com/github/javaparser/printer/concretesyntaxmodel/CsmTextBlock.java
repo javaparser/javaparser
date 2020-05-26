@@ -24,7 +24,6 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.utils.LineEnding;
 
 public class CsmTextBlock implements CsmElement {
     private final ObservableProperty property;

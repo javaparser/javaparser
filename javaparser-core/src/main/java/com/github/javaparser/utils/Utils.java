@@ -39,11 +39,12 @@ import static java.util.Arrays.*;
 public class Utils {
 
     /**
-     * @deprecated Use {@link LineEnding#SYSTEM} if referring to the current host system's line separator,
-     *  else {@link LineEnding#CR} or {@link LineEnding#LF} or {@link LineEnding#CRLF} if referring to a specific style of line separator.
+     * // TODO: Replace this within the internal codebase.
+     * @deprecated Use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
      */
     @Deprecated
-    public static final String EOL = LineEnding.SYSTEM.toRawString();
+    public static final String EOL = LineSeparator.SYSTEM.toRawString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -282,7 +283,7 @@ public class Utils {
     /**
      * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
      */
-    public static String normalizeEolInTextBlock(String content, LineEnding desiredEndOfLineCharacter) {
+    public static String normalizeEolInTextBlock(String content, LineSeparator desiredEndOfLineCharacter) {
         return normalizeEolInTextBlock(content, desiredEndOfLineCharacter.toRawString());
     }
 

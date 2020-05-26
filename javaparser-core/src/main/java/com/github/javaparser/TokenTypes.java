@@ -21,7 +21,7 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.utils.LineEnding;
+import com.github.javaparser.utils.LineSeparator;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -66,21 +66,21 @@ public class TokenTypes {
     /**
      * @return the kind of EOL token to use on the platform you're running on.
      */
-    public static int eolTokenKind(LineEnding lineEnding) {
-        if (lineEnding.equalsString(LineEnding.LF)) {
+    public static int eolTokenKind(LineSeparator lineSeparator) {
+        if (lineSeparator.equalsString(LineSeparator.LF)) {
             return UNIX_EOL;
         }
-        if (lineEnding.equalsString(LineEnding.CRLF)) {
+        if (lineSeparator.equalsString(LineSeparator.CRLF)) {
             return WINDOWS_EOL;
         }
-        if (lineEnding.equalsString(LineEnding.CR)) {
+        if (lineSeparator.equalsString(LineSeparator.CR)) {
             return OLD_MAC_EOL;
         }
         throw new AssertionError("Unknown EOL character sequence");
     }
 
     public static int eolTokenKind() {
-        return eolTokenKind(LineEnding.SYSTEM);
+        return eolTokenKind(LineSeparator.SYSTEM);
     }
 
     /**
