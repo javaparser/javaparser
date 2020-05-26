@@ -140,8 +140,8 @@ public class ParserConfiguration {
 
 
 
-    // TODO: Allow this to be configurable e.g. setDesiredLineEnding(...)
-    private boolean retainOriginalLineEnding = true;
+    // TODO: Add a configurable option e.g. setDesiredLineEnding(...) to replace/swap out existing line endings
+    private boolean detectOriginalLineEnding = true;
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
@@ -193,7 +193,7 @@ public class ParserConfiguration {
 
             @Override
             public Provider process(Provider innerProvider) {
-                if (isRetainOriginalLineEnding()) {
+                if (isDetectOriginalLineEnding()) {
                     _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
                     return _lineEndingProcessingProvider;
                 }
@@ -202,7 +202,7 @@ public class ParserConfiguration {
 
             @Override
             public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                if (isRetainOriginalLineEnding()) {
+                if (isDetectOriginalLineEnding()) {
                     result.getResult().ifPresent(
                             rootNode -> {
                                 LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
@@ -378,13 +378,13 @@ public class ParserConfiguration {
         return preprocessUnicodeEscapes;
     }
     
-    public ParserConfiguration setRetainOriginalLineEnding(boolean retainOriginalLineEnding) {
-        this.retainOriginalLineEnding = retainOriginalLineEnding;
+    public ParserConfiguration setDetectOriginalLineEnding(boolean detectOriginalLineEnding) {
+        this.detectOriginalLineEnding = detectOriginalLineEnding;
         return this;
     }
 
-    public boolean isRetainOriginalLineEnding() {
-        return retainOriginalLineEnding;
+    public boolean isDetectOriginalLineEnding() {
+        return detectOriginalLineEnding;
     }
 
     public Charset getCharacterEncoding() {
