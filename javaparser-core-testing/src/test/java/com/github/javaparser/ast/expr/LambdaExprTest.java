@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseBlock;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LambdaExprTest {
@@ -73,7 +73,7 @@ class LambdaExprTest {
     @Test
     void oneParameterAndStatementUtilityConstructor() {
         LambdaExpr expr = new LambdaExpr(new Parameter(new UnknownType(), "a"), parseBlock("{return 5;}"));
-        assertEqualsNoEol("a -> {\n    return 5;\n}", expr.toString());
+        assertEqualsStringIgnoringEol("a -> {\n    return 5;\n}", expr.toString());
     }
 
     @Test
@@ -85,13 +85,13 @@ class LambdaExprTest {
     @Test
     void multipleParametersAndStatementUtilityConstructor() {
         LambdaExpr expr = new LambdaExpr(new NodeList<>(new Parameter(new UnknownType(), "a"), new Parameter(new UnknownType(), "b")), parseBlock("{return 5;}"));
-        assertEqualsNoEol("(a, b) -> {\n    return 5;\n}", expr.toString());
+        assertEqualsStringIgnoringEol("(a, b) -> {\n    return 5;\n}", expr.toString());
     }
 
     @Test
     void zeroParametersAndStatementUtilityConstructor() {
         LambdaExpr expr = new LambdaExpr(new NodeList<>(), parseBlock("{return 5;}"));
-        assertEqualsNoEol("() -> {\n    return 5;\n}", expr.toString());
+        assertEqualsStringIgnoringEol("() -> {\n    return 5;\n}", expr.toString());
     }
 
 }

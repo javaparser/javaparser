@@ -29,40 +29,37 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class Issue2620Test {
 
-    private static final String CR = "\r";
-    private static final String LF = "\n";
-    private static final String CRLF = CR + LF;
-
-
     @Test
     public void testWithCr() {
-        doTest(CR);
+        doTest(LineSeparator.CR);
     }
 
     @Test
     public void testWithLf() {
-        doTest(LF);
+        doTest(LineSeparator.LF);
     }
 
     @Test
     public void testWithCrLf() {
-        doTest(CRLF);
+        doTest(LineSeparator.CRLF);
     }
 
 
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
-    public void doTest(String eol) {
+    public void doTest(LineSeparator eol) {
 
         final String original = "" +
                 "    public class Foo { //comment" + eol +
@@ -104,12 +101,16 @@ public class Issue2620Test {
         final String actual = LexicalPreservingPrinter.print(cu);
         System.out.println("\n\nActual:\n" + actual);
 
+        LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
+
+        assertFalse(detectedLineSeparator.equals(LineSeparator.MIXED));
+        assertEquals(eol.asEscapedString(), detectedLineSeparator.asEscapedString());
 
         assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
 
         // Commented out until #2661 is fixed (re: EOL characters of injected code)
-//        assertEqualsNoEol(escapeNewlines(expected), escapeNewlines(actual));
-//        assertEquals(expected, actual, "Failed due to EOL differences.");
+        assertEqualsStringIgnoringEol(escapeNewlines(expected), escapeNewlines(actual));
+        assertEquals(expected, actual, "Failed due to EOL differences.");
     }
 
     private String escapeNewlines(String input) {

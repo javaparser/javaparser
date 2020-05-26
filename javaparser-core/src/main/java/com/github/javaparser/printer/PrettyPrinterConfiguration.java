@@ -26,7 +26,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.function.Function;
 
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.SPACES;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNonNegative;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.assertPositive;
@@ -92,7 +92,7 @@ public class PrettyPrinterConfiguration {
     private IndentType indentType = SPACES;
     private int tabWidth = 4;
     private int indentSize = 4;
-    private String endOfLineCharacter = EOL;
+    private String endOfLineCharacter = SYSTEM_EOL;
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
