@@ -112,6 +112,10 @@ public enum LineEnding {
         int countLf = count(string, "\n");
         int countCrLf = count(string, "\r\n");
 
+        return getLineEnding(countCr, countLf, countCrLf);
+    }
+
+    public static LineEnding getLineEnding(int countCr, int countLf, int countCrLf) {
         boolean noLineEndings = countCr == 0 && countLf == 0 && countCrLf == 0;
         if (noLineEndings) {
             return NONE;

@@ -29,7 +29,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.utils.LineEnding;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
@@ -49,6 +48,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+
     public enum LanguageLevel {
         /**
          * Java 1.0
@@ -137,6 +137,10 @@ public class ParserConfiguration {
         }
     }
 
+
+
+    // TODO: Allow this to be configurable e.g. setDesiredLineEnding(...)
+    private boolean retainOriginalLineEnding = true;
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
@@ -152,6 +156,7 @@ public class ParserConfiguration {
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
+
         class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
             private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
@@ -181,9 +186,45 @@ public class ParserConfiguration {
                 }
             }
         }
+        
+        class LineEndingProcessor implements PreProcessor, PostProcessor {
+            private LineEndingProcessingProvider _lineEndingProcessingProvider;
+
+            @Override
+            public Provider process(Provider innerProvider) {
+                if (isRetainOriginalLineEnding()) {
+                    _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
+                    return _lineEndingProcessingProvider;
+                }
+                return innerProvider;
+            }
+
+            @Override
+            public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                if (isRetainOriginalLineEnding()) {
+                    result.getResult().ifPresent(
+                            rootNode -> {
+                                // Set the line ending on the root node
+                                rootNode.setData(Node.LINE_ENDING_KEY, _lineEndingProcessingProvider.getDetectedLineEnding());
+
+//                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
+//                                rootNode.findAll(Node.class)
+//                                        .forEach(node -> node.setData(Node.LINE_ENDING_KEY, detectedLineEnding));
+                            }
+                    );
+                }
+            }
+        }
+        
         UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
+        
+        LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
+        preProcessors.add(lineEndingProcessor);
+        postProcessors.add(lineEndingProcessor);
+        
+        
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
                 result.ifSuccessful(resultNode -> result
@@ -332,6 +373,15 @@ public class ParserConfiguration {
 
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
+    }
+    
+    public ParserConfiguration setRetainOriginalLineEnding(boolean retainOriginalLineEnding) {
+        this.retainOriginalLineEnding = retainOriginalLineEnding;
+        return this;
+    }
+
+    public boolean isRetainOriginalLineEnding() {
+        return retainOriginalLineEnding;
     }
 
     public Charset getCharacterEncoding() {
