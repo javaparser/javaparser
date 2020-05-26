@@ -26,9 +26,7 @@ import com.github.javaparser.ast.expr.UnaryExpr;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.function.Function;
 
 import static java.util.Arrays.*;
@@ -39,7 +37,23 @@ import static java.util.Arrays.*;
  * @author Federico Tomassetti
  */
 public class Utils {
-    public static final String EOL = System.getProperty("line.separator");
+
+    /**
+     * // TODO: Replace this within the internal codebase.
+     * @deprecated New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
+     */
+    @Deprecated
+    public static final String EOL = LineSeparator.SYSTEM.asRawString();
+
+    /**
+     * @deprecated Renamed from {@link #EOL} to make it explicit that we're using the system's line separator.
+     *             New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     *              else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
+     *
+     */
+    @Deprecated
+    public static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -108,6 +122,7 @@ public class Utils {
     /**
      * @deprecated use screamingToCamelCase
      */
+    @Deprecated
     public static String toCamelCase(String original) {
         return screamingToCamelCase(original);
     }
@@ -268,11 +283,17 @@ public class Utils {
     }
 
     /**
-     * @return content with all kinds of EOL characters replaced by endOfLineCharacter
+     * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
      */
-    public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
-        return content
-                .replaceAll("\\R", endOfLineCharacter);
+    public static String normalizeEolInTextBlock(String content, String desiredEndOfLineCharacter) {
+        return content.replaceAll("\\R", desiredEndOfLineCharacter);
+    }
+
+    /**
+     * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
+     */
+    public static String normalizeEolInTextBlock(String content, LineSeparator desiredEndOfLineCharacter) {
+        return normalizeEolInTextBlock(content, desiredEndOfLineCharacter.asRawString());
     }
 
     /**
