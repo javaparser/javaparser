@@ -104,7 +104,7 @@ public class Issue2620Test {
         LineEnding detectedLineEnding = LineEnding.detect(actual);
 
         assertFalse(detectedLineEnding.equals(LineEnding.MIXED));
-        assertEquals(eol.escaped(), detectedLineEnding.escaped());
+        assertEquals(eol.toEscapedString(), detectedLineEnding.toEscapedString());
 
         assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
 

@@ -14,89 +14,51 @@ public enum LineEnding {
     /**
      * The CR {@code \r} line ending is the default line separator for classic MacOS
      */
-    CR("\r"),
+    CR("\r", "CR (\\r)"),
     /**
      * The LF {@code \n} line ending is the default line separator for Unix and modern MacOS
      */
-    LF("\n"),
+    LF("\n", "LF (\\n)"),
     /**
      * The CRLF {@code \r\n} line ending is the default line separator for Windows
      */
-    CRLF("\r\n"),
+    CRLF("\r\n", "CRLF (\\r\\n)"),
     /**
      * This line ending is set to whatever the host system's line separator is
      */
-    SYSTEM(System.getProperty("line.separator")),
+    SYSTEM(
+            System.getProperty("line.separator"),
+            "SYSTEM : (" + System.getProperty("line.separator")
+                    .replace("\r", "\\r")
+                    .replace("\n", "\\n") +
+                    ")"
+    ),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,
      * only that we use the same one consistently
      */
-    ARBITRARY("\n"),
+    ARBITRARY("\n", "ARBITRARY (\\n)"),
     /**
      * The MIXED line ending is used where strings appear to have multiple different line separators e.g. {@code "line
      * 1\nline 2\rline 3\r\n"} or {@code "line 1\nline 2\rline 3\nline 4\n"}
      */
-    MIXED(""),
+    MIXED("", "MIXED"),
     /**
      * The UNKNOWN line ending can be used in the case where the given string has not yet been analysed to determine its
      * line separator
      */
-    UNKNOWN(""),
+    UNKNOWN("", "UNKNOWN"),
     /**
      * The NONE line ending is used where there are precisely zero line endings e.g. a simple one-line string
      */
-    NONE("");
+    NONE("", "NONE");
 
     private final String text;
+    private final String description;
 
-    LineEnding(String text) {
+    LineEnding(String text, String description) {
         this.text = text;
-    }
-
-    public boolean isStandardEol() {
-        // Compare based on the strings to allow for e.g. LineEnding.SYSTEM
-        if (equalsString(LineEnding.CR) ||equalsString(LineEnding.LF) || equalsString(LineEnding.CRLF)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public String escaped() {
-        String result = text
-                .replace("\r", "\\r")
-                .replace("\n", "\\n");
-
-        return result;
-    }
-
-    /**
-     * @param ending A string containing ONLY the line separator needle (e.g. {@code \r}, {@code \n}, or {@code \r\n})
-     * @return Where the given ending is a "standard" line separator (i.e. {@code \r}, {@code \n}, or {@code \r\n}),
-     * return that. Otherwise an empty optional.
-     */
-    public static Optional<LineEnding> lookup(String ending) {
-        if (CR.toString().equals(ending)) {
-            return Optional.of(CR);
-        } else if (LF.toString().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.toString().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public static Optional<LineEnding> lookupEscaped(String ending) {
-        if (CR.escaped().equals(ending)) {
-            return Optional.of(CR);
-        } else if (LF.escaped().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.escaped().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
-        }
+        this.description = description;
     }
 
     /**
@@ -140,13 +102,64 @@ public enum LineEnding {
         return MIXED;
     }
 
-    @Override
-    public String toString() {
-        return text;
+    /**
+     * @param ending A string containing ONLY the line separator needle (e.g. {@code \r}, {@code \n}, or {@code \r\n})
+     * @return Where the given ending is a "standard" line separator (i.e. {@code \r}, {@code \n}, or {@code \r\n}),
+     * return that. Otherwise an empty optional.
+     */
+    public static Optional<LineEnding> lookup(String ending) {
+        if (CR.toRawString().equals(ending)) {
+            return Optional.of(CR);
+        } else if (LF.toRawString().equals(ending)) {
+            return Optional.of(LF);
+        } else if (CRLF.toRawString().equals(ending)) {
+            return Optional.of(CRLF);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<LineEnding> lookupEscaped(String ending) {
+        if (CR.toEscapedString().equals(ending)) {
+            return Optional.of(CR);
+        } else if (LF.toEscapedString().equals(ending)) {
+            return Optional.of(LF);
+        } else if (CRLF.toEscapedString().equals(ending)) {
+            return Optional.of(CRLF);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public String describe() {
+        // TODO: Return a generated description rather than one hardcoded via constructor.
+        return description;
     }
 
     public boolean equalsString(LineEnding lineEnding) {
-        return text.equals(lineEnding.toString());
+        return text.equals(lineEnding.toRawString());
+    }
+
+    public boolean isStandardEol() {
+        // Compare based on the strings to allow for e.g. LineEnding.SYSTEM
+        return equalsString(LineEnding.CR) || equalsString(LineEnding.LF) || equalsString(LineEnding.CRLF);
+    }
+
+    public String toEscapedString() {
+        String result = text
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
+
+        return result;
+    }
+
+    public String toRawString() {
+        return text;
+    }
+
+    @Override
+    public String toString() {
+        return toRawString();
     }
 
 }

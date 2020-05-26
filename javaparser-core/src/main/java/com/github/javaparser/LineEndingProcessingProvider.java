@@ -22,12 +22,8 @@ package com.github.javaparser;
 
 import com.github.javaparser.utils.LineEnding;
 
-import javax.sound.sampled.Line;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,19 +32,19 @@ import java.util.Optional;
  */
 public class LineEndingProcessingProvider implements Provider {
 
-    private static final char LF = '\n';
-
-    private static final char CR = '\r';
-
-    private static final char BACKSLASH = '\\';
-
     private static final int EOF = -1;
 
-    private static final int INITIAL_BUFFER_SIZE = 2048;
+    private static final int DEFAULT_BUFFER_SIZE = 2048;
 
-    private char[] _data;
+    /**
+     * The "other" provider which we are wrapping around / reading from.
+     */
+    private final Provider _input;
 
-    private Map<LineEnding, Integer> eolCounts = new HashMap<>();
+    /**
+     * The buffer that we're storing data within.
+     */
+    private final char[] _data;
 
     /**
      * The number of characters in {@link #_data}.
@@ -60,21 +56,29 @@ public class LineEndingProcessingProvider implements Provider {
      */
     private int _pos = 0;
 
-    private Provider _input;
+    private final Map<LineEnding, Integer> eolCounts = new HashMap<>();
 
-    /**
-     * Creates a {@link LineEndingProcessingProvider}.
-     */
     public LineEndingProcessingProvider(Provider input) {
-        this(INITIAL_BUFFER_SIZE, input);
+        this(DEFAULT_BUFFER_SIZE, input);
     }
 
-    /**
-     * Creates a {@link LineEndingProcessingProvider}.
-     */
     public LineEndingProcessingProvider(int bufferSize, Provider input) {
         _input = input;
         _data = new char[bufferSize];
+    }
+
+    @Override
+    public void close() throws IOException {
+        _input.close();
+    }
+
+    private int fillBuffer() throws IOException {
+        _pos = 0;
+        int direct = _input.read(_data, 0, _data.length);
+        if (direct != 0) {
+            _len = direct;
+        }
+        return direct;
     }
 
     public LineEnding getDetectedLineEnding() {
@@ -85,38 +89,9 @@ public class LineEndingProcessingProvider implements Provider {
         );
     }
 
-    @Override
-    public int read(char[] buffer, final int offset, int len) throws IOException {
-        int pos = offset;
-        int stop = offset + len;
-        while (pos < stop) {
-            int ch = nextBufferedChar();
-            if (ch < 0) {
-                if (pos == offset) {
-                    // Nothing read yet, this is the end of the stream.
-                    return EOF;
-                } else {
-                    break;
-                }
-            } else {
-                Optional<LineEnding> lookup = LineEnding.lookup(String.valueOf(ch));
-                lookup.ifPresent(lineEnding -> {
-                    eolCounts.putIfAbsent(lineEnding, 0);
-                    eolCounts.put(lineEnding, eolCounts.get(lineEnding) + 1);
-                });
-
-                // Move to next character
-                buffer[pos++] = (char) ch;
-            }
-        }
-        return pos - offset;
+    private boolean isBufferEmpty() {
+        return _pos >= _len;
     }
-
-    @Override
-    public void close() throws IOException {
-        _input.close();
-    }
-
 
     /**
      * Retrieves the next un-escaped character from the buffered {@link #_input}.
@@ -133,18 +108,52 @@ public class LineEndingProcessingProvider implements Provider {
         return _data[_pos++];
     }
 
-    private boolean isBufferEmpty() {
-        return _pos >= _len;
-    }
+    @Override
+    public int read(char[] buffer, final int offset, int len) throws IOException {
+        int pos = offset;
+        int stop = offset + len;
+        LineEnding previousLineSeparator = null;
+        while (pos < stop) {
+            int ch = nextBufferedChar();
+            if (ch < 0) {
+                if (pos == offset) {
+                    // Nothing read yet, this is the end of the stream.
+                    return EOF;
+                } else {
+                    break;
+                }
+            } else {
+                String str = String.valueOf((char) ch);
+                Optional<LineEnding> lookup = LineEnding.lookup(str);
 
-    private int fillBuffer() throws IOException {
-        _pos = 0;
-        int direct = _input.read(_data, 0, _data.length);
-        if (direct != 0) {
-            _len = direct;
+                if (lookup.isPresent()) {
+                    LineEnding lineSeparator = lookup.get();
+
+                    // Track the number of times this character is found..
+                    eolCounts.putIfAbsent(lineSeparator, 0);
+                    eolCounts.put(lineSeparator, eolCounts.get(lineSeparator) + 1);
+
+                    // Handle line separators of length two (specifically CRLF)
+                    // TODO: Make this more generic than just CRLF (e.g. track the previous char rather than the previous line separator
+                    if (lineSeparator == LineEnding.LF) {
+                        if (previousLineSeparator == LineEnding.CR) {
+                            eolCounts.putIfAbsent(LineEnding.CRLF, 0);
+                            eolCounts.put(LineEnding.CRLF, eolCounts.get(LineEnding.CRLF) + 1);
+                        }
+                    }
+
+                    // If "this" (current) char <strong>is</strong> a line separator, set the next loop's "previous" to this
+                    previousLineSeparator = lineSeparator;
+                } else {
+                    // If "this" (current) char <strong>is not</strong> a line separator, set the next loop's "previous" to null
+                    previousLineSeparator = null;
+                }
+
+                // Move to next character
+                buffer[pos++] = (char) ch;
+            }
         }
-        return direct;
+        return pos - offset;
     }
-
 
 }

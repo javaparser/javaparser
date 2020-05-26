@@ -215,7 +215,7 @@ class LexicalDifferenceCalculator {
                 if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
                     LineEnding lineEnding = node.getLineEndingStyleOrDefault(LineEnding.SYSTEM);
                     elements.add(new CsmChild(node.getComment().get()));
-                    elements.add(new CsmToken(eolTokenKind(lineEnding), lineEnding.toString()));
+                    elements.add(new CsmToken(eolTokenKind(lineEnding), lineEnding.toRawString()));
                 }
                 elements.add(new CsmChild(child));
             }

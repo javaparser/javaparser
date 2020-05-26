@@ -103,7 +103,7 @@ public interface CsmElement {
     }
 
     static CsmElement newline(LineEnding lineEnding) {
-        return new CsmToken(eolTokenKind(lineEnding), lineEnding.toString());
+        return new CsmToken(eolTokenKind(lineEnding), lineEnding.toRawString());
     }
 
     static CsmElement none() {

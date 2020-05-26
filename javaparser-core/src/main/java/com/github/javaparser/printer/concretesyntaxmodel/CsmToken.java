@@ -60,7 +60,7 @@ public class CsmToken implements CsmElement {
         //  and "placeholder" values ({@code <SPACE>}) with their textual counterparts
         if (isEndOfLineToken(tokenType)) {
             // Use the unescaped version
-            content = LineEnding.lookupEscaped(this.content).get().toString();
+            content = LineEnding.lookupEscaped(this.content).get().toRawString();
         } else if (isWhitespaceButNotEndOfLine(tokenType)) {
             content = " ";
         }

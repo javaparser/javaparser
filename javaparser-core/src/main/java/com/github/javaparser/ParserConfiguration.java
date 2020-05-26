@@ -29,6 +29,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.utils.LineEnding;
 import com.github.javaparser.version.Java10PostProcessor;
 import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
@@ -204,8 +205,10 @@ public class ParserConfiguration {
                 if (isRetainOriginalLineEnding()) {
                     result.getResult().ifPresent(
                             rootNode -> {
+                                LineEnding detectedLineEnding = _lineEndingProcessingProvider.getDetectedLineEnding();
+
                                 // Set the line ending on the root node
-                                rootNode.setData(Node.LINE_ENDING_KEY, _lineEndingProcessingProvider.getDetectedLineEnding());
+                                rootNode.setData(Node.LINE_ENDING_KEY, detectedLineEnding);
 
 //                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
 //                                rootNode.findAll(Node.class)

@@ -12,9 +12,9 @@ class LineEndingTest {
 
     @Test
     void escaped() {
-        assertEquals("\\r", LineEnding.CR.escaped());
-        assertEquals("\\n", LineEnding.LF.escaped());
-        assertEquals("\\r\\n", LineEnding.CRLF.escaped());
+        assertEquals("\\r", LineEnding.CR.toEscapedString());
+        assertEquals("\\n", LineEnding.LF.toEscapedString());
+        assertEquals("\\r\\n", LineEnding.CRLF.toEscapedString());
     }
 
     @Test
@@ -69,12 +69,12 @@ class LineEndingTest {
 
     @Test
     void testToString() {
-        assertEquals("\r", LineEnding.CR.toString());
-        assertEquals("\n", LineEnding.LF.toString());
-        assertEquals("\r\n", LineEnding.CRLF.toString());
+        assertEquals("\r", LineEnding.CR.toRawString());
+        assertEquals("\n", LineEnding.LF.toRawString());
+        assertEquals("\r\n", LineEnding.CRLF.toRawString());
 
         // Note that this represents an "arbitrary" line ending -- this test is to highlight any time that it changes.
-        assertEquals("\n", LineEnding.ARBITRARY.toString());
+        assertEquals("\n", LineEnding.ARBITRARY.toRawString());
     }
 
     @Test

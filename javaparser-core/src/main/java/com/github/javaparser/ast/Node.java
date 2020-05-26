@@ -284,7 +284,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public final String toString() {
         if (containsData(LINE_ENDING_KEY)) {
             LineEnding lineEnding = getLineEndingStyleOrDefault(LineEnding.SYSTEM);
-            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineEnding.toString());
+            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineEnding.toRawString());
         }
         return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }

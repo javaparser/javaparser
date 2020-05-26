@@ -43,7 +43,7 @@ public class Utils {
      *  else {@link LineEnding#CR} or {@link LineEnding#LF} or {@link LineEnding#CRLF} if referring to a specific style of line separator.
      */
     @Deprecated
-    public static final String EOL = LineEnding.SYSTEM.toString();
+    public static final String EOL = LineEnding.SYSTEM.toRawString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -283,7 +283,7 @@ public class Utils {
      * @return content, with all kinds of EOL characters replaced by desiredEndOfLineCharacter
      */
     public static String normalizeEolInTextBlock(String content, LineEnding desiredEndOfLineCharacter) {
-        return normalizeEolInTextBlock(content, desiredEndOfLineCharacter.toString());
+        return normalizeEolInTextBlock(content, desiredEndOfLineCharacter.toRawString());
     }
 
     /**
