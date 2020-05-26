@@ -36,7 +36,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -147,21 +147,21 @@ class ModuleDeclarationTest {
                         "}");
 
         assertEquals(
-                "@Foo(1)" + EOL +
-                        "@Foo(2)" + EOL +
-                        "@Bar" + EOL +
-                        "module M.N {" + EOL +
-                        "    requires A.B;" + EOL +
-                        "    requires transitive C.D;" + EOL +
-                        "    requires static E.F;" + EOL +
-                        "    requires static transitive G.H;" + EOL +
-                        "    exports P.Q;" + EOL +
-                        "    exports R.S to T1.U1, T2.U2;" + EOL +
-                        "    opens P.Q;" + EOL +
-                        "    opens R.S to T1.U1, T2.U2;" + EOL +
-                        "    uses V.W;" + EOL +
-                        "    provides X.Y with Z1.Z2, Z3.Z4;" + EOL +
-                        "}" + EOL, cu.toString());
+                "@Foo(1)" + SYSTEM_EOL +
+                        "@Foo(2)" + SYSTEM_EOL +
+                        "@Bar" + SYSTEM_EOL +
+                        "module M.N {" + SYSTEM_EOL +
+                        "    requires A.B;" + SYSTEM_EOL +
+                        "    requires transitive C.D;" + SYSTEM_EOL +
+                        "    requires static E.F;" + SYSTEM_EOL +
+                        "    requires static transitive G.H;" + SYSTEM_EOL +
+                        "    exports P.Q;" + SYSTEM_EOL +
+                        "    exports R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
+                        "    opens P.Q;" + SYSTEM_EOL +
+                        "    opens R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
+                        "    uses V.W;" + SYSTEM_EOL +
+                        "    provides X.Y with Z1.Z2, Z3.Z4;" + SYSTEM_EOL +
+                        "}" + SYSTEM_EOL, cu.toString());
 
     }
 
@@ -186,21 +186,21 @@ class ModuleDeclarationTest {
                         "}");
 
         assertEquals(
-                "@Foo(1)" + EOL +
-                        "@Foo(2)" + EOL +
-                        "@Bar" + EOL +
-                        "open module M.N {" + EOL +
-                        "    requires A.B;" + EOL +
-                        "    requires transitive C.D;" + EOL +
-                        "    requires static E.F;" + EOL +
-                        "    requires transitive static G.H;" + EOL +
-                        "    exports P.Q;" + EOL +
-                        "    exports R.S to T1.U1, T2.U2;" + EOL +
-                        "    opens P.Q;" + EOL +
-                        "    opens R.S to T1.U1, T2.U2;" + EOL +
-                        "    uses V.W;" + EOL +
-                        "    provides X.Y with Z1.Z2, Z3.Z4;" + EOL +
-                        "}" + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
+                "@Foo(1)" + SYSTEM_EOL +
+                        "@Foo(2)" + SYSTEM_EOL +
+                        "@Bar" + SYSTEM_EOL +
+                        "open module M.N {" + SYSTEM_EOL +
+                        "    requires A.B;" + SYSTEM_EOL +
+                        "    requires transitive C.D;" + SYSTEM_EOL +
+                        "    requires static E.F;" + SYSTEM_EOL +
+                        "    requires transitive static G.H;" + SYSTEM_EOL +
+                        "    exports P.Q;" + SYSTEM_EOL +
+                        "    exports R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
+                        "    opens P.Q;" + SYSTEM_EOL +
+                        "    opens R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
+                        "    uses V.W;" + SYSTEM_EOL +
+                        "    provides X.Y with Z1.Z2, Z3.Z4;" + SYSTEM_EOL +
+                        "}" + SYSTEM_EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
 
     }
 

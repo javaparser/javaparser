@@ -57,7 +57,7 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
@@ -171,7 +171,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addedImportShouldBePrependedWithEOL() {
-        considerCode("import a.A;" + EOL + "class X{}");
+        considerCode("import a.A;" + SYSTEM_EOL + "class X{}");
 
         cu.addImport("a.B");
 
@@ -317,7 +317,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         classA.addField("int", "myField");
-        assertEquals("class A {" + EOL + "    int myField;" + EOL + "}", LexicalPreservingPrinter.print(classA));
+        assertEquals("class A {" + SYSTEM_EOL + "    int myField;" + SYSTEM_EOL + "}", LexicalPreservingPrinter.print(classA));
     }
 
     @Test
@@ -330,7 +330,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void printASimpleCUWithoutChanges() {
-        String code = "class /*a comment*/ A {\t\t" + EOL + " int f;" + EOL + EOL + EOL
+        String code = "class /*a comment*/ A {\t\t" + SYSTEM_EOL + " int f;" + SYSTEM_EOL + SYSTEM_EOL + SYSTEM_EOL
                 + "         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
@@ -342,30 +342,30 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void printASimpleClassRemovingAField() {
-        String code = "class /*a comment*/ A {\t\t" + EOL +
-                " int f;" + EOL + EOL + EOL +
+        String code = "class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+                " int f;" + SYSTEM_EOL + SYSTEM_EOL + SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
-        assertEquals("class /*a comment*/ A {\t\t" + EOL +
-                EOL +
+        assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+                SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
     }
 
     @Test
     void printASimpleClassRemovingAMethod() {
-        String code = "class /*a comment*/ A {\t\t" + EOL +
-                " int f;" + EOL + EOL + EOL +
-                "         void foo(int p  ) { return  'z'  \t; }" + EOL +
+        String code = "class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+                " int f;" + SYSTEM_EOL + SYSTEM_EOL + SYSTEM_EOL +
+                "         void foo(int p  ) { return  'z'  \t; }" + SYSTEM_EOL +
                 " int g;}";
         considerCode(code);
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(1);
-        assertEquals("class /*a comment*/ A {\t\t" + EOL +
-                " int f;" + EOL + EOL + EOL +
+        assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+                " int f;" + SYSTEM_EOL + SYSTEM_EOL + SYSTEM_EOL +
                 " int g;}", LexicalPreservingPrinter.print(c));
     }
 
@@ -430,8 +430,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .getStatements();
         stmts.add(s);
         MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
-        assertEquals("void foo(char p1, int p2) {" + EOL +
-                "    10 + 2;" + EOL +
+        assertEquals("void foo(char p1, int p2) {" + SYSTEM_EOL +
+                "    10 + 2;" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(m));
     }
 
@@ -598,11 +598,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void printLambdaIntersectionTypeAssignment() {
-        String code = "class A {" + EOL +
-                "  void f() {" + EOL +
-                "    Runnable r = (Runnable & Serializable) (() -> {});" + EOL +
-                "    r = (Runnable & Serializable)() -> {};" + EOL +
-                "    r = (Runnable & I)() -> {};" + EOL +
+        String code = "class A {" + SYSTEM_EOL +
+                "  void f() {" + SYSTEM_EOL +
+                "    Runnable r = (Runnable & Serializable) (() -> {});" + SYSTEM_EOL +
+                "    r = (Runnable & Serializable)() -> {};" + SYSTEM_EOL +
+                "    r = (Runnable & I)() -> {};" + SYSTEM_EOL +
                 "  }}";
         considerCode(code);
 
@@ -611,10 +611,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void printLambdaIntersectionTypeReturn() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); "
-                + EOL
+                + SYSTEM_EOL
                 + "}}";
         considerCode(code);
 
@@ -624,12 +624,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #855
     @Test
     void handleOverrideAnnotation() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -645,13 +645,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 }
                             }
                         }));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   @Override()" + EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override()" + SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -679,7 +679,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
                 .addMethod("setAField", PUBLIC);
-        assertEquals("public void setAField() {" + EOL +
+        assertEquals("public void setAField() {" + SYSTEM_EOL +
                 "    }", LexicalPreservingPrinter.print(setter));
     }
 
@@ -878,9 +878,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 parseClassOrInterfaceType("String"),
                                 "test2",
                                 new StringLiteralExpr("")))));
-        assertEquals("public void someMethod() {" + EOL
-                + "        String test = \"\";" + EOL
-                + "        String test2 = \"\";" + EOL
+        assertEquals("public void someMethod() {" + SYSTEM_EOL
+                + "        String test = \"\";" + SYSTEM_EOL
+                + "        String test2 = \"\";" + SYSTEM_EOL
                 // HACK: The right closing brace should not have indentation
                 // because the original method did not introduce indentation,
                 // however due to necessity this test was left with indentation,
@@ -891,11 +891,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #866
     @Test
     void moveOverrideAnnotations() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   protected @Override void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected @Override void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -914,23 +914,23 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 methodDeclaration.addMarkerAnnotation("Override");
                             }
                         })));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     // See issue #866
     @Test
     void moveOrAddOverrideAnnotations() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   protected @Override void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected @Override void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -951,25 +951,25 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 methodDeclaration.addMarkerAnnotation("Override");
                             }
                         }));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     // See issue #865
     @Test
     void handleAddingMarkerAnnotation() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -985,24 +985,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 }
                             }
                         }));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     // See issue #865
     @Test
     void handleOverrideMarkerAnnotation() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   protected void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -1012,24 +1012,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .forEach(type -> type.getMembers()
                         .forEach(member -> member.ifMethodDeclaration(
                                 methodDeclaration -> methodDeclaration.addMarkerAnnotation("Override"))));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     // See issue #865
     @Test
     void handleOverrideAnnotationAlternative() {
-        String code = "public class TestPage extends Page {" + EOL +
-                EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   protected void initializePage() {}" + EOL +
+        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -1039,22 +1039,22 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .forEach(type -> type.getMembers()
                         .forEach(member -> member.ifMethodDeclaration(
                                 methodDeclaration -> methodDeclaration.addAnnotation("Override"))));
-        assertEquals("public class TestPage extends Page {" + EOL +
-                EOL +
-                "   @Override()" + EOL +
-                "   protected void test() {}" + EOL +
-                EOL +
-                "   @Override()" + EOL +
-                "   protected void initializePage() {}" + EOL +
+        assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override()" + SYSTEM_EOL +
+                "   protected void test() {}" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "   @Override()" + SYSTEM_EOL +
+                "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void invokeModifierVisitor() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); "
-                + EOL
+                + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
@@ -1070,7 +1070,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + EOL +
+        assertEquals("@Deprecated()" + SYSTEM_EOL +
                 "public final class A {}", LexicalPreservingPrinter.print(cu));
 
     }
@@ -1084,15 +1084,15 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + EOL +
+        assertEquals("@Deprecated()" + SYSTEM_EOL +
                 "public abstract class A {}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void issue1244() {
-        String code = "public class Foo {" + EOL + EOL
-                + "// Some comment" + EOL + EOL // does work with only one \n
-                + "public void writeExternal() {}" + EOL + "}";
+        String code = "public class Foo {" + SYSTEM_EOL + SYSTEM_EOL
+                + "// Some comment" + SYSTEM_EOL + SYSTEM_EOL // does work with only one \n
+                + "public void writeExternal() {}" + SYSTEM_EOL + "}";
         CompilationUnit originalCu = parse(code);
         CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
 
@@ -1118,11 +1118,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue 1277
     @Test
     void testInvokeModifierVisitor() {
-        String code = "class A {" + EOL +
-                "  public String message = \"hello\";" + EOL +
-                "   void bar() {" + EOL +
-                "     System.out.println(\"hello\");" + EOL +
-                "   }" + EOL +
+        String code = "class A {" + SYSTEM_EOL +
+                "  public String message = \"hello\";" + SYSTEM_EOL +
+                "   void bar() {" + SYSTEM_EOL +
+                "     System.out.println(\"hello\");" + SYSTEM_EOL +
+                "   }" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -1140,12 +1140,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void invokeModifierVisitorIssue1297() {
-        String code = "class A {" + EOL +
-                "   public void bar() {" + EOL +
-                "     System.out.println(\"hello\");" + EOL +
-                "     System.out.println(\"hello\");" + EOL +
-                "     // comment" + EOL +
-                "   }" + EOL +
+        String code = "class A {" + SYSTEM_EOL +
+                "   public void bar() {" + SYSTEM_EOL +
+                "     System.out.println(\"hello\");" + SYSTEM_EOL +
+                "     System.out.println(\"hello\");" + SYSTEM_EOL +
+                "     // comment" + SYSTEM_EOL +
+                "   }" + SYSTEM_EOL +
                 "}";
 
         CompilationUnit cu = parse(code);
@@ -1162,10 +1162,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
                 .setBlockComment("block");
-        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
-                "    /*block*/" + EOL +
-                "    void mymethod() {" + EOL +
-                "    }" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
+                "    /*block*/" + SYSTEM_EOL +
+                "    void mymethod() {" + SYSTEM_EOL +
+                "    }" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1178,27 +1178,27 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
                 .setLineComment("line");
-        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
-                "    //line" + EOL +
-                "    void mymethod() {" + EOL +
-                "    }" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
+                "    //line" + SYSTEM_EOL +
+                "    void mymethod() {" + SYSTEM_EOL +
+                "    }" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void removedLineCommentsPrinted() {
-        String code = "public class Foo {" + EOL +
-                "//line" + EOL +
-                "void mymethod() {" + EOL +
-                "}" + EOL +
+        String code = "public class Foo {" + SYSTEM_EOL +
+                "//line" + SYSTEM_EOL +
+                "void mymethod() {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL +
                 "}";
         CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
-        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
-                "void mymethod() {" + EOL +
-                "}" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
+                "void mymethod() {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1222,20 +1222,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void removedBlockCommentsPrinted() {
-        String code = "public class Foo {" + EOL +
-                "/*" + EOL +
-                "Block comment coming through" + EOL +
-                "*/" + EOL +
-                "void mymethod() {" + EOL +
-                "}" + EOL +
+        String code = "public class Foo {" + SYSTEM_EOL +
+                "/*" + SYSTEM_EOL +
+                "Block comment coming through" + SYSTEM_EOL +
+                "*/" + SYSTEM_EOL +
+                "void mymethod() {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL +
                 "}";
         CompilationUnit cu = parse(code);
         LexicalPreservingPrinter.setup(cu);
         cu.getAllContainedComments().get(0).remove();
 
-        assertEqualsStringIgnoringEol("public class Foo {" + EOL +
-                "void mymethod() {" + EOL +
-                "}" + EOL +
+        assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
+                "void mymethod() {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 

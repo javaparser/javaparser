@@ -40,11 +40,20 @@ public class Utils {
 
     /**
      * // TODO: Replace this within the internal codebase.
-     * @deprecated Use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     * @deprecated New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
      *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
      */
     @Deprecated
     public static final String EOL = LineSeparator.SYSTEM.toRawString();
+
+    /**
+     * @deprecated Renamed from {@link #EOL} to make it explicit that we're using the system's line separator.
+     *             New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     *              else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
+     *
+     */
+    @Deprecated
+    public static final String SYSTEM_EOL = LineSeparator.SYSTEM.toRawString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();

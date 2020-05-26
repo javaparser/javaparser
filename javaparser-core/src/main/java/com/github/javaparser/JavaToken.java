@@ -23,7 +23,7 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Generated;
 
@@ -113,7 +113,7 @@ public class JavaToken {
             content = content.substring(1, content.length() - 1);
         }
         if (TokenTypes.isEndOfLineToken(kind)) {
-            content = EOL;
+            content = SYSTEM_EOL;
         } else if (TokenTypes.isWhitespace(kind)) {
             content = " ";
         }

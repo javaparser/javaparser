@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommentTest {
@@ -75,20 +75,20 @@ class CommentTest {
     @Test
     void testReplaceDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
-                "}" + EOL);
+        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void oneMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void anotherMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL);
 
         MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
 
@@ -116,21 +116,21 @@ class CommentTest {
     @Test
     void testRemoveDuplicateComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
+        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void oneMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void anotherMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
                 "}" +
-                EOL);
+                SYSTEM_EOL);
 
         MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
 
@@ -154,21 +154,21 @@ class CommentTest {
     @Test
     void testRemoveDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void oneMethod() {" + EOL +
-                "  }" + EOL +
-                EOL +
-                "  /**" + EOL +
-                "   * Comment A" + EOL +
-                "   */" + EOL +
-                "  public void anotherMethod() {" + EOL +
-                "  }" + EOL +
+        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void oneMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
+                SYSTEM_EOL +
+                "  /**" + SYSTEM_EOL +
+                "   * Comment A" + SYSTEM_EOL +
+                "   */" + SYSTEM_EOL +
+                "  public void anotherMethod() {" + SYSTEM_EOL +
+                "  }" + SYSTEM_EOL +
                 "}" +
-                EOL);
+                SYSTEM_EOL);
 
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
 
