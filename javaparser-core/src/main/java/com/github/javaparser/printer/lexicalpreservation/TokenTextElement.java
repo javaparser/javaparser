@@ -49,77 +49,32 @@ class TokenTextElement extends TextElement {
         return token.getText();
     }
 
+    @Override
+    Optional<Range> getRange() {
+        return token.getRange();
+    }
+
     // Visible for testing
     String getText() {
         return token.getText();
-    }
-
-    int getTokenKind() {
-        return token.getKind();
     }
 
     public JavaToken getToken() {
         return token;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TokenTextElement that = (TokenTextElement) o;
-
-        return token.equals(that.token);
-    }
-
-    @Override
-    public int hashCode() {
-        return token.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return token.toString();
-    }
-
-    @Override
-    boolean isToken(int tokenKind) {
-        return token.getKind() == tokenKind;
-    }
-
-    @Override
-    boolean isNode(Node node) {
-        return false;
-    }
-
-    @Override
-    public boolean isWhiteSpace() {
-        return token.getCategory().isWhitespace();
-    }
-
-    @Override
-    public boolean isSpaceOrTab() {
-        return token.getCategory().isWhitespaceButNotEndOfLine();
-    }
-
-    @Override
-    public boolean isComment() {
-        return token.getCategory().isComment();
-    }
-
-    @Override
-    public boolean isSeparator() {
-        return token.getCategory().isSeparator();
-    }
-
-    @Override
-    public boolean isNewline() {
-        return token.getCategory().isEndOfLine();
+    int getTokenKind() {
+        return token.getKind();
     }
 
     @Override
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return false;
+    }
+
+    @Override
+    public boolean isComment() {
+        return token.getCategory().isComment();
     }
 
     @Override
@@ -133,12 +88,57 @@ class TokenTextElement extends TextElement {
     }
 
     @Override
+    public boolean isNewline() {
+        return token.getCategory().isEndOfLine();
+    }
+
+    @Override
+    boolean isNode(Node node) {
+        return false;
+    }
+
+    @Override
     public boolean isPrimitive() {
         return Kind.valueOf(getTokenKind()).isPrimitive();
     }
 
     @Override
-    Optional<Range> getRange() {
-        return token.getRange();
+    public boolean isSeparator() {
+        return token.getCategory().isSeparator();
+    }
+
+    @Override
+    public boolean isSpaceOrTab() {
+        return token.getCategory().isWhitespaceButNotEndOfLine();
+    }
+
+    @Override
+    boolean isToken(int tokenKind) {
+        return token.getKind() == tokenKind;
+    }
+
+    @Override
+    public boolean isWhiteSpace() {
+        return token.getCategory().isWhitespace();
+    }
+
+    @Override
+    public String toString() {
+        return token.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return token.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TokenTextElement that = (TokenTextElement) o;
+
+        return token.equals(that.token);
     }
 }

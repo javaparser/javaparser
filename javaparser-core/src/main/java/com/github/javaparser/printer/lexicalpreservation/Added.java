@@ -35,26 +35,6 @@ public class Added implements DifferenceElement {
     }
 
     @Override
-    public String toString() {
-        return "Added{" + element + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Added added = (Added) o;
-
-        return element.equals(added.element);
-    }
-
-    @Override
-    public int hashCode() {
-        return element.hashCode();
-    }
-
-    @Override
     public CsmElement getElement() {
         return element;
     }
@@ -64,13 +44,13 @@ public class Added implements DifferenceElement {
         return true;
     }
 
+    public boolean isIndent() {
+        return element instanceof CsmIndent;
+    }
+
     @Override
     public boolean isRemoved() {
         return false;
-    }
-
-    public boolean isIndent() {
-        return element instanceof CsmIndent;
     }
 
     public boolean isUnindent() {
@@ -85,5 +65,25 @@ public class Added implements DifferenceElement {
         } else {
             throw new UnsupportedOperationException(element.getClass().getSimpleName());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Added{" + element + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return element.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Added added = (Added) o;
+
+        return element.equals(added.element);
     }
 }

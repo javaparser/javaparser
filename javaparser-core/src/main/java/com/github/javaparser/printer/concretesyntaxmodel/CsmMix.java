@@ -55,13 +55,8 @@ public class CsmMix implements CsmElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CsmMix csmMix = (CsmMix) o;
-
-        return elements != null ? elements.equals(csmMix.elements) : csmMix.elements == null;
+    public String toString() {
+        return elements.stream().map(e -> e.toString()).collect(Collectors.joining(",", "CsmMix[", "]"));
     }
 
     @Override
@@ -70,7 +65,12 @@ public class CsmMix implements CsmElement {
     }
 
     @Override
-    public String toString() {
-        return elements.stream().map(e -> e.toString()).collect(Collectors.joining(",", "CsmMix[", "]"));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CsmMix csmMix = (CsmMix) o;
+
+        return elements != null ? elements.equals(csmMix.elements) : csmMix.elements == null;
     }
 }

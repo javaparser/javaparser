@@ -25,10 +25,6 @@ import com.github.javaparser.ast.Node;
 
 class TextElementMatchers {
 
-    static TextElementMatcher byTokenType(int tokenType) {
-        return textElement -> textElement.isToken(tokenType);
-    }
-
     static TextElementMatcher byNode(final Node node) {
         return new TextElementMatcher() {
             @Override
@@ -41,5 +37,9 @@ class TextElementMatchers {
                 return "match node " + node;
             }
         };
+    }
+
+    static TextElementMatcher byTokenType(int tokenType) {
+        return textElement -> textElement.isToken(tokenType);
     }
 }

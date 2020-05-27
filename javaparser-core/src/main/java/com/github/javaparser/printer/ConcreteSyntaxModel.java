@@ -66,35 +66,6 @@ public class ConcreteSyntaxModel {
     private static final Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
     private static final Optional<String> initializationError;
 
-    private static CsmElement modifiers() {
-        return list(ObservableProperty.MODIFIERS, space(), none(), space());
-    }
-
-    /**
-     * Build a mix collecting all the elements specified.
-     */
-    private static CsmElement mix(CsmElement... elements) {
-        return new CsmMix(Arrays.asList(elements));
-    }
-
-    private static CsmElement memberAnnotations() {
-        return list(ObservableProperty.ANNOTATIONS, newline(), none(), newline());
-    }
-
-    private static CsmElement annotations() {
-        return list(ObservableProperty.ANNOTATIONS, space(), none(), newline());
-    }
-
-    private static CsmElement typeParameters() {
-        return list(ObservableProperty.TYPE_PARAMETERS, sequence(comma(), space()), token(GeneratedJavaParserConstants.LT),
-                sequence(token(GeneratedJavaParserConstants.GT), space()));
-    }
-
-    private static CsmElement typeArguments() {
-        return list(ObservableProperty.TYPE_ARGUMENTS, sequence(comma(), space()), token(GeneratedJavaParserConstants.LT),
-                sequence(token(GeneratedJavaParserConstants.GT)));
-    }
-
     static {
 
         ///
@@ -969,14 +940,8 @@ public class ConcreteSyntaxModel {
 
     }
 
-    public static void genericPrettyPrint(Node node, SourcePrinter printer) {
-        forClass(node.getClass()).prettyPrint(node, printer);
-    }
-
-    public static String genericPrettyPrint(Node node) {
-        SourcePrinter sourcePrinter = new SourcePrinter();
-        forClass(node.getClass()).prettyPrint(node, sourcePrinter);
-        return sourcePrinter.toString();
+    private static CsmElement annotations() {
+        return list(ObservableProperty.ANNOTATIONS, space(), none(), newline());
     }
 
     public static CsmElement forClass(Class<? extends Node> nodeClazz) {
@@ -987,6 +952,41 @@ public class ConcreteSyntaxModel {
             throw new UnsupportedOperationException(nodeClazz.getSimpleName());
         }
         return concreteSyntaxModelByClass.get(nodeClazz);
+    }
+
+    public static String genericPrettyPrint(Node node) {
+        SourcePrinter sourcePrinter = new SourcePrinter();
+        forClass(node.getClass()).prettyPrint(node, sourcePrinter);
+        return sourcePrinter.toString();
+    }
+
+    public static void genericPrettyPrint(Node node, SourcePrinter printer) {
+        forClass(node.getClass()).prettyPrint(node, printer);
+    }
+
+    private static CsmElement memberAnnotations() {
+        return list(ObservableProperty.ANNOTATIONS, newline(), none(), newline());
+    }
+
+    /**
+     * Build a mix collecting all the elements specified.
+     */
+    private static CsmElement mix(CsmElement... elements) {
+        return new CsmMix(Arrays.asList(elements));
+    }
+
+    private static CsmElement modifiers() {
+        return list(ObservableProperty.MODIFIERS, space(), none(), space());
+    }
+
+    private static CsmElement typeArguments() {
+        return list(ObservableProperty.TYPE_ARGUMENTS, sequence(comma(), space()), token(GeneratedJavaParserConstants.LT),
+                sequence(token(GeneratedJavaParserConstants.GT)));
+    }
+
+    private static CsmElement typeParameters() {
+        return list(ObservableProperty.TYPE_PARAMETERS, sequence(comma(), space()), token(GeneratedJavaParserConstants.LT),
+                sequence(token(GeneratedJavaParserConstants.GT), space()));
     }
 
 }

@@ -30,12 +30,12 @@ public class CsmSingleReference implements CsmElement {
 
     private final ObservableProperty property;
 
-    public ObservableProperty getProperty() {
-        return property;
-    }
-
     public CsmSingleReference(ObservableProperty property) {
         this.property = property;
+    }
+
+    public ObservableProperty getProperty() {
+        return property;
     }
 
     @Override

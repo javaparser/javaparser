@@ -38,8 +38,38 @@ public class Reshuffled implements DifferenceElement {
     }
 
     @Override
+    public CsmMix getElement() {
+        return nextOrder;
+    }
+
+    public CsmMix getNextOrder() {
+        return nextOrder;
+    }
+
+    public CsmMix getPreviousOrder() {
+        return previousOrder;
+    }
+
+    @Override
+    public boolean isAdded() {
+        return false;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int result = previousOrder.hashCode();
+        result = 31 * result + nextOrder.hashCode();
+        return result;
     }
 
     @Override
@@ -51,35 +81,5 @@ public class Reshuffled implements DifferenceElement {
 
         if (!previousOrder.equals(that.previousOrder)) return false;
         return nextOrder.equals(that.nextOrder);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = previousOrder.hashCode();
-        result = 31 * result + nextOrder.hashCode();
-        return result;
-    }
-
-    @Override
-    public CsmMix getElement() {
-        return nextOrder;
-    }
-
-    public CsmMix getPreviousOrder() {
-        return previousOrder;
-    }
-
-    public CsmMix getNextOrder() {
-        return nextOrder;
-    }
-
-    @Override
-    public boolean isAdded() {
-        return false;
-    }
-
-    @Override
-    public boolean isRemoved() {
-        return false;
     }
 }

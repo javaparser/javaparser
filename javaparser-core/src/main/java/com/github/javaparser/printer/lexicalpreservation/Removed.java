@@ -34,31 +34,6 @@ public class Removed implements DifferenceElement {
         this.element = element;
     }
 
-    @Override
-    public String toString() {
-        return "Removed{" + element + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Removed removed = (Removed) o;
-
-        return element.equals(removed.element);
-    }
-
-    @Override
-    public int hashCode() {
-        return element.hashCode();
-    }
-
-    @Override
-    public CsmElement getElement() {
-        return element;
-    }
-
     public Node getChild() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
@@ -66,6 +41,11 @@ public class Removed implements DifferenceElement {
         }
 
         throw new IllegalStateException("Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
+    }
+
+    @Override
+    public CsmElement getElement() {
+        return element;
     }
 
     public int getTokenType() {
@@ -82,12 +62,17 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    public boolean isToken() {
-        return element instanceof CsmToken;
-    }
-
     public boolean isChild() {
         return element instanceof LexicalDifferenceCalculator.CsmChild;
+    }
+
+    public boolean isNewLine() {
+        if (isToken()) {
+            CsmToken csmToken = (CsmToken) element;
+            return csmToken.isNewLine();
+        }
+
+        return false;
     }
 
     public boolean isPrimitiveType() {
@@ -97,6 +82,15 @@ public class Removed implements DifferenceElement {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return true;
+    }
+
+    public boolean isToken() {
+        return element instanceof CsmToken;
     }
 
     public boolean isWhiteSpace() {
@@ -109,16 +103,22 @@ public class Removed implements DifferenceElement {
     }
 
     @Override
-    public boolean isRemoved() {
-        return true;
+    public String toString() {
+        return "Removed{" + element + '}';
     }
 
-    public boolean isNewLine() {
-        if (isToken()) {
-            CsmToken csmToken = (CsmToken) element;
-            return csmToken.isNewLine();
-        }
+    @Override
+    public int hashCode() {
+        return element.hashCode();
+    }
 
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Removed removed = (Removed) o;
+
+        return element.equals(removed.element);
     }
 }

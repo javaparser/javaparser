@@ -27,24 +27,47 @@ import java.util.List;
 
 class TextElementIteratorsFactory {
 
-    static class CascadingIterator<E> implements Iterator<E> {
-
-        interface Provider<E> {
-
-            Iterator<E> provide();
+    public static Iterator<TokenTextElement> partialReverseIterator(NodeText nodeText, int fromIndex) {
+        List<Iterator<TokenTextElement>> elements = new LinkedList<>();
+        for (int i = fromIndex; i >= 0; i--) {
+            elements.add(reverseIterator(nodeText, i));
         }
+        return new ComposedIterator<>(elements);
+    }
+
+    public static Iterator<TokenTextElement> reverseIterator(NodeText nodeText) {
+        return partialReverseIterator(nodeText, nodeText.numberOfElements() - 1);
+    }
+
+    private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
+        TextElement textElement = nodeText.getTextElement(index);
+        if (textElement instanceof TokenTextElement) {
+            return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
+                @Override
+                public void remove() {
+                    nodeText.removeElement(index);
+                }
+            };
+        } else if (textElement instanceof ChildTextElement) {
+            ChildTextElement childTextElement = (ChildTextElement) textElement;
+            NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
+            return reverseIterator(textForChild);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    static class CascadingIterator<E> implements Iterator<E> {
 
         private final Provider<E> nextProvider;
         private final Iterator<E> current;
-        private Iterator<E> next;
         private boolean lastReturnedFromCurrent = false;
         private boolean lastReturnedFromNext = false;
-
+        private Iterator<E> next;
         public CascadingIterator(Iterator<E> current, Provider<E> nextProvider) {
             this.nextProvider = nextProvider;
             this.current = current;
         }
-
 
         @Override
         public boolean hasNext() {
@@ -83,6 +106,47 @@ class TextElementIteratorsFactory {
                 return;
             }
             throw new IllegalArgumentException();
+        }
+
+        interface Provider<E> {
+
+            Iterator<E> provide();
+        }
+    }
+
+    static class ComposedIterator<E> implements Iterator<E> {
+
+        private final List<Iterator<E>> elements;
+        private int currIndex;
+
+        ComposedIterator(List<Iterator<E>> elements) {
+            this.elements = elements;
+            currIndex = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (currIndex >= elements.size()) {
+                return false;
+            }
+            if (elements.get(currIndex).hasNext()) {
+                return true;
+            }
+            currIndex++;
+            return hasNext();
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new IllegalArgumentException();
+            }
+            return elements.get(currIndex).next();
+        }
+
+        @Override
+        public void remove() {
+            elements.get(currIndex).remove();
         }
     }
 
@@ -123,72 +187,6 @@ class TextElementIteratorsFactory {
         public void remove() {
 
         }
-    }
-
-    static class ComposedIterator<E> implements Iterator<E> {
-
-        private final List<Iterator<E>> elements;
-        private int currIndex;
-
-        ComposedIterator(List<Iterator<E>> elements) {
-            this.elements = elements;
-            currIndex = 0;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (currIndex >= elements.size()) {
-                return false;
-            }
-            if (elements.get(currIndex).hasNext()) {
-                return true;
-            }
-            currIndex++;
-            return hasNext();
-        }
-
-        @Override
-        public E next() {
-            if (!hasNext()) {
-                throw new IllegalArgumentException();
-            }
-            return elements.get(currIndex).next();
-        }
-
-        @Override
-        public void remove() {
-            elements.get(currIndex).remove();
-        }
-    }
-
-    private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
-        TextElement textElement = nodeText.getTextElement(index);
-        if (textElement instanceof TokenTextElement) {
-            return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
-                @Override
-                public void remove() {
-                    nodeText.removeElement(index);
-                }
-            };
-        } else if (textElement instanceof ChildTextElement) {
-            ChildTextElement childTextElement = (ChildTextElement) textElement;
-            NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
-            return reverseIterator(textForChild);
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public static Iterator<TokenTextElement> reverseIterator(NodeText nodeText) {
-        return partialReverseIterator(nodeText, nodeText.numberOfElements() - 1);
-    }
-
-    public static Iterator<TokenTextElement> partialReverseIterator(NodeText nodeText, int fromIndex) {
-        List<Iterator<TokenTextElement>> elements = new LinkedList<>();
-        for (int i = fromIndex; i >= 0; i--) {
-            elements.add(reverseIterator(nodeText, i));
-        }
-        return new ComposedIterator<>(elements);
     }
 
 }

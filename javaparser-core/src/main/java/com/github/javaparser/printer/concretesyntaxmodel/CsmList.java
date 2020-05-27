@@ -38,26 +38,6 @@ public class CsmList implements CsmElement {
     private final CsmElement preceeding;
     private final CsmElement following;
 
-    public ObservableProperty getProperty() {
-        return property;
-    }
-
-    public CsmElement getSeparatorPost() {
-        return separatorPost;
-    }
-
-    public CsmElement getSeparatorPre() {
-        return separatorPre;
-    }
-
-    public CsmElement getPreceeding() {
-        return preceeding;
-    }
-
-    public CsmElement getFollowing() {
-        return following;
-    }
-
     public CsmList(ObservableProperty property, CsmElement separator) {
         this(property, new CsmNone(), separator, new CsmNone(), new CsmNone());
     }
@@ -72,6 +52,26 @@ public class CsmList implements CsmElement {
         this.separatorPost = separatorPost;
         this.preceeding = preceeding;
         this.following = following;
+    }
+
+    public CsmElement getFollowing() {
+        return following;
+    }
+
+    public CsmElement getPreceeding() {
+        return preceeding;
+    }
+
+    public ObservableProperty getProperty() {
+        return property;
+    }
+
+    public CsmElement getSeparatorPost() {
+        return separatorPost;
+    }
+
+    public CsmElement getSeparatorPre() {
+        return separatorPre;
     }
 
     @Override

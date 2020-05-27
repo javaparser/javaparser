@@ -29,12 +29,12 @@ public interface DifferenceElement {
         return new Added(element);
     }
 
-    static DifferenceElement removed(CsmElement element) {
-        return new Removed(element);
-    }
-
     static DifferenceElement kept(CsmElement element) {
         return new Kept(element);
+    }
+
+    static DifferenceElement removed(CsmElement element) {
+        return new Removed(element);
     }
 
     /**

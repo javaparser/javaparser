@@ -37,26 +37,6 @@ public class Kept implements DifferenceElement {
     }
 
     @Override
-    public String toString() {
-        return "Kept{" + element + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Kept kept = (Kept) o;
-
-        return element.equals(kept.element);
-    }
-
-    @Override
-    public int hashCode() {
-        return element.hashCode();
-    }
-
-    @Override
     public CsmElement getElement() {
         return element;
     }
@@ -75,20 +55,21 @@ public class Kept implements DifferenceElement {
         return false;
     }
 
+    public boolean isChild() {
+        return element instanceof LexicalDifferenceCalculator.CsmChild;
+    }
+
     public boolean isIndent() {
         return element instanceof CsmIndent;
     }
 
-    public boolean isUnindent() {
-        return element instanceof CsmUnindent;
-    }
+    public boolean isNewLine() {
+        if (isToken()) {
+            CsmToken csmToken = (CsmToken) element;
+            return csmToken.isNewLine();
+        }
 
-    public boolean isToken() {
-        return element instanceof CsmToken;
-    }
-
-    public boolean isChild() {
-        return element instanceof LexicalDifferenceCalculator.CsmChild;
+        return false;
     }
 
     public boolean isPrimitiveType() {
@@ -98,6 +79,19 @@ public class Kept implements DifferenceElement {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
+
+    public boolean isToken() {
+        return element instanceof CsmToken;
+    }
+
+    public boolean isUnindent() {
+        return element instanceof CsmUnindent;
     }
 
     public boolean isWhiteSpace() {
@@ -118,17 +112,23 @@ public class Kept implements DifferenceElement {
         return false;
     }
 
-    public boolean isNewLine() {
-        if (isToken()) {
-            CsmToken csmToken = (CsmToken) element;
-            return csmToken.isNewLine();
-        }
-
-        return false;
+    @Override
+    public String toString() {
+        return "Kept{" + element + '}';
     }
 
     @Override
-    public boolean isRemoved() {
-        return false;
+    public int hashCode() {
+        return element.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Kept kept = (Kept) o;
+
+        return element.equals(kept.element);
     }
 }

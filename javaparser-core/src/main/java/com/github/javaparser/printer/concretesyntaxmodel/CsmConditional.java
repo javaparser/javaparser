@@ -36,8 +36,37 @@ public class CsmConditional implements CsmElement {
     private final CsmElement thenElement;
     private final CsmElement elseElement;
 
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        this.properties = Arrays.asList(property);
+        this.condition = condition;
+        this.thenElement = thenElement;
+        this.elseElement = elseElement;
+    }
+
+    public CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        if (properties.size() < 1) {
+            throw new IllegalArgumentException();
+        }
+        this.properties = properties;
+        this.condition = condition;
+        this.thenElement = thenElement;
+        this.elseElement = elseElement;
+    }
+
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement) {
+        this(property, condition, thenElement, new CsmNone());
+    }
+
     public Condition getCondition() {
         return condition;
+    }
+
+    public CsmElement getElseElement() {
+        return elseElement;
+    }
+
+    public List<ObservableProperty> getProperties() {
+        return properties;
     }
 
     public ObservableProperty getProperty() {
@@ -47,16 +76,21 @@ public class CsmConditional implements CsmElement {
         return properties.get(0);
     }
 
-    public List<ObservableProperty> getProperties() {
-        return properties;
-    }
-
     public CsmElement getThenElement() {
         return thenElement;
     }
 
-    public CsmElement getElseElement() {
-        return elseElement;
+    @Override
+    public void prettyPrint(Node node, SourcePrinter printer) {
+        boolean test = false;
+        for (ObservableProperty prop : properties) {
+            test = test || condition.evaluate(node, prop);
+        }
+        if (test) {
+            thenElement.prettyPrint(node, printer);
+        } else {
+            elseElement.prettyPrint(node, printer);
+        }
     }
 
     public enum Condition {
@@ -81,40 +115,6 @@ public class CsmConditional implements CsmElement {
                 return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());
-        }
-    }
-
-    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        this.properties = Arrays.asList(property);
-        this.condition = condition;
-        this.thenElement = thenElement;
-        this.elseElement = elseElement;
-    }
-
-    public CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        if (properties.size() < 1) {
-            throw new IllegalArgumentException();
-        }
-        this.properties = properties;
-        this.condition = condition;
-        this.thenElement = thenElement;
-        this.elseElement = elseElement;
-    }
-
-    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement) {
-        this(property, condition, thenElement, new CsmNone());
-    }
-
-    @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
-        boolean test = false;
-        for (ObservableProperty prop : properties) {
-            test = test || condition.evaluate(node, prop);
-        }
-        if (test) {
-            thenElement.prettyPrint(node, printer);
-        } else {
-            elseElement.prettyPrint(node, printer);
         }
     }
 }

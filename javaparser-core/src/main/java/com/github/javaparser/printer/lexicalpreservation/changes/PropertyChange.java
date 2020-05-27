@@ -39,16 +39,16 @@ public class PropertyChange implements Change {
         this.newValue = newValue;
     }
 
-    public ObservableProperty getProperty() {
-        return property;
+    public Object getNewValue() {
+        return newValue;
     }
 
     public Object getOldValue() {
         return oldValue;
     }
 
-    public Object getNewValue() {
-        return newValue;
+    public ObservableProperty getProperty() {
+        return property;
     }
 
     @Override

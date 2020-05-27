@@ -31,39 +31,10 @@ public abstract class TextElement implements TextElementMatcher {
 
     abstract String expand();
 
-    abstract boolean isToken(int tokenKind);
+    abstract Optional<Range> getRange();
 
-    final boolean isCommentToken() {
-        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT)
-                || isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)
-                || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
-    }
-
-    @Override
-    public boolean match(TextElement textElement) {
-        return this.equals(textElement);
-    }
-
-    abstract boolean isNode(Node node);
-
-    public abstract boolean isLiteral();
-
-    public abstract boolean isWhiteSpace();
-
-    public abstract boolean isSpaceOrTab();
-
-    public abstract boolean isNewline();
-
-    public abstract boolean isComment();
-
-    public abstract boolean isSeparator();
-
-    public abstract boolean isIdentifier();
-
-    public abstract boolean isPrimitive();
-
-    public final boolean isWhiteSpaceOrComment() {
-        return isWhiteSpace() || isComment();
+    public boolean isChild() {
+        return isChildOfClass(Node.class);
     }
 
     /**
@@ -71,11 +42,40 @@ public abstract class TextElement implements TextElementMatcher {
      */
     public abstract boolean isChildOfClass(Class<? extends Node> nodeClass);
 
-    public boolean isChild() {
-        return isChildOfClass(Node.class);
+    public abstract boolean isComment();
+
+    final boolean isCommentToken() {
+        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT)
+                || isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)
+                || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
     }
 
-    abstract Optional<Range> getRange();
+    public abstract boolean isIdentifier();
+
+    public abstract boolean isLiteral();
+
+    public abstract boolean isNewline();
+
+    abstract boolean isNode(Node node);
+
+    public abstract boolean isPrimitive();
+
+    public abstract boolean isSeparator();
+
+    public abstract boolean isSpaceOrTab();
+
+    abstract boolean isToken(int tokenKind);
+
+    public abstract boolean isWhiteSpace();
+
+    public final boolean isWhiteSpaceOrComment() {
+        return isWhiteSpace() || isComment();
+    }
+
+    @Override
+    public boolean match(TextElement textElement) {
+        return this.equals(textElement);
+    }
 
     /**
      * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br>

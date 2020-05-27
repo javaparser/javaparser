@@ -36,22 +36,6 @@ public class CsmToken implements CsmElement {
     private String content;
     private TokenContentCalculator tokenContentCalculator;
 
-    public interface TokenContentCalculator {
-
-        String calculate(Node node);
-    }
-
-    public int getTokenType() {
-        return tokenType;
-    }
-
-    public String getContent(Node node) {
-        if (tokenContentCalculator != null) {
-            return tokenContentCalculator.calculate(node);
-        }
-        return content;
-    }
-
     public CsmToken(int tokenType) {
         this.tokenType = tokenType;
         this.content = GeneratedJavaParserConstants.tokenImage[tokenType];
@@ -79,6 +63,25 @@ public class CsmToken implements CsmElement {
         this.tokenContentCalculator = tokenContentCalculator;
     }
 
+    public String getContent(Node node) {
+        if (tokenContentCalculator != null) {
+            return tokenContentCalculator.calculate(node);
+        }
+        return content;
+    }
+
+    public int getTokenType() {
+        return tokenType;
+    }
+
+    public boolean isNewLine() {
+        return TokenTypes.isEndOfLineToken(tokenType);
+    }
+
+    public boolean isWhiteSpace() {
+        return TokenTypes.isWhitespace(tokenType);
+    }
+
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (isEndOfLineToken(tokenType)) {
@@ -94,6 +97,14 @@ public class CsmToken implements CsmElement {
     }
 
     @Override
+    public int hashCode() {
+        int result = tokenType;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (tokenContentCalculator != null ? tokenContentCalculator.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -105,19 +116,8 @@ public class CsmToken implements CsmElement {
         return tokenContentCalculator != null ? tokenContentCalculator.equals(csmToken.tokenContentCalculator) : csmToken.tokenContentCalculator == null;
     }
 
-    @Override
-    public int hashCode() {
-        int result = tokenType;
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (tokenContentCalculator != null ? tokenContentCalculator.hashCode() : 0);
-        return result;
-    }
+    public interface TokenContentCalculator {
 
-    public boolean isWhiteSpace() {
-        return TokenTypes.isWhitespace(tokenType);
-    }
-
-    public boolean isNewLine() {
-        return TokenTypes.isEndOfLineToken(tokenType);
+        String calculate(Node node);
     }
 }

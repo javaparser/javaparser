@@ -31,20 +31,14 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CsmAttribute implements CsmElement {
 
-    public ObservableProperty getProperty() {
-        return property;
-    }
-
     private final ObservableProperty property;
 
     public CsmAttribute(ObservableProperty property) {
         this.property = property;
     }
 
-    @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
-        Object value = property.getRawValue(node);
-        printer.print(PrintingHelper.printToString(value));
+    public ObservableProperty getProperty() {
+        return property;
     }
 
     /**
@@ -85,5 +79,11 @@ public class CsmAttribute implements CsmElement {
         }
         throw new UnsupportedOperationException("getTokenType does not know how to handle property "
                 + property + " with text: " + text);
+    }
+
+    @Override
+    public void prettyPrint(Node node, SourcePrinter printer) {
+        Object value = property.getRawValue(node);
+        printer.print(PrintingHelper.printToString(value));
     }
 }
