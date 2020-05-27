@@ -23,17 +23,19 @@ package com.github.javaparser.generator.core.other;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.StaleGenerated;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.io.IOException;
 import java.util.List;
 
-public class RemoveGeneratorAnnotations extends AbstractGenerator {
+public class StaleGeneratorAnnotations extends AbstractGenerator {
 
-    public RemoveGeneratorAnnotations(SourceRoot sourceRoot) {
+    public StaleGeneratorAnnotations(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 
@@ -74,4 +76,20 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
         after();
     }
 
+    public void verify() throws IOException {
+        Log.info("Running %s", () -> getClass().getSimpleName());
+
+        List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
+
+        Log.info("parsedCus.size() = " + parsedCus.size());
+        parsedCus.forEach(compilationUnit -> {
+            List<AnnotationExpr> allAnnotations = compilationUnit.findAll(AnnotationExpr.class);
+            allAnnotations.stream()
+                    .filter(annotationExpr -> annotationExpr.getName().asString().equals(StaleGenerated.class.getSimpleName()))
+                    .forEach(annotationExpr -> {
+                        // TODO: Accumulate and report all, rather than throw on first run.
+                        throw new RuntimeException("Annotation of @StaleGenerated found within: " + compilationUnit.getStorage().get().getPath().toString());
+                    });
+        });
+    }
 }
