@@ -39,7 +39,6 @@ import org.junit.jupiter.api.Test;
 import javax.json.Json;
 import java.io.StringReader;
 
-import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,7 +49,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void simpleTest() {
-        CompilationUnit cu = parse("public class X{} class Z{}");
+        CompilationUnit cu = StaticJavaParser.parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -61,7 +60,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testRawType() {
-        Type type = parseType("Blub");
+        Type type = StaticJavaParser.parseType("Blub");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -72,7 +71,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testDiamondType() {
-        Type type = parseType("Blub<>");
+        Type type = StaticJavaParser.parseType("Blub<>");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -83,7 +82,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testGenerics() {
-        Type type = parseType("Blub<Blab, Bleb>");
+        Type type = StaticJavaParser.parseType("Blub<Blab, Bleb>");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -94,7 +93,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testOperator() {
-        Expression expr = parseExpression("1+1");
+        Expression expr = StaticJavaParser.parseExpression("1+1");
         String serialized = serialize(expr, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -105,7 +104,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testPrimitiveType() {
-        Type type = parseType("int");
+        Type type = StaticJavaParser.parseType("int");
         String serialized = serialize(type, false);
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -116,7 +115,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testComment() {
-        CompilationUnit cu = parse("/* block comment */\npublic class X{ \n // line comment\npublic void test() {}\n}");
+        CompilationUnit cu = StaticJavaParser.parse("/* block comment */\npublic class X{ \n // line comment\npublic void test() {}\n}");
         String serialized = serialize(cu, false);
 
         CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -135,7 +134,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testJavaDocComment() {
-        CompilationUnit cu = parse("public class X{ " +
+        CompilationUnit cu = StaticJavaParser.parse("public class X{ " +
                 "     /**\n" +
                 "     * Woke text.\n" +
                 "     * @param a blub\n" +
@@ -162,7 +161,7 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testNonMetaProperties() {
-        CompilationUnit cu = parse("public class X{} class Z{}");
+        CompilationUnit cu = StaticJavaParser.parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
         CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
@@ -198,7 +197,7 @@ class JavaParserJsonDeserializerTest {
             }
         };
         StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
-        CompilationUnit cu = parse("public class X{} class Z{}");
+        CompilationUnit cu = StaticJavaParser.parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
         CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));

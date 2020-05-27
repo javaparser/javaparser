@@ -21,6 +21,7 @@
 
 package com.github.javaparser.generator.metamodel;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -37,7 +38,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
@@ -59,11 +59,11 @@ public class NodeMetaModelGenerator {
         final String superNodeMetaModel = MetaModelGenerator.nodeMetaModelName(superclass);
 
         boolean isRootNode = !MetaModelGenerator.isNode(superclass);
-        nodeField.getVariable(0).setInitializer(parseExpression(f("new %s(%s)",
+        nodeField.getVariable(0).setInitializer(StaticJavaParser.parseExpression(f("new %s(%s)",
                 className,
                 optionalOf(decapitalize(superNodeMetaModel), !isRootNode))));
 
-        initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
+        initializeNodeMetaModelsStatements.add(StaticJavaParser.parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(MetaModelGenerator.METAMODEL_PACKAGE);
         classMetaModelJavaFile.setBlockComment(MetaModelGenerator.COPYRIGHT_NOTICE_JP_CORE);
@@ -83,7 +83,7 @@ public class NodeMetaModelGenerator {
                 .addParameter("Optional<" + MetaModelGenerator.BASE_NODE_META_MODEL + ">", "super" + MetaModelGenerator.BASE_NODE_META_MODEL);
         classMMConstructor
                 .getBody()
-                .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
+                .addStatement(StaticJavaParser.parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
                                                                        MetaModelGenerator.BASE_NODE_META_MODEL,
                                                                        nodeClass.getName(),
                                                                        nodeClass.getSimpleName(),
@@ -93,7 +93,7 @@ public class NodeMetaModelGenerator {
 
         if (typeAnalysis.isAbstract) {
             classMetaModelJavaFile.addImport(Node.class);
-            nodeMetaModelClass.addMember(parseBodyDeclaration(f(
+            nodeMetaModelClass.addMember(StaticJavaParser.parseBodyDeclaration(f(
                     "protected %s(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {" +
                             "super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);" +
                             " }",
