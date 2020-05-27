@@ -32,7 +32,8 @@ import java.util.stream.Collectors;
  * A group of elements that could be in any order.
  */
 public class CsmMix implements CsmElement {
-    private List<CsmElement> elements;
+
+    private final List<CsmElement> elements;
 
     public CsmMix(List<CsmElement> elements) {
         if (elements == null) {

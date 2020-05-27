@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CsmList implements CsmElement {
+
     private final ObservableProperty property;
     private final CsmElement separatorPost;
     private final CsmElement separatorPre;

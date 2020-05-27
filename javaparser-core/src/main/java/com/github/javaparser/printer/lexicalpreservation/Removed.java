@@ -27,6 +27,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 public class Removed implements DifferenceElement {
+
     private final CsmElement element;
 
     Removed(CsmElement element) {
@@ -81,9 +82,13 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    public boolean isToken() { return element instanceof CsmToken; }
+    public boolean isToken() {
+        return element instanceof CsmToken;
+    }
 
-    public boolean isChild() { return element instanceof LexicalDifferenceCalculator.CsmChild; }
+    public boolean isChild() {
+        return element instanceof LexicalDifferenceCalculator.CsmChild;
+    }
 
     public boolean isPrimitiveType() {
         if (isChild()) {
@@ -95,7 +100,7 @@ public class Removed implements DifferenceElement {
     }
 
     public boolean isWhiteSpace() {
-        if(isToken()) {
+        if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpace();
         }
@@ -107,9 +112,9 @@ public class Removed implements DifferenceElement {
     public boolean isRemoved() {
         return true;
     }
-    
+
     public boolean isNewLine() {
-        if(isToken()) {
+        if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isNewLine();
         }

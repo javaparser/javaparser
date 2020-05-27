@@ -28,6 +28,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
  * some new elements have been added or removed to the mix.
  */
 public class Reshuffled implements DifferenceElement {
+
     private final CsmMix previousOrder;
     private final CsmMix nextOrder;
 
@@ -38,7 +39,7 @@ public class Reshuffled implements DifferenceElement {
 
     @Override
     public String toString() {
-        return "Reshuffled{" + nextOrder + ", previous="+ previousOrder+ '}';
+        return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
     }
 
     @Override

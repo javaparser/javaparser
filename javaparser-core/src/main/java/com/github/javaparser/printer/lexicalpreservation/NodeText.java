@@ -31,6 +31,7 @@ import java.util.List;
  * It is basically a list of tokens and children.
  */
 class NodeText {
+
     private final List<TextElement> elements;
 
     public static final int NOT_FOUND = -1;

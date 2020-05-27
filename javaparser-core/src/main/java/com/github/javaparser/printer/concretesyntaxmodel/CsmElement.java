@@ -30,7 +30,8 @@ import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.TokenTypes.*;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
 
 public interface CsmElement {
 
@@ -96,7 +97,9 @@ public interface CsmElement {
         return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
     }
 
-    static CsmElement comment() { return new CsmComment(); }
+    static CsmElement comment() {
+        return new CsmComment();
+    }
 
     static CsmElement newline() {
         return newline(LineSeparator.SYSTEM);

@@ -24,6 +24,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import java.util.Iterator;
 
 public class WrappingRangeIterator implements Iterator<Integer> {
+
     private final int limit;
     private int currentValue = 0;
 

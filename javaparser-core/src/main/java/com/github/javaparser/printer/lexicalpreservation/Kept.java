@@ -29,6 +29,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 public class Kept implements DifferenceElement {
+
     private final CsmElement element;
 
     Kept(CsmElement element) {
@@ -74,13 +75,21 @@ public class Kept implements DifferenceElement {
         return false;
     }
 
-    public boolean isIndent() { return element instanceof CsmIndent; }
+    public boolean isIndent() {
+        return element instanceof CsmIndent;
+    }
 
-    public boolean isUnindent() { return element instanceof CsmUnindent; }
+    public boolean isUnindent() {
+        return element instanceof CsmUnindent;
+    }
 
-    public boolean isToken() { return element instanceof CsmToken; }
+    public boolean isToken() {
+        return element instanceof CsmToken;
+    }
 
-    public boolean isChild() { return element instanceof LexicalDifferenceCalculator.CsmChild; }
+    public boolean isChild() {
+        return element instanceof LexicalDifferenceCalculator.CsmChild;
+    }
 
     public boolean isPrimitiveType() {
         if (isChild()) {
@@ -92,7 +101,7 @@ public class Kept implements DifferenceElement {
     }
 
     public boolean isWhiteSpace() {
-        if(isToken()) {
+        if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpace();
         }
@@ -110,7 +119,7 @@ public class Kept implements DifferenceElement {
     }
 
     public boolean isNewLine() {
-        if(isToken()) {
+        if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isNewLine();
         }

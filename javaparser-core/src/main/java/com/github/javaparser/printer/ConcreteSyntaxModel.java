@@ -22,11 +22,21 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.modules.ModuleExportsDirective;
+import com.github.javaparser.ast.modules.ModuleOpensDirective;
+import com.github.javaparser.ast.modules.ModuleProvidesDirective;
+import com.github.javaparser.ast.modules.ModuleRequiresDirective;
+import com.github.javaparser.ast.modules.ModuleUsesDirective;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -35,7 +45,11 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
@@ -44,13 +58,13 @@ import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.C
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 
 /**
- * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
- * code.
+ * The Concrete Syntax Model for a single node type.
+ * It knows the syntax used to represent a certain element in Java code.
  */
 public class ConcreteSyntaxModel {
 
     private static final Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
-    private static Optional<String> initializationError;
+    private static final Optional<String> initializationError;
 
     private static CsmElement modifiers() {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());

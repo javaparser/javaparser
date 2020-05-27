@@ -26,6 +26,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmString implements CsmElement {
+
     private final ObservableProperty property;
 
     public CsmString(ObservableProperty property) {

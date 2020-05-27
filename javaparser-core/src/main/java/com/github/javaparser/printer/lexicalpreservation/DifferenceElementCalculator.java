@@ -24,12 +24,21 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 class DifferenceElementCalculator {
+
     static boolean matching(CsmElement a, CsmElement b) {
         if (a instanceof CsmChild) {
             if (b instanceof CsmChild) {
@@ -43,7 +52,7 @@ class DifferenceElementCalculator {
             } else if (b instanceof CsmUnindent) {
                 return false;
             } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
         } else if (a instanceof CsmToken) {
             if (b instanceof CsmToken) {
@@ -51,8 +60,8 @@ class DifferenceElementCalculator {
                 // Tokens are described by their type AND their content
                 // and TokenContentCalculator. By using .equals(), all
                 // three values are compared.
-                CsmToken childA = (CsmToken)a;
-                CsmToken childB = (CsmToken)b;
+                CsmToken childA = (CsmToken) a;
+                CsmToken childB = (CsmToken) b;
                 return childA.equals(childB);
             } else if (b instanceof CsmChild) {
                 return false;
@@ -61,14 +70,14 @@ class DifferenceElementCalculator {
             } else if (b instanceof CsmUnindent) {
                 return false;
             } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
         } else if (a instanceof CsmIndent) {
             return b instanceof CsmIndent;
         } else if (a instanceof CsmUnindent) {
             return b instanceof CsmUnindent;
         }
-        throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+        throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
     }
 
     private static boolean replacement(CsmElement a, CsmElement b) {
@@ -83,18 +92,18 @@ class DifferenceElementCalculator {
             } else if (b instanceof CsmToken) {
                 return false;
             } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
         } else if (a instanceof CsmToken) {
             if (b instanceof CsmToken) {
-                CsmToken childA = (CsmToken)a;
-                CsmToken childB = (CsmToken)b;
+                CsmToken childA = (CsmToken) a;
+                CsmToken childB = (CsmToken) b;
                 return childA.getTokenType() == childB.getTokenType();
             } else if (b instanceof CsmChild) {
                 return false;
             }
         }
-        throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+        throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
     }
 
     /**
@@ -102,10 +111,10 @@ class DifferenceElementCalculator {
      */
     private static Map<Node, Integer> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
         Map<Node, Integer> positions = new HashMap<>();
-        for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
+        for (int i = 0; i < calculatedSyntaxModel.elements.size(); i++) {
             CsmElement element = calculatedSyntaxModel.elements.get(i);
             if (element instanceof CsmChild) {
-                positions.put(((CsmChild)element).getChild(), i);
+                positions.put(((CsmChild) element).getChild(), i);
             }
         }
         return positions;
@@ -143,7 +152,7 @@ class DifferenceElementCalculator {
         while (commonChildrenIndex < commonChildren.size()) {
             Node child = commonChildren.get(commonChildrenIndex++);
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
-            int posOfNextChildInAfter    = childrenInAfter.get(child);
+            int posOfNextChildInAfter = childrenInAfter.get(child);
             if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
                 elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)));
             }
@@ -217,7 +226,7 @@ class DifferenceElementCalculator {
                         // No reason to deal with a reshuffled, we are just going to keep everything as it is
                         ((CsmMix) nextAfter).getElements().forEach(el -> elements.add(new Kept(el)));
                     } else {
-                        elements.add(new Reshuffled((CsmMix)nextOriginal, (CsmMix)nextAfter));
+                        elements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
                     }
                     originalIndex++;
                     afterIndex++;

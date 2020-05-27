@@ -64,7 +64,8 @@ public class PhantomNodeLogic {
     }
 
     /**
-     * A node contained in a phantom node is also a phantom node. We limit how many levels up we check just for performance reasons.
+     * A node contained in a phantom node is also a phantom node.
+     * We limit how many levels up we check just for performance reasons.
      */
     private static boolean inPhantomNode(Node node, int levels) {
         return node.getParentNode().isPresent() &&
@@ -73,7 +74,8 @@ public class PhantomNodeLogic {
     }
 
     /**
-     * Clean up the cache used by the LexicalPreserving logic. This should only be used once you're done printing all parsed data with
+     * Clean up the cache used by the LexicalPreserving logic.
+     * This should only be used once you're done printing all parsed data with
      * a JavaParser's configuration setLexicalPreservationEnabled=true.
      */
     public static void cleanUpCache() {

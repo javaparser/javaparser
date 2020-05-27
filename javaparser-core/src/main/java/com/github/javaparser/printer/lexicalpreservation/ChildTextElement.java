@@ -31,12 +31,14 @@ import java.util.Optional;
  * Represent the position of a child node in the NodeText of its parent.
  */
 class ChildTextElement extends TextElement {
+
     private final Node child;
 
     ChildTextElement(Node child) {
         this.child = child;
     }
 
+    @Override
     String expand() {
         return LexicalPreservingPrinter.print(child);
     }
@@ -99,17 +101,17 @@ class ChildTextElement extends TextElement {
     public boolean isComment() {
         return child instanceof Comment;
     }
-    
+
     @Override
     public boolean isSeparator() {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return false;
     }
-    
+
     @Override
     public boolean isPrimitive() {
         return false;

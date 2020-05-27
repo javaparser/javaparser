@@ -30,6 +30,7 @@ import com.github.javaparser.printer.SourcePrinter;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CsmAttribute implements CsmElement {
+
     public ObservableProperty getProperty() {
         return property;
     }
@@ -58,7 +59,7 @@ public class CsmAttribute implements CsmElement {
                 return GeneratedJavaParserConstants.IDENTIFIER;
             case TYPE: {
                 String expectedImage = "\"" + text.toLowerCase() + "\"";
-                for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
+                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
                     if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
                         return i;
                     }

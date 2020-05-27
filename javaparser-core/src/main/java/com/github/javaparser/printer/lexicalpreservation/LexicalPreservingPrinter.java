@@ -365,7 +365,7 @@ public class LexicalPreservingPrinter {
         if (PhantomNodeLogic.isPhantomNode(node)) {
             return Optional.empty();
         }
-        if(!node.getRange().isPresent()) {
+        if (!node.getRange().isPresent()) {
             return Optional.empty();
         }
         if (!node.getRange().get().contains(tokenRange)) {
