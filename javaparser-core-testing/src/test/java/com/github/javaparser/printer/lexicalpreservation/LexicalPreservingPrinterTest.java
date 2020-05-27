@@ -1575,7 +1575,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
 //        final String actual2 = b.toString();
 //        System.out.println(actual2);
-//        assertEqualsNoEol(expected, actual2);
+//        assertEqualsStringIgnoringEol(expected, actual2);
     }
 
 }
