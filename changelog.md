@@ -1,7 +1,13 @@
-Next Release (Version 3.16.1)
+Next Release (Version 3.16.2)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/176?closed=1)
+* FIXED: Enhanced the handling of line separator, introducing an enum `LineSeparator` that can be used.
+    (PR [#2685](https://github.com/javaparser/javaparser/pull/2685), by [@MysterAitch](https://github.com/MysterAitch))
+
+Version 3.16.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
-* FIXED: Fixed type 
+* FIXED: Fixed typo
     (PR [#2697](https://github.com/javaparser/javaparser/pull/2697), by [@hfreeb](https://github.com/hfreeb))
 
 Version 3.16.0
