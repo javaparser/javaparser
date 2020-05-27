@@ -78,32 +78,36 @@ public class CoreGenerator {
         // Exceptions to this occur when e.g. a field/property is renamed/removed.
         new RemoveGeneratorAnnotations(sourceRoot).generate();
 
-        // Do generations
-        new TypeCastingGenerator(sourceRoot).generate();
+        // Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
+        new CloneVisitorGenerator(sourceRoot).generate();
+        new EqualsVisitorGenerator(sourceRoot).generate();
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorGenerator(sourceRoot).generate();
         new GenericVisitorWithDefaultsGenerator(sourceRoot).generate();
-        new EqualsVisitorGenerator(sourceRoot).generate();
-        new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
+        new HashCodeVisitorGenerator(sourceRoot).generate();
+        new ModifierVisitorGenerator(sourceRoot).generate();
         new NoCommentEqualsVisitorGenerator(sourceRoot).generate();
+        new NoCommentHashCodeVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
         new VoidVisitorAdapterGenerator(sourceRoot).generate();
         new VoidVisitorGenerator(sourceRoot).generate();
         new VoidVisitorWithDefaultsGenerator(sourceRoot).generate();
-        new GenericVisitorGenerator(sourceRoot).generate();
-        new HashCodeVisitorGenerator(sourceRoot).generate();
-        new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
-        new NoCommentHashCodeVisitorGenerator(sourceRoot).generate();
-        new CloneVisitorGenerator(sourceRoot).generate();
-        new ModifierVisitorGenerator(sourceRoot).generate();
 
-        new PropertyGenerator(sourceRoot).generate();
-        new RemoveMethodGenerator(sourceRoot).generate();
-        new ReplaceMethodGenerator(sourceRoot).generate();
+        new TypeCastingGenerator(sourceRoot).generate(); // Not visitor-related, but extends AbstractNodeGenerator?
+
+        // Run generators -- extends AbstractGenerator
+        new AcceptGenerator(sourceRoot).generate();
         new CloneGenerator(sourceRoot).generate();
         new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();
         new NodeModifierGenerator(sourceRoot).generate();
-        new AcceptGenerator(sourceRoot).generate();
+        new PropertyGenerator(sourceRoot).generate();
+        new RemoveMethodGenerator(sourceRoot).generate();
+        new ReplaceMethodGenerator(sourceRoot).generate();
+
+        // Run generators -- grammar/tokens
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
 
         // Finally, do BndGenerator once everything is sorted.
