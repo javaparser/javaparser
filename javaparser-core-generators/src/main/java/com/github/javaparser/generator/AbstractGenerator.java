@@ -27,6 +27,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.StaleGenerated;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -108,7 +109,7 @@ public abstract class AbstractGenerator {
      * @param content    Where an annotation has content, it is passed here (otherwise null).
      * @param <T>        Only accept nodes which accept annotations.
      */
-    private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
+    private <T extends NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
         NodeList<AnnotationExpr> annotations = node.getAnnotations()
                 .stream()
                 .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
@@ -132,6 +133,22 @@ public abstract class AbstractGenerator {
      */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
         annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
+        removeStale(node);
+    }
+
+    protected <T extends Node & NodeWithAnnotations<?>> void removeStale(T node) {
+        node.getAnnotations()
+                .removeIf(annotationExpr ->
+                        annotationExpr.getName().asString().equals(StaleGenerated.class.getSimpleName())
+                );
+    }
+
+    /**
+     * @param node The node to which the {@code @StaleGenerated} annotation will be added.
+     * @param <T>
+     */
+    protected <T extends NodeWithAnnotations<?>> void annotateStale(T node) {
+        annotate(node, StaleGenerated.class, null);
     }
 
     /**
@@ -145,7 +162,7 @@ public abstract class AbstractGenerator {
      * @param node The node to which the {@code @SuppressWarnings} annotation will be added.
      * @param <T>  Only accept nodes which accept annotations.
      */
-    protected <T extends Node & NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
+    protected <T extends NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
         annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
     }
 

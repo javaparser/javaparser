@@ -24,6 +24,7 @@ package com.github.javaparser.generator.core.other;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
@@ -48,8 +49,11 @@ public class RemoveGeneratorAnnotations extends AbstractGenerator {
             allAnnotations.stream()
                     .filter(annotationExpr -> annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
                     .forEach(annotationExpr -> {
-                        // Remove the annotation -- TODO: should likely be a replace operation.
-                        annotationExpr.remove();
+                        annotationExpr.getParentNode()
+                                .ifPresent(node -> {
+                                    NodeWithAnnotations<?> annotatedNode = (NodeWithAnnotations<?>) node;
+                                    annotateStale(annotatedNode);
+                                });
                     });
 
 //            // Remove the import. -- TODO: Fix this (causes java.util.ConcurrentModificationException)
