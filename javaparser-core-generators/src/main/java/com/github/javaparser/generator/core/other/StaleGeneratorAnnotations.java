@@ -31,6 +31,7 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaleGeneratorAnnotations extends AbstractGenerator {
@@ -82,14 +83,33 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
         List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
 
         Log.info("parsedCus.size() = " + parsedCus.size());
+
+        List<String> errors = new ArrayList<>();
+
         parsedCus.forEach(compilationUnit -> {
             List<AnnotationExpr> allAnnotations = compilationUnit.findAll(AnnotationExpr.class);
             allAnnotations.stream()
                     .filter(annotationExpr -> annotationExpr.getName().asString().equals(StaleGenerated.class.getSimpleName()))
                     .forEach(annotationExpr -> {
-                        // TODO: Accumulate and report all, rather than throw on first run.
-                        throw new RuntimeException("Annotation of @StaleGenerated found within: " + compilationUnit.getStorage().get().getPath().toString());
+                        errors.add(
+                                "Annotation of @StaleGenerated found within: " +
+                                compilationUnit.getStorage().get().getPath().toString() +
+                                ":" +
+                                annotationExpr.getRange().get().begin.line
+                        );
                     });
         });
+
+        if (!errors.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("ERROR: (" + errors.size() + ") @StaleGenerated Found: ");
+            for (int i = 0; i < errors.size(); i++) {
+                String s = errors.get(i);
+                sb.append("\n    " + i + ": " + s);
+            }
+
+//            throw new RuntimeException(sb.toString());
+            System.err.println(sb.toString());
+        }
     }
 }

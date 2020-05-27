@@ -23,7 +23,11 @@ package com.github.javaparser.generator.core.manually_run;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.generator.core.node.*;
+import com.github.javaparser.generator.core.other.BndGenerator;
 import com.github.javaparser.generator.core.other.StaleGeneratorAnnotations;
+import com.github.javaparser.generator.core.other.TokenKindGenerator;
+import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
@@ -44,8 +48,7 @@ public class CoreGenerator {
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
-                                .setLexicalPreservationEnabled(true)
-            ;
+            .setLexicalPreservationEnabled(true);
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
@@ -63,7 +66,11 @@ public class CoreGenerator {
 
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
 
+        // Write the generated code to storage.
         sourceRoot.saveAll();
+
+        // Verify that there are no leftover @StaleGenerated annotations remaining.
+        new StaleGeneratorAnnotations(sourceRoot).verify();
 
         // TODO: Include some form of statistics within the output.
     }
@@ -74,43 +81,39 @@ public class CoreGenerator {
         // Exceptions to this occur when e.g. a field/property is renamed/removed.
         new StaleGeneratorAnnotations(sourceRoot).generate();
 
-        // Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
-//        new CloneVisitorGenerator(sourceRoot).generate();
-//        new EqualsVisitorGenerator(sourceRoot).generate();
-//        new GenericListVisitorAdapterGenerator(sourceRoot).generate();
-//        new GenericVisitorAdapterGenerator(sourceRoot).generate();
-//        new GenericVisitorGenerator(sourceRoot).generate();
-//        new GenericVisitorWithDefaultsGenerator(sourceRoot).generate();
-//        new HashCodeVisitorGenerator(sourceRoot).generate();
-//        new ModifierVisitorGenerator(sourceRoot).generate();
-//        new NoCommentEqualsVisitorGenerator(sourceRoot).generate();
-//        new NoCommentHashCodeVisitorGenerator(sourceRoot).generate();
-//        new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
-//        new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
-//        new VoidVisitorAdapterGenerator(sourceRoot).generate();
-//        new VoidVisitorGenerator(sourceRoot).generate();
-//        new VoidVisitorWithDefaultsGenerator(sourceRoot).generate();
+//         Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
+        new CloneVisitorGenerator(sourceRoot).generate();
+        new EqualsVisitorGenerator(sourceRoot).generate();
+        new GenericListVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorGenerator(sourceRoot).generate();
+        new GenericVisitorWithDefaultsGenerator(sourceRoot).generate();
+        new HashCodeVisitorGenerator(sourceRoot).generate();
+        new ModifierVisitorGenerator(sourceRoot).generate();
+        new NoCommentEqualsVisitorGenerator(sourceRoot).generate();
+        new NoCommentHashCodeVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
+        new VoidVisitorAdapterGenerator(sourceRoot).generate();
+        new VoidVisitorGenerator(sourceRoot).generate();
+        new VoidVisitorWithDefaultsGenerator(sourceRoot).generate();
 //
-//        new TypeCastingGenerator(sourceRoot).generate(); // Not visitor-related, but extends AbstractNodeGenerator?
-//
-//        // Run generators -- extends AbstractGenerator
-//        new AcceptGenerator(sourceRoot).generate();
-//        new CloneGenerator(sourceRoot).generate();
-//        new GetMetaModelGenerator(sourceRoot).generate();
-//        new MainConstructorGenerator(sourceRoot).generate();
-//        new NodeModifierGenerator(sourceRoot).generate();
-//        new PropertyGenerator(sourceRoot).generate();
-//        new RemoveMethodGenerator(sourceRoot).generate();
-//        new ReplaceMethodGenerator(sourceRoot).generate();
-//
-//        // Run generators -- grammar/tokens
-//        new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
-//
-//        // Finally, do BndGenerator once everything is sorted.
-//        new BndGenerator(sourceRoot).generate();
+        new TypeCastingGenerator(sourceRoot).generate(); // Not visitor-related, but extends AbstractNodeGenerator?
 
+        // Run generators -- extends AbstractGenerator
+        new AcceptGenerator(sourceRoot).generate();
+        new CloneGenerator(sourceRoot).generate();
+        new GetMetaModelGenerator(sourceRoot).generate();
+        new MainConstructorGenerator(sourceRoot).generate();
+        new NodeModifierGenerator(sourceRoot).generate();
+        new PropertyGenerator(sourceRoot).generate();
+        new RemoveMethodGenerator(sourceRoot).generate();
+        new ReplaceMethodGenerator(sourceRoot).generate();
 
-        // Verify that there are no leftover @StaleGenerated annotations remaining.
-//        new StaleGeneratorAnnotations(sourceRoot).verify();
+        // Run generators -- grammar/tokens
+        new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
+
+        // Finally, do BndGenerator once everything is sorted.
+        new BndGenerator(sourceRoot).generate();
     }
 }
