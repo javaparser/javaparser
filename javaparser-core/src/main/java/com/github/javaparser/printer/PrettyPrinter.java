@@ -27,7 +27,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * Pretty printer for AST nodes.
  */
-public class PrettyPrinter {
+public class PrettyPrinter implements NodePrinter {
     private final PrettyPrinterConfiguration configuration;
 
     public PrettyPrinter() {
@@ -42,5 +42,10 @@ public class PrettyPrinter {
         final VoidVisitor<Void> visitor = configuration.getVisitorFactory().apply(configuration);
         node.accept(visitor, null);
         return visitor.toString();
+    }
+
+    @Override
+    public String asString(Node node) {
+        return print(node);
     }
 }

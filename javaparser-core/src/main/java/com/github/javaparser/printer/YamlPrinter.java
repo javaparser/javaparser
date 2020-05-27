@@ -34,7 +34,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 /**
  * Outputs a YAML file containing the AST meant for inspecting it.
  */
-public class YamlPrinter {
+public class YamlPrinter implements NodePrinter {
 
     private static final int NUM_SPACES_FOR_INDENT = 4;
     private final boolean outputNodeType;
@@ -111,5 +111,10 @@ public class YamlPrinter {
 
     public static void print(Node node) {
         System.out.println(new YamlPrinter(true).output(node));
+    }
+
+    @Override
+    public String asString(Node node) {
+        return output(node);
     }
 }

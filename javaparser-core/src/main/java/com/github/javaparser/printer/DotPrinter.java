@@ -35,7 +35,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 /**
  * Outputs a Graphviz diagram of the AST.
  */
-public class DotPrinter {
+public class DotPrinter implements NodePrinter {
 
     private int nodeCount;
     private final boolean outputNodeType;
@@ -107,5 +107,10 @@ public class DotPrinter {
 
     private static String escape(String value) {
         return value.replace("\"", "\\\"");
+    }
+
+    @Override
+    public String asString(Node node) {
+        return output(node);
     }
 }

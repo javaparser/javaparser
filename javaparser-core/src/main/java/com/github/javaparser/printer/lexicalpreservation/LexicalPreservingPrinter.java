@@ -39,6 +39,7 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.printer.NodePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -73,7 +74,7 @@ import static java.util.stream.Collectors.toList;
  * operating on the AST and then used them to reproduce the source code
  * in its original formatting including the AST changes.
  */
-public class LexicalPreservingPrinter {
+public class LexicalPreservingPrinter implements NodePrinter {
 
     /**
      * The nodetext for a node is stored in the node's data field. This is the key to set and retrieve it.
@@ -665,5 +666,15 @@ public class LexicalPreservingPrinter {
             throw new UnsupportedOperationException("Unknown type of comment: " + newComment.getClass().getSimpleName());
 
         }
+    }
+
+    @Override
+    public String asString(Node node) {
+        return LexicalPreservingPrinter.print(node);
+    }
+
+    @Override
+    public String toString() {
+        return "LexicalPreservingPrinter{}";
     }
 }
