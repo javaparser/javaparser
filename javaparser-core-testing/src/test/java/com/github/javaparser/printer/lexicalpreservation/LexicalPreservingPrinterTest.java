@@ -1573,6 +1573,490 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         System.out.println(actual);
         assertEqualsStringIgnoringEol(expected, actual);
 
+//        // toString still uses the pretty printer -- avoid within this test...
+//        final String actual2 = b.toString();
+//        System.out.println(actual2);
+//        assertEqualsStringIgnoringEol(expected, actual2);
+    }
+
+    @Test
+    public void removeAnnotationsTest_fullClass() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+        String eol = SYSTEM_EOL;
+//        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {" + eol +
+                "" + eol +
+                "    private Name name;" + eol +
+                "" + eol +
+                "    private NodeList<Name> moduleNames;" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective() {" + eol +
+                "        this(null, new Name(), new NodeList<>());" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @AllFieldsConstructor" + eol +
+                "    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {" + eol +
+                "        this(null, name, moduleNames);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    /**" + eol +
+                "     * This constructor is used by the parser and is considered private." + eol +
+                "     */" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setName(name);" + eol +
+                "        setModuleNames(moduleNames);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol +
+                "        v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol +
+                "    public boolean remove(Node node) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.remove(i);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        return super.remove(node);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public Name getName() {" + eol +
+                "        return name;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setName(final Name name) {" + eol +
+                "        assertNotNull(name);" + eol +
+                "        if (name == this.name) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.NAME, this.name, name);" + eol +
+                "        if (this.name != null)" + eol +
+                "            this.name.setParentNode(null);" + eol +
+                "        this.name = name;" + eol +
+                "        setAsParentNodeOf(name);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public NodeList<Name> getModuleNames() {" + eol +
+                "        return moduleNames;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {" + eol +
+                "        assertNotNull(moduleNames);" + eol +
+                "        if (moduleNames == this.moduleNames) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);" + eol +
+                "        if (this.moduleNames != null)" + eol +
+                "            this.moduleNames.setParentNode(null);" + eol +
+                "        this.moduleNames = moduleNames;" + eol +
+                "        setAsParentNodeOf(moduleNames);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + eol +
+                "    public ModuleExportsDirective clone() {" + eol +
+                "        return (ModuleExportsDirective) accept(new CloneVisitor(), null);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + eol +
+                "    public boolean replace(Node node, Node replacementNode) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.set(i, (Name) replacementNode);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        if (node == name) {" + eol +
+                "            setName((Name) replacementNode);" + eol +
+                "            return true;" + eol +
+                "        }" + eol +
+                "        return super.replace(node, replacementNode);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsStmt() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsStmt() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsStmt() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective addModuleName(String name) {" + eol +
+                "        moduleNames.add(parseName(name));" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsDirective() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsDirective() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsDirective() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + eol +
+                "    public ModuleExportsDirectiveMetaModel getMetaModel() {" + eol +
+                "        return JavaParserMetaModel.moduleExportsDirectiveMetaModel;" + eol +
+                "    }" + eol +
+                "}" + eol + eol +
+                "";
+
+        String expected = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {" + eol +
+                "" + eol +
+                "    private Name name;" + eol +
+                "" + eol +
+                "    private NodeList<Name> moduleNames;" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective() {" + eol +
+                "        this(null, new Name(), new NodeList<>());" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @AllFieldsConstructor" + eol +
+                "    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {" + eol +
+                "        this(null, name, moduleNames);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    /**" + eol +
+                "     * This constructor is used by the parser and is considered private." + eol +
+                "     */" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setName(name);" + eol +
+                "        setModuleNames(moduleNames);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol +
+                "        v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol +
+                "    public boolean remove(Node node) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.remove(i);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        return super.remove(node);" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public Name getName() {" + eol +
+                "        return name;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setName(final Name name) {" + eol +
+                "        assertNotNull(name);" + eol +
+                "        if (name == this.name) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.NAME, this.name, name);" + eol +
+                "        if (this.name != null)" + eol +
+                "            this.name.setParentNode(null);" + eol +
+                "        this.name = name;" + eol +
+                "        setAsParentNodeOf(name);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public NodeList<Name> getModuleNames() {" + eol +
+                "        return moduleNames;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {" + eol +
+                "        assertNotNull(moduleNames);" + eol +
+                "        if (moduleNames == this.moduleNames) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);" + eol +
+                "        if (this.moduleNames != null)" + eol +
+                "            this.moduleNames.setParentNode(null);" + eol +
+                "        this.moduleNames = moduleNames;" + eol +
+                "        setAsParentNodeOf(moduleNames);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + eol +
+                "    public ModuleExportsDirective clone() {" + eol +
+                "        return (ModuleExportsDirective) accept(new CloneVisitor(), null);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + eol +
+                "    public boolean replace(Node node, Node replacementNode) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.set(i, (Name) replacementNode);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        if (node == name) {" + eol +
+                "            setName((Name) replacementNode);" + eol +
+                "            return true;" + eol +
+                "        }" + eol +
+                "        return super.replace(node, replacementNode);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsStmt() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsStmt() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsStmt() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective addModuleName(String name) {" + eol +
+                "        moduleNames.add(parseName(name));" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsDirective() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsDirective() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsDirective() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + eol +
+                "    public ModuleExportsDirectiveMetaModel getMetaModel() {" + eol +
+                "        return JavaParserMetaModel.moduleExportsDirectiveMetaModel;" + eol +
+                "    }" + eol +
+                "}" + eol + eol +
+                "";
+
+        final Node b = javaParser.parse(code)
+                .getResult()
+                .orElseThrow(AssertionError::new);
+
+        List<AnnotationExpr> allAnnotations = b.findAll(AnnotationExpr.class);
+
+        List<Node> annotatedNodes = allAnnotations.stream()
+                .filter(annotationExpr -> annotationExpr.getParentNode().isPresent())
+                .map(annotationExpr -> annotationExpr.getParentNode().get())
+                .collect(Collectors.toList());
+
+        annotatedNodes.stream()
+                .filter(node -> node instanceof NodeWithAnnotations)
+                .map(node -> (NodeWithAnnotations<?>) node)
+                .forEach(nodeWithAnnotations -> {
+                    NodeList<AnnotationExpr> annotations = nodeWithAnnotations.getAnnotations();
+
+                    NodeList<AnnotationExpr> newAnnotations = annotations.stream()
+//                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Override.class.getSimpleName()))
+                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
+                            .collect(Collectors.toCollection(NodeList::new));
+
+//                    nodeWithAnnotations.setAnnotations(new NodeList<>());
+                    nodeWithAnnotations.setAnnotations(newAnnotations);
+                });
+
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        System.out.println(actual);
+        assertEqualsStringIgnoringEol(expected, actual);
+
+//        // toString still uses the pretty printer -- avoid within this test...
 //        final String actual2 = b.toString();
 //        System.out.println(actual2);
 //        assertEqualsStringIgnoringEol(expected, actual2);
