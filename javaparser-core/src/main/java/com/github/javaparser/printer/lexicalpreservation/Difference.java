@@ -531,7 +531,8 @@ public class Difference {
                 Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
 
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
+                boolean includeNewlineVariantsAsEqual = true;
+                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node, includeNewlineVariantsAsEqual);
 
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
@@ -613,7 +614,7 @@ public class Difference {
         }
     }
 
-    private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
+    private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node, boolean includeNewlineVariantsAsEqual) {
         List<Integer> correspondingIndices = new ArrayList<>();
         for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
 
@@ -623,24 +624,23 @@ public class Difference {
 
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
             for (int i = startIndex; i < nodeText.getElements().size(); i++) {
+                // Avoid overwriting a previously set link
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
 
-                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node);
+                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node, includeNewlineVariantsAsEqual);
 
                     if (isCorresponding) {
                         boolean hasSamePreviousElement = false;
                         if (i > 0 && previousCsmElementIndex > -1) {
                             TextElement previousTextElement = nodeText.getTextElement(i - 1);
-
-                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex), node);
+                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex), node, includeNewlineVariantsAsEqual);
                         }
 
                         boolean hasSameNextElement = false;
                         if (i < nodeText.getElements().size() - 1 && nextCsmElementIndex < elements.size()) {
                             TextElement nextTextElement = nodeText.getTextElement(i + 1);
-
-                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex), node);
+                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex), node, includeNewlineVariantsAsEqual);
                         }
 
                         if (hasSamePreviousElement && hasSameNextElement) {
@@ -652,6 +652,9 @@ public class Difference {
                         } else {
                             potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
+                    } else if (!includeNewlineVariantsAsEqual && isAlmostCorrespondingNewline(textElement, csmElement, node)) {
+                        // If we aren't treating newline variants as equal (e.g. \n \r), rank a separator difference higher than "ALMOST"
+                        potentialMatches.putIfAbsent(MatchClassification.NEWLINE, i);
                     } else if (isAlmostCorrespondingElement(textElement, csmElement, node)) {
                         potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
                     }
@@ -780,18 +783,37 @@ public class Difference {
     }
 
     private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
-        if (isCorrespondingElement(textElement, csmElement, node)) {
+        if (isCorrespondingElement(textElement, csmElement, node, false)) {
             return false;
         }
         return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();
     }
 
-    private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
+    private boolean isAlmostCorrespondingNewline(TextElement textElement, CsmElement csmElement, Node node) {
+        if (isCorrespondingElement(textElement, csmElement, node, false)) {
+            return false;
+        }
         if (csmElement instanceof CsmToken) {
             CsmToken csmToken = (CsmToken) csmElement;
             if (textElement instanceof TokenTextElement) {
                 TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node));
+                boolean bothAreNewlines = tokenTextElement.getToken().getCategory().isEndOfLine() && ((CsmToken) csmElement).isNewLine();
+            }
+        }
+        return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();
+    }
+
+    private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node, boolean includeNewlineVariantsAsEqual) {
+        if (csmElement instanceof CsmToken) {
+            CsmToken csmToken = (CsmToken) csmElement;
+            if (textElement instanceof TokenTextElement) {
+                // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
+                // element always has the current operating system's EOL as type
+                TokenTextElement tokenTextElement = (TokenTextElement) textElement;
+                boolean tokensAreEqual = tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node));
+                boolean bothAreNewlines = tokenTextElement.getToken().getCategory().isEndOfLine() && ((CsmToken) csmElement).isNewLine();
+
+                return tokensAreEqual || (includeNewlineVariantsAsEqual && bothAreNewlines);
             }
         } else if (csmElement instanceof CsmChild) {
             CsmChild csmChild = (CsmChild) csmElement;
@@ -903,7 +925,12 @@ public class Difference {
     }
 
     private enum MatchClassification {
-        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
+        ALL(1),
+        PREVIOUS_AND_SAME(2),
+        NEXT_AND_SAME(3),
+        SAME_ONLY(4),
+        NEWLINE(5),
+        ALMOST(6);
 
         private final int priority;
 
