@@ -94,8 +94,9 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
                         String lineNumber = "";
                         if(annotationExpr.getRange().isPresent()) {
                             lineNumber = ":" + annotationExpr.getRange().get().begin.line;
-                        } else if (annotationExpr.getParentNode().isPresent() && annotationExpr.getParentNode().get().getRange().isPresent()) {
-                            lineNumber = ":" + annotationExpr.getParentNode().get().getRange().get().begin.line + " (parent node line)";
+//                        } else if (annotationExpr.getParentNode().isPresent() && annotationExpr.getParentNode().get().getRange().isPresent()) {
+//                            // Commented out as unreliable due to AST modifications
+//                            lineNumber = ":" + annotationExpr.getParentNode().get().getRange().get().begin.line + " (parent node line)";
                         } else {
                             lineNumber = " (no line #)";
                         }
