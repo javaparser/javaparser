@@ -39,13 +39,13 @@ public abstract class PropagatingAstObserver implements AstObserver {
         }
         return new PropagatingAstObserver() {
             @Override
-            public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                observer.propertyChange(observedNode, property, oldValue, newValue);
+            public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                observer.listChange(observedNode, type, index, nodeAddedOrRemoved);
             }
 
             @Override
-            public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                observer.listChange(observedNode, type, index, nodeAddedOrRemoved);
+            public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                observer.propertyChange(observedNode, property, oldValue, newValue);
             }
 
             @Override
@@ -55,11 +55,32 @@ public abstract class PropagatingAstObserver implements AstObserver {
         };
     }
 
-    @Override
-    public final void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-        considerRemoving(oldValue);
-        considerAdding(newValue);
-        concretePropertyChange(observedNode, property, oldValue, newValue);
+    public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        // do nothing
+    }
+
+    public void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
+        // do nothing
+    }
+
+    public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+        // do nothing
+    }
+
+    private void considerAdding(Object element) {
+        if (element instanceof Node) {
+            ((Node) element).registerForSubtree(this);
+        } else if (element instanceof Observable) {
+            ((Observable) element).register(this);
+        }
+    }
+
+    private void considerRemoving(Object element) {
+        if (element instanceof Observable) {
+            if (((Observable) element).isRegistered(this)) {
+                ((Observable) element).unregister(this);
+            }
+        }
     }
 
     @Override
@@ -82,37 +103,16 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListReplacement(observedNode, index, oldNode, newNode);
     }
 
-    public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-        // do nothing
-    }
-
-    public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-        // do nothing
-    }
-
-    public void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
-        // do nothing
-    }
-
     @Override
     public void parentChange(Node observedNode, Node previousParent, Node newParent) {
         // do nothing
     }
 
-    private void considerRemoving(Object element) {
-        if (element instanceof Observable) {
-            if (((Observable) element).isRegistered(this)) {
-                ((Observable) element).unregister(this);
-            }
-        }
-    }
-
-    private void considerAdding(Object element) {
-        if (element instanceof Node) {
-            ((Node) element).registerForSubtree(this);
-        } else if (element instanceof Observable) {
-            ((Observable) element).register(this);
-        }
+    @Override
+    public final void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+        considerRemoving(oldValue);
+        considerAdding(newValue);
+        concretePropertyChange(observedNode, property, oldValue, newValue);
     }
 
 }

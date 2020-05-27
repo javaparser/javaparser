@@ -27,7 +27,12 @@ import com.github.javaparser.ast.NodeList;
 public abstract class AstObserverAdapter implements AstObserver {
 
     @Override
-    public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+    public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        // do nothing
+    }
+
+    @Override
+    public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
         // do nothing
     }
 
@@ -37,12 +42,7 @@ public abstract class AstObserverAdapter implements AstObserver {
     }
 
     @Override
-    public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-        // do nothing
-    }
-
-    @Override
-    public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
+    public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 }

@@ -20,14 +20,15 @@
  */
 package com.github.javaparser.ast.observer;
 
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.Generated;
 import com.github.javaparser.utils.Utils;
+
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Arrays;
 
 /**
  * Properties considered by the AstObserver
@@ -132,32 +133,8 @@ public enum ObservableProperty {
     RANGE,
     COMMENTED_NODE;
 
-    enum Type {
-
-        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
-
-        private boolean multiple;
-
-        private boolean node;
-
-        Type(boolean multiple, boolean node) {
-            this.multiple = multiple;
-            this.node = node;
-        }
-    }
-
-    private Type type;
-
-    private boolean derived;
-
-    public static ObservableProperty fromCamelCaseName(String camelCaseName) {
-        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
-        if (observableProperty.isPresent()) {
-            return observableProperty.get();
-        } else {
-            throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
-        }
-    }
+    private final boolean derived;
+    private final Type type;
 
     ObservableProperty(Type type) {
         this.type = type;
@@ -173,56 +150,44 @@ public enum ObservableProperty {
         this(Type.SINGLE_REFERENCE, false);
     }
 
-    public boolean isDerived() {
-        return derived;
-    }
-
-    public boolean isAboutNodes() {
-        return type.node;
-    }
-
-    public boolean isAboutValues() {
-        return !isAboutNodes();
-    }
-
-    public boolean isMultiple() {
-        return type.multiple;
-    }
-
-    public boolean isSingle() {
-        return !isMultiple();
+    public static ObservableProperty fromCamelCaseName(String camelCaseName) {
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
+        if (observableProperty.isPresent()) {
+            return observableProperty.get();
+        } else {
+            throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
+        }
     }
 
     public String camelCaseName() {
         return Utils.screamingToCamelCase(name());
     }
 
-    public Node getValueAsSingleReference(Node node) {
-        Object rawValue = getRawValue(node);
-        try {
-            if (rawValue instanceof Node) {
-                return (Node) rawValue;
-            } else if (rawValue instanceof Optional) {
-                Optional<Node> opt = (Optional<Node>) rawValue;
-                if (opt.isPresent()) {
-                    return opt.get();
-                } else {
-                    return null;
-                }
-            } else {
-                throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+    public Object getRawValue(Node node) {
+        String getterName = "get" + Utils.capitalize(camelCaseName());
+        if (!hasMethod(node, getterName)) {
+            getterName = "is" + Utils.capitalize(camelCaseName());
+            if (!hasMethod(node, getterName)) {
+                getterName = "has" + Utils.capitalize(camelCaseName());
             }
-        } catch (ClassCastException e) {
-            throw new RuntimeException(e);
+        }
+        try {
+            return node.getClass().getMethod(getterName).invoke(node);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 
-    private boolean hasMethod(Node node, String name) {
+    public Boolean getValueAsBooleanAttribute(Node node) {
+        return (Boolean) getRawValue(node);
+    }
+
+    public Collection<?> getValueAsCollection(Node node) {
+        Object rawValue = getRawValue(node);
         try {
-            node.getClass().getMethod(name);
-            return true;
-        } catch (NoSuchMethodException e) {
-            return false;
+            return (Collection) rawValue;
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -247,12 +212,23 @@ public enum ObservableProperty {
         }
     }
 
-    public Collection<?> getValueAsCollection(Node node) {
+    public Node getValueAsSingleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
-            return (Collection) rawValue;
+            if (rawValue instanceof Node) {
+                return (Node) rawValue;
+            } else if (rawValue instanceof Optional) {
+                Optional<Node> opt = (Optional<Node>) rawValue;
+                if (opt.isPresent()) {
+                    return opt.get();
+                } else {
+                    return null;
+                }
+            } else {
+                throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+            }
         } catch (ClassCastException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -260,27 +236,37 @@ public enum ObservableProperty {
         return (String) getRawValue(node);
     }
 
-    public Boolean getValueAsBooleanAttribute(Node node) {
-        return (Boolean) getRawValue(node);
+    private boolean hasMethod(Node node, String name) {
+        try {
+            node.getClass().getMethod(name);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
-    public Object getRawValue(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        if (!hasMethod(node, getterName)) {
-            getterName = "is" + Utils.capitalize(camelCaseName());
-            if (!hasMethod(node, getterName)) {
-                getterName = "has" + Utils.capitalize(camelCaseName());
-            }
-        }
-        try {
-            return node.getClass().getMethod(getterName).invoke(node);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
-        }
+    public boolean isAboutNodes() {
+        return type.node;
+    }
+
+    public boolean isAboutValues() {
+        return !isAboutNodes();
+    }
+
+    public boolean isDerived() {
+        return derived;
+    }
+
+    public boolean isMultiple() {
+        return type.multiple;
     }
 
     public boolean isNull(Node node) {
         return null == getRawValue(node);
+    }
+
+    public boolean isNullOrEmpty(Node node) {
+        return Utils.valueIsNullOrEmpty(getRawValue(node));
     }
 
     public boolean isNullOrNotPresent(Node node) {
@@ -294,7 +280,24 @@ public enum ObservableProperty {
         return false;
     }
 
-    public boolean isNullOrEmpty(Node node) {
-        return Utils.valueIsNullOrEmpty(getRawValue(node));
+    public boolean isSingle() {
+        return !isMultiple();
+    }
+
+    enum Type {
+
+        SINGLE_ATTRIBUTE(false, false),
+        SINGLE_REFERENCE(false, true),
+        MULTIPLE_ATTRIBUTE(true, false),
+        MULTIPLE_REFERENCE(true, true);
+
+        private final boolean multiple;
+
+        private final boolean node;
+
+        Type(boolean multiple, boolean node) {
+            this.multiple = multiple;
+            this.node = node;
+        }
     }
 }

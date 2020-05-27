@@ -228,8 +228,10 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.NAME),
                 // FIXME: we should introduce a derived property
                 // list(ObservableProperty.EXTRA_ARRAY_LEVELS),
-                conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(),
-                        child(ObservableProperty.INITIALIZER)))
+                conditional(
+                        ObservableProperty.INITIALIZER, IS_PRESENT,
+                        sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER))
+                )
         ));
 
         ///
