@@ -1504,7 +1504,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         );
 
 //        String eol = EOL;
-        String eol = "\n"; // Fails on Windows
+        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
 
         String code = "" +
                 "public class AssertStmt extends Statement {" + eol +
