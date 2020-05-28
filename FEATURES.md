@@ -58,7 +58,7 @@ Java 10 support [complete on 25/Feb/2018](https://github.com/javaparser/javapars
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 286](https://openjdk.java.net/jeps/286) |   **Release**    | **Supported Since: v3.5.15, released on: 25/Feb/2018**                       | **Local-Variable Type Inference**                                 |
+| [JEP 286](https://openjdk.java.net/jeps/286) |   **Release**    | **Supported Since: v3.5.15<br>Released on: 25/Feb/2018**                       | **Local-Variable Type Inference**                                 |
 | [JEP 296](https://openjdk.java.net/jeps/296) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Consolidate the JDK Forest into a Single Repository~~           |
 | [JEP 304](https://openjdk.java.net/jeps/304) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Garbage-Collector Interface~~                                   |
 | [JEP 307](https://openjdk.java.net/jeps/307) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Parallel Full GC for G1~~                                       |
@@ -78,7 +78,7 @@ Java 11 support [complete on 19/Aug/2018](https://github.com/javaparser/javapars
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
+| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
 | [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed <sup id="a_11_JEP327">[JEP327](#f_11_JEP327)_              | _Unicode 10_                                                      |
 | [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed <sup id="a_11_JEP181">[JEP181](#f_11_JEP181)_              | _Nest-Based Access Control_                                       |
 | [JEP 309](https://openjdk.java.net/jeps/309) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic Class-File Constants~~                                  |
@@ -116,7 +116,7 @@ Resolution support for Java 12 complete on ??/??/2019
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.11.0, released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                      |
+| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                      |
 | [JEP 189](https://openjdk.java.net/jeps/189) | ~~Experimental~~ | ~~_Not Applicable (NA)_~~                                                     | ~~Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)~~ |
 | [JEP 230](https://openjdk.java.net/jeps/230) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Microbenchmark Suite~~                                          |
 | [JEP 334](https://openjdk.java.net/jeps/334) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JVM Constants API~~                                             |
@@ -132,8 +132,8 @@ No language changes in JDK 13 -- thus no "complete" date. Details of preview sup
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.11.0, released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                    |
-| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.14.0, released on: 05/May/2019**                       | Text Blocks (Preview)                                           |
+| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                    |
+| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                       | Text Blocks (Preview)                                           |
 | [JEP 350](https://openjdk.java.net/jeps/350) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic CDS Archives~~                                        |
 | [JEP 351](https://openjdk.java.net/jeps/351) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC: Uncommit Unused Memory~~                                 |
 | [JEP 353](https://openjdk.java.net/jeps/353) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Reimplement the Legacy Socket API~~                           |
@@ -149,8 +149,8 @@ The preview features of instanceof pattern and records are work-in-progress.
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy, released on: dd/mmm/yyyy**                       | **Switch Expressions (Standard)**                               |
-| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.14.0, released on: 05/May/2019**                       | **Text Blocks (Second Preview)**                                |
+| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                       | **Switch Expressions (Standard)**                               |
+| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                       | **Text Blocks (Second Preview)**                                |
 | [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | **Pattern Matching for instanceof (Preview)**                   |
 | [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | **Records (Preview)**                                           |
 | [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)<sup id="a_14_JEP343">[JEP343](#f_14_JEP343)_~~         | ~~Packaging Tool (Incubator)~~                                  |
@@ -174,7 +174,6 @@ The preview features of instanceof pattern and records are work-in-progress.
                                      This is not going to be actively pursued (_especially_ since this is still in the incubator stage), 
                                        though tested PRs are always welcome. [↩](#a_14_JEP343)
 
-[^JEP320]: 
 
 ## JDK 15 - _targeted for September 2020_
 Source: https://openjdk.java.net/projects/jdk/15/
