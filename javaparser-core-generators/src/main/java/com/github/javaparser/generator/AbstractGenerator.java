@@ -36,6 +36,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -83,7 +84,9 @@ public abstract class AbstractGenerator {
 
             if(callable.isMethodDeclaration()) {
                 // We want the methods that we generate/insert to be pretty printed.
-                MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(callable.toString());
+                // FIXME: Hacky way to "correct" the indentation, by manually inserting the spaces... This will break e.g. nested classes/blocks.
+                String methodDeclaration = "    " + callable.toString().replaceAll("(\\R)", "$1    ");
+                MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(methodDeclaration);
 
                 // Do the replacement.
                 containingClassOrInterface.getMembers().replace(existingCallable, prettyMethodDeclaration);
