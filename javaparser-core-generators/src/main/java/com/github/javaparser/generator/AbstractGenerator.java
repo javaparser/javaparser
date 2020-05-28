@@ -23,6 +23,7 @@ package com.github.javaparser.generator;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.Problem;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
@@ -80,8 +81,18 @@ public abstract class AbstractGenerator {
             // Mark the method as having been fully/partially generated.
             annotateGenerated(callable);
 
-            // Do the replacement.
-            containingClassOrInterface.getMembers().replace(existingCallable, callable);
+            if(callable.isMethodDeclaration()) {
+                // We want the methods that we generate/insert to be pretty printed.
+                MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(callable.toString());
+
+                // Do the replacement.
+                containingClassOrInterface.getMembers().replace(existingCallable, prettyMethodDeclaration);
+            } else {
+                // TODO: Unable to parse a constructor directly...?
+
+                // Do the replacement.
+                containingClassOrInterface.getMembers().replace(existingCallable, callable);
+            }
         }
     }
 
