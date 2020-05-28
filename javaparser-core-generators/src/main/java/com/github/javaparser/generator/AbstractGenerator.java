@@ -137,10 +137,21 @@ public abstract class AbstractGenerator {
     }
 
     protected <T extends Node & NodeWithAnnotations<?>> void removeStale(T node) {
-        node.getAnnotations()
-                .removeIf(annotationExpr ->
-                        annotationExpr.getName().asString().equals(StaleGenerated.class.getSimpleName())
-                );
+        node.getAnnotations().removeIf(annotationExpr ->
+                annotationExpr.getName().asString().equals(
+                        StaleGenerated.class.getSimpleName()
+                )
+        );
+
+        node.findAncestor(CompilationUnit.class).ifPresent(compilationUnit -> {
+            if (compilationUnit.findAll(AnnotationExpr.class).isEmpty()) {
+                // If there are no usages of this annotation, remove the import.
+                boolean isRemoved = compilationUnit.getImports().removeIf(importDeclaration -> {
+                    return importDeclaration.getName().equals(StaleGenerated.class.getCanonicalName());
+                });
+            }
+        });
+
     }
 
     /**
