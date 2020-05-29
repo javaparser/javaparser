@@ -64,13 +64,21 @@ public class CoreGenerator {
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
                 .setPrinter(LexicalPreservingPrinter::print);
 
+
+        // Do the generating
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
+
+        StaleGeneratorAnnotations staleGeneratorAnnotations = new StaleGeneratorAnnotations(sourceRoot);
+
+        // Remove unused stale imports
+        staleGeneratorAnnotations.removeStaleImportIfUnused();
+        staleGeneratorAnnotations.removeGeneratedImportIfUnused();
 
         // Write the generated code to storage.
         sourceRoot.saveAll();
 
         // Verify that there are no leftover @StaleGenerated annotations remaining.
-        new StaleGeneratorAnnotations(sourceRoot).verify();
+        staleGeneratorAnnotations.verify();
 
         // TODO: Include some form of statistics within the output.
     }

@@ -36,7 +36,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -82,7 +81,7 @@ public abstract class AbstractGenerator {
             // Mark the method as having been fully/partially generated.
             annotateGenerated(callable);
 
-            if(callable.isMethodDeclaration()) {
+            if (callable.isMethodDeclaration()) {
                 // We want the methods that we generate/insert to be pretty printed.
                 // FIXME: Hacky way to "correct" the indentation, by manually inserting the spaces... This will break e.g. nested classes/blocks.
                 String methodDeclaration = "    " + callable.toString().replaceAll("(\\R)", "$1    ");
@@ -150,22 +149,45 @@ public abstract class AbstractGenerator {
         removeStale(node);
     }
 
-    protected <T extends Node & NodeWithAnnotations<?>> void removeStale(T node) {
+    protected <T extends Node & NodeWithAnnotations<?>> void removeAnnotation(T node, Class<?> annotation) {
         node.getAnnotations().removeIf(annotationExpr ->
                 annotationExpr.getName().asString().equals(
-                        StaleGenerated.class.getSimpleName()
+                        annotation.getSimpleName()
                 )
         );
 
         node.findAncestor(CompilationUnit.class).ifPresent(compilationUnit -> {
-            if (compilationUnit.findAll(AnnotationExpr.class).isEmpty()) {
-                // If there are no usages of this annotation, remove the import.
-                boolean isRemoved = compilationUnit.getImports().removeIf(importDeclaration -> {
-                    return importDeclaration.getName().equals(StaleGenerated.class.getCanonicalName());
-                });
-            }
+            removeAnnotationImportIfUnused(compilationUnit, annotation);
         });
 
+    }
+
+    protected <T extends Node & NodeWithAnnotations<?>> void removeStale(T node) {
+        removeAnnotation(node, StaleGenerated.class);
+    }
+
+    protected <T extends Node & NodeWithAnnotations<?>> void removeGenerated(T node) {
+        removeAnnotation(node, Generated.class);
+    }
+
+    protected void removeAnnotationImportIfUnused(CompilationUnit compilationUnit, Class<?> annotation) {
+
+        List<AnnotationExpr> staleAnnotations = compilationUnit
+                .findAll(AnnotationExpr.class)
+                .stream()
+                .filter(annotationExpr ->
+                        annotationExpr.getName().asString().equals(
+                                annotation.getSimpleName()
+                        )
+                )
+                .collect(Collectors.toList());
+
+        if (staleAnnotations.isEmpty()) {
+            // If there are no usages of this annotation, remove the import.
+            boolean isRemoved = compilationUnit.getImports().removeIf(importDeclaration -> {
+                return importDeclaration.getNameAsString().equals(annotation.getCanonicalName());
+            });
+        }
     }
 
     /**

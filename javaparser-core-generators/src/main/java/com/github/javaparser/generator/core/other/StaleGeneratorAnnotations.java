@@ -77,6 +77,30 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
         after();
     }
 
+    public void removeStaleImportIfUnused() throws IOException {
+        Log.info("Running %s", () -> getClass().getSimpleName());
+
+        List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
+        Log.info("parsedCus.size() = " + parsedCus.size());
+
+        parsedCus.forEach(compilationUnit -> {
+            // Remove unused @StaleGenerated import
+            removeAnnotationImportIfUnused(compilationUnit, StaleGenerated.class);
+        });
+    }
+
+    public void removeGeneratedImportIfUnused() throws IOException {
+        Log.info("Running %s", () -> getClass().getSimpleName());
+
+        List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
+        Log.info("parsedCus.size() = " + parsedCus.size());
+
+        parsedCus.forEach(compilationUnit -> {
+            // Remove unused @StaleGenerated import
+            removeAnnotationImportIfUnused(compilationUnit, Generated.class);
+        });
+    }
+
     public void verify() throws IOException {
         Log.info("Running %s", () -> getClass().getSimpleName());
 
@@ -87,12 +111,13 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
         List<String> errors = new ArrayList<>();
 
         parsedCus.forEach(compilationUnit -> {
+            // Check
             List<AnnotationExpr> allAnnotations = compilationUnit.findAll(AnnotationExpr.class);
             allAnnotations.stream()
                     .filter(annotationExpr -> annotationExpr.getName().asString().equals(StaleGenerated.class.getSimpleName()))
                     .forEach(annotationExpr -> {
                         String lineNumber = "";
-                        if(annotationExpr.getRange().isPresent()) {
+                        if (annotationExpr.getRange().isPresent()) {
                             lineNumber = ":" + annotationExpr.getRange().get().begin.line;
 //                        } else if (annotationExpr.getParentNode().isPresent() && annotationExpr.getParentNode().get().getRange().isPresent()) {
 //                            // Commented out as unreliable due to AST modifications
@@ -103,8 +128,8 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
 
                         errors.add(
                                 "Annotation of @StaleGenerated found within: " +
-                                compilationUnit.getStorage().get().getPath().toString() +
-                                lineNumber
+                                        compilationUnit.getStorage().get().getPath().toString() +
+                                        lineNumber
                         );
                     });
         });
