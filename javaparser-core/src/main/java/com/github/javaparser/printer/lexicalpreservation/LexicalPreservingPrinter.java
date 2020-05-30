@@ -382,6 +382,7 @@ public class LexicalPreservingPrinter implements NodePrinter {
     }
 
     private static void storeInitialText(Node root) {
+        // Note deliberate use of object identity map
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
         // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
@@ -411,6 +412,8 @@ public class LexicalPreservingPrinter implements NodePrinter {
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {
         if (nodeTokens == null) {
+            // TODO: Confirm that nodeTokens is intended to be read-only (thus the immutable Collections.emptyList() is acceptable)
+            // What about if we later add to this? Presumably it the list gets replaced given that
             nodeTokens = Collections.emptyList();
         }
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
@@ -426,7 +429,9 @@ public class LexicalPreservingPrinter implements NodePrinter {
             elements.add(new Pair<>(token.getRange().get(), new TokenTextElement(token)));
         }
         elements.sort(comparing(e -> e.a.begin));
-        node.setData(NODE_TEXT_DATA, new NodeText(elements.stream().map(p -> p.b).collect(toList())));
+        List<TextElement> textElements = elements.stream().map(p -> p.b).collect(toList());
+
+        node.setData(NODE_TEXT_DATA, new NodeText(textElements));
     }
 
     //

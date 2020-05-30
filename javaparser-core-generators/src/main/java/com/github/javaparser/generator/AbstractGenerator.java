@@ -32,6 +32,8 @@ import com.github.javaparser.ast.StaleGenerated;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
@@ -76,7 +78,16 @@ public abstract class AbstractGenerator {
             final CallableDeclaration<?> existingCallable = existingMatchingCallables.get(0);
 
             // Attempt to retain any existing javadoc.
-            callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+
+            // TODO: Confirm what is done with normal comments...
+            Optional<JavadocComment> callableJavadocComment = callable.getJavadocComment();
+            Optional<JavadocComment> existingCallableJavadocComment = existingCallable.getJavadocComment();
+
+            Optional<Comment> callableComment = callable.getComment();
+            Optional<Comment> existingCallableComment = existingCallable.getComment();
+
+            callable.setComment(callableComment.orElse(existingCallable.getComment().orElse(null)));
+//            callable.setJavadocComment(callableJavadocComment.orElse(existingCallableJavadocComment.orElse(null)));
 
             // Mark the method as having been fully/partially generated.
             annotateGenerated(callable);
