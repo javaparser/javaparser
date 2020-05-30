@@ -52,6 +52,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.StaticJavaParser.parse;
@@ -2060,6 +2061,97 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 //        final String actual2 = b.toString();
 //        System.out.println(actual2);
 //        assertEqualsStringIgnoringEol(expected, actual2);
+    }
+
+    @Test
+    public void addEnumConstantDeclaration() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+        String eol = SYSTEM_EOL;
+//        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "enum Scratch {\n" +
+                "\n" +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    Scratch(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "}\n" +
+                "";
+
+        String expected_pretty = "" +
+                "enum Scratch {\n" +
+                "\n"  +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE), ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    Scratch(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "}\n" +
+                "";
+        String expected_lexical = "" +
+                "enum Scratch {\n" +
+                "    \n" +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    Scratch(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "}" + // "\n" +
+                "";
+
+
+        //
+        final Node b = javaParser.parse(code)
+                .getResult()
+                .orElseThrow(AssertionError::new);
+
+        Optional<EnumDeclaration> optionalEnumDeclaration = ((CompilationUnit) b).getEnumByName("Scratch");
+        assertTrue(optionalEnumDeclaration.isPresent());
+
+        EnumDeclaration enumDeclaration = optionalEnumDeclaration.get();
+        EnumConstantDeclaration enumConstantDeclaration;
+
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+
+        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY");
+        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+
+
+        //// FIRST CONFIRM THAT THE PRETTY PRINTED VERSION MATCHES EXPECTATIONS
+        final String actual2 = b.toString();
+        System.out.println("Pretty: \n" + actual2);
+        assertEqualsStringIgnoringEol(expected_pretty, actual2);
+
+
+        //// NEXT CONFIRM THAT THE LEXICAL PREVERVING PRINTER PRINTS THE SAME
+        TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(actual2);
+        String print = LexicalPreservingPrinter.print(prettyEnumDeclaration.asEnumDeclaration());
+
+        System.out.println("Lexical preserving: \n" + print);
+        assertEqualsStringIgnoringEol(expected_lexical, print);
+
     }
 
 }
