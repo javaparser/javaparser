@@ -21,6 +21,7 @@
 
 package com.github.javaparser.generator;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -81,6 +82,7 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
     protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
+        // TODO: Pretty Print..
         final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods()
                 .stream()
                 .filter(m -> m.getNameAsString().equals("visit"))
@@ -89,6 +91,9 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
 
         if (existingVisitMethod.isPresent()) {
             generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
+
+            MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(existingVisitMethod.get().toString());
+            addOrReplaceWhenSameSignature(visitorClass, prettyMethodDeclaration);
         } else if (createMissingVisitMethods) {
             MethodDeclaration newVisitMethod = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
@@ -100,6 +105,10 @@ public abstract class AbstractVisitorGenerator extends AbstractGenerator {
                         .addModifier(PUBLIC);
             }
             generateVisitMethodBody(node, newVisitMethod, compilationUnit);
+
+            // Code above modifies the method body
+            MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(newVisitMethod.toString());
+            addOrReplaceWhenSameSignature(visitorClass, prettyMethodDeclaration);
         }
     }
 }
