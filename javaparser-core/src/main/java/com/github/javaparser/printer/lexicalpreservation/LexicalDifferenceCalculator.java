@@ -132,7 +132,8 @@ class LexicalDifferenceCalculator {
         List<CsmElement> elements = new LinkedList<>();
         Node container = nodeList.getParentNodeForChildren();
         calculatedSyntaxModelForNode(csm, container, elements, new ListAdditionChange(observableProperty, index, nodeAdded));
-        return new CalculatedSyntaxModel(elements);
+        CalculatedSyntaxModel calculatedSyntaxModel = new CalculatedSyntaxModel(elements);
+        return calculatedSyntaxModel;
     }
 
     // Visible for testing

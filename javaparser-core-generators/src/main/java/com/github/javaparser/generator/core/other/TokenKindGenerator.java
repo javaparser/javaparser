@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
@@ -35,6 +36,8 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.util.List;
 
 /**
  * Generates the TokenKind enum from {@link com.github.javaparser.GeneratedJavaParserConstants}
@@ -56,28 +59,56 @@ public class TokenKindGenerator extends AbstractGenerator {
         final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
         final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind")).orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
-        kindEnum.getEntries().clear();
-        annotateGenerated(kindEnum);
+        List<MethodDeclaration> valueOfMethods = kindEnum.getMethodsByName("valueOf");
+        if (valueOfMethods.size() != 1) {
+            throw new AssertionError("Expected precisely one method named valueOf");
+        }
+        MethodDeclaration valueOfMethod = valueOfMethods.get(0);
+        final SwitchStmt valueOfSwitch = valueOfMethod.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
 
-        final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
+
+        // TODO: Define "reset"
+        // Reset the enum:
+        kindEnum.getEntries().clear();
+        // Reset the switch within the method valueOf():
         valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
 
+
+        // Do generation
+        annotateGenerated(kindEnum);
+        annotateGenerated(valueOfMethod);
+        //
         final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
         final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
         for (BodyDeclaration<?> member : constants.getMembers()) {
             member.toFieldDeclaration()
                     .filter(field -> {
+                        // TODO: Why?
+                        // Only include constants that are relevant -- i.e. skip lexical state (e.g. inside comment) and literal token values.
                         String javadoc = field.getJavadocComment().get().getContent();
                         return javadoc.contains("RegularExpression Id") || javadoc.contains("End of File");
                     })
                     .map(field -> field.getVariable(0))
                     .ifPresent(var -> {
+                        // For each defined constant, generate an enum and corresponding valueOf entry:
                         final String name = var.getNameAsString();
                         final IntegerLiteralExpr kind = var.getInitializer().get().asIntegerLiteralExpr();
                         generateEnumEntry(kindEnum, name, kind);
                         generateValueOfEntry(valueOfSwitch, name, kind);
                     });
         }
+
+
+
+//        // Replace with pretty printed
+//        kindEnum.replace(prettyPrint(kindEnum, "        "));
+//
+//        valueOfMethod.replace(prettyPrint(valueOfMethod));
+//        kindEnum.replace(valueOfMethod, prettyPrint(valueOfMethod));
+//        valueOfSwitch.replace(prettyPrint(valueOfSwitch));
+//
+//        kindEnum.replace(prettyPrint(kindEnum));
+//        javaTokenCu.replace(kindEnum, prettyPrint(kindEnum));
 
         //
         after();
@@ -91,6 +122,8 @@ public class TokenKindGenerator extends AbstractGenerator {
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
         final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
+
+        // TODO: Why addFirst? Presumably to avoid adding after "default" (thus is effectively addBefore(default label).
         valueOfSwitch.getEntries().addFirst(entry);
     }
 }

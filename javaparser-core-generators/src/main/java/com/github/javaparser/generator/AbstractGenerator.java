@@ -40,6 +40,9 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -300,7 +303,22 @@ public abstract class AbstractGenerator {
         String enumDeclarationString = indent + enumDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
         TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(enumDeclarationString);
 
+        LexicalPreservingPrinter.setup(prettyEnumDeclaration);
+
         // We know that it is an enum declaration.
         return prettyEnumDeclaration.asEnumDeclaration();
+    }
+
+    protected SwitchStmt prettyPrint(SwitchStmt switchStmt) {
+        return prettyPrint(switchStmt, "");
+    }
+    protected SwitchStmt prettyPrint(SwitchStmt switchStmt, String indent) {
+        String switchStmtString = indent + switchStmt.toString().replaceAll("(\\R)", "$1" + indent);
+        Statement prettySwitchStmt = StaticJavaParser.parseStatement(switchStmtString);
+
+        LexicalPreservingPrinter.setup(prettySwitchStmt);
+
+        // We know that it is an switch statement.
+        return prettySwitchStmt.asSwitchStmt();
     }
 }
