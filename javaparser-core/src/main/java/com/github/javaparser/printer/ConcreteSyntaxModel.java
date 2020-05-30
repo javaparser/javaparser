@@ -171,6 +171,7 @@ public class ConcreteSyntaxModel {
                 newline(),
                 indent(),
                 newline(),
+                // FIXME: Have the enum constant declarations respect the indentation?
                 list(ObservableProperty.ENTRIES,
                         sequence(comma(), newline()),
                         none(),

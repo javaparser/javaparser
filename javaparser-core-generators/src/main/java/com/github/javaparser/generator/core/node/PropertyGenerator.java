@@ -85,7 +85,8 @@ public class PropertyGenerator extends AbstractNodeGenerator {
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
 
         // Pretty print the enum.
-        observablePropertyCu.replace(observablePropertyEnum, prettyPrint(observablePropertyEnum));
+        EnumDeclaration prettyEnumDeclaration = prettyPrint(observablePropertyEnum);
+        observablePropertyCu.replace(observablePropertyEnum, prettyEnumDeclaration);
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
