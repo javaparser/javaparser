@@ -58,20 +58,34 @@ public class PropertyGenerator extends AbstractNodeGenerator {
     @Override
     protected void after() throws Exception {
         CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
+
+        // Start with a blank enum.
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
+
+        // Ensure that the enum is marked as generated.
+        annotateGenerated(observablePropertyEnum);
+
+        // Add enum entry for all declared properties.
         List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
         observablePropertyNames.sort(String::compareTo);
         for (String propName : observablePropertyNames) {
             generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
         }
+
+        // Add enum entry for all derived properties.
         List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
         derivedPropertyNames.sort(String::compareTo);
         for (String propName : derivedPropertyNames) {
             generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
         }
+
+        // Manually add enum entries.
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
+
+        // Pretty print the enum.
+        observablePropertyCu.replace(observablePropertyEnum, prettyPrint(observablePropertyEnum));
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {

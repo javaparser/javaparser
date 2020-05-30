@@ -31,7 +31,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.StaleGenerated;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -94,9 +96,7 @@ public abstract class AbstractGenerator {
 
             if (callable.isMethodDeclaration()) {
                 // We want the methods that we generate/insert to be pretty printed.
-                // FIXME: Hacky way to "correct" the indentation, by manually inserting the spaces... This will break e.g. nested classes/blocks.
-                String methodDeclaration = "    " + callable.toString().replaceAll("(\\R)", "$1    ");
-                MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(methodDeclaration);
+                MethodDeclaration prettyMethodDeclaration = prettyPrint(callable.asMethodDeclaration(), "    ");
 
                 // Do the replacement.
                 containingClassOrInterface.getMembers().replace(existingCallable, prettyMethodDeclaration);
@@ -282,4 +282,25 @@ public abstract class AbstractGenerator {
                 .collect(Collectors.toList());
     }
 
+
+    protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration) {
+        return prettyPrint(methodDeclaration, "");
+    }
+    protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration, String indent) {
+        String methodDeclarationString = indent + methodDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
+        MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(methodDeclarationString);
+
+        return prettyMethodDeclaration;
+    }
+
+    protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration) {
+        return prettyPrint(enumDeclaration, "");
+    }
+    protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration, String indent) {
+        String enumDeclarationString = indent + enumDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
+        TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(enumDeclarationString);
+
+        // We know that it is an enum declaration.
+        return prettyEnumDeclaration.asEnumDeclaration();
+    }
 }
