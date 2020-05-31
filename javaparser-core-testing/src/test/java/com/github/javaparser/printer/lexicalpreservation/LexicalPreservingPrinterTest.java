@@ -2074,83 +2074,699 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 //        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
 
         String code = "" +
-                "enum Scratch {\n" +
+                "/*\n" +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+                " *\n" +
+                " * This file is part of JavaParser.\n" +
+                " *\n" +
+                " * JavaParser can be used either under the terms of\n" +
+                " * a) the GNU Lesser General Public License as published by\n" +
+                " *     the Free Software Foundation, either version 3 of the License, or\n" +
+                " *     (at your option) any later version.\n" +
+                " * b) the terms of the Apache License\n" +
+                " *\n" +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+                " * LICENCE.APACHE. Please refer to those files for details.\n" +
+                " *\n" +
+                " * JavaParser is distributed in the hope that it will be useful,\n" +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                " * GNU Lesser General Public License for more details.\n" +
+                " */\n" +
+                "package com.github.javaparser.ast.observer;\n" +
                 "\n" +
+                "import com.github.javaparser.ast.Generated;\n" +
+                "import com.github.javaparser.ast.Node;\n" +
+                "import com.github.javaparser.ast.NodeList;\n" +
+                "import com.github.javaparser.utils.Utils;\n" +
+                "\n" +
+                "import java.lang.reflect.InvocationTargetException;\n" +
+                "import java.util.Arrays;\n" +
+                "import java.util.Collection;\n" +
+                "import java.util.Optional;\n" +
+                "\n" +
+                "/**\n" +
+                " * Properties considered by the AstObserver\n" +
+                " */\n" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
+                "\n" +
+                "    ANNOTATIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),\n" +
+                "    ARGUMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ASTERISK(Type.SINGLE_ATTRIBUTE),\n" +
+                "    BODY(Type.SINGLE_REFERENCE),\n" +
+                "    CATCH_CLAUSES(Type.MULTIPLE_REFERENCE),\n" +
+                "    CHECK(Type.SINGLE_REFERENCE),\n" +
+                "    CLASS_BODY(Type.MULTIPLE_REFERENCE),\n" +
+                "    CLASS_DECLARATION(Type.SINGLE_REFERENCE),\n" +
+                "    COMMENT(Type.SINGLE_REFERENCE),\n" +
+                "    COMPARE(Type.SINGLE_REFERENCE),\n" +
+                "    COMPONENT_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    CONDITION(Type.SINGLE_REFERENCE),\n" +
+                "    CONTENT(Type.SINGLE_ATTRIBUTE),\n" +
+                "    DEFAULT_VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    DIMENSION(Type.SINGLE_REFERENCE),\n" +
+                "    DIRECTIVES(Type.MULTIPLE_REFERENCE),\n" +
+                "    ELEMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ELEMENT_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    ELSE_EXPR(Type.SINGLE_REFERENCE),\n" +
+                "    ELSE_STMT(Type.SINGLE_REFERENCE),\n" +
+                "    ENCLOSING_PARAMETERS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ENTRIES(Type.MULTIPLE_REFERENCE),\n" +
+                "    EXPRESSION(Type.SINGLE_REFERENCE),\n" +
+                "    EXTENDED_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    EXTENDED_TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    FINALLY_BLOCK(Type.SINGLE_REFERENCE),\n" +
+                "    IDENTIFIER(Type.SINGLE_ATTRIBUTE),\n" +
+                "    IMPLEMENTED_TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    IMPORTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    INDEX(Type.SINGLE_REFERENCE),\n" +
+                "    INITIALIZATION(Type.MULTIPLE_REFERENCE),\n" +
+                "    INITIALIZER(Type.SINGLE_REFERENCE),\n" +
+                "    INNER(Type.SINGLE_REFERENCE),\n" +
+                "    INTERFACE(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ITERABLE(Type.SINGLE_REFERENCE),\n" +
+                "    KEYWORD(Type.SINGLE_ATTRIBUTE),\n" +
+                "    LABEL(Type.SINGLE_REFERENCE),\n" +
+                "    LABELS(Type.MULTIPLE_REFERENCE),\n" +
+                "    LEFT(Type.SINGLE_REFERENCE),\n" +
+                "    LEVELS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MEMBERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MEMBER_VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    MESSAGE(Type.SINGLE_REFERENCE),\n" +
+                "    MODIFIERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MODULE(Type.SINGLE_REFERENCE),\n" +
+                "    MODULE_NAMES(Type.MULTIPLE_REFERENCE),\n" +
+                "    NAME(Type.SINGLE_REFERENCE),\n" +
+                "    OPEN(Type.SINGLE_ATTRIBUTE),\n" +
+                "    OPERATOR(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ORIGIN(Type.SINGLE_ATTRIBUTE),\n" +
+                "    PACKAGE_DECLARATION(Type.SINGLE_REFERENCE),\n" +
+                "    PAIRS(Type.MULTIPLE_REFERENCE),\n" +
+                "    PARAMETER(Type.SINGLE_REFERENCE),\n" +
+                "    PARAMETERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    QUALIFIER(Type.SINGLE_REFERENCE),\n" +
+                "    RECEIVER_PARAMETER(Type.SINGLE_REFERENCE),\n" +
+                "    RESOURCES(Type.MULTIPLE_REFERENCE),\n" +
+                "    RIGHT(Type.SINGLE_REFERENCE),\n" +
+                "    SCOPE(Type.SINGLE_REFERENCE),\n" +
+                "    SELECTOR(Type.SINGLE_REFERENCE),\n" +
+                "    STATEMENT(Type.SINGLE_REFERENCE),\n" +
+                "    STATEMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    STATIC(Type.SINGLE_ATTRIBUTE),\n" +
+                "    SUPER_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    TARGET(Type.SINGLE_REFERENCE),\n" +
+                "    THEN_EXPR(Type.SINGLE_REFERENCE),\n" +
+                "    THEN_STMT(Type.SINGLE_REFERENCE),\n" +
+                "    THIS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    THROWN_EXCEPTIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    TRY_BLOCK(Type.SINGLE_REFERENCE),\n" +
+                "    TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_ARGUMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_BOUND(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_NAME(Type.SINGLE_REFERENCE),\n" +
+                "    TYPE_PARAMETERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    UPDATE(Type.MULTIPLE_REFERENCE),\n" +
+                "    VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    VALUES(Type.MULTIPLE_REFERENCE),\n" +
+                "    VARIABLE(Type.SINGLE_REFERENCE),\n" +
+                "    VARIABLES(Type.MULTIPLE_REFERENCE),\n" +
+                "    VAR_ARGS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    VAR_ARGS_ANNOTATIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    WITH(Type.MULTIPLE_REFERENCE),\n" +
+                "    CASCADING_IF_STMT(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    ELSE_BLOCK(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    ELSE_BRANCH(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    EXPRESSION_BODY(Type.SINGLE_REFERENCE, true),\n" +
+                "    MAXIMUM_COMMON_TYPE(Type.SINGLE_REFERENCE, true),\n" +
+                "    POSTFIX(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    PREFIX(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    THEN_BLOCK(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    USING_DIAMOND_OPERATOR(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    RANGE,\n" +
+                "    COMMENTED_NODE;\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    ObservableProperty(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
+                "\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n" +
+                "";
+
+        String expected_lexical = "" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    ObservableProperty(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
+                "\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
+                "    }\n" +
+                "}" + // "\n" +
+                "";
+
+        String expected_lexical1 = "" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
                 "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE);\n" +
                 "\n" +
                 "    private final boolean derived;\n" +
                 "    private final Type type;\n" +
                 "\n" +
-                "    Scratch(Type type) {\n" +
+                "    ObservableProperty(Type type) {\n" +
                 "        this.type = type;\n" +
                 "        this.derived = false;\n" +
                 "    }\n" +
-                "}\n" +
-                "";
-
-        String expected_pretty = "" +
-                "enum Scratch {\n" +
-                "\n"  +
-                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE), ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
                 "\n" +
-                "    private final boolean derived;\n" +
-                "\n" +
-                "    private final Type type;\n" +
-                "\n" +
-                "    Scratch(Type type) {\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
                 "        this.type = type;\n" +
-                "        this.derived = false;\n" +
+                "        this.derived = derived;\n" +
                 "    }\n" +
-                "}\n" +
-                "";
-        String expected_lexical = "" +
-                "enum Scratch {\n" +
-                "    \n" +
-                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE),\n" +
-                "    ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
                 "\n" +
-                "    private final boolean derived;\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
                 "\n" +
-                "    private final Type type;\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
                 "\n" +
-                "    Scratch(Type type) {\n" +
-                "        this.type = type;\n" +
-                "        this.derived = false;\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
                 "    }\n" +
                 "}" + // "\n" +
                 "";
 
 
         //
-        final Node b = javaParser.parse(code)
-                .getResult()
-                .orElseThrow(AssertionError::new);
-
-        Optional<EnumDeclaration> optionalEnumDeclaration = ((CompilationUnit) b).getEnumByName("Scratch");
+        final Node b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
+        Optional<EnumDeclaration> optionalEnumDeclaration = ((CompilationUnit) b).getEnumByName("ObservableProperty");
         assertTrue(optionalEnumDeclaration.isPresent());
-
         EnumDeclaration enumDeclaration = optionalEnumDeclaration.get();
+
+        // Clear all the declarations
+        enumDeclaration.getEntries().clear();
+
+        //
         EnumConstantDeclaration enumConstantDeclaration;
 
-//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
-//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+        // Re-add the one constant
+        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
+        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+        assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(enumDeclaration));
 
+        // Re-add a second constant
         enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY");
         enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+        assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(enumDeclaration));
 
 
-        //// FIRST CONFIRM THAT THE PRETTY PRINTED VERSION MATCHES EXPECTATIONS
-        final String actual2 = b.toString();
-        System.out.println("Pretty: \n" + actual2);
-        assertEqualsStringIgnoringEol(expected_pretty, actual2);
 
-
-        //// NEXT CONFIRM THAT THE LEXICAL PREVERVING PRINTER PRINTS THE SAME
-        TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(actual2);
-        String print = LexicalPreservingPrinter.print(prettyEnumDeclaration.asEnumDeclaration());
-
-        System.out.println("Lexical preserving: \n" + print);
-        assertEqualsStringIgnoringEol(expected_lexical, print);
+//        //// FIRST CONFIRM THAT THE PRETTY PRINTED VERSION MATCHES EXPECTATIONS
+//        final String prettyString = b.toString();
+////        System.out.println("Pretty: \n" + prettyString);
+////        assertEqualsStringIgnoringEol(expected_pretty, prettyString);
+//
+//
+//        //// NEXT CONFIRM THAT THE LEXICAL PREVERVING PRINTER PRINTS THE SAME
+//        TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(prettyString);
+//        String print = LexicalPreservingPrinter.print(prettyEnumDeclaration.asEnumDeclaration());
+//
+//        System.out.println("Lexical preserving: \n" + print);
+//        assertEqualsStringIgnoringEol(expected_lexical, print);
 
     }
 
