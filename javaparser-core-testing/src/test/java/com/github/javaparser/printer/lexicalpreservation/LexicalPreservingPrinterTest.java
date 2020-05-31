@@ -47,6 +47,7 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -2063,6 +2064,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 //        assertEqualsStringIgnoringEol(expected, actual2);
     }
 
+    @Disabled("Exploratory test")
     @Test
     public void addEnumConstantDeclaration() {
         final JavaParser javaParser = new JavaParser(
