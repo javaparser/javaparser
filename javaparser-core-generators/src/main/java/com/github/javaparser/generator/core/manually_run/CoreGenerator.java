@@ -62,7 +62,9 @@ public class CoreGenerator {
         // Specify the root dir of the JavaParser Core module
         final Path root_JavaParserCore = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
 
-        //
+        // Why is this required?
+        // `SourceRoot#tryToParse` creates a new instance of `JavaParser`,
+        // AND the config is passed via the constructor to SourceRoot
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         //
