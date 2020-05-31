@@ -89,7 +89,7 @@ public class CoreGenerator {
         // Exceptions to this occur when e.g. a field/property is renamed/removed.
         new StaleGeneratorAnnotations(sourceRoot).generate();
 
-//         Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
+        // Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
         new CloneVisitorGenerator(sourceRoot).generate();
         new EqualsVisitorGenerator(sourceRoot).generate();
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
@@ -105,7 +105,8 @@ public class CoreGenerator {
         new VoidVisitorAdapterGenerator(sourceRoot).generate();
         new VoidVisitorGenerator(sourceRoot).generate();
         new VoidVisitorWithDefaultsGenerator(sourceRoot).generate();
-//
+
+        //
         new TypeCastingGenerator(sourceRoot).generate(); // Not visitor-related, but extends AbstractNodeGenerator?
 
         // Run generators -- extends AbstractGenerator

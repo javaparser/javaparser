@@ -2744,13 +2744,19 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         EnumConstantDeclaration enumConstantDeclaration;
 
         // Re-add the one constant
-        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
-        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
-        assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(enumDeclaration));
-
-        // Re-add a second constant
-        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY");
-        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+////        assertEqualsStringIgnoringEol(expected_lexical1, LexicalPreservingPrinter.print(enumDeclaration));
+//
+//        // Re-add a second constant
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY1");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY2");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY3");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
         assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(enumDeclaration));
 
 

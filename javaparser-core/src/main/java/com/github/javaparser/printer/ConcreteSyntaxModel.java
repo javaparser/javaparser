@@ -179,7 +179,13 @@ public class ConcreteSyntaxModel {
                 ),
                 conditional(ObservableProperty.MEMBERS, IS_EMPTY,
                         conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
-                        sequence(semicolon(), newline(), newline(), list(ObservableProperty.MEMBERS, newline(), newline(), none(), newline()))
+                        sequence(
+                                // Only include a semicolon when there are entries AND there are members.
+                                conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, semicolon()),
+                                newline(),
+                                newline(),
+                                list(ObservableProperty.MEMBERS, newline(), newline(), none(), newline())
+                        )
                 ),
                 unindent(),
                 token(RBRACE)

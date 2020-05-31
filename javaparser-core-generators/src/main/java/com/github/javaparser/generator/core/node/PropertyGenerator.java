@@ -84,9 +84,9 @@ public class PropertyGenerator extends AbstractNodeGenerator {
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
 
-        // Pretty print the enum.
-        // FIXME: Have the lexical preserving printer respect (insert) the indendation of enums.
-        EnumDeclaration prettyEnumDeclaration = prettyPrint(observablePropertyEnum);
+//        // Pretty print the enum.
+//        // FIXME: Have the lexical preserving printer respect (insert) the indendation of enums.
+//        EnumDeclaration prettyEnumDeclaration = prettyPrint(observablePropertyEnum);
 //        observablePropertyCu.replace(observablePropertyEnum, prettyEnumDeclaration); // Replace the whole enum (#1)
 //        observablePropertyEnum.replace(prettyEnumDeclaration); // Replace the whole enum (#2)
 //        observablePropertyEnum.setEntries(prettyEnumDeclaration.getEntries()); // Replace only the entries of the enum.
