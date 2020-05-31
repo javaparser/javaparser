@@ -46,11 +46,12 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 public class MetaModelGenerator extends AbstractGenerator {
 
     static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
+    static final String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     /**
      * Note that order of this list is manually set and maintained.
      */
-    private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
+    private static final List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
          being afraid those are not initialized yet. */
@@ -98,10 +99,10 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.body.ReceiverParameter.class);
         add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
-        add(com.github.javaparser.ast.comments.Comment.class); // Base of other comment types
+        add(com.github.javaparser.ast.comments.Comment.class); // First, as it is the base of other comment types
         add(com.github.javaparser.ast.comments.BlockComment.class);
-        add(com.github.javaparser.ast.comments.LineComment.class);
         add(com.github.javaparser.ast.comments.JavadocComment.class);
+        add(com.github.javaparser.ast.comments.LineComment.class);
 
         add(com.github.javaparser.ast.expr.ArrayAccessExpr.class);
         add(com.github.javaparser.ast.expr.ArrayCreationExpr.class);
@@ -129,15 +130,15 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.NormalAnnotationExpr.class);
         add(com.github.javaparser.ast.expr.NullLiteralExpr.class);
         add(com.github.javaparser.ast.expr.ObjectCreationExpr.class);
-        add(com.github.javaparser.ast.expr.SimpleName.class);
         add(com.github.javaparser.ast.expr.SingleMemberAnnotationExpr.class);
+        add(com.github.javaparser.ast.expr.SimpleName.class);
         add(com.github.javaparser.ast.expr.SuperExpr.class);
+        add(com.github.javaparser.ast.expr.SwitchExpr.class);
         add(com.github.javaparser.ast.expr.TextBlockLiteralExpr.class);
         add(com.github.javaparser.ast.expr.ThisExpr.class);
         add(com.github.javaparser.ast.expr.TypeExpr.class);
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
-        add(com.github.javaparser.ast.expr.SwitchExpr.class);
 
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
@@ -181,7 +182,9 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
     }};
 
-    static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
+    public MetaModelGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
+    }
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
@@ -198,10 +201,6 @@ public class MetaModelGenerator extends AbstractGenerator {
         new MetaModelGenerator(sourceRoot).generate();
 
         sourceRoot.saveAll();
-    }
-
-    public MetaModelGenerator(SourceRoot sourceRoot) {
-        super(sourceRoot);
     }
 
     public void generate() throws Exception {

@@ -22,10 +22,13 @@
 package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.metamodel.DerivedProperty;
@@ -98,7 +101,6 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
         final CompilationUnit classMetaModelJavaFile = new CompilationUnit(MetaModelGenerator.METAMODEL_PACKAGE);
         classMetaModelJavaFile.setBlockComment(COPYRIGHT_NOTICE_JP_CORE);
         classMetaModelJavaFile.addImport(Optional.class);
-        classMetaModelJavaFile.addImport(Generated.class);
         classMetaModelJavaFile.addImport(nodeClass);
 
         //
