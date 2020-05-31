@@ -33,7 +33,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An annotation that has a single value. <br>{@code @Count(15)}
  *

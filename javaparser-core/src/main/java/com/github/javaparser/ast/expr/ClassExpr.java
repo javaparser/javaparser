@@ -36,7 +36,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * Defines an expression that accesses the class of a type.
  * <br>{@code Object.class}

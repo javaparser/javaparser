@@ -31,7 +31,6 @@ import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
-
 /**
  * Base class for reference types.
  *

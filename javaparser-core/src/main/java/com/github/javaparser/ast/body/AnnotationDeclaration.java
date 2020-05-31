@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarati
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An annotation type declaration.<br>{@code @interface X { ... }}
  *

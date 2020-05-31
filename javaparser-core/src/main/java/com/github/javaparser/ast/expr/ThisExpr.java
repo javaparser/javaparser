@@ -35,7 +35,7 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
+import com.github.javaparser.ast.StaleGenerated;
 /**
  * An occurrence of the "this" keyword. <br>
  * {@code World.this.greet()} is a MethodCallExpr of method name greet,
@@ -47,6 +47,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
  * @see SuperExpr
  */
+
 public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
     @OptionalProperty
@@ -116,6 +117,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    @StaleGenerated
     public ThisExpr removeClassName() {
         return setTypeName((Name) null);
     }

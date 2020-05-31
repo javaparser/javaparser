@@ -35,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * The return statement, with an optional expression to return.
  * <br>{@code return 5 * 5;}

@@ -31,7 +31,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
-
 /**
  * Any literal value that is stored internally as a String.
  */

@@ -38,7 +38,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An if-then-else statement. The else is optional.
  * <br>In {@code if(a==5) hurray() else boo();} the condition is a==5,

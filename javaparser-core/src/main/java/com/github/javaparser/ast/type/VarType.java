@@ -34,7 +34,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.metamodel.VarTypeMetaModel;
 import com.github.javaparser.ast.Generated;
-
 /**
  * <h1>A type called "var" waiting for Java to infer it.</h1>
  * Examples:

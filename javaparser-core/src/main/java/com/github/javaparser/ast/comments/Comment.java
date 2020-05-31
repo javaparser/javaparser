@@ -33,7 +33,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 /**
  * Abstract class for all AST nodes that represent comments.
  *

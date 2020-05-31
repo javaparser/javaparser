@@ -42,7 +42,6 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A call to super or this in a constructor or initializer.
  * <br>{@code class X { X() { super(15); } }}

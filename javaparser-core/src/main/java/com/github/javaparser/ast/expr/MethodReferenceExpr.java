@@ -42,7 +42,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * Note that the field "identifier", indicating the word to the right of the ::, is not always a method name,

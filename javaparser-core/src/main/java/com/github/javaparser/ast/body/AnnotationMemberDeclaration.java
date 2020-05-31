@@ -48,7 +48,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Generated;
-
 /**
  * The "int id();" in {@code @interface X { int id(); }}
  * <p>

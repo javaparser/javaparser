@@ -36,7 +36,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: {@code class X { static { a=3; }  } }
  *

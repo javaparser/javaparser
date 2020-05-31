@@ -35,7 +35,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An unknown parameter type object. It plays the role of a null object for
  * lambda parameters that have no explicit type declared. As such, it has no

@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
  * As of Java 8 it is used in casts or while expressing bounds for generic types.

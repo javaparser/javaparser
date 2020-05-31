@@ -34,7 +34,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
  * <br>{@code a=5}

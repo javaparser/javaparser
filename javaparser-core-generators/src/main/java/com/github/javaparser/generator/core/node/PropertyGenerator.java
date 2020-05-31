@@ -101,6 +101,8 @@ public class PropertyGenerator extends AbstractNodeGenerator {
         } else {
             body.addStatement(f("return %s;", property.getName()));
         }
+
+        //
         replaceWhenSameSignature(nodeCoid, getter);
     }
 
@@ -144,9 +146,12 @@ public class PropertyGenerator extends AbstractNodeGenerator {
         }
 
         final MethodDeclaration setter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
+
+        //
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             setter.setType(parseType("T"));
         }
+
         setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
                 .addModifier(FINAL);
 
@@ -172,13 +177,14 @@ public class PropertyGenerator extends AbstractNodeGenerator {
             body.addStatement(f("setAsParentNodeOf(%s);", name));
         }
         if (property.getContainingNodeMetaModel().hasWildcard()) {
+            // Suppress warnings about this unchecked cast.
+            annotateSuppressWarnings(setter, "unchecked");
             body.addStatement(f("return (T) this;"));
         } else {
             body.addStatement(f("return this;"));
         }
+
+        //
         replaceWhenSameSignature(nodeCoid, setter);
-        if (property.getContainingNodeMetaModel().hasWildcard()) {
-            annotateSuppressWarnings(setter);
-        }
     }
 }

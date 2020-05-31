@@ -35,7 +35,6 @@ import com.github.javaparser.resolution.types.ResolvedVoidType;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
  * when it returns void.

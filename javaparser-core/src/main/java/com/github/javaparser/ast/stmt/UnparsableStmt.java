@@ -32,7 +32,6 @@ import static com.github.javaparser.ast.Node.Parsedness.*;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A statement that had parse errors.
  * Nothing is known about it except the tokens it covers.

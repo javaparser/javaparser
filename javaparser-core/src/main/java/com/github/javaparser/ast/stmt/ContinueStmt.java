@@ -35,7 +35,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A continue statement with an optional label;
  * <br>{@code continue brains;}

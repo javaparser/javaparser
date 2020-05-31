@@ -32,7 +32,6 @@ import com.github.javaparser.metamodel.MemberValuePairMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A value for a member of an annotation.
  * In {@code @Counters(a=15)} a=15 is a MemberValuePair. Its name is a, and its value is 15.

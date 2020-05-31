@@ -29,7 +29,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
-
 /**
  * A base class for all literal expressions.
  *

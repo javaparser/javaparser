@@ -36,7 +36,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
  * <br>In {@code World::greet} the ClassOrInterfaceType "World" is wrapped in a TypeExpr

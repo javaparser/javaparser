@@ -33,7 +33,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
+import com.github.javaparser.ast.StaleGenerated;
 /**
  * An occurrence of the "super" keyword. <br>
  * {@code World.super.greet()} is a MethodCallExpr of method name greet,
@@ -45,6 +45,7 @@ import com.github.javaparser.ast.Generated;
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
  * @see ThisExpr
  */
+
 public class SuperExpr extends Expression {
 
     @OptionalProperty
@@ -150,6 +151,7 @@ public class SuperExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    @StaleGenerated
     public SuperExpr removeClassName() {
         return setTypeName((Name) null);
     }

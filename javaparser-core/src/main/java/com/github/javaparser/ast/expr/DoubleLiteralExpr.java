@@ -31,7 +31,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
  * <br>{@code 100.1f}

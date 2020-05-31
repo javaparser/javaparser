@@ -30,10 +30,11 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
+import com.github.javaparser.ast.StaleGenerated;
 /**
  * A module directive.
  */
+
 public abstract class ModuleDirective extends Node {
 
     @AllFieldsConstructor
@@ -73,96 +74,116 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleExportsStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleExportsDirective asModuleExportsStmt() {
         throw new IllegalStateException(f("%s is not an ModuleExportsDirective", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleOpensStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleOpensDirective asModuleOpensStmt() {
         throw new IllegalStateException(f("%s is not an ModuleOpensDirective", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleProvidesStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleProvidesDirective asModuleProvidesStmt() {
         throw new IllegalStateException(f("%s is not an ModuleProvidesDirective", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleRequiresStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleRequiresDirective asModuleRequiresStmt() {
         throw new IllegalStateException(f("%s is not an ModuleRequiresDirective", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleUsesStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleUsesDirective asModuleUsesStmt() {
         throw new IllegalStateException(f("%s is not an ModuleUsesDirective", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleProvidesStmt(Consumer<ModuleProvidesDirective> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleExportsDirective> toModuleExportsStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleOpensDirective> toModuleOpensStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleProvidesDirective> toModuleProvidesStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleUsesDirective> toModuleUsesStmt() {
         return Optional.empty();
     }

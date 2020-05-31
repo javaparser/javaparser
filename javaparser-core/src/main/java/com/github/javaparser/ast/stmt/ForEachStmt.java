@@ -39,7 +39,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * A for-each statement.
  * <br>{@code for(Object o: objects) { ... }}

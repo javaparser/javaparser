@@ -34,7 +34,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * The ternary conditional expression.
  * In {@code b==0?x:y}, b==0 is the condition, x is thenExpr, and y is elseExpr.

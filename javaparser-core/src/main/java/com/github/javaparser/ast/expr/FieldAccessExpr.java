@@ -43,7 +43,6 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * Access of a field of an object or a class.
  * <br>In {@code person.name} "name" is the name and "person" is the scope.

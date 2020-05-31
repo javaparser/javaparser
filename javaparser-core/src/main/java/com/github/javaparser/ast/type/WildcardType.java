@@ -37,7 +37,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
-
+import com.github.javaparser.ast.StaleGenerated;
 /**
  * A wildcard type argument. Examples:
  * <br>{@code void printCollection(Collection<}<b>{@code ?}</b>{@code > c) { ... }}
@@ -46,6 +46,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
+
 public class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
     @OptionalProperty
@@ -217,6 +218,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    @StaleGenerated
     public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType) {
         super(tokenRange);
         setExtendedType(extendedType);

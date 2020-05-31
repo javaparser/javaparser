@@ -31,7 +31,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An empty statement is a ";" where a statement is expected.
  * @author Julio Vilmar Gesser

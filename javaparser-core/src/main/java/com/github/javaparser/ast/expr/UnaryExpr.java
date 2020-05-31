@@ -36,7 +36,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An expression where an operator is applied to a single expression.
  * It supports the operators that are found in the UnaryExpr.Operator enum.

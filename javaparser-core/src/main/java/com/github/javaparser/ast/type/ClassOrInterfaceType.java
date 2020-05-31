@@ -42,7 +42,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A class or an interface type.
  * <br>{@code Object}

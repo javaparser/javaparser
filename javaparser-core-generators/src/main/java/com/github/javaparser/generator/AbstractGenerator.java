@@ -223,8 +223,8 @@ public abstract class AbstractGenerator {
      * @param node The node to which the {@code @SuppressWarnings} annotation will be added.
      * @param <T>  Only accept nodes which accept annotations.
      */
-    protected <T extends NodeWithAnnotations<?>> void annotateSuppressWarnings(T node) {
-        annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
+    protected <T extends NodeWithAnnotations<?>> void annotateSuppressWarnings(T node, String warningType) {
+        annotate(node, SuppressWarnings.class, new StringLiteralExpr(warningType));
     }
 
     /**

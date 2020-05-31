@@ -35,7 +35,6 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A name that may consist of multiple identifiers.
  * In other words: it.may.contain.dots.

@@ -34,7 +34,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * <h1>The break statement</h1>
  * <h2>Java 1.0-11</h2>

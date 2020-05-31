@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
-
 /**
  * A Javadoc comment. {@code /&#42;&#42; a comment &#42;/}
  *

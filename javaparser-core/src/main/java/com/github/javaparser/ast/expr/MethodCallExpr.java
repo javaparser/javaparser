@@ -44,7 +44,6 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * A method call on an object or a class. <br>{@code circle.circumference()} <br>In <code>a.&lt;String&gt;bb(15);</code> a
  * is the scope, String is a type argument, bb is the name and 15 is an argument.

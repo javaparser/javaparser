@@ -35,10 +35,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.ModuleUsesDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-
+import com.github.javaparser.ast.StaleGenerated;
 /**
  * A uses directive in module-info.java. {@code uses V.W;}
  */
+
 public class ModuleUsesDirective extends ModuleDirective implements NodeWithName<ModuleUsesDirective> {
 
     private Name name;
@@ -83,6 +84,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @StaleGenerated
     public ModuleUsesDirective setType(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -104,23 +106,27 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public boolean isModuleUsesStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public ModuleUsesDirective asModuleUsesStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @StaleGenerated
     public Optional<ModuleUsesDirective> toModuleUsesStmt() {
         return Optional.of(this);
     }

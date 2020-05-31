@@ -36,7 +36,6 @@ import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
-
 /**
  * Base class for types.
  *

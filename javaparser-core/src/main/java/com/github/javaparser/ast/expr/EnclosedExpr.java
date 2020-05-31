@@ -33,7 +33,6 @@ import com.github.javaparser.TokenRange;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
-
 /**
  * An expression between ( ).
  * <br>{@code (1+1)}

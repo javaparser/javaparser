@@ -107,8 +107,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return modifiers;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setMembers(final NodeList<BodyDeclaration<?>> members) {
         assertNotNull(members);
         if (members == this.members) {
@@ -122,8 +122,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return (T) this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -137,8 +137,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return (T) this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {

@@ -38,7 +38,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Generated;
-
 /**
  * <h1>The classic for statement</h1>
  * Examples:

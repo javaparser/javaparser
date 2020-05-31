@@ -34,7 +34,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
-
 /**
  * All ways to specify a long literal.
  *

@@ -36,7 +36,6 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
-
 /**
  * Usage of the throw statement.
  * <br>{@code throw new Exception()}

@@ -36,7 +36,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.YieldStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 /**
  * <h1>The yield statement</h1>
  * <h2>Java 1.0-11</h2>

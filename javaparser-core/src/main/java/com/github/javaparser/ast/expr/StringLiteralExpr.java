@@ -34,7 +34,6 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 import static com.github.javaparser.utils.StringEscapeUtils.*;
-
 /**
  * A literal string.
  * <br>{@code "Hello World!"}

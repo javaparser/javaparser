@@ -38,7 +38,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.SwitchExprMetaModel;
-
 /**
  * <h1>The switch expression</h1>
  * <h2>Java 1.0-11</h2>
