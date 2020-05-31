@@ -46,23 +46,35 @@ public class CoreGenerator {
 
     private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
             .setLanguageLevel(RAW)
-//                                .setStoreTokens(false)
-//                                .setAttributeComments(false)
-            .setLexicalPreservationEnabled(true);
+//            .setStoreTokens(false)
+//            .setAttributeComments(false)
+            .setLexicalPreservationEnabled(true)
+            ;
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
+
+        // Ensure that any log entries are output to the console.
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
-        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
-                .setPrinter(LexicalPreservingPrinter::print);
+
+        // Specify the root dir of the JavaParser Core module
+        final Path root_JavaParserCore = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+
+        //
         StaticJavaParser.setConfiguration(parserConfiguration);
 
+        //
+        final SourceRoot sourceRoot = new SourceRoot(root_JavaParserCore, parserConfiguration)
+                .setPrinter(LexicalPreservingPrinter::print) // TODO: Why is this required if it is already set within the config? See also #2703
+                ;
+
+        //
         final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
-                .setPrinter(LexicalPreservingPrinter::print);
+                .setPrinter(LexicalPreservingPrinter::print) // TODO: Why is this required if it is already set within the config? See also #2703
+                ;
 
 
         // Do the generating
