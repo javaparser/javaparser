@@ -79,7 +79,7 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
         final String nodeMetaModelFieldName = decapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
 
-        initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
+        initializeNodeMetaModelsStatements.add(StaticJavaParser.parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
         this.initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
 
         final Class<?> superclass = nodeClass.getSuperclass();
@@ -89,7 +89,7 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
         final FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
         annotateGenerated(nodeField);
         nodeField.getVariable(0).setInitializer(
-                parseExpression(
+                StaticJavaParser.parseExpression(
                         f("new %s(%s)",
                                 className,
                                 optionalOf(decapitalize(superNodeMetaModel), !isRootNode))
@@ -138,7 +138,7 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
         // ?Abstract protected constructor?
         if (typeAnalysis.isAbstract) {
             classMetaModelJavaFile.addImport(Node.class);
-            BodyDeclaration<?> bodyDeclaration = parseBodyDeclaration(f(
+            BodyDeclaration<?> bodyDeclaration = StaticJavaParser.parseBodyDeclaration(f(
                     "protected %s(Optional<%s> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {" +
                             "super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);" +
                             " }",
