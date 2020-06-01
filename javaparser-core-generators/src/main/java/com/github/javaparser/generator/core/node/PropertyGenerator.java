@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.generator.AbstractNodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -145,7 +146,12 @@ public class PropertyGenerator extends AbstractNodeGenerator {
             return;
         }
 
-        final MethodDeclaration setter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
+        Type setterReturnType = parseType(property.getContainingNodeMetaModel().getTypeNameGenerified());
+        final MethodDeclaration setter = new MethodDeclaration(
+                createModifierList(PUBLIC),
+                setterReturnType,
+                property.getSetterMethodName()
+        );
 
         //
         if (property.getContainingNodeMetaModel().hasWildcard()) {
@@ -166,7 +172,14 @@ public class PropertyGenerator extends AbstractNodeGenerator {
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
-        body.addStatement(f("if (%s == this.%s) { return (%s) this; }", name, name, setter.getType()));
+
+        // Only include a cast in the return if it will be useful.
+        boolean returnTypeIsCurrentType = setter.getTypeAsString().equals(nodeCoid.getNameAsString());
+        body.addStatement(f("if (%s == this.%s) { return %s this; }",
+                name,
+                name ,
+                returnTypeIsCurrentType ? "" : "(" + setter.getType() + ")"
+        ));
 
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {
