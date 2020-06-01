@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.declarations.common;
 
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -60,9 +61,21 @@ public class MethodDeclarationCommonLogic {
         // and then we replace them in the return type
         // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
         InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-        for (int i = 0; i < methodDeclaration.getNumberOfParams() - (methodDeclaration.hasVariadicParameter() ? 1 : 0); i++) {
-            ResolvedType formalParamType = methodDeclaration.getParam(i).getType();
+        for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
+            ResolvedParameterDeclaration formalParamDecl = methodDeclaration.getParam(i);
+            ResolvedType formalParamType = formalParamDecl.getType();
+
+            // Don't continue if a vararg parameter is reached and there are no arguments left
+            if (formalParamDecl.isVariadic() && parameterTypes.size() < methodDeclaration.getNumberOfParams()) {
+                break;
+            }
+
             ResolvedType actualParamType = parameterTypes.get(i);
+
+            if (formalParamDecl.isVariadic() && !actualParamType.isArray()) {
+                formalParamType = formalParamType.asArrayType().getComponentType();
+            }
+
             inferenceContext.addPair(formalParamType, actualParamType);
         }
 

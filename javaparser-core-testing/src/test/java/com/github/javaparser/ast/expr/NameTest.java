@@ -28,7 +28,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
@@ -54,7 +54,7 @@ class NameTest {
     void importName() {
         ImportDeclaration importDeclaration = parseImport("import java.util.List;");
 
-        assertEquals("import java.util.List;" + EOL, importDeclaration.toString());
+        assertEquals("import java.util.List;" + SYSTEM_EOL, importDeclaration.toString());
         assertEquals("import java.util.List;" , ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
@@ -62,8 +62,8 @@ class NameTest {
     void packageName() {
         CompilationUnit cu = parse("package p1.p2;");
 
-        assertEquals("package p1.p2;" + EOL + EOL, cu.toString());
-        assertEquals("package p1.p2;" + EOL + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
+        assertEquals("package p1.p2;" + SYSTEM_EOL + SYSTEM_EOL, cu.toString());
+        assertEquals("package p1.p2;" + SYSTEM_EOL + SYSTEM_EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
 
     @Test

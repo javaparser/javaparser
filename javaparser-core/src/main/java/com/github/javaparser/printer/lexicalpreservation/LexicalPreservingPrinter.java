@@ -21,7 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -38,9 +39,13 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
-import com.github.javaparser.utils.Utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -48,15 +53,20 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.*;
-import static java.util.stream.Collectors.*;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -117,6 +127,7 @@ public class LexicalPreservingPrinter {
     }
 
     private static class Observer extends PropagatingAstObserver {
+
         @Override
         public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
             if (oldValue == newValue) {
@@ -142,8 +153,9 @@ public class LexicalPreservingPrinter {
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
 
+                    LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
-                    nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
+                    nodeText.addToken(index + 1, eolTokenKind(lineSeparator), lineSeparator.asRawString());
                 } else if (newValue == null) {
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {
@@ -275,7 +287,7 @@ public class LexicalPreservingPrinter {
          * at the position of {@code index}, the new comment and the node will have the same indent.
          *
          * @param nodeText The text of the node
-         * @param index The position where a new comment will be added to
+         * @param index    The position where a new comment will be added to
          */
         private void fixIndentOfMovedNode(NodeText nodeText, int index) {
             if (index <= 0) {
@@ -296,7 +308,7 @@ public class LexicalPreservingPrinter {
         }
 
         @Override
-        public void concreteListChange(NodeList<?> changedList, AstObserver.ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        public void concreteListChange(NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
@@ -327,44 +339,46 @@ public class LexicalPreservingPrinter {
         // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
         // on a list but as they were organized in a tree. At each time we select only the branch corresponding to the
         // range of interest and ignore all other branches
-        for (JavaToken token : root.getTokenRange().get()) {
-            Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-            Node owner = findNodeForToken(root, tokenRange);
-            if (owner == null) {
-                throw new RuntimeException("Token without node owning it: " + token);
-            }
-            if (!tokensByNode.containsKey(owner)) {
-                tokensByNode.put(owner, new LinkedList<>());
-            }
-            tokensByNode.get(owner).add(token);
-        }
-
-        // Now that we know the tokens we use them to create the initial NodeText for each node
-        new TreeVisitor() {
-            @Override
-            public void process(Node node) {
-                if (!PhantomNodeLogic.isPhantomNode(node)) {
-                    LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+        root.getTokenRange().ifPresent(rootTokenRange -> {
+            for (JavaToken token : rootTokenRange) {
+                Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
+                Node owner = findNodeForToken(root, tokenRange).orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+                if (!tokensByNode.containsKey(owner)) {
+                    tokensByNode.put(owner, new LinkedList<>());
                 }
+                tokensByNode.get(owner).add(token);
             }
-        }.visitBreadthFirst(root);
+
+            // Now that we know the tokens we use them to create the initial NodeText for each node
+            new TreeVisitor() {
+                @Override
+                public void process(Node node) {
+                    if (!PhantomNodeLogic.isPhantomNode(node)) {
+                        LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                    }
+                }
+            }.visitBreadthFirst(root);
+        });
     }
 
-    private static Node findNodeForToken(Node node, Range tokenRange) {
+    private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
         if (PhantomNodeLogic.isPhantomNode(node)) {
-            return null;
+            return Optional.empty();
         }
-        if (node.getRange().get().contains(tokenRange)) {
-            for (Node child : node.getChildNodes()) {
-                Node found = findNodeForToken(child, tokenRange);
-                if (found != null) {
-                    return found;
-                }
+        if(!node.getRange().isPresent()) {
+            return Optional.empty();
+        }
+        if (!node.getRange().get().contains(tokenRange)) {
+            return Optional.empty();
+        }
+
+        for (Node child : node.getChildNodes()) {
+            Optional<Node> found = findNodeForToken(child, tokenRange);
+            if (found.isPresent()) {
+                return found;
             }
-            return node;
-        } else {
-            return null;
         }
+        return Optional.of(node);
     }
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {

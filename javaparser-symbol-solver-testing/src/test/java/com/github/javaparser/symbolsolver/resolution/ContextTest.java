@@ -126,6 +126,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
         when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
@@ -149,6 +150,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
         when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         //when(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.unsolved(ClassDeclaration.class));
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
@@ -173,6 +175,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
         when(compilationUnitDecl.getQualifiedName()).thenReturn("my.packagez.CompilationUnit");
         TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
@@ -196,6 +199,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(stringDecl.getName()).thenReturn("String");
         when(stringDecl.getQualifiedName()).thenReturn("java.lang.String");
         TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).thenReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));

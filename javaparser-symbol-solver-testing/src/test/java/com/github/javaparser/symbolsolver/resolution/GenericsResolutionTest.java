@@ -242,6 +242,20 @@ class GenericsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void resolveUsageOfMethodOfGenericClassWithBoxing() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodBoxing");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "foo").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("foo", methodUsage.getName());
+        assertEquals("GenericMethodBoxing", methodUsage.declaringType().getName());
+        assertEquals("java.lang.Long", methodUsage.returnType().describe());
+    }
+
+    @Test
     void resolveElementOfList() {
         CompilationUnit cu = parseSample("ElementOfList");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");
@@ -401,7 +415,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         Context context = JavaParserFactory.getContext(call, typeSolver);
 
         ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceType();
-        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration();
+        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration().orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
         List<TypeUsage> typeParametersValues = typeOfScope.typeParametersValues();
 
         List<MethodUsage> methods = new ArrayList<>();

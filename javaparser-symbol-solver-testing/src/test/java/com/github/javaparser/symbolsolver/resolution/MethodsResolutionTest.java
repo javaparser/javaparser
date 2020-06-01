@@ -142,6 +142,28 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    void testSuperMethodCallDefaultMethod() {
+        JavaParser parser = new JavaParser();
+        parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parser.parse("" +
+                "public class X { \n" +
+                "    public interface Y { \n" +
+                "        default void foo() {} \n" +
+                "    } \n" +
+                "    public class Z implements Y { \n" +
+                "        public void foo() { \n" +
+                "            Y.super.foo(); \n" +
+                "        } \n" +
+                "    } \n" +
+                "}" +
+                "").getResult().get();
+
+        MethodCallExpr expression = Navigator.findMethodCall(cu, "foo").get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+        assertEquals("foo", methodUsage.getName());
+    }
+
+    @Test
     void solveMethodWithClassExpressionAsParameter() {
         CompilationUnit cu = parseSample("ClassExpression");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExpression");
@@ -447,7 +469,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
         assertEquals(true, type.isReferenceType());
-        assertEquals(true, type.asReferenceType().getTypeDeclaration() instanceof JavaParserAnonymousClassDeclaration);
+        assertEquals(true, type.asReferenceType().getTypeDeclaration().get() instanceof JavaParserAnonymousClassDeclaration);
     }
 
     @Test
@@ -480,7 +502,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
         ReferenceTypeImpl resolvedType =
                 (ReferenceTypeImpl) JavaParserFacade.get(new ReflectionTypeSolver()).getType(stmt.getExpression());
         ClassOrInterfaceDeclaration resolvedTypeDeclaration
-                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration()).getWrappedNode();
+                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration().get()).getWrappedNode();
 
         assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
     }

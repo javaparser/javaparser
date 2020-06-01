@@ -23,6 +23,8 @@ package com.github.javaparser.ast.validator;
 
 /**
  * This validator validates according to Java 12 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
  */
 public class Java12Validator extends Java11Validator {
 
