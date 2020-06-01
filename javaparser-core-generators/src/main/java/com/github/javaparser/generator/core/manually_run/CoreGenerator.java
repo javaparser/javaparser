@@ -79,10 +79,14 @@ public class CoreGenerator {
                 ;
 
 
+        // First remove all @Generated() annotations.
+        // Note that the generators below should replace them, meaning no substantial git diffs.
+        // Exceptions to this occur when e.g. a field/property is renamed/removed.
+        StaleGeneratorAnnotations staleGeneratorAnnotations = new StaleGeneratorAnnotations(sourceRoot);
+        staleGeneratorAnnotations.generate();
+
         // Do the generating
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
-
-        StaleGeneratorAnnotations staleGeneratorAnnotations = new StaleGeneratorAnnotations(sourceRoot);
 
         // Remove unused stale imports
         staleGeneratorAnnotations.removeStaleImportIfUnused();
@@ -98,10 +102,6 @@ public class CoreGenerator {
     }
 
     private void run(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot) throws Exception {
-        // First remove all @Generated() annotations.
-        // Note that the generators below should replace them, meaning no substantial git diffs.
-        // Exceptions to this occur when e.g. a field/property is renamed/removed.
-        new StaleGeneratorAnnotations(sourceRoot).generate();
 
         // Run generators -- extends AbstractNodeGenerator ((mostly visitor stuff?))
         new CloneVisitorGenerator(sourceRoot).generate();

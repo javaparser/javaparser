@@ -33,6 +33,7 @@ import com.github.javaparser.utils.SourceRoot;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StaleGeneratorAnnotations extends AbstractGenerator {
 
@@ -44,10 +45,19 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
     public void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
 
-        List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
+        List<CompilationUnit> allParsedCusInSourceRoot = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
+        Log.info("allParsedCusInSourceRoot.size() = " + allParsedCusInSourceRoot.size());
 
-        Log.info("parsedCus.size() = " + parsedCus.size());
-        parsedCus.forEach(compilationUnit -> {
+        // Filter out classes that are handled within the metamodel generators.
+        List<CompilationUnit> filteredCompilationUnits = allParsedCusInSourceRoot
+                .stream()
+                .filter(compilationUnit -> compilationUnit.getPackageDeclaration().isPresent())
+                .filter(compilationUnit -> !("com.github.javaparser.metamodel".equals(compilationUnit.getPackageDeclaration().get().getNameAsString())))
+                .collect(Collectors.toList());
+
+        // Do the adding of the stale annotation.
+        Log.info("filteredCompilationUnits.size() = " + filteredCompilationUnits.size());
+        filteredCompilationUnits.forEach(compilationUnit -> {
             List<AnnotationExpr> allAnnotations = compilationUnit.findAll(AnnotationExpr.class);
             allAnnotations.stream()
                     .filter(annotationExpr -> annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
@@ -58,19 +68,6 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
                                     annotateStale(annotatedNode);
                                 });
                     });
-
-//            // Remove the import. -- TODO: Fix this (causes java.util.ConcurrentModificationException)
-//            compilationUnit.getImports().removeIf(importDeclaration -> importDeclaration.getName().asString().equals(Generated.class.getCanonicalName()));
-//            for (ImportDeclaration importDeclaration : compilationUnit.getImports()) {
-//                if (importDeclaration.getName().asString().equals(Generated.class.getCanonicalName())) {
-//                    Log.info("importDeclaration.getName().asString() = " + importDeclaration.getName().asString());
-//                    Log.info("Generated.class.getCanonicalName()     = " + Generated.class.getCanonicalName());
-//                    importDeclaration.remove();
-//
-//                    // Mark this CU as having been edited.
-//                    this.editedCus.add(compilationUnit);
-//                }
-//            }
 
         });
 
