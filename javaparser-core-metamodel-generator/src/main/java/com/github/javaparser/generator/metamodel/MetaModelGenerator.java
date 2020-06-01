@@ -30,6 +30,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
+import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator extends AbstractGenerator {
@@ -180,6 +182,12 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
     }};
 
+
+    // Explicitly opt out of lexical preservation.
+    private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
+            .setLanguageLevel(RAW)
+            .setLexicalPreservationEnabled(false);
+
     public MetaModelGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
@@ -188,13 +196,20 @@ public class MetaModelGenerator extends AbstractGenerator {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
-        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final ParserConfiguration parserConfiguration = new ParserConfiguration()
-                .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
-                .setStoreTokens(false);
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
 
+        // Ensure that any log entries are output to the console.
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
+
+        // Specify the root dir of the JavaParser Core module
+        final Path root_JavaParserCore = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+
+        // Why is this required?
+        // `SourceRoot#tryToParse` creates a new instance of `JavaParser`,
+        // AND the config is passed via the constructor to SourceRoot
         StaticJavaParser.setConfiguration(parserConfiguration);
+
+        // Deliberately not using the lexical preserving printer.
+        final SourceRoot sourceRoot = new SourceRoot(root_JavaParserCore, parserConfiguration);
 
         new MetaModelGenerator(sourceRoot).generate();
 
