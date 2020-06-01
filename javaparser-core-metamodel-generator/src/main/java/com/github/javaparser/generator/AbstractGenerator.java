@@ -42,6 +42,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -58,46 +59,48 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  */
 public abstract class AbstractGenerator {
 
-    protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
-            " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-            " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
-            " *\n" +
-            " * This file is part of JavaParser.\n" +
-            " *\n" +
-            " * JavaParser can be used either under the terms of\n" +
-            " * a) the GNU Lesser General Public License as published by\n" +
-            " *     the Free Software Foundation, either version 3 of the License, or\n" +
-            " *     (at your option) any later version.\n" +
-            " * b) the terms of the Apache License\n" +
-            " *\n" +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-            " * LICENCE.APACHE. Please refer to those files for details.\n" +
-            " *\n" +
-            " * JavaParser is distributed in the hope that it will be useful,\n" +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-            " * GNU Lesser General Public License for more details.\n" +
+    protected static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
+
+    protected static final String COPYRIGHT_NOTICE_JP_CORE = "" + SYSTEM_EOL +
+            " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + SYSTEM_EOL +
+            " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * This file is part of JavaParser." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * JavaParser can be used either under the terms of" + SYSTEM_EOL +
+            " * a) the GNU Lesser General Public License as published by" + SYSTEM_EOL +
+            " *     the Free Software Foundation, either version 3 of the License, or" + SYSTEM_EOL +
+            " *     (at your option) any later version." + SYSTEM_EOL +
+            " * b) the terms of the Apache License" + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * You should have received a copy of both licenses in LICENCE.LGPL and" + SYSTEM_EOL +
+            " * LICENCE.APACHE. Please refer to those files for details." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * JavaParser is distributed in the hope that it will be useful," + SYSTEM_EOL +
+            " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + SYSTEM_EOL +
+            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + SYSTEM_EOL +
+            " * GNU Lesser General Public License for more details." + SYSTEM_EOL +
             " ";
 
-    protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
-            " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
-            " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
-            " *\n" +
-            " * This file is part of JavaParser.\n" +
-            " *\n" +
-            " * JavaParser can be used either under the terms of\n" +
-            " * a) the GNU Lesser General Public License as published by\n" +
-            " *     the Free Software Foundation, either version 3 of the License, or\n" +
-            " *     (at your option) any later version.\n" +
-            " * b) the terms of the Apache License\n" +
-            " *\n" +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-            " * LICENCE.APACHE. Please refer to those files for details.\n" +
-            " *\n" +
-            " * JavaParser is distributed in the hope that it will be useful,\n" +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-            " * GNU Lesser General Public License for more details.\n" +
+    protected static final String COPYRIGHT_NOTICE_JP_SS = "" + SYSTEM_EOL +
+            " * Copyright (C) 2015-2016 Federico Tomassetti" + SYSTEM_EOL +
+            " * Copyright (C) 2017-2020 The JavaParser Team." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * This file is part of JavaParser." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * JavaParser can be used either under the terms of" + SYSTEM_EOL +
+            " * a) the GNU Lesser General Public License as published by" + SYSTEM_EOL +
+            " *     the Free Software Foundation, either version 3 of the License, or" + SYSTEM_EOL +
+            " *     (at your option) any later version." + SYSTEM_EOL +
+            " * b) the terms of the Apache License" + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * You should have received a copy of both licenses in LICENCE.LGPL and" + SYSTEM_EOL +
+            " * LICENCE.APACHE. Please refer to those files for details." + SYSTEM_EOL +
+            " *" + SYSTEM_EOL +
+            " * JavaParser is distributed in the hope that it will be useful," + SYSTEM_EOL +
+            " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + SYSTEM_EOL +
+            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + SYSTEM_EOL +
+            " * GNU Lesser General Public License for more details." + SYSTEM_EOL +
             " ";
 
     protected final SourceRoot sourceRoot;

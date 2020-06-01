@@ -56,12 +56,12 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
 
     public static final String GENERATED_CLASS_COMMENT = "" +
             "This file, class, and its contents are completely generated based on:" +
-            "\n<ul>" +
-            "\n    <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>" +
-            "\n    <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>" +
-            "\n</ul>" +
-            "\n" +
-            "\nFor this reason, any changes made directly to this file will be overwritten the next time generators are run." +
+            SYSTEM_EOL + "<ul>" +
+            SYSTEM_EOL + "    <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>" +
+            SYSTEM_EOL + "    <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>" +
+            SYSTEM_EOL + "</ul>" +
+            SYSTEM_EOL + "" +
+            SYSTEM_EOL + "For this reason, any changes made directly to this file will be overwritten the next time generators are run." +
             "";
 
     private static final String GENERATED_JAVADOC_COMMENT = "Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.";

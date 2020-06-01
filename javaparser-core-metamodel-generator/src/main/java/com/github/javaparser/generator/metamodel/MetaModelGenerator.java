@@ -30,8 +30,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
@@ -195,7 +193,7 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
+
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         new MetaModelGenerator(sourceRoot).generate();
