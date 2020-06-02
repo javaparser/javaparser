@@ -65,7 +65,7 @@ public class ControlFlowLogic {
      * completes normally. In this case, the break target need not be a switch, while, do, or for statement.
      */
     public Statement breakTarget(BreakStmt breakStmt) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("Unable to complete the operation for the statement %s", breakStmt));
     }
 
     /**
@@ -100,11 +100,11 @@ public class ControlFlowLogic {
     }
 
     private boolean contains(Statement container, Statement contained) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("%s is not present in the %s", contained, container));
     }
 
     private List<TryStmt> containedTryStmts(Statement statement) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("%s is not present", statement));
     }
 
     private <P extends Node> boolean parentIs(Node node, Class<P> parentClass) {
@@ -132,7 +132,7 @@ public class ControlFlowLogic {
                 if (!n.isEmpty() && !parentIs(statement, SwitchStmt.class)) {
                     return canCompleteNormally(n.getStatement(n.getStatements().size() - 1));
                 }
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(String.format("The statement %s is not reachable", statement));
             }
 
             @Override
@@ -140,7 +140,7 @@ public class ControlFlowLogic {
                 // A labeled statement can complete normally if at least one of the following is true:
                 // – The contained statement can complete normally.
                 // – There is a reachable break statement that exits the labeled statement.
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(String.format("The statement is either incomplete or unreachable"));
             }
 
             @Override
@@ -200,7 +200,7 @@ public class ControlFlowLogic {
         // The then-statement of an if-then-else  statement is reachable iff the if-then-else statement is reachable.
         // The else-statement is reachable iff the if-then-else statement is reachable.
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("The statement %s is not reachable", statement));
     }
 
     public boolean isReachable(Statement statement) {
