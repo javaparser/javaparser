@@ -43,7 +43,7 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
 
     @Override
     public void generate() throws Exception {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+        Log.info("Running %s #generate()", () -> getClass().getSimpleName());
 
         List<CompilationUnit> allParsedCusInSourceRoot = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
         Log.info("allParsedCusInSourceRoot.size() = " + allParsedCusInSourceRoot.size());
@@ -75,7 +75,7 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
     }
 
     public void removeStaleImportIfUnused() throws IOException {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+        Log.info("Running %s #removeStaleImportIfUnused()", () -> getClass().getSimpleName());
 
         List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
         Log.info("parsedCus.size() = " + parsedCus.size());
@@ -87,7 +87,7 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
     }
 
     public void removeGeneratedImportIfUnused() throws IOException {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+        Log.info("Running %s #removeGeneratedImportIfUnused()", () -> getClass().getSimpleName());
 
         List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
         Log.info("parsedCus.size() = " + parsedCus.size());
@@ -99,7 +99,7 @@ public class StaleGeneratorAnnotations extends AbstractGenerator {
     }
 
     public void verify() throws IOException {
-        Log.info("Running %s", () -> getClass().getSimpleName());
+        Log.info("Running %s #verify()", () -> getClass().getSimpleName());
 
         List<CompilationUnit> parsedCus = getParsedCompilationUnitsFromSourceRoot(sourceRoot);
 
