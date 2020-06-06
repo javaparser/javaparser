@@ -134,7 +134,7 @@ public class CoreGenerator {
         new ReplaceMethodGenerator(sourceRoot).generate();
 
         // Run generators -- grammar/tokens
-        new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
+        new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate(); // TODO/FIXME: Lexical preserving indentation for enums.
 
         // Finally, do BndGenerator once everything is sorted.
         new BndGenerator(sourceRoot).generate();
