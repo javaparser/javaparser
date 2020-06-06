@@ -34,7 +34,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Outputs an XML file containing the AST meant for inspecting it.
  */
-public class XmlPrinter implements NodePrinter {
+public class XmlPrinter {
     private final boolean outputNodeType;
 
     public XmlPrinter(boolean outputNodeType) {
@@ -97,11 +97,6 @@ public class XmlPrinter implements NodePrinter {
 
     public static void print(Node node) {
         System.out.println(new XmlPrinter(true).output(node));
-    }
-
-    @Override
-    public String asString(Node node) {
-        return output(node);
     }
 }
 

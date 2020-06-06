@@ -27,12 +27,6 @@ package com.github.javaparser.ast.observer;
 public interface Observable {
 
     /**
-     * Was this observer registered?
-     * Note that equals is used to determine if the given observer was registered.
-     */
-    boolean isRegistered(AstObserver observer);
-
-    /**
      * Register an observer.
      */
     void register(AstObserver observer);
@@ -41,4 +35,10 @@ public interface Observable {
      * Unregister an observer. If the given observer was not registered there are no effects.
      */
     void unregister(AstObserver observer);
+
+    /**
+     * Was this observer registered?
+     * Note that equals is used to determine if the given observer was registered.
+     */
+    boolean isRegistered(AstObserver observer);
 }

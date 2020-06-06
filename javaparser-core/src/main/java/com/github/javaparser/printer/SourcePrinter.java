@@ -22,7 +22,6 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
 import com.github.javaparser.utils.Utils;
 
@@ -32,7 +31,7 @@ import java.util.LinkedList;
 /**
  * A support class for code that outputs formatted source code.
  */
-public class SourcePrinter implements NodePrinter {
+public class SourcePrinter {
     private final String endOfLineCharacter;
     private final String indentation;
     private final int tabWidth;
@@ -222,11 +221,6 @@ public class SourcePrinter implements NodePrinter {
      */
     @Deprecated
     public String getSource() {
-        return toString();
-    }
-
-    @Override
-    public String asString(Node node) {
         return toString();
     }
 
