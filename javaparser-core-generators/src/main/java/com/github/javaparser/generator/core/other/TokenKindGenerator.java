@@ -99,7 +99,7 @@ public class TokenKindGenerator extends AbstractGenerator {
         }
 
 
-
+//        // TODO
 //        // Replace with pretty printed
 //        kindEnum.replace(prettyPrint(kindEnum, "        "));
 //
