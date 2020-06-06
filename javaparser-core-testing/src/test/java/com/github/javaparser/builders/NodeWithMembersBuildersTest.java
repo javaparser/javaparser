@@ -21,7 +21,6 @@
 
 package com.github.javaparser.builders;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -30,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -98,8 +98,8 @@ class NodeWithMembersBuildersTest {
     void testGetMethodsWithParameterTypes() {
         MethodDeclaration mFoo = classDeclaration.addMethod("foo", PUBLIC); // foo()
         MethodDeclaration mFooInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i"); // foo(int)
-        ClassOrInterfaceType type = StaticJavaParser.parseClassOrInterfaceType("List");
-        type.setTypeArguments(StaticJavaParser.parseClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
+        type.setTypeArguments(parseClassOrInterfaceType("String"));
         MethodDeclaration mFooIntList = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // foo(int, List)
         MethodDeclaration mFooListInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // foo(List, int)
         MethodDeclaration mFoo2Int = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i"); // foo2(int)
@@ -146,8 +146,8 @@ class NodeWithMembersBuildersTest {
     void testGetConstructorsWithParameterTypes() {
         ConstructorDeclaration c = classDeclaration.addConstructor(PUBLIC); // Foo()
         ConstructorDeclaration cInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i"); // Foo(int)
-        ClassOrInterfaceType type = StaticJavaParser.parseClassOrInterfaceType("List");
-        type.setTypeArguments(StaticJavaParser.parseClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
+        type.setTypeArguments(parseClassOrInterfaceType("String"));
         ConstructorDeclaration cIntList = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // Foo(int, List)
         ConstructorDeclaration cListInt = classDeclaration.addConstructor(PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // Foo(List, int)
         ConstructorDeclaration cIntInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // Foo(int, int)
@@ -199,7 +199,7 @@ class NodeWithMembersBuildersTest {
     void testAddPrivateFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPrivateField(StaticJavaParser.parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPrivateField(parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -214,7 +214,7 @@ class NodeWithMembersBuildersTest {
     void testAddPublicFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPublicField(StaticJavaParser.parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPublicField(parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -229,7 +229,7 @@ class NodeWithMembersBuildersTest {
     void testAddProtectedFieldWithType(){
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addProtectedField(StaticJavaParser.parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addProtectedField(parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -247,7 +247,7 @@ class NodeWithMembersBuildersTest {
         classOrInterfaceDeclaration.addFieldWithInitializer(
                 "java.lang.String",
                 "name",
-                StaticJavaParser.parseExpression("John"),
+                parseExpression("John"),
                 PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -266,7 +266,7 @@ class NodeWithMembersBuildersTest {
         classOrInterfaceDeclaration.addFieldWithInitializer(
                 List.class,
                 "skills",
-                StaticJavaParser.parseExpression("new ArrayList()"),
+                parseExpression("new ArrayList()"),
                 PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());

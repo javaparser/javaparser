@@ -48,6 +48,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The "int id();" in {@code @interface X { int id(); }}
  * <p>
@@ -269,7 +270,6 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
         action.accept(this);

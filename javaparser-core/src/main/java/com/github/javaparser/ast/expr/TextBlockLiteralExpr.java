@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJavaTextBlock;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
+
 /**
  * <h1>A text block</h1>
  * <h2>Java 13-</h2>
@@ -106,7 +107,6 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
         action.accept(this);

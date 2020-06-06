@@ -31,14 +31,12 @@ import java.util.Optional;
  * Represent the position of a child node in the NodeText of its parent.
  */
 class ChildTextElement extends TextElement {
-
     private final Node child;
 
     ChildTextElement(Node child) {
         this.child = child;
     }
 
-    @Override
     String expand() {
         return LexicalPreservingPrinter.print(child);
     }
@@ -47,37 +45,8 @@ class ChildTextElement extends TextElement {
         return child;
     }
 
-    NodeText getNodeTextForWrappedNode() {
-        return LexicalPreservingPrinter.getOrCreateNodeText(child);
-    }
-
     @Override
-    Optional<Range> getRange() {
-        return child.getRange();
-    }
-
-    @Override
-    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
-        return nodeClass.isInstance(child);
-    }
-
-    @Override
-    public boolean isComment() {
-        return child instanceof Comment;
-    }
-
-    @Override
-    public boolean isIdentifier() {
-        return false;
-    }
-
-    @Override
-    public boolean isLiteral() {
-        return false;
-    }
-
-    @Override
-    public boolean isNewline() {
+    boolean isToken(int tokenKind) {
         return false;
     }
 
@@ -86,39 +55,8 @@ class ChildTextElement extends TextElement {
         return node == child;
     }
 
-    @Override
-    public boolean isPrimitive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSeparator() {
-        return false;
-    }
-
-    @Override
-    public boolean isSpaceOrTab() {
-        return false;
-    }
-
-    @Override
-    boolean isToken(int tokenKind) {
-        return false;
-    }
-
-    @Override
-    public boolean isWhiteSpace() {
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "ChildTextElement{" + child + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return child.hashCode();
+    NodeText getNodeTextForWrappedNode() {
+        return LexicalPreservingPrinter.getOrCreateNodeText(child);
     }
 
     @Override
@@ -130,5 +68,65 @@ class ChildTextElement extends TextElement {
 
         return child.equals(that.child);
 
+    }
+
+    @Override
+    public int hashCode() {
+        return child.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ChildTextElement{" + child + '}';
+    }
+
+    @Override
+    public boolean isWhiteSpace() {
+        return false;
+    }
+
+    @Override
+    public boolean isSpaceOrTab() {
+        return false;
+    }
+
+    @Override
+    public boolean isNewline() {
+        return false;
+    }
+
+    @Override
+    public boolean isComment() {
+        return child instanceof Comment;
+    }
+    
+    @Override
+    public boolean isSeparator() {
+        return false;
+    }
+    
+    @Override
+    public boolean isIdentifier() {
+        return false;
+    }
+    
+    @Override
+    public boolean isPrimitive() {
+        return false;
+    }
+
+    @Override
+    public boolean isLiteral() {
+        return false;
+    }
+
+    @Override
+    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
+        return nodeClass.isInstance(child);
+    }
+
+    @Override
+    Optional<Range> getRange() {
+        return child.getRange();
     }
 }

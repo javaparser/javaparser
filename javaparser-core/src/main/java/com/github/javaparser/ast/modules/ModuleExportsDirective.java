@@ -37,11 +37,10 @@ import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.StaleGenerated;
+
 /**
  * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}
  */
-
 public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
 
     private Name name;
@@ -158,27 +157,23 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public boolean isModuleExportsStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public ModuleExportsDirective asModuleExportsStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public Optional<ModuleExportsDirective> toModuleExportsStmt() {
         return Optional.of(this);
     }
@@ -206,7 +201,6 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
         action.accept(this);

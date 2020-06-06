@@ -36,6 +36,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.YieldStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * <h1>The yield statement</h1>
  * <h2>Java 1.0-11</h2>
@@ -123,7 +124,6 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
         action.accept(this);

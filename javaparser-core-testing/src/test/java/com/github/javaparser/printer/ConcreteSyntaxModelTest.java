@@ -21,11 +21,11 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,32 +37,32 @@ class ConcreteSyntaxModelTest {
 
     @Test
     void printSimpleClassExpr() {
-        ClassExpr expr = StaticJavaParser.parseExpression("Foo.class");
+        ClassExpr expr = parseExpression("Foo.class");
         assertEquals("Foo.class", print(expr));
     }
 
     @Test
     void printArrayClassExpr() {
-        ClassExpr expr = StaticJavaParser.parseExpression("Foo[].class");
+        ClassExpr expr = parseExpression("Foo[].class");
         assertEquals("Foo[].class", print(expr));
     }
 
     @Test
     void printGenericClassExpr() {
-        ClassExpr expr = StaticJavaParser.parseExpression("Foo<String>.class");
+        ClassExpr expr = parseExpression("Foo<String>.class");
         assertEquals("Foo<String>.class", print(expr));
     }
 
     @Test
     void printSimplestClass() {
-        Node node = StaticJavaParser.parse("class A {}");
+        Node node = parse("class A {}");
         assertEquals("class A {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL, print(node));
     }
 
     @Test
     void printAClassWithField() {
-        Node node = StaticJavaParser.parse("class A { int a; }");
+        Node node = parse("class A { int a; }");
         assertEquals("class A {" + SYSTEM_EOL
                 + SYSTEM_EOL +
                 "    int a;" + SYSTEM_EOL +
@@ -71,26 +71,26 @@ class ConcreteSyntaxModelTest {
 
     @Test
     void printParameters() {
-        Node node = StaticJavaParser.parseBodyDeclaration("int x(int y, int z) {}");
+        Node node = parseBodyDeclaration("int x(int y, int z) {}");
         assertEquals("int x(int y, int z) {" + SYSTEM_EOL + "}", print(node));
     }
 
     @Test
     void printReceiverParameter() {
-        Node node = StaticJavaParser.parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
+        Node node = parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
         assertEquals("int x(X A.B.this, int y, int z) {" + SYSTEM_EOL + "}", print(node));
     }
 
     @Test
     void printAnEmptyInterface() {
-        Node node = StaticJavaParser.parse("interface A {}");
+        Node node = parse("interface A {}");
         assertEquals("interface A {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL, print(node));
     }
 
     @Test
     void printAnEmptyInterfaceWithModifier() {
-        Node node = StaticJavaParser.parse("public interface A {}");
+        Node node = parse("public interface A {}");
         assertEquals("public interface A {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL, print(node));
     }

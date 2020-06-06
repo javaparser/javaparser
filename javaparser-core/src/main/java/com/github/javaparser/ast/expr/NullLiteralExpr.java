@@ -31,6 +31,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A literal "null".
  * <br>{@code null}
@@ -105,7 +106,6 @@ public class NullLiteralExpr extends LiteralExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
         action.accept(this);

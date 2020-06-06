@@ -37,6 +37,7 @@ import static com.github.javaparser.StaticJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
  */

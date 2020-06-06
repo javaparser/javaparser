@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The initialization of an array. In the following sample, the outer { } is an ArrayInitializerExpr.
  * It has two expressions inside: two ArrayInitializerExprs.
@@ -148,7 +149,6 @@ public class ArrayInitializerExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
         action.accept(this);

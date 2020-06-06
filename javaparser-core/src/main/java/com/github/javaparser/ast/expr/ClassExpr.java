@@ -36,6 +36,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Defines an expression that accesses the class of a type.
  * <br>{@code Object.class}
@@ -140,7 +141,6 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassExpr(Consumer<ClassExpr> action) {
         action.accept(this);

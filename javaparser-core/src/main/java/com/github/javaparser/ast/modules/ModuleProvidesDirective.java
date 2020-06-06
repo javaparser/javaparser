@@ -36,11 +36,10 @@ import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.StaleGenerated;
+
 /**
  * A provides directive in module-info.java. {@code provides X.Y with Z1.Z2, Z3.Z4;}
  */
-
 public class ModuleProvidesDirective extends ModuleDirective implements NodeWithName<ModuleProvidesDirective> {
 
     private Name name;
@@ -101,27 +100,23 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public boolean isModuleProvidesStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public ModuleProvidesDirective asModuleProvidesStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public void ifModuleProvidesStmt(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public Optional<ModuleProvidesDirective> toModuleProvidesStmt() {
         return Optional.of(this);
     }
@@ -200,7 +195,6 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);

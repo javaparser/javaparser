@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Usage of the synchronized keyword.
  * <br>In {@code synchronized (a123) { ... }} the expression is a123 and { ... } is the body
@@ -167,7 +168,6 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
         action.accept(this);

@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 import static com.github.javaparser.utils.StringEscapeUtils.*;
+
 /**
  * A literal string.
  * <br>{@code "Hello World!"}
@@ -150,7 +151,6 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifStringLiteralExpr(Consumer<StringLiteralExpr> action) {
         action.accept(this);

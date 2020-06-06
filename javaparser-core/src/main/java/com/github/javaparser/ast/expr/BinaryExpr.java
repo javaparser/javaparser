@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
  * It supports the operators that are found the the BinaryExpr.Operator enum.
@@ -247,7 +248,6 @@ public class BinaryExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBinaryExpr(Consumer<BinaryExpr> action) {
         action.accept(this);

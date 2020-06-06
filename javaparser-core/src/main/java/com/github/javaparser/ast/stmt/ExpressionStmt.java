@@ -36,6 +36,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Used to wrap an expression so that it can take the place of a statement.
  *
@@ -139,7 +140,6 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
         action.accept(this);

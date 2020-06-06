@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Usage of the instanceof operator.
  * <br>{@code tool instanceof Drill}
@@ -167,7 +168,6 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);

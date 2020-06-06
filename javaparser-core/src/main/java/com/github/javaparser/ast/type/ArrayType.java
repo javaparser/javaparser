@@ -41,6 +41,7 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
@@ -279,7 +280,6 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);

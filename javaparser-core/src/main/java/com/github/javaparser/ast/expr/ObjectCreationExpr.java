@@ -46,6 +46,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A constructor call.
  * <br>In {@code new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};}
@@ -340,7 +341,6 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
         action.accept(this);

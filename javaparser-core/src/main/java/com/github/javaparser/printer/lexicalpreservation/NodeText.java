@@ -31,9 +31,9 @@ import java.util.List;
  * It is basically a list of tokens and children.
  */
 class NodeText {
+    private final List<TextElement> elements;
 
     public static final int NOT_FOUND = -1;
-    private final List<TextElement> elements;
 
     //
     // Constructors
@@ -54,14 +54,6 @@ class NodeText {
     // Adding elements
     //
 
-    void addChild(Node child) {
-        addElement(new ChildTextElement(child));
-    }
-
-    void addChild(int index, Node child) {
-        addElement(index, new ChildTextElement(child));
-    }
-
     /**
      * Add an element at the end.
      */
@@ -76,6 +68,14 @@ class NodeText {
         this.elements.add(index, nodeTextElement);
     }
 
+    void addChild(Node child) {
+        addElement(new ChildTextElement(child));
+    }
+
+    void addChild(int index, Node child) {
+        addElement(index, new ChildTextElement(child));
+    }
+
     void addToken(int tokenKind, String text) {
         elements.add(new TokenTextElement(tokenKind, text));
     }
@@ -87,24 +87,6 @@ class NodeText {
     //
     // Finding elements
     //
-
-    /**
-     * Generate the corresponding string.
-     */
-    String expand() {
-        StringBuffer sb = new StringBuffer();
-
-        elements.forEach(e -> sb.append(e.expand()));
-        return sb.toString();
-    }
-
-    int findChild(Node child) {
-        return findChild(child, 0);
-    }
-
-    int findChild(Node child, int from) {
-        return findElement(TextElementMatchers.byNode(child), from);
-    }
 
     int findElement(TextElementMatcher matcher) {
         return findElement(matcher, 0);
@@ -119,27 +101,34 @@ class NodeText {
         return res;
     }
 
-    // Visible for testing
-    List<TextElement> getElements() {
-        return elements;
+    int tryToFindElement(TextElementMatcher matcher, int from) {
+        for (int i = from; i < elements.size(); i++) {
+            TextElement element = elements.get(i);
+            if (matcher.match(element)) {
+                return i;
+            }
+        }
+        return NOT_FOUND;
     }
 
-    // Visible for testing
-    TextElement getTextElement(int index) {
-        return elements.get(index);
+    int findChild(Node child) {
+        return findChild(child, 0);
+    }
+
+    int findChild(Node child, int from) {
+        return findElement(TextElementMatchers.byNode(child), from);
+    }
+
+    int tryToFindChild(Node child) {
+        return tryToFindChild(child, 0);
+    }
+
+    int tryToFindChild(Node child, int from) {
+        return tryToFindElement(TextElementMatchers.byNode(child), from);
     }
 
     //
     // Removing single elements
-    //
-
-    // Visible for testing
-    int numberOfElements() {
-        return elements.size();
-    }
-
-    //
-    // Removing sequences
     //
 
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
@@ -163,7 +152,7 @@ class NodeText {
     }
 
     //
-    // Replacing elements
+    // Removing sequences
     //
 
     void removeElement(int index) {
@@ -171,7 +160,7 @@ class NodeText {
     }
 
     //
-    // Other methods
+    // Replacing elements
     //
 
     void replace(TextElementMatcher position, TextElement newElement) {
@@ -180,22 +169,33 @@ class NodeText {
         elements.add(index, newElement);
     }
 
-    int tryToFindChild(Node child) {
-        return tryToFindChild(child, 0);
+    //
+    // Other methods
+    //
+
+    /**
+     * Generate the corresponding string.
+     */
+    String expand() {
+        StringBuffer sb = new StringBuffer();
+
+        elements.forEach(e -> sb.append(e.expand()));
+        return sb.toString();
     }
 
-    int tryToFindChild(Node child, int from) {
-        return tryToFindElement(TextElementMatchers.byNode(child), from);
+    // Visible for testing
+    int numberOfElements() {
+        return elements.size();
     }
 
-    int tryToFindElement(TextElementMatcher matcher, int from) {
-        for (int i = from; i < elements.size(); i++) {
-            TextElement element = elements.get(i);
-            if (matcher.match(element)) {
-                return i;
-            }
-        }
-        return NOT_FOUND;
+    // Visible for testing
+    TextElement getTextElement(int index) {
+        return elements.get(index);
+    }
+
+    // Visible for testing
+    List<TextElement> getElements() {
+        return elements;
     }
 
     @Override

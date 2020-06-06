@@ -33,6 +33,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A literal character.
  * <br>{@code 'a'}
@@ -149,7 +150,6 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
         action.accept(this);

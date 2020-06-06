@@ -45,6 +45,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
@@ -94,8 +95,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return modifiers;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -114,8 +115,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return name;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -134,8 +135,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return parameters;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
@@ -154,8 +155,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return thrownExceptions;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
@@ -174,8 +175,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return typeParameters;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
@@ -394,7 +395,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
         action.accept(this);
@@ -405,8 +405,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return Optional.ofNullable(receiverParameter);
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setReceiverParameter(final ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
             return (T) this;

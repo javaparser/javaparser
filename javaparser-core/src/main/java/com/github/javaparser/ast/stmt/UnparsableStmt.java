@@ -32,6 +32,7 @@ import static com.github.javaparser.ast.Node.Parsedness.*;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A statement that had parse errors.
  * Nothing is known about it except the tokens it covers.
@@ -109,7 +110,6 @@ public class UnparsableStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
         action.accept(this);

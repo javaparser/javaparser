@@ -42,10 +42,9 @@ import java.util.*;
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
- * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of
- * elements
+ * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
  * to remove or to add and follow by another sequence of elements.
- * <p>
+ *
  * I should later be able to apply such difference to a nodeText.
  */
 public class Difference {
@@ -57,10 +56,11 @@ public class Difference {
 
     private final List<DifferenceElement> diffElements;
     private final List<TextElement> originalElements;
+    private int originalIndex = 0;
+    private int diffIndex = 0;
+
     private final List<TokenTextElement> indentation;
     private boolean addedIndentation = false;
-    private int diffIndex = 0;
-    private int originalIndex = 0;
 
     Difference(List<DifferenceElement> diffElements, NodeText nodeText, Node node) {
         if (nodeText == null) {

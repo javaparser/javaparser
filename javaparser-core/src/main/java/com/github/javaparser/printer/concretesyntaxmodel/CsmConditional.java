@@ -30,11 +30,58 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CsmConditional implements CsmElement {
-
     private final Condition condition;
     private final List<ObservableProperty> properties;
     private final CsmElement thenElement;
     private final CsmElement elseElement;
+
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public ObservableProperty getProperty() {
+        if (properties.size() > 1) {
+            throw new IllegalStateException();
+        }
+        return properties.get(0);
+    }
+    
+    public List<ObservableProperty> getProperties() {
+        return properties;
+    }
+
+    public CsmElement getThenElement() {
+        return thenElement;
+    }
+
+    public CsmElement getElseElement() {
+        return elseElement;
+    }
+
+    public enum Condition {
+        IS_EMPTY,
+        IS_NOT_EMPTY,
+        IS_PRESENT,
+        FLAG;
+
+        boolean evaluate(Node node, ObservableProperty property){
+            if (this == IS_PRESENT) {
+                return !property.isNullOrNotPresent(node);
+            }
+            if (this == FLAG) {
+                return property.getValueAsBooleanAttribute(node);
+            }
+            if (this == IS_EMPTY) {
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
+                return value == null || value.isEmpty();
+            }
+            if (this == IS_NOT_EMPTY) {
+                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
+                return value != null && !value.isEmpty();
+            }
+            throw new UnsupportedOperationException(name());
+        }
+    }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
         this.properties = Arrays.asList(property);
@@ -57,29 +104,6 @@ public class CsmConditional implements CsmElement {
         this(property, condition, thenElement, new CsmNone());
     }
 
-    public Condition getCondition() {
-        return condition;
-    }
-
-    public CsmElement getElseElement() {
-        return elseElement;
-    }
-
-    public List<ObservableProperty> getProperties() {
-        return properties;
-    }
-
-    public ObservableProperty getProperty() {
-        if (properties.size() > 1) {
-            throw new IllegalStateException();
-        }
-        return properties.get(0);
-    }
-
-    public CsmElement getThenElement() {
-        return thenElement;
-    }
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         boolean test = false;
@@ -90,31 +114,6 @@ public class CsmConditional implements CsmElement {
             thenElement.prettyPrint(node, printer);
         } else {
             elseElement.prettyPrint(node, printer);
-        }
-    }
-
-    public enum Condition {
-        IS_EMPTY,
-        IS_NOT_EMPTY,
-        IS_PRESENT,
-        FLAG;
-
-        boolean evaluate(Node node, ObservableProperty property) {
-            if (this == IS_PRESENT) {
-                return !property.isNullOrNotPresent(node);
-            }
-            if (this == FLAG) {
-                return property.getValueAsBooleanAttribute(node);
-            }
-            if (this == IS_EMPTY) {
-                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
-                return value == null || value.isEmpty();
-            }
-            if (this == IS_NOT_EMPTY) {
-                NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
-                return value != null && !value.isEmpty();
-            }
-            throw new UnsupportedOperationException(name());
         }
     }
 }

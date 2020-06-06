@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>The break statement</h1>
  * <h2>Java 1.0-11</h2>
@@ -175,7 +176,6 @@ public class BreakStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBreakStmt(Consumer<BreakStmt> action) {
         action.accept(this);

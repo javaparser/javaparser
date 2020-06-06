@@ -36,6 +36,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: {@code class X { static { a=3; }  } }
  *
@@ -157,7 +158,6 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
         action.accept(this);

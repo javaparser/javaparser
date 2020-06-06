@@ -31,18 +31,7 @@ public abstract class TextElement implements TextElementMatcher {
 
     abstract String expand();
 
-    abstract Optional<Range> getRange();
-
-    public boolean isChild() {
-        return isChildOfClass(Node.class);
-    }
-
-    /**
-     * Is this TextElement representing a child of the given class?
-     */
-    public abstract boolean isChildOfClass(Class<? extends Node> nodeClass);
-
-    public abstract boolean isComment();
+    abstract boolean isToken(int tokenKind);
 
     final boolean isCommentToken() {
         return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT)
@@ -50,32 +39,43 @@ public abstract class TextElement implements TextElementMatcher {
                 || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
     }
 
-    public abstract boolean isIdentifier();
-
-    public abstract boolean isLiteral();
-
-    public abstract boolean isNewline();
+    @Override
+    public boolean match(TextElement textElement) {
+        return this.equals(textElement);
+    }
 
     abstract boolean isNode(Node node);
 
-    public abstract boolean isPrimitive();
+    public abstract boolean isLiteral();
 
-    public abstract boolean isSeparator();
+    public abstract boolean isWhiteSpace();
 
     public abstract boolean isSpaceOrTab();
 
-    abstract boolean isToken(int tokenKind);
+    public abstract boolean isNewline();
 
-    public abstract boolean isWhiteSpace();
+    public abstract boolean isComment();
+
+    public abstract boolean isSeparator();
+
+    public abstract boolean isIdentifier();
+
+    public abstract boolean isPrimitive();
 
     public final boolean isWhiteSpaceOrComment() {
         return isWhiteSpace() || isComment();
     }
 
-    @Override
-    public boolean match(TextElement textElement) {
-        return this.equals(textElement);
+    /**
+     * Is this TextElement representing a child of the given class?
+     */
+    public abstract boolean isChildOfClass(Class<? extends Node> nodeClass);
+
+    public boolean isChild() {
+        return isChildOfClass(Node.class);
     }
+
+    abstract Optional<Range> getRange();
 
     /**
      * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br>

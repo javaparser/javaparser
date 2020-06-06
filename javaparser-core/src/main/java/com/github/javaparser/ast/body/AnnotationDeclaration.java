@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarati
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * An annotation type declaration.<br>{@code @interface X { ... }}
  *
@@ -120,7 +121,6 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
         action.accept(this);

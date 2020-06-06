@@ -36,6 +36,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>The try statement</h1>
  * <h2>Java 1.0-6</h2>
@@ -300,7 +301,6 @@ public class TryStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTryStmt(Consumer<TryStmt> action) {
         action.accept(this);

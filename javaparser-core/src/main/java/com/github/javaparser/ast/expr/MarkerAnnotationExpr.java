@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 import static com.github.javaparser.StaticJavaParser.parseName;
+
 /**
  * An annotation that uses only the annotation type name.
  * <br>{@code @Override}
@@ -114,7 +115,6 @@ public class MarkerAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
         action.accept(this);

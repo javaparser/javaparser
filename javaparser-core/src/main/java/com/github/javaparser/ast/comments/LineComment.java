@@ -31,6 +31,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <p>
  * AST node that represent line comments.
@@ -111,7 +112,6 @@ public class LineComment extends Comment {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLineComment(Consumer<LineComment> action) {
         action.accept(this);

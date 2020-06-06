@@ -38,6 +38,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
  * <br>In {@code int x = a + 3;} a is a SimpleName inside a NameExpr.
@@ -147,7 +148,6 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNameExpr(Consumer<NameExpr> action) {
         action.accept(this);

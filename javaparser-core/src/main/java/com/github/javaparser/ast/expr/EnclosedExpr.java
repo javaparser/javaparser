@@ -33,6 +33,7 @@ import com.github.javaparser.TokenRange;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * An expression between ( ).
  * <br>{@code (1+1)}
@@ -143,7 +144,6 @@ public class EnclosedExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
         action.accept(this);

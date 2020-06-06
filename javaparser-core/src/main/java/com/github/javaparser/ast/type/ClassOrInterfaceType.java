@@ -42,6 +42,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A class or an interface type.
  * <br>{@code Object}
@@ -283,7 +284,6 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
         action.accept(this);

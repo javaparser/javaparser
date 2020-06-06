@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>The classic for statement</h1>
  * Examples:
@@ -276,7 +277,6 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);

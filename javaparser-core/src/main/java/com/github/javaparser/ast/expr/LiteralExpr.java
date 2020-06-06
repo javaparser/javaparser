@@ -29,6 +29,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
+
 /**
  * A base class for all literal expressions.
  *
@@ -90,7 +91,6 @@ public abstract class LiteralExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralExpr(Consumer<LiteralExpr> action) {
         action.accept(this);

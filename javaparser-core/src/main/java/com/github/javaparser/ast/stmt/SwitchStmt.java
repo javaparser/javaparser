@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>The switch statement</h1>
  *
@@ -210,7 +211,6 @@ public class SwitchStmt extends Statement implements SwitchNode {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
         action.accept(this);

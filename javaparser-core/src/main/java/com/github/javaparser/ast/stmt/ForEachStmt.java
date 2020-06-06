@@ -39,6 +39,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A for-each statement.
  * <br>{@code for(Object o: objects) { ... }}
@@ -229,7 +230,6 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForEachStmt(Consumer<ForEachStmt> action) {
         action.accept(this);

@@ -33,6 +33,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * Array brackets [] being used to get a value from an array.
  * In <br>{@code getNames()[15*15]} the name expression is getNames() and the index expression is 15*15.
@@ -163,7 +164,6 @@ public class ArrayAccessExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
         action.accept(this);

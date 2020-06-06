@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A typecast. The (long) in {@code (long)15}
  *
@@ -166,7 +167,6 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCastExpr(Consumer<CastExpr> action) {
         action.accept(this);

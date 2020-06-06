@@ -31,6 +31,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import java.util.Optional;
+
 /**
  * Any literal value that is stored internally as a String.
  */
@@ -109,7 +110,6 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
         action.accept(this);

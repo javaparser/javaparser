@@ -21,11 +21,9 @@
 
 package com.github.javaparser.steps;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.utils.Utils;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -36,6 +34,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrettyPrintingSteps {
@@ -51,52 +51,52 @@ public class PrettyPrintingSteps {
     @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException {
         URL url = getClass().getResource("../samples/" + classFile);
-        sourceUnderTest = Utils.readerToString(new FileReader(new File(url.toURI()))).trim();
+        sourceUnderTest = readerToString(new FileReader(new File(url.toURI()))).trim();
     }
 
     @When("the {class|compilation unit} is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parse(sourceUnderTest);
+        resultNode = parse(sourceUnderTest);
     }
 
     @When("the expression is parsed by the Java parser")
     public void whenTheExpressionIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseExpression(sourceUnderTest);
+        resultNode = parseExpression(sourceUnderTest);
     }
 
     @When("the block is parsed by the Java parser")
     public void whenTheBlockIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseBlock(sourceUnderTest);
+        resultNode = parseBlock(sourceUnderTest);
     }
 
     @When("the statement is parsed by the Java parser")
     public void whenTheStatementIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseStatement(sourceUnderTest);
+        resultNode = parseStatement(sourceUnderTest);
     }
 
     @When("the import is parsed by the Java parser")
     public void whenTheImportIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseImport(sourceUnderTest);
+        resultNode = parseImport(sourceUnderTest);
     }
 
     @When("the annotation is parsed by the Java parser")
     public void whenTheAnnotationIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseAnnotation(sourceUnderTest);
+        resultNode = parseAnnotation(sourceUnderTest);
     }
 
     @When("the annotation body declaration is parsed by the Java parser")
     public void whenTheBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseAnnotationBodyDeclaration(sourceUnderTest);
+        resultNode = parseAnnotationBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class body declaration is parsed by the Java parser")
     public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseBodyDeclaration(sourceUnderTest);
+        resultNode = parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the interface body declaration is parsed by the Java parser")
     public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = StaticJavaParser.parseBodyDeclaration(sourceUnderTest);
+        resultNode = parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class is visited by an empty ModifierVisitorAdapter")

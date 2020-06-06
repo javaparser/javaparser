@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The ternary conditional expression.
  * In {@code b==0?x:y}, b==0 is the condition, x is thenExpr, and y is elseExpr.
@@ -190,7 +191,6 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
         action.accept(this);

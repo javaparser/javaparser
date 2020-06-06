@@ -130,7 +130,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final CompilationUnit n, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
         if (!nodesEquals(n.getImports(), n2.getImports()))
@@ -147,7 +146,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final PackageDeclaration n, final Visitable arg) {
         final PackageDeclaration n2 = (PackageDeclaration) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -160,7 +158,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final TypeParameter n, final Visitable arg) {
         final TypeParameter n2 = (TypeParameter) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -175,7 +172,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final LineComment n, final Visitable arg) {
         final LineComment n2 = (LineComment) arg;
         if (!objEquals(n.getContent(), n2.getContent()))
@@ -186,7 +182,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final BlockComment n, final Visitable arg) {
         final BlockComment n2 = (BlockComment) arg;
         if (!objEquals(n.getContent(), n2.getContent()))
@@ -197,7 +192,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ClassOrInterfaceDeclaration n, final Visitable arg) {
         final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg;
         if (!nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes()))
@@ -222,7 +216,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
         if (!nodesEquals(n.getEntries(), n2.getEntries()))
@@ -243,7 +236,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final EnumConstantDeclaration n, final Visitable arg) {
         final EnumConstantDeclaration n2 = (EnumConstantDeclaration) arg;
         if (!nodesEquals(n.getArguments(), n2.getArguments()))
@@ -260,7 +252,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final AnnotationDeclaration n, final Visitable arg) {
         final AnnotationDeclaration n2 = (AnnotationDeclaration) arg;
         if (!nodesEquals(n.getMembers(), n2.getMembers()))
@@ -277,7 +268,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final AnnotationMemberDeclaration n, final Visitable arg) {
         final AnnotationMemberDeclaration n2 = (AnnotationMemberDeclaration) arg;
         if (!nodeEquals(n.getDefaultValue(), n2.getDefaultValue()))
@@ -296,7 +286,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final FieldDeclaration n, final Visitable arg) {
         final FieldDeclaration n2 = (FieldDeclaration) arg;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
@@ -311,7 +300,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final VariableDeclarator n, final Visitable arg) {
         final VariableDeclarator n2 = (VariableDeclarator) arg;
         if (!nodeEquals(n.getInitializer(), n2.getInitializer()))
@@ -326,7 +314,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ConstructorDeclaration n, final Visitable arg) {
         final ConstructorDeclaration n2 = (ConstructorDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -351,7 +338,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final MethodDeclaration n, final Visitable arg) {
         final MethodDeclaration n2 = (MethodDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -378,7 +364,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final Parameter n, final Visitable arg) {
         final Parameter n2 = (Parameter) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -399,7 +384,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final InitializerDeclaration n, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -414,7 +398,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final JavadocComment n, final Visitable arg) {
         final JavadocComment n2 = (JavadocComment) arg;
         if (!objEquals(n.getContent(), n2.getContent()))
@@ -425,7 +408,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ClassOrInterfaceType n, final Visitable arg) {
         final ClassOrInterfaceType n2 = (ClassOrInterfaceType) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -442,7 +424,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final PrimitiveType n, final Visitable arg) {
         final PrimitiveType n2 = (PrimitiveType) arg;
         if (!objEquals(n.getType(), n2.getType()))
@@ -455,7 +436,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ArrayType n, final Visitable arg) {
         final ArrayType n2 = (ArrayType) arg;
         if (!nodeEquals(n.getComponentType(), n2.getComponentType()))
@@ -470,7 +450,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ArrayCreationLevel n, final Visitable arg) {
         final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -483,7 +462,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final IntersectionType n, final Visitable arg) {
         final IntersectionType n2 = (IntersectionType) arg;
         if (!nodesEquals(n.getElements(), n2.getElements()))
@@ -496,7 +474,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final UnionType n, final Visitable arg) {
         final UnionType n2 = (UnionType) arg;
         if (!nodesEquals(n.getElements(), n2.getElements()))
@@ -509,7 +486,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final VoidType n, final Visitable arg) {
         final VoidType n2 = (VoidType) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -520,7 +496,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final WildcardType n, final Visitable arg) {
         final WildcardType n2 = (WildcardType) arg;
         if (!nodeEquals(n.getExtendedType(), n2.getExtendedType()))
@@ -535,7 +510,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final UnknownType n, final Visitable arg) {
         final UnknownType n2 = (UnknownType) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -546,7 +520,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ArrayAccessExpr n, final Visitable arg) {
         final ArrayAccessExpr n2 = (ArrayAccessExpr) arg;
         if (!nodeEquals(n.getIndex(), n2.getIndex()))
@@ -559,7 +532,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ArrayCreationExpr n, final Visitable arg) {
         final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
         if (!nodeEquals(n.getElementType(), n2.getElementType()))
@@ -574,7 +546,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ArrayInitializerExpr n, final Visitable arg) {
         final ArrayInitializerExpr n2 = (ArrayInitializerExpr) arg;
         if (!nodesEquals(n.getValues(), n2.getValues()))
@@ -585,7 +556,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final AssignExpr n, final Visitable arg) {
         final AssignExpr n2 = (AssignExpr) arg;
         if (!objEquals(n.getOperator(), n2.getOperator()))
@@ -600,7 +570,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final BinaryExpr n, final Visitable arg) {
         final BinaryExpr n2 = (BinaryExpr) arg;
         if (!nodeEquals(n.getLeft(), n2.getLeft()))
@@ -615,7 +584,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final CastExpr n, final Visitable arg) {
         final CastExpr n2 = (CastExpr) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -628,7 +596,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ClassExpr n, final Visitable arg) {
         final ClassExpr n2 = (ClassExpr) arg;
         if (!nodeEquals(n.getType(), n2.getType()))
@@ -639,7 +606,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ConditionalExpr n, final Visitable arg) {
         final ConditionalExpr n2 = (ConditionalExpr) arg;
         if (!nodeEquals(n.getCondition(), n2.getCondition()))
@@ -654,7 +620,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final EnclosedExpr n, final Visitable arg) {
         final EnclosedExpr n2 = (EnclosedExpr) arg;
         if (!nodeEquals(n.getInner(), n2.getInner()))
@@ -665,7 +630,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final FieldAccessExpr n, final Visitable arg) {
         final FieldAccessExpr n2 = (FieldAccessExpr) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -680,7 +644,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final InstanceOfExpr n, final Visitable arg) {
         final InstanceOfExpr n2 = (InstanceOfExpr) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -693,7 +656,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final StringLiteralExpr n, final Visitable arg) {
         final StringLiteralExpr n2 = (StringLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
@@ -704,7 +666,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final IntegerLiteralExpr n, final Visitable arg) {
         final IntegerLiteralExpr n2 = (IntegerLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
@@ -715,7 +676,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final LongLiteralExpr n, final Visitable arg) {
         final LongLiteralExpr n2 = (LongLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
@@ -726,7 +686,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final CharLiteralExpr n, final Visitable arg) {
         final CharLiteralExpr n2 = (CharLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
@@ -737,7 +696,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final DoubleLiteralExpr n, final Visitable arg) {
         final DoubleLiteralExpr n2 = (DoubleLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
@@ -748,7 +706,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final BooleanLiteralExpr n, final Visitable arg) {
         final BooleanLiteralExpr n2 = (BooleanLiteralExpr) arg;
         if (!objEquals(n.isValue(), n2.isValue()))
@@ -759,7 +716,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final NullLiteralExpr n, final Visitable arg) {
         final NullLiteralExpr n2 = (NullLiteralExpr) arg;
         if (!nodeEquals(n.getComment(), n2.getComment()))
@@ -768,7 +724,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final MethodCallExpr n, final Visitable arg) {
         final MethodCallExpr n2 = (MethodCallExpr) arg;
         if (!nodesEquals(n.getArguments(), n2.getArguments()))
@@ -785,7 +740,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final NameExpr n, final Visitable arg) {
         final NameExpr n2 = (NameExpr) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -796,7 +750,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ObjectCreationExpr n, final Visitable arg) {
         final ObjectCreationExpr n2 = (ObjectCreationExpr) arg;
         if (!nodesEquals(n.getAnonymousClassBody(), n2.getAnonymousClassBody()))
@@ -815,7 +768,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final Name n, final Visitable arg) {
         final Name n2 = (Name) arg;
         if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
@@ -828,7 +780,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SimpleName n, final Visitable arg) {
         final SimpleName n2 = (SimpleName) arg;
         if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
@@ -839,7 +790,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ThisExpr n, final Visitable arg) {
         final ThisExpr n2 = (ThisExpr) arg;
         if (!nodeEquals(n.getTypeName(), n2.getTypeName()))
@@ -850,7 +800,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SuperExpr n, final Visitable arg) {
         final SuperExpr n2 = (SuperExpr) arg;
         if (!nodeEquals(n.getTypeName(), n2.getTypeName()))
@@ -861,7 +810,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final UnaryExpr n, final Visitable arg) {
         final UnaryExpr n2 = (UnaryExpr) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -874,7 +822,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final VariableDeclarationExpr n, final Visitable arg) {
         final VariableDeclarationExpr n2 = (VariableDeclarationExpr) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -889,7 +836,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final MarkerAnnotationExpr n, final Visitable arg) {
         final MarkerAnnotationExpr n2 = (MarkerAnnotationExpr) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -900,7 +846,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SingleMemberAnnotationExpr n, final Visitable arg) {
         final SingleMemberAnnotationExpr n2 = (SingleMemberAnnotationExpr) arg;
         if (!nodeEquals(n.getMemberValue(), n2.getMemberValue()))
@@ -913,7 +858,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final NormalAnnotationExpr n, final Visitable arg) {
         final NormalAnnotationExpr n2 = (NormalAnnotationExpr) arg;
         if (!nodesEquals(n.getPairs(), n2.getPairs()))
@@ -926,7 +870,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final MemberValuePair n, final Visitable arg) {
         final MemberValuePair n2 = (MemberValuePair) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -939,7 +882,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ExplicitConstructorInvocationStmt n, final Visitable arg) {
         final ExplicitConstructorInvocationStmt n2 = (ExplicitConstructorInvocationStmt) arg;
         if (!nodesEquals(n.getArguments(), n2.getArguments()))
@@ -956,7 +898,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final LocalClassDeclarationStmt n, final Visitable arg) {
         final LocalClassDeclarationStmt n2 = (LocalClassDeclarationStmt) arg;
         if (!nodeEquals(n.getClassDeclaration(), n2.getClassDeclaration()))
@@ -967,7 +908,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final AssertStmt n, final Visitable arg) {
         final AssertStmt n2 = (AssertStmt) arg;
         if (!nodeEquals(n.getCheck(), n2.getCheck()))
@@ -980,7 +920,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final BlockStmt n, final Visitable arg) {
         final BlockStmt n2 = (BlockStmt) arg;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
@@ -991,7 +930,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final LabeledStmt n, final Visitable arg) {
         final LabeledStmt n2 = (LabeledStmt) arg;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1004,7 +942,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final EmptyStmt n, final Visitable arg) {
         final EmptyStmt n2 = (EmptyStmt) arg;
         if (!nodeEquals(n.getComment(), n2.getComment()))
@@ -1013,7 +950,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ExpressionStmt n, final Visitable arg) {
         final ExpressionStmt n2 = (ExpressionStmt) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -1024,7 +960,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SwitchStmt n, final Visitable arg) {
         final SwitchStmt n2 = (SwitchStmt) arg;
         if (!nodesEquals(n.getEntries(), n2.getEntries()))
@@ -1037,7 +972,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SwitchEntry n, final Visitable arg) {
         final SwitchEntry n2 = (SwitchEntry) arg;
         if (!nodesEquals(n.getLabels(), n2.getLabels()))
@@ -1052,7 +986,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final BreakStmt n, final Visitable arg) {
         final BreakStmt n2 = (BreakStmt) arg;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1063,7 +996,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ReturnStmt n, final Visitable arg) {
         final ReturnStmt n2 = (ReturnStmt) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -1074,7 +1006,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final IfStmt n, final Visitable arg) {
         final IfStmt n2 = (IfStmt) arg;
         if (!nodeEquals(n.getCondition(), n2.getCondition()))
@@ -1089,7 +1020,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final WhileStmt n, final Visitable arg) {
         final WhileStmt n2 = (WhileStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1102,7 +1032,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ContinueStmt n, final Visitable arg) {
         final ContinueStmt n2 = (ContinueStmt) arg;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1113,7 +1042,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final DoStmt n, final Visitable arg) {
         final DoStmt n2 = (DoStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1126,7 +1054,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ForEachStmt n, final Visitable arg) {
         final ForEachStmt n2 = (ForEachStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1141,7 +1068,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ForStmt n, final Visitable arg) {
         final ForStmt n2 = (ForStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1158,7 +1084,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ThrowStmt n, final Visitable arg) {
         final ThrowStmt n2 = (ThrowStmt) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -1169,7 +1094,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SynchronizedStmt n, final Visitable arg) {
         final SynchronizedStmt n2 = (SynchronizedStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1182,7 +1106,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final TryStmt n, final Visitable arg) {
         final TryStmt n2 = (TryStmt) arg;
         if (!nodesEquals(n.getCatchClauses(), n2.getCatchClauses()))
@@ -1199,7 +1122,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final CatchClause n, final Visitable arg) {
         final CatchClause n2 = (CatchClause) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1212,7 +1134,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final LambdaExpr n, final Visitable arg) {
         final LambdaExpr n2 = (LambdaExpr) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
@@ -1227,7 +1148,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final MethodReferenceExpr n, final Visitable arg) {
         final MethodReferenceExpr n2 = (MethodReferenceExpr) arg;
         if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
@@ -1242,7 +1162,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final TypeExpr n, final Visitable arg) {
         final TypeExpr n2 = (TypeExpr) arg;
         if (!nodeEquals(n.getType(), n2.getType()))
@@ -1253,7 +1172,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ImportDeclaration n, final Visitable arg) {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
         if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
@@ -1273,7 +1191,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleDeclaration n, final Visitable arg) {
         final ModuleDeclaration n2 = (ModuleDeclaration) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -1290,7 +1207,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleRequiresDirective n, final Visitable arg) {
         final ModuleRequiresDirective n2 = (ModuleRequiresDirective) arg;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
@@ -1303,7 +1219,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleExportsDirective n, final Visitable arg) {
         final ModuleExportsDirective n2 = (ModuleExportsDirective) arg;
         if (!nodesEquals(n.getModuleNames(), n2.getModuleNames()))
@@ -1316,7 +1231,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleProvidesDirective n, final Visitable arg) {
         final ModuleProvidesDirective n2 = (ModuleProvidesDirective) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1329,7 +1243,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleUsesDirective n, final Visitable arg) {
         final ModuleUsesDirective n2 = (ModuleUsesDirective) arg;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1340,7 +1253,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ModuleOpensDirective n, final Visitable arg) {
         final ModuleOpensDirective n2 = (ModuleOpensDirective) arg;
         if (!nodesEquals(n.getModuleNames(), n2.getModuleNames()))
@@ -1353,7 +1265,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final UnparsableStmt n, final Visitable arg) {
         final UnparsableStmt n2 = (UnparsableStmt) arg;
         if (!nodeEquals(n.getComment(), n2.getComment()))
@@ -1362,7 +1273,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final ReceiverParameter n, final Visitable arg) {
         final ReceiverParameter n2 = (ReceiverParameter) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -1377,7 +1287,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final VarType n, final Visitable arg) {
         final VarType n2 = (VarType) arg;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -1388,7 +1297,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final Modifier n, final Visitable arg) {
         final Modifier n2 = (Modifier) arg;
         if (!objEquals(n.getKeyword(), n2.getKeyword()))
@@ -1399,7 +1307,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final SwitchExpr n, final Visitable arg) {
         final SwitchExpr n2 = (SwitchExpr) arg;
         if (!nodesEquals(n.getEntries(), n2.getEntries()))
@@ -1412,7 +1319,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final YieldStmt n, final Visitable arg) {
         final YieldStmt n2 = (YieldStmt) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
@@ -1423,7 +1329,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))

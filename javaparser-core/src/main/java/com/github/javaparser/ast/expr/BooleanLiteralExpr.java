@@ -32,6 +32,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The boolean literals.
  * <br>{@code true}
@@ -137,7 +138,6 @@ public class BooleanLiteralExpr extends LiteralExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
         action.accept(this);

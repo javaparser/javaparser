@@ -42,6 +42,7 @@ import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclara
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: {@code enum X { A(1), B(2) }}
  *
@@ -217,7 +218,6 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumConstantDeclaration(Consumer<EnumConstantDeclaration> action) {
         action.accept(this);

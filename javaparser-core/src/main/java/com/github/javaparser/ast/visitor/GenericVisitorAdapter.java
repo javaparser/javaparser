@@ -40,7 +40,6 @@ import com.github.javaparser.ast.type.*;
 public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A> {
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final AnnotationDeclaration n, final A arg) {
         R result;
         {
@@ -72,7 +71,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final AnnotationMemberDeclaration n, final A arg) {
         R result;
         if (n.getDefaultValue().isPresent()) {
@@ -109,7 +107,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ArrayAccessExpr n, final A arg) {
         R result;
         {
@@ -131,7 +128,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ArrayCreationExpr n, final A arg) {
         R result;
         {
@@ -158,7 +154,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ArrayInitializerExpr n, final A arg) {
         R result;
         {
@@ -175,7 +170,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final AssertStmt n, final A arg) {
         R result;
         {
@@ -197,7 +191,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final AssignExpr n, final A arg) {
         R result;
         {
@@ -219,7 +212,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final BinaryExpr n, final A arg) {
         R result;
         {
@@ -241,7 +233,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final BlockStmt n, final A arg) {
         R result;
         {
@@ -258,7 +249,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final BooleanLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -270,7 +260,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final BreakStmt n, final A arg) {
         R result;
         if (n.getLabel().isPresent()) {
@@ -287,7 +276,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final CastExpr n, final A arg) {
         R result;
         {
@@ -309,7 +297,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final CatchClause n, final A arg) {
         R result;
         {
@@ -331,7 +318,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final CharLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -343,7 +329,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ClassExpr n, final A arg) {
         R result;
         {
@@ -360,7 +345,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ClassOrInterfaceDeclaration n, final A arg) {
         R result;
         {
@@ -407,7 +391,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ClassOrInterfaceType n, final A arg) {
         R result;
         {
@@ -439,7 +422,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final CompilationUnit n, final A arg) {
         R result;
         {
@@ -471,7 +453,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ConditionalExpr n, final A arg) {
         R result;
         {
@@ -498,7 +479,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ConstructorDeclaration n, final A arg) {
         R result;
         {
@@ -550,7 +530,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ContinueStmt n, final A arg) {
         R result;
         if (n.getLabel().isPresent()) {
@@ -567,7 +546,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final DoStmt n, final A arg) {
         R result;
         {
@@ -589,7 +567,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final DoubleLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -601,7 +578,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final EmptyStmt n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -613,7 +589,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final EnclosedExpr n, final A arg) {
         R result;
         {
@@ -630,7 +605,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final EnumConstantDeclaration n, final A arg) {
         R result;
         {
@@ -662,7 +636,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final EnumDeclaration n, final A arg) {
         R result;
         {
@@ -704,7 +677,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
         R result;
         {
@@ -731,7 +703,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ExpressionStmt n, final A arg) {
         R result;
         {
@@ -748,7 +719,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final FieldAccessExpr n, final A arg) {
         R result;
         {
@@ -775,7 +745,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final FieldDeclaration n, final A arg) {
         R result;
         {
@@ -802,7 +771,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ForEachStmt n, final A arg) {
         R result;
         {
@@ -829,7 +797,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ForStmt n, final A arg) {
         R result;
         {
@@ -861,7 +828,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final IfStmt n, final A arg) {
         R result;
         {
@@ -888,7 +854,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final InitializerDeclaration n, final A arg) {
         R result;
         {
@@ -910,7 +875,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final InstanceOfExpr n, final A arg) {
         R result;
         {
@@ -932,7 +896,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final IntegerLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -944,7 +907,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final JavadocComment n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -956,7 +918,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final LabeledStmt n, final A arg) {
         R result;
         {
@@ -978,7 +939,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final LongLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -990,7 +950,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final MarkerAnnotationExpr n, final A arg) {
         R result;
         {
@@ -1007,7 +966,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final MemberValuePair n, final A arg) {
         R result;
         {
@@ -1029,7 +987,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final MethodCallExpr n, final A arg) {
         R result;
         {
@@ -1061,7 +1018,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final MethodDeclaration n, final A arg) {
         R result;
         if (n.getBody().isPresent()) {
@@ -1118,7 +1074,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final NameExpr n, final A arg) {
         R result;
         {
@@ -1135,7 +1090,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final NormalAnnotationExpr n, final A arg) {
         R result;
         {
@@ -1157,7 +1111,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final NullLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -1169,7 +1122,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ObjectCreationExpr n, final A arg) {
         R result;
         if (n.getAnonymousClassBody().isPresent()) {
@@ -1206,7 +1158,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final PackageDeclaration n, final A arg) {
         R result;
         {
@@ -1228,7 +1179,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final Parameter n, final A arg) {
         R result;
         {
@@ -1265,7 +1215,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final PrimitiveType n, final A arg) {
         R result;
         {
@@ -1282,7 +1231,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final Name n, final A arg) {
         R result;
         if (n.getQualifier().isPresent()) {
@@ -1299,7 +1247,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SimpleName n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -1311,7 +1258,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ArrayType n, final A arg) {
         R result;
         {
@@ -1333,7 +1279,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ArrayCreationLevel n, final A arg) {
         R result;
         {
@@ -1355,7 +1300,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final IntersectionType n, final A arg) {
         R result;
         {
@@ -1377,7 +1321,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final UnionType n, final A arg) {
         R result;
         {
@@ -1399,7 +1342,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ReturnStmt n, final A arg) {
         R result;
         if (n.getExpression().isPresent()) {
@@ -1416,7 +1358,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SingleMemberAnnotationExpr n, final A arg) {
         R result;
         {
@@ -1438,7 +1379,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final StringLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -1450,7 +1390,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SuperExpr n, final A arg) {
         R result;
         if (n.getTypeName().isPresent()) {
@@ -1467,7 +1406,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SwitchEntry n, final A arg) {
         R result;
         {
@@ -1489,7 +1427,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SwitchStmt n, final A arg) {
         R result;
         {
@@ -1511,7 +1448,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SynchronizedStmt n, final A arg) {
         R result;
         {
@@ -1533,7 +1469,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ThisExpr n, final A arg) {
         R result;
         if (n.getTypeName().isPresent()) {
@@ -1550,7 +1485,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ThrowStmt n, final A arg) {
         R result;
         {
@@ -1567,7 +1501,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final TryStmt n, final A arg) {
         R result;
         {
@@ -1599,7 +1532,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final LocalClassDeclarationStmt n, final A arg) {
         R result;
         {
@@ -1616,7 +1548,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final TypeParameter n, final A arg) {
         R result;
         {
@@ -1643,7 +1574,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final UnaryExpr n, final A arg) {
         R result;
         {
@@ -1660,7 +1590,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final UnknownType n, final A arg) {
         R result;
         {
@@ -1677,7 +1606,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final VariableDeclarationExpr n, final A arg) {
         R result;
         {
@@ -1704,7 +1632,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final VariableDeclarator n, final A arg) {
         R result;
         if (n.getInitializer().isPresent()) {
@@ -1731,7 +1658,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final VoidType n, final A arg) {
         R result;
         {
@@ -1748,7 +1674,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final WhileStmt n, final A arg) {
         R result;
         {
@@ -1770,7 +1695,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final WildcardType n, final A arg) {
         R result;
         if (n.getExtendedType().isPresent()) {
@@ -1797,7 +1721,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final LambdaExpr n, final A arg) {
         R result;
         {
@@ -1819,7 +1742,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final MethodReferenceExpr n, final A arg) {
         R result;
         {
@@ -1841,7 +1763,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final TypeExpr n, final A arg) {
         R result;
         {
@@ -1858,7 +1779,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ImportDeclaration n, final A arg) {
         R result;
         {
@@ -1875,7 +1795,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final BlockComment n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -1887,7 +1806,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final LineComment n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -1910,7 +1828,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleDeclaration n, final A arg) {
         R result;
         {
@@ -1937,7 +1854,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleRequiresDirective n, final A arg) {
         R result;
         {
@@ -1959,7 +1875,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleExportsDirective n, final A arg) {
         R result;
         {
@@ -1981,7 +1896,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleProvidesDirective n, final A arg) {
         R result;
         {
@@ -2003,7 +1917,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override()
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleUsesDirective n, final A arg) {
         R result;
         {
@@ -2020,7 +1933,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ModuleOpensDirective n, final A arg) {
         R result;
         {
@@ -2042,7 +1954,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final UnparsableStmt n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -2054,7 +1965,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final ReceiverParameter n, final A arg) {
         R result;
         {
@@ -2081,7 +1991,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final VarType n, final A arg) {
         R result;
         {
@@ -2098,7 +2007,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final Modifier n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -2110,7 +2018,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final SwitchExpr n, final A arg) {
         R result;
         {
@@ -2132,7 +2039,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final YieldStmt n, final A arg) {
         R result;
         {
@@ -2149,7 +2055,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final TextBlockLiteralExpr n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {

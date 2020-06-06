@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A while statement.
  * <br>{@code while(true) { ... }}
@@ -167,7 +168,6 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWhileStmt(Consumer<WhileStmt> action) {
         action.accept(this);

@@ -24,20 +24,92 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class DifferenceElementCalculator {
+    static boolean matching(CsmElement a, CsmElement b) {
+        if (a instanceof CsmChild) {
+            if (b instanceof CsmChild) {
+                CsmChild childA = (CsmChild) a;
+                CsmChild childB = (CsmChild) b;
+                return childA.getChild().equals(childB.getChild());
+            } else if (b instanceof CsmToken) {
+                return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
+                return false;
+            } else {
+                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+            }
+        } else if (a instanceof CsmToken) {
+            if (b instanceof CsmToken) {
+                // fix #2382:
+                // Tokens are described by their type AND their content
+                // and TokenContentCalculator. By using .equals(), all
+                // three values are compared.
+                CsmToken childA = (CsmToken)a;
+                CsmToken childB = (CsmToken)b;
+                return childA.equals(childB);
+            } else if (b instanceof CsmChild) {
+                return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
+                return false;
+            } else {
+                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+            }
+        } else if (a instanceof CsmIndent) {
+            return b instanceof CsmIndent;
+        } else if (a instanceof CsmUnindent) {
+            return b instanceof CsmUnindent;
+        }
+        throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+    }
+
+    private static boolean replacement(CsmElement a, CsmElement b) {
+        if (a instanceof CsmIndent || b instanceof CsmIndent || a instanceof CsmUnindent || b instanceof CsmUnindent) {
+            return false;
+        }
+        if (a instanceof CsmChild) {
+            if (b instanceof CsmChild) {
+                CsmChild childA = (CsmChild) a;
+                CsmChild childB = (CsmChild) b;
+                return childA.getChild().getClass().equals(childB.getChild().getClass());
+            } else if (b instanceof CsmToken) {
+                return false;
+            } else {
+                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+            }
+        } else if (a instanceof CsmToken) {
+            if (b instanceof CsmToken) {
+                CsmToken childA = (CsmToken)a;
+                CsmToken childB = (CsmToken)b;
+                return childA.getTokenType() == childB.getTokenType();
+            } else if (b instanceof CsmChild) {
+                return false;
+            }
+        }
+        throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+    }
+
+    /**
+     * Find the positions of all the given children.
+     */
+    private static Map<Node, Integer> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
+        Map<Node, Integer> positions = new HashMap<>();
+        for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
+            CsmElement element = calculatedSyntaxModel.elements.get(i);
+            if (element instanceof CsmChild) {
+                positions.put(((CsmChild)element).getChild(), i);
+            }
+        }
+        return positions;
+    }
 
     /**
      * Calculate the Difference between two CalculatedSyntaxModel elements, determining which elements were kept,
@@ -71,7 +143,7 @@ class DifferenceElementCalculator {
         while (commonChildrenIndex < commonChildren.size()) {
             Node child = commonChildren.get(commonChildrenIndex++);
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
-            int posOfNextChildInAfter = childrenInAfter.get(child);
+            int posOfNextChildInAfter    = childrenInAfter.get(child);
             if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
                 elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)));
             }
@@ -84,6 +156,39 @@ class DifferenceElementCalculator {
             elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())));
         }
         return elements;
+    }
+
+    private static void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
+        for (TextElement el : nodeTextForChild.getElements()) {
+            if (el instanceof ChildTextElement) {
+                ChildTextElement cte = (ChildTextElement) el;
+                considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), elements);
+            } else if (el instanceof TokenTextElement) {
+                TokenTextElement tte = (TokenTextElement) el;
+                elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
+            } else {
+                throw new UnsupportedOperationException(el.toString());
+            }
+        }
+    }
+
+    private static int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
+        boolean dealtWith = false;
+        if (removedElement instanceof CsmChild) {
+            CsmChild removedChild = (CsmChild) removedElement;
+            if (removedChild.getChild() instanceof Type && removedChild.getChild().getParentNode().isPresent() &&
+                    removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
+                NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
+                considerRemoval(nodeTextForChild, elements);
+                originalIndex++;
+                dealtWith = true;
+            }
+        }
+        if (!dealtWith) {
+            elements.add(new Removed(removedElement));
+            originalIndex++;
+        }
+        return originalIndex;
     }
 
     private static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
@@ -112,7 +217,7 @@ class DifferenceElementCalculator {
                         // No reason to deal with a reshuffled, we are just going to keep everything as it is
                         ((CsmMix) nextAfter).getElements().forEach(el -> elements.add(new Kept(el)));
                     } else {
-                        elements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
+                        elements.add(new Reshuffled((CsmMix)nextOriginal, (CsmMix)nextAfter));
                     }
                     originalIndex++;
                     afterIndex++;
@@ -146,97 +251,10 @@ class DifferenceElementCalculator {
         return elements;
     }
 
-    private static int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
-        boolean dealtWith = false;
-        if (removedElement instanceof CsmChild) {
-            CsmChild removedChild = (CsmChild) removedElement;
-            if (removedChild.getChild() instanceof Type && removedChild.getChild().getParentNode().isPresent() &&
-                    removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
-                NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
-                considerRemoval(nodeTextForChild, elements);
-                originalIndex++;
-                dealtWith = true;
-            }
-        }
-        if (!dealtWith) {
-            elements.add(new Removed(removedElement));
-            originalIndex++;
-        }
-        return originalIndex;
-    }
-
-    private static void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
-        for (TextElement el : nodeTextForChild.getElements()) {
-            if (el instanceof ChildTextElement) {
-                ChildTextElement cte = (ChildTextElement) el;
-                considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), elements);
-            } else if (el instanceof TokenTextElement) {
-                TokenTextElement tte = (TokenTextElement) el;
-                elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
-            } else {
-                throw new UnsupportedOperationException(el.toString());
-            }
-        }
-    }
-
     private static long cost(List<DifferenceElement> elements) {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
     }
 
-    /**
-     * Find the positions of all the given children.
-     */
-    private static Map<Node, Integer> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
-        Map<Node, Integer> positions = new HashMap<>();
-        for (int i = 0; i < calculatedSyntaxModel.elements.size(); i++) {
-            CsmElement element = calculatedSyntaxModel.elements.get(i);
-            if (element instanceof CsmChild) {
-                positions.put(((CsmChild) element).getChild(), i);
-            }
-        }
-        return positions;
-    }
-
-    static boolean matching(CsmElement a, CsmElement b) {
-        if (a instanceof CsmChild) {
-            if (b instanceof CsmChild) {
-                CsmChild childA = (CsmChild) a;
-                CsmChild childB = (CsmChild) b;
-                return childA.getChild().equals(childB.getChild());
-            } else if (b instanceof CsmToken) {
-                return false;
-            } else if (b instanceof CsmIndent) {
-                return false;
-            } else if (b instanceof CsmUnindent) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
-            }
-        } else if (a instanceof CsmToken) {
-            if (b instanceof CsmToken) {
-                // fix #2382:
-                // Tokens are described by their type AND their content
-                // and TokenContentCalculator. By using .equals(), all
-                // three values are compared.
-                CsmToken childA = (CsmToken) a;
-                CsmToken childB = (CsmToken) b;
-                return childA.equals(childB);
-            } else if (b instanceof CsmChild) {
-                return false;
-            } else if (b instanceof CsmIndent) {
-                return false;
-            } else if (b instanceof CsmUnindent) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
-            }
-        } else if (a instanceof CsmIndent) {
-            return b instanceof CsmIndent;
-        } else if (a instanceof CsmUnindent) {
-            return b instanceof CsmUnindent;
-        }
-        throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
-    }
 
     /**
      * Remove from the difference all the elements related to indentation.
@@ -244,31 +262,5 @@ class DifferenceElementCalculator {
      */
     static void removeIndentationElements(List<DifferenceElement> elements) {
         elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
-    }
-
-    private static boolean replacement(CsmElement a, CsmElement b) {
-        if (a instanceof CsmIndent || b instanceof CsmIndent || a instanceof CsmUnindent || b instanceof CsmUnindent) {
-            return false;
-        }
-        if (a instanceof CsmChild) {
-            if (b instanceof CsmChild) {
-                CsmChild childA = (CsmChild) a;
-                CsmChild childB = (CsmChild) b;
-                return childA.getChild().getClass().equals(childB.getChild().getClass());
-            } else if (b instanceof CsmToken) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
-            }
-        } else if (a instanceof CsmToken) {
-            if (b instanceof CsmToken) {
-                CsmToken childA = (CsmToken) a;
-                CsmToken childB = (CsmToken) b;
-                return childA.getTokenType() == childB.getTokenType();
-            } else if (b instanceof CsmChild) {
-                return false;
-            }
-        }
-        throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
     }
 }

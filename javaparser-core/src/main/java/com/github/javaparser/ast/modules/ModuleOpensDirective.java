@@ -36,11 +36,10 @@ import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleOpensDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.StaleGenerated;
+
 /**
  * An opens directive in module-info.java. {@code opens R.S to T1.U1, T2.U2;}
  */
-
 public class ModuleOpensDirective extends ModuleDirective implements NodeWithName<ModuleOpensDirective> {
 
     private Name name;
@@ -157,27 +156,23 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public boolean isModuleOpensStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public ModuleOpensDirective asModuleOpensStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public Optional<ModuleOpensDirective> toModuleOpensStmt() {
         return Optional.of(this);
     }
@@ -200,7 +195,6 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleOpensDirective(Consumer<ModuleOpensDirective> action) {
         action.accept(this);

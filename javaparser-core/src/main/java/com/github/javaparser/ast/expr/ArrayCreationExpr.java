@@ -256,7 +256,6 @@ public class ArrayCreationExpr extends Expression {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayCreationExpr(Consumer<ArrayCreationExpr> action) {
         action.accept(this);

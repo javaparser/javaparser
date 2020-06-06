@@ -41,6 +41,7 @@ import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * <h1>A lambda expression</h1>
  * <h2>Java 1-7</h2>
@@ -251,7 +252,6 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLambdaExpr(Consumer<LambdaExpr> action) {
         action.accept(this);

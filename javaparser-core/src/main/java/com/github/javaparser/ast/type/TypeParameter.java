@@ -41,6 +41,7 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A type parameter. Examples:
  * <br>{@code <}<b>{@code U}</b>{@code > U getU() { ... }}
@@ -217,7 +218,6 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeParameter(Consumer<TypeParameter> action) {
         action.accept(this);

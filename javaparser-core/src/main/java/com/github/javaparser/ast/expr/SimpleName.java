@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.SimpleNameMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A name that consists of a single identifier.
  * In other words: it.does.NOT.contain.dots.

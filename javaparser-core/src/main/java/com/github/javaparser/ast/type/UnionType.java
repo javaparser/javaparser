@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.types.ResolvedUnionType;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>The union type</h1>
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -173,7 +174,6 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
         action.accept(this);

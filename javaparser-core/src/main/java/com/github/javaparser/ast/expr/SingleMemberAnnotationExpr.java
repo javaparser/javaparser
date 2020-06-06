@@ -33,6 +33,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * An annotation that has a single value. <br>{@code @Count(15)}
  *
@@ -136,7 +137,6 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
         action.accept(this);

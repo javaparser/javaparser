@@ -51,7 +51,7 @@ public class CsmOrphanCommentsEnding implements CsmElement {
             }
         }
         for (int i = 0; i < commentsAtEnd; i++) {
-            Comment c = (Comment) everything.get(everything.size() - commentsAtEnd + i);
+            Comment c = (Comment)everything.get(everything.size() - commentsAtEnd + i);
             CsmComment.process(c, printer);
         }
     }

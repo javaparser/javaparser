@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A statement that is labeled, like {@code label123: println("continuing");}
  *
@@ -167,7 +168,6 @@ public class LabeledStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLabeledStmt(Consumer<LabeledStmt> action) {
         action.accept(this);

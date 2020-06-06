@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * An empty statement is a ";" where a statement is expected.
  * @author Julio Vilmar Gesser
@@ -103,7 +104,6 @@ public class EmptyStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEmptyStmt(Consumer<EmptyStmt> action) {
         action.accept(this);

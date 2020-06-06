@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A primitive type.
  * <br>{@code int}
@@ -225,7 +226,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
         action.accept(this);

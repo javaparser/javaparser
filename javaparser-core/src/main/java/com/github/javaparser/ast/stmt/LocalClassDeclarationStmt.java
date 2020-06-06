@@ -34,6 +34,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>A class declaration inside a method.</h1>
  * <h2>Java 1.0</h2>
@@ -143,7 +144,6 @@ public class LocalClassDeclarationStmt extends Statement {
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
         action.accept(this);

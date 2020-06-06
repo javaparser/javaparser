@@ -30,98 +30,22 @@ import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.TokenTypes.spaceTokenKind;
+import static com.github.javaparser.TokenTypes.*;
 
 public interface CsmElement {
 
-    static CsmElement attribute(ObservableProperty property) {
-        return new CsmAttribute(property);
-    }
-
-    static CsmElement block(CsmElement content) {
-        return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
-    }
-
-    static CsmElement charToken(ObservableProperty property) {
-        return new CsmChar(property);
-    }
+    void prettyPrint(Node node, SourcePrinter printer);
 
     static CsmElement child(ObservableProperty property) {
         return new CsmSingleReference(property);
     }
 
-    static CsmElement comma() {
-        return new CsmToken(GeneratedJavaParserConstants.COMMA);
-    }
-
-    static CsmElement comment() {
-        return new CsmComment();
-    }
-
-    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
-        return new CsmConditional(property, condition, thenElement);
-    }
-
-    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        return new CsmConditional(property, condition, thenElement, elseElement);
-    }
-
-    static CsmElement conditional(List<ObservableProperty> properties, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        return new CsmConditional(properties, condition, thenElement, elseElement);
-    }
-
-    static CsmElement indent() {
-        return new CsmIndent();
-    }
-
-    static CsmElement list(ObservableProperty property) {
-        return new CsmList(property);
-    }
-
-    static CsmElement list(ObservableProperty property, CsmElement separator) {
-        return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone());
-    }
-
-    static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
-        return new CsmList(property, none(), separator, preceeding, following);
-    }
-
-    static CsmElement list(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
-        return new CsmList(property, separatorPre, separatorPost, preceeding, following);
-    }
-
-    static CsmElement newline() {
-        return newline(LineSeparator.SYSTEM);
-    }
-
-    static CsmElement newline(LineSeparator lineSeparator) {
-        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString());
-    }
-
-    static CsmElement none() {
-        return new CsmNone();
-    }
-
-    static CsmElement orphanCommentsBeforeThis() {
-        // FIXME
-        return new CsmNone();
-    }
-
-    static CsmElement orphanCommentsEnding() {
-        return new CsmOrphanCommentsEnding();
-    }
-
-    static CsmElement semicolon() {
-        return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
+    static CsmElement attribute(ObservableProperty property) {
+        return new CsmAttribute(property);
     }
 
     static CsmElement sequence(CsmElement... elements) {
         return new CsmSequence(Arrays.asList(elements));
-    }
-
-    static CsmElement space() {
-        return new CsmToken(spaceTokenKind(), " ");
     }
 
     static CsmElement string(int tokenType, String content) {
@@ -140,6 +64,10 @@ public interface CsmElement {
         return new CsmString(property);
     }
 
+    static CsmElement charToken(ObservableProperty property) {
+        return new CsmChar(property);
+    }
+
     static CsmElement token(int tokenType) {
         return new CsmToken(tokenType);
     }
@@ -148,9 +76,78 @@ public interface CsmElement {
         return new CsmToken(tokenType, tokenContentCalculator);
     }
 
+    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
+        return new CsmConditional(property, condition, thenElement);
+    }
+
+    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        return new CsmConditional(property, condition, thenElement, elseElement);
+    }
+
+    static CsmElement conditional(List<ObservableProperty> properties, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        return new CsmConditional(properties, condition, thenElement, elseElement);
+    }
+
+    static CsmElement space() {
+        return new CsmToken(spaceTokenKind(), " ");
+    }
+
+    static CsmElement semicolon() {
+        return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
+    }
+
+    static CsmElement comment() { return new CsmComment(); }
+
+    static CsmElement newline() {
+        return newline(LineSeparator.SYSTEM);
+    }
+
+    static CsmElement newline(LineSeparator lineSeparator) {
+        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString());
+    }
+
+    static CsmElement none() {
+        return new CsmNone();
+    }
+
+    static CsmElement comma() {
+        return new CsmToken(GeneratedJavaParserConstants.COMMA);
+    }
+
+    static CsmElement list(ObservableProperty property) {
+        return new CsmList(property);
+    }
+
+    static CsmElement list(ObservableProperty property, CsmElement separator) {
+        return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone());
+    }
+
+    static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
+        return new CsmList(property, none(), separator, preceeding, following);
+    }
+
+    static CsmElement list(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
+        return new CsmList(property, separatorPre, separatorPost, preceeding, following);
+    }
+
+    static CsmElement orphanCommentsEnding() {
+        return new CsmOrphanCommentsEnding();
+    }
+
+    static CsmElement orphanCommentsBeforeThis() {
+        // FIXME
+        return new CsmNone();
+    }
+
+    static CsmElement indent() {
+        return new CsmIndent();
+    }
+
     static CsmElement unindent() {
         return new CsmUnindent();
     }
 
-    void prettyPrint(Node node, SourcePrinter printer);
+    static CsmElement block(CsmElement content) {
+        return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
+    }
 }

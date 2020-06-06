@@ -48,6 +48,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The declaration of a variable.<br>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.

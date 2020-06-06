@@ -35,6 +35,7 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarati
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A base class for the different types of annotations.
  *
@@ -126,7 +127,6 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationExpr(Consumer<AnnotationExpr> action) {
         action.accept(this);

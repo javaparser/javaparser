@@ -21,7 +21,6 @@
 
 package com.github.javaparser.steps;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -43,6 +42,7 @@ import org.jbehave.core.annotations.When;
 
 import java.util.Map;
 
+import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.staticModifier;
@@ -104,12 +104,12 @@ public class ManipulationSteps {
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseBlock")
     public void whenIsTheStringIsParsedByTheJavaParser(String value) {
-        blockStmt = StaticJavaParser.parseBlock(value);
+        blockStmt = parseBlock(value);
     }
 
     @When("is the String \"$value\" is parsed by the JavaParser using parseStatement")
     public void whenIsTheStringIsParsedByTheJavaParserUsingParseStatement(String value) {
-        statement = StaticJavaParser.parseStatement(value);
+        statement = parseStatement(value);
     }
 
     @When("the List of VariableDeclarations are set as the resources on TryStmt")
@@ -125,7 +125,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackageDeclaration(new PackageDeclaration(StaticJavaParser.parseName(packageName)));
+        compilationUnit.setPackageDeclaration(new PackageDeclaration(parseName(packageName)));
         state.put("cu1", compilationUnit);
     }
 

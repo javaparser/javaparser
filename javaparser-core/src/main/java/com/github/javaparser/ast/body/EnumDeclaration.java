@@ -211,7 +211,6 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
         action.accept(this);

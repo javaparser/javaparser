@@ -39,6 +39,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 import com.github.javaparser.ast.Generated;
+
 /**
  * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
  *

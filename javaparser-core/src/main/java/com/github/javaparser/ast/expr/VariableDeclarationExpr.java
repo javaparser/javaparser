@@ -44,6 +44,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+
 /**
  * A declaration of variables.
  * It is an expression, so it can be put in places like the initializer of a for loop,
@@ -260,7 +261,6 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
         action.accept(this);

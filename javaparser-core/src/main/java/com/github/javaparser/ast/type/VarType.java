@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.metamodel.VarTypeMetaModel;
 import com.github.javaparser.ast.Generated;
+
 /**
  * <h1>A type called "var" waiting for Java to infer it.</h1>
  * Examples:
@@ -131,7 +132,6 @@ public class VarType extends Type {
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
         action.accept(this);

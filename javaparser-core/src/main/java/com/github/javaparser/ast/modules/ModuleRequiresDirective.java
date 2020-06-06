@@ -39,11 +39,10 @@ import java.util.Optional;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.StaleGenerated;
+
 /**
  * A require directive in module-info.java. {@code require a.b.C;}
  */
-
 public class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
     private NodeList<Modifier> modifiers;
@@ -168,27 +167,23 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public boolean isModuleRequiresStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public ModuleRequiresDirective asModuleRequiresStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    @StaleGenerated
     public Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
         return Optional.of(this);
     }
@@ -211,7 +206,6 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);

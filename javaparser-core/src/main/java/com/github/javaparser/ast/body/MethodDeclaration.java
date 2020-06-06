@@ -315,7 +315,6 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodDeclaration(Consumer<MethodDeclaration> action) {
         action.accept(this);

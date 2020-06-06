@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CsmSequence implements CsmElement {
-
-    private final List<CsmElement> elements;
+    private List<CsmElement> elements;
 
     public CsmSequence(List<CsmElement> elements) {
         if (elements == null) {
