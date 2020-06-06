@@ -25,13 +25,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
@@ -2775,6 +2769,88 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 //
 //        System.out.println("Lexical preserving: \n" + print);
 //        assertEqualsStringIgnoringEol(expected_lexical, print);
+
+    }
+
+
+    @Test
+    public void addRemoveImportDeclaration() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+//        String eol = SYSTEM_EOL;
+        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class X {" + eol +
+                "" + eol +
+                "}" + eol +
+                "";
+
+        //
+        final Node b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
+
+        CompilationUnit cu = (CompilationUnit) b;
+        LexicalPreservingPrinter.setup(cu);
+
+        Class<StaleGenerated> annotationClass = StaleGenerated.class;
+
+        cu.addImport(annotationClass);
+        cu.getImports().removeIf(importDeclaration -> {
+            return importDeclaration.getNameAsString().equals(annotationClass.getCanonicalName());
+        });
+        cu.addImport(annotationClass);
+        cu.getImports().removeIf(importDeclaration -> {
+            return importDeclaration.getNameAsString().equals(annotationClass.getCanonicalName());
+        });
+
+        System.out.println("cu = " + cu);
+
 
     }
 
