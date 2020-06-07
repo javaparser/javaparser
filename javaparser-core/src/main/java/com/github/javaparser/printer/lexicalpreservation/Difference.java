@@ -704,13 +704,15 @@ public class Difference {
         }
 
         if (!used) {
-            // Handling trailing comments
-            boolean sufficientTokensRemainToSkip = nodeText.numberOfElements() > originalIndex + 2;
-            boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
-            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
-            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
+//            // FIXME: These extracted variables are buggy -- had to revert to the original conditions for tests to pass.
+//            boolean sufficientTokensRemainToSkip = nodeText.numberOfElements() > originalIndex + 2;
+//            boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
+//            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
+//            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
 
-            if (sufficientTokensRemainToSkip && currentIsAComment) {
+            // Handling trailing comments
+            if (nodeText.numberOfElements() > originalIndex + 1 && nodeText.getTextElement(originalIndex).isComment()) {
+                // Don't put EOL inside the line comment tokens
                 // Need to get behind the comment:
                 originalIndex += 2; // FIXME: Why 2? This comment and the next newline?
                 nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
@@ -718,7 +720,7 @@ public class Difference {
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 originalIndex++; // Now we can increment
-            } else if (currentIsNewline && previousIsAComment) {
+            } else if (nodeText.getTextElement(originalIndex).isNewline() && originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment()) {
                 /*
                  * Manage the case where we want to add an element, after an expression which is followed by a comment on the same line.
                  * This is not the same case as the one who handles the trailing comments, because in this case the node text element is a new line (not a comment)
