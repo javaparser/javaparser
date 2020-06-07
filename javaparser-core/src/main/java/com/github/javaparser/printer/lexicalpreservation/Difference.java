@@ -714,6 +714,8 @@ public class Difference {
 
             // Handling trailing comments
             if (nodeText.numberOfElements() > originalIndex + 1 && nodeText.getTextElement(originalIndex).isComment()) {
+                // FIXME: This causes odd behaviour with adding imports
+                //  (the extra newline is added after the javadoc, not before -- seemingly due to `nodeText.getTextElement(originalIndex).isComment()`)
                 // Don't put EOL inside the line comment tokens
                 // Need to get behind the comment:
                 originalIndex += 2; // FIXME: Why 2? This comment and the next newline?
