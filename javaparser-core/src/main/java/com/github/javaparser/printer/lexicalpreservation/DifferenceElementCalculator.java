@@ -144,16 +144,34 @@ class DifferenceElementCalculator {
             Node child = commonChildren.get(commonChildrenIndex++);
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
             int posOfNextChildInAfter    = childrenInAfter.get(child);
-            if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
-                elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)));
+
+            // TODO: Better naming of this condition -- Define "elements to add" logic within this condition
+            // TODO: Better determination of if changes have occurred (e.g. can we be sure re: adding and removing elements?)
+            boolean changesHaveOccurred = originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter;
+            if (changesHaveOccurred) {
+                List<DifferenceElement> differenceElements = calculateImpl(
+                        original.sub(originalIndex, posOfNextChildInOriginal),
+                        after.sub(afterIndex, posOfNextChildInAfter)
+                );
+                elements.addAll(differenceElements);
             }
+
             elements.add(new Kept(new CsmChild(child)));
             originalIndex = posOfNextChildInOriginal + 1;
             afterIndex = posOfNextChildInAfter + 1;
         }
 
-        if (originalIndex < original.elements.size() || afterIndex < after.elements.size()) {
-            elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())));
+
+        // TODO: Better naming of this condition -- Define "elements to add" logic within this condition
+        // TODO: Better determination of if changes have occurred (e.g. can we be sure re: adding and removing elements?)
+        boolean changesHaveOccurred = originalIndex < original.elements.size() || afterIndex < after.elements.size();
+        if (changesHaveOccurred) {
+            List<DifferenceElement> differenceElements = calculateImpl(
+                    original.sub(originalIndex, original.elements.size()),
+                    after.sub(afterIndex, after.elements.size())
+            );
+            // Add differences
+            elements.addAll(differenceElements);
         }
         return elements;
     }
@@ -191,6 +209,7 @@ class DifferenceElementCalculator {
         return originalIndex;
     }
 
+    // TODO: Rename me.
     private static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
                                                          LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         List<DifferenceElement> elements = new LinkedList<>();
@@ -201,23 +220,36 @@ class DifferenceElementCalculator {
         // We move through the two CalculatedSyntaxModel, moving both forward when we have a match
         // and moving just one side forward when we have an element kept or removed
 
+        boolean originalElementsRemaining = originalIndex < original.elements.size();
+        boolean afterElementsRemaining = afterIndex < after.elements.size();
         do {
-            if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
+            // TODO: These "exhausted" variables can be defined as the inverse of elements remaining.
+            boolean exhaustedAfterElements = afterIndex >= after.elements.size();
+            boolean exhaustedOriginalElements = originalIndex >= original.elements.size();
+
+            if (originalElementsRemaining && exhaustedAfterElements) {
+                // Elements are present in the original, but not after.
+                // Thus can shortcut as all remaining elements must have been removed.
                 CsmElement removedElement = original.elements.get(originalIndex);
                 originalIndex = considerRemoval(removedElement, originalIndex, elements);
-            } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
+            } else if (exhaustedOriginalElements && afterElementsRemaining) {
+                // No original elements remain but there are still more elements after.
+                // Thus can shortcut as all remaining elements must have been added.
                 elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
             } else {
+                // Still elements remaining before/after that must be compared.
+                // Thus, must look more closely to determine if they have been added/removed.
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
 
                 if ((nextOriginal instanceof CsmMix) && (nextAfter instanceof CsmMix)) {
                     if (((CsmMix) nextAfter).getElements().equals(((CsmMix) nextOriginal).getElements())) {
-                        // No reason to deal with a reshuffled, we are just going to keep everything as it is
+                        // They are equal -- we are just going to keep everything as it is.
+                        // Thus we can shortcut as there is no reason to deal with a Reshuffled.
                         ((CsmMix) nextAfter).getElements().forEach(el -> elements.add(new Kept(el)));
                     } else {
-                        elements.add(new Reshuffled((CsmMix)nextOriginal, (CsmMix)nextAfter));
+                        elements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
                     }
                     originalIndex++;
                     afterIndex++;
@@ -230,14 +262,14 @@ class DifferenceElementCalculator {
                     elements.add(new Added(nextAfter));
                     afterIndex++;
                 } else {
-                    // We can try to remove the element or add it and look which one leads to the lower difference
+                    // We can try to remove the element or add it and look which one leads to the least difference (similar to Levenshtein distance between strings)
                     List<DifferenceElement> addingElements = calculate(original.from(originalIndex), after.from(afterIndex + 1));
                     List<DifferenceElement> removingElements = null;
-                    if (cost(addingElements) > 0) {
+                    if (costOfDifferences(addingElements) > 0) {
                         removingElements = calculate(original.from(originalIndex + 1), after.from(afterIndex));
                     }
 
-                    if (removingElements == null || cost(removingElements) > cost(addingElements)) {
+                    if (removingElements == null || costOfDifferences(removingElements) > costOfDifferences(addingElements)) {
                         elements.add(new Added(nextAfter));
                         afterIndex++;
                     } else {
@@ -246,12 +278,20 @@ class DifferenceElementCalculator {
                     }
                 }
             }
-        } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
+
+            // Variables to indicate if we have reached the end of either the originals or the afters.
+            originalElementsRemaining = originalIndex < original.elements.size();
+            afterElementsRemaining = afterIndex < after.elements.size();
+
+        } while (originalElementsRemaining || afterElementsRemaining);
 
         return elements;
     }
 
-    private static long cost(List<DifferenceElement> elements) {
+    /**
+     * @return The number of changes (additions/removals) as the cost.
+     */
+    private static long costOfDifferences(List<DifferenceElement> elements) {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
     }
 

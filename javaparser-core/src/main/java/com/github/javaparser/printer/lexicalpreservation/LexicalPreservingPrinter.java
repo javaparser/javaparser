@@ -312,9 +312,18 @@ public class LexicalPreservingPrinter {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(
+                        findNodeListName(changedList),
+                        changedList,
+                        index
+                );
             } else if (type == AstObserver.ListChangeType.ADDITION) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(
+                        findNodeListName(changedList),
+                        changedList,
+                        index,
+                        nodeAddedOrRemoved
+                );
             } else {
                 throw new UnsupportedOperationException();
             }
