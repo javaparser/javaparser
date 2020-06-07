@@ -398,14 +398,18 @@ public class CompilationUnit extends Node {
     public CompilationUnit addImport(Class<?> clazz) {
         if (clazz.isAnonymousClass() || clazz.isLocalClass()) {
             throw new IllegalArgumentException(clazz.getName() + " is an anonymous or local class, therefore it cannot be added with addImport");
-        }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName())) {
+        } else if (ClassUtils.isPrimitiveOrWrapper(clazz)) {
+            // Importing primitive values or java.lang is unnecessary.
+            return this;
+        } else if (clazz.isArray()) {
+            // If we're adding an array type, recursively call this method but with the component type of the array.
+            return addImport(clazz.getComponentType());
+        } else if (JAVA_LANG.equals(clazz.getPackage().getName())) {
+            // Note that this relies upon the clazz.isArray check above being false (where clazz.getPackage() would be null)
             // Importing primitive values or java.lang is unnecessary.
             return this;
         }
-        if (clazz.isArray()) {
-            return addImport(clazz.getComponentType());
-        }
+
         return addImport(clazz.getCanonicalName());
     }
 
