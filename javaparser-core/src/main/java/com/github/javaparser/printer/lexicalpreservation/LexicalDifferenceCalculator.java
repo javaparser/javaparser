@@ -139,19 +139,19 @@ class LexicalDifferenceCalculator {
 
         // Set the line separator character tokens
         LineSeparator lineSeparator = container.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-        replaceEolTokens(differenceElements, lineSeparator);
+        normaliseEolTokens(differenceElements, lineSeparator);
 
         return differenceElements;
     }
 
-    private void replaceEolTokens(List<DifferenceElement> differenceElements, LineSeparator lineSeparator) {
+    private void normaliseEolTokens(List<DifferenceElement> differenceElements, LineSeparator desiredLineSeparator) {
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement differenceElement = differenceElements.get(i);
             if (differenceElement.isAdded()) {
                 CsmElement element = differenceElement.getElement();
                 boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
                 if (isWhitespaceToken) {
-                    differenceElements.set(i, new Added(CsmElement.newline(lineSeparator)));
+                    differenceElements.set(i, new Added(CsmElement.newline(desiredLineSeparator)));
                 }
             }
         }

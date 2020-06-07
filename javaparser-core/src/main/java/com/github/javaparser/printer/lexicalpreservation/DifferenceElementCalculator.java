@@ -53,6 +53,7 @@ class DifferenceElementCalculator {
                 // three values are compared.
                 CsmToken childA = (CsmToken)a;
                 CsmToken childB = (CsmToken)b;
+                // TODO: Consider mixed line endings as equal? (equivalent?)
                 return childA.equals(childB);
             } else if (b instanceof CsmChild) {
                 return false;
@@ -280,6 +281,7 @@ class DifferenceElementCalculator {
             }
 
             // Variables to indicate if we have reached the end of either the originals or the afters.
+            // Note: Deliberately updated at the end, so that the while() condition uses up-to-date values.
             originalElementsRemaining = originalIndex < original.elements.size();
             afterElementsRemaining = afterIndex < after.elements.size();
 
