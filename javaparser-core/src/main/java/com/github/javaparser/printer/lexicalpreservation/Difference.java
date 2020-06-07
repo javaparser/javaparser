@@ -665,6 +665,8 @@ public class Difference {
 
         TextElement addedTextElement = added.toTextElement();
         boolean used = false;
+
+        // FIRST FIGURE OUT THE INDENTATION LEVEL TO INSERT AT
         boolean isPreviousElementNewline = (originalIndex > 0) && originalElements.get(originalIndex - 1).isNewline();
         if (isPreviousElementNewline) {
             List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
@@ -740,6 +742,8 @@ public class Difference {
         }
 
         if (addedTextElement.isNewline()) {
+            // We have already incremented the indices above,
+            // therefore "next" refers to this already updated index.
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
