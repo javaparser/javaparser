@@ -173,13 +173,15 @@ public class PropertyGenerator extends AbstractNodeGenerator {
             }
         }
 
-        // Only include a cast in the return if it will be useful.
-        boolean returnTypeIsCurrentType = setter.getTypeAsString().equals(nodeCoid.getNameAsString());
-        body.addStatement(f("if (%s == this.%s) { return %s this; }",
-                name,
-                name ,
-                returnTypeIsCurrentType ? "" : "(" + setter.getType() + ")"
-        ));
+//        // Temporarily disabled
+//        // Only include a cast in the return if it will be useful.
+//        boolean returnTypeIsCurrentType = setter.getTypeAsString().equals(nodeCoid.getNameAsString());
+//        body.addStatement(f("if (%s == this.%s) { return %s this; }",
+//                name,
+//                name ,
+//                returnTypeIsCurrentType ? "" : "(" + setter.getType() + ")"
+//        ));
+        body.addStatement(f("if (%s == this.%s) { return (%s) this; }", name, name, setter.getType()));
 
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {
