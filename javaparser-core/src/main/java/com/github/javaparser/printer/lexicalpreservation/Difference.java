@@ -439,7 +439,7 @@ public class Difference {
                 // If in front we have one space and before also we had space let's drop one space
                 // TODO: Confirm this logic -- seems to be checking the current and previous, but the comment talks about in front and before (suggesting "this" current element is a "middle" element)
                 if (textElements.size() > currentTextElementIndex && peekPreviousTextElement().isPresent()) {
-                    if (currentTextElement().isWhiteSpace() && peekPreviousTextElement().get().isWhiteSpace()) {
+                    if (currentTextElement().isWhitespaceButNotEndOfLine() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine()) {
                         // However we do not want to do that when we are about to add or remove elements
                         // TODO: Meaningfully named conditions
                         if ((currentDifferenceElementIndex + 1) == differenceElements.size() || (nextDifferenceElement() instanceof Kept)) {
