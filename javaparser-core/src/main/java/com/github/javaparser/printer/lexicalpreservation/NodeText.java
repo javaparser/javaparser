@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Node;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This contains the lexical information for a single node.
@@ -200,7 +201,11 @@ class NodeText {
 
     @Override
     public String toString() {
-        return "NodeText{" + elements + '}';
+        return "NodeText{" +
+                elements.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")) +
+                '}';
     }
 
 }
