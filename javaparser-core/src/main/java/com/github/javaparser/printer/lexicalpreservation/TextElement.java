@@ -50,7 +50,13 @@ public abstract class TextElement implements TextElementMatcher {
 
     public abstract boolean isWhiteSpace();
 
+    /**
+     * @deprecated Use {@link #isWhitespaceButNotEndOfLine()}
+     */
+    @Deprecated
     public abstract boolean isSpaceOrTab();
+
+    public abstract boolean isWhitespaceButNotEndOfLine();
 
     public abstract boolean isNewline();
 

@@ -96,8 +96,17 @@ class TokenTextElement extends TextElement {
         return token.getCategory().isWhitespace();
     }
 
+    /**
+     * @deprecated Use {@link #isWhitespaceButNotEndOfLine()}
+     */
     @Override
+    @Deprecated
     public boolean isSpaceOrTab() {
+        return isWhitespaceButNotEndOfLine();
+    }
+
+    @Override
+    public boolean isWhitespaceButNotEndOfLine() {
         return token.getCategory().isWhitespaceButNotEndOfLine();
     }
 

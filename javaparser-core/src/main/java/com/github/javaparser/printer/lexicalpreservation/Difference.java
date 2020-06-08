@@ -110,7 +110,7 @@ public class Difference {
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(LBRACE)) {
             return true;
         }
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isSpaceOrTab()) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhitespaceButNotEndOfLine()) {
             return isAfterLBrace(nodeText, nodeTextIndex - 1);
         }
         return false;
@@ -124,7 +124,7 @@ public class Difference {
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
             return true;
         }
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isSpaceOrTab()) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhitespaceButNotEndOfLine()) {
             return isFirstNonWhitespaceElementOnLine(nodeText, nodeTextIndex - 1);
         }
         return false;
@@ -150,7 +150,7 @@ public class Difference {
             if (nodeText.getElements().get(i).isNewline()) {
                 break;
             }
-            if (!nodeText.getElements().get(i).isSpaceOrTab()) {
+            if (!nodeText.getElements().get(i).isWhitespaceButNotEndOfLine()) {
                 hasOnlyWsBefore = false;
             }
         }
@@ -503,10 +503,10 @@ public class Difference {
 
             if (indentation.isPresent() && !isReplaced(lastElementIndex)) {
                 for (int i = 0; i < indentation.get(); i++) {
-                    if (currentTextElement().isSpaceOrTab()) {
+                    if (currentTextElement().isWhitespaceButNotEndOfLine()) {
                         // If the current element is a space, remove it
                         nodeText.removeElement(currentTextElementIndex);
-                    } else if (peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isSpaceOrTab()) {
+                    } else if (peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine()) {
                         // If the current element is not a space itself we remove the space in front of it
                         removePreviousTextElementAndShiftIndex();
                     }
@@ -566,7 +566,7 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
-            } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
+            } else if (kept.isNewLine() && originalTextToken.isWhitespaceButNotEndOfLine()) {
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
                 // case where originalTextToken is a separator like ";" and
@@ -593,7 +593,7 @@ public class Difference {
             incrementCurrentDifferenceElementIndex();
             if (!openBraceWasOnSameLine()) {
                 // Remove indentation
-                for (int i = 0; i < STANDARD_INDENTATION_SIZE && peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isSpaceOrTab(); i++) {
+                for (int i = 0; i < STANDARD_INDENTATION_SIZE && peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine(); i++) {
                     nodeText.removeElement(--currentTextElementIndex);
                 }
             }
@@ -698,7 +698,7 @@ public class Difference {
     private boolean nextIsRightBrace(int index) {
         List<TextElement> elements = textElements.subList(index, textElements.size());
         for (TextElement element : elements) {
-            if (!element.isSpaceOrTab()) {
+            if (!element.isWhitespaceButNotEndOfLine()) {
                 return element.isToken(RBRACE);
             }
         }
@@ -746,7 +746,7 @@ public class Difference {
                 used = true;
             }
             insertTextElementAndShiftIndex(currentTextElementIndex, new TokenTextElement(TokenTypes.eolTokenKind()));
-            while (currentTextElementIndex >= 2 && textElements.get(currentTextElementIndex - 2).isSpaceOrTab()) {
+            while (currentTextElementIndex >= 2 && textElements.get(currentTextElementIndex - 2).isWhitespaceButNotEndOfLine()) {
                 // This remove the space in "{ }" when adding a new line
                 // Note that the space will be two elements before (jumping past the right-brace)
                 removeTextElementThenShiftIndex(currentTextElementIndex - 2);
@@ -1065,7 +1065,7 @@ public class Difference {
             indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
-            if ((nodeTextIndex < nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+            if ((nodeTextIndex < nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isWhitespaceButNotEndOfLine()) {
                 nodeTextIndex++;
             } else {
                 nodeText.getElements().add(nodeTextIndex++, e);

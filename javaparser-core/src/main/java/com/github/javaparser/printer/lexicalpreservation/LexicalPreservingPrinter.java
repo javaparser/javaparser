@@ -296,7 +296,7 @@ public class LexicalPreservingPrinter {
 
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
-                if (!spaceCandidate.isSpaceOrTab()) {
+                if (!spaceCandidate.isWhitespaceButNotEndOfLine()) {
                     if (spaceCandidate.isNewline() && i != index - 1) {
                         for (int j = 0; j < (index - 1) - i; j++) {
                             nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
@@ -614,7 +614,7 @@ public class LexicalPreservingPrinter {
         }
         Collections.reverse(followingNewlines);
         for (int i = 0; i < followingNewlines.size(); i++) {
-            if (!followingNewlines.get(i).isSpaceOrTab()) {
+            if (!followingNewlines.get(i).isWhitespaceButNotEndOfLine()) {
                 return followingNewlines.subList(0, i);
             }
         }
