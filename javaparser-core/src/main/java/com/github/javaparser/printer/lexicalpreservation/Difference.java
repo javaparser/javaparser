@@ -54,23 +54,23 @@ public class Difference {
     private final NodeText nodeText;
     private final Node node;
 
-    private final List<DifferenceElement> diffElements;
-    private final List<TextElement> originalElements;
-    private int originalIndex = 0;
-    private int diffIndex = 0;
+    private final List<DifferenceElement> differenceElements;
+    private final List<TextElement> textElements;
+    private int indexOfTextElements = 0;
+    private int indexOfDifferenceElements = 0;
 
     private final List<TokenTextElement> indentation;
     private boolean addedIndentation = false;
 
-    Difference(List<DifferenceElement> diffElements, NodeText nodeText, Node node) {
+    Difference(List<DifferenceElement> differenceElements, NodeText nodeText, Node node) {
         if (nodeText == null) {
             throw new NullPointerException("nodeText can not be null");
         }
 
         this.nodeText = nodeText;
         this.node = node;
-        this.diffElements = diffElements;
-        this.originalElements = nodeText.getElements();
+        this.differenceElements = differenceElements;
+        this.textElements = nodeText.getElements();
 
         this.indentation = LexicalPreservingPrinter.findIndentation(node);
     }
@@ -147,7 +147,7 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-        extractReshuffledDiffElements(diffElements);
+        extractReshuffledDiffElements(differenceElements);
         Map<Removed, RemovedGroup> removedGroups = combineRemovedElementsToRemovedGroups();
 
         do {
@@ -155,12 +155,12 @@ public class Difference {
             boolean isLeftOverOriginalElement = applyLeftOverOriginalElements();
 
             if (!isLeftOverDiffElement && !isLeftOverOriginalElement){
-                DifferenceElement diffElement = diffElements.get(diffIndex);
+                DifferenceElement diffElement = differenceElements.get(indexOfDifferenceElements);
 
                 if (diffElement instanceof Added) {
                     applyAddedDiffElement((Added) diffElement);
                 } else {
-                    TextElement originalElement = originalElements.get(originalIndex);
+                    TextElement originalElement = textElements.get(indexOfTextElements);
                     boolean originalElementIsChild = originalElement instanceof ChildTextElement;
                     boolean originalElementIsToken = originalElement instanceof TokenTextElement;
 
@@ -174,16 +174,16 @@ public class Difference {
                     }
                 }
             }
-        } while (diffIndex < diffElements.size() || originalIndex < originalElements.size());
+        } while (indexOfDifferenceElements < differenceElements.size() || indexOfTextElements < textElements.size());
     }
 
     private boolean applyLeftOverOriginalElements() {
         boolean isLeftOverElement = false;
-        if (diffIndex >= diffElements.size() && originalIndex < originalElements.size()) {
-            TextElement originalElement = originalElements.get(originalIndex);
+        if (indexOfDifferenceElements >= differenceElements.size() && indexOfTextElements < textElements.size()) {
+            TextElement originalElement = textElements.get(indexOfTextElements);
 
             if (originalElement.isWhiteSpaceOrComment()) {
-                originalIndex++;
+                indexOfTextElements++;
             } else {
                 throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
                         + this + " " + originalElement);
@@ -196,13 +196,13 @@ public class Difference {
 
     private boolean applyLeftOverDiffElements() {
         boolean isLeftOverElement = false;
-        if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
-            DifferenceElement diffElement = diffElements.get(diffIndex);
+        if (indexOfDifferenceElements < differenceElements.size() && indexOfTextElements >= textElements.size()) {
+            DifferenceElement diffElement = differenceElements.get(indexOfDifferenceElements);
             if (diffElement instanceof Kept) {
                 Kept kept = (Kept) diffElement;
 
                 if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
-                    diffIndex++;
+                    indexOfDifferenceElements++;
                 } else {
                     throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
                             + nodeText + ". Difference: " + this);
@@ -210,9 +210,9 @@ public class Difference {
             } else if (diffElement instanceof Added) {
                 Added addedElement = (Added) diffElement;
 
-                nodeText.addElement(originalIndex, addedElement.toTextElement());
-                originalIndex++;
-                diffIndex++;
+                nodeText.addElement(indexOfTextElements, addedElement.toTextElement());
+                indexOfTextElements++;
+                indexOfDifferenceElements++;
             } else {
                 throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
             }
@@ -238,7 +238,7 @@ public class Difference {
 
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
                 boolean includeNewlineVariantsAsEqual = true;
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node, includeNewlineVariantsAsEqual);
+                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, indexOfTextElements, node, includeNewlineVariantsAsEqual);
 
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
@@ -289,7 +289,7 @@ public class Difference {
 
                 int diffElIterator = index;
                 if (lastNodeTextIndex != -1) {
-                    for (int ntIndex = originalIndex; ntIndex <= lastNodeTextIndex; ntIndex++) {
+                    for (int ntIndex = indexOfTextElements; ntIndex <= lastNodeTextIndex; ntIndex++) {
 
                         if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
                             int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
@@ -355,8 +355,8 @@ public class Difference {
         Map<Integer, List<Removed>> removedElementsMap = new HashMap<>();
 
         Integer firstElement = null;
-        for (int i = 0; i < diffElements.size(); i++) {
-            DifferenceElement diffElement = diffElements.get(i);
+        for (int i = 0; i < differenceElements.size(); i++) {
+            DifferenceElement diffElement = differenceElements.get(i);
             if (diffElement instanceof Removed) {
                 if (firstElement == null) {
                     firstElement = i;
@@ -379,29 +379,29 @@ public class Difference {
                 // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
                 Comment comment = (Comment) originalElementChild.getChild();
                 if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
-                    nodeText.removeElement(originalIndex);
+                    nodeText.removeElement(indexOfTextElements);
                 } else {
-                    originalIndex++;
+                    indexOfTextElements++;
                 }
             } else {
-                nodeText.removeElement(originalIndex);
+                nodeText.removeElement(indexOfTextElements);
 
-                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added))
+                if ((indexOfDifferenceElements + 1 >= differenceElements.size() || !(differenceElements.get(indexOfDifferenceElements + 1) instanceof Added))
                         && !removedGroup.isACompleteLine()) {
-                    originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
+                    indexOfTextElements = considerEnforcingIndentation(nodeText, indexOfTextElements);
                 }
                 // If in front we have one space and before also we had space let's drop one space
-                if (originalElements.size() > originalIndex && originalIndex > 0) {
-                    if (originalElements.get(originalIndex).isWhiteSpace()
-                            && originalElements.get(originalIndex - 1).isWhiteSpace()) {
+                if (textElements.size() > indexOfTextElements && indexOfTextElements > 0) {
+                    if (textElements.get(indexOfTextElements).isWhiteSpace()
+                            && textElements.get(indexOfTextElements - 1).isWhiteSpace()) {
                         // However we do not want to do that when we are about to adding or removing elements
-                        if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
-                            originalElements.remove(originalIndex--);
+                        if ((indexOfDifferenceElements + 1) == differenceElements.size() || (differenceElements.get(indexOfDifferenceElements + 1) instanceof Kept)) {
+                            textElements.remove(indexOfTextElements--);
                         }
                     }
                 }
 
-                diffIndex++;
+                indexOfDifferenceElements++;
             }
         } else if (removed.isToken() && originalElementIsToken &&
                 (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
@@ -409,24 +409,24 @@ public class Difference {
                         // element always has the current operating system's EOL as type
                         || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
                                 && removed.isNewLine()))) {
-            nodeText.removeElement(originalIndex);
-            diffIndex++;
+            nodeText.removeElement(indexOfTextElements);
+            indexOfDifferenceElements++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
-            originalIndex++;
+            indexOfTextElements++;
         } else if (originalElement.isLiteral()) {
-            nodeText.removeElement(originalIndex);
-            diffIndex++;
+            nodeText.removeElement(indexOfTextElements);
+            indexOfDifferenceElements++;
         } else if (removed.isPrimitiveType()) {
             if (originalElement.isPrimitive()) {
-                nodeText.removeElement(originalIndex);
-                diffIndex++;
+                nodeText.removeElement(indexOfTextElements);
+                indexOfDifferenceElements++;
             } else {
                 throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
             }
         } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
-            diffIndex++;
+            indexOfDifferenceElements++;
         } else if (originalElement.isWhiteSpace()) {
-            originalIndex++;
+            indexOfTextElements++;
         } else {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
         }
@@ -438,7 +438,7 @@ public class Difference {
      * Cleans the line of left over space if there is unnecessary indentation and the element will not be replaced
      */
     private void cleanTheLineOfLeftOverSpace(RemovedGroup removedGroup, Removed removed) {
-        if (originalIndex >= originalElements.size()) {
+        if (indexOfTextElements >= textElements.size()) {
             // if all elements were already processed there is nothing to do
             return;
         }
@@ -451,13 +451,13 @@ public class Difference {
 
             if (indentation.isPresent() && !isReplaced(lastElementIndex)) {
                 for (int i = 0; i < indentation.get(); i++) {
-                    if (originalElements.get(originalIndex).isSpaceOrTab()) {
+                    if (textElements.get(indexOfTextElements).isSpaceOrTab()) {
                         // If the current element is a space, remove it
-                        nodeText.removeElement(originalIndex);
-                    } else if (originalIndex >= 1 && originalElements.get(originalIndex - 1).isSpaceOrTab()) {
+                        nodeText.removeElement(indexOfTextElements);
+                    } else if (indexOfTextElements >= 1 && textElements.get(indexOfTextElements - 1).isSpaceOrTab()) {
                         // If the current element is not a space itself we remove the space in front of it
-                        nodeText.removeElement(originalIndex - 1);
-                        originalIndex--;
+                        nodeText.removeElement(indexOfTextElements - 1);
+                        indexOfTextElements--;
                     }
                 }
             }
@@ -469,17 +469,17 @@ public class Difference {
 
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
-            originalIndex++;
+            indexOfTextElements++;
         } else if (kept.isChild() && ((CsmChild)kept.getElement()).getChild() instanceof Comment ) {
-            diffIndex++;
+            indexOfDifferenceElements++;
         } else if (kept.isChild() && originalElementIsChild) {
-            diffIndex++;
-            originalIndex++;
+            indexOfDifferenceElements++;
+            indexOfTextElements++;
         } else if (kept.isChild() && originalElementIsToken) {
             if (originalElement.isWhiteSpaceOrComment()) {
-                originalIndex++;
+                indexOfTextElements++;
             } else if (originalElement.isIdentifier() && isNodeWithTypeArguments(kept)) {
-                diffIndex++;
+                indexOfDifferenceElements++;
                 // skip all token related to node with type argument declaration
                 // for example:
                 // List i : in this case originalElement is "List" and the next token is space. There is nothing to skip. in the originalElements list.
@@ -488,15 +488,15 @@ public class Difference {
                 // List<List<String>> i : in this case originalElement is "List" and the next
                 // token is "<" so we have to skip all the tokens which are used in the typed arguments declaration [<][List][<][String][>][>](6 tokens) in the originalElements list.
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
-                originalIndex += step;
-                originalIndex++;
+                indexOfTextElements += step;
+                indexOfTextElements++;
             } else if (originalElement.isIdentifier()) {
-                originalIndex++;
-                diffIndex++;
+                indexOfTextElements++;
+                indexOfDifferenceElements++;
             } else {
                 if (kept.isPrimitiveType()) {
-                    originalIndex++;
-                    diffIndex++;
+                    indexOfTextElements++;
+                    indexOfDifferenceElements++;
                 } else {
                     throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
                 }
@@ -505,36 +505,36 @@ public class Difference {
             TokenTextElement originalTextToken = (TokenTextElement) originalElement;
 
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
-                originalIndex++;
-                diffIndex++;
+                indexOfTextElements++;
+                indexOfDifferenceElements++;
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
-                originalIndex++;
-                diffIndex++;
+                indexOfTextElements++;
+                indexOfDifferenceElements++;
              // case where originalTextToken is a separator like ";" and
              // kept is not a new line or whitespace for example "}"
              // see issue 2351
             }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
-                originalIndex++;
+                indexOfTextElements++;
             } else if (kept.isWhiteSpaceOrComment()) {
-                diffIndex++;
+                indexOfDifferenceElements++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
-                originalIndex++;
+                indexOfTextElements++;
             } else {
                 throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
             }
         } else if (kept.isWhiteSpace()) {
-            diffIndex++;
+            indexOfDifferenceElements++;
         } else if (kept.isIndent()) {
-            diffIndex++;
+            indexOfDifferenceElements++;
         } else if (kept.isUnindent()) {
             // Nothing to do, beside considering indentation
             // However we want to consider the case in which the indentation was not applied, like when we have
             // just a left brace followed by space
 
-            diffIndex++;
+            indexOfDifferenceElements++;
             if (!openBraceWasOnSameLine()) {
-                for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
-                    nodeText.removeElement(--originalIndex);
+                for (int i = 0; i < STANDARD_INDENTATION_SIZE && indexOfTextElements >= 1 && nodeText.getTextElement(indexOfTextElements - 1).isSpaceOrTab(); i++) {
+                    nodeText.removeElement(--indexOfTextElements);
                 }
             }
         } else {
@@ -603,7 +603,7 @@ public class Difference {
     }
 
     private boolean openBraceWasOnSameLine() {
-        int index = originalIndex;
+        int index = indexOfTextElements;
         while (index >= 0 && !nodeText.getTextElement(index).isNewline()) {
             if (nodeText.getTextElement(index).isToken(LBRACE)) {
                 return true;
@@ -614,9 +614,9 @@ public class Difference {
     }
 
     private boolean wasSpaceBetweenBraces() {
-        return nodeText.getTextElement(originalIndex).isToken(RBRACE)
-                && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1)
-                && (diffIndex < 2 || !diffElements.get(diffIndex - 2).isRemoved());
+        return nodeText.getTextElement(indexOfTextElements).isToken(RBRACE)
+                && doWeHaveLeftBraceFollowedBySpace(indexOfTextElements - 1)
+                && (indexOfDifferenceElements < 2 || !differenceElements.get(indexOfDifferenceElements - 2).isRemoved());
     }
 
     private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
@@ -636,7 +636,7 @@ public class Difference {
     }
 
     private boolean nextIsRightBrace(int index) {
-        List<TextElement> elements = originalElements.subList(index, originalElements.size());
+        List<TextElement> elements = textElements.subList(index, textElements.size());
         for(TextElement element : elements) {
             if (!element.isSpaceOrTab()) {
                 return element.isToken(RBRACE);
@@ -651,7 +651,7 @@ public class Difference {
                 indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
             }
             addedIndentation = true;
-            diffIndex++;
+            indexOfDifferenceElements++;
             return;
         }
         if (added.isUnindent()) {
@@ -659,7 +659,7 @@ public class Difference {
                 indentation.remove(indentation.size() - 1);
             }
             addedIndentation = false;
-            diffIndex++;
+            indexOfDifferenceElements++;
             return;
         }
 
@@ -667,31 +667,31 @@ public class Difference {
         boolean used = false;
 
         // FIRST FIGURE OUT THE INDENTATION LEVEL TO INSERT AT
-        boolean isPreviousElementNewline = (originalIndex > 0) && originalElements.get(originalIndex - 1).isNewline();
+        boolean isPreviousElementNewline = (indexOfTextElements > 0) && textElements.get(indexOfTextElements - 1).isNewline();
         if (isPreviousElementNewline) {
-            List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
-            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
+            List<TextElement> elements = processIndentation(indentation, textElements.subList(0, indexOfTextElements - 1));
+            boolean nextIsRightBrace = nextIsRightBrace(indexOfTextElements);
             for (TextElement e : elements) {
                 if (!nextIsRightBrace
                         && e instanceof TokenTextElement
-                        && originalElements.get(originalIndex).isToken(((TokenTextElement)e).getTokenKind())) {
-                    originalIndex++;
+                        && textElements.get(indexOfTextElements).isToken(((TokenTextElement)e).getTokenKind())) {
+                    indexOfTextElements++;
                 } else {
-                    nodeText.addElement(originalIndex++, e);
+                    nodeText.addElement(indexOfTextElements++, e);
                 }
             }
-        } else if (isAfterLBrace(nodeText, originalIndex) && !isAReplacement(diffIndex)) {
+        } else if (isAfterLBrace(nodeText, indexOfTextElements) && !isAReplacement(indexOfDifferenceElements)) {
             if (addedTextElement.isNewline()) {
                 used = true;
             }
-            nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
+            nodeText.addElement(indexOfTextElements++, new TokenTextElement(TokenTypes.eolTokenKind()));
             // This remove the space in "{ }" when adding a new line
-            while (originalIndex >= 2 && originalElements.get(originalIndex - 2).isSpaceOrTab()) {
-                originalElements.remove(originalIndex - 2);
-                originalIndex--;
+            while (indexOfTextElements >= 2 && textElements.get(indexOfTextElements - 2).isSpaceOrTab()) {
+                textElements.remove(indexOfTextElements - 2);
+                indexOfTextElements--;
             }
-            for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                nodeText.addElement(originalIndex++, e);
+            for (TextElement e : processIndentation(indentation, textElements.subList(0, indexOfTextElements - 1))) {
+                nodeText.addElement(indexOfTextElements++, e);
             }
             // Indentation is painful...
             // Sometimes we want to force indentation: this is the case when indentation was expected but
@@ -700,7 +700,7 @@ public class Difference {
             // inserted by us in this transformation we do not want to insert it again
             if (!addedIndentation) {
                 for (TextElement e : indentationBlock()) {
-                    nodeText.addElement(originalIndex++, e);
+                    nodeText.addElement(indexOfTextElements++, e);
                 }
             }
         }
@@ -712,49 +712,54 @@ public class Difference {
 //            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
 //            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
 
+//            TextElement currentTextElement = nodeText.getTextElement(indexOfTextElements);
+//            boolean currentElementIsNewline = currentTextElement.isNewline();
+//            boolean previousElementIsComment = indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment();
+//            boolean elementIsCommentFollowedByAnyElement = nodeText.numberOfElements() > indexOfTextElements + 1 && currentTextElement.isComment();
+
             // Handling trailing comments
-            if (nodeText.numberOfElements() > originalIndex + 1 && nodeText.getTextElement(originalIndex).isComment()) {
+            if (nodeText.numberOfElements() > indexOfTextElements + 1 && nodeText.getTextElement(indexOfTextElements).isComment()) {
                 // FIXME: This causes odd behaviour with adding imports
                 //  (the extra newline is added after the javadoc, not before -- seemingly due to `nodeText.getTextElement(originalIndex).isComment()`)
                 // Don't put EOL inside the line comment tokens
                 // Need to get behind the comment:
-                originalIndex += 2; // FIXME: Why 2? This comment and the next newline?
-                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+                indexOfTextElements += 2; // FIXME: Why 2? This comment and the next newline?
+                nodeText.addElement(indexOfTextElements, addedTextElement); // Defer originalIndex increment
 
                 // We want to adjust the indentation while considering the new element that we added
-                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
-                originalIndex++; // Now we can increment
-            } else if (nodeText.getTextElement(originalIndex).isNewline() && originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment()) {
+                indexOfTextElements = adjustIndentation(indentation, nodeText, indexOfTextElements, false);
+                indexOfTextElements++; // Now we can increment
+            } else if (nodeText.getTextElement(indexOfTextElements).isNewline() && indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment()) {
                 /*
                  * Manage the case where we want to add an element, after an expression which is followed by a comment on the same line.
                  * This is not the same case as the one who handles the trailing comments, because in this case the node text element is a new line (not a comment)
                  * For example : {@code private String a; // this is a }
                  */
-                originalIndex++; // Insert after the new line which follows this comment.
+                indexOfTextElements++; // Insert after the new line which follows this comment.
 
                 // We want to adjust the indentation while considering the new element that we added
-                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
-                nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
+                indexOfTextElements = adjustIndentation(indentation, nodeText, indexOfTextElements, false);
+                nodeText.addElement(indexOfTextElements, addedTextElement); // Defer originalIndex increment
 
-                originalIndex++; // Now we can increment.
+                indexOfTextElements++; // Now we can increment.
             } else {
-                nodeText.addElement(originalIndex, addedTextElement);
-                originalIndex++;
+                nodeText.addElement(indexOfTextElements, addedTextElement);
+                indexOfTextElements++;
             }
         }
 
         if (addedTextElement.isNewline()) {
             // We have already incremented the indices above,
             // therefore "next" refers to this already updated index.
-            boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
-            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
-            boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
+            boolean followedByUnindent = isFollowedByUnindent(differenceElements, indexOfDifferenceElements);
+            boolean nextIsRightBrace = nextIsRightBrace(indexOfTextElements);
+            boolean nextIsNewLine = nodeText.getTextElement(indexOfTextElements).isNewline();
             if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
-                originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
+                indexOfTextElements = adjustIndentation(indentation, nodeText, indexOfTextElements, followedByUnindent);
             }
         }
 
-        diffIndex++;
+        indexOfDifferenceElements++;
     }
 
     private String tokenDescription(int kind) {
@@ -941,15 +946,15 @@ public class Difference {
     }
 
     private boolean isAReplacement(int diffIndex) {
-        return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
+        return (diffIndex > 0) && differenceElements.get(diffIndex) instanceof Added && differenceElements.get(diffIndex - 1) instanceof Removed;
     }
 
     private boolean isReplaced(int diffIndex) {
-        return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
+        return (diffIndex < differenceElements.size() - 1) && differenceElements.get(diffIndex + 1) instanceof Added && differenceElements.get(diffIndex) instanceof Removed;
     }
 
     @Override
     public String toString() {
-        return "Difference{" + diffElements + '}';
+        return "Difference{" + differenceElements + '}';
     }
 }
