@@ -718,16 +718,15 @@ public class Difference {
             boolean previousElementIsComment = indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment();
             boolean elementIsCommentFollowedByAnyElement = nodeText.numberOfElements() > indexOfTextElements + 1 && currentTextElement.isComment();
 
-            // Handling trailing comments
             if (!previousElementIsNewline && elementIsCommentFollowedByAnyElement) {
-                // FIXME: This causes odd behaviour with adding imports
-                //  (the extra newline is added after the javadoc, not before -- seemingly due to `nodeText.getTextElement(originalIndex).isComment()`)
-                // Don't put EOL inside the line comment tokens
-                // Need to get behind the comment:
-                indexOfTextElements += 2; // FIXME: Why 2? This comment and the next newline?
-                nodeText.addElement(indexOfTextElements, addedTextElement); // Defer originalIndex increment
+                // Handling trailing comments
+                // Note that we need to get behind the comment and the newline that follows it (i.e. skip two elements):
+                indexOfTextElements += 2;
 
-                // We want to adjust the indentation while considering the new element that we added
+                // Insert the added element
+                nodeText.addElement(indexOfTextElements, addedTextElement); // NB: Defer originalIndex increment until indentation adjusted.
+
+                // We want to adjust the indentation while considering the new element that we just added
                 indexOfTextElements = adjustIndentation(indentation, nodeText, indexOfTextElements, false);
                 indexOfTextElements++; // Now we can increment
             } else if (currentElementIsNewline && previousElementIsComment) {
