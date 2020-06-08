@@ -229,23 +229,29 @@ class LexicalDifferenceCalculator {
             CsmList csmList = (CsmList) csm;
             if (csmList.getProperty().isAboutNodes()) {
                 Object rawValue = change.getValue(csmList.getProperty(), node);
+
+                // Setup an appropriately typed NodeList, else throw...
                 NodeList<?> nodeList;
                 if (rawValue instanceof Optional) {
                     Optional<?> optional = (Optional<?>)rawValue;
                     if (optional.isPresent()) {
-                        if (!(optional.get() instanceof NodeList)) {
+                        if (optional.get() instanceof NodeList) {
+                            nodeList = (NodeList<?>) optional.get();
+                        } else {
                             throw new IllegalStateException("Expected NodeList, found " + optional.get().getClass().getCanonicalName());
                         }
-                        nodeList = (NodeList<?>) optional.get();
                     } else {
                         nodeList = new NodeList<>();
                     }
                 } else {
-                    if (!(rawValue instanceof NodeList)) {
+                    if (rawValue instanceof NodeList) {
+                        nodeList = (NodeList<?>) rawValue;
+                    } else {
                         throw new IllegalStateException("Expected NodeList, found " + rawValue.getClass().getCanonicalName());
                     }
-                    nodeList = (NodeList<?>) rawValue;
                 }
+
+                // Next do the calculations...
                 if (!nodeList.isEmpty()) {
                     calculatedSyntaxModelForNode(csmList.getPreceeding(), node, elements, change);
                     for (int i = 0; i < nodeList.size(); i++) {
