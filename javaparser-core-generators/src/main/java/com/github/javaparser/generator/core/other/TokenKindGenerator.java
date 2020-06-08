@@ -70,33 +70,39 @@ public class TokenKindGenerator extends AbstractGenerator {
         // TODO: Define "reset"
         // Reset the enum:
         kindEnum.getEntries().clear();
-        // Reset the switch within the method valueOf():
-        valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
+        // Reset the switch within the method valueOf(), leaving only the default
+//        valueOfSwitch.getEntries().stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
+
+        // TODO: Figure out why the newlines are not removed when we remove an entire switch entry...
+        SwitchEntry defaultEntry = valueOfSwitch.getDefaultSwitchEntry().get();
+        valueOfSwitch.getEntries().clear();
+        valueOfSwitch.getEntries().add(defaultEntry);
 
 
-        // Do generation
-        annotateGenerated(kindEnum);
-        annotateGenerated(valueOfMethod);
-        //
-        final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
-        final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
-        for (BodyDeclaration<?> member : constants.getMembers()) {
-            member.toFieldDeclaration()
-                    .filter(field -> {
-                        // TODO: Why?
-                        // Only include constants that are relevant -- i.e. skip lexical state (e.g. inside comment) and literal token values.
-                        String javadoc = field.getJavadocComment().get().getContent();
-                        return javadoc.contains("RegularExpression Id") || javadoc.contains("End of File");
-                    })
-                    .map(field -> field.getVariable(0))
-                    .ifPresent(var -> {
-                        // For each defined constant, generate an enum and corresponding valueOf entry:
-                        final String name = var.getNameAsString();
-                        final IntegerLiteralExpr kind = var.getInitializer().get().asIntegerLiteralExpr();
-                        generateEnumEntry(kindEnum, name, kind);
-                        generateValueOfEntry(valueOfSwitch, name, kind);
-                    });
-        }
+
+//        // Do generation
+//        annotateGenerated(kindEnum);
+//        annotateGenerated(valueOfMethod);
+//        //
+//        final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
+//        final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
+//        for (BodyDeclaration<?> member : constants.getMembers()) {
+//            member.toFieldDeclaration()
+//                    .filter(field -> {
+//                        // TODO: Why?
+//                        // Only include constants that are relevant -- i.e. skip lexical state (e.g. inside comment) and literal token values.
+//                        String javadoc = field.getJavadocComment().get().getContent();
+//                        return javadoc.contains("RegularExpression Id") || javadoc.contains("End of File");
+//                    })
+//                    .map(field -> field.getVariable(0))
+//                    .ifPresent(var -> {
+//                        // For each defined constant, generate an enum and corresponding valueOf entry:
+//                        final String name = var.getNameAsString();
+//                        final IntegerLiteralExpr kind = var.getInitializer().get().asIntegerLiteralExpr();
+//                        generateEnumEntry(kindEnum, name, kind);
+//                        generateValueOfEntry(valueOfSwitch, name, kind);
+//                    });
+//        }
 
 
 //        // TODO
