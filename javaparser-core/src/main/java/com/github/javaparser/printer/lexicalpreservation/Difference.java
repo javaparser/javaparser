@@ -712,13 +712,14 @@ public class Difference {
 //            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
 //            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
 
-//            TextElement currentTextElement = nodeText.getTextElement(indexOfTextElements);
-//            boolean currentElementIsNewline = currentTextElement.isNewline();
-//            boolean previousElementIsComment = indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment();
-//            boolean elementIsCommentFollowedByAnyElement = nodeText.numberOfElements() > indexOfTextElements + 1 && currentTextElement.isComment();
+            TextElement currentTextElement = nodeText.getTextElement(indexOfTextElements);
+            boolean currentElementIsNewline = currentTextElement.isNewline();
+            boolean previousElementIsNewline = indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isNewline();
+            boolean previousElementIsComment = indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment();
+            boolean elementIsCommentFollowedByAnyElement = nodeText.numberOfElements() > indexOfTextElements + 1 && currentTextElement.isComment();
 
             // Handling trailing comments
-            if (nodeText.numberOfElements() > indexOfTextElements + 1 && nodeText.getTextElement(indexOfTextElements).isComment()) {
+            if (!previousElementIsNewline && elementIsCommentFollowedByAnyElement) {
                 // FIXME: This causes odd behaviour with adding imports
                 //  (the extra newline is added after the javadoc, not before -- seemingly due to `nodeText.getTextElement(originalIndex).isComment()`)
                 // Don't put EOL inside the line comment tokens
@@ -729,7 +730,7 @@ public class Difference {
                 // We want to adjust the indentation while considering the new element that we added
                 indexOfTextElements = adjustIndentation(indentation, nodeText, indexOfTextElements, false);
                 indexOfTextElements++; // Now we can increment
-            } else if (nodeText.getTextElement(indexOfTextElements).isNewline() && indexOfTextElements > 0 && nodeText.getTextElement(indexOfTextElements - 1).isComment()) {
+            } else if (currentElementIsNewline && previousElementIsComment) {
                 /*
                  * Manage the case where we want to add an element, after an expression which is followed by a comment on the same line.
                  * This is not the same case as the one who handles the trailing comments, because in this case the node text element is a new line (not a comment)
