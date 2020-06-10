@@ -136,6 +136,12 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.BODY)
         ));
 
+        /*
+         * <pre>{@code
+         * // comment
+         * @Annotation FOO("arg1", 123)
+         * }</pre>
+         */
         concreteSyntaxModelByClass.put(EnumConstantDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),
@@ -147,7 +153,8 @@ public class ConcreteSyntaxModel {
                 ),
                 conditional(CLASS_BODY, IS_NOT_EMPTY,
                         sequence(
-                                space(), token(GeneratedJavaParserConstants.LBRACE), newline(), indent(), newline(),
+                                space(), token(GeneratedJavaParserConstants.LBRACE), newline(),
+                                indent(), newline(),
                                 list(ObservableProperty.CLASS_BODY, newline(), newline(), none(), newline()),
                                 unindent(),
                                 token(RBRACE), newline()
@@ -449,7 +456,8 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.RPAREN),
                 conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT,
                         sequence(
-                                space(), token(LBRACE), newline(), indent(),
+                                space(), token(LBRACE), newline(),
+                                indent(),
                                 list(ObservableProperty.ANONYMOUS_CLASS_BODY,
                                         newline(),
                                         newline(),
@@ -692,9 +700,12 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(SwitchEntry.class, sequence(
                 comment(),
                 conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
+                        // case "abc", "def":
                         sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
+                        // default:
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
+                // contents of the switch entry (e.g. `break;`)
                 indent(),
                 list(ObservableProperty.STATEMENTS, newline(), none(), newline()),
                 unindent()
@@ -702,6 +713,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(SwitchStmt.class, sequence(
                 comment(),
+                // switch(conditionVariable) {
                 token(GeneratedJavaParserConstants.SWITCH),
                 token(GeneratedJavaParserConstants.LPAREN),
                 child(ObservableProperty.SELECTOR),
@@ -709,12 +721,17 @@ public class ConcreteSyntaxModel {
                 space(),
                 token(GeneratedJavaParserConstants.LBRACE),
                 newline(),
+                // SwitchEntry.class
+//                list(ObservableProperty.ENTRIES, newline(), indent(), sequence(unindent(), newline())),
                 list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                // }
                 token(GeneratedJavaParserConstants.RBRACE)
         ));
 
         concreteSyntaxModelByClass.put(SwitchExpr.class, sequence(
                 comment(),
+                // same as SwitchStmt.class, but within an expression
+                // int a = switch(conditionVariable) {}
                 token(GeneratedJavaParserConstants.SWITCH),
                 token(GeneratedJavaParserConstants.LPAREN),
                 child(ObservableProperty.SELECTOR),
@@ -944,10 +961,14 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
-                .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
+        List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels()
+                .stream()
+                .filter(c -> !c.isAbstract())
+                .filter(c -> !Comment.class.isAssignableFrom(c.getType()))
+                .filter(c -> !concreteSyntaxModelByClass.containsKey(c.getType()))
                 .map(nm -> nm.getType().getSimpleName())
                 .collect(Collectors.toList());
+
         if (unsupportedNodeClassNames.isEmpty()) {
             initializationError = Optional.empty();
         } else {

@@ -191,7 +191,9 @@ class LexicalDifferenceCalculator {
     private void calculatedSyntaxModelForNode(CsmElement csm, Node node, List<CsmElement> elements, Change change) {
         if (csm instanceof CsmSequence) {
             CsmSequence csmSequence = (CsmSequence) csm;
-            csmSequence.getElements().forEach(e -> calculatedSyntaxModelForNode(e, node, elements, change));
+            for (CsmElement e : csmSequence.getElements()) {
+                calculatedSyntaxModelForNode(e, node, elements, change);
+            }
         } else if (csm instanceof CsmComment) {
             // nothing to do
         } else if (csm instanceof CsmSingleReference) {
@@ -251,7 +253,7 @@ class LexicalDifferenceCalculator {
                     }
                 }
 
-                // Next do the calculations...
+                // Next "explode" any lists/sequences so that we just have a flat list (rather than nested)...
                 if (!nodeList.isEmpty()) {
                     calculatedSyntaxModelForNode(csmList.getPreceeding(), node, elements, change);
                     for (int i = 0; i < nodeList.size(); i++) {
@@ -403,7 +405,12 @@ class LexicalDifferenceCalculator {
     CalculatedSyntaxModel calculatedSyntaxModelAfterListRemoval(CsmElement csm, ObservableProperty observableProperty, NodeList<?> nodeList, int index) {
         List<CsmElement> elements = new LinkedList<>();
         Node container = nodeList.getParentNodeForChildren();
-        calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index));
+        if(nodeList.size() == 1) {
+            // We're about to remove the last element in the list.
+            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index));
+        } else {
+            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index));
+        }
         return new CalculatedSyntaxModel(elements);
     }
 

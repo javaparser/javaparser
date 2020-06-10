@@ -453,6 +453,10 @@ public class Difference {
                     }
                 }
 
+//                if(removedGroup.isACompleteLine() && currentTextElement().isNewline() && removed.getChild() instanceof SwitchEntry) {
+//                    nodeText.removeElement(currentTextElementIndex);
+//                }
+
                 //
                 incrementCurrentDifferenceElementIndex();
             }
@@ -605,8 +609,13 @@ public class Difference {
             incrementCurrentDifferenceElementIndex();
             if (!openBraceWasOnSameLine()) {
                 // Remove indentation
-                for (int i = 0; i < STANDARD_INDENTATION_SIZE && peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine(); i++) {
-                    nodeText.removeElement(--currentTextElementIndex);
+                for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
+                    if(peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine()) {
+                        nodeText.removeElement(--currentTextElementIndex);
+                    } else {
+                        // If we encounter a non-whitespace element, short-circuit out of the loop.
+                        break;
+                    }
                 }
             }
         } else {
