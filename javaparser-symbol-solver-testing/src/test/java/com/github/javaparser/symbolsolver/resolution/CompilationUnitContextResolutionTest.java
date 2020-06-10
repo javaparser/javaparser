@@ -99,4 +99,25 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         assertEquals("main.Clazz.MyEnum", actual);
     }
 
+    @Test
+    void solveMyself() throws IOException {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+            new ReflectionTypeSolver(),
+            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment")))));
+
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment/main/Main.java"));
+
+        MethodCallExpr mce = Navigator.findMethodCall(cu, "foo").get();
+        String actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Main.NestedEnum.foo", actual);
+
+        mce = Navigator.findMethodCall(cu, "bar").get();
+        actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Main.NestedEnum.bar", actual);
+
+        mce = Navigator.findMethodCall(cu, "baz").get();
+        actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Main.NestedEnum.baz", actual);
+    }
+
 }
