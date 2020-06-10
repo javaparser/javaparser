@@ -420,64 +420,70 @@ public class Difference {
             ChildTextElement originalElementChild = (ChildTextElement) originalElement;
             if (originalElementChild.isComment()) {
                 // We expected to remove a proper node but we found a comment in between.
-                // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
-                Comment comment = (Comment) originalElementChild.getChild();
-                // TODO: Meaningfully named conditions
-                if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
+                // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it.
+                Comment originalComment = (Comment) originalElementChild.getChild();
+                boolean commentIsAttachedToNodeBeingRemoved = !originalComment.isOrphan()
+                        && originalComment.getCommentedNode().isPresent()
+                        && originalComment.getCommentedNode().get().equals(removed.getChild());
+                if (commentIsAttachedToNodeBeingRemoved) {
                     nodeText.removeElement(currentTextElementIndex);
                 } else {
+                    // Keep the comment - move along.
                     incrementCurrentTextElementIndex();
                 }
             } else {
+                // Remove the element, but don't shift the index yet (first need to account for associated whitespace differences).
                 nodeText.removeElement(currentTextElementIndex);
 
-                // FIXME: Meaningful naming of this condition.
-                boolean b = currentDifferenceElementIndex + 1 >= differenceElements.size() || !(nextDifferenceElement() instanceof Added);
-                if (b && !removedGroup.isACompleteLine()) {
+                boolean nextDifferenceElementIsAdded = peekNextDifferenceElement().isPresent() && nextDifferenceElement() instanceof Added;
+                if (!nextDifferenceElementIsAdded && !removedGroup.isACompleteLine()) {
                     currentTextElementIndex = considerEnforcingIndentation(nodeText, currentTextElementIndex);
                 }
+
                 // If in front we have one space and before also we had space let's drop one space
-                // TODO: Confirm this logic -- seems to be checking the current and previous, but the comment talks about in front and before (suggesting "this" current element is a "middle" element)
-                if (textElements.size() > currentTextElementIndex && peekPreviousTextElement().isPresent()) {
-                    if (currentTextElement().isWhitespaceButNotEndOfLine() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine()) {
-                        // However we do not want to do that when we are about to add or remove elements
-                        // TODO: Meaningfully named conditions
-                        if ((currentDifferenceElementIndex + 1) == differenceElements.size() || (nextDifferenceElement() instanceof Kept)) {
-                            removeCurrentTextElementAndShiftIndex();
-                        }
+                // (note that we have removed an element above, thus the "new current" is the element formerly the "other side" of the removed element)
+                boolean thisTextElementIsWhitespaceButNotEol = peekCurrentTextElement().isPresent() && currentTextElement().isWhitespaceButNotEndOfLine();
+                boolean previousTextElementIsWhitespaceButNotEol = peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine();
+
+                if (thisTextElementIsWhitespaceButNotEol && previousTextElementIsWhitespaceButNotEol) {
+                    // However we do not want to do that when we are about to modify elements (e.g. add or remove elements)
+                    boolean nextDifferenceElementIsAbsentOrKept = !peekNextDifferenceElement().isPresent() || nextDifferenceElement() instanceof Kept;
+                    if (nextDifferenceElementIsAbsentOrKept) {
+                        removeCurrentTextElementAndShiftIndex();
                     }
                 }
 
+                //
                 incrementCurrentDifferenceElementIndex();
             }
         } else if (removed.isToken() && originalElementIsToken &&
                 (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
-                        // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
-                        // element always has the current operating system's EOL as type
-                        || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
-                        && removed.isNewLine()))) {
+                        || (removed.isNewLine() && originalElement.isNewline())
+                )
+        ) {
+            // Explicitly check for EOLs as their token kind might not be equal (e.g. a file with mixed line ending characters).
+            // This is because the 'removed' element always has the current operating system's EOL as type.
             nodeText.removeElement(currentTextElementIndex);
             incrementCurrentDifferenceElementIndex();
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
+            // Differences in whitespace and indentation are handled within printers and below. // TODO: Rephrase?
+            // Skip / ignore it here.
             incrementCurrentTextElementIndex();
         } else if (originalElement.isLiteral()) {
             nodeText.removeElement(currentTextElementIndex);
             incrementCurrentDifferenceElementIndex();
-        } else if (removed.isPrimitiveType()) {
-            if (originalElement.isPrimitive()) {
-                nodeText.removeElement(currentTextElementIndex);
-                incrementCurrentDifferenceElementIndex();
-            } else {
-                throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
-            }
-        } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
+        } else if (removed.isPrimitiveType() && originalElement.isPrimitive()) {
+            nodeText.removeElement(currentTextElementIndex);
             incrementCurrentDifferenceElementIndex();
-        } else if (originalElement.isWhiteSpace()) {
-            incrementCurrentTextElementIndex();
+        } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
+            // Differences in whitespace and indentation are handled within printers and below. // TODO: Rephrase?
+            // Skip / ignore it here.
+            incrementCurrentDifferenceElementIndex();
         } else {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
         }
 
+        // Handle remaining whitespace changes (e.g. indentation where we have just removed a whole line of content)
         cleanTheLineOfLeftOverSpace(removedGroup, removed);
     }
 
@@ -489,18 +495,24 @@ public class Difference {
      * Cleans the line of left over space if there is unnecessary indentation and the element will not be replaced
      */
     private void cleanTheLineOfLeftOverSpace(RemovedGroup removedGroup, Removed removed) {
-        // TODO: Meaningfully named conditions
         if (currentTextElementIndex >= textElements.size()) {
-            // if all elements were already processed there is nothing to do
+            // If all elements were already processed there is nothing to do.
+            return;
+        }
+        if(removedGroup.isProcessed()) {
+            // If we have already processed this group, there is nothing to do.
+            return;
+        }
+        if(removedGroup.getLastElement() != removed) {
+            // We still have elements to process, there is nothing to do (yet).
             return;
         }
 
-        if (!removedGroup.isProcessed()
-                && removedGroup.getLastElement() == removed
-                && removedGroup.isACompleteLine()) {
+        if (removedGroup.isACompleteLine()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
             Optional<Integer> indentation = removedGroup.getIndentation();
 
+            // Remove the indentation.
             if (indentation.isPresent() && !isReplaced(lastElementIndex)) {
                 for (int i = 0; i < indentation.get(); i++) {
                     if (currentTextElement().isWhitespaceButNotEndOfLine()) {
