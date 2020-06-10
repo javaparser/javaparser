@@ -48,17 +48,42 @@ class MethodCallExprResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.getConfiguration().setSymbolResolver(null);
     }
 
+    // in each case, the name itself doesn't matter -- we just want to assert that StackOverflowError wouldn't occur.
+
     @Test
-    void solveMCE() throws IOException {
+    void solveMceInReceiver() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/MethodCallExprResolution")))));
+            new JavaParserTypeSolver(adaptPath("src/test/resources/MethodCallExprResolution/00_receiver")))));
 
-        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/MethodCallExprResolution/main/Main.java"));
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/MethodCallExprResolution/00_receiver/main/Main.java"));
         MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
-        // the type itself doesn't matter -- we just want to assert that StackOverflowError wouldn't occur.
-        String actual = mce.resolve().getReturnType().describe();
-        assertEquals("void", actual);
+        String actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Child.method", actual);
+    }
+
+    @Test
+    void solveMceInParent() throws IOException {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+            new ReflectionTypeSolver(),
+            new JavaParserTypeSolver(adaptPath("src/test/resources/MethodCallExprResolution/01_parent")))));
+
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/MethodCallExprResolution/01_parent/main/Main.java"));
+        MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
+        String actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Parent.method", actual);
+    }
+
+    @Test
+    void solveMceInNested() throws IOException {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+            new ReflectionTypeSolver(),
+            new JavaParserTypeSolver(adaptPath("src/test/resources/MethodCallExprResolution/02_nested")))));
+
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/MethodCallExprResolution/02_nested/main/Main.java"));
+        MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
+        String actual = mce.resolve().getQualifiedName();
+        assertEquals("main.Child.method", actual);
     }
 
 }
