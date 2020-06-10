@@ -160,7 +160,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Next, consider methods declared within ancestors.
         // Note that we only consider ancestors when we are not currently at java.lang.Object (avoiding infinite recursion).
-        if (!typeDeclaration.isJavaLangObject()) {
+        if (candidateMethods.isEmpty() && !typeDeclaration.isJavaLangObject()) {
             for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
                 Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclaration = ancestor.getTypeDeclaration();
 
