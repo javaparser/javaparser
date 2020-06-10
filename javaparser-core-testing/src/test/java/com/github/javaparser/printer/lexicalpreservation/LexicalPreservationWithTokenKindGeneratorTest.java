@@ -3,28 +3,23 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.printer.PrettyPrinter;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LexicalPreservationWithTokenKindGeneratorTest {
 
 
     @Test
     public void foo() {
-        String originalCode = "" +
+        final String originalCode = "" +
                 "public class JavaToken {\n" +
                 "\n" +
                 "    public enum Kind {\n" +
@@ -69,11 +64,11 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "";
 
 
-        String expectedOutput_lexical = "public class JavaToken {\n" +
+        final String expectedOutput_lexical = "public class JavaToken {\n" +
                 "\n" +
                 "    public enum Kind {\n" +
                 "\n" +
-                "        \n" +
+//                "        \n" +
                 "\n" +
                 "        private final int kind;\n" +
                 "\n" +
@@ -85,14 +80,14 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "            switch(kind) {\n" +
                 "                default:\n" +
                 "                    throw new IllegalArgumentException(f(\"Token kind %i is unknown.\", kind));\n" +
-                "\n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
+//                "\n" +
+//                "                \n" +
+//                "                \n" +
+//                "                \n" +
+//                "                \n" +
+//                "                \n" +
+//                "                \n" +
+//                "                \n" +
                 "            }\n" +
                 "        }\n" +
                 "    }\n" +
@@ -100,28 +95,23 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "}\n" +
                 "";
 
-
-        ParserConfiguration parserConfiguration = new ParserConfiguration()
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration()
                 .setLanguageLevel(RAW)
-//            .setStoreTokens(false)
-//            .setAttributeComments(false)
                 .setLexicalPreservationEnabled(true)
-                ;
+        );
 
-        JavaParser javaParser = new JavaParser(parserConfiguration);
+        final ParseResult<CompilationUnit> parseResult = javaParser.parse(originalCode);
+        final CompilationUnit javaTokenCu = parseResult.getResult().orElseThrow(RuntimeException::new);
+        final ClassOrInterfaceDeclaration javaTokenCoid = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(originalCode);
-        CompilationUnit javaTokenCu = parseResult.getResult().orElseThrow(RuntimeException::new);
+        final EnumDeclaration kindEnum = javaTokenCoid
+                .findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind"))
+                .orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
-        final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
-        final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind")).orElseThrow(() -> new AssertionError("Can't find class in java file."));
-
-        List<MethodDeclaration> valueOfMethods = kindEnum.getMethodsByName("valueOf");
-        if (valueOfMethods.size() != 1) {
-            throw new AssertionError("Expected precisely one method named valueOf");
-        }
-        MethodDeclaration valueOfMethod = valueOfMethods.get(0);
-        final SwitchStmt valueOfSwitch = valueOfMethod.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
+        final MethodDeclaration valueOfMethodDeclaration = kindEnum.getMethodsByName("valueOf").get(0);
+        final SwitchStmt valueOfSwitch = valueOfMethodDeclaration
+                .findFirst(SwitchStmt.class)
+                .orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
 
 
         // TODO: Define "reset"
@@ -131,7 +121,7 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //        valueOfSwitch.getEntries().stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
 
         // TODO: Figure out why the newlines are not removed when we remove an entire switch entry...
-        SwitchEntry defaultEntry = valueOfSwitch.getDefaultSwitchEntry().get();
+        final SwitchEntry defaultEntry = valueOfSwitch.getDefaultSwitchEntry().get();
         valueOfSwitch.getEntries().clear();
         valueOfSwitch.getEntries().add(defaultEntry);
 
