@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -84,6 +85,18 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
         String actual = mce.resolve().getQualifiedName();
         assertEquals("main.Child.method", actual);
+    }
+
+    @Test
+    void solveSymbol() throws IOException {
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+            new ReflectionTypeSolver(),
+            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol")))));
+
+        CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol/main/Main.java"));
+        NameExpr ne = Navigator.findNameExpression(cu, "A").get();
+        String actual = ne.resolve().getType().describe();
+        assertEquals("main.Clazz.MyEnum", actual);
     }
 
 }
