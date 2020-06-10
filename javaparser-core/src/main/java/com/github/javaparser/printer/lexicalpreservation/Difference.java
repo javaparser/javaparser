@@ -624,47 +624,67 @@ public class Difference {
         CsmChild child = (CsmChild) csmElem;
         if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
             return false;
-        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
+        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments<?>) child.getChild()).getTypeArguments();
         return typeArgs.isPresent() && typeArgs.get().size() > 0;
     }
 
-    /*
-     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
+    /**
+     * <p>
+     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list.
      * This is due to the fact that types are considered as token in the originalElements list.
-     * For example,
-     * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
-     * So in this case, getIndexToNextTokenElement(..) on the [List] token returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
-     * DiffElements list and originalElements list
-     * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally managed, to take into account this type of declaration
-     * List <List<String>> l
-     * Be careful, this method must be call only if diamond operator could be found in the sequence
+     * For example, {@code List<String>} is represented by 4 tokens ({@code [List][<][String][>]})
+     * while it's a {@code CsmChild} element in the {@code DiffElements} list.
+     * So, in this case, {@code getIndexToNextTokenElement(..)} on the {@code [List]} token returns 3 because we have to
+     * skip 3 tokens ({@code [<][String][>]}) to synchronize {@code DiffElements} list and {@code originalElements} list
+     * </p><p>
+     * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally
+     * managed, to take into account this type of declaration: {@code List <List<String>> l}
+     * </p><p>
+     * Be careful, this method must be called only if diamond operator could be found in the sequence.
+     * </p>
      *
-     * @Param TokenTextElement the token currently analyzed
-     * @Param int the number of nested diamond operators
+     * @param element               the token currently analyzed
+     * @param nestedDiamondOperatorLevel the number of nested diamond operators
      * @return the number of token to skip in originalElements list
      */
-    private int getIndexToNextTokenElement(TokenTextElement element, int nestedDiamondOperator) {
-        int step = 0; // number of token to skip
+    private int getIndexToNextTokenElement(TokenTextElement element, int nestedDiamondOperatorLevel) {
+        int step = 0; // number of tokens to skip
+
         Optional<JavaToken> next = element.getToken().getNextToken();
-        if (!next.isPresent()) return step;
-        // because there is a token, first we need to increment the number of token to skip
+        if (!next.isPresent()) {
+            // If there is no next token, there is nothing else to skip past.
+            return step;
+        }
+
+        // because there is a next token, first we need to increment the number of token to skip
         step++;
+
         // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
         JavaToken token = next.get();
         Kind kind = Kind.valueOf(token.getKind());
         if (isDiamondOperator(kind)) {
-            if (Kind.GT.equals(kind))
-                nestedDiamondOperator--;
-            else
-                nestedDiamondOperator++;
+            if (Kind.LT.equals(kind)) {
+                // We've just entered a new <> pair
+                nestedDiamondOperatorLevel++;
+            } else if (Kind.GT.equals(kind)) {
+                // We've just exited a <> pair
+                nestedDiamondOperatorLevel--;
+            } else {
+                // Logically impossible.
+            }
         }
-        // manage the fact where the first token is not a diamond operator but a whitespace
-        // and the end of the token sequence to skip
-        // for example in this declaration List <String> a;
-        if (nestedDiamondOperator == 0 && !next.get().getCategory().isWhitespace())
+
+        /*
+         * Manage the case where the first token is not a diamond operator but a whitespace
+         * and the end of the token sequence to skip.
+         * For example, this declaration: {@code List <String> a;}
+         */
+        if (nestedDiamondOperatorLevel == 0 && !next.get().getCategory().isWhitespace()) {
             return step;
+        }
+
         // recursively analyze token to skip
-        return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
+        return step + getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperatorLevel);
     }
 
     /*
