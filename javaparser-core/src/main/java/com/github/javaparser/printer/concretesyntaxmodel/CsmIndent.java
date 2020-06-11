@@ -26,7 +26,7 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmIndent implements CsmElement {
 
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     @Override
     public CsmElement addToContextNote(String contextNote) {

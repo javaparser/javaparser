@@ -27,7 +27,7 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmChar implements CsmElement {
     private final ObservableProperty property;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     public CsmChar(ObservableProperty property) {
         this.property = property;

@@ -32,7 +32,7 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 public class CsmOrphanCommentsEnding implements CsmElement {
 
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     @Override
     public CsmElement addToContextNote(String contextNote) {

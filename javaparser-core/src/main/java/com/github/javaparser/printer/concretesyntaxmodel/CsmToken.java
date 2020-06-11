@@ -32,7 +32,7 @@ import static com.github.javaparser.TokenTypes.*;
 public class CsmToken implements CsmElement {
     private final int tokenType;
     private String content;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
     private TokenContentCalculator tokenContentCalculator;
 
     public interface TokenContentCalculator {

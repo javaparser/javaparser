@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class CsmMix implements CsmElement {
     private List<CsmElement> elements;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
 
     public CsmMix(List<CsmElement> elements) {

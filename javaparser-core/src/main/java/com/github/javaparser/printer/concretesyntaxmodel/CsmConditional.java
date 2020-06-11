@@ -34,7 +34,7 @@ public class CsmConditional implements CsmElement {
     private final List<ObservableProperty> properties;
     private final CsmElement thenElement;
     private final CsmElement elseElement;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     public Condition getCondition() {
         return condition;

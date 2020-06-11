@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class CsmSequence implements CsmElement {
     private List<CsmElement> elements;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
 
     public CsmSequence(List<CsmElement> elements) {

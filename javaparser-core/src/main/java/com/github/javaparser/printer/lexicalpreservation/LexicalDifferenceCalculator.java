@@ -196,7 +196,6 @@ class LexicalDifferenceCalculator {
     // Visible for testing
     CalculatedSyntaxModel calculatedSyntaxModelForNode(CsmElement csm, Node node) {
         List<CsmElement> elements = new LinkedList<>();
-//        calculatedSyntaxModelForNode(csm, node, elements, new NoChange(), "LEXICAL DIFFERENCE CALCULATOR: no change constructor");
         calculatedSyntaxModelForNode(csm, node, elements, new NoChange(), "");
         return new CalculatedSyntaxModel(elements);
     }
@@ -206,14 +205,14 @@ class LexicalDifferenceCalculator {
     }
 
     private void calculatedSyntaxModelForNode(CsmElement csm, Node node, List<CsmElement> elements, Change change, String contextNote) {
-        contextNote += "; calcForNode";
-        csm.addToContextNote("; calcForNode");
+//        contextNote += "; calcForNode";
+//        csm.addToContextNote("; calcForNode");
 
         if (csm instanceof CsmSequence) {
             CsmSequence csmSequence = (CsmSequence) csm;
             for (CsmElement e : csmSequence.getElements()) {
 //                e.addToContextNote("; element within CsmSequence");
-                e.addToContextNote("; exploded CsmSequence element");
+//                e.addToContextNote("; exploded CsmSequence element");
                 calculatedSyntaxModelForNode(e, node, elements, change, contextNote + "; exploded CsmSequence element");
             }
         } else if (csm instanceof CsmComment) {
@@ -427,7 +426,7 @@ class LexicalDifferenceCalculator {
     // Visible for testing
     CalculatedSyntaxModel calculatedSyntaxModelAfterPropertyChange(CsmElement csm, Node node, ObservableProperty property, Object oldValue, Object newValue) {
         List<CsmElement> elements = new LinkedList<>();
-        calculatedSyntaxModelForNode(csm, node, elements, new PropertyChange(property, oldValue, newValue), "LEXICAL DIFFERENCE CALCULATOR: after property change constructor");
+        calculatedSyntaxModelForNode(csm, node, elements, new PropertyChange(property, oldValue, newValue), "");
         return new CalculatedSyntaxModel(elements);
     }
 
@@ -437,9 +436,9 @@ class LexicalDifferenceCalculator {
         Node container = nodeList.getParentNodeForChildren();
         if(nodeList.size() == 1) {
             // We're about to remove the last element in the list.
-            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index), "LEXICAL DIFFERENCE CALCULATOR: after list item removal (removal of final element in list) constructor");
+            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index), "");
         } else {
-            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index), "LEXICAL DIFFERENCE CALCULATOR: after list item removal constructor");
+            calculatedSyntaxModelForNode(csm, container, elements, new ListRemovalChange(observableProperty, index), "");
         }
         return new CalculatedSyntaxModel(elements);
     }
@@ -448,7 +447,7 @@ class LexicalDifferenceCalculator {
     CalculatedSyntaxModel calculatedSyntaxModelAfterListAddition(CsmElement csm, ObservableProperty observableProperty, NodeList<?> nodeList, int index, Node nodeAdded) {
         List<CsmElement> elements = new LinkedList<>();
         Node container = nodeList.getParentNodeForChildren();
-        calculatedSyntaxModelForNode(csm, container, elements, new ListAdditionChange(observableProperty, index, nodeAdded), "LEXICAL DIFFERENCE CALCULATOR: list addition constructor");
+        calculatedSyntaxModelForNode(csm, container, elements, new ListAdditionChange(observableProperty, index, nodeAdded), "");
         return new CalculatedSyntaxModel(elements);
     }
 
@@ -478,7 +477,7 @@ class LexicalDifferenceCalculator {
     private CalculatedSyntaxModel calculatedSyntaxModelAfterListReplacement(CsmElement csm, ObservableProperty observableProperty, NodeList<?> nodeList, int index, Node newValue) {
         List<CsmElement> elements = new LinkedList<>();
         Node container = nodeList.getParentNodeForChildren();
-        calculatedSyntaxModelForNode(csm, container, elements, new ListReplacementChange(observableProperty, index, newValue), "LEXICAL DIFFERENCE CALCULATOR: list replacement constructor");
+        calculatedSyntaxModelForNode(csm, container, elements, new ListReplacementChange(observableProperty, index, newValue), "");
         return new CalculatedSyntaxModel(elements);
     }
 

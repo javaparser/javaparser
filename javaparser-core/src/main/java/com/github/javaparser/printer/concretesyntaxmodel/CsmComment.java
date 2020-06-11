@@ -30,7 +30,7 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmComment implements CsmElement {
 
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     static void process(Comment comment, SourcePrinter printer) {
         String content = printer.normalizeEolInTextBlock(comment.getContent());

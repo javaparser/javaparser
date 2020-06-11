@@ -25,6 +25,8 @@ import com.github.javaparser.printer.Printable;
 
 class PrintingHelper {
 
+    public static int NEXT_ID = 0;
+
     static String printToString(Object value) {
         if (value instanceof Printable) {
             return ((Printable)value).asString();

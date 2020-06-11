@@ -36,7 +36,7 @@ public class CsmList implements CsmElement {
     private final CsmElement separatorPre;
     private final CsmElement preceeding;
     private final CsmElement following;
-    private String contextNote = "";
+    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
 
     public ObservableProperty getProperty() {
