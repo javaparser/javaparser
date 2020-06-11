@@ -26,6 +26,19 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmIndent implements CsmElement {
 
+    private String contextNote = "";
+
+    @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
+    }
+
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         printer.indent();
@@ -39,5 +52,12 @@ public class CsmIndent implements CsmElement {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof CsmIndent;
+    }
+
+    @Override
+    public String toString() {
+        return "CsmIndent{" +
+                "contextNote='" + contextNote + '\'' +
+                '}';
     }
 }

@@ -27,9 +27,21 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmChar implements CsmElement {
     private final ObservableProperty property;
+    private String contextNote = "";
 
     public CsmChar(ObservableProperty property) {
         this.property = property;
+    }
+
+    @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
     }
 
     @Override

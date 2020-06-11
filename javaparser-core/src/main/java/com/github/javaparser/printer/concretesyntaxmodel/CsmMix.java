@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
  */
 public class CsmMix implements CsmElement {
     private List<CsmElement> elements;
+    private String contextNote = "";
+
 
     public CsmMix(List<CsmElement> elements) {
         if (elements == null) {
@@ -43,9 +45,19 @@ public class CsmMix implements CsmElement {
         }
         this.elements = elements;
     }
-
     public List<CsmElement> getElements() {
         return elements;
+    }
+
+    @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
     }
 
     @Override

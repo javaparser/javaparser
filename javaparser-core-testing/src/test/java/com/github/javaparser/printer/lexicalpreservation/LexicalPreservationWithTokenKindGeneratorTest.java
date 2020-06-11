@@ -3,7 +3,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -13,18 +12,16 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CalculatedSyntaxModel;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -358,9 +355,10 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "\n" +
                 "    public enum Kind {\n" +
                 "\n" +
-                "        EOF(0),\n" +
-//                "        SPACE(1),\n" +
-                "        CTRL_Z(146);\n" +
+//                "        EOF(0),\n" +
+////                "        SPACE(1),\n" +
+//                "        CTRL_Z(146);\n" +
+                "        ;\n" + // Deliberately omit these for now in this test...
                 "\n" +
                 "        public static Kind valueOf(int kind) {\n" +
                 "            switch(kind) {\n" +
@@ -399,17 +397,35 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
         NodeList<SwitchEntry> nodeList = switchStmt.getEntries();
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
-        LexicalDifferenceCalculator.CalculatedSyntaxModel original = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, container);
-        LexicalDifferenceCalculator.CalculatedSyntaxModel after = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(element, ObservableProperty.ENTRIES, nodeList, 0);
 
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+        CalculatedSyntaxModel original = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, container);
+        CalculatedSyntaxModel afterRemovingOne = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(element, ObservableProperty.ENTRIES, nodeList, 0);
 
-        for (int i = 5; i < 15 && i < differenceElements.size(); i++) {
-//        for (int i = 0; i < differenceElements.size(); i++) {
+//        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, afterRemovingOne);
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculateImpl(original, afterRemovingOne);
+        System.out.println();
+        System.out.println("==BEFORE ELEMENTS==");
+        for (int i = 0; i < original.elements.size(); i++) {
+            CsmElement originalElement = original.elements.get(i);
+            System.out.println(i + " = " + elementToString(originalElement));
+        }
+        System.out.println();
+        System.out.println("==AFTER REMOVING ONE==");
+        for (int i = 0; i < afterRemovingOne.elements.size(); i++) {
+            CsmElement afterElement = afterRemovingOne.elements.get(i);
+            System.out.println(i + " = " + elementToString(afterElement));
+        }
+        System.out.println();
+        System.out.println();
+        for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement differenceElement = differenceElements.get(i);
-//            if(differenceElement.isAdded() || differenceElement.isRemoved()) {
-                System.out.println(i + " = " + differenceElement);
-//            }
+            if(differenceElement.isAdded()) {
+                System.out.println("(++) " + i + " = " + elementToString(differenceElement));
+            } else if(differenceElement.isRemoved()) {
+                System.out.println("(--) " + i + " = " + elementToString(differenceElement));
+            } else {
+                System.out.println(i + " = " + elementToString(differenceElement));
+            }
         }
 
         System.out.println();
@@ -426,17 +442,25 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 
 
         generateValueOfEntry(switchStmt, "EOF", new IntegerLiteralExpr(0));
-//        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
-//        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
-//        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
-//        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
-//        generateValueOfEntry(switchStmt, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
-//        generateValueOfEntry(switchStmt, "CTRL_Z", new IntegerLiteralExpr(146));
+        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
+        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
+        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+        generateValueOfEntry(switchStmt, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+        generateValueOfEntry(switchStmt, "CTRL_Z", new IntegerLiteralExpr(146));
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(originalCode, LexicalPreservingPrinter.print(javaTokenCu));
 
 
+    }
+
+    public String elementToString(DifferenceElement differenceElement) {
+        return differenceElement.toString().replace("\r", "\\r").replace("\n", "\\n");
+    }
+
+    public String elementToString(CsmElement csmElement) {
+        return csmElement.toString().replace("\r", "\\r").replace("\n", "\\n");
     }
 
 

@@ -32,6 +32,7 @@ import static com.github.javaparser.TokenTypes.*;
 public class CsmToken implements CsmElement {
     private final int tokenType;
     private String content;
+    private String contextNote = "";
     private TokenContentCalculator tokenContentCalculator;
 
     public interface TokenContentCalculator {
@@ -77,6 +78,17 @@ public class CsmToken implements CsmElement {
     }
 
     @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
+    }
+
+    @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (isEndOfLineToken(tokenType)) {
             printer.println();
@@ -87,7 +99,12 @@ public class CsmToken implements CsmElement {
 
     @Override
     public String toString() {
-        return "token(" + content + ")";
+        return "CsmToken{" +
+//                "tokenType=" + tokenType +
+//                ", content='" + content + '\'' +
+                "content='" + content + '\'' +
+                ", contextNote='" + contextNote + '\'' +
+                '}';
     }
 
     @Override

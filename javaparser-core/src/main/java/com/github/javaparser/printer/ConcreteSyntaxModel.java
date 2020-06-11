@@ -720,10 +720,10 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(SwitchEntry.class, sequence(
                 comment(),
+                // case "abc", "def":
+                // default:
                 conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
-                        // case "abc", "def":
                         sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
-                        // default:
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 // contents of the switch entry (e.g. `break;`)
@@ -739,12 +739,12 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.SELECTOR),
                 token(GeneratedJavaParserConstants.RPAREN),
                 space(),
-                token(GeneratedJavaParserConstants.LBRACE),
+                token(GeneratedJavaParserConstants.LBRACE), newline(),
                 // SwitchEntry.class
-                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_EMPTY,
-                        newline(),
-                        list(ObservableProperty.ENTRIES, newline(), sequence(newline(), indent()), sequence(newline(), unindent()))
-                ),
+                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_NOT_EMPTY, indent()),
+                list(ObservableProperty.ENTRIES, newline()),
+                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_NOT_EMPTY, unindent()),
+                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_NOT_EMPTY, newline()),
                 // }
                 token(GeneratedJavaParserConstants.RBRACE)
         ));
@@ -1039,7 +1039,7 @@ public class ConcreteSyntaxModel {
      * Build a mix collecting all the elements specified.
      */
     private static CsmElement mix(CsmElement... elements) {
-        return new CsmMix(Arrays.asList(elements));
+        return new CsmMix(Arrays.asList(elements)).addToContextNote("ConcreteSyntaxModel - mix(CsmElement... elements)");
     }
 
     private static CsmElement modifiers() {

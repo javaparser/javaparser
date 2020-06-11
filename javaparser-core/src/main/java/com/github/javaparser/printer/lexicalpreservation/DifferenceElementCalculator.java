@@ -157,7 +157,7 @@ class DifferenceElementCalculator {
                 elements.addAll(differenceElements);
             }
 
-            elements.add(new Kept(new CsmChild(child)));
+            elements.add(new Kept(new CsmChild(child).addToContextNote("; DifferenceElementCalculator - calculate()")));
             originalIndex = posOfNextChildInOriginal + 1;
             afterIndex = posOfNextChildInAfter + 1;
         }
@@ -184,7 +184,7 @@ class DifferenceElementCalculator {
                 considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), elements);
             } else if (el instanceof TokenTextElement) {
                 TokenTextElement tte = (TokenTextElement) el;
-                elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
+                elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText()).addToContextNote("consider removal")));
             } else {
                 throw new UnsupportedOperationException(el.toString());
             }
@@ -211,7 +211,7 @@ class DifferenceElementCalculator {
     }
 
     // TODO: Rename me.
-    private static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
+    static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
                                                          LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         List<DifferenceElement> elements = new LinkedList<>();
 

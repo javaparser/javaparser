@@ -34,6 +34,7 @@ public class CsmConditional implements CsmElement {
     private final List<ObservableProperty> properties;
     private final CsmElement thenElement;
     private final CsmElement elseElement;
+    private String contextNote = "";
 
     public Condition getCondition() {
         return condition;
@@ -45,7 +46,18 @@ public class CsmConditional implements CsmElement {
         }
         return properties.get(0);
     }
-    
+
+    @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
+    }
+
     public List<ObservableProperty> getProperties() {
         return properties;
     }

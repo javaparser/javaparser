@@ -36,6 +36,8 @@ public class CsmList implements CsmElement {
     private final CsmElement separatorPre;
     private final CsmElement preceeding;
     private final CsmElement following;
+    private String contextNote = "";
+
 
     public ObservableProperty getProperty() {
         return property;
@@ -71,6 +73,17 @@ public class CsmList implements CsmElement {
         this.separatorPost = separatorPost;
         this.preceeding = preceeding;
         this.following = following;
+    }
+
+    @Override
+    public CsmElement addToContextNote(String contextNote) {
+        this.contextNote += contextNote;
+        return this;
+    }
+
+    @Override
+    public String getContextNote() {
+        return contextNote;
     }
 
     @Override

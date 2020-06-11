@@ -30,121 +30,129 @@ import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.TokenTypes.*;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
 
 public interface CsmElement {
+
+    CsmElement addToContextNote(String contextNote);
+
+    String getContextNote();
+
 
     void prettyPrint(Node node, SourcePrinter printer);
 
     static CsmElement child(ObservableProperty property) {
-        return new CsmSingleReference(property);
+        return new CsmSingleReference(property); //.addToContextNote("CSM");
     }
 
     static CsmElement attribute(ObservableProperty property) {
-        return new CsmAttribute(property);
+        return new CsmAttribute(property); //.addToContextNote("CSM");
     }
 
     static CsmElement sequence(CsmElement... elements) {
-        return new CsmSequence(Arrays.asList(elements));
+        return new CsmSequence(Arrays.asList(elements)); //.addToContextNote("CSM");
     }
 
     static CsmElement string(int tokenType, String content) {
-        return new CsmToken(tokenType, content);
+        return new CsmToken(tokenType, content); //.addToContextNote("CSM");
     }
 
     static CsmElement string(int tokenType) {
-        return new CsmToken(tokenType);
+        return new CsmToken(tokenType); //.addToContextNote("CSM");
     }
 
     static CsmElement stringToken(ObservableProperty property) {
-        return new CsmString(property);
+        return new CsmString(property); //.addToContextNote("CSM");
     }
 
     static CsmElement textBlockToken(ObservableProperty property) {
-        return new CsmString(property);
+        return new CsmString(property); //.addToContextNote("CSM");
     }
 
     static CsmElement charToken(ObservableProperty property) {
-        return new CsmChar(property);
+        return new CsmChar(property); //.addToContextNote("CSM");
     }
 
     static CsmElement token(int tokenType) {
-        return new CsmToken(tokenType);
+        return new CsmToken(tokenType); //.addToContextNote("CSM");
     }
 
     static CsmElement token(int tokenType, CsmToken.TokenContentCalculator tokenContentCalculator) {
-        return new CsmToken(tokenType, tokenContentCalculator);
+        return new CsmToken(tokenType, tokenContentCalculator); //.addToContextNote("CSM");
     }
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
-        return new CsmConditional(property, condition, thenElement);
+        return new CsmConditional(property, condition, thenElement); //.addToContextNote("CSM");
     }
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        return new CsmConditional(property, condition, thenElement, elseElement);
+        return new CsmConditional(property, condition, thenElement, elseElement); //.addToContextNote("CSM");
     }
 
     static CsmElement conditional(List<ObservableProperty> properties, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        return new CsmConditional(properties, condition, thenElement, elseElement);
+        return new CsmConditional(properties, condition, thenElement, elseElement); //.addToContextNote("CSM");
     }
 
     static CsmElement space() {
-        return new CsmToken(spaceTokenKind(), " ");
+        return new CsmToken(spaceTokenKind(), " "); //.addToContextNote("CSM");
     }
 
     static CsmElement semicolon() {
-        return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
+        return new CsmToken(GeneratedJavaParserConstants.SEMICOLON); //.addToContextNote("CSM");
     }
 
-    static CsmElement comment() { return new CsmComment(); }
+    static CsmElement comment() {
+        return new CsmComment(); //.addToContextNote("CSM");
+    }
 
     static CsmElement newline() {
-        return newline(LineSeparator.SYSTEM);
+        return newline(LineSeparator.SYSTEM); //.addToContextNote("; CSM (system line separator)");
     }
 
     static CsmElement newline(LineSeparator lineSeparator) {
-        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString());
+        return new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()); //.addToContextNote("CSM (given line separator)");
     }
 
     static CsmElement none() {
-        return new CsmNone();
+        return new CsmNone(); //.addToContextNote("CSM");
     }
 
     static CsmElement comma() {
-        return new CsmToken(GeneratedJavaParserConstants.COMMA);
+        return new CsmToken(GeneratedJavaParserConstants.COMMA); //.addToContextNote("CSM");
     }
 
     static CsmElement list(ObservableProperty property) {
-        return new CsmList(property);
+        return new CsmList(property); //.addToContextNote("CSM");
     }
 
     static CsmElement list(ObservableProperty property, CsmElement separator) {
-        return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone());
+        return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone()); //.addToContextNote("CSM");
     }
 
     static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
-        return new CsmList(property, none(), separator, preceeding, following);
+        return new CsmList(property, none(), separator, preceeding, following); //.addToContextNote("CSM");
     }
 
     static CsmElement list(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
-        return new CsmList(property, separatorPre, separatorPost, preceeding, following);
+        return new CsmList(property, separatorPre, separatorPost, preceeding, following); //.addToContextNote("CSM");
     }
 
     static CsmElement orphanCommentsEnding() {
-        return new CsmOrphanCommentsEnding();
+        return new CsmOrphanCommentsEnding(); //.addToContextNote("CSM");
     }
 
     static CsmElement orphanCommentsBeforeThis() {
         // FIXME
-        return new CsmNone();
+        return new CsmNone(); //.addToContextNote("CSM");
     }
 
     static CsmElement indent() {
-        return new CsmIndent();
+        return new CsmIndent(); //.addToContextNote("CSM");
     }
 
     static CsmElement unindent() {
-        return new CsmUnindent();
+        return new CsmUnindent(); //.addToContextNote("CSM");
     }
 
     static CsmElement block(CsmElement content) {
