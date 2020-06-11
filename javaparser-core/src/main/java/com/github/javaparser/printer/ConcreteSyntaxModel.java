@@ -706,9 +706,7 @@ public class ConcreteSyntaxModel {
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 // contents of the switch entry (e.g. `break;`)
-                indent(),
-                list(ObservableProperty.STATEMENTS, newline(), none(), newline()),
-                unindent()
+                list(ObservableProperty.STATEMENTS, newline(), indent(), unindent())
         ));
 
         concreteSyntaxModelByClass.put(SwitchStmt.class, sequence(
@@ -720,10 +718,11 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.RPAREN),
                 space(),
                 token(GeneratedJavaParserConstants.LBRACE),
-                newline(),
                 // SwitchEntry.class
-//                list(ObservableProperty.ENTRIES, newline(), indent(), sequence(unindent(), newline())),
-                list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_EMPTY,
+                        newline(),
+                        list(ObservableProperty.ENTRIES, newline(), sequence(indent(), newline()), sequence(newline(), unindent()))
+                ),
                 // }
                 token(GeneratedJavaParserConstants.RBRACE)
         ));
@@ -732,14 +731,20 @@ public class ConcreteSyntaxModel {
                 comment(),
                 // same as SwitchStmt.class, but within an expression
                 // int a = switch(conditionVariable) {}
+                comment(),
+                // switch(conditionVariable) {
                 token(GeneratedJavaParserConstants.SWITCH),
                 token(GeneratedJavaParserConstants.LPAREN),
                 child(ObservableProperty.SELECTOR),
                 token(GeneratedJavaParserConstants.RPAREN),
                 space(),
                 token(GeneratedJavaParserConstants.LBRACE),
-                newline(),
-                list(ObservableProperty.ENTRIES, none(), indent(), unindent()),
+                // SwitchEntry.class
+                conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_EMPTY,
+                        newline(),
+                        list(ObservableProperty.ENTRIES, newline(), sequence(indent(), newline()), sequence(newline(), unindent()))
+                ),
+                // }
                 token(GeneratedJavaParserConstants.RBRACE)
         ));
 

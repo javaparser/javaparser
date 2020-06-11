@@ -269,20 +269,20 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "\n" +
                 "        public static Kind valueOf(int kind) {\n" +
                 "            switch(kind) {\n" +
-                "                case 146:\n" +
-                "                    return CTRL_Z;\n" +
-                "                case 5:\n" +
-                "                    return SINGLE_LINE_COMMENT;\n" +
-                "                case 4:\n" +
-                "                    return OLD_MAC_EOL;\n" +
-                "                case 3:\n" +
-                "                    return UNIX_EOL;\n" +
-                "                case 2:\n" +
-                "                    return WINDOWS_EOL;\n" +
-                "                case 1:\n" +
-                "                    return SPACE;\n" +
-                "                case 0:\n" +
-                "                    return EOF;\n" +
+//                "                case 146:\n" +
+//                "                    return CTRL_Z;\n" +
+//                "                case 5:\n" +
+//                "                    return SINGLE_LINE_COMMENT;\n" +
+//                "                case 4:\n" +
+//                "                    return OLD_MAC_EOL;\n" +
+//                "                case 3:\n" +
+//                "                    return UNIX_EOL;\n" +
+//                "                case 2:\n" +
+//                "                    return WINDOWS_EOL;\n" +
+//                "                case 1:\n" +
+//                "                    return SPACE;\n" +
+//                "                case 0:\n" +
+//                "                    return EOF;\n" +
                 "                default:\n" +
                 "                    throw new IllegalArgumentException(f(\"Token kind %i is unknown.\", kind));\n" +
                 "            }\n" +
@@ -315,7 +315,7 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
         // TODO: Figure out why the newlines are not removed when we remove an entire switch entry...
         final SwitchEntry defaultEntry = valueOfSwitch.getDefaultSwitchEntry().get();
         valueOfSwitch.getEntries().clear();
-        valueOfSwitch.getEntries().add(defaultEntry);
+//        valueOfSwitch.getEntries().add(defaultEntry);
 
 //        "        EOF(0),\n" +
 //                "        SPACE(1),\n" +
@@ -326,12 +326,12 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //                "        CTRL_Z(146);\n" +
 
         generateValueOfEntry(valueOfSwitch, "EOF", new IntegerLiteralExpr(0));
-        generateValueOfEntry(valueOfSwitch, "SPACE", new IntegerLiteralExpr(1));
-        generateValueOfEntry(valueOfSwitch, "WINDOWS_EOL", new IntegerLiteralExpr(2));
-        generateValueOfEntry(valueOfSwitch, "UNIX_EOL", new IntegerLiteralExpr(3));
-        generateValueOfEntry(valueOfSwitch, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
-        generateValueOfEntry(valueOfSwitch, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
-        generateValueOfEntry(valueOfSwitch, "CTRL_Z", new IntegerLiteralExpr(146));
+//        generateValueOfEntry(valueOfSwitch, "SPACE", new IntegerLiteralExpr(1));
+//        generateValueOfEntry(valueOfSwitch, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+//        generateValueOfEntry(valueOfSwitch, "UNIX_EOL", new IntegerLiteralExpr(3));
+//        generateValueOfEntry(valueOfSwitch, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+//        generateValueOfEntry(valueOfSwitch, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+//        generateValueOfEntry(valueOfSwitch, "CTRL_Z", new IntegerLiteralExpr(146));
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(originalCode, LexicalPreservingPrinter.print(javaTokenCu));
