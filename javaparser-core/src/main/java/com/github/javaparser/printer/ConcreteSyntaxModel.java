@@ -54,7 +54,10 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_EMPTY;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_PRESENT;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 
 /**
@@ -654,22 +657,40 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(IfStmt.class, sequence(
                 comment(),
-                token(GeneratedJavaParserConstants.IF),
-                space(),
+                // if(condition)
+                token(GeneratedJavaParserConstants.IF), space(),
                 token(GeneratedJavaParserConstants.LPAREN),
                 child(ObservableProperty.CONDITION),
                 token(GeneratedJavaParserConstants.RPAREN),
+                // { /* thenstmt */ } // TODO: Fix the comment to be clearer
                 conditional(ObservableProperty.THEN_BLOCK, CsmConditional.Condition.FLAG,
-                        sequence(space(), child(ObservableProperty.THEN_STMT),
-                                conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, space())),
-                        sequence(newline(), indent(), child(ObservableProperty.THEN_STMT),
+                        sequence(
+                                space(),
+                                child(ObservableProperty.THEN_STMT),
+                                conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, space())
+                        ),
+                        sequence(
+                                newline(),
+                                indent(),
+                                child(ObservableProperty.THEN_STMT),
                                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, newline()),
-                                unindent())),
+                                unindent()
+                        )
+                ),
+                // TODO: Fix the comments
+                // else { /* else_stmt */ }
+                // else { /* else_block */ }
                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT,
-                        sequence(token(GeneratedJavaParserConstants.ELSE),
-                                conditional(Arrays.asList(ObservableProperty.ELSE_BLOCK, ObservableProperty.CASCADING_IF_STMT), CsmConditional.Condition.FLAG,
+                        sequence(
+                                token(GeneratedJavaParserConstants.ELSE),
+                                conditional(
+                                        Arrays.asList(ObservableProperty.ELSE_BLOCK, ObservableProperty.CASCADING_IF_STMT),
+                                        CsmConditional.Condition.FLAG,
                                         sequence(space(), child(ObservableProperty.ELSE_STMT)),
-                                        sequence(newline(), indent(), child(ObservableProperty.ELSE_STMT), unindent()))))
+                                        sequence(newline(), indent(), child(ObservableProperty.ELSE_STMT), unindent())
+                                )
+                        )
+                )
         ));
 
         concreteSyntaxModelByClass.put(LabeledStmt.class, sequence(
@@ -706,6 +727,7 @@ public class ConcreteSyntaxModel {
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
                 newline(),
                 // contents of the switch entry (e.g. `break;`)
+//                list(ObservableProperty.STATEMENTS, newline(), indent(), sequence(newline(), unindent()))
                 list(ObservableProperty.STATEMENTS, newline(), indent(), unindent())
         ));
 
@@ -721,7 +743,7 @@ public class ConcreteSyntaxModel {
                 // SwitchEntry.class
                 conditional(ObservableProperty.ENTRIES, CsmConditional.Condition.IS_EMPTY,
                         newline(),
-                        list(ObservableProperty.ENTRIES, newline(), sequence(indent(), newline()), sequence(newline(), unindent()))
+                        list(ObservableProperty.ENTRIES, newline(), sequence(newline(), indent()), sequence(newline(), unindent()))
                 ),
                 // }
                 token(GeneratedJavaParserConstants.RBRACE)
