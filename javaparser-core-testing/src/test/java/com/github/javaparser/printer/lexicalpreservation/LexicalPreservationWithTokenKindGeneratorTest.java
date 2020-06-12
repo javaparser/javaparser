@@ -23,7 +23,6 @@ import java.util.List;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LexicalPreservationWithTokenKindGeneratorTest {
 
@@ -360,7 +359,7 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //                "        CTRL_Z(146);\n" +
                 "        ;\n" + // Deliberately omit these for now in this test...
                 "\n" +
-                "        public static Kind valueOf(int kind) {\n" +
+                "        public Kind valueOf(int kind) {\n" +
                 "            switch(kind) {\n" +
 //                "                case 1:\n" +
 //                "                    return SPACE;\n" +
@@ -395,10 +394,9 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 
         ////
         NodeList<SwitchEntry> nodeList = switchStmt.getEntries();
-        Node container = nodeList.getParentNodeForChildren();
-        CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
+        CsmElement element = ConcreteSyntaxModel.forClass(nodeList.getParentNodeForChildren().getClass());
 
-        CalculatedSyntaxModel original = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, container);
+        CalculatedSyntaxModel original = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, nodeList.getParentNodeForChildren());
         CalculatedSyntaxModel afterRemovingOne = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(element, ObservableProperty.ENTRIES, nodeList, 0);
 
 //        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, afterRemovingOne);
@@ -407,28 +405,29 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
         System.out.println("==BEFORE ELEMENTS==");
         for (int i = 0; i < original.elements.size(); i++) {
             CsmElement originalElement = original.elements.get(i);
-            System.out.println(i + " = " + elementToString(originalElement));
+            System.out.println(i + " = " + escapeNewlines(originalElement.toString()));
         }
-        System.out.println();
-        System.out.println("==AFTER REMOVING ONE==");
-        for (int i = 0; i < afterRemovingOne.elements.size(); i++) {
-            CsmElement afterElement = afterRemovingOne.elements.get(i);
-            System.out.println(i + " = " + elementToString(afterElement));
-        }
-        System.out.println();
-        System.out.println();
-        for (int i = 0; i < differenceElements.size(); i++) {
-            DifferenceElement differenceElement = differenceElements.get(i);
-            if(differenceElement.isAdded()) {
-                System.out.println("(++) " + i + " = " + elementToString(differenceElement));
-            } else if(differenceElement.isRemoved()) {
-                System.out.println("(--) " + i + " = " + elementToString(differenceElement));
-            } else {
-                System.out.println(i + " = " + elementToString(differenceElement));
-            }
-        }
-
-        System.out.println();
+//        System.out.println();
+//        System.out.println("==AFTER REMOVING ONE==");
+//        for (int i = 0; i < afterRemovingOne.elements.size(); i++) {
+//            CsmElement afterElement = afterRemovingOne.elements.get(i);
+//            System.out.println(i + " = " + escapeNewlines(afterElement.toString()));
+//        }
+//        System.out.println();
+//        System.out.println();
+//        for (int i = 0; i < differenceElements.size(); i++) {
+//            DifferenceElement differenceElement = differenceElements.get(i);
+//            if (differenceElement.isAdded()) {
+//                System.out.println("(++) " + i + " = " + escapeNewlines(differenceElement.toString()));
+//            } else if (differenceElement.isRemoved()) {
+//                System.out.println("(--) " + i + " = " + escapeNewlines(differenceElement.toString()));
+//            } else {
+//                System.out.println(i + " = " + escapeNewlines(differenceElement.toString()));
+//            }
+//        }
+//
+//        System.out.println();
+//        System.out.println();
 
         // TODO: Figure out why the newlines are not removed when we remove an entire switch entry...
         final SwitchEntry defaultEntry = switchStmt.getDefaultSwitchEntry().get();
@@ -441,13 +440,33 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
         switchStmt.getEntries().removeIf(switchEntry -> switchEntry != defaultEntry);
 
 
+//        System.out.println();
+//        System.out.println("==NODETEXT==");
+//        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(switchStmt);
+//        for (int i = 0; i < nodeText.getElements().size(); i++) {
+//            TextElement nodeTextElement = nodeText.getElements().get(i);
+//            System.out.println(i + " = " + escapeNewlines(nodeTextElement.toString()));
+//        }
+
         generateValueOfEntry(switchStmt, "EOF", new IntegerLiteralExpr(0));
-        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
-        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
-        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
-        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
-        generateValueOfEntry(switchStmt, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
-        generateValueOfEntry(switchStmt, "CTRL_Z", new IntegerLiteralExpr(146));
+//        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
+//        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+//        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
+//        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+//        generateValueOfEntry(switchStmt, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+//        generateValueOfEntry(switchStmt, "CTRL_Z", new IntegerLiteralExpr(146));
+
+        CalculatedSyntaxModel original2 = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, nodeList.getParentNodeForChildren());
+        System.out.println();
+        System.out.println("==BEFORE ELEMENTS==");
+        for (int i = 0; i < original2.elements.size(); i++) {
+            CsmElement originalElement = original2.elements.get(i);
+            System.out.println(i + " = " + escapeNewlines(originalElement.toString()));
+        }
+
+//        printDifferences(original, afterRemovingOne);
+        printDifferences(original, original);
+
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(originalCode, LexicalPreservingPrinter.print(javaTokenCu));
@@ -455,14 +474,26 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 
     }
 
-    public String elementToString(DifferenceElement differenceElement) {
-        return differenceElement.toString().replace("\r", "\\r").replace("\n", "\\n");
+    public void printDifferences(CalculatedSyntaxModel before, CalculatedSyntaxModel after) {
+        System.out.println();
+        System.out.println();
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculateImpl(before, after);
+        for (int i = 0; i < differenceElements.size(); i++) {
+            DifferenceElement differenceElement = differenceElements.get(i);
+            if (differenceElement.isAdded()) {
+                System.out.println("(++) " + i + " = " + escapeNewlines(differenceElement.toString()));
+            } else if (differenceElement.isRemoved()) {
+                System.out.println("(--) " + i + " = " + escapeNewlines(differenceElement.toString()));
+            } else {
+                System.out.println(i + " = " + escapeNewlines(differenceElement.toString()));
+            }
+        }
     }
 
-    public String elementToString(CsmElement csmElement) {
-        return csmElement.toString().replace("\r", "\\r").replace("\n", "\\n");
+    public String escapeNewlines(String string) {
+//        return string.replace("\r", "\\r").replace("\n", "\\n");
+        return string.replace("; ", ";\n    - ");
     }
-
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
         final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));

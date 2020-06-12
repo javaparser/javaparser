@@ -154,7 +154,7 @@ final class RemovedGroup implements Iterable<Removed> {
         boolean hasOnlyWhitespace = false;
         if (startElement.isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) startElement.getElement();
-            Node child = csmChild.getChild();
+            Node child = csmChild.getChildNode();
 
             Optional<TokenRange> tokenRange = child.getTokenRange();
             if (tokenRange.isPresent()) {
@@ -197,7 +197,7 @@ final class RemovedGroup implements Iterable<Removed> {
         int indentation = 0;
         if (firstElement.isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) firstElement.getElement();
-            Node child = csmChild.getChild();
+            Node child = csmChild.getChildNode();
 
             Optional<TokenRange> tokenRange = child.getTokenRange();
             if (tokenRange.isPresent()) {

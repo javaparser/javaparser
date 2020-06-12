@@ -545,7 +545,7 @@ public class Difference {
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             incrementCurrentTextElementIndex();
-        } else if (kept.isChild() && ((CsmChild) kept.getElement()).getChild() instanceof Comment) {
+        } else if (kept.isChild() && ((CsmChild) kept.getElement()).getChildNode() instanceof Comment) {
             incrementCurrentDifferenceElementIndex();
         } else if (kept.isChild() && originalElementIsChild) {
             incrementCurrentDifferenceElementIndex();
@@ -631,9 +631,9 @@ public class Difference {
         if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
             return false;
         CsmChild child = (CsmChild) csmElem;
-        if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
+        if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChildNode().getClass()))
             return false;
-        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments<?>) child.getChild()).getTypeArguments();
+        Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments<?>) child.getChildNode()).getTypeArguments();
         return typeArgs.isPresent() && typeArgs.get().size() > 0;
     }
 
@@ -1082,7 +1082,7 @@ public class Difference {
             CsmChild csmChild = (CsmChild) csmElement;
             if (textElement instanceof ChildTextElement) {
                 ChildTextElement childTextElement = (ChildTextElement) textElement;
-                return childTextElement.getChild() == csmChild.getChild();
+                return childTextElement.getChild() == csmChild.getChildNode();
             }
         } else {
             throw new UnsupportedOperationException();

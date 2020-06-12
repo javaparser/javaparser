@@ -35,7 +35,7 @@ class DifferenceElementCalculator {
             if (b instanceof CsmChild) {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
-                return childA.getChild().equals(childB.getChild());
+                return childA.getChildNode().equals(childB.getChildNode());
             } else if (b instanceof CsmToken) {
                 return false;
             } else if (b instanceof CsmIndent) {
@@ -80,7 +80,7 @@ class DifferenceElementCalculator {
             if (b instanceof CsmChild) {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
-                return childA.getChild().getClass().equals(childB.getChild().getClass());
+                return childA.getChildNode().getClass().equals(childB.getChildNode().getClass());
             } else if (b instanceof CsmToken) {
                 return false;
             } else {
@@ -106,7 +106,7 @@ class DifferenceElementCalculator {
         for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
             CsmElement element = calculatedSyntaxModel.elements.get(i);
             if (element instanceof CsmChild) {
-                positions.put(((CsmChild)element).getChild(), i);
+                positions.put(((CsmChild)element).getChildNode(), i);
             }
         }
         return positions;
@@ -154,6 +154,7 @@ class DifferenceElementCalculator {
                         original.sub(originalIndex, posOfNextChildInOriginal),
                         after.sub(afterIndex, posOfNextChildInAfter)
                 );
+                // Add differences
                 differenceElements.addAll(changeDifferences);
             }
 
@@ -194,25 +195,26 @@ class DifferenceElementCalculator {
     private static int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> differenceElements) {
         boolean dealtWith = false;
         if (removedElement instanceof CsmChild) {
-            CsmChild removedChild = (CsmChild) removedElement;
-            if (removedChild.getChild() instanceof Type && removedChild.getChild().getParentNode().isPresent() &&
-                    removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
-                NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChild.getChild());
+            Node removedChildNode = ((CsmChild) removedElement).getChildNode();
+            boolean parentOfRemovedChildIsVariableDeclarator = removedChildNode instanceof Type &&
+                    removedChildNode.getParentNode().isPresent() &&
+                    removedChildNode.getParentNode().get() instanceof VariableDeclarator;
+            if (parentOfRemovedChildIsVariableDeclarator) {
+                NodeText nodeTextForChild = LexicalPreservingPrinter.getOrCreateNodeText(removedChildNode);
                 considerRemoval(nodeTextForChild, differenceElements);
                 originalIndex++;
                 dealtWith = true;
             }
         }
         if (!dealtWith) {
-            differenceElements.add(new Removed(removedElement));//.addToContextNote("; considerRemoval (!dealtWith)")));
+            differenceElements.add(new Removed(removedElement));//.addToContextNote("; considerRemoval -- not removed"))); //.addToContextNote("; considerRemoval (!dealtWith)")));
             originalIndex++;
         }
         return originalIndex;
     }
 
-    // TODO: Rename me.
-    static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original,
-                                                         LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+    // TODO: Rename me (what is "impl"?).
+    static List<DifferenceElement> calculateImpl(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         List<DifferenceElement> differenceElements = new LinkedList<>();
 
         int originalIndex = 0;
@@ -268,15 +270,23 @@ class DifferenceElementCalculator {
                     List<DifferenceElement> removingElements = null;
                     if (costOfDifferences(addingElements) > 0) {
                         removingElements = calculate(original.from(originalIndex + 1), after.from(afterIndex));
-                    }
-
-                    boolean removalIsMoreOptimal = removingElements != null && costOfDifferences(removingElements) <= costOfDifferences(addingElements);
-                    if (removalIsMoreOptimal) {
-                        differenceElements.add(new Removed(nextOriginal.addToContextNote("; removalIsMoreOptimal")));
-                        originalIndex++;
+                        if (costOfDifferences(addingElements) < costOfDifferences(removingElements)) {
+                            // If adding is more optimal than removal:
+                            differenceElements.add(new Added(nextAfter.addToContextNote("; addingIsMoreOptimal")));
+                            afterIndex++; // TODO: Document why after
+                        } else if (costOfDifferences(addingElements) > costOfDifferences(removingElements)) {
+                            // If removal is more optimal than adding:
+                            differenceElements.add(new Removed(nextOriginal.addToContextNote("; removalIsMoreOptimal")));
+                            originalIndex++; // TODO: Document why original
+                        } else {
+                            // If removal and adding are equivalent -- default to removal:
+                            differenceElements.add(new Removed(nextOriginal.addToContextNote("; addingAndRemovalIsEquivalent")));
+                            originalIndex++;
+                        }
                     } else {
-                        differenceElements.add(new Added(nextAfter.addToContextNote("; NOT removalIsMoreOptimal")));
-                        afterIndex++;
+                        // If there is no cost to adding, we presume there is no cost to removal (i.e. everything remains as-is).
+                        // Shouldn't ever happen, as it should be handled above (i.e. equal/equivalent/matching).
+                        throw new RuntimeException();
                     }
                 }
             }

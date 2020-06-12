@@ -315,7 +315,7 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
     }
 
     private boolean isChild(CsmElement element, Class<? extends Node> childClass) {
-        return element instanceof CsmChild && childClass.isInstance(((CsmChild)element).getChild());
+        return element instanceof CsmChild && childClass.isInstance(((CsmChild)element).getChildNode());
     }
 
     protected EnumConstantDeclaration considerEcd(String code) {

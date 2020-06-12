@@ -61,7 +61,7 @@ public class Removed implements DifferenceElement {
     public Node getChild() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
-            return csmChild.getChild();
+            return csmChild.getChildNode();
         }
 
         throw new IllegalStateException("Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
@@ -88,7 +88,7 @@ public class Removed implements DifferenceElement {
     public boolean isPrimitiveType() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
-            return csmChild.getChild() instanceof PrimitiveType;
+            return csmChild.getChildNode() instanceof PrimitiveType;
         }
 
         return false;

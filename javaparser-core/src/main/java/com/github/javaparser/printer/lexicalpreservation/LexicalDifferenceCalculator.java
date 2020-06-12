@@ -88,7 +88,15 @@ class LexicalDifferenceCalculator {
         private final Node child;
         private String contextNote;
 
+        /**
+         * @deprecated Use {@link #getChildNode()}
+         */
+        @Deprecated
         public Node getChild() {
+            return getChildNode();
+        }
+
+        public Node getChildNode() {
             return child;
         }
 
@@ -167,7 +175,7 @@ class LexicalDifferenceCalculator {
                 CsmElement element = differenceElement.getElement();
                 boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
                 if (isWhitespaceToken) {
-                    differenceElements.set(i, new Added(CsmElement.newline(desiredLineSeparator)));
+                    differenceElements.set(i, new Added(CsmElement.newline(desiredLineSeparator).addToContextNote("; created within normaliseEolTokens")));
                 }
             }
         }

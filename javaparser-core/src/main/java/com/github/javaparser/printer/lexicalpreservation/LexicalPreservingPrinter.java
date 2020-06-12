@@ -554,7 +554,7 @@ public class LexicalPreservingPrinter {
 
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChildNode());
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
