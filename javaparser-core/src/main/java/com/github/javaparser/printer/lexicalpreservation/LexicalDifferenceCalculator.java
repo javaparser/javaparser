@@ -173,8 +173,8 @@ class LexicalDifferenceCalculator {
             DifferenceElement differenceElement = differenceElements.get(i);
             if (differenceElement.isAdded()) {
                 CsmElement element = differenceElement.getElement();
-                boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
-                if (isWhitespaceToken) {
+                boolean isNewlineToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
+                if (isNewlineToken) {
                     differenceElements.set(i, new Added(CsmElement.newline(desiredLineSeparator).addToContextNote("; created within normaliseEolTokens")));
                 }
             }

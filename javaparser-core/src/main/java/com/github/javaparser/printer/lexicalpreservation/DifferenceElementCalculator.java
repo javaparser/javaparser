@@ -267,26 +267,23 @@ class DifferenceElementCalculator {
                 } else {
                     // We can try to remove the element or add it and look which one leads to the least difference (similar to Levenshtein distance between strings)
                     List<DifferenceElement> addingElements = calculate(original.from(originalIndex), after.from(afterIndex + 1));
-                    List<DifferenceElement> removingElements = null;
+                    List<DifferenceElement> removingElements = new ArrayList<>();
                     if (costOfDifferences(addingElements) > 0) {
                         removingElements = calculate(original.from(originalIndex + 1), after.from(afterIndex));
-                        if (costOfDifferences(addingElements) < costOfDifferences(removingElements)) {
-                            // If adding is more optimal than removal:
-                            differenceElements.add(new Added(nextAfter.addToContextNote("; addingIsMoreOptimal")));
-                            afterIndex++; // TODO: Document why after
-                        } else if (costOfDifferences(addingElements) > costOfDifferences(removingElements)) {
-                            // If removal is more optimal than adding:
-                            differenceElements.add(new Removed(nextOriginal.addToContextNote("; removalIsMoreOptimal")));
-                            originalIndex++; // TODO: Document why original
-                        } else {
-                            // If removal and adding are equivalent -- default to removal:
-                            differenceElements.add(new Removed(nextOriginal.addToContextNote("; addingAndRemovalIsEquivalent")));
-                            originalIndex++;
-                        }
+                    }
+
+                    if (costOfDifferences(addingElements) < costOfDifferences(removingElements)) {
+                        // If adding is more optimal than removal:
+                        differenceElements.add(new Added(nextAfter));//.addToContextNote("; addingIsMoreOptimal")));
+                        afterIndex++; // TODO: Document why after
+                    } else if (costOfDifferences(addingElements) > costOfDifferences(removingElements)) {
+                        // If removal is more optimal than adding:
+                        differenceElements.add(new Removed(nextOriginal));//.addToContextNote("; removalIsMoreOptimal")));
+                        originalIndex++; // TODO: Document why original
                     } else {
-                        // If there is no cost to adding, we presume there is no cost to removal (i.e. everything remains as-is).
-                        // Shouldn't ever happen, as it should be handled above (i.e. equal/equivalent/matching).
-                        throw new RuntimeException();
+                        // If removal and adding are equivalent -- default to adding: // TODO: Document why? Note defaulting to removal fails...
+                        differenceElements.add(new Added(nextAfter.addToContextNote("; adding and removal is equivalent - defaulting to adding")));
+                        afterIndex++; // TODO: Document why after
                     }
                 }
             }
