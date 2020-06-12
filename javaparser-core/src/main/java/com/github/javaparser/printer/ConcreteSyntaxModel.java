@@ -120,7 +120,10 @@ public class ConcreteSyntaxModel {
                         sequence(space(), token(GeneratedJavaParserConstants.IMPLEMENTS), space()),
                         none()),
                 space(),
-                block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
+                block(sequence(
+                        newline(),
+                        list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())
+                ))
         ));
 
         concreteSyntaxModelByClass.put(ConstructorDeclaration.class, sequence(
@@ -177,7 +180,7 @@ public class ConcreteSyntaxModel {
 
                 block(sequence(
                         newline(),
-                        newline(), // Deliberately duplicated newline
+                        newline(), // Deliberate double newline
                         // FIXME: Have the enum constant declarations respect the indentation?
                         list(ObservableProperty.ENTRIES,
                                 sequence(comma(), newline()),
@@ -704,9 +707,9 @@ public class ConcreteSyntaxModel {
                         sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))
                 ),
                 indented(sequence(
-                    newline(),
-                    // contents of the switch entry (e.g. `break;`)
-                    list(ObservableProperty.STATEMENTS, newline(), none(), none())
+                        newline(),
+                        // contents of the switch entry (e.g. `break;`)
+                        list(ObservableProperty.STATEMENTS, newline(), none(), none())
                 ))
         ));
 

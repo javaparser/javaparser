@@ -221,7 +221,7 @@ class LexicalDifferenceCalculator {
             for (CsmElement e : csmSequence.getElements()) {
 //                e.addToContextNote("; element within CsmSequence");
 //                e.addToContextNote("; exploded CsmSequence element");
-                calculatedSyntaxModelForNode(e, node, elements, change, contextNote + "; exploded CsmSequence element");
+                calculatedSyntaxModelForNode(e, node, elements, change, contextNote); // + "; exploded CsmSequence element");
             }
         } else if (csm instanceof CsmComment) {
             // nothing to do

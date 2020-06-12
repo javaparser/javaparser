@@ -77,21 +77,21 @@ public class Difference {
     }
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
-        List<TextElement> res = new LinkedList<>(indentation);
-        boolean afterNl = false;
+        List<TextElement> result = new LinkedList<>(indentation);
+        boolean isAfterNewline = false;
         for (TextElement e : prevElements) {
             if (e.isNewline()) {
-                res.clear();
-                afterNl = true;
+                result.clear();
+                isAfterNewline = true;
             } else {
-                if (afterNl && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement) e).getTokenKind())) {
-                    res.add(e);
+                if (isAfterNewline && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement) e).getTokenKind())) {
+                    result.add(e);
                 } else {
-                    afterNl = false;
+                    isAfterNewline = false;
                 }
             }
         }
-        return res;
+        return result;
     }
 
     private List<TextElement> newIndentationBlock() {
@@ -345,7 +345,7 @@ public class Difference {
                             CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
                             boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
                             if (toBeKept) {
-                                diffElements.add(diffElIterator++, new Kept(originalCSMElement));
+                                diffElements.add(diffElIterator++, new Kept(originalCSMElement.addToContextNote("; originalCSMElement")));
                             } else {
                                 diffElements.add(diffElIterator++, new Removed(originalCSMElement));
                             }
@@ -416,6 +416,23 @@ public class Difference {
     }
 
     private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
+//        if (added.isIndent()) {
+//            for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
+//                indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+//            }
+//            indentationHasBeenAdded = true;
+//            incrementCurrentDifferenceElementIndex();
+//            return;
+//        }
+//        if (added.isUnindent()) {
+//            for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
+//                indentation.remove(indentation.size() - 1);
+//            }
+//            indentationHasBeenAdded = false;
+//            incrementCurrentDifferenceElementIndex();
+//            return;
+//        }
+
         if (removed.isChild() && originalElementIsChild) {
             ChildTextElement originalElementChild = (ChildTextElement) originalElement;
             if (originalElementChild.isComment()) {
@@ -543,6 +560,23 @@ public class Difference {
     }
 
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
+        if (kept.isIndent()) {
+            for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
+                indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+            }
+            indentationHasBeenAdded = true;
+            incrementCurrentDifferenceElementIndex();
+            return;
+        }
+        if (kept.isUnindent()) {
+            for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
+                indentation.remove(indentation.size() - 1);
+            }
+            indentationHasBeenAdded = false;
+            incrementCurrentDifferenceElementIndex();
+            return;
+        }
+
         if (originalElement.isComment()) {
             incrementCurrentTextElementIndex();
         } else if (kept.isChild() && ((CsmChild) kept.getElement()).getChildNode() instanceof Comment) {
@@ -582,13 +616,17 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
+            } else if (kept.isNewLine() && originalTextToken.isNewline()) {
+                // Newlines may not always be equal tokenkind (e.g. mixed newline separators)
+                incrementCurrentTextElementIndex();
+                incrementCurrentDifferenceElementIndex();
             } else if (kept.isNewLine() && originalTextToken.isWhitespaceButNotEndOfLine()) {
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
+            } else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
                 // case where originalTextToken is a separator like ";" and
                 // kept is not a new line or whitespace for example "}"
                 // see issue 2351
-            } else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
                 incrementCurrentTextElementIndex();
             } else if (kept.isWhiteSpaceOrComment()) {
                 incrementCurrentDifferenceElementIndex();
@@ -602,11 +640,11 @@ public class Difference {
         } else if (kept.isIndent()) {
             incrementCurrentDifferenceElementIndex();
         } else if (kept.isUnindent()) {
+            incrementCurrentDifferenceElementIndex();
+
             // Nothing to do, beside considering indentation
             // However we want to consider the case in which the indentation was not applied, like when we have
             // just a left brace followed by space
-
-            incrementCurrentDifferenceElementIndex();
             if (!openBraceWasOnSameLine()) {
                 // Remove indentation
                 for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {

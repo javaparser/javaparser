@@ -7,6 +7,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
@@ -132,6 +133,15 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 
         // Reset the enum:
         kindEnum.getEntries().clear();
+
+
+        generateEnumEntry(kindEnum, "EOF", new IntegerLiteralExpr(0));
+        generateEnumEntry(kindEnum, "SPACE", new IntegerLiteralExpr(1));
+        generateEnumEntry(kindEnum, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+        generateEnumEntry(kindEnum, "UNIX_EOL", new IntegerLiteralExpr(3));
+        generateEnumEntry(kindEnum, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+        generateEnumEntry(kindEnum, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+        generateEnumEntry(kindEnum, "CTRL_Z", new IntegerLiteralExpr(146));
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(expectedOutput_lexical, LexicalPreservingPrinter.print(javaTokenCu));
@@ -276,20 +286,20 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "\n" +
                 "        public static Kind valueOf(int kind) {\n" +
                 "            switch(kind) {\n" +
-//                "                case 146:\n" +
-//                "                    return CTRL_Z;\n" +
-//                "                case 5:\n" +
-//                "                    return SINGLE_LINE_COMMENT;\n" +
-//                "                case 4:\n" +
-//                "                    return OLD_MAC_EOL;\n" +
-//                "                case 3:\n" +
-//                "                    return UNIX_EOL;\n" +
-//                "                case 2:\n" +
-//                "                    return WINDOWS_EOL;\n" +
-//                "                case 1:\n" +
-//                "                    return SPACE;\n" +
-//                "                case 0:\n" +
-//                "                    return EOF;\n" +
+                "                case 146:\n" +
+                "                    return CTRL_Z;\n" +
+                "                case 5:\n" +
+                "                    return SINGLE_LINE_COMMENT;\n" +
+                "                case 4:\n" +
+                "                    return OLD_MAC_EOL;\n" +
+                "                case 3:\n" +
+                "                    return UNIX_EOL;\n" +
+                "                case 2:\n" +
+                "                    return WINDOWS_EOL;\n" +
+                "                case 1:\n" +
+                "                    return SPACE;\n" +
+                "                case 0:\n" +
+                "                    return EOF;\n" +
                 "                default:\n" +
                 "                    throw new IllegalArgumentException(f(\"Token kind %i is unknown.\", kind));\n" +
                 "            }\n" +
@@ -333,13 +343,13 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //                "        SINGLE_LINE_COMMENT(5),\n" +
 //                "        CTRL_Z(146);\n" +
 
-        generateValueOfEntry(valueOfSwitch, "EOF", new IntegerLiteralExpr(0));
-        generateValueOfEntry(valueOfSwitch, "SPACE", new IntegerLiteralExpr(1));
-        generateValueOfEntry(valueOfSwitch, "WINDOWS_EOL", new IntegerLiteralExpr(2));
-        generateValueOfEntry(valueOfSwitch, "UNIX_EOL", new IntegerLiteralExpr(3));
-        generateValueOfEntry(valueOfSwitch, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
-        generateValueOfEntry(valueOfSwitch, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
-        generateValueOfEntry(valueOfSwitch, "CTRL_Z", new IntegerLiteralExpr(146));
+        generateValueOfEntry_toStart(valueOfSwitch, "EOF", new IntegerLiteralExpr(0));
+        generateValueOfEntry_toStart(valueOfSwitch, "SPACE", new IntegerLiteralExpr(1));
+        generateValueOfEntry_toStart(valueOfSwitch, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+        generateValueOfEntry_toStart(valueOfSwitch, "UNIX_EOL", new IntegerLiteralExpr(3));
+        generateValueOfEntry_toStart(valueOfSwitch, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+        generateValueOfEntry_toStart(valueOfSwitch, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+        generateValueOfEntry_toStart(valueOfSwitch, "CTRL_Z", new IntegerLiteralExpr(146));
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(originalCode, LexicalPreservingPrinter.print(javaTokenCu));
@@ -488,32 +498,28 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
     @Test
     public void test3() {
         String originalCode = "" +
-                "public class JavaToken {\n" +
-                "\n" +
-                "        public Kind valueOf(int kind) {\n" +
-                "            switch(kind) {\n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "            }\n" +
+                "class JavaToken {Kind valueOf(int kind) {\n" +
+                "        switch(kind) {\n" +
+//                "            \n" +
+//                "            \n" +
+//                "            \n" +
                 "        }\n" +
+                "}\n" +
                 "}\n" +
                 "";
 
         String expected_lexical = "" +
-                "public class JavaToken {\n" +
-                "\n" +
-                "        public Kind valueOf(int kind) {\n" +
-                "            switch(kind) {\n" +
-                "                case 1:\n" +
-                "                    return SPACE;\n" +
-                "                case 0:\n" +
-                "                    return EOF;\n" +
-                "                \n" +
-                "                \n" +
-                "                \n" +
-                "            }\n" +
+                "class JavaToken {Kind valueOf(int kind) {\n" +
+                "        switch(kind) {\n" +
+                "            case 1:\n" +
+                "                return SPACE;\n" +
+                "            case 0:\n" +
+                "                return EOF;\n" +
+//                "            \n" +
+//                "            \n" +
+//                "            \n" +
                 "        }\n" +
+                "}\n" +
                 "}\n" +
                 "";
 
@@ -592,5 +598,11 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
     private void generateValueOfEntry_toEnd(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
         final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
         valueOfSwitch.getEntries().add(entry);
+    }
+
+    private void generateEnumEntry(EnumDeclaration kindEnum, String name, IntegerLiteralExpr kind) {
+        final EnumConstantDeclaration enumEntry = new EnumConstantDeclaration(name);
+        enumEntry.getArguments().add(kind);
+        kindEnum.addEntry(enumEntry);
     }
 }

@@ -257,7 +257,7 @@ class DifferenceElementCalculator {
                     originalIndex++;
                     afterIndex++;
                 } else if (matching(nextOriginal, nextAfter)) {
-                    differenceElements.add(new Kept(nextOriginal)); //.addToContextNote("; matching(nextOriginal, nextAfter)")));
+                    differenceElements.add(new Kept(nextOriginal.addToContextNote("; matching(nextOriginal, nextAfter)")));
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
