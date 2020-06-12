@@ -158,4 +158,8 @@ public interface CsmElement {
     static CsmElement block(CsmElement content) {
         return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
     }
+
+    static CsmElement bracketed(CsmElement content) {
+        return sequence(token(GeneratedJavaParserConstants.LPAREN), content, token(GeneratedJavaParserConstants.RPAREN));
+    }
 }
