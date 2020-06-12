@@ -648,10 +648,10 @@ public class ConcreteSyntaxModel {
                         ),
                         sequence(
                                 newline(),
-                                indent(),
-                                child(ObservableProperty.THEN_STMT),
-                                conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, newline()),
-                                unindent()
+                                indented(sequence(
+                                    child(ObservableProperty.THEN_STMT),
+                                    conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, newline())
+                                ))
                         )
                 ),
                 // TODO: Fix the comments
@@ -664,7 +664,7 @@ public class ConcreteSyntaxModel {
                                         Arrays.asList(ObservableProperty.ELSE_BLOCK, ObservableProperty.CASCADING_IF_STMT),
                                         CsmConditional.Condition.FLAG,
                                         sequence(space(), child(ObservableProperty.ELSE_STMT)),
-                                        sequence(newline(), indent(), child(ObservableProperty.ELSE_STMT), unindent())
+                                        sequence(newline(), indented(child(ObservableProperty.ELSE_STMT)))
                                 )
                         )
                 )
@@ -701,11 +701,13 @@ public class ConcreteSyntaxModel {
                 // default:
                 conditional(ObservableProperty.LABELS, IS_NOT_EMPTY,
                         sequence(token(GeneratedJavaParserConstants.CASE), space(), list(ObservableProperty.LABELS), token(GeneratedJavaParserConstants.COLON)),
-                        sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))),
-                newline(),
-                // contents of the switch entry (e.g. `break;`)
-//                list(ObservableProperty.STATEMENTS, newline(), indent(), sequence(newline(), unindent()))
-                list(ObservableProperty.STATEMENTS, newline(), indent(), unindent())
+                        sequence(token(GeneratedJavaParserConstants._DEFAULT), token(GeneratedJavaParserConstants.COLON))
+                ),
+                indented(sequence(
+                    newline(),
+                    // contents of the switch entry (e.g. `break;`)
+                    list(ObservableProperty.STATEMENTS, newline(), none(), none())
+                ))
         ));
 
         concreteSyntaxModelByClass.put(SwitchStmt.class, sequence(
@@ -758,14 +760,22 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(GeneratedJavaParserConstants.TRY),
                 space(),
-                conditional(ObservableProperty.RESOURCES, CsmConditional.Condition.IS_NOT_EMPTY, sequence(
-                        bracketed(
-                                list(ObservableProperty.RESOURCES, sequence(semicolon(), newline()), indent(), unindent())
-                        ),
-                        space())),
+                conditional(ObservableProperty.RESOURCES, CsmConditional.Condition.IS_NOT_EMPTY,
+                        sequence(
+                                bracketed(list(ObservableProperty.RESOURCES, sequence(semicolon(), newline()), indent(), unindent())),
+                                space()
+                        )
+                ),
                 child(ObservableProperty.TRY_BLOCK),
                 list(ObservableProperty.CATCH_CLAUSES),
-                conditional(ObservableProperty.FINALLY_BLOCK, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.FINALLY), space(), child(ObservableProperty.FINALLY_BLOCK)))
+                conditional(ObservableProperty.FINALLY_BLOCK, IS_PRESENT,
+                        sequence(
+                                space(),
+                                token(GeneratedJavaParserConstants.FINALLY),
+                                space(),
+                                child(ObservableProperty.FINALLY_BLOCK)
+                        )
+                )
         ));
 
         concreteSyntaxModelByClass.put(WhileStmt.class, sequence(
