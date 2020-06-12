@@ -361,8 +361,10 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
                 "\n" +
                 "        public Kind valueOf(int kind) {\n" +
                 "            switch(kind) {\n" +
-//                "                case 1:\n" +
-//                "                    return SPACE;\n" +
+                "                \n" +
+                "                \n" +
+                "                case 1:\n" +
+                "                    return SPACE;\n" +
                 "                case 0:\n" +
                 "                    return EOF;\n" +
                 "                default:\n" +
@@ -448,8 +450,8 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //            System.out.println(i + " = " + escapeNewlines(nodeTextElement.toString()));
 //        }
 
-        generateValueOfEntry(switchStmt, "EOF", new IntegerLiteralExpr(0));
-//        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
+        generateValueOfEntry_toStart(switchStmt, "EOF", new IntegerLiteralExpr(0));
+        generateValueOfEntry_toStart(switchStmt, "SPACE", new IntegerLiteralExpr(1));
 //        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
 //        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
 //        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
@@ -467,12 +469,93 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
 //        printDifferences(original, afterRemovingOne);
         printDifferences(original, original);
 
+        System.out.println();
+        System.out.println();
+
+        Node parentNodeForChildren = nodeList.getParentNodeForChildren();
+        System.out.println("parentNodeForChildren = " + parentNodeForChildren);
+        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(parentNodeForChildren);
+
+        System.out.println("indentation (" + indentation.size() + ") = " + indentation);
+//        indentation.forEach(System.out::println);
 
 //        assertEquals(originalCode, javaTokenCu.toString());
         assertEqualsStringIgnoringEol(originalCode, LexicalPreservingPrinter.print(javaTokenCu));
 
 
     }
+
+    @Test
+    public void test3() {
+        String originalCode = "" +
+                "public class JavaToken {\n" +
+                "\n" +
+                "        public Kind valueOf(int kind) {\n" +
+                "            switch(kind) {\n" +
+                "                \n" +
+                "                \n" +
+                "                \n" +
+                "            }\n" +
+                "        }\n" +
+                "}\n" +
+                "";
+
+        String expected_lexical = "" +
+                "public class JavaToken {\n" +
+                "\n" +
+                "        public Kind valueOf(int kind) {\n" +
+                "            switch(kind) {\n" +
+                "                case 1:\n" +
+                "                    return SPACE;\n" +
+                "                case 0:\n" +
+                "                    return EOF;\n" +
+                "                \n" +
+                "                \n" +
+                "                \n" +
+                "            }\n" +
+                "        }\n" +
+                "}\n" +
+                "";
+
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration()
+                .setLanguageLevel(RAW)
+                .setLexicalPreservationEnabled(true)
+        );
+
+        final ParseResult<CompilationUnit> parseResult = javaParser.parse(originalCode);
+        final CompilationUnit javaTokenCu = parseResult.getResult().orElseThrow(RuntimeException::new);
+        final ClassOrInterfaceDeclaration javaTokenCoid = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
+
+        ////
+        final MethodDeclaration valueOfMethodDeclaration = javaTokenCoid.getMethodsByName("valueOf").get(0);
+        final SwitchStmt switchStmt = valueOfMethodDeclaration
+                .findFirst(SwitchStmt.class)
+                .orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
+
+        ////
+        NodeList<SwitchEntry> nodeList = switchStmt.getEntries();
+        CsmElement element = ConcreteSyntaxModel.forClass(nodeList.getParentNodeForChildren().getClass());
+
+
+        CalculatedSyntaxModel original = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, nodeList.getParentNodeForChildren());
+
+
+        generateValueOfEntry(switchStmt, "EOF", new IntegerLiteralExpr(0));
+        generateValueOfEntry(switchStmt, "SPACE", new IntegerLiteralExpr(1));
+//        generateValueOfEntry(switchStmt, "WINDOWS_EOL", new IntegerLiteralExpr(2));
+//        generateValueOfEntry(switchStmt, "UNIX_EOL", new IntegerLiteralExpr(3));
+//        generateValueOfEntry(switchStmt, "OLD_MAC_EOL", new IntegerLiteralExpr(4));
+//        generateValueOfEntry(switchStmt, "SINGLE_LINE_COMMENT", new IntegerLiteralExpr(5));
+//        generateValueOfEntry(switchStmt, "CTRL_Z", new IntegerLiteralExpr(146));
+
+
+        CalculatedSyntaxModel after = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, nodeList.getParentNodeForChildren());
+
+        printDifferences(original, after);
+        assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(javaTokenCu));
+
+    }
+
 
     public void printDifferences(CalculatedSyntaxModel before, CalculatedSyntaxModel after) {
         System.out.println();
@@ -496,9 +579,18 @@ public class LexicalPreservationWithTokenKindGeneratorTest {
     }
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
-        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
+        // HELPER METHOD -- single place to toggle adding to start or end
+//        generateValueOfEntry_toStart(valueOfSwitch, name, kind);
+        generateValueOfEntry_toEnd(valueOfSwitch, name, kind);
+    }
 
-        // TODO: Why addFirst? Presumably to avoid adding after "default" (thus is effectively addBefore(default label).
+    private void generateValueOfEntry_toStart(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
+        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
         valueOfSwitch.getEntries().addFirst(entry);
+    }
+
+    private void generateValueOfEntry_toEnd(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
+        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)));
+        valueOfSwitch.getEntries().add(entry);
     }
 }

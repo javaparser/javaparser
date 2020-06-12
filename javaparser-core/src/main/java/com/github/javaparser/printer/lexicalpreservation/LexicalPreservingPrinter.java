@@ -536,8 +536,7 @@ public class LexicalPreservingPrinter {
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
-                if (calculatedSyntaxModel.elements.size() > indexCurrentElement &&
-                        !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                if (indexCurrentElement < calculatedSyntaxModel.elements.size()) {
                     for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
                         indentation.add(new TokenTextElement(SPACE, " "));
                     }

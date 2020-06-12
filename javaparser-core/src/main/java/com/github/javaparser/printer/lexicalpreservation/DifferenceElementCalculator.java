@@ -238,7 +238,7 @@ class DifferenceElementCalculator {
             } else if (exhaustedOriginalElements && afterElementsRemaining) {
                 // No original differenceElements remain but there are still more differenceElements after.
                 // Thus can shortcut as all remaining differenceElements must have been added.
-                differenceElements.add(new Added(after.elements.get(afterIndex).addToContextNote("exhaustedOriginalElements && afterElementsRemaining")));
+                differenceElements.add(new Added(after.elements.get(afterIndex)));//.addToContextNote("; exhaustedOriginalElements && afterElementsRemaining")));
                 afterIndex++;
             } else {
                 // Still differenceElements remaining before/after that must be compared.
@@ -282,7 +282,7 @@ class DifferenceElementCalculator {
                         originalIndex++; // TODO: Document why original
                     } else {
                         // If removal and adding are equivalent -- default to adding: // TODO: Document why? Note defaulting to removal fails...
-                        differenceElements.add(new Added(nextAfter.addToContextNote("; adding and removal is equivalent - defaulting to adding")));
+                        differenceElements.add(new Added(nextAfter));//.addToContextNote("; adding and removal is equivalent - defaulting to adding")));
                         afterIndex++; // TODO: Document why after
                     }
                 }
