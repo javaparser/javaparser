@@ -191,7 +191,9 @@ public class ConcreteSyntaxModel {
                                 conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
                                 sequence(
                                         // Only include a semicolon when there are entries AND there are members.
-                                        conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, semicolon()),
+//                                        conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY,
+                                                semicolon(),
+//                                        ),
                                         newline(),
                                         newline(),
                                         list(ObservableProperty.MEMBERS, newline(), newline(), none(), newline())

@@ -121,11 +121,27 @@ public class Difference {
             return true;
         }
 
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
+        int prevIndex = nodeTextIndex - 1;
+        if (nodeTextIndex > 0 && nodeText.getElements().get(prevIndex).isNewline()) {
             return true;
         }
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhitespaceButNotEndOfLine()) {
-            return isFirstNonWhitespaceElementOnLine(nodeText, nodeTextIndex - 1);
+        if (nodeTextIndex > 0 && nodeText.getElements().get(prevIndex).isWhitespaceButNotEndOfLine()) {
+            return isFirstNonWhitespaceElementOnLine(nodeText, prevIndex);
+        }
+        return false;
+    }
+
+    private boolean isLastNonWhitespaceElementOnLine(NodeText nodeText, int nodeTextIndex) {
+        if (nodeTextIndex == 0) {
+            return true;
+        }
+
+        int nextIndex = nodeTextIndex + 1;
+        if (nextIndex < nodeText.getElements().size() &&  nodeText.getElements().get(nextIndex).isNewline()) {
+            return true;
+        }
+        if (nextIndex < nodeText.getElements().size() && nodeText.getElements().get(nextIndex).isWhitespaceButNotEndOfLine()) {
+            return isFirstNonWhitespaceElementOnLine(nodeText, nextIndex);
         }
         return false;
     }
@@ -617,12 +633,11 @@ public class Difference {
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
             } else if (kept.isNewLine() && originalTextToken.isNewline()) {
-                // Newlines may not always be equal tokenkind (e.g. mixed newline separators)
+                // Newlines may not always be equal in terms of tokenkind (e.g. mixed newline separators)
                 incrementCurrentTextElementIndex();
                 incrementCurrentDifferenceElementIndex();
             } else if (kept.isNewLine() && originalTextToken.isWhitespaceButNotEndOfLine()) {
                 incrementCurrentTextElementIndex();
-                incrementCurrentDifferenceElementIndex();
             } else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
                 // case where originalTextToken is a separator like ";" and
                 // kept is not a new line or whitespace for example "}"

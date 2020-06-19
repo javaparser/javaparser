@@ -141,8 +141,9 @@ final class RemovedGroup implements Iterable<Removed> {
      * @return true if the RemovedGroup equates to a complete line
      */
     final boolean isACompleteLine() {
-        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction)
-                && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
+        boolean hasOnlyWhitespaceInFront = hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction);
+        boolean hasOnlyWhitespaceBehind = hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
+        return hasOnlyWhitespaceInFront && hasOnlyWhitespaceBehind;
     }
 
     private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenInFrontFunction = begin -> hasOnlyWhiteSpaceForTokenFunction(begin, token -> token.getPreviousToken());
