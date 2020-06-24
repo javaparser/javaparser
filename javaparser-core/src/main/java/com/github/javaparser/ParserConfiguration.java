@@ -399,4 +399,22 @@ public class ParserConfiguration {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "ParserConfiguration{" +
+                "\n - detectOriginalLineSeparator=" + detectOriginalLineSeparator +
+                "\n - storeTokens=" + storeTokens +
+                "\n - attributeComments=" + attributeComments +
+                "\n - doNotAssignCommentsPrecedingEmptyLines=" + doNotAssignCommentsPrecedingEmptyLines +
+                "\n - ignoreAnnotationsWhenAttributingComments=" + ignoreAnnotationsWhenAttributingComments +
+                "\n - lexicalPreservationEnabled=" + lexicalPreservationEnabled +
+                "\n - preprocessUnicodeEscapes=" + preprocessUnicodeEscapes +
+                "\n - symbolResolver=" + symbolResolver +
+                "\n - tabSize=" + tabSize +
+                "\n - languageLevel=" + languageLevel +
+                "\n - characterEncoding=" + characterEncoding +
+                "\n - preProcessors=" + preProcessors +
+                "\n - postProcessors=" + postProcessors +
+                "\n}";
+    }
 }
