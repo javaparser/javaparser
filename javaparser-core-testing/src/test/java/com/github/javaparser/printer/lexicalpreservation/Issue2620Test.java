@@ -73,9 +73,9 @@ public class Issue2620Test {
         // FIXME: Indentation is bad here.
         String expected = "" +
                 "    public class Foo { //comment" + eol +
-                "    private String newField;" + eol +
-                "    " + eol +
-                "    private String a;" + eol +
+                "        private String newField;" + eol +
+                "        " + eol +
+                "        private String a;" + eol +
                 "        private String b;" + eol +
                 "        private String c;" + eol +
                 "        private String d;" + eol +

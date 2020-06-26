@@ -417,7 +417,8 @@ public class Difference {
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement diffElement = differenceElements.get(i);
             if (diffElement instanceof Removed) {
-                if (firstElement == null) {
+                boolean previousElementIsNewline = (i > 0 && differenceElements.get(i - 1).isRemoved() && ((Removed) differenceElements.get(i-1)).isNewLine());
+                if (firstElement == null || previousElementIsNewline) {
                     firstElement = i;
                 }
 
