@@ -380,11 +380,11 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmIndent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(eolTokenKind())), differenceElements.get(i++));
-        assertEquals(DifferenceElement.added(new CsmIndent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.added(new CsmChild(s)), differenceElements.get(i++));
         assertEquals(DifferenceElement.added(new CsmToken(eolTokenKind())), differenceElements.get(i++));
-        assertEquals(DifferenceElement.added(new CsmUnindent()), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmUnindent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(i++));
         assertEquals(i, differenceElements.size());
     }

@@ -151,6 +151,7 @@ final class RemovedGroup implements Iterable<Removed> {
     private final Function<TokenRange, Boolean> hasOnlyWhitespaceInFrontFunction = tokenRange -> hasOnlyWhitespaceJavaTokenInFrontFunction.apply(tokenRange.getBegin());
     private final Function<TokenRange, Boolean> hasOnlyWhitespaceBehindFunction = tokenRange -> hasOnlyWhitespaceJavaTokenBehindFunction.apply(tokenRange.getEnd());
 
+    // FIXME: Presumes first token is a newline
     private boolean hasOnlyWhitespace(Removed startElement, Function<TokenRange, Boolean> hasOnlyWhitespaceFunction) {
         boolean hasOnlyWhitespace = false;
         if (startElement.isChild()) {
@@ -170,17 +171,23 @@ final class RemovedGroup implements Iterable<Removed> {
         return hasOnlyWhitespace;
     }
 
-    private boolean hasOnlyWhiteSpaceForTokenFunction(JavaToken token, Function<JavaToken, Optional<JavaToken>> tokenFunction) {
-        Optional<JavaToken> tokenResult = tokenFunction.apply(token);
+    /**
+     *
+     * @param givenToken The starting token, to which nextNeighbourTokenFunction will be applied
+     * @param nextNeighbourTokenFunction A function which gives the next token to process (e.g. might be the next one, or the previous one)
+     * @return Whether the given token has only whitespace between it and the next-found newline (direction is determined by {@code nextNeighbourTokenFunction})
+     */
+    private boolean hasOnlyWhiteSpaceForTokenFunction(JavaToken givenToken, Function<JavaToken, Optional<JavaToken>> nextNeighbourTokenFunction) {
+        Optional<JavaToken> neighbouringToken = nextNeighbourTokenFunction.apply(givenToken);
+        if (neighbouringToken.isPresent()) {
+            JavaToken neighbourToken = neighbouringToken.get();
 
-        if (tokenResult.isPresent()) {
-            if (TokenTypes.isWhitespaceButNotEndOfLine(tokenResult.get().getKind())) {
-                return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
-            } else if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
-                return true;
-            } else {
-                return false;
+            if (TokenTypes.isWhitespaceButNotEndOfLine(neighbourToken.getKind())) {
+                // If the neighbouring token is whitespace, keep going until we reach a non-whitespace character...
+                return hasOnlyWhiteSpaceForTokenFunction(neighbourToken, nextNeighbourTokenFunction);
             }
+
+            return TokenTypes.isEndOfLineToken(neighbourToken.getKind());
         }
 
         return true;

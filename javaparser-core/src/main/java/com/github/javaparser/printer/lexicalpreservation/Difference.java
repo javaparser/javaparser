@@ -410,14 +410,15 @@ public class Difference {
     }
 
     private Map<Integer, List<Removed>> groupConsecutiveRemovedElements() {
-        Map<Integer, List<Removed>> removedElementsMap = new HashMap<>();
+        Map<Integer, List<Removed>> removedElementsMap = new IdentityHashMap<>();
 
         Integer firstElement = null;
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement diffElement = differenceElements.get(i);
             if (diffElement instanceof Removed) {
                 boolean previousElementIsNewline = (i > 0 && differenceElements.get(i - 1).isRemoved() && ((Removed) differenceElements.get(i-1)).isNewLine());
-                if (firstElement == null || previousElementIsNewline) {
+                boolean isNewline = ((Removed) diffElement).isNewLine();
+                if (firstElement == null || isNewline || previousElementIsNewline) {
                     firstElement = i;
                 }
 
@@ -554,6 +555,7 @@ public class Difference {
                 for (int i = 0; i < indentation.get(); i++) {
                     if (currentTextElement().isWhitespaceButNotEndOfLine()) {
                         // If the current element is a space, remove it
+                        // Note: The index remains as-is, because remaining elements will shift to fill the gap created.
                         nodeText.removeElement(currentTextElementIndex);
                     } else if (peekPreviousTextElement().isPresent() && peekPreviousTextElement().get().isWhitespaceButNotEndOfLine()) {
                         // If the current element is not a space itself we remove the space in front of it
