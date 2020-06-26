@@ -24,10 +24,19 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 class DifferenceElementCalculator {
     static boolean matching(CsmElement a, CsmElement b) {
@@ -142,14 +151,13 @@ class DifferenceElementCalculator {
         int afterIndex = 0;
         int commonChildrenIndex = 0;
         while (commonChildrenIndex < commonChildren.size()) {
-            Node child = commonChildren.get(commonChildrenIndex++);
+            Node child = commonChildren.get(commonChildrenIndex);
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
-            int posOfNextChildInAfter    = childrenInAfter.get(child);
+            int posOfNextChildInAfter = childrenInAfter.get(child);
 
-            // TODO: Better naming of this condition -- Define "differenceElements to add" logic within this condition
-            // TODO: Better determination of if changes have occurred (e.g. can we be sure re: adding and removing differenceElements?)
-            boolean changesHaveOccurred = originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter;
-            if (changesHaveOccurred) {
+            //
+            boolean unhandledDifferencesRemain = originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter;
+            if (unhandledDifferencesRemain) {
                 List<DifferenceElement> changeDifferences = calculateImpl(
                         original.sub(originalIndex, posOfNextChildInOriginal),
                         after.sub(afterIndex, posOfNextChildInAfter)
@@ -158,16 +166,18 @@ class DifferenceElementCalculator {
                 differenceElements.addAll(changeDifferences);
             }
 
-            differenceElements.add(new Kept(new CsmChild(child).addToContextNote("; DifferenceElementCalculator - calculate()")));
+            differenceElements.add(new Kept(new CsmChild(child)));
             originalIndex = posOfNextChildInOriginal + 1;
             afterIndex = posOfNextChildInAfter + 1;
+
+            // Move to next common child.
+            commonChildrenIndex++;
         }
 
 
-        // TODO: Better naming of this condition -- Define "differenceElements to add" logic within this condition
-        // TODO: Better determination of if changes have occurred (e.g. can we be sure re: adding and removing differenceElements?)
-        boolean changesHaveOccurred = originalIndex < original.elements.size() || afterIndex < after.elements.size();
-        if (changesHaveOccurred) {
+        // If unhandled differences remain after we have processed the common children...
+        boolean unhandledDifferencesRemain = originalIndex < original.elements.size() || afterIndex < after.elements.size();
+        if (unhandledDifferencesRemain) {
             List<DifferenceElement> changeDifferences = calculateImpl(
                     original.sub(originalIndex, original.elements.size()),
                     after.sub(afterIndex, after.elements.size())
@@ -185,7 +195,7 @@ class DifferenceElementCalculator {
                 considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), differenceElements);
             } else if (el instanceof TokenTextElement) {
                 TokenTextElement tte = (TokenTextElement) el;
-                differenceElements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText()).addToContextNote("considerRemoval")));
+                differenceElements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
             } else {
                 throw new UnsupportedOperationException(el.toString());
             }
@@ -207,7 +217,7 @@ class DifferenceElementCalculator {
             }
         }
         if (!dealtWith) {
-            differenceElements.add(new Removed(removedElement));//.addToContextNote("; considerRemoval -- not removed"))); //.addToContextNote("; considerRemoval (!dealtWith)")));
+            differenceElements.add(new Removed(removedElement));
             originalIndex++;
         }
         return originalIndex;
@@ -238,7 +248,7 @@ class DifferenceElementCalculator {
             } else if (exhaustedOriginalElements && afterElementsRemaining) {
                 // No original differenceElements remain but there are still more differenceElements after.
                 // Thus can shortcut as all remaining differenceElements must have been added.
-                differenceElements.add(new Added(after.elements.get(afterIndex)));//.addToContextNote("; exhaustedOriginalElements && afterElementsRemaining")));
+                differenceElements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
             } else {
                 // Still differenceElements remaining before/after that must be compared.
@@ -250,19 +260,20 @@ class DifferenceElementCalculator {
                     if (((CsmMix) nextAfter).getElements().equals(((CsmMix) nextOriginal).getElements())) {
                         // They are equal -- we are just going to keep everything as it is.
                         // Thus we can shortcut as there is no reason to deal with a Reshuffled.
-                        ((CsmMix) nextAfter).getElements().forEach(el -> differenceElements.add(new Kept(el.addToContextNote("; equal"))));
+                        ((CsmMix) nextAfter).getElements().forEach(el -> differenceElements.add(new Kept(el)));
                     } else {
-                        differenceElements.add(new Reshuffled((CsmMix) nextOriginal.addToContextNote("reshuffled"), (CsmMix) nextAfter.addToContextNote("; reshuffled")));
+                        differenceElements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
                     }
                     originalIndex++;
                     afterIndex++;
                 } else if (matching(nextOriginal, nextAfter)) {
-                    differenceElements.add(new Kept(nextOriginal.addToContextNote("; matching(nextOriginal, nextAfter)")));
+                    // Flag as kept, and move to next element
+                    differenceElements.add(new Kept(nextOriginal));
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
                     originalIndex = considerRemoval(nextOriginal, originalIndex, differenceElements);
-                    differenceElements.add(new Added(nextAfter.addToContextNote("; replacement(nextOriginal, nextAfter)")));
+                    differenceElements.add(new Added(nextAfter));
                     afterIndex++;
                 } else {
                     // We can try to remove the element or add it and look which one leads to the least difference (similar to Levenshtein distance between strings)
@@ -274,15 +285,15 @@ class DifferenceElementCalculator {
 
                     if (costOfDifferences(addingElements) < costOfDifferences(removingElements)) {
                         // If adding is more optimal than removal:
-                        differenceElements.add(new Added(nextAfter));//.addToContextNote("; addingIsMoreOptimal")));
+                        differenceElements.add(new Added(nextAfter));
                         afterIndex++; // TODO: Document why after
                     } else if (costOfDifferences(addingElements) > costOfDifferences(removingElements)) {
                         // If removal is more optimal than adding:
-                        differenceElements.add(new Removed(nextOriginal));//.addToContextNote("; removalIsMoreOptimal")));
+                        differenceElements.add(new Removed(nextOriginal));
                         originalIndex++; // TODO: Document why original
                     } else {
                         // If removal and adding are equivalent -- default to adding: // TODO: Document why? Note defaulting to removal fails...
-                        differenceElements.add(new Added(nextAfter));//.addToContextNote("; adding and removal is equivalent - defaulting to adding")));
+                        differenceElements.add(new Added(nextAfter));
                         afterIndex++; // TODO: Document why after
                     }
                 }

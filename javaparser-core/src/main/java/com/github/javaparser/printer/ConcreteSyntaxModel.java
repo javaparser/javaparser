@@ -185,18 +185,15 @@ public class ConcreteSyntaxModel {
                         list(ObservableProperty.ENTRIES,
                                 sequence(comma(), newline()),
                                 none(),
-                                none()
-                        ),
-                        conditional(ObservableProperty.MEMBERS, IS_EMPTY,
-                                conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
                                 sequence(
                                         // Only include a semicolon when there are entries AND there are members.
-//                                        conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY,
-                                                semicolon(),
-//                                        ),
-                                        newline(),
-                                        newline(),
-                                        list(ObservableProperty.MEMBERS, newline(), newline(), none(), newline())
+                                        conditional(ObservableProperty.MEMBERS, IS_NOT_EMPTY, semicolon()),
+                                        // Always include a newline (only when there are entries -- that's why in the "after" and not inline with the list)
+                                        newline()
+                                )
+                        ),
+                        conditional(ObservableProperty.MEMBERS, IS_NOT_EMPTY, sequence(
+                                list(ObservableProperty.MEMBERS, sequence(newline(),newline()), newline(), newline())
                                 )
                         )
                 ))
@@ -1016,7 +1013,7 @@ public class ConcreteSyntaxModel {
      * Build a mix collecting all the elements specified.
      */
     private static CsmElement mix(CsmElement... elements) {
-        return new CsmMix(Arrays.asList(elements)).addToContextNote("ConcreteSyntaxModel - mix(CsmElement... elements)");
+        return new CsmMix(Arrays.asList(elements));
     }
 
     private static CsmElement modifiers() {

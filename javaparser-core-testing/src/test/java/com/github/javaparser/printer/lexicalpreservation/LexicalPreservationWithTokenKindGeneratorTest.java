@@ -18,6 +18,7 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CalculatedSyntaxModel;
+import com.github.javaparser.utils.Log;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,6 +27,59 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class LexicalPreservationWithTokenKindGeneratorTest {
+
+    static {
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
+    }
+
+    @Test
+    public void removeLastEnumConstant() {
+        final String originalCode = "" +
+                "    public enum Kind {\n" +
+                "\n" +
+                "      CTRL_Z(146);\n" +
+                "\n" +
+                "        private final int kind;\n" +
+                "\n" +
+                "    }\n" +
+                "";
+
+
+        final String expectedOutput_lexical = "" +
+                "    public enum Kind {\n" +
+                "\n" +
+                "        \n" +
+//                "        ;\n" +
+//                "        CTRL_Z(146);\n" +
+//                "\n" +
+                "        private final int kind;\n" +
+                "\n" +
+                "    }\n" +
+                "";
+
+
+        final JavaParser javaParser = new JavaParser(new ParserConfiguration()
+                .setLanguageLevel(RAW)
+                .setLexicalPreservationEnabled(true)
+        );
+
+        ////
+        final ParseResult<CompilationUnit> parseResult = javaParser.parse(originalCode);
+        final CompilationUnit javaTokenCu = parseResult.getResult().orElseThrow(RuntimeException::new);
+//        final ClassOrInterfaceDeclaration javaTokenCoid = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
+
+        ////
+        final EnumDeclaration kindEnum = javaTokenCu
+                .findFirst(EnumDeclaration.class, e -> e.getNameAsString().equals("Kind"))
+                .orElseThrow(() -> new AssertionError("Can't find class in java file."));
+
+        // Reset the enum:
+        kindEnum.getEntries().clear();
+
+//        assertEquals(originalCode, javaTokenCu.toString());
+        assertEqualsStringIgnoringEol(expectedOutput_lexical, LexicalPreservingPrinter.print(javaTokenCu));
+
+    }
 
 
     @Test

@@ -25,18 +25,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmNone implements CsmElement {
-    private String contextNote = "" + PrintingHelper.NEXT_ID++;
-
-    @Override
-    public CsmElement addToContextNote(String contextNote) {
-        this.contextNote += contextNote;
-        return this;
-    }
-
-    @Override
-    public String getContextNote() {
-        return contextNote;
-    }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {

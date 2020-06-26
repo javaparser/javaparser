@@ -215,12 +215,12 @@ final class RemovedGroup implements Iterable<Removed> {
 
                     if (previousToken.isPresent()) {
                         if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
-                            return Optional.of(Integer.valueOf(indentation));
+                            return Optional.of(indentation);
                         } else {
                             return Optional.empty();
                         }
                     } else {
-                        return Optional.of(Integer.valueOf(indentation));
+                        return Optional.of(indentation);
                     }
                 }
             }

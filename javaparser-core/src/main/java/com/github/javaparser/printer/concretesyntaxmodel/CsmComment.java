@@ -30,8 +30,6 @@ import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmComment implements CsmElement {
 
-    private String contextNote = "" + PrintingHelper.NEXT_ID++;
-
     static void process(Comment comment, SourcePrinter printer) {
         String content = printer.normalizeEolInTextBlock(comment.getContent());
         if (comment instanceof BlockComment) {
@@ -49,17 +47,6 @@ public class CsmComment implements CsmElement {
         } else {
             throw new UnsupportedOperationException(comment.getClass().getSimpleName());
         }
-    }
-
-    @Override
-    public CsmElement addToContextNote(String contextNote) {
-        this.contextNote += contextNote;
-        return this;
-    }
-
-    @Override
-    public String getContextNote() {
-        return contextNote;
     }
 
     @Override

@@ -29,8 +29,6 @@ import java.util.Objects;
 
 public class CsmSequence implements CsmElement {
     private List<CsmElement> elements;
-    private String contextNote = "" + PrintingHelper.NEXT_ID++;
-
 
     public CsmSequence(List<CsmElement> elements) {
         if (elements == null) {
@@ -44,17 +42,6 @@ public class CsmSequence implements CsmElement {
 
     public List<CsmElement> getElements() {
         return elements;
-    }
-
-    @Override
-    public CsmElement addToContextNote(String contextNote) {
-        this.contextNote += contextNote;
-        return this;
-    }
-
-    @Override
-    public String getContextNote() {
-        return contextNote;
     }
 
     @Override

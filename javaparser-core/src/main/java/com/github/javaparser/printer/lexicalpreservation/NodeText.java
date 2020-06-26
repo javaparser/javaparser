@@ -199,6 +199,11 @@ class NodeText {
         return elements;
     }
 
+    // Visible for testing
+    List<TextElement> subList(int fromIndex, int toIndex) {
+        return elements.subList(fromIndex, toIndex);
+    }
+
     @Override
     public String toString() {
         return "NodeText{" +

@@ -35,23 +35,10 @@ public class CsmAttribute implements CsmElement {
     }
 
     private final ObservableProperty property;
-    private String contextNote = "" + PrintingHelper.NEXT_ID++;
 
     public CsmAttribute(ObservableProperty property) {
         this.property = property;
     }
-
-    @Override
-    public CsmElement addToContextNote(String contextNote) {
-        this.contextNote += contextNote;
-        return this;
-    }
-
-    @Override
-    public String getContextNote() {
-        return contextNote;
-    }
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         Object value = property.getRawValue(node);

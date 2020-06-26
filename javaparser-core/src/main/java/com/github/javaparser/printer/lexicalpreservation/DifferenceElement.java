@@ -44,4 +44,8 @@ public interface DifferenceElement {
     boolean isAdded();
 
     boolean isRemoved();
+
+    default boolean isKept() {
+        return !isAdded() && !isRemoved();
+    }
 }
