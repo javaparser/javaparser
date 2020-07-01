@@ -203,8 +203,8 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
     Preconditions.checkArgument(typeSolver != null);
 
-    if (myDeclaration.hasVisibleField(name)) {
-      return SymbolReference.solved(myDeclaration.getVisibleField(name));
+    if (myDeclaration.hasField(name)) {
+      return SymbolReference.solved(myDeclaration.getField(name));
     }
 
     return getParent()

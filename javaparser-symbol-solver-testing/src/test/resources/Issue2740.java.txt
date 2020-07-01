@@ -1,0 +1,17 @@
+package javaparser;
+
+import java.util.ArrayList;
+
+public class Test {
+
+    private int a;
+    private void test(){
+        Runnable runnable=new Runnable() {
+            private ArrayList<Integer> b=new ArrayList<>();
+            @Override
+            public void run() {
+                b.add(10);
+            }
+        };
+    }
+}
