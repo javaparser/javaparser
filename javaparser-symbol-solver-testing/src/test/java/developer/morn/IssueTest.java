@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2019 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.symbolsolver;
+package developer.morn;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -33,15 +33,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Author: MaoMorn Date: 2020/7/1 Time: 16:46 Description:
  */
-public class Issue2740Test extends AbstractResolutionTest {
+public class IssueTest extends AbstractResolutionTest {
 
     @Test
-    public void test() {
+    void issue2740Test() {
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
         CompilationUnit cu = parseSample("Issue2740");
         MethodCallExpr call = cu.findAll(MethodCallExpr.class).get(0);
         assertEquals(
                 JavaParserFacade.get(typeSolver).solve(call).getCorrespondingDeclaration().getQualifiedSignature(),
                 "java.util.ArrayList.add(E)");
+    }
+
+    @Test
+    void issue2739Test(){
+
     }
 }

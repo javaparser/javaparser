@@ -25,3 +25,5 @@ build-*
 build
 out
 .java-version
+
+/javaparser-symbol-solver-testing/src/test/java/developer/morn/utility
