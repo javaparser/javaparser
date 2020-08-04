@@ -24,9 +24,13 @@ package com.github.javaparser.symbolsolver.logic;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.utils.Pair;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,21 +47,41 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
         Set<String> methodsSignatures = new HashSet<>();
 
         for (ResolvedMethodDeclaration methodDeclaration : getDeclaredMethods()) {
-            methods.add(new MethodUsage(methodDeclaration));
-            methodsSignatures.add(methodDeclaration.getSignature());
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
+            methods.add(methodUsage);
+            methodsSignatures.add(getSignature(methodUsage));
         }
 
         for (ResolvedReferenceType ancestor : getAllAncestors()) {
-            for (MethodUsage mu : ancestor.getDeclaredMethods()) {
-                String signature = mu.getDeclaration().getSignature();
+            List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typeParametersMap = ancestor.getTypeParametersMap();
+            for (MethodUsage ancestorMethodUsage : ancestor.getDeclaredMethods()) {
+                MethodUsage methodUsage = ancestorMethodUsage;
+                for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> p : typeParametersMap) {
+                    methodUsage = methodUsage.replaceTypeParameter(p.a, p.b);
+                }
+                String signature = getSignature(methodUsage);
                 if (!methodsSignatures.contains(signature)) {
                     methodsSignatures.add(signature);
-                    methods.add(mu);
+                    methods.add(ancestorMethodUsage);
                 }
             }
         }
 
         return methods;
+    }
+
+    private String getSignature(MethodUsage mu) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(mu.getName());
+        sb.append("(");
+        for (int i = 0; i < mu.getNoParams(); i++) {
+            if (i != 0) {
+                sb.append(", ");
+            }
+            sb.append(mu.getParamType(i).describe());
+        }
+        sb.append(")");
+        return sb.toString();
     }
 
     @Override
