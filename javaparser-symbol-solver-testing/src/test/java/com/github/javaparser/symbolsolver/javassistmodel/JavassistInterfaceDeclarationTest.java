@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -146,4 +148,14 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     ///
     /// Test ancestors
     ///
+
+    @Test
+    void testGetAncestorsWithGenericAncestors() {
+        JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.GenericChildInterface");
+        List<ResolvedReferenceType> ancestors = compilationUnit.getAncestors();
+        assertEquals(2, ancestors.size());
+        assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(0).describe()); // Type should be 'S', from the GenericChildInterface
+        assertEquals("java.lang.Object", ancestors.get(1).describe());
+    }
+
 }
