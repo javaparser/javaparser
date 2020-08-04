@@ -21,12 +21,15 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -156,6 +159,15 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(2, ancestors.size());
         assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(0).describe()); // Type should be 'S', from the GenericChildInterface
         assertEquals("java.lang.Object", ancestors.get(1).describe());
+
+        // check the ancestor generic type is mapped to the type of the child
+        List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typePamatersMap = ancestors.get(0).getTypeParametersMap();
+        assertEquals(1, typePamatersMap.size());
+
+        ResolvedTypeParameterDeclaration genericTypeParameterDeclaration = typePamatersMap.get(0).a;
+        assertEquals("com.github.javaparser.test.GenericInterface.T", genericTypeParameterDeclaration.getQualifiedName());
+        ResolvedType genericResolvedType = typePamatersMap.get(0).b;
+        assertEquals("com.github.javaparser.test.GenericChildInterface.S", genericResolvedType.asTypeParameter().getQualifiedName());
     }
 
 }
