@@ -21,58 +21,104 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue2620Test {
-    
+
+    private static final String CR = "\r";
+    private static final String LF = "\n";
+    private static final String CRLF = CR + LF;
+
+
+    @Test
+    public void testWithCr() {
+        doTest(CR);
+    }
+
+    @Test
+    public void testWithLf() {
+        doTest(LF);
+    }
+
+    @Test
+    public void testWithCrLf() {
+        doTest(CRLF);
+    }
+
+
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
-    @Test
-    public void test() {
-        String expected = 
-                "public class Foo { //comment" + EOL +
-                "private String b;" + EOL +
-                EOL +
-                "  private String a;" + EOL +
-                "}";
-      
-        CompilationUnit cu = StaticJavaParser.parse(
-                "public class Foo { //comment" + EOL +
-                "  private String a;" + EOL +
-                "}"
-                );
+    public void doTest(String eol) {
+
+        final String original = "" +
+                "    public class Foo { //comment" + eol +
+                "        private String a;" + eol +
+                "        private String b;" + eol +
+                "        private String c;" + eol +
+                "        private String d;" + eol +
+                "    }";
+
+        // Note: Expect the platform's EOL character when printing
+        // FIXME: Indentation is bad here.
+        String expected = "" +
+                "    public class Foo { //comment" + eol +
+                "    private String newField;" + eol +
+                "    " + eol +
+                "    private String a;" + eol +
+                "        private String b;" + eol +
+                "        private String c;" + eol +
+                "        private String d;" + eol +
+                "    }";
+
+
+        CompilationUnit cu = StaticJavaParser.parse(original);
         LexicalPreservingPrinter.setup(cu);
-        System.out.println("original:\n"+LexicalPreservingPrinter.print(cu));
-        System.out.println("expected:\n"+expected);
+
         // create a new field declaration
-        VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "b");
+        VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "newField");
         FieldDeclaration fd = new FieldDeclaration(new NodeList(Modifier.privateModifier()), variable);
-        Optional<ClassOrInterfaceDeclaration> cid = cu.findFirst(ClassOrInterfaceDeclaration.class);
+        Optional<ClassOrInterfaceDeclaration> cd = cu.findFirst(ClassOrInterfaceDeclaration.class);
+
         // add the new variable
-        cid.get().getMembers().addFirst(fd);
-        System.out.println("generated:\n"+LexicalPreservingPrinter.print(cu));
-        assertTrue(LexicalPreservingPrinter.print(cu).equals(expected));
+        cd.get().getMembers().addFirst(fd);
+
+        // should be printed like this
+        System.out.println("\n\nOriginal:\n" + original);
+        System.out.println("\n\nExpected:\n" + expected);
+
+        // but the result is
+        final String actual = LexicalPreservingPrinter.print(cu);
+        System.out.println("\n\nActual:\n" + actual);
+
+
+        assertEquals(normaliseNewlines(expected), normaliseNewlines(actual));
+
+        // Commented out until #2661 is fixed (re: EOL characters of injected code)
+//        assertEqualsNoEol(escapeNewlines(expected), escapeNewlines(actual));
+//        assertEquals(expected, actual, "Failed due to EOL differences.");
+    }
+
+    private String escapeNewlines(String input) {
+        return input
+                .replaceAll("\\r", "\\\\r")
+                .replaceAll("\\n", "\\\\n");
+    }
+
+    private String normaliseNewlines(String input) {
+        return input.replaceAll("\\r\\n|\\r|\\n", "\\\\n");
     }
 }
