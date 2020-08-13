@@ -305,7 +305,10 @@ public class Difference {
                         nodeTextIndexToPreviousCSMIndex.put(value, i);
                     }
                 }
-                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
+
+                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream()
+                        .max(Integer::compareTo)
+                        .orElse(-1);
 
                 // Elements to be added at the end
                 List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
