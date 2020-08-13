@@ -32,6 +32,7 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +41,6 @@ import java.io.StringReader;
 
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
-import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,7 +55,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("public class X {\n}\n\nclass Z {\n}\n", deserialized.toString());
+        assertEqualsStringIgnoringEol("public class X {\n}\n\nclass Z {\n}\n", deserialized.toString());
         assertEquals(cu.hashCode(), deserialized.hashCode());
     }
 
@@ -66,7 +66,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("Blub", deserialized.toString());
+        assertEqualsStringIgnoringEol("Blub", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
     }
 
@@ -77,7 +77,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("Blub<>", deserialized.toString());
+        assertEqualsStringIgnoringEol("Blub<>", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
     }
 
@@ -88,7 +88,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("Blub<Blab, Bleb>", deserialized.toString());
+        assertEqualsStringIgnoringEol("Blub<Blab, Bleb>", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
     }
 
@@ -99,7 +99,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("1 + 1", deserialized.toString());
+        assertEqualsStringIgnoringEol("1 + 1", deserialized.toString());
         assertEquals(expr.hashCode(), deserialized.hashCode());
     }
 
@@ -110,7 +110,7 @@ class JavaParserJsonDeserializerTest {
 
         Node deserialized = deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertEqualsNoEol("int", deserialized.toString());
+        assertEqualsStringIgnoringEol("int", deserialized.toString());
         assertEquals(type.hashCode(), deserialized.hashCode());
     }
 
@@ -214,8 +214,11 @@ class JavaParserJsonDeserializerTest {
     /**
      * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
      */
-    private static void assertEqualsNoEol(String expected, String actual) {
-        assertEquals(normalizeEolInTextBlock(expected, EOL), actual);
+    private static void assertEqualsStringIgnoringEol(String expected, String actual) {
+        assertEquals(
+                normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
+                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY)
+        );
     }
 
 }

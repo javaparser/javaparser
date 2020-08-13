@@ -12,7 +12,7 @@ import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.PositionUtils.nodeContains;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PositionUtilsTest {
@@ -79,7 +79,7 @@ public class PositionUtilsTest {
                 "";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
-        assertEqualsNoEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
+        assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
         AnnotationExpr annotationB = x.getAnnotationByName("B").get();
@@ -103,7 +103,7 @@ public class PositionUtilsTest {
                 "}\n" +
                 "";
         CompilationUnit cu = StaticJavaParser.parse(code);
-        assertEqualsNoEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
+        assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
         final ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
         final AnnotationExpr annotationA = x.getAnnotationByName("A").get();

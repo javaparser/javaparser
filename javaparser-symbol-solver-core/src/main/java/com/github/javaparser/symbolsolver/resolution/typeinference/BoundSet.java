@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -186,8 +187,12 @@ public class BoundSet {
         List<Pair<ResolvedReferenceType, ResolvedReferenceType>> pairs = new LinkedList<>();
         for (ResolvedReferenceType rtFrom1 : set1) {
             for (ResolvedReferenceType rtFrom2 : set2) {
-                if (rtFrom1.getTypeDeclaration().equals(rtFrom2.getTypeDeclaration())) {
-                    pairs.add(new Pair<>(rtFrom1, rtFrom2));
+                Optional<ResolvedReferenceTypeDeclaration> rtFrom1TypeDeclaration = rtFrom1.getTypeDeclaration();
+                Optional<ResolvedReferenceTypeDeclaration> rtFrom2TypeDeclaration = rtFrom2.getTypeDeclaration();
+                if (rtFrom1TypeDeclaration.isPresent() && rtFrom2TypeDeclaration.isPresent()) {
+                    if(rtFrom1TypeDeclaration.get().equals(rtFrom2TypeDeclaration.get())) {
+                        pairs.add(new Pair<>(rtFrom1, rtFrom2));
+                    }
                 }
             }
         }

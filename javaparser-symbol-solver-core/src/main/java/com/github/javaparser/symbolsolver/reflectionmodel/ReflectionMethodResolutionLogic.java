@@ -59,18 +59,22 @@ class ReflectionMethodResolutionLogic {
         }
 
         for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, parameterTypes, staticOnly);
-            if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
-            }
+            ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, parameterTypes, staticOnly);
+                if (ref.isSolved()) {
+                    methods.add(ref.getCorrespondingDeclaration());
+                }
+            });
         }
 
         if (scopeType.getAncestors().isEmpty()){
             ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, parameterTypes, staticOnly);
-            if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
-            }
+            objectClass.getTypeDeclaration().ifPresent(objectTypeDeclaration -> {
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectTypeDeclaration, name, parameterTypes, staticOnly);
+                if (ref.isSolved()) {
+                    methods.add(ref.getCorrespondingDeclaration());
+                }
+            });
         }
         return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
     }
@@ -99,20 +103,25 @@ class ReflectionMethodResolutionLogic {
         }
 
         for(ResolvedReferenceType ancestor : scopeType.getAncestors()){
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes);
-            if (ref.isSolved()){
-                ResolvedMethodDeclaration correspondingDeclaration = ref.getCorrespondingDeclaration();
-                MethodUsage methodUsage = replaceParams(typeParameterValues, ancestor.getTypeDeclaration(), correspondingDeclaration);
-                methods.add(methodUsage);
+            if(ancestor.getTypeDeclaration().isPresent()) {
+                ResolvedReferenceTypeDeclaration ancestorTypeDeclaration = ancestor.getTypeDeclaration().get();
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes);
+                if (ref.isSolved()){
+                    ResolvedMethodDeclaration correspondingDeclaration = ref.getCorrespondingDeclaration();
+                    MethodUsage methodUsage = replaceParams(typeParameterValues, ancestorTypeDeclaration, correspondingDeclaration);
+                    methods.add(methodUsage);
+                }
             }
         }
 
-        if (scopeType.getAncestors().isEmpty()){
-            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-            SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, argumentsTypes);
-            if (ref.isSolved()) {
-                MethodUsage usage = replaceParams(typeParameterValues, objectClass.getTypeDeclaration(), ref.getCorrespondingDeclaration());
-                methods.add(usage);
+        if (scopeType.getAncestors().isEmpty()) {
+            Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).getTypeDeclaration();
+            if (optionalObjectClass.isPresent()) {
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes);
+                if (ref.isSolved()) {
+                    MethodUsage usage = replaceParams(typeParameterValues, optionalObjectClass.get(), ref.getCorrespondingDeclaration());
+                    methods.add(usage);
+                }
             }
         }
 

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * The results given when parsing with an instance of JavaParser.
@@ -99,9 +99,9 @@ public class ParseResult<T> {
         if (isSuccessful()) {
             return "Parsing successful";
         }
-        StringBuilder message = new StringBuilder("Parsing failed:").append(EOL);
+        StringBuilder message = new StringBuilder("Parsing failed:").append(SYSTEM_EOL);
         for (Problem problem : problems) {
-            message.append(problem.toString()).append(EOL);
+            message.append(problem.toString()).append(SYSTEM_EOL);
         }
         return message.toString();
     }

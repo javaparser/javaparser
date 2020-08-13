@@ -71,6 +71,13 @@ public interface TypeSolver {
         }
     }
 
+    /**
+     * @return A resolved reference to {@code java.lang.Object}
+     */
+    default ResolvedReferenceTypeDeclaration getSolvedJavaLangObject() throws UnsolvedSymbolException {
+        return solveType(Object.class.getCanonicalName());
+    }
+
     default boolean hasType(String name) {
         return tryToSolveType(name).isSolved();
     }

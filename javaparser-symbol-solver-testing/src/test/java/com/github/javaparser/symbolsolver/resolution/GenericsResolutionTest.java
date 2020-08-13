@@ -415,7 +415,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         Context context = JavaParserFactory.getContext(call, typeSolver);
 
         ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceType();
-        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration();
+        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration().orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
         List<TypeUsage> typeParametersValues = typeOfScope.typeParametersValues();
 
         List<MethodUsage> methods = new ArrayList<>();

@@ -23,7 +23,7 @@ package com.github.javaparser.ast.body;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConstructorDeclarationTest {
@@ -34,6 +34,6 @@ class ConstructorDeclarationTest {
 
         assertEquals(String.format("public Cons() {%1$s" +
                 "    super();%1$s" +
-                "}", EOL), cons.toString());
+                "}", SYSTEM_EOL), cons.toString());
     }
 }
