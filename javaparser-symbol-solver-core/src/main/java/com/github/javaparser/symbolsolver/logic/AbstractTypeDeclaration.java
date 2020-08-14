@@ -49,7 +49,7 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
         for (ResolvedMethodDeclaration methodDeclaration : getDeclaredMethods()) {
             MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             methods.add(methodUsage);
-            methodsSignatures.add(getSignature(methodUsage));
+            methodsSignatures.add(methodUsage.getSignature());
         }
 
         for (ResolvedReferenceType ancestor : getAllAncestors()) {
@@ -60,7 +60,7 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
                 for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> p : typeParametersMap) {
                     methodUsage = methodUsage.replaceTypeParameter(p.a, p.b);
                 }
-                String signature = getSignature(methodUsage);
+                String signature = methodUsage.getSignature();
                 if (!methodsSignatures.contains(signature)) {
                     methodsSignatures.add(signature);
                     methods.add(mu);
@@ -69,20 +69,6 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
         }
 
         return methods;
-    }
-
-    private String getSignature(MethodUsage mu) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(mu.getName());
-        sb.append("(");
-        for (int i = 0; i < mu.getNoParams(); i++) {
-            if (i != 0) {
-                sb.append(", ");
-            }
-            sb.append(mu.getParamType(i).describe());
-        }
-        sb.append(")");
-        return sb.toString();
     }
 
     @Override
