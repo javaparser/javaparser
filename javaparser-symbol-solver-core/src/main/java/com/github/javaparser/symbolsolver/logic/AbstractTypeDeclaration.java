@@ -54,15 +54,16 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
 
         for (ResolvedReferenceType ancestor : getAllAncestors()) {
             List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typeParametersMap = ancestor.getTypeParametersMap();
-            for (MethodUsage ancestorMethodUsage : ancestor.getDeclaredMethods()) {
-                MethodUsage methodUsage = ancestorMethodUsage;
+            for (MethodUsage mu : ancestor.getDeclaredMethods()) {
+                // replace type parameters to be able to filter away overridden generified methods
+                MethodUsage methodUsage = mu;
                 for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> p : typeParametersMap) {
                     methodUsage = methodUsage.replaceTypeParameter(p.a, p.b);
                 }
                 String signature = getSignature(methodUsage);
                 if (!methodsSignatures.contains(signature)) {
                     methodsSignatures.add(signature);
-                    methods.add(ancestorMethodUsage);
+                    methods.add(mu);
                 }
             }
         }
