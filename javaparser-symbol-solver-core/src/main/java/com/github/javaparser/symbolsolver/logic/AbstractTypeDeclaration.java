@@ -24,9 +24,13 @@ package com.github.javaparser.symbolsolver.logic;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.utils.Pair;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,13 +47,20 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
         Set<String> methodsSignatures = new HashSet<>();
 
         for (ResolvedMethodDeclaration methodDeclaration : getDeclaredMethods()) {
-            methods.add(new MethodUsage(methodDeclaration));
-            methodsSignatures.add(methodDeclaration.getSignature());
+            MethodUsage methodUsage = new MethodUsage(methodDeclaration);
+            methods.add(methodUsage);
+            methodsSignatures.add(methodUsage.getSignature());
         }
 
         for (ResolvedReferenceType ancestor : getAllAncestors()) {
+            List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typeParametersMap = ancestor.getTypeParametersMap();
             for (MethodUsage mu : ancestor.getDeclaredMethods()) {
-                String signature = mu.getDeclaration().getSignature();
+                // replace type parameters to be able to filter away overridden generified methods
+                MethodUsage methodUsage = mu;
+                for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> p : typeParametersMap) {
+                    methodUsage = methodUsage.replaceTypeParameter(p.a, p.b);
+                }
+                String signature = methodUsage.getSignature();
                 if (!methodsSignatures.contains(signature)) {
                     methodsSignatures.add(signature);
                     methods.add(mu);
