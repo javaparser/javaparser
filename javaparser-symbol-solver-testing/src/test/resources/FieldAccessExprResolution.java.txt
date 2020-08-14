@@ -1,0 +1,59 @@
+public class X {
+
+    public class X1 {
+        public void method() {}
+    }
+
+    public class Y1 {
+        public class X2 {
+            public void method() {}
+        }
+
+        public X2 x;
+    }
+
+    public class Z1 {
+        public class Y2 {
+            public class X3 {
+                public void method() {}
+            }
+
+            public X3 x;
+        }
+
+        public Y2 y;
+    }
+
+    public X1 x;
+    public Y1 y;
+    public Z1 z;
+
+    public void method() {}
+
+}
+
+public class Main {
+
+    private X x;
+
+    public Main() {
+        x = new X();
+    }
+
+    public void x() {
+        x.method();
+    }
+
+    public void x_x() {
+        x.x.method();
+    }
+
+    public void x_y_x() {
+        x.y.x.method();
+    }
+
+    public void x_z_y_x() {
+        x.z.y.x.method();
+    }
+
+}
