@@ -200,7 +200,12 @@ public class MethodUsage implements ResolvedTypeParametrized {
             if (i != 0) {
                 sb.append(", ");
             }
-            sb.append(getParamType(i).describe());
+            ResolvedType type = getParamType(i);
+            if (type.isArray() && getDeclaration().getParam(i).isVariadic()) {
+                sb.append(type.asArrayType().getComponentType().describe()).append("...");
+            } else {
+                sb.append(type.describe());
+            }
         }
         sb.append(")");
         return sb.toString();
