@@ -93,9 +93,17 @@ public class JavaParserFactory {
             return new ObjectCreationContext((ObjectCreationExpr)node, typeSolver);
         } else {
             if (node instanceof NameExpr) {
-                // to resolve a name when in a fieldAccess context, we can get to the grand parent to prevent a infinite loop if the name is the same as the field (ie x.x)
-                if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr && node.getParentNode().get().getParentNode().isPresent()) {
-                    return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
+                // to resolve a name when in a fieldAccess context, we can go up until we get a node other than FieldAccessExpr,
+                // in order to prevent a infinite loop if the name is the same as the field (ie x.x, x.y.x, or x.y.z.x)
+                if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
+                    Node ancestor = node.getParentNode().get();
+                    while (ancestor.getParentNode().isPresent()) {
+                        ancestor = ancestor.getParentNode().get();
+                        if (!(ancestor instanceof FieldAccessExpr)) {
+                            break;
+                        }
+                    }
+                    return getContext(ancestor, typeSolver);
                 }
                 if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof ObjectCreationExpr && node.getParentNode().get().getParentNode().isPresent()) {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
@@ -135,7 +143,7 @@ public class JavaParserFactory {
             return new NoSymbolDeclarator<>(node, typeSolver);
         }
     }
-    
+
     public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             if (((ClassOrInterfaceDeclaration) node).isInterface()) {
