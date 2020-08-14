@@ -186,7 +186,7 @@ public class MethodUsage implements ResolvedTypeParametrized {
      * followed by the signature of the method.
      */
     public String getQualifiedSignature() {
-        return getDeclaration().getQualifiedName() + "." + getSignature();
+        return getDeclaration().declaringType().getQualifiedName() + "." + getSignature();
     }
 
     /**
