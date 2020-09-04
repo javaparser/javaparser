@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -27,20 +30,12 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.utils.Utils.EOL;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class Issue2283Test {
     private JavaParser javaParser;
