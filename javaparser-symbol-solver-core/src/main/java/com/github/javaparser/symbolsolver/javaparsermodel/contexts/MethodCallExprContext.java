@@ -29,6 +29,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -81,6 +82,30 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         ResolvedType typeOfScope;
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
+            // Consider static method calls
+            if (scope instanceof NameExpr) {
+                String className = ((NameExpr) scope).getName().getId();
+                SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+                if (ref.isSolved()) {
+                    SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
+                    if (m.isSolved()) {
+                        ResolvedMethodDeclaration declaration = m.getCorrespondingDeclaration();
+                        if (declaration instanceof TypeVariableResolutionCapability) {
+                            MethodUsage methodUsage =
+                                ((TypeVariableResolutionCapability) declaration).resolveTypeVariables(this, argumentsTypes);
+                            return Optional.of(methodUsage);
+                        } else {
+                            MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
+                            methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+                            methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+                            return Optional.of(methodUsage);
+                        }
+                    } else {
+                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+                                "Method '" + name + "' with parameterTypes " + argumentsTypes);
+                    }
+                }
+            }
             // Scope is present -- search/solve within that type
             typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
         } else {
