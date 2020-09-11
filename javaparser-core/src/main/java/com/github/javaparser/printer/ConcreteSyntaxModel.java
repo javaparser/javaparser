@@ -778,7 +778,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
                 conditional(SCOPE, IS_PRESENT, sequence(child(SCOPE), string(GeneratedJavaParserConstants.DOT))),
-                list(ANNOTATIONS, space()),
+                list(ANNOTATIONS, space(), none(), space()),
                 child(NAME),
                 conditional(ObservableProperty.USING_DIAMOND_OPERATOR, FLAG,
                         sequence(string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),
