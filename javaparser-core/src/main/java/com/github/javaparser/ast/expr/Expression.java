@@ -558,7 +558,7 @@ public abstract class Expression extends Node {
     }
 
     /**
-     * This constructor is used by the parser and is considered private.
+     * Calculates the expression type
      */
     public ResolvedType calculateResolvedType() {
         return getSymbolResolver().calculateType(this);
