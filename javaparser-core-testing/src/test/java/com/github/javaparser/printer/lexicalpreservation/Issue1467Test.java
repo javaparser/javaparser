@@ -48,15 +48,9 @@ public class Issue1467Test {
                         "    }\n" + 
                         "}";
         String expected = 
-                "public class Bar {\n" + 
-                "    public void foo() {\n" + 
-                "        System.out.print(\"Hello\");\n" + 
-                "    }\n" + 
-                "    public void f() {\n" + 
+                "public void f() {\n" + 
                 "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
-                "    }\n" + 
-                "\n" + 
-                "}";
+                "    }\n" ;
         CompilationUnit cu = StaticJavaParser.parse(before);
         LexicalPreservingPrinter.setup(cu);
         // add method method declaration
@@ -74,9 +68,9 @@ public class Issue1467Test {
         // set body to the method declaration
         decl.setBody(body);
         // print the result from LexicalPreservingPrinter
-        String actual = LexicalPreservingPrinter.print(cu);
-//        System.out.println(expected);
-//        System.out.println(actual);
+        String actual = LexicalPreservingPrinter.print(decl);
+        System.out.println(expected);
+        System.out.println(actual);
         TestUtils.assertEqualsStringIgnoringEol(expected, actual);
     }
 }
