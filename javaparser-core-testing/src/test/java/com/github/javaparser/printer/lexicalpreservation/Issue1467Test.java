@@ -75,6 +75,8 @@ public class Issue1467Test {
         decl.setBody(body);
         // print the result from LexicalPreservingPrinter
         String actual = LexicalPreservingPrinter.print(cu);
+//        System.out.println(expected);
+//        System.out.println(actual);
         TestUtils.assertEqualsStringIgnoringEol(expected, actual);
     }
 }
