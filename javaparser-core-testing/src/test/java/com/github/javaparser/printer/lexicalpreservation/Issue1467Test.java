@@ -50,7 +50,7 @@ public class Issue1467Test {
         String expected = 
                 "public void f() {\n" + 
                 "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
-                "    }\n" ;
+                "    }" ;
         CompilationUnit cu = StaticJavaParser.parse(before);
         LexicalPreservingPrinter.setup(cu);
         // add method method declaration
