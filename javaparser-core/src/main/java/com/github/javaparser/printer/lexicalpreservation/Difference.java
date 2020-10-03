@@ -506,6 +506,9 @@ public class Difference {
             if (kept.getTokenType() == originalTextToken.getTokenKind()) {
                 originalIndex++;
                 diffIndex++;
+            } else if (kept.isNewLine() && originalTextToken.isNewline()) {
+                originalIndex++;
+                diffIndex++;
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
