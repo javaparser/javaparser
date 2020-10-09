@@ -1,0 +1,29 @@
+# Make the Bundle-SymbolicName fully qualified, not just the artifact id
+Bundle-SymbolicName: com.github.javaparser.javaparser-symbol-solver-core
+
+Export-Package: \
+	com.github.javaparser.symbolsolver,\
+	com.github.javaparser.symbolsolver.core.resolution,\
+	com.github.javaparser.symbolsolver.declarations.common,\
+	com.github.javaparser.symbolsolver.javaparser,\
+	com.github.javaparser.symbolsolver.javaparsermodel,\
+	com.github.javaparser.symbolsolver.javaparsermodel.contexts,\
+	com.github.javaparser.symbolsolver.javaparsermodel.declarations,\
+	com.github.javaparser.symbolsolver.javaparsermodel.declarators,\
+	com.github.javaparser.symbolsolver.javassistmodel,\
+	com.github.javaparser.symbolsolver.logic,\
+	com.github.javaparser.symbolsolver.model.resolution,\
+	com.github.javaparser.symbolsolver.model.typesystem,\
+	com.github.javaparser.symbolsolver.reflectionmodel,\
+	com.github.javaparser.symbolsolver.reflectionmodel.comparators,\
+	com.github.javaparser.symbolsolver.resolution,\
+	com.github.javaparser.symbolsolver.resolution.naming,\
+	com.github.javaparser.symbolsolver.resolution.typeinference,\
+	com.github.javaparser.symbolsolver.resolution.typeinference.bounds,\
+	com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas,\
+	com.github.javaparser.symbolsolver.resolution.typesolvers,\
+	com.github.javaparser.symbolsolver.utils
+
+# Don't use the project's version for the packages
+# We prefer not setting a version as we don't follow OSGi version semantics
+-nodefaultversion: true
