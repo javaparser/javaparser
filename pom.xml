@@ -154,11 +154,6 @@
             <name>javaparser-JavaParser</name>
             <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/;publish=1</url>
         </repository>
-        <repository>
-            <id>ossrh</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
     </distributionManagement>
 
     <build>
