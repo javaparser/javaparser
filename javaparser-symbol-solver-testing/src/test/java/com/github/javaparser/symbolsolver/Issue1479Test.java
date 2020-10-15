@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration.JavaParserFieldDeclarationAdapter;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -40,8 +40,8 @@ public class Issue1479Test extends AbstractSymbolResolutionTest {
         assertTrue(fae.calculateResolvedType().describe().equals("java.lang.String"));
         ResolvedFieldDeclaration value = fae.resolve().asField();
         assertTrue(value.getName().equals("AFIELD"));
-        FieldDeclaration field = ((JavaParserFieldDeclarationAdapter)value).getWrappedNode();
-        assertEquals("a", field.getVariable(0).getInitializer().get().asStringLiteralExpr().getValue());
+        Optional<FieldDeclaration> fd = value.toAst();
+        assertEquals("a", fd.get().getVariable(0).getInitializer().get().asStringLiteralExpr().getValue());
     }
     
 }
