@@ -81,6 +81,21 @@
             <url>https://github.com/MysterAitch</url>
             <id>MysterAitch</id>
         </developer>
+        <developer>
+            <name>Roger Howell</name>
+            <url>https://github.com/MysterAitch</url>
+            <id>MysterAitch</id>
+        </developer>
+        <developer>
+            <name>Jean Pierre Lerbscher</name>
+            <url>https://github.com/jlerbsc</url>
+            <id>jlerbsc</id>
+        </developer>
+        <developer>
+            <name>Maarten Coene</name>
+            <url>https://github.com/maartenc</url>
+            <id>maartenc</id>
+        </developer>
     </developers>
     <contributors>
         <contributor>
