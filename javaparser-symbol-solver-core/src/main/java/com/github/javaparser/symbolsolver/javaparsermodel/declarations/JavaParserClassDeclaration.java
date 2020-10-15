@@ -150,9 +150,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                                 
                                 @Override
                                 public Optional<FieldDeclaration> toAst() {
-                                    FieldDeclaration fd = JavaParserFieldDeclaration.class.isAssignableFrom(f.getClass()) ?
-                                            ((JavaParserFieldDeclaration)f).getWrappedNode() : null;
-                                    return Optional.ofNullable(fd);
+                                    return f.toAst();
                                 }
                             });
                         }));
