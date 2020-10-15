@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -48,13 +55,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -112,6 +112,47 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     ///
     /// Public methods: fields
     ///
+    
+    public static class JavaParserFieldDeclarationAdapter implements ResolvedFieldDeclaration {
+        
+        ResolvedFieldDeclaration resolvedFieldDeclaration;
+        ResolvedReferenceType ancestor;
+        
+        public JavaParserFieldDeclarationAdapter(ResolvedFieldDeclaration decl, ResolvedReferenceType ancestor ) {
+            this.resolvedFieldDeclaration = decl;
+            this.ancestor = ancestor;
+        }
+
+        @Override
+        public ResolvedType getType() {
+            return ancestor.useThisTypeParametersOnTheGivenType(resolvedFieldDeclaration.getType());
+        }
+
+        @Override
+        public String getName() {
+            return resolvedFieldDeclaration.getName();
+        }
+
+        @Override
+        public AccessSpecifier accessSpecifier() {
+            return resolvedFieldDeclaration.accessSpecifier();
+        }
+
+        @Override
+        public boolean isStatic() {
+            return resolvedFieldDeclaration.isStatic();
+        }
+
+        @Override
+        public ResolvedTypeDeclaration declaringType() {
+            return resolvedFieldDeclaration.declaringType();
+        }
+        
+        public com.github.javaparser.ast.body.FieldDeclaration getWrappedNode() {
+            return resolvedFieldDeclaration.getClass().isAssignableFrom(JavaParserFieldDeclaration.class) ? 
+                    ((JavaParserFieldDeclaration)resolvedFieldDeclaration).getWrappedNode() : null;
+        }
+    }
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
@@ -122,33 +163,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                 .filter(ancestor -> ancestor.getTypeDeclaration().isPresent())
                 .forEach(ancestor -> ancestor.getTypeDeclaration().get().getAllFields()
                         .forEach(f -> {
-                            fields.add(new ResolvedFieldDeclaration() {
-
-                                @Override
-                                public AccessSpecifier accessSpecifier() {
-                                    return f.accessSpecifier();
-                                }
-
-                                @Override
-                                public String getName() {
-                                    return f.getName();
-                                }
-
-                                @Override
-                                public ResolvedType getType() {
-                                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
-                                }
-
-                                @Override
-                                public boolean isStatic() {
-                                    return f.isStatic();
-                                }
-
-                                @Override
-                                public ResolvedTypeDeclaration declaringType() {
-                                    return f.declaringType();
-                                }
-                            });
+                            fields.add(new JavaParserFieldDeclarationAdapter(f, ancestor));
                         })
                 );
 
