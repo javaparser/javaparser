@@ -1,10 +1,15 @@
-Next Release (Version 3.16.2)
+Next Release (Version 3.16.3)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/177?closed=1)
+
+Version 3.16.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/176?closed=1)
 * FIXED: Enhanced the handling of line separator, introducing an enum `LineSeparator` that can be used.
     (PR [#2685](https://github.com/javaparser/javaparser/pull/2685), by [@MysterAitch](https://github.com/MysterAitch))
 * FIXED: The generated metamodel classes now have the `@Generated` annotation 
     (PR [#2706](https://github.com/javaparser/javaparser/pull/2706), by [@MysterAitch](https://github.com/MysterAitch))
+* various other bugfixes and enhancements
 
 Version 3.16.1
 ------------------
