@@ -21,10 +21,18 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -48,13 +56,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -112,14 +113,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     ///
     /// Public methods: fields
     ///
-
+    
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
-        getAncestors(true)
-                .stream()
-                .filter(ancestor -> ancestor.getTypeDeclaration().isPresent())
+        getAncestors(true).stream().filter(ancestor -> ancestor.getTypeDeclaration().isPresent())
                 .forEach(ancestor -> ancestor.getTypeDeclaration().get().getAllFields()
                         .forEach(f -> {
                             fields.add(new ResolvedFieldDeclaration() {
@@ -148,9 +147,13 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
+                                
+                                @Override
+                                public Optional<FieldDeclaration> toAst() {
+                                    return f.toAst();
+                                }
                             });
-                        })
-                );
+                        }));
 
         return fields;
     }
