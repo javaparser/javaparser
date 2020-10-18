@@ -12,7 +12,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 
-public class Issue2477Test {
+public class Issue2477Test extends AbstractSymbolResolutionTest {
 
     @Test
     public void test() {
