@@ -141,4 +141,23 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         return this == BOOLEAN;
     }
     
+    /*
+     * Binary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2)
+     * If any operand is of a reference type, it is subjected to unboxing conversion (§5.1.8).
+     */
+    public ResolvedPrimitiveType bnp(ResolvedPrimitiveType other) {
+        // If either operand is of type double, the other is converted to double.
+        if (this == ResolvedPrimitiveType.DOUBLE || other == ResolvedPrimitiveType.DOUBLE) {
+            return ResolvedPrimitiveType.DOUBLE;
+        // Otherwise, if either operand is of type float, the other is converted to float.
+        } else if (this == ResolvedPrimitiveType.FLOAT || other == ResolvedPrimitiveType.FLOAT) {
+            return ResolvedPrimitiveType.FLOAT;
+        // Otherwise, if either operand is of type long, the other is converted to long.
+        } else if (this == ResolvedPrimitiveType.LONG || other == ResolvedPrimitiveType.LONG) {
+            return ResolvedPrimitiveType.LONG;
+        }
+        // Otherwise, both operands are converted to type int.
+        return ResolvedPrimitiveType.INT;
+    }
+    
 }
