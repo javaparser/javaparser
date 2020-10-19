@@ -171,8 +171,8 @@ public class TypeHelper {
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
     }
 
-    public static ResolvedType toUnboxedType(ResolvedReferenceType referenceType) {
-        throw new UnsupportedOperationException(referenceType.toString());
+    public static ResolvedPrimitiveType toUnboxedType(ResolvedReferenceType referenceType) {
+        return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst().get();
     }
 
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
