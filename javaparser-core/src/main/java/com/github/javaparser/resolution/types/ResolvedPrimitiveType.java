@@ -63,6 +63,13 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         throw new IllegalArgumentException("Name " + name);
     }
+    
+    /*
+     * Returns an array containing all numeric types
+     */
+    public static ResolvedPrimitiveType[] getNumericPrimitiveTypes() {
+        return new ResolvedPrimitiveType[] {BYTE,SHORT,CHAR,INT,LONG,FLOAT,DOUBLE};
+    }
 
     @Override
     public String toString() {
