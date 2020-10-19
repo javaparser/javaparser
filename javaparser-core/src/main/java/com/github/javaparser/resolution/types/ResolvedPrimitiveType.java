@@ -126,4 +126,12 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public boolean isNumeric() {
         return this != BOOLEAN;
     }
+    
+    /**
+     * Is this a boolean type?
+     */
+    public boolean isBoolean() {
+        return this == BOOLEAN;
+    }
+    
 }
