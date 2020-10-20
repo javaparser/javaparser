@@ -177,8 +177,17 @@ public class TypeHelper {
         }
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
     }
+    
+    /*
+     * Returns true if the reference type can be unboxed to the primitive type
+     * For example : Integer to int
+     */
+    public static boolean isUnboxableTo(ResolvedPrimitiveType primitiveType, ResolvedReferenceType referenceType) {
+        return primitiveType.getBoxTypeQName().equals(referenceType.asReferenceType().describe());
+    }
 
     public static ResolvedPrimitiveType toUnboxedType(ResolvedReferenceType referenceType) {
+        // perhaps we have to verify that the referenceType is unboxable ?
         return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst().get();
     }
 
