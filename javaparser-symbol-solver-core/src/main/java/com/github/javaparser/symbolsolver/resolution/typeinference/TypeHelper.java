@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.resolution.MethodUsage;
@@ -36,13 +43,6 @@ import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.utils.Pair;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * The term "type" is used loosely in this chapter to include type-like syntax that contains inference variables.
@@ -85,6 +85,13 @@ public class TypeHelper {
             return isProperType(type.asArrayType().getComponentType());
         }
         throw new UnsupportedOperationException(type.toString());
+    }
+    
+    /*
+     * Returns true if the ResolvedType is a numeric
+     */
+    public static boolean isNumericType(ResolvedType type) {
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(type));
     }
 
     /**
@@ -164,22 +171,31 @@ public class TypeHelper {
         return t.isAssignableBy(s);
     }
 
-    private static boolean isUnboxable(ResolvedType referenceType) {
+    public static boolean isUnboxable(ResolvedType referenceType) {
         if (!referenceType.isReferenceType()) {
             return false;
         }
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
     }
-
-    private static ResolvedType toUnboxedType(ResolvedReferenceType referenceType) {
-        throw new UnsupportedOperationException(referenceType.toString());
+    
+    /*
+     * Returns true if the reference type can be unboxed to the primitive type
+     * For example : Integer to int
+     */
+    public static boolean isUnboxableTo(ResolvedPrimitiveType primitiveType, ResolvedReferenceType referenceType) {
+        return primitiveType.getBoxTypeQName().equals(referenceType.asReferenceType().describe());
     }
 
-    private static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
+    public static ResolvedPrimitiveType toUnboxedType(ResolvedReferenceType referenceType) {
+        // perhaps we have to verify that the referenceType is unboxable ?
+        return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst().get();
+    }
+
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
     }
 
-    private static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
+    public static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
         Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName())).findFirst();
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
@@ -187,7 +203,7 @@ public class TypeHelper {
         throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s="+s+", t=" + t);
     }
 
-    private static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
+    public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
         if (s.isPrimitive() && t.isPrimitive()) {
             return s.isAssignableBy(t);
         } else {
