@@ -89,6 +89,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -196,6 +198,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(ConditionalExpr node, Boolean solveLambdas) {
+        ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
+        ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
+        ConditionalExprHandler rce = ConditionalExprResolver.getConditionExprHandler(thenExpr, elseExpr);
+        try {
+            return rce.resolveType();
+        } catch (UnsupportedOperationException e) {
+            // There is nothing to do because, for the moment, we want to run actual implementation 
+        }
         return node.getThenExpr().accept(this, solveLambdas);
     }
 
