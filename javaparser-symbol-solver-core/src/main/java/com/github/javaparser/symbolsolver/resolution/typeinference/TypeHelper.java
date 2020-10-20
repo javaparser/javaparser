@@ -86,6 +86,13 @@ public class TypeHelper {
         }
         throw new UnsupportedOperationException(type.toString());
     }
+    
+    /*
+     * Returns true if the ResolvedType is a numeric
+     */
+    public static boolean isNumericType(ResolvedType type) {
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(type));
+    }
 
     /**
      * see https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
