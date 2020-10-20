@@ -160,4 +160,11 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         return ResolvedPrimitiveType.INT;
     }
     
+    /*
+     * Verify if the ResolvedPrimitiveType is in the list of ResolvedPrimitiveType
+     */
+    public boolean in(ResolvedPrimitiveType[] types) {
+        return Arrays.stream(types).anyMatch(type -> this == type); 
+    }
+    
 }
