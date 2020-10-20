@@ -21,13 +21,24 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.utils.CodeGenerationUtils;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.AfterEach;
+
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.utils.CodeGenerationUtils;
+
 public abstract class AbstractSymbolResolutionTest {
+    
+    @AfterEach
+    public void reset() {
+        // reset configuration to not potentially disturb others tests.
+        // So we have to set specific configuration between each test.
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
 
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
