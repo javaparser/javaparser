@@ -21,6 +21,12 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -28,12 +34,6 @@ import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Fred Lefévère-Laoide
@@ -187,17 +187,18 @@ public class ConstructorResolutionLogic {
                         // we expect the methods to be ordered such that inherited methods are later in the list
                     }
                 }
-            }
-            if (possibleAmbiguity) {
-                // pick the first exact match if it exists
-                if (!MethodResolutionLogic.isExactMatch(winningCandidate, argumentsTypes)) {
-                    if (MethodResolutionLogic.isExactMatch(other, argumentsTypes)) {
-                        winningCandidate = other;
-                    } else {
-                        throw new MethodAmbiguityException("Ambiguous constructor call: cannot find a most applicable constructor: " + winningCandidate + ", " + other);
+                if (possibleAmbiguity) {
+                    // pick the first exact match if it exists
+                    if (!MethodResolutionLogic.isExactMatch(winningCandidate, argumentsTypes)) {
+                        if (MethodResolutionLogic.isExactMatch(other, argumentsTypes)) {
+                            winningCandidate = other;
+                        } else {
+                            throw new MethodAmbiguityException("Ambiguous constructor call: cannot find a most applicable constructor: " + winningCandidate + ", " + other);
+                        }
                     }
                 }
             }
+            
             return SymbolReference.solved(winningCandidate);
         }
     }
