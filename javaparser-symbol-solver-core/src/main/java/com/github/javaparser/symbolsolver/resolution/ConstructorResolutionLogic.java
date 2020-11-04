@@ -224,6 +224,9 @@ public class ConstructorResolutionLogic {
                 return false;
             }
             // if it matches a variadic and a not variadic I pick the not variadic
+            if (!tdA.isArray() && tdB.isArray()) {
+                return true;
+            }
             // FIXME
             if (i == (constructorA.getNumberOfParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
                 return true;
