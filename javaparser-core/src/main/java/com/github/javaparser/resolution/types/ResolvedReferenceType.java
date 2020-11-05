@@ -21,17 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
-import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
-import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
-import com.github.javaparser.utils.Pair;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,6 +29,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
+import com.github.javaparser.utils.Pair;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -475,11 +476,12 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             if (this.isRawType() || other.isRawType()) {
                 return true;
             }
-            if (this.typeParametersValues().size() != other.typeParametersValues().size()) {
+            List<ResolvedType> typeParametersValues = typeParametersValues();
+            if (typeParametersValues.size() != other.typeParametersValues().size()) {
                 throw new IllegalStateException();
             }
-            for (int i = 0; i < typeParametersValues().size(); i++) {
-                ResolvedType thisParam = typeParametersValues().get(i);
+            for (int i = 0; i < typeParametersValues.size(); i++) {
+                ResolvedType thisParam = typeParametersValues.get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof ResolvedWildcard) {
@@ -495,9 +497,17 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                         }
                     } else {
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
-                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
+                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds()
+                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
+                                    .collect(Collectors.toList());
+                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds()
+                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
+                                    .collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
+                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
+                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
+                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
+                            return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
                         return false;
                     }
@@ -511,6 +521,22 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
     // Private methods
     //
+    
+    private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
+        // verify if the ResolvedTypeVariable has only one type variable and the bound is
+        // not a reference type with a bound parameter 
+        // for example EnumSet<E> noneOf(Class<E> elementType)
+        List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
+        if (bounds.size() == 1) {
+            ResolvedType boundType = bounds.get(0).getType();
+            boolean hasTypeParameter = boundType.isReferenceType()
+                    && !boundType.asReferenceType().typeParametersMap.isEmpty();
+            return hasTypeParameter
+                    ? compareConsideringTypeParameters(boundType.asReferenceType())
+                    : boundType.isAssignableBy(referenceType);
+        }
+        return false;
+    }
 
     private static List<ResolvedType> deriveParams(ResolvedReferenceTypeDeclaration typeDeclaration) {
         if (typeDeclaration == null) {
