@@ -47,9 +47,15 @@ class DifferenceElementCalculator {
         }
         @Override
         public boolean equals(Object other) {
-            return other != null && other instanceof ChildPositionInfo
-                    && this.node.equals(((ChildPositionInfo)other).node) 
-                    && this.position.equals(((ChildPositionInfo)other).position);
+            if ( other == null || !(other instanceof ChildPositionInfo))
+                return false;
+            ChildPositionInfo cpi = (ChildPositionInfo)other;
+            // verify that the node content and the position are equal 
+            // because we can have nodes with the same content but in different lines
+            // in this case we consider that nodes are not equals
+            return this.node.equals(cpi.node) 
+                    && this.node.getRange().isPresent() && cpi.node.getRange().isPresent()
+                    && this.node.getRange().get().contains(cpi.node.getRange().get());
         }
         @Override
         public int hashCode() {
@@ -158,7 +164,7 @@ class DifferenceElementCalculator {
         List<ChildPositionInfo> childrenInOriginal = findChildrenPositions(original);
         List<ChildPositionInfo> childrenInAfter = findChildrenPositions(after);
 
-        List<ChildPositionInfo> commonChildren = new LinkedList<>(childrenInOriginal);
+        List<ChildPositionInfo> commonChildren = new ArrayList<>(childrenInOriginal);
         commonChildren.retainAll(childrenInAfter);
 
         List<DifferenceElement> elements = new LinkedList<>();

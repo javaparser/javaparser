@@ -45,13 +45,11 @@ public class Issue2290Test extends AbstractLexicalPreservingTest  {
 
         String s = 
                 "public class Clone1 {\n" + 
-                "\n" + 
-                "    public static void main(String[] args) {\n" + 
-                "        System.out.println(\"I'm a clone10\");\n" +
-                "        System.out.println(\"I'm not a clone!\");\n" + 
-                "        System.out.println(\"I'm a clone10\");\n" + 
-                "    }\n" + 
-                "\n" + 
+                "  public static void main(String[] args) {\n" + 
+                "    System.out.println(\"I'm a clone10\");\n" +
+                "    System.out.println(\"I'm not a clone!\");\n" + 
+                "    System.out.println(\"I'm a clone10\");\n" + 
+                "  }\n" + 
                 "}";
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ExpressionStmt> exprs = cu.findAll(ExpressionStmt.class);
@@ -62,6 +60,5 @@ public class Issue2290Test extends AbstractLexicalPreservingTest  {
         assertTrue(exprs.size()==2);
         // verify that the first statement is not removed
         assertEquals("System.out.println(\"I'm a clone10\");",exprs.get(0).toString());
-
     }
 }
