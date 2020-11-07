@@ -24,13 +24,13 @@ on:
 jobs:
 
 
-  # Do a quick test using min/max JDK ((on ubuntu))
-  test_min_max_jdk_ubuntu:
+  # Do a quick test using min/max JDK versions ((on ubuntu, mac, and windows))
+  test_min_max_jdk:
     strategy:
       ## Optionally cancel all other combinations if one fails
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         jdk: [ 8,15 ]
 
     runs-on: ${{ matrix.os }}
@@ -70,58 +70,10 @@ jobs:
 
 
 
-  # Do a quick test using min/max JDK ((on mac and windows))
-  test_min_max_jdk__mac_and_windows:
-    # ONLY START THIS TEST IF THE ONE BEFORE FINISHED FINE
-    needs: test_min_max_jdk_ubuntu
-
-    strategy:
-      ## Optionally cancel all other combinations if one fails
-      fail-fast: false
-      matrix:
-        os: [ macos-latest, windows-latest ]
-        jdk: [ 8,15 ]
-
-    runs-on: ${{ matrix.os }}
-
-    # Steps should be identical for all runs
-    steps:
-      ## Checkout the current version of the code from the repo.
-      - name: Checkout latest code
-        uses: actions/checkout@v2
-
-      ## Setup the specified version of Java (includes maven/gradle).
-      - name: Set up JDK ${{ matrix.jdk }}
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.jdk }}
-
-      ## Given that the build matrix only specifies the major version (configurable), output the precise version used.
-      - name: Echo exact java version being used
-        run: java -version
-
-      ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
-      ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
-      - name: Cache Maven packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      ## Actually perform the tests. Unsuccessful tests will indicate a failed build.
-      ### -e : show traces where any errors occur
-      ### -B test : run the maven lifecycle stage `test`
-      ### -P AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
-      - name: Test with Maven (incl. slow tests)
-        run: mvn -e -B test -P AlsoSlowTests
-
-
-
-  # Do a test of the intermediary JDK versions
+  # Do a thorough test of the other intermediary JDK versions
   test_intermediary_versions:
     # ONLY START THIS TEST IF THE ONE BEFORE FINISHED FINE
-    needs: test_min_max_jdk__mac_and_windows
+    needs: test_min_max_jdk
 
     strategy:
       ## Optionally cancel all other combinations if one fails
