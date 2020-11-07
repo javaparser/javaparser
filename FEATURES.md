@@ -72,7 +72,7 @@ Java 10 support [complete on 25/Feb/2018](https://github.com/javaparser/javapars
 | [JEP 322](https://openjdk.java.net/jeps/322) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Time-Based Release Versioning~~                                 |
 
 ## JDK 11 - September 2018
-Source: https://openjdk.java.net/projects/jdk/11/
+Source: [https://openjdk.java.net/projects/jdk/11/](https://openjdk.java.net/projects/jdk/11/)
 
 Java 11 support [complete on 19/Aug/2018](https://github.com/javaparser/javaparser/blob/master/changelog.md#version-3618)
 
@@ -108,7 +108,7 @@ Java 11 support [complete on 19/Aug/2018](https://github.com/javaparser/javapars
 
 
 ## JDK 12 - March 2019
-Source: https://openjdk.java.net/projects/jdk/12/
+Source: [https://openjdk.java.net/projects/jdk/12/](https://openjdk.java.net/projects/jdk/12/)
 
 Parsing support for Java 12 (including preview features) [complete on 03/Feb/2019](https://github.com/javaparser/javaparser/blob/master/changelog.md#version-3110)
 
@@ -126,7 +126,7 @@ Resolution support for Java 12 complete on ??/??/2019
 | [JEP 346](https://openjdk.java.net/jeps/346) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Promptly Return Unused Committed Memory from G1~~               |
 
 ## JDK 13 - September 2018
-Source: https://openjdk.java.net/projects/jdk/13/
+Source: [https://openjdk.java.net/projects/jdk/13/](https://openjdk.java.net/projects/jdk/13/)
 
 No language changes in JDK 13 -- thus no "complete" date. Details of preview support is below.
 
@@ -140,8 +140,8 @@ No language changes in JDK 13 -- thus no "complete" date. Details of preview sup
 
 
 
-## JDK 14 (current) - March 2020
-Source: https://openjdk.java.net/projects/jdk/14/
+## JDK 14 - March 2020
+Source: [https://openjdk.java.net/projects/jdk/14/](https://openjdk.java.net/projects/jdk/14/)
 
 Switch support was complete during preview status. 
 
@@ -175,13 +175,12 @@ The preview features of instanceof pattern and records are work-in-progress.
                                        though tested PRs are always welcome. [↩](#a_14_JEP343)
 
 
-## JDK 15 - _targeted for September 2020_
-Source: https://openjdk.java.net/projects/jdk/15/
 
-#### JEPs proposed to target JDK 15 review ends
-- 383: Foreign-Memory Access API (Second Incubator) 2020/05/21
+## JDK 15 (current) - September 2020
+Source: [https://openjdk.java.net/projects/jdk/15/](https://openjdk.java.net/projects/jdk/15/)
 
-#### JEPs targeted to JDK 15, so far
+_// TODO: Categorise, and format as table_
+
 - JEP 339: Edwards-Curve Digital Signature Algorithm (EdDSA)
 - JEP 360: Sealed Classes (Preview)
 - JEP 371: Hidden Classes
@@ -193,8 +192,35 @@ Source: https://openjdk.java.net/projects/jdk/15/
 - JEP 378: Text Blocks
 - JEP 379: Shenandoah: A Low-Pause-Time Garbage Collector
 - JEP 381: Remove the Solaris and SPARC Ports
+- JEP 383: Foreign-Memory Access API (Second Incubator)
 - JEP 384: Records (Second Preview)
+- JEP 385: Deprecate RMI Activation for Removal
+
+
 
 ## JDK 16 - _targeted for March 2021_
+Source: [https://openjdk.java.net/projects/jdk/16/](https://openjdk.java.net/projects/jdk/16/)
+
+#### Schedule 
+- 2020/12/10 -- Rampdown Phase One (fork from main line)
+- 2021/01/14 -- Rampdown Phase Two
+- 2021/02/04 -- Initial Release Candidate
+- 2021/02/18 -- Final Release Candidate
+- 2021/03/16 -- General Availability
+
+#### JEPs targeted to JDK 16:
+- JEP 338: Vector API (Incubator)
+- JEP 347: Enable C++14 Language Features
+- JEP 357: Migrate from Mercurial to Git
+- JEP 369: Migrate to GitHub
+- JEP 376: ZGC: Concurrent Thread-Stack Processing
+- JEP 380: Unix-Domain Socket Channels
+- JEP 386: Alpine Linux Port
+- JEP 387: Elastic Metaspace
+- JEP 388: Windows/AArch64 Port
+- JEP 392: Packaging Tool
+- JEP 393: Foreign-Memory Access API (Third Incubator)
+- JEP 394: Pattern Matching for instanceof
+- JEP 395: Records
 
 ## JDK 17 - _targeted for September 2021_
