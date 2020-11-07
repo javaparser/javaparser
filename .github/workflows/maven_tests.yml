@@ -9,12 +9,11 @@ on:
     - master
     paths-ignore:
     - '**.md'
-    - '**.yml'
 
   # Trigger the workflow on any pull_request (ignoring .md only changes)
   pull_request:
     paths-ignore:
-    - '**.yml'
+    - '**.md'
 
 jobs:
   maven_test:
