@@ -1,6 +1,49 @@
 Next Release (Version 3.16.3)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/177?closed=1)
+* ADDED: Created MANY test cases for older issues resolved but not directly linked/closed.
+    (PRs
+    [#2838](https://github.com/javaparser/javaparser/pull/2838), 
+    [#2842](https://github.com/javaparser/javaparser/pull/2842), 
+    [#2843](https://github.com/javaparser/javaparser/pull/2843), 
+    [#2852](https://github.com/javaparser/javaparser/pull/2852), 
+    [#2853](https://github.com/javaparser/javaparser/pull/2853), 
+    [#2854](https://github.com/javaparser/javaparser/pull/2854), 
+    [#2855](https://github.com/javaparser/javaparser/pull/2855), 
+    [#2867](https://github.com/javaparser/javaparser/pull/2867), 
+    [#2868](https://github.com/javaparser/javaparser/pull/2868), 
+    [#2862](https://github.com/javaparser/javaparser/pull/2862), 
+    [#2873](https://github.com/javaparser/javaparser/pull/2873), 
+    by [@jlerbsc](https://github.com/jlerbsc)
+    )
+* ADDED: Added helper method to `ResolvedPrimitiveType.java` which checks if it is a boolean
+    (PR [#2856](https://github.com/javaparser/javaparser/pull/2856), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED: Added helper method to `ResolvedPrimitiveType.java` which returns all numeric types
+    (PR [#2858](https://github.com/javaparser/javaparser/pull/2858), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED/CHANGED: Minor refactoring - formatting code and adding convenient methods to `TypeHelper` and `ResolvedPrimitveType`
+    (PR [#2860](https://github.com/javaparser/javaparser/pull/2860), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED: Allow the symbol resolver for a `SymbolSolverCollectionStrategy` to be set via the given parser configuration
+    (PR [#2864](https://github.com/javaparser/javaparser/pull/2864), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: `MethodResolutionLogic.findMostApplicable` not return correct symbol reference when resolving overloaded method
+    (PR [#2866](https://github.com/javaparser/javaparser/pull/2866), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Updated `AbstractSymbolResolutionTest.java` with better `@BeforeEach`/`@AfterEach`  
+    (PR [#2871](https://github.com/javaparser/javaparser/pull/2871), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: `TypeResolver` fails on method with args to static imported fields
+    (PR [#2872](https://github.com/javaparser/javaparser/pull/2872), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Resolution error for non-generic constructor if generic constructor declared
+    (PR [#2874](https://github.com/javaparser/javaparser/pull/2874), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Fails to calculate the type of a generic return type constructed from a Primitive type
+    (PR [#2875](https://github.com/javaparser/javaparser/pull/2875), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Can't get qualified signature of a resolved method inside a Constant Enum declaration 
+    (PR [#2876](https://github.com/javaparser/javaparser/pull/2876), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Constructor resolution error for overloaded variadic constructor
+    (PR [#2877](https://github.com/javaparser/javaparser/pull/2877), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Unable to find the constructor declaration when the argument list contains multiple `Optional.empty()` for different `Optional<T>`
+    (PR [#2880](https://github.com/javaparser/javaparser/pull/2880), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Solving symbol as value in the case where the scope is a constraint
+    (PR [#2883](https://github.com/javaparser/javaparser/pull/2883), by [@jlerbsc](https://github.com/jlerbsc))
+
+
 
 Version 3.16.2
 ------------------
