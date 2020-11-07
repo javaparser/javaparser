@@ -179,22 +179,22 @@ The preview features of instanceof pattern and records are work-in-progress.
 ## JDK 15 (current) - September 2020
 Source: [https://openjdk.java.net/projects/jdk/15/](https://openjdk.java.net/projects/jdk/15/)
 
-_// TODO: Categorise, and format as table_
-
-- JEP 339: Edwards-Curve Digital Signature Algorithm (EdDSA)
-- JEP 360: Sealed Classes (Preview)
-- JEP 371: Hidden Classes
-- JEP 372: Remove the Nashorn JavaScript Engine
-- JEP 373: Reimplement the Legacy DatagramSocket API
-- JEP 374: Disable and Deprecate Biased Locking
-- JEP 375: Pattern Matching for instanceof (Second Preview)
-- JEP 377: ZGC: A Scalable Low-Latency Garbage Collector
-- JEP 378: Text Blocks
-- JEP 379: Shenandoah: A Low-Pause-Time Garbage Collector
-- JEP 381: Remove the Solaris and SPARC Ports
-- JEP 383: Foreign-Memory Access API (Second Incubator)
-- JEP 384: Records (Second Preview)
-- JEP 385: Deprecate RMI Activation for Removal
+|  JEP  | Status | JavaParser Since | Description |
+| :---: | :----: | :--------------: | ----------- |   
+| [JEP 378](https://openjdk.java.net/jeps/378) |  **Release**        | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                      | **Text Blocks**                                                  |
+| [JEP 371](https://openjdk.java.net/jeps/371) |  **Release**        | _TBC -- Unclear if language change (#2886)_                                   | Hidden Classes                                                   |
+| [JEP 384](https://openjdk.java.net/jeps/384) |  **2nd Preview**    | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | Records (Second Preview)                                         |
+| [JEP 375](https://openjdk.java.net/jeps/375) |  **2nd Preview**    | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | Pattern Matching for instanceof (Second Preview)                 |
+| [JEP 360](https://openjdk.java.net/jeps/360) |  **_Preview_**      | **WIP - [#2888](https://github.com/javaparser/javaparser/issues/2888)**       | Sealed Classes (Preview)                                         |
+| [JEP 339](https://openjdk.java.net/jeps/339) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Edwards-Curve Digital Signature Algorithm (EdDSA)~~            |
+| [JEP 372](https://openjdk.java.net/jeps/372) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Nashorn JavaScript Engine~~                         |
+| [JEP 373](https://openjdk.java.net/jeps/373) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Reimplement the Legacy DatagramSocket API~~                    |
+| [JEP 374](https://openjdk.java.net/jeps/374) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Disable and Deprecate Biased Locking~~                         |
+| [JEP 377](https://openjdk.java.net/jeps/377) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC: A Scalable Low-Latency Garbage Collector~~                |
+| [JEP 379](https://openjdk.java.net/jeps/379) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Shenandoah: A Low-Pause-Time Garbage Collector~~               |
+| [JEP 381](https://openjdk.java.net/jeps/381) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Solaris and SPARC Ports~~                           |
+| [JEP 383](https://openjdk.java.net/jeps/383) | ~~_2nd Incubator_~~ | ~~_Not Applicable (NA)_~~                                                     | ~~Foreign-Memory Access API (Second Incubator)~~                 |
+| [JEP 385](https://openjdk.java.net/jeps/385) |  ~~Release~~        | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate RMI Activation for Removal~~                         |
 
 
 
