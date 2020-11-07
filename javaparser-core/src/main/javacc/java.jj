@@ -95,8 +95,36 @@ PARSER_END(GeneratedJavaParser)
 
 SPECIAL_TOKEN :
 {
-  <SPACE: [" ", "\t", "\f", "\u0085", "\u00A0", "\u1680", "\u180e", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005",
-      "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u200c", "\u200d", "\u2028", "\u2029", "\u202f", "\u205f", "\u2060", "\u3000", "\ufeff"]>
+  <SPACE: [ // TODO: Rename (or document) this as `WHITESPACE`?
+     " ",      // regular space character
+     "\t",     // tab character
+     "\f",     // formfeed character
+     "\u0085", // 'NEXT LINE (NEL)' (U+0085)
+     "\u00A0", // 'NO-BREAK SPACE' (U+00A0)
+     "\u1680", // 'OGHAM SPACE MARK' (U+1680)
+     "\u180e", // 'MONGOLIAN VOWEL SEPARATOR' (U+180E)
+     "\u2000", // 'EN QUAD' (U+2000)
+     "\u2001", // 'EM QUAD' (U+2001)
+     "\u2002", // 'EN SPACE' (U+2002)
+     "\u2003", // 'EM SPACE' (U+2003)
+     "\u2004", // 'THREE-PER-EM SPACE' (U+2004)
+     "\u2005", // 'FOUR-PER-EM SPACE' (U+2005)
+     "\u2006", // 'SIX-PER-EM SPACE' (U+2006)
+     "\u2007", // 'FIGURE SPACE' (U+2007)
+     "\u2008", // 'PUNCTUATION SPACE' (U+2008)
+     "\u2009", // 'THIN SPACE' (U+2009)
+     "\u200a", // 'HAIR SPACE' (U+200A)
+     "\u200b", // 'ZERO WIDTH SPACE' (U+200B)
+     "\u200c", // 'ZERO WIDTH NON-JOINER' (U+200C)
+     "\u200d", // 'ZERO WIDTH JOINER' (U+200D)
+     "\u2028", // 'LINE SEPARATOR' (U+2028) // TODO: Investigate this being EOL?
+     "\u2029", // 'PARAGRAPH SEPARATOR' (U+2029) // TODO: Investigate this being EOL?
+     "\u202f", // 'NARROW NO-BREAK SPACE' (U+202F)
+     "\u205f", // 'MEDIUM MATHEMATICAL SPACE' (U+205F)
+     "\u2060", // 'WORD JOINER' (U+2060)
+     "\u3000", // 'IDEOGRAPHIC SPACE' (U+3000)
+     "\ufeff"  // 'ZERO WIDTH NO-BREAK SPACE' (U+FEFF)
+  ]>
 | <WINDOWS_EOL : "\r\n">
 | <UNIX_EOL: "\n">
 | <OLD_MAC_EOL: "\r">

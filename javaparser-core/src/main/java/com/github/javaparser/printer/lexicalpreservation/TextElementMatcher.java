@@ -26,7 +26,7 @@ public interface TextElementMatcher {
     boolean match(TextElement textElement);
 
     /**
-     * This allows the combination of different TextElementMatcher instances.<br/>
+     * This allows the combination of different TextElementMatcher instances.<br>
      * If combined, all of the TextElementMatchers have to return true.
      *
      * @param textElementMatcher TextElementMatcher to combine with this one

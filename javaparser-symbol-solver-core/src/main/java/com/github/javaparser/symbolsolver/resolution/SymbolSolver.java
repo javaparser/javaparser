@@ -21,10 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -43,10 +47,8 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -147,6 +149,10 @@ public class SymbolSolver {
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
             return ((ReflectionInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof ReflectionEnumDeclaration) {
+            ResolvedEnumConstantDeclaration  red = ((ReflectionEnumDeclaration) typeDeclaration).getEnumConstant(name);
+            return SymbolReference.solved(red);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
             return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);

@@ -67,7 +67,7 @@ class Issue113Test extends AbstractSymbolResolutionTest {
         CompilationUnit cu = parse(pathToSourceFile);
 
         JavaParserClassDeclaration jssExtendedWidget = new JavaParserClassDeclaration(cu.getClassByName("Widget").get(), typeSolver);
-        ResolvedReferenceType superClass = jssExtendedWidget.getSuperClass();
+        ResolvedReferenceType superClass = jssExtendedWidget.getSuperClass().get();
         assertEquals("com.foo.base.Widget", superClass.getQualifiedName());
     }
 

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -130,11 +130,11 @@ class TreeVisitorTest {
         Node.ParentsVisitor visitor = new Node.ParentsVisitor(x);
         assertEquals("x = 1", visitor.next().toString());
         assertEquals("int x = 1;", visitor.next().toString());
-        assertEqualsNoEol("class X {\n" +
+        assertEqualsStringIgnoringEol("class X {\n" +
                 "\n" +
                 "    int x = 1;\n" +
                 "}", visitor.next().toString());
-        assertEqualsNoEol("class X {\n" +
+        assertEqualsStringIgnoringEol("class X {\n" +
                 "\n" +
                 "    int x = 1;\n" +
                 "}\n", visitor.next().toString());

@@ -39,7 +39,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A Java 9 Jigsaw module declaration. <code>@Foo module com.github.abc { requires a.B; }</code>
+ * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
  */
 public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
 

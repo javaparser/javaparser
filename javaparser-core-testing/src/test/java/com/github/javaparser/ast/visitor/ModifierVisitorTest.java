@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -126,7 +126,7 @@ class ModifierVisitorTest {
             }
         }, null);
 
-        assertEquals("void x() {" + EOL + "}", result.toString());
+        assertEquals("void x() {" + SYSTEM_EOL + "}", result.toString());
     }
 
     @Test
