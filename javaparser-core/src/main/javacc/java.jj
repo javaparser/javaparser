@@ -792,6 +792,15 @@ public CompilationUnit CompilationUnit():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.4.1
+ * <pre>{@code
+ *     PackageDeclaration:
+ *         {PackageModifier} package Identifier {. Identifier} ;
+ *     PackageModifier:
+ *         Annotation
+ * }</pre>
+ */
 PackageDeclaration PackageDeclaration():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();

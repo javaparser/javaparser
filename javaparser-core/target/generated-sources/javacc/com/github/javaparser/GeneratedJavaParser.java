@@ -208,6 +208,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.4.1
+ * <pre>{@code
+ *     PackageDeclaration:
+ *         {PackageModifier} package Identifier {. Identifier} ;
+ *     PackageModifier:
+ *         Annotation
+ * }</pre>
+ */
   final public PackageDeclaration PackageDeclaration() throws ParseException {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     Name name;
@@ -6324,6 +6333,38 @@ after they matched their desired input, which will lead to unexpected behaviour
     finally { jj_save(57, xla); }
   }
 
+  private boolean jj_3_43() {
+    if (jj_3R_111()) return true;
+    return false;
+  }
+
+  private boolean jj_3_23() {
+    if (jj_scan_token(DOT)) return true;
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3_42() {
+    if (jj_3R_110()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(19)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(39)) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_133() {
+    if (jj_3R_196()) return true;
+    return false;
+  }
+
   private boolean jj_3R_82() {
     if (jj_3R_76()) return true;
     Token xsp;
@@ -9803,18 +9844,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_3R_59()) return true;
-    return false;
-  }
-
   private boolean jj_3R_287() {
     if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_scan_token(SEMICOLON)) return true;
+  private boolean jj_3_2() {
+    if (jj_3R_59()) return true;
     return false;
   }
 
@@ -9832,33 +9868,6 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3R_170()) { jj_scanpos = xsp; break; }
     }
-    return false;
-  }
-
-  private boolean jj_3_43() {
-    if (jj_3R_111()) return true;
-    return false;
-  }
-
-  private boolean jj_3_23() {
-    if (jj_scan_token(DOT)) return true;
-    if (jj_3R_76()) return true;
-    return false;
-  }
-
-  private boolean jj_3_42() {
-    if (jj_3R_110()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(19)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(39)) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_133() {
-    if (jj_3R_196()) return true;
     return false;
   }
 
