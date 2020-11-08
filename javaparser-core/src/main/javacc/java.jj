@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -165,7 +165,7 @@ TOKEN_MGR_DECLS :
     public void setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
     }
-    
+
     public void setYieldSupported() {
         yieldSupported = true;
     }
@@ -392,7 +392,7 @@ TOKEN :
 /* TEXT BLOCK LITERAL */
 MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 <IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
-// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" - 
+// Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" -
 // which might match that doublequote with following doublequotes.
 <IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
@@ -403,8 +403,8 @@ TOKEN :
   < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
 |
   < #LETTER: [
-         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",  
-         "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",  
+         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
+         "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
          "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u037f",  "\u0386",
          "\u0388"-"\u038a",  "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u048a"-"\u052f",
          "\u0531"-"\u0556",  "\u0559",  "\u0561"-"\u0587",  "\u058f",  "\u05d0"-"\u05ea",  "\u05f0"-"\u05f2",
@@ -664,7 +664,7 @@ CompilationUnit CompilationUnit():
         ( LOOKAHEAD(2)";" )*
         [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
         (
-            in = ImportDeclaration() { imports = add(imports, in); } 
+            in = ImportDeclaration() { imports = add(imports, in); }
         |
             (
                 modifier = Modifiers()
@@ -698,7 +698,7 @@ PackageDeclaration PackageDeclaration():
 	JavaToken begin;
 }
 {
-  annotations = Annotations() 
+  annotations = Annotations()
   "package" {begin = token();}  name = Name() ";"
   { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
@@ -712,9 +712,9 @@ ImportDeclaration ImportDeclaration():
     JavaToken begin;
 }
 {
-    "import" {begin = token();} 
-    [ "static" { isStatic = true; } ] 
-    name = Name() 
+    "import" {begin = token();}
+    [ "static" { isStatic = true; } ]
+    name = Name()
     [ "." "*" { isAsterisk = true; } ] ";"
     { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
 }
@@ -840,13 +840,13 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
     [ "," ]
     [
         ";" (
-            member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); } 
+            member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); }
         |
             ";"
         )*
     ]
     "}"
-    
+
     { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
 }
 
@@ -863,10 +863,10 @@ EnumConstantDeclaration EnumConstantDeclaration():
 {
   {  }
   ( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
-  name = SimpleName() { begin = orIfInvalid(begin, token()); } 
+  name = SimpleName() { begin = orIfInvalid(begin, token()); }
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody() ]
-  { 
-      return new EnumConstantDeclaration(range(begin, token()), annotations, name, args, classBody);  
+  {
+      return new EnumConstantDeclaration(range(begin, token()), annotations, name, args, classBody);
   }
 }
 
@@ -883,9 +883,9 @@ RangedList<TypeParameter> TypeParameters():
 }
 {
    "<" { ret.beginAt(token()); }
-   annotations = Annotations() 
+   annotations = Annotations()
    tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
-   ( "," 
+   ( ","
    annotations = Annotations() tp = TypeParameter(annotations) { ret.add(tp); annotations = null; } )*
    ">" { ret.endAt(token()); }
    { return ret; }
@@ -995,7 +995,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     {
         if(storeTokens) {
             name.setTokenRange(name.getTokenRange().get().withEnd(token()));
-        }    
+        }
         return new Pair(name, arrayBracketPairs);
     }
 }
@@ -1047,7 +1047,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
       ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )* ]
     ( body = Block() | ";" )
-    { 
+    {
         type = juggleArrayType(type, arrayBracketPairs);
         return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
     }
@@ -1059,7 +1059,7 @@ ReferenceType AnnotatedReferenceType():
 	ReferenceType type;
 }
 {
-    annotations = Annotations() 
+    annotations = Annotations()
     type = ReferenceType(annotations)
     { return type; }
 }
@@ -1070,7 +1070,7 @@ Type AnnotatedType():
 	Type type;
 }
 {
-    annotations = Annotations() 
+    annotations = Annotations()
     type = Type(annotations)
     { return type; }
 }
@@ -1083,13 +1083,13 @@ Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
 }
 {
     "("
-    [ 
+    [
         ( LOOKAHEAD(ReceiverParameter())
             rp = ReceiverParameter()
             |
             par = Parameter() { ret = add(ret, par); }
-        ) 
-        ( "," par = Parameter() { ret = add(ret, par); } )* 
+        )
+        ( "," par = Parameter() { ret = add(ret, par); } )*
     ]
     ")"
     { return new Pair(ret, rp); }
@@ -1127,7 +1127,7 @@ Parameter Parameter():
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
 }
 {
-    modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
+    modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ]
     id = VariableDeclaratorId()
     {
         JavaToken begin = orIfInvalid(modifier.begin, partialType);
@@ -1143,7 +1143,7 @@ ReceiverParameter ReceiverParameter():
 }
 {
     annotations = Annotations()
-    partialType = Type(emptyList()) 
+    partialType = Type(emptyList())
     id = ReceiverParameterId()
     {
         return new ReceiverParameter(range(partialType, token()), annotations, partialType, id);
@@ -1155,7 +1155,7 @@ Name ReceiverParameterId():
 	Name ret = null;
 }
 {
-    [ LOOKAHEAD(Name()) ret = Name() "."] "this" 
+    [ LOOKAHEAD(Name()) ret = Name() "."] "this"
     { return new Name(tokenRange(), ret, token.image); }
 }
 
@@ -1233,7 +1233,7 @@ InitializerDeclaration InitializerDeclaration():
 	boolean isStatic = false;
 }
 {
-  [ "static" { isStatic = true; begin=token();} ] 
+  [ "static" { isStatic = true; begin=token();} ]
   body = Block() {begin = orIfInvalid(begin, body);}
   { return new InitializerDeclaration(range(begin, token()), isStatic, body); }
 }
@@ -1351,7 +1351,7 @@ Type TypeArgument():
 	NodeList<AnnotationExpr> annotations;
 }
 {
- annotations = Annotations() 
+ annotations = Annotations()
  (
    ret = Type(annotations)
  |
@@ -1374,7 +1374,7 @@ WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations):
 	|
 		"super" annotations = Annotations() sup = ReferenceType(annotations)
    ]
-   { 
+   {
      return new WildcardType(range(begin, token()), ext, sup, firstAnnotations);
    }
 }
@@ -1498,7 +1498,7 @@ Expression Expression():
             "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image); }
         )
     ]
-    
+
     { return ret; }
 }
 
@@ -1610,7 +1610,7 @@ Expression InstanceOfExpression():
 }
 {
     ret = RelationalExpression() [ "instanceof" type = AnnotatedReferenceType() {
-        ret = new InstanceOfExpr(range(ret, token()), ret, type); 
+        ret = new InstanceOfExpr(range(ret, token()), ret, type);
     } ]
     { return ret; }
 }
@@ -1776,7 +1776,7 @@ Expression CastExpression():
 }
 {
   "(" {begin=token();}
-  annotations = Annotations() 
+  annotations = Annotations()
   (
   	  LOOKAHEAD(2)
   	  primitiveType = PrimitiveType(annotations) ")" ret = UnaryExpression() { ret = new CastExpr(range(begin, token()), primitiveType, ret); }
@@ -2031,9 +2031,9 @@ Expression AllocationExpression(Expression scope):
 }
 {
     "new" { if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);} }
-    
+
     [ typeArgs = TypeArguments() ]
-    annotations = Annotations() 
+    annotations = Annotations()
     (
         type = PrimitiveType(annotations)
         ret = ArrayCreation(begin, type)
@@ -2059,15 +2059,15 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 	JavaToken arrayCreationLevelStart = INVALID;
 	List<TokenRange> levelRanges = new ArrayList<TokenRange>();
 }
-{ 
+{
     ( LOOKAHEAD(2)
         annotations = Annotations()
         "[" { arrayCreationLevelStart = annotations.isEmpty() ? token() : orIfInvalid(arrayCreationLevelStart, annotations.get(0)); }
-        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; }
         "]" { levelRanges.add(range(arrayCreationLevelStart, token())); }
-    )+ 
-    (arrayInitializerExpr = ArrayInitializer())? 
-    {  
+    )+
+    (arrayInitializerExpr = ArrayInitializer())?
+    {
         return juggleArrayCreation(range(begin, token()), levelRanges, type, inits, accum, arrayInitializerExpr);
     }
 }
@@ -2182,7 +2182,7 @@ Statement BlockStatement():
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
         | LOOKAHEAD(VariableDeclarationExpression() )
             expr = VariableDeclarationExpression() ";"
-            { ret = new ExpressionStmt(range(expr, token()), expr); } 
+            { ret = new ExpressionStmt(range(expr, token()), expr); }
         |
             ret = Statement()
         )
@@ -2223,7 +2223,7 @@ Statement LambdaBody():
 {
     (
         expr = Expression() { n = new ExpressionStmt(range(expr, token()), expr); }
-        |  
+        |
         n = Block()
     )
     { return n; }
@@ -2349,7 +2349,7 @@ IfStmt IfStatement():
 }
 {
   "if" {begin=token();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
-  { 
+  {
       return new IfStmt(range(begin, token()), condition, thenStmt, elseStmt);
   }
 }
@@ -2532,7 +2532,7 @@ TryStmt TryStatement():
   			( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
-  			 
+
   			catchBlock = Block()
   			{
   			    if (exceptionTypes.size() > 1) {
@@ -2709,7 +2709,7 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
   "@" { begin=orIfInvalid(begin, token()); }
   "interface" name = SimpleName() members = AnnotationTypeBody()
-  { 
+  {
       return new AnnotationDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, members);
   }
 }
@@ -2720,7 +2720,7 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 	BodyDeclaration member;
 }
 {
-    "{" ( 
+    "{" (
         member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); }
     |
         ";"
@@ -2791,7 +2791,7 @@ ModuleDirective ModuleDirective():
 }
 {
     (
-        // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'" 
+        // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'"
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
         <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));}
     |
