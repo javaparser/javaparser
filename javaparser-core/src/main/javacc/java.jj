@@ -988,7 +988,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 	SimpleName name;
 	JavaToken begin;
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
 }
 {
     name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
@@ -1031,7 +1031,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	SimpleName name;
 	Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
 	NodeList<ReferenceType> throws_ = emptyList();
 	BlockStmt body = null;
 	NodeList<AnnotationExpr> annotations;
@@ -1260,7 +1260,7 @@ ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations):
 {
 	Type type;
 	ArrayBracketPair arrayBracketPair;
-	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
 }
 {
   (

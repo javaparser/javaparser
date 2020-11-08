@@ -998,7 +998,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         SimpleName name;
         JavaToken begin;
         ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     name = SimpleName();
                           begin=token();
     label_13:
@@ -1172,7 +1172,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         SimpleName name;
         Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
         ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
         NodeList<ReferenceType> throws_ = emptyList();
         BlockStmt body = null;
         NodeList<AnnotationExpr> annotations;
@@ -1694,7 +1694,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations) throws ParseException {
         Type type;
         ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
+        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
     case BYTE:
