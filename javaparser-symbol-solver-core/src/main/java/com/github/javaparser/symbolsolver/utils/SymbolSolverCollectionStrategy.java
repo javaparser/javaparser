@@ -21,15 +21,8 @@
 
 package com.github.javaparser.symbolsolver.utils;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import com.github.javaparser.utils.CollectionStrategy;
-import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.ProjectRoot;
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -39,8 +32,15 @@ import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CollectionStrategy;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.ProjectRoot;
 
 /**
  * {@link CollectionStrategy} which collects all SourceRoots and initialises the TypeSolver and
@@ -56,8 +56,11 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
     }
 
     public SymbolSolverCollectionStrategy(ParserConfiguration parserConfiguration) {
-        // TODO/FiXME: Allow the symbol resolver to be set via the given parser configuration, and throw if invalid?
-        this.parserConfiguration = parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        // Allow the symbol resolver to be set via the given parser configuration
+        this.parserConfiguration = parserConfiguration;
+        if (!parserConfiguration.getSymbolResolver().isPresent()) {
+            this.parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        }
     }
 
     @Override

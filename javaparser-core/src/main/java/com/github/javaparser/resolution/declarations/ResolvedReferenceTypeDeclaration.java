@@ -21,18 +21,17 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * @author Federico Tomassetti
@@ -122,7 +121,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Bar I should get a FieldDeclaration with type String.
      */
     default ResolvedFieldDeclaration getField(String name) {
-        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
         } else {
