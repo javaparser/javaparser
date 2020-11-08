@@ -60,20 +60,6 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         return token_source;
     }
 
-/*************************************************************************************************************
- * THE JAVA LANGUAGE GRAMMAR STARTS HERE                                                                     *
- *                                                                                                           *
- * https://javacc.github.io/javacc/documentation/grammar.html#bnf-production                                 *
- * {@code                                                                                                    *
- * bnf_production ::= java_access_modifier java_return_type java_identifier "(" java_parameter_list ")" ":"  *
- *                    java_block                                                                             *
- *                    "{" expansion_choices "}"                                                              *
- * }                                                                                                         *
- *************************************************************************************************************/
-
-/*
- * Program structuring syntax follows.
- */
   final public CompilationUnit CompilationUnit() throws ParseException {
     PackageDeclaration packageDeclaration = null;
     NodeList<ImportDeclaration> imports = emptyNodeList();
@@ -6333,60 +6319,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     finally { jj_save(57, xla); }
   }
 
-  private boolean jj_3_43() {
-    if (jj_3R_111()) return true;
-    return false;
-  }
-
-  private boolean jj_3_23() {
-    if (jj_scan_token(DOT)) return true;
-    if (jj_3R_76()) return true;
-    return false;
-  }
-
-  private boolean jj_3_42() {
-    if (jj_3R_110()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(19)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(39)) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_133() {
-    if (jj_3R_196()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_82() {
-    if (jj_3R_76()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_23()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  private boolean jj_3R_132() {
-    if (jj_3R_111()) return true;
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_131() {
-    if (jj_3R_110()) return true;
-    if (jj_3R_195()) return true;
-    return false;
-  }
-
   private boolean jj_3R_168() {
     if (jj_3R_77()) return true;
     return false;
@@ -9868,6 +9800,60 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3R_170()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  private boolean jj_3_43() {
+    if (jj_3R_111()) return true;
+    return false;
+  }
+
+  private boolean jj_3_23() {
+    if (jj_scan_token(DOT)) return true;
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3_42() {
+    if (jj_3R_110()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(19)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(39)) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_133() {
+    if (jj_3R_196()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_82() {
+    if (jj_3R_76()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3_23()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  private boolean jj_3R_132() {
+    if (jj_3R_111()) return true;
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_131() {
+    if (jj_3R_110()) return true;
+    if (jj_3R_195()) return true;
     return false;
   }
 
