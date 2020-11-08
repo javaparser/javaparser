@@ -40,11 +40,12 @@
 * - https://javacc.github.io/javacc/documentation/grammar.html#options
 */
 options {
-    STATIC=false;
-    COMMON_TOKEN_ACTION=true;
-    JDK_VERSION = "1.8";
-    TOKEN_EXTENDS ="TokenBase";
+    COMMON_TOKEN_ACTION = true;
+    ERROR_REPORTING = true;
     JAVA_TEMPLATE_TYPE = "modern";
+    JDK_VERSION = "1.8";
+    STATIC = false;
+    TOKEN_EXTENDS = "TokenBase";
 }
 
 
