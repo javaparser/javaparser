@@ -476,6 +476,9 @@ public class Difference {
         }
     }
 
+    // note: 
+    // increment originalIndex if we want to keep the original element
+    // increment diffIndex if we don't want to skip the diff element 
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
@@ -534,6 +537,8 @@ public class Difference {
             } else {
                 throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
             }
+        } else if (kept.isToken() && originalElementIsChild) {
+            diffIndex++;
         } else if (kept.isWhiteSpace()) {
             diffIndex++;
         } else if (kept.isIndent()) {
