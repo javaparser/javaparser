@@ -34,6 +34,7 @@ jobs:
         jdk: [ 8,15 ]
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     # Steps should be identical for all runs
     steps:
@@ -83,6 +84,7 @@ jobs:
         jdk: [ 9,10,11,12,13,14 ]
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     # Steps should be identical for all runs
     steps:
