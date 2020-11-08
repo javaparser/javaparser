@@ -45,7 +45,7 @@ import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase implements GeneratedJavaParserConstants {
     /* Returns the JavaParser specific token type of the last matched token */
-    JavaToken token() {
+    JavaToken jpToken() {
         return token.javaToken;
     }
 
@@ -209,7 +209,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken begin;
     annotations = Annotations();
     jj_consume_token(PACKAGE);
-             begin = token();
+             begin = jpToken();
     name = Name();
     jj_consume_token(SEMICOLON);
     {if (true) return new PackageDeclaration(range(begin, token()), annotations, name);}
@@ -222,7 +222,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     boolean isAsterisk = false;
     JavaToken begin;
     jj_consume_token(IMPORT);
-              begin = token();
+              begin = jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATIC:
       jj_consume_token(STATIC);
@@ -695,7 +695,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<ClassOrInterfaceType> typeBound  = emptyNodeList();
     JavaToken begin;
     name = SimpleName();
-                         begin=token();
+                         begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case EXTENDS:
       typeBound = TypeBound();
@@ -1003,7 +1003,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     ArrayBracketPair arrayBracketPair;
     List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     name = SimpleName();
-                          begin=token();
+                          begin=jpToken();
     label_13:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1016,7 +1016,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         break label_13;
       }
       arrayBracketPair = ArrayBracketPair(Origin.NAME);
-                                                                                                arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair);
+                                                                                                  arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair);
     }
         if(storeTokens) {
             name.setTokenRange(name.getTokenRange().get().withEnd(token()));
@@ -1091,7 +1091,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression val;
     JavaToken begin;
     jj_consume_token(LBRACE);
-       begin=token();
+       begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
     case BYTE:
@@ -1139,7 +1139,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     case PLUS:
     case MINUS:
       val = VariableInitializer();
-                                                       values = add(values, val);
+                                                         values = add(values, val);
       label_14:
       while (true) {
         if (jj_2_10(2)) {
@@ -1149,7 +1149,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         }
         jj_consume_token(COMMA);
         val = VariableInitializer();
-                                                                                                                                     values = add(values, val);
+                                                                                                                                       values = add(values, val);
       }
       break;
     default:
@@ -1523,7 +1523,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       ;
     }
     jj_consume_token(LBRACE);
-        blockBegin=token();
+        blockBegin=jpToken();
     if (jj_2_13(2147483647)) {
       exConsInv = ExplicitConstructorInvocation();
     } else {
@@ -1653,7 +1653,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATIC:
       jj_consume_token(STATIC);
-               isStatic = true; begin=token();
+               isStatic = true; begin=jpToken();
       break;
     default:
       jj_la1[53] = jj_gen;
@@ -1827,7 +1827,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken begin;
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     name = SimpleName();
-                       begin=token();
+                       begin=jpToken();
     if (jj_2_20(2)) {
       typeArgs = TypeArguments();
     } else {
@@ -1961,7 +1961,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken begin;
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     jj_consume_token(HOOK);
-        begin=token();
+        begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case EXTENDS:
     case SUPER:
@@ -2679,11 +2679,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
         jj_consume_token(PLUS);
-              op = UnaryExpr.Operator.PLUS; begin=token();
+              op = UnaryExpr.Operator.PLUS; begin=jpToken();
         break;
       case MINUS:
         jj_consume_token(MINUS);
-              op = UnaryExpr.Operator.MINUS; begin=token();
+              op = UnaryExpr.Operator.MINUS; begin=jpToken();
         break;
       default:
         jj_la1[86] = jj_gen;
@@ -2748,9 +2748,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression ret;
     JavaToken begin = INVALID;
     jj_consume_token(INCR);
-        begin=token();
+        begin=jpToken();
     ret = UnaryExpression();
-                                                  ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_INCREMENT);
+                                                    ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_INCREMENT);
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
@@ -2759,9 +2759,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression ret;
     JavaToken begin;
     jj_consume_token(DECR);
-        begin=token();
+        begin=jpToken();
     ret = UnaryExpression();
-                                                  ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_DECREMENT);
+                                                    ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_DECREMENT);
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
@@ -2776,11 +2776,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case TILDE:
         jj_consume_token(TILDE);
-                  op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token();
+                  op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=jpToken();
         break;
       case BANG:
         jj_consume_token(BANG);
-                  op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token();
+                  op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=jpToken();
         break;
       default:
         jj_la1[88] = jj_gen;
@@ -2884,7 +2884,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<AnnotationExpr> annotations;
     NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
     jj_consume_token(LPAREN);
-       begin=token();
+       begin=jpToken();
     annotations = Annotations();
     if (jj_2_30(2)) {
       primitiveType = PrimitiveType(annotations);
@@ -3084,7 +3084,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       break;
     case LPAREN:
       jj_consume_token(LPAREN);
-             begin=token();
+             begin=jpToken();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case RPAREN:
         jj_consume_token(RPAREN);
@@ -3224,7 +3224,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         case TRANSITIVE:
         case IDENTIFIER:
           name = SimpleName();
-                                begin=token();
+                                begin=jpToken();
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case LPAREN:
             args = Arguments();
@@ -3496,7 +3496,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken begin = INVALID;
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     jj_consume_token(NEW);
-            if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);}
+            if(scope==null) {begin=jpToken();} else {begin = orIfInvalid(begin, scope);}
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LT:
       typeArgs = TypeArguments();
@@ -3574,7 +3574,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     while (true) {
       annotations = Annotations();
       jj_consume_token(LBRACKET);
-              arrayCreationLevelStart = annotations.isEmpty() ? token() : orIfInvalid(arrayCreationLevelStart, annotations.get(0));
+              arrayCreationLevelStart = annotations.isEmpty() ? jpToken() : orIfInvalid(arrayCreationLevelStart, annotations.get(0));
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case BOOLEAN:
       case BYTE:
@@ -3761,7 +3761,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression msg = null;
     JavaToken begin;
     jj_consume_token(ASSERT);
-            begin=token();
+            begin=jpToken();
     check = Expression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case COLON:
@@ -3782,7 +3782,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Statement stmt;
     JavaToken begin;
     label = SimpleName();
-                        begin=token();
+                        begin=jpToken();
     jj_consume_token(COLON);
     stmt = Statement();
     {if (true) return new LabeledStmt(range(begin, token()), label, stmt);}
@@ -3793,7 +3793,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     jj_consume_token(LBRACE);
-         begin=token();
+         begin=jpToken();
     try {
       stmts = Statements();
       jj_consume_token(RBRACE);
@@ -4111,7 +4111,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<SwitchEntry> entries = emptyNodeList() ;
     JavaToken begin;
     jj_consume_token(SWITCH);
-            begin=token();
+            begin=jpToken();
     jj_consume_token(LPAREN);
     selector = Expression();
     jj_consume_token(RPAREN);
@@ -4141,7 +4141,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<SwitchEntry> entries = emptyNodeList();
     JavaToken begin;
     jj_consume_token(SWITCH);
-            begin=token();
+            begin=jpToken();
     jj_consume_token(LPAREN);
     selector = Expression();
     jj_consume_token(RPAREN);
@@ -4176,9 +4176,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CASE:
       jj_consume_token(CASE);
-                begin=token();
+                begin=jpToken();
       label = ConditionalExpression();
-                                                                  labels = add(labels, label);
+                                                                    labels = add(labels, label);
       label_46:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4196,7 +4196,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       break;
     case _DEFAULT:
       jj_consume_token(_DEFAULT);
-                   begin=token();
+                   begin=jpToken();
       break;
     default:
       jj_la1[131] = jj_gen;
@@ -4295,7 +4295,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Statement elseStmt = null;
     JavaToken begin;
     jj_consume_token(IF);
-        begin=token();
+        begin=jpToken();
     jj_consume_token(LPAREN);
     condition = Expression();
     jj_consume_token(RPAREN);
@@ -4320,7 +4320,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Statement body;
     JavaToken begin;
     jj_consume_token(WHILE);
-           begin=token();
+           begin=jpToken();
     jj_consume_token(LPAREN);
     condition = Expression();
     jj_consume_token(RPAREN);
@@ -4334,7 +4334,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Statement body;
     JavaToken begin;
     jj_consume_token(DO);
-        begin=token();
+        begin=jpToken();
     body = Statement();
     jj_consume_token(WHILE);
     jj_consume_token(LPAREN);
@@ -4353,7 +4353,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Statement body;
     JavaToken begin;
     jj_consume_token(FOR);
-         begin=token();
+         begin=jpToken();
     jj_consume_token(LPAREN);
     if (jj_2_45(2147483647)) {
       varExpr = VariableDeclarationExpression();
@@ -4697,7 +4697,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     SimpleName label = null;
     JavaToken begin;
     jj_consume_token(BREAK);
-           begin=token();
+           begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ENUM:
     case STRICTFP:
@@ -4728,7 +4728,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression value;
     JavaToken begin;
     jj_consume_token(YIELD);
-           begin=token();
+           begin=jpToken();
     value = Expression();
     jj_consume_token(SEMICOLON);
     {if (true) return new YieldStmt(range(begin, token()), value);}
@@ -4739,7 +4739,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     SimpleName label = null;
     JavaToken begin;
     jj_consume_token(CONTINUE);
-              begin=token();
+              begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ENUM:
     case STRICTFP:
@@ -4770,7 +4770,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression expr = null;
     JavaToken begin;
     jj_consume_token(RETURN);
-            begin=token();
+            begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
     case BYTE:
@@ -4831,7 +4831,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression expr;
     JavaToken begin;
     jj_consume_token(THROW);
-           begin=token();
+           begin=jpToken();
     expr = Expression();
     jj_consume_token(SEMICOLON);
     {if (true) return new ThrowStmt(range(begin, token()),expr);}
@@ -4843,7 +4843,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     BlockStmt body;
     JavaToken begin;
     jj_consume_token(SYNCHRONIZED);
-                  begin=token();
+                  begin=jpToken();
     jj_consume_token(LPAREN);
     expr = Expression();
     jj_consume_token(RPAREN);
@@ -4868,7 +4868,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken paramEnd;
     Type type;
     jj_consume_token(TRY);
-         begin=token();
+         begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAREN:
       resources = ResourceSpecification();
@@ -4889,7 +4889,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         break label_48;
       }
       jj_consume_token(CATCH);
-                       catchBegin=token();
+                       catchBegin=jpToken();
       jj_consume_token(LPAREN);
       exceptModifier = Modifiers();
                                                  typesBegin = exceptModifier.begin;
@@ -4910,7 +4910,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
                                                                exceptionTypes.add(exceptionType);
       }
       exceptId = VariableDeclaratorId();
-                                                  paramEnd = token();
+                                                  paramEnd = jpToken();
       jj_consume_token(RPAREN);
       catchBlock = Block();
                   if (exceptionTypes.size() > 1) {
@@ -5078,7 +5078,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken begin;
     Expression memberVal;
     jj_consume_token(AT);
-          begin=token();
+          begin=jpToken();
     name = Name();
     if (jj_2_51(2147483647)) {
       jj_consume_token(LPAREN);
@@ -5145,7 +5145,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression value;
     JavaToken begin;
     name = SimpleName();
-                          begin=token();
+                          begin=jpToken();
     jj_consume_token(ASSIGN);
     value = MemberValue();
       {if (true) return new MemberValuePair(range(begin, token()),name, value);}
@@ -5222,7 +5222,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression member;
     JavaToken begin;
     jj_consume_token(LBRACE);
-       begin=token();
+       begin=jpToken();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
     case BYTE:
@@ -5516,30 +5516,30 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     JavaToken transitiveExceptionalToken;
     if (jj_2_57(2147483647)) {
       jj_consume_token(REQUIRES);
-                    begin=token();
+                    begin=jpToken();
       jj_consume_token(TRANSITIVE);
-                                                  transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);
+                                                    transitiveExceptionalToken=jpToken(); setTokenKind(IDENTIFIER);
       jj_consume_token(SEMICOLON);
-                                                                                                                      directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));
+                                                                                                                          directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case REQUIRES:
         jj_consume_token(REQUIRES);
-                    begin=token();
+                    begin=jpToken();
         modifiers = Modifiers();
         name = Name();
         jj_consume_token(SEMICOLON);
-                                                                           directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);
+                                                                             directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);
         break;
       case EXPORTS:
         jj_consume_token(EXPORTS);
-                   begin=token();
+                   begin=jpToken();
         name = Name();
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case TO:
           jj_consume_token(TO);
           tmpName = Name();
-                                                                     names.add(tmpName);
+                                                                       names.add(tmpName);
           label_55:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -5552,7 +5552,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
             }
             jj_consume_token(COMMA);
             tmpName = Name();
-                                                                                                              names.add(tmpName);
+                                                                                                                names.add(tmpName);
           }
           break;
         default:
@@ -5560,17 +5560,17 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           ;
         }
         jj_consume_token(SEMICOLON);
-                                                                                                                                             directive=new ModuleExportsDirective(range(begin, token()), name, names);
+                                                                                                                                               directive=new ModuleExportsDirective(range(begin, token()), name, names);
         break;
       case OPENS:
         jj_consume_token(OPENS);
-                 begin=token();
+                 begin=jpToken();
         name = Name();
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case TO:
           jj_consume_token(TO);
           tmpName = Name();
-                                                                   names.add(tmpName);
+                                                                     names.add(tmpName);
           label_56:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -5583,7 +5583,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
             }
             jj_consume_token(COMMA);
             tmpName = Name();
-                                                                                                            names.add(tmpName);
+                                                                                                              names.add(tmpName);
           }
           break;
         default:
@@ -5591,22 +5591,22 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           ;
         }
         jj_consume_token(SEMICOLON);
-                                                                                                                                           directive=new ModuleOpensDirective(range(begin, token()), name, names);
+                                                                                                                                             directive=new ModuleOpensDirective(range(begin, token()), name, names);
         break;
       case USES:
         jj_consume_token(USES);
-                 begin=token();
+                 begin=jpToken();
         name = Name();
         jj_consume_token(SEMICOLON);
-                                                  directive=new ModuleUsesDirective(range(begin, token()), name);
+                                                    directive=new ModuleUsesDirective(range(begin, token()), name);
         break;
       case PROVIDES:
         jj_consume_token(PROVIDES);
-                     begin=token();
+                     begin=jpToken();
         name = Name();
         jj_consume_token(WITH);
         tmpName = Name();
-                                                                        names.add(tmpName);
+                                                                          names.add(tmpName);
         label_57:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -5619,10 +5619,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           }
           jj_consume_token(COMMA);
           tmpName = Name();
-                                                                                                                  names.add(tmpName);
+                                                                                                                    names.add(tmpName);
         }
         jj_consume_token(SEMICOLON);
-                                                                                                                                                directive=new ModuleProvidesDirective(range(begin, token()), name, names);
+                                                                                                                                                  directive=new ModuleProvidesDirective(range(begin, token()), name, names);
         break;
       default:
         jj_la1[164] = jj_gen;
@@ -6324,14 +6324,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_167() {
-    if (jj_scan_token(VOID)) return true;
-    return false;
-  }
-
   private boolean jj_3R_343() {
     if (jj_scan_token(COLON)) return true;
     if (jj_3R_92()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_167() {
+    if (jj_scan_token(VOID)) return true;
     return false;
   }
 
@@ -7632,14 +7632,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_191() {
-    if (jj_3R_223()) return true;
-    return false;
-  }
-
   private boolean jj_3_10() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_80()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_191() {
+    if (jj_3R_223()) return true;
     return false;
   }
 
@@ -7981,11 +7981,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_378() {
-    if (jj_3R_119()) return true;
-    return false;
-  }
-
   private boolean jj_3R_342() {
     if (jj_3R_80()) return true;
     Token xsp;
@@ -7993,6 +7988,11 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3_10()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  private boolean jj_3R_378() {
+    if (jj_3R_119()) return true;
     return false;
   }
 
@@ -8351,6 +8351,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_326() {
+    if (jj_3R_90()) return true;
+    return false;
+  }
+
   private boolean jj_3_7() {
     Token xsp;
     xsp = jj_scanpos;
@@ -8366,11 +8371,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     if (jj_3R_92()) return true;
     if (jj_scan_token(RPAREN)) return true;
     if (jj_3R_123()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_326() {
-    if (jj_3R_90()) return true;
     return false;
   }
 
@@ -8677,6 +8677,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_424() {
+    if (jj_scan_token(ELSE)) return true;
+    if (jj_3R_196()) return true;
+    return false;
+  }
+
   private boolean jj_3R_178() {
     if (jj_3R_90()) return true;
     Token xsp;
@@ -8687,12 +8693,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_428() {
     if (jj_scan_token(PLUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_424() {
-    if (jj_scan_token(ELSE)) return true;
-    if (jj_3R_196()) return true;
     return false;
   }
 

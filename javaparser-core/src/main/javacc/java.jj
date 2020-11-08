@@ -100,7 +100,7 @@ import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
     /* Returns the JavaParser specific token type of the last matched token */
-    JavaToken token() {
+    JavaToken jpToken() {
         return token.javaToken;
     }
 
@@ -810,7 +810,7 @@ PackageDeclaration PackageDeclaration():
 }
 {
   annotations = Annotations()
-  "package" {begin = token();}  name = Name() ";"
+  "package" {begin = jpToken();}  name = Name() ";"
   { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
@@ -823,7 +823,7 @@ ImportDeclaration ImportDeclaration():
     JavaToken begin;
 }
 {
-    "import" {begin = token();}
+    "import" {begin = jpToken();}
     [ "static" { isStatic = true; } ]
     name = Name()
     [ "." "*" { isAsterisk = true; } ] ";"
@@ -1009,7 +1009,7 @@ TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations):
     JavaToken begin;
 }
 {
-   name = SimpleName() { begin=token(); } [ typeBound = TypeBound() ]
+   name = SimpleName() { begin=jpToken(); } [ typeBound = TypeBound() ]
    { return new TypeParameter(range(begin, token()), name, typeBound, annotations); }
 }
 
@@ -1102,7 +1102,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
 }
 {
-    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() { begin=jpToken();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     {
         if(storeTokens) {
             name.setTokenRange(name.getTokenRange().get().withEnd(token()));
@@ -1131,7 +1131,7 @@ ArrayInitializerExpr ArrayInitializer():
     JavaToken begin;
 }
 {
-  "{" {begin=token();} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
+  "{" {begin=jpToken();} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
   { return new ArrayInitializerExpr(range(begin, token()), values); }
 }
 
@@ -1287,7 +1287,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   // Modifiers matched in the caller
   name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, token()); } parameters = Parameters() [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
   ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })* ]
-  "{" { blockBegin=token(); }
+  "{" { blockBegin=jpToken(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
   "}"
@@ -1344,7 +1344,7 @@ InitializerDeclaration InitializerDeclaration():
     boolean isStatic = false;
 }
 {
-  [ "static" { isStatic = true; begin=token();} ]
+  [ "static" { isStatic = true; begin=jpToken();} ]
   body = Block() {begin = orIfInvalid(begin, body);}
   { return new InitializerDeclaration(range(begin, token()), isStatic, body); }
 }
@@ -1425,7 +1425,7 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  name = SimpleName() {begin=token();}
+  name = SimpleName() {begin=jpToken();}
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
       ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, firstAnnotations);
@@ -1479,7 +1479,7 @@ WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations):
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-   "?" {begin=token();}
+   "?" {begin=jpToken();}
    [
         "extends" annotations = Annotations() ext = ReferenceType(annotations)
     |
@@ -1806,8 +1806,8 @@ Expression UnaryExpression():
     |
       ret = PreDecrementExpression()
     |
-      ( "+" { op = UnaryExpr.Operator.PLUS; begin=token();} |
-        "-" { op = UnaryExpr.Operator.MINUS; begin=token();}
+      ( "+" { op = UnaryExpr.Operator.PLUS; begin=jpToken();} |
+        "-" { op = UnaryExpr.Operator.MINUS; begin=jpToken();}
       ) ret = UnaryExpression()
       {
         ret = new UnaryExpr(range(begin, token()), ret, op);
@@ -1824,7 +1824,7 @@ Expression PreIncrementExpression():
     JavaToken begin = INVALID;
 }
 {
-  "++" {begin=token();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
+  "++" {begin=jpToken();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
   { return ret; }
 }
 
@@ -1834,7 +1834,7 @@ Expression PreDecrementExpression():
     JavaToken begin;
 }
 {
-  "--" {begin=token();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
+  "--" {begin=jpToken();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
   { return ret; }
 }
 
@@ -1847,8 +1847,8 @@ Expression UnaryExpressionNotPlusMinus():
 {
     (
         (
-            "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token(); } |
-            "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token(); }
+            "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=jpToken(); } |
+            "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=jpToken(); }
         ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, op); }
         | LOOKAHEAD( CastExpression() )
             ret = CastExpression()
@@ -1886,7 +1886,7 @@ Expression CastExpression():
     NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
 }
 {
-  "(" {begin=token();}
+  "(" {begin=jpToken();}
   annotations = Annotations()
   (
         LOOKAHEAD(2)
@@ -1968,7 +1968,7 @@ Expression PrimaryPrefix():
         }
       )
     |
-        "(" {begin=token();}
+        "(" {begin=jpToken();}
         (
             ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
         | LOOKAHEAD(Parameter())
@@ -1993,7 +1993,7 @@ Expression PrimaryPrefix():
         }
 
     |
-          name = SimpleName() { begin=token(); }
+          name = SimpleName() { begin=jpToken(); }
           [ args = Arguments() { hasArgs=true; } ]
           {
               if (hasArgs) {
@@ -2141,7 +2141,7 @@ Expression AllocationExpression(Expression scope):
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-    "new" { if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);} }
+    "new" { if(scope==null) {begin=jpToken();} else {begin = orIfInvalid(begin, scope);} }
 
     [ typeArgs = TypeArguments() ]
     annotations = Annotations()
@@ -2173,7 +2173,7 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 {
     ( LOOKAHEAD(2)
         annotations = Annotations()
-        "[" { arrayCreationLevelStart = annotations.isEmpty() ? token() : orIfInvalid(arrayCreationLevelStart, annotations.get(0)); }
+        "[" { arrayCreationLevelStart = annotations.isEmpty() ? jpToken() : orIfInvalid(arrayCreationLevelStart, annotations.get(0)); }
         (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; }
         "]" { levelRanges.add(range(arrayCreationLevelStart, token())); }
     )+
@@ -2242,7 +2242,7 @@ AssertStmt AssertStatement():
     JavaToken begin;
 }
 {
-  "assert" {begin=token();} check = Expression() [ ":" msg = Expression() ] ";"
+  "assert" {begin=jpToken();} check = Expression() [ ":" msg = Expression() ] ";"
   { return new AssertStmt(range(begin, token()), check, msg);  }
 }
 
@@ -2253,7 +2253,7 @@ LabeledStmt LabeledStatement():
     JavaToken begin;
 }
 {
-  label = SimpleName() {begin=token();} ":" stmt = Statement()
+  label = SimpleName() {begin=jpToken();} ":" stmt = Statement()
   { return new LabeledStmt(range(begin, token()), label, stmt); }
 }
 
@@ -2263,7 +2263,7 @@ BlockStmt Block():
     JavaToken begin;
 }
 {
-    "{" {begin=token();}
+    "{" {begin=jpToken();}
     try {
         stmts = Statements()
         "}"
@@ -2380,7 +2380,7 @@ SwitchStmt SwitchStatement():
     JavaToken begin;
 }
 {
-  "switch" {begin=token();} "(" selector = Expression() ")" "{"
+  "switch" {begin=jpToken();} "(" selector = Expression() ")" "{"
     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
   "}"
 
@@ -2395,7 +2395,7 @@ SwitchExpr SwitchExpression():
     JavaToken begin;
 }
 {
-  "switch" {begin=token();} "(" selector = Expression() ")" "{"
+  "switch" {begin=jpToken();} "(" selector = Expression() ")" "{"
     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
   "}"
 
@@ -2414,10 +2414,10 @@ SwitchEntry SwitchEntry():
 }
 {
     (
-        "case" {begin=token();} label = ConditionalExpression() { labels = add(labels, label); }
+        "case" {begin=jpToken();} label = ConditionalExpression() { labels = add(labels, label); }
         ( "," label = ConditionalExpression()  { labels = add(labels, label); } )*
     |
-        "default" {begin=token();}
+        "default" {begin=jpToken();}
     )
     (
         ":" stmts = Statements() { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts); }
@@ -2459,7 +2459,7 @@ IfStmt IfStatement():
     JavaToken begin;
 }
 {
-  "if" {begin=token();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
+  "if" {begin=jpToken();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
   {
       return new IfStmt(range(begin, token()), condition, thenStmt, elseStmt);
   }
@@ -2472,7 +2472,7 @@ WhileStmt WhileStatement():
     JavaToken begin;
 }
 {
-  "while" {begin=token();} "(" condition = Expression() ")" body = Statement()
+  "while" {begin=jpToken();} "(" condition = Expression() ")" body = Statement()
   { return new WhileStmt(range(begin, token()),condition, body); }
 }
 
@@ -2483,7 +2483,7 @@ DoStmt DoStatement():
     JavaToken begin;
 }
 {
-  "do" {begin=token();} body = Statement() "while" "(" condition = Expression() ")" ";"
+  "do" {begin=jpToken();} body = Statement() "while" "(" condition = Expression() ")" ";"
   { return new DoStmt(range(begin, token()),body, condition); }
 }
 
@@ -2497,7 +2497,7 @@ Statement ForStatement():
     JavaToken begin;
 }
 {
-  "for" {begin=token();} "("
+  "for" {begin=jpToken();} "("
 
   (
       LOOKAHEAD(VariableDeclarationExpression() ":")
@@ -2558,7 +2558,7 @@ BreakStmt BreakStatement():
     JavaToken begin;
 }
 {
-  "break" {begin=token();} [ label = SimpleName() ] ";"
+  "break" {begin=jpToken();} [ label = SimpleName() ] ";"
   { return new BreakStmt(range(begin, token()), label); }
 }
 
@@ -2568,7 +2568,7 @@ YieldStmt YieldStatement():
     JavaToken begin;
 }
 {
-  "yield" {begin=token();} value = Expression() ";"
+  "yield" {begin=jpToken();} value = Expression() ";"
   { return new YieldStmt(range(begin, token()), value); }
 }
 
@@ -2578,7 +2578,7 @@ ContinueStmt ContinueStatement():
     JavaToken begin;
 }
 {
-  "continue" {begin=token();} [ label = SimpleName() ] ";"
+  "continue" {begin=jpToken();} [ label = SimpleName() ] ";"
   { return new ContinueStmt(range(begin, token()), label); }
 }
 
@@ -2588,7 +2588,7 @@ ReturnStmt ReturnStatement():
     JavaToken begin;
 }
 {
-  "return" {begin=token();} [ expr = Expression() ] ";"
+  "return" {begin=jpToken();} [ expr = Expression() ] ";"
   { return new ReturnStmt(range(begin, token()),expr); }
 }
 
@@ -2598,7 +2598,7 @@ ThrowStmt ThrowStatement():
     JavaToken begin;
 }
 {
-  "throw" {begin=token();} expr = Expression() ";"
+  "throw" {begin=jpToken();} expr = Expression() ";"
   { return new ThrowStmt(range(begin, token()),expr); }
 }
 
@@ -2609,7 +2609,7 @@ SynchronizedStmt SynchronizedStatement():
     JavaToken begin;
 }
 {
-  "synchronized" {begin=token();} "(" expr = Expression() ")" body = Block()
+  "synchronized" {begin=jpToken();} "(" expr = Expression() ")" body = Block()
   { return new SynchronizedStmt(range(begin, token()),expr, body); }
 }
 
@@ -2631,17 +2631,17 @@ TryStmt TryStatement():
     Type type;
 }
 {
-  "try" {begin=token();}
+  "try" {begin=jpToken();}
   (resources = ResourceSpecification())?
   tryBlock = Block()
   (
         LOOKAHEAD(2)
           (
-              "catch" {catchBegin=token();}
+              "catch" {catchBegin=jpToken();}
               "(" exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
             exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
               ( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
-              exceptId = VariableDeclaratorId() { paramEnd = token(); }
+              exceptId = VariableDeclaratorId() { paramEnd = jpToken(); }
               ")"
 
               catchBlock = Block()
@@ -2744,7 +2744,7 @@ AnnotationExpr Annotation():
     Expression memberVal;
 }
 {
-    "@" { begin=token(); } name = Name()
+    "@" { begin=jpToken(); } name = Name()
     (
         LOOKAHEAD( "(" ( Identifier() "=" | ")" ))
         "(" [ pairs = MemberValuePairs() ] ")"
@@ -2776,7 +2776,7 @@ MemberValuePair MemberValuePair():
     JavaToken begin;
 }
 {
-    name = SimpleName() { begin=token();} "=" value = MemberValue()
+    name = SimpleName() { begin=jpToken();} "=" value = MemberValue()
     { return new MemberValuePair(range(begin, token()),name, value); }
 }
 
@@ -2802,7 +2802,7 @@ Expression  MemberValueArrayInitializer():
     JavaToken begin;
 }
 {
-  "{" {begin=token();}
+  "{" {begin=jpToken();}
   (    member = MemberValue() { ret.add(member); } ( LOOKAHEAD(2) "," member = MemberValue() { ret.add(member); } )*  )? [ "," ]
   "}"
   { return new ArrayInitializerExpr(range(begin, token()),ret); }
@@ -2904,17 +2904,17 @@ ModuleDirective ModuleDirective():
     (
         // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'"
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
-        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));}
+        <REQUIRES> {begin=jpToken();} <TRANSITIVE> {transitiveExceptionalToken=jpToken(); setTokenKind(IDENTIFIER);} ";" {directive=new ModuleRequiresDirective(range(begin, token()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText()));}
     |
-        <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);}
+        <REQUIRES> {begin=jpToken();} modifiers=Modifiers() name=Name() ";" {directive=new ModuleRequiresDirective(range(begin, token()), modifiers.modifiers, name);}
     |
-        <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleExportsDirective(range(begin, token()), name, names);}
+        <EXPORTS> {begin=jpToken();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleExportsDirective(range(begin, token()), name, names);}
     |
-        <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleOpensDirective(range(begin, token()), name, names);}
+        <OPENS> {begin=jpToken();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {directive=new ModuleOpensDirective(range(begin, token()), name, names);}
     |
-        <USES> { begin=token();} name=Name() ";" {directive=new ModuleUsesDirective(range(begin, token()), name);}
+        <USES> { begin=jpToken();} name=Name() ";" {directive=new ModuleUsesDirective(range(begin, token()), name);}
     |
-        <PROVIDES> { begin=token();} name=Name() <WITH> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name() {names.add(tmpName);}  )* ";" {directive=new ModuleProvidesDirective(range(begin, token()), name, names);}
+        <PROVIDES> { begin=jpToken();} name=Name() <WITH> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name() {names.add(tmpName);}  )* ";" {directive=new ModuleProvidesDirective(range(begin, token()), name, names);}
     )
     { return directive; }
 }
