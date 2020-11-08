@@ -206,9 +206,9 @@ abstract class GeneratedJavaParserBase {
     }
 
     /**
-     * Quickly create a new NodeList
+     * Quickly create a new, empty, NodeList
      */
-    <T extends Node> NodeList<T> emptyList() {
+    <T extends Node> NodeList<T> emptyNodeList() {
         return new NodeList<>();
     }
 

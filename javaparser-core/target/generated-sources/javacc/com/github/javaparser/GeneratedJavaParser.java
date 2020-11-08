@@ -75,10 +75,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Program structuring syntax follows.
  */
   final public CompilationUnit CompilationUnit() throws ParseException {
-    PackageDeclaration pakage = null;
-    NodeList<ImportDeclaration> imports = emptyList();
+    PackageDeclaration packageDeclaration = null;
+    NodeList<ImportDeclaration> imports = emptyNodeList();
     ImportDeclaration in = null;
-    NodeList<TypeDeclaration<?>> types = emptyList();
+    NodeList<TypeDeclaration<?>> types = emptyNodeList();
     ModifierHolder modifier;
     TypeDeclaration<?> tn = null;
     ModuleDeclaration module = null;
@@ -93,7 +93,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         jj_consume_token(SEMICOLON);
       }
       if (jj_2_2(2147483647)) {
-        pakage = PackageDeclaration();
+        packageDeclaration = PackageDeclaration();
       } else {
         ;
       }
@@ -198,7 +198,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         jj_consume_token(-1);
         throw new ParseException();
       }
-          {if (true) return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);}
+          {if (true) return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);}
     } catch (ParseException e) {
         recover(EOF, e);
         final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
@@ -343,10 +343,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier) throws ParseException {
     boolean isInterface = false;
     SimpleName name;
-    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyList());
-    NodeList<ClassOrInterfaceType> extList = emptyList();
-    NodeList<ClassOrInterfaceType> impList = emptyList();
-    NodeList<BodyDeclaration<?>> members = emptyList();
+    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
+    NodeList<ClassOrInterfaceType> extList = emptyNodeList();
+    NodeList<ClassOrInterfaceType> impList = emptyNodeList();
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
     JavaToken begin = modifier.begin;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CLASS:
@@ -443,11 +443,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 
   final public EnumDeclaration EnumDeclaration(ModifierHolder modifier) throws ParseException {
     SimpleName name;
-    NodeList<ClassOrInterfaceType> impList = emptyList();
+    NodeList<ClassOrInterfaceType> impList = emptyNodeList();
     EnumConstantDeclaration entry;
-    NodeList<EnumConstantDeclaration> entries = emptyList();
+    NodeList<EnumConstantDeclaration> entries = emptyNodeList();
     BodyDeclaration<?> member;
-    NodeList<BodyDeclaration<?>> members = emptyList();
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
     JavaToken begin = modifier.begin;
     jj_consume_token(ENUM);
              begin = orIfInvalid(begin, token());
@@ -621,8 +621,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     AnnotationExpr ann;
     SimpleName name;
-    NodeList<Expression> args = emptyList();
-    NodeList<BodyDeclaration<?>> classBody = emptyList();
+    NodeList<Expression> args = emptyNodeList();
+    NodeList<BodyDeclaration<?>> classBody = emptyNodeList();
     JavaToken begin = INVALID;
 
     label_8:
@@ -697,7 +697,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 
   final public TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations) throws ParseException {
     SimpleName name;
-    NodeList<ClassOrInterfaceType> typeBound  = emptyList();
+    NodeList<ClassOrInterfaceType> typeBound  = emptyNodeList();
     JavaToken begin;
     name = SimpleName();
                          begin=token();
@@ -714,7 +714,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<ClassOrInterfaceType> TypeBound() throws ParseException {
-    NodeList<ClassOrInterfaceType> ret = emptyList();
+    NodeList<ClassOrInterfaceType> ret = emptyNodeList();
     ClassOrInterfaceType cit;
     jj_consume_token(EXTENDS);
     cit = AnnotatedClassOrInterfaceType();
@@ -738,7 +738,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<BodyDeclaration<?>> ClassOrInterfaceBody() throws ParseException {
-    NodeList<BodyDeclaration<?>> ret = emptyList();
+    NodeList<BodyDeclaration<?>> ret = emptyNodeList();
     BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_11:
@@ -962,9 +962,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
     VariableDeclarator val;
     // Modifiers are already matched in the caller
-        partialType = Type(emptyList());
+        partialType = Type(emptyNodeList());
     val = VariableDeclarator(partialType);
-                                                                            variables.add(val);
+                                                                                variables.add(val);
     label_12:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1092,7 +1092,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ArrayInitializerExpr ArrayInitializer() throws ParseException {
-    NodeList<Expression> values = emptyList();
+    NodeList<Expression> values = emptyNodeList();
     Expression val;
     JavaToken begin;
     jj_consume_token(LBRACE);
@@ -1175,13 +1175,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public MethodDeclaration MethodDeclaration(ModifierHolder modifier) throws ParseException {
-    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     Type type;
     SimpleName name;
-    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     ArrayBracketPair arrayBracketPair;
     List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
-    NodeList<ReferenceType> throws_ = emptyList();
+    NodeList<ReferenceType> throws_ = emptyNodeList();
     BlockStmt body = null;
     NodeList<AnnotationExpr> annotations;
     JavaToken begin = modifier.begin;
@@ -1197,8 +1197,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     }
     annotations = Annotations();
                                   modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations));
-    type = ResultType(emptyList());
-                                     begin = orIfInvalid(begin, type);
+    type = ResultType(emptyNodeList());
+                                         begin = orIfInvalid(begin, type);
     name = SimpleName();
     parameters = Parameters();
     label_15:
@@ -1275,7 +1275,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Pair<NodeList<Parameter>, ReceiverParameter> Parameters() throws ParseException {
-    NodeList<Parameter> ret = emptyList();
+    NodeList<Parameter> ret = emptyNodeList();
     Parameter par;
     ReceiverParameter rp = null;
     jj_consume_token(LPAREN);
@@ -1412,7 +1412,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<Parameter> ret = null;
     Pair<SimpleName, List<ArrayBracketPair>> id;
     id = VariableDeclaratorId();
-                                      ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a));
+                                      ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a));
     label_19:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1425,7 +1425,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       }
       jj_consume_token(COMMA);
       id = VariableDeclaratorId();
-                                           ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a));
+                                           ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a));
     }
       {if (true) return ret;}
     throw new Error("Missing return statement in function");
@@ -1436,15 +1436,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Type partialType;
     boolean isVarArg = false;
     Pair<SimpleName, List<ArrayBracketPair>> id;
-    NodeList<AnnotationExpr> varArgAnnotations = emptyList();
+    NodeList<AnnotationExpr> varArgAnnotations = emptyNodeList();
     modifier = Modifiers();
-    partialType = Type(emptyList());
+    partialType = Type(emptyNodeList());
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AT:
     case ELLIPSIS:
       varArgAnnotations = Annotations();
       jj_consume_token(ELLIPSIS);
-                                                                                                       isVarArg = true;
+                                                                                                           isVarArg = true;
       break;
     default:
       jj_la1[46] = jj_gen;
@@ -1459,9 +1459,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public ReceiverParameter ReceiverParameter() throws ParseException {
     Type partialType;
     Name id;
-    NodeList<AnnotationExpr> annotations = emptyList();
+    NodeList<AnnotationExpr> annotations = emptyNodeList();
     annotations = Annotations();
-    partialType = Type(emptyList());
+    partialType = Type(emptyNodeList());
     id = ReceiverParameterId();
         {if (true) return new ReceiverParameter(range(partialType, token()), annotations, partialType, id);}
     throw new Error("Missing return statement in function");
@@ -1481,12 +1481,12 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier) throws ParseException {
-    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     SimpleName name;
-    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
-    NodeList<ReferenceType> throws_ = emptyList();
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
+    NodeList<ReferenceType> throws_ = emptyNodeList();
     ExplicitConstructorInvocationStmt exConsInv = null;
-    NodeList<Statement> stmts = emptyList();
+    NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
@@ -1635,7 +1635,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Statement> Statements() throws ParseException {
-    NodeList<Statement> ret = emptyList();
+    NodeList<Statement> ret = emptyNodeList();
     Statement stmt;
     label_21:
     while (true) {
@@ -1773,7 +1773,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations) throws ParseException {
     JavaToken begin = INVALID;
     ReferenceType elementType;
-    NodeList<ReferenceType> elements = emptyList();
+    NodeList<ReferenceType> elements = emptyNodeList();
     elementType = ReferenceType(annotations);
                                                begin = orIfInvalid(begin, elementType); elements = add(elements, elementType);
     jj_consume_token(BIT_AND);
@@ -2887,7 +2887,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     PrimitiveType primitiveType;
     JavaToken begin = INVALID;
     NodeList<AnnotationExpr> annotations;
-    NodeList<ReferenceType> typesOfMultiCast = emptyList();
+    NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
     jj_consume_token(LPAREN);
        begin=token();
     annotations = Annotations();
@@ -2990,8 +2990,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Expression ret = null;
     SimpleName name;
     RangedList<Type> typeArgs = new RangedList<Type>(null);
-    NodeList<Expression> args = emptyList();
-    NodeList<Parameter> params = emptyList();
+    NodeList<Expression> args = emptyNodeList();
+    NodeList<Parameter> params = emptyNodeList();
     boolean hasArgs = false;
     boolean isLambda = false;
     Type type;
@@ -3041,7 +3041,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
             if (hasArgs) {
                   ret = new MethodCallExpr(range(ret, token()), ret, typeArgs.list, name, args);
             } else {
-                  ret = new FieldAccessExpr(range(ret, token()), ret, emptyList(), name);
+                  ret = new FieldAccessExpr(range(ret, token()), ret, emptyNodeList(), name);
             }
         break;
       case DOUBLECOLON:
@@ -3170,10 +3170,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     default:
       jj_la1[104] = jj_gen;
       if (jj_2_35(2147483647)) {
-        type = ResultType(emptyList());
+        type = ResultType(emptyNodeList());
         jj_consume_token(DOT);
         jj_consume_token(CLASS);
-                                                    ret = new ClassExpr(range(type, token()), type);
+                                                        ret = new ClassExpr(range(type, token()), type);
       } else if (jj_2_36(2147483647)) {
         type = AnnotatedType();
         jj_consume_token(DOUBLECOLON);
@@ -3280,7 +3280,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public Expression PrimarySuffixWithoutSuper(Expression scope) throws ParseException {
     Expression ret;
     RangedList<Type> typeArgs = new RangedList<Type>(null);
-    NodeList<Expression> args = emptyList();
+    NodeList<Expression> args = emptyNodeList();
     boolean hasArgs = false;
     SimpleName name;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3411,7 +3411,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> Arguments() throws ParseException {
-    NodeList<Expression> ret = emptyList();
+    NodeList<Expression> ret = emptyNodeList();
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
@@ -3470,7 +3470,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> ArgumentList() throws ParseException {
-    NodeList<Expression> ret = emptyList();
+    NodeList<Expression> ret = emptyNodeList();
     Expression expr;
     expr = Expression();
                         ret.add(expr);
@@ -3570,7 +3570,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public ArrayCreationExpr ArrayCreation(JavaToken begin, Type type) throws ParseException {
     Expression expr = null;
     ArrayInitializerExpr arrayInitializerExpr = null;
-    NodeList<Expression> inits = emptyList();
+    NodeList<Expression> inits = emptyNodeList();
     List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     JavaToken arrayCreationLevelStart = INVALID;
@@ -3795,7 +3795,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public BlockStmt Block() throws ParseException {
-    NodeList<Statement> stmts = emptyList();
+    NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     jj_consume_token(LBRACE);
          begin=token();
@@ -3906,9 +3906,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
     VariableDeclarator var;
     modifier = Modifiers();
-    partialType = Type(emptyList());
+    partialType = Type(emptyNodeList());
     var = VariableDeclarator(partialType);
-                                                                                                   variables.add(var);
+                                                                                                       variables.add(var);
     label_43:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3921,7 +3921,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       }
       jj_consume_token(COMMA);
       var = VariableDeclarator(partialType);
-                                                                                                                                                                       variables.add(var);
+                                                                                                                                                                           variables.add(var);
     }
         JavaToken begin=orIfInvalid(modifier.begin, partialType);
         {if (true) return new VariableDeclarationExpr(range(begin, token()), modifier.modifiers, modifier.annotations, variables);}
@@ -4113,7 +4113,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public SwitchStmt SwitchStatement() throws ParseException {
     Expression selector;
     SwitchEntry entry;
-    NodeList<SwitchEntry> entries = emptyList();
+    NodeList<SwitchEntry> entries = emptyNodeList() ;
     JavaToken begin;
     jj_consume_token(SWITCH);
             begin=token();
@@ -4143,7 +4143,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public SwitchExpr SwitchExpression() throws ParseException {
     Expression selector;
     SwitchEntry entry;
-    NodeList<SwitchEntry> entries = emptyList();
+    NodeList<SwitchEntry> entries = emptyNodeList();
     JavaToken begin;
     jj_consume_token(SWITCH);
             begin=token();
@@ -4172,8 +4172,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 
   final public SwitchEntry SwitchEntry() throws ParseException {
     Expression label = null;
-    NodeList<Expression> labels = emptyList();
-    NodeList<Statement> stmts = emptyList();
+    NodeList<Expression> labels = emptyNodeList();
+    NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     SwitchEntry ret;
     Expression expression = null;
@@ -4353,8 +4353,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public Statement ForStatement() throws ParseException {
     VariableDeclarationExpr varExpr = null;
     Expression expr = null;
-    NodeList<Expression> init = emptyList();
-    NodeList<Expression> update = emptyList();
+    NodeList<Expression> init = emptyNodeList();
+    NodeList<Expression> update = emptyNodeList();
     Statement body;
     JavaToken begin;
     jj_consume_token(FOR);
@@ -4858,14 +4858,14 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public TryStmt TryStatement() throws ParseException {
-    NodeList<Expression> resources = emptyList();
+    NodeList<Expression> resources = emptyNodeList();
     BlockStmt tryBlock;
     BlockStmt finallyBlock = null;
-    NodeList<CatchClause> catchs = emptyList();
+    NodeList<CatchClause> catchs = emptyNodeList();
     BlockStmt catchBlock;
     ModifierHolder exceptModifier;
     ReferenceType exceptionType;
-    NodeList<ReferenceType> exceptionTypes = emptyList();
+    NodeList<ReferenceType> exceptionTypes = emptyNodeList();
     Pair<SimpleName, List<ArrayBracketPair>> exceptId;
     JavaToken begin;
     JavaToken catchBegin;
@@ -4898,8 +4898,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       jj_consume_token(LPAREN);
       exceptModifier = Modifiers();
                                                  typesBegin = exceptModifier.begin;
-      exceptionType = ReferenceType(emptyList());
-                                                         exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token());
+      exceptionType = ReferenceType(emptyNodeList());
+                                                             exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token());
       label_49:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4923,9 +4923,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
                   } else {
                       type = (Type)exceptionTypes.get(0);
                   }
-                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
                   catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-                  exceptionTypes = emptyList();
+                  exceptionTypes = emptyNodeList();
     }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case FINALLY:
@@ -5079,7 +5079,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   final public AnnotationExpr Annotation() throws ParseException {
     AnnotationExpr ret;
     Name name;
-    NodeList<MemberValuePair> pairs = emptyList();
+    NodeList<MemberValuePair> pairs = emptyNodeList();
     JavaToken begin;
     Expression memberVal;
     jj_consume_token(AT);
@@ -5223,7 +5223,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression MemberValueArrayInitializer() throws ParseException {
-    NodeList<Expression> ret = emptyList();
+    NodeList<Expression> ret = emptyNodeList();
     Expression member;
     JavaToken begin;
     jj_consume_token(LBRACE);
@@ -5308,7 +5308,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 /* Annotation Types. */
   final public AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier) throws ParseException {
     SimpleName name;
-    NodeList<BodyDeclaration<?>> members = emptyList();
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
     JavaToken begin = modifier.begin;
     jj_consume_token(AT);
         begin=orIfInvalid(begin, token());
@@ -5320,7 +5320,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<BodyDeclaration<?>> AnnotationTypeBody() throws ParseException {
-    NodeList<BodyDeclaration<?>> ret = emptyList();
+    NodeList<BodyDeclaration<?>> ret = emptyNodeList();
     BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_54:
@@ -5484,7 +5484,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     Type type;
     SimpleName name;
     Expression defaultVal = null;
-    type = Type(emptyList());
+    type = Type(emptyNodeList());
     name = SimpleName();
     jj_consume_token(LPAREN);
     jj_consume_token(RPAREN);
@@ -5515,7 +5515,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     ModifierHolder modifiers;
     Name name;
     Name tmpName;
-    NodeList<Name> names=emptyList();
+    NodeList<Name> names=emptyNodeList();
     JavaToken begin;
     ModuleDirective directive;
     JavaToken transitiveExceptionalToken;
@@ -6324,139 +6324,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     finally { jj_save(57, xla); }
   }
 
-  private boolean jj_3R_59() {
-    if (jj_3R_88()) return true;
-    if (jj_scan_token(PACKAGE)) return true;
-    if (jj_3R_82()) return true;
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_358() {
-    if (jj_3R_123()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_357() {
-    if (jj_3R_92()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_333() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_357()) {
-    jj_scanpos = xsp;
-    if (jj_3R_358()) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_76() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(71)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(65)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(66)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(67)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(68)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(69)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(70)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(72)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(73)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(74)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(26)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(51)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(64)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(93)) return true;
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    return false;
-  }
-
-  private boolean jj_3_2() {
-    if (jj_3R_59()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_287() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_90() {
-    if (jj_3R_76()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_111() {
-    if (jj_3R_110()) return true;
-    if (jj_3R_77()) return true;
-    if (jj_3R_114()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_170()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  private boolean jj_3_43() {
-    if (jj_3R_111()) return true;
-    return false;
-  }
-
-  private boolean jj_3_23() {
-    if (jj_scan_token(DOT)) return true;
-    if (jj_3R_76()) return true;
-    return false;
-  }
-
-  private boolean jj_3_42() {
-    if (jj_3R_110()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(19)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(39)) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_133() {
-    if (jj_3R_196()) return true;
-    return false;
-  }
-
   private boolean jj_3R_82() {
     if (jj_3R_76()) return true;
     Token xsp;
@@ -6955,13 +6822,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_321() {
-    if (jj_3R_320()) return true;
+  private boolean jj_3R_454() {
+    if (jj_3R_455()) return true;
     return false;
   }
 
-  private boolean jj_3R_454() {
-    if (jj_3R_455()) return true;
+  private boolean jj_3R_321() {
+    if (jj_3R_320()) return true;
     return false;
   }
 
@@ -7341,6 +7208,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_165() {
+    if (jj_3R_88()) return true;
+    if (jj_scan_token(ELLIPSIS)) return true;
+    return false;
+  }
+
   private boolean jj_3R_269() {
     if (jj_scan_token(LONG_LITERAL)) return true;
     return false;
@@ -7354,12 +7227,6 @@ after they matched their desired input, which will lead to unexpected behaviour
       if (jj_3R_417()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(RBRACE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_165() {
-    if (jj_3R_88()) return true;
-    if (jj_scan_token(ELLIPSIS)) return true;
     return false;
   }
 
@@ -9347,6 +9214,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_170() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_114()) return true;
+    return false;
+  }
+
   private boolean jj_3R_264() {
     if (jj_3R_311()) return true;
     return false;
@@ -9360,12 +9233,6 @@ after they matched their desired input, which will lead to unexpected behaviour
   private boolean jj_3R_383() {
     if (jj_3R_92()) return true;
     if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_170() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_114()) return true;
     return false;
   }
 
@@ -9859,6 +9726,139 @@ after they matched their desired input, which will lead to unexpected behaviour
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_258()) jj_scanpos = xsp;
+    return false;
+  }
+
+  private boolean jj_3R_59() {
+    if (jj_3R_88()) return true;
+    if (jj_scan_token(PACKAGE)) return true;
+    if (jj_3R_82()) return true;
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_358() {
+    if (jj_3R_123()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_357() {
+    if (jj_3R_92()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_333() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_357()) {
+    jj_scanpos = xsp;
+    if (jj_3R_358()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_76() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(71)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(65)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(66)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(67)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(68)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(69)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(70)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(72)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(73)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(74)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(26)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(51)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(64)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(93)) return true;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_3R_59()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_287() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_90() {
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_111() {
+    if (jj_3R_110()) return true;
+    if (jj_3R_77()) return true;
+    if (jj_3R_114()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_170()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  private boolean jj_3_43() {
+    if (jj_3R_111()) return true;
+    return false;
+  }
+
+  private boolean jj_3_23() {
+    if (jj_scan_token(DOT)) return true;
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3_42() {
+    if (jj_3R_110()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(19)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(39)) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_133() {
+    if (jj_3R_196()) return true;
     return false;
   }
 
