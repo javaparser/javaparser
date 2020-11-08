@@ -19,17 +19,39 @@
  * GNU Lesser General Public License for more details.
  */
 
-// Options available are spread across:
-// - https://javacc.github.io/javacc/documentation/cli.html
-// - https://javacc.github.io/javacc/documentation/grammar.html#options
+/*
+ * -- FILE STRUCTURE --
+ * https://javacc.github.io/javacc/documentation/grammar.html#file-structure
+ *
+ * {@code
+ * javacc_input ::= javacc_options
+ *                  "PARSER_BEGIN" "(" <IDENTIFIER> ")"
+ *                  java_compilation_unit
+ *                  "PARSER_END" "(" <IDENTIFIER> ")"
+ *                  ( production )*
+ *                  <EOF>
+ * }
+ */
+
+
+/*
+* Available options are spread across:
+* - https://javacc.github.io/javacc/documentation/cli.html
+* - https://javacc.github.io/javacc/documentation/grammar.html#options
+*/
 options {
-  STATIC=false;
-  COMMON_TOKEN_ACTION=true;
-  JDK_VERSION = "1.8";
-  TOKEN_EXTENDS ="TokenBase";
-  JAVA_TEMPLATE_TYPE = "modern";
+    STATIC=false;
+    COMMON_TOKEN_ACTION=true;
+    JDK_VERSION = "1.8";
+    TOKEN_EXTENDS ="TokenBase";
+    JAVA_TEMPLATE_TYPE = "modern";
 }
 
+
+/********************************************************
+ * This is the template for the generated file.         *
+ * GeneratedJavaParser.java                             *
+ ********************************************************/
 PARSER_BEGIN(GeneratedJavaParser)
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
@@ -52,6 +74,7 @@ PARSER_BEGIN(GeneratedJavaParser)
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser;
+
 import java.io.*;
 import java.util.*;
 import com.github.javaparser.ast.*;
@@ -91,8 +114,33 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
         return token_source;
     }
 }
-
 PARSER_END(GeneratedJavaParser)
+
+
+/*
+ * https://javacc.github.io/javacc/documentation/grammar.html#production
+ *
+ * {@code
+ * production ::= javacode_production
+ *              | regular_expr_production
+ *              | bnf_production
+ *              | token_manager_decls
+
+ * }
+ */
+
+
+/***************************************************************************
+ * TOKEN DEFINITIONS START HERE                                            *
+ * https://javacc.github.io/javacc/documentation/grammar.html#regexpr_kind *
+ *                                                                         *
+ * {@code                                                                  *
+ * regexpr_kind ::= "TOKEN"                                                *
+ *                | "SPECIAL_TOKEN"                                        *
+ *                | "SKIP"                                                 *
+ *                | "MORE"                                                 *
+ * }                                                                       *
+ ***************************************************************************/
 
 /* WHITE SPACE */
 
@@ -644,9 +692,17 @@ TOKEN :
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
 
-/*****************************************
- * THE JAVA LANGUAGE GRAMMAR STARTS HERE *
- *****************************************/
+
+/*************************************************************************************************************
+ * THE JAVA LANGUAGE GRAMMAR STARTS HERE                                                                     *
+ *                                                                                                           *
+ * https://javacc.github.io/javacc/documentation/grammar.html#bnf-production                                 *
+ * {@code                                                                                                    *
+ * bnf_production ::= java_access_modifier java_return_type java_identifier "(" java_parameter_list ")" ":"  *
+ *                    java_block                                                                             *
+ *                    "{" expansion_choices "}"                                                              *
+ * }                                                                                                         *
+ *************************************************************************************************************/
 
 /*
  * Program structuring syntax follows.
