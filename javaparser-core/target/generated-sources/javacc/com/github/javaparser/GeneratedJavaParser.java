@@ -67,13 +67,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Program structuring syntax follows.
  */
   final public CompilationUnit CompilationUnit() throws ParseException {
-        PackageDeclaration pakage = null;
-        NodeList<ImportDeclaration> imports = emptyList();
-        ImportDeclaration in = null;
-        NodeList<TypeDeclaration<?>> types = emptyList();
+    PackageDeclaration pakage = null;
+    NodeList<ImportDeclaration> imports = emptyList();
+    ImportDeclaration in = null;
+    NodeList<TypeDeclaration<?>> types = emptyList();
     ModifierHolder modifier;
-        TypeDeclaration<?> tn = null;
-        ModuleDeclaration module = null;
+    TypeDeclaration<?> tn = null;
+    ModuleDeclaration module = null;
     try {
       label_1:
       while (true) {
@@ -201,9 +201,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public PackageDeclaration PackageDeclaration() throws ParseException {
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-        Name name;
-        JavaToken begin;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    Name name;
+    JavaToken begin;
     annotations = Annotations();
     jj_consume_token(PACKAGE);
              begin = token();
@@ -251,9 +251,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * better error messages.
  */
   final public ModifierHolder Modifiers() throws ParseException {
-        JavaToken begin = INVALID;
+    JavaToken begin = INVALID;
     NodeList<Modifier> modifiers = new NodeList<Modifier>();
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     AnnotationExpr ann;
     label_3:
     while (true) {
@@ -380,7 +380,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       ;
     }
     members = ClassOrInterfaceBody();
-          {if (true) return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members);}
+      {if (true) return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members);}
     throw new Error("Missing return statement in function");
   }
 
@@ -434,13 +434,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public EnumDeclaration EnumDeclaration(ModifierHolder modifier) throws ParseException {
-        SimpleName name;
+    SimpleName name;
     NodeList<ClassOrInterfaceType> impList = emptyList();
-        EnumConstantDeclaration entry;
-        NodeList<EnumConstantDeclaration> entries = emptyList();
-        BodyDeclaration<?> member;
+    EnumConstantDeclaration entry;
+    NodeList<EnumConstantDeclaration> entries = emptyList();
+    BodyDeclaration<?> member;
     NodeList<BodyDeclaration<?>> members = emptyList();
-        JavaToken begin = modifier.begin;
+    JavaToken begin = modifier.begin;
     jj_consume_token(ENUM);
              begin = orIfInvalid(begin, token());
     name = SimpleName();
@@ -610,12 +610,12 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public EnumConstantDeclaration EnumConstantDeclaration() throws ParseException {
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-        AnnotationExpr ann;
-        SimpleName name;
-        NodeList<Expression> args = emptyList();
-        NodeList<BodyDeclaration<?>> classBody = emptyList();
-        JavaToken begin = INVALID;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    AnnotationExpr ann;
+    SimpleName name;
+    NodeList<Expression> args = emptyList();
+    NodeList<BodyDeclaration<?>> classBody = emptyList();
+    JavaToken begin = INVALID;
 
     label_8:
     while (true) {
@@ -658,9 +658,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * The normal case is that it contains TypeParameters, like <A, B, C>.
  */
   final public RangedList<TypeParameter> TypeParameters() throws ParseException {
-        RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new NodeList<TypeParameter>());
-        TypeParameter tp;
-        NodeList<AnnotationExpr> annotations;
+    RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new NodeList<TypeParameter>());
+    TypeParameter tp;
+    NodeList<AnnotationExpr> annotations;
     jj_consume_token(LT);
          ret.beginAt(token());
     annotations = Annotations();
@@ -688,9 +688,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations) throws ParseException {
-        SimpleName name;
-        NodeList<ClassOrInterfaceType> typeBound  = emptyList();
-        JavaToken begin;
+    SimpleName name;
+    NodeList<ClassOrInterfaceType> typeBound  = emptyList();
+    JavaToken begin;
     name = SimpleName();
                          begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -706,8 +706,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<ClassOrInterfaceType> TypeBound() throws ParseException {
-        NodeList<ClassOrInterfaceType> ret = emptyList();
-        ClassOrInterfaceType cit;
+    NodeList<ClassOrInterfaceType> ret = emptyList();
+    ClassOrInterfaceType cit;
     jj_consume_token(EXTENDS);
     cit = AnnotatedClassOrInterfaceType();
                                                      ret.add(cit);
@@ -730,8 +730,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<BodyDeclaration<?>> ClassOrInterfaceBody() throws ParseException {
-        NodeList<BodyDeclaration<?>> ret = emptyList();
-        BodyDeclaration member;
+    NodeList<BodyDeclaration<?>> ret = emptyList();
+    BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_11:
     while (true) {
@@ -886,7 +886,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       case LT:
         // Just get all the modifiers out of the way. If you want to do
               // more checks, pass the modifiers down to the member
-                  modifier = Modifiers();
+              modifier = Modifiers();
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case CLASS:
         case INTERFACE:
@@ -950,9 +950,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public FieldDeclaration FieldDeclaration(ModifierHolder modifier) throws ParseException {
-        Type partialType;
-        NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
-        VariableDeclarator val;
+    Type partialType;
+    NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
+    VariableDeclarator val;
     // Modifiers are already matched in the caller
         partialType = Type(emptyList());
     val = VariableDeclarator(partialType);
@@ -978,8 +978,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public VariableDeclarator VariableDeclarator(Type partialType) throws ParseException {
-        Pair<SimpleName, List<ArrayBracketPair>> id;
-        Expression init = null;
+    Pair<SimpleName, List<ArrayBracketPair>> id;
+    Expression init = null;
     id = VariableDeclaratorId();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSIGN:
@@ -995,10 +995,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId() throws ParseException {
-        SimpleName name;
-        JavaToken begin;
-        ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
+    SimpleName name;
+    JavaToken begin;
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     name = SimpleName();
                           begin=token();
     label_13:
@@ -1023,7 +1023,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression VariableInitializer() throws ParseException {
-        Expression ret;
+    Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
       ret = ArrayInitializer();
@@ -1084,9 +1084,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ArrayInitializerExpr ArrayInitializer() throws ParseException {
-        NodeList<Expression> values = emptyList();
-        Expression val;
-        JavaToken begin;
+    NodeList<Expression> values = emptyList();
+    Expression val;
+    JavaToken begin;
     jj_consume_token(LBRACE);
        begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1167,17 +1167,17 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public MethodDeclaration MethodDeclaration(ModifierHolder modifier) throws ParseException {
-        RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-        Type type;
-        SimpleName name;
-        Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
-        ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
-        NodeList<ReferenceType> throws_ = emptyList();
-        BlockStmt body = null;
-        NodeList<AnnotationExpr> annotations;
-        JavaToken begin = modifier.begin;
-        ReferenceType throwType;
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
+    Type type;
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
+    NodeList<ReferenceType> throws_ = emptyList();
+    BlockStmt body = null;
+    NodeList<AnnotationExpr> annotations;
+    JavaToken begin = modifier.begin;
+    ReferenceType throwType;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LT:
       typeParameters = TypeParameters();
@@ -1249,8 +1249,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ReferenceType AnnotatedReferenceType() throws ParseException {
-        NodeList<AnnotationExpr> annotations;
-        ReferenceType type;
+    NodeList<AnnotationExpr> annotations;
+    ReferenceType type;
     annotations = Annotations();
     type = ReferenceType(annotations);
       {if (true) return type;}
@@ -1258,8 +1258,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Type AnnotatedType() throws ParseException {
-        NodeList<AnnotationExpr> annotations;
-        Type type;
+    NodeList<AnnotationExpr> annotations;
+    Type type;
     annotations = Annotations();
     type = Type(annotations);
       {if (true) return type;}
@@ -1267,9 +1267,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Pair<NodeList<Parameter>, ReceiverParameter> Parameters() throws ParseException {
-        NodeList<Parameter> ret = emptyList();
-        Parameter par;
-        ReceiverParameter rp = null;
+    NodeList<Parameter> ret = emptyList();
+    Parameter par;
+    ReceiverParameter rp = null;
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ABSTRACT:
@@ -1404,7 +1404,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     NodeList<Parameter> ret = null;
     Pair<SimpleName, List<ArrayBracketPair>> id;
     id = VariableDeclaratorId();
-                                          ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a));
+                                      ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyList(), new UnknownType(), false, emptyList(), id.a));
     label_19:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1424,11 +1424,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Parameter Parameter() throws ParseException {
-        ModifierHolder modifier;
-        Type partialType;
-        boolean isVarArg = false;
-        Pair<SimpleName, List<ArrayBracketPair>> id;
-        NodeList<AnnotationExpr> varArgAnnotations = emptyList();
+    ModifierHolder modifier;
+    Type partialType;
+    boolean isVarArg = false;
+    Pair<SimpleName, List<ArrayBracketPair>> id;
+    NodeList<AnnotationExpr> varArgAnnotations = emptyList();
     modifier = Modifiers();
     partialType = Type(emptyList());
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1449,9 +1449,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ReceiverParameter ReceiverParameter() throws ParseException {
-        Type partialType;
-        Name id;
-        NodeList<AnnotationExpr> annotations = emptyList();
+    Type partialType;
+    Name id;
+    NodeList<AnnotationExpr> annotations = emptyList();
     annotations = Annotations();
     partialType = Type(emptyList());
     id = ReceiverParameterId();
@@ -1460,7 +1460,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Name ReceiverParameterId() throws ParseException {
-        Name ret = null;
+    Name ret = null;
     if (jj_2_12(2147483647)) {
       ret = Name();
       jj_consume_token(DOT);
@@ -1473,15 +1473,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier) throws ParseException {
-        RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-        SimpleName name;
-        Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
-        NodeList<ReferenceType> throws_ = emptyList();
-        ExplicitConstructorInvocationStmt exConsInv = null;
-        NodeList<Statement> stmts = emptyList();
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
+    NodeList<ReferenceType> throws_ = emptyList();
+    ExplicitConstructorInvocationStmt exConsInv = null;
+    NodeList<Statement> stmts = emptyList();
     JavaToken begin = modifier.begin;
-        JavaToken blockBegin = INVALID;
-        ReferenceType throwType;
+    JavaToken blockBegin = INVALID;
+    ReferenceType throwType;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LT:
       typeParameters = TypeParameters();
@@ -1528,31 +1528,31 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     }
     stmts = Statements();
     jj_consume_token(RBRACE);
-        if (exConsInv != null) {
-                stmts = prepend(stmts, exConsInv);
-        }
-        {if (true) return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);}
+      if (exConsInv != null) {
+          stmts = prepend(stmts, exConsInv);
+      }
+      {if (true) return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);}
     throw new Error("Missing return statement in function");
   }
 
   final public ExplicitConstructorInvocationStmt ExplicitConstructorInvocation() throws ParseException {
-        boolean isThis = false;
-        NodeList<Expression> args;
-        Expression expr = null;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        JavaToken begin = INVALID;
+    boolean isThis = false;
+    NodeList<Expression> args;
+    Expression expr = null;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    JavaToken begin = INVALID;
     if (jj_2_15(2147483647)) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LT:
         typeArgs = TypeArguments();
-                                         begin=typeArgs.range.getBegin();
+                                     begin=typeArgs.range.getBegin();
         break;
       default:
         jj_la1[50] = jj_gen;
         ;
       }
       jj_consume_token(THIS);
-                   begin = orIfInvalid(begin, token()); isThis = true;
+               begin = orIfInvalid(begin, token()); isThis = true;
       args = Arguments();
       jj_consume_token(SEMICOLON);
     } else {
@@ -1598,21 +1598,21 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         if (jj_2_14(2147483647)) {
           expr = PrimaryExpressionWithoutSuperSuffix();
           jj_consume_token(DOT);
-                  begin = orIfInvalid(begin, expr);
+            begin = orIfInvalid(begin, expr);
         } else {
           ;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case LT:
           typeArgs = TypeArguments();
-                                         begin = orIfInvalid(begin, typeArgs.range.getBegin());
+                                     begin = orIfInvalid(begin, typeArgs.range.getBegin());
           break;
         default:
           jj_la1[51] = jj_gen;
           ;
         }
         jj_consume_token(SUPER);
-                   begin = orIfInvalid(begin, token());
+               begin = orIfInvalid(begin, token());
         args = Arguments();
         jj_consume_token(SEMICOLON);
         break;
@@ -1627,8 +1627,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Statement> Statements() throws ParseException {
-        NodeList<Statement> ret = emptyList();
-        Statement stmt;
+    NodeList<Statement> ret = emptyList();
+    Statement stmt;
     label_21:
     while (true) {
       if (jj_2_16(2)) {
@@ -1637,16 +1637,16 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         break label_21;
       }
       stmt = BlockStatement();
-                                                 ret = add(ret, stmt);
+                                             ret = add(ret, stmt);
     }
-          {if (true) return ret;}
+      {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public InitializerDeclaration InitializerDeclaration() throws ParseException {
-        BlockStmt body;
-        JavaToken begin = INVALID;
-        boolean isStatic = false;
+    BlockStmt body;
+    JavaToken begin = INVALID;
+    boolean isStatic = false;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATIC:
       jj_consume_token(STATIC);
@@ -1666,7 +1666,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Type, name and expression syntax follows.
  */
   final public Type Type(NodeList<AnnotationExpr> annotations) throws ParseException {
-        Type ret;
+    Type ret;
     if (jj_2_17(2)) {
       ret = ReferenceType(annotations);
     } else {
@@ -1692,9 +1692,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations) throws ParseException {
-        Type type;
-        ArrayBracketPair arrayBracketPair;
-        List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
+    Type type;
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
     case BYTE:
@@ -1752,7 +1752,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ArrayBracketPair ArrayBracketPair(Origin origin) throws ParseException {
-        NodeList<AnnotationExpr> annotations;
+    NodeList<AnnotationExpr> annotations;
     JavaToken begin = INVALID;
     annotations = Annotations();
     jj_consume_token(LBRACKET);
@@ -1763,9 +1763,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations) throws ParseException {
-        JavaToken begin = INVALID;
-        ReferenceType elementType;
-        NodeList<ReferenceType> elements = emptyList();
+    JavaToken begin = INVALID;
+    ReferenceType elementType;
+    NodeList<ReferenceType> elements = emptyList();
     elementType = ReferenceType(annotations);
                                                begin = orIfInvalid(begin, elementType); elements = add(elements, elementType);
     jj_consume_token(BIT_AND);
@@ -1809,8 +1809,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ClassOrInterfaceType AnnotatedClassOrInterfaceType() throws ParseException {
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-        ClassOrInterfaceType cit;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    ClassOrInterfaceType cit;
     annotations = Annotations();
     cit = ClassOrInterfaceType(annotations);
       {if (true) return cit;}
@@ -1818,11 +1818,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotations) throws ParseException {
-        ClassOrInterfaceType ret;
-        SimpleName name;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        JavaToken begin;
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    ClassOrInterfaceType ret;
+    SimpleName name;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    JavaToken begin;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     name = SimpleName();
                        begin=token();
     if (jj_2_20(2)) {
@@ -1847,7 +1847,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       } else {
         ;
       }
-            ret = new ClassOrInterfaceType(range(begin, token()), ret, name, typeArgs.list, annotations);
+        ret = new ClassOrInterfaceType(range(begin, token()), ret, name, typeArgs.list, annotations);
         typeArgs = new RangedList<Type>(null);
     }
     {if (true) return ret;}
@@ -1855,8 +1855,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public RangedList<Type> TypeArguments() throws ParseException {
-        RangedList<Type> ret = new RangedList<Type>(new NodeList<Type>());
-        Type type;
+    RangedList<Type> ret = new RangedList<Type>(new NodeList<Type>());
+    Type type;
     jj_consume_token(LT);
            ret.beginAt(token());
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1912,8 +1912,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Type TypeArgument() throws ParseException {
-        Type ret;
-        NodeList<AnnotationExpr> annotations;
+    Type ret;
+    NodeList<AnnotationExpr> annotations;
     annotations = Annotations();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
@@ -1953,10 +1953,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations) throws ParseException {
-        ReferenceType ext = null;
-        ReferenceType sup = null;
-        JavaToken begin;
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    ReferenceType ext = null;
+    ReferenceType sup = null;
+    JavaToken begin;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     jj_consume_token(HOOK);
         begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1988,7 +1988,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations) throws ParseException {
-        PrimitiveType ret;
+    PrimitiveType ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
       jj_consume_token(BOOLEAN);
@@ -2032,11 +2032,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Type ResultType(NodeList<AnnotationExpr> annotations) throws ParseException {
-        Type ret;
+    Type ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VOID:
       jj_consume_token(VOID);
-                   ret = new VoidType(tokenRange());
+               ret = new VoidType(tokenRange());
       break;
     case BOOLEAN:
     case BYTE:
@@ -2072,7 +2072,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Name Name() throws ParseException {
-        Name ret;
+    Name ret;
     Identifier();
                  ret = new Name(tokenRange(), null, token.image);
     label_27:
@@ -2157,11 +2157,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Expression syntax follows.
  */
   final public Expression Expression() throws ParseException {
-        Expression ret;
-        AssignExpr.Operator op;
-        Expression value;
-        Statement lambdaBody = null;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
+    Expression ret;
+    AssignExpr.Operator op;
+    Expression value;
+    Statement lambdaBody = null;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
     ret = ConditionalExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSIGN:
@@ -2251,7 +2251,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public AssignExpr.Operator AssignmentOperator() throws ParseException {
-        AssignExpr.Operator ret;
+    AssignExpr.Operator ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSIGN:
       jj_consume_token(ASSIGN);
@@ -2311,9 +2311,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression ConditionalExpression() throws ParseException {
-        Expression ret;
-        Expression left;
-        Expression right;
+    Expression ret;
+    Expression left;
+    Expression right;
     ret = ConditionalOrExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case HOOK:
@@ -2332,8 +2332,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression ConditionalOrExpression() throws ParseException {
-        Expression ret;
-        Expression right;
+    Expression ret;
+    Expression right;
     ret = ConditionalAndExpression();
     label_28:
     while (true) {
@@ -2354,8 +2354,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression ConditionalAndExpression() throws ParseException {
-        Expression ret;
-        Expression right;
+    Expression ret;
+    Expression right;
     ret = InclusiveOrExpression();
     label_29:
     while (true) {
@@ -2376,8 +2376,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression InclusiveOrExpression() throws ParseException {
-        Expression ret;
-        Expression right;
+    Expression ret;
+    Expression right;
     ret = ExclusiveOrExpression();
     label_30:
     while (true) {
@@ -2398,8 +2398,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression ExclusiveOrExpression() throws ParseException {
-        Expression ret;
-        Expression right;
+    Expression ret;
+    Expression right;
     ret = AndExpression();
     label_31:
     while (true) {
@@ -2420,8 +2420,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression AndExpression() throws ParseException {
-        Expression ret;
-        Expression right;
+    Expression ret;
+    Expression right;
     ret = EqualityExpression();
     label_32:
     while (true) {
@@ -2442,9 +2442,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression EqualityExpression() throws ParseException {
-        Expression ret;
-        Expression right;
-        BinaryExpr.Operator op;
+    Expression ret;
+    Expression right;
+    BinaryExpr.Operator op;
     ret = InstanceOfExpression();
     label_33:
     while (true) {
@@ -2479,9 +2479,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression InstanceOfExpression() throws ParseException {
-        Expression ret;
-        ReferenceType type;
-        NodeList<AnnotationExpr> annotations;
+    Expression ret;
+    ReferenceType type;
+    NodeList<AnnotationExpr> annotations;
     ret = RelationalExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INSTANCEOF:
@@ -2498,9 +2498,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression RelationalExpression() throws ParseException {
-        Expression ret;
-        Expression right;
-        BinaryExpr.Operator op;
+    Expression ret;
+    Expression right;
+    BinaryExpr.Operator op;
     ret = ShiftExpression();
     label_34:
     while (true) {
@@ -2518,19 +2518,19 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LT:
         jj_consume_token(LT);
-                 op = BinaryExpr.Operator.LESS;
+               op = BinaryExpr.Operator.LESS;
         break;
       case GT:
         jj_consume_token(GT);
-                 op = BinaryExpr.Operator.GREATER;
+               op = BinaryExpr.Operator.GREATER;
         break;
       case LE:
         jj_consume_token(LE);
-                 op = BinaryExpr.Operator.LESS_EQUALS;
+               op = BinaryExpr.Operator.LESS_EQUALS;
         break;
       case GE:
         jj_consume_token(GE);
-                 op = BinaryExpr.Operator.GREATER_EQUALS;
+               op = BinaryExpr.Operator.GREATER_EQUALS;
         break;
       default:
         jj_la1[80] = jj_gen;
@@ -2538,16 +2538,16 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         throw new ParseException();
       }
       right = ShiftExpression();
-                                      ret = new BinaryExpr(range(ret, token()), ret, right, op);
+                                    ret = new BinaryExpr(range(ret, token()), ret, right, op);
     }
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression ShiftExpression() throws ParseException {
-        Expression ret;
-        Expression right;
-        BinaryExpr.Operator op;
+    Expression ret;
+    Expression right;
+    BinaryExpr.Operator op;
     ret = AdditiveExpression();
     label_35:
     while (true) {
@@ -2559,32 +2559,32 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LSHIFT:
         jj_consume_token(LSHIFT);
-                             op = BinaryExpr.Operator.LEFT_SHIFT;
+                           op = BinaryExpr.Operator.LEFT_SHIFT;
         break;
       default:
         jj_la1[81] = jj_gen;
         if (jj_2_26(1)) {
           RSIGNEDSHIFT();
-                             op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT;
+                           op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT;
         } else if (jj_2_27(1)) {
           RUNSIGNEDSHIFT();
-                             op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT;
+                           op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT;
         } else {
           jj_consume_token(-1);
           throw new ParseException();
         }
       }
       right = AdditiveExpression();
-                                         ret = new BinaryExpr(range(ret, token()), ret, right, op);
+                                       ret = new BinaryExpr(range(ret, token()), ret, right, op);
     }
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression AdditiveExpression() throws ParseException {
-        Expression ret;
-        Expression right;
-        BinaryExpr.Operator op;
+    Expression ret;
+    Expression right;
+    BinaryExpr.Operator op;
     ret = MultiplicativeExpression();
     label_36:
     while (true) {
@@ -2600,11 +2600,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
         jj_consume_token(PLUS);
-                op = BinaryExpr.Operator.PLUS;
+              op = BinaryExpr.Operator.PLUS;
         break;
       case MINUS:
         jj_consume_token(MINUS);
-                op = BinaryExpr.Operator.MINUS;
+              op = BinaryExpr.Operator.MINUS;
         break;
       default:
         jj_la1[83] = jj_gen;
@@ -2612,16 +2612,16 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         throw new ParseException();
       }
       right = MultiplicativeExpression();
-                                               ret = new BinaryExpr(range(ret, token()), ret, right, op);
+                                             ret = new BinaryExpr(range(ret, token()), ret, right, op);
     }
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression MultiplicativeExpression() throws ParseException {
-        Expression ret;
-        Expression right;
-        BinaryExpr.Operator op;
+    Expression ret;
+    Expression right;
+    BinaryExpr.Operator op;
     ret = UnaryExpression();
     label_37:
     while (true) {
@@ -2638,15 +2638,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case STAR:
         jj_consume_token(STAR);
-                op = BinaryExpr.Operator.MULTIPLY;
+              op = BinaryExpr.Operator.MULTIPLY;
         break;
       case SLASH:
         jj_consume_token(SLASH);
-                op = BinaryExpr.Operator.DIVIDE;
+              op = BinaryExpr.Operator.DIVIDE;
         break;
       case REM:
         jj_consume_token(REM);
-                op = BinaryExpr.Operator.REMAINDER;
+              op = BinaryExpr.Operator.REMAINDER;
         break;
       default:
         jj_la1[85] = jj_gen;
@@ -2654,16 +2654,16 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         throw new ParseException();
       }
       right = UnaryExpression();
-                                      ret = new BinaryExpr(range(ret, token()), ret, right, op);
+                                    ret = new BinaryExpr(range(ret, token()), ret, right, op);
     }
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression UnaryExpression() throws ParseException {
-        Expression ret;
-        UnaryExpr.Operator op;
-        JavaToken begin = INVALID;
+    Expression ret;
+    UnaryExpr.Operator op;
+    JavaToken begin = INVALID;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INCR:
       ret = PreIncrementExpression();
@@ -2676,11 +2676,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
         jj_consume_token(PLUS);
-                  op = UnaryExpr.Operator.PLUS; begin=token();
+              op = UnaryExpr.Operator.PLUS; begin=token();
         break;
       case MINUS:
         jj_consume_token(MINUS);
-                  op = UnaryExpr.Operator.MINUS; begin=token();
+              op = UnaryExpr.Operator.MINUS; begin=token();
         break;
       default:
         jj_la1[86] = jj_gen;
@@ -2742,8 +2742,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PreIncrementExpression() throws ParseException {
-        Expression ret;
-        JavaToken begin = INVALID;
+    Expression ret;
+    JavaToken begin = INVALID;
     jj_consume_token(INCR);
         begin=token();
     ret = UnaryExpression();
@@ -2753,8 +2753,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PreDecrementExpression() throws ParseException {
-        Expression ret;
-        JavaToken begin;
+    Expression ret;
+    JavaToken begin;
     jj_consume_token(DECR);
         begin=token();
     ret = UnaryExpression();
@@ -2764,20 +2764,20 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression UnaryExpressionNotPlusMinus() throws ParseException {
-        Expression ret;
-        UnaryExpr.Operator op;
-        JavaToken begin = INVALID;
+    Expression ret;
+    UnaryExpr.Operator op;
+    JavaToken begin = INVALID;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BANG:
     case TILDE:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case TILDE:
         jj_consume_token(TILDE);
-                              op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token();
+                  op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token();
         break;
       case BANG:
         jj_consume_token(BANG);
-                              op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token();
+                  op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token();
         break;
       default:
         jj_la1[88] = jj_gen;
@@ -2785,7 +2785,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         throw new ParseException();
       }
       ret = UnaryExpression();
-                                            ret = new UnaryExpr(range(begin, token()), ret, op);
+                                    ret = new UnaryExpr(range(begin, token()), ret, op);
       break;
     default:
       jj_la1[89] = jj_gen;
@@ -2842,13 +2842,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         }
       }
     }
-          {if (true) return ret;}
+      {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression PostfixExpression() throws ParseException {
-        Expression ret;
-        UnaryExpr.Operator op;
+    Expression ret;
+    UnaryExpr.Operator op;
     ret = PrimaryExpression();
     if (jj_2_29(2)) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -2874,12 +2874,12 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression CastExpression() throws ParseException {
-        Expression ret;
-        ReferenceType referenceType;
-        PrimitiveType primitiveType;
-        JavaToken begin = INVALID;
-        NodeList<AnnotationExpr> annotations;
-        NodeList<ReferenceType> typesOfMultiCast = emptyList();
+    Expression ret;
+    ReferenceType referenceType;
+    PrimitiveType primitiveType;
+    JavaToken begin = INVALID;
+    NodeList<AnnotationExpr> annotations;
+    NodeList<ReferenceType> typesOfMultiCast = emptyList();
     jj_consume_token(LPAREN);
        begin=token();
     annotations = Annotations();
@@ -2887,7 +2887,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       primitiveType = PrimitiveType(annotations);
       jj_consume_token(RPAREN);
       ret = UnaryExpression();
-                                                                                   ret = new CastExpr(range(begin, token()), primitiveType, ret);
+                                                                                 ret = new CastExpr(range(begin, token()), primitiveType, ret);
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case BOOLEAN:
@@ -2913,7 +2913,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       case TRANSITIVE:
       case IDENTIFIER:
         referenceType = ReferenceType(annotations);
-                                                       typesOfMultiCast = add(typesOfMultiCast, referenceType);
+                                                     typesOfMultiCast = add(typesOfMultiCast, referenceType);
         label_38:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -2926,15 +2926,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           }
           jj_consume_token(BIT_AND);
           referenceType = AnnotatedReferenceType();
-            typesOfMultiCast = add(typesOfMultiCast, referenceType);
+          typesOfMultiCast = add(typesOfMultiCast, referenceType);
         }
         jj_consume_token(RPAREN);
         ret = UnaryExpressionNotPlusMinus();
-            if (typesOfMultiCast.size() > 1) {
-                ret = new CastExpr(range(begin, token()), new IntersectionType(range(typesOfMultiCast.get(0), typesOfMultiCast.get(typesOfMultiCast.size() -1)), typesOfMultiCast), ret);
-            } else {
-                ret = new CastExpr(range(begin, token()), referenceType, ret);
-            }
+          if (typesOfMultiCast.size() > 1) {
+              ret = new CastExpr(range(begin, token()), new IntersectionType(range(typesOfMultiCast.get(0), typesOfMultiCast.get(typesOfMultiCast.size() -1)), typesOfMultiCast), ret);
+          } else {
+              ret = new CastExpr(range(begin, token()), referenceType, ret);
+          }
         break;
       default:
         jj_la1[93] = jj_gen;
@@ -2947,7 +2947,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PrimaryExpression() throws ParseException {
-        Expression ret;
+    Expression ret;
     ret = PrimaryPrefix();
     label_39:
     while (true) {
@@ -2963,7 +2963,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PrimaryExpressionWithoutSuperSuffix() throws ParseException {
-        Expression ret;
+    Expression ret;
     ret = PrimaryPrefix();
     label_40:
     while (true) {
@@ -2979,17 +2979,17 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PrimaryPrefix() throws ParseException {
-        Expression ret = null;
-        SimpleName name;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        NodeList<Expression> args = emptyList();
-        NodeList<Parameter> params = emptyList();
-        boolean hasArgs = false;
-        boolean isLambda = false;
-        Type type;
-        JavaToken begin;
-        Parameter p = null;
-        SimpleName id = null;
+    Expression ret = null;
+    SimpleName name;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    NodeList<Expression> args = emptyList();
+    NodeList<Parameter> params = emptyList();
+    boolean hasArgs = false;
+    boolean isLambda = false;
+    Type type;
+    JavaToken begin;
+    Parameter p = null;
+    SimpleName id = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case FALSE:
     case NULL:
@@ -3004,11 +3004,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       break;
     case THIS:
       jj_consume_token(THIS);
-                   ret = new ThisExpr(tokenRange(), null);
+               ret = new ThisExpr(tokenRange(), null);
       break;
     case SUPER:
       jj_consume_token(SUPER);
-                    ret = new SuperExpr(tokenRange(), null);
+                ret = new SuperExpr(tokenRange(), null);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case DOT:
         jj_consume_token(DOT);
@@ -3024,17 +3024,17 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case LPAREN:
           args = Arguments();
-                                hasArgs=true;
+                            hasArgs=true;
           break;
         default:
           jj_la1[95] = jj_gen;
           ;
         }
-                        if (hasArgs) {
-                                ret = new MethodCallExpr(range(ret, token()), ret, typeArgs.list, name, args);
-                        } else {
-                                ret = new FieldAccessExpr(range(ret, token()), ret, emptyList(), name);
-                        }
+            if (hasArgs) {
+                  ret = new MethodCallExpr(range(ret, token()), ret, typeArgs.list, name, args);
+            } else {
+                  ret = new FieldAccessExpr(range(ret, token()), ret, emptyList(), name);
+            }
         break;
       case DOUBLECOLON:
         jj_consume_token(DOUBLECOLON);
@@ -3071,7 +3071,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           jj_consume_token(-1);
           throw new ParseException();
         }
-                  ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
+          ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
         break;
       default:
         jj_la1[98] = jj_gen;
@@ -3165,7 +3165,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         type = ResultType(emptyList());
         jj_consume_token(DOT);
         jj_consume_token(CLASS);
-                                                        ret = new ClassExpr(range(type, token()), type);
+                                                    ret = new ClassExpr(range(type, token()), type);
       } else if (jj_2_36(2147483647)) {
         type = AnnotatedType();
         jj_consume_token(DOUBLECOLON);
@@ -3202,8 +3202,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           jj_consume_token(-1);
           throw new ParseException();
         }
-                  ret = new TypeExpr(range(type, type), type);
-                  ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
+          ret = new TypeExpr(range(type, type), type);
+          ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case ENUM:
@@ -3221,21 +3221,21 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         case TRANSITIVE:
         case IDENTIFIER:
           name = SimpleName();
-                                      begin=token();
+                                begin=token();
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case LPAREN:
             args = Arguments();
-                                       hasArgs=true;
+                                 hasArgs=true;
             break;
           default:
             jj_la1[103] = jj_gen;
             ;
           }
-                        if (hasArgs) {
-                                ret = new MethodCallExpr(range(begin, token()), null, null, name, args);
-                        } else {
-                                ret = new NameExpr(name);
-                        }
+              if (hasArgs) {
+                  ret = new MethodCallExpr(range(begin, token()), null, null, name, args);
+            } else {
+                  ret = new NameExpr(name);
+            }
           break;
         default:
           jj_la1[105] = jj_gen;
@@ -3249,7 +3249,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PrimarySuffix(Expression scope) throws ParseException {
-        Expression ret;
+    Expression ret;
     if (jj_2_37(2)) {
       ret = PrimarySuffixWithoutSuper(scope);
     } else {
@@ -3257,7 +3257,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       case DOT:
         jj_consume_token(DOT);
         jj_consume_token(SUPER);
-                      ret = new SuperExpr(range(scope, token()), scopeToName(scope));
+                    ret = new SuperExpr(range(scope, token()), scopeToName(scope));
         break;
       default:
         jj_la1[106] = jj_gen;
@@ -3270,18 +3270,18 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression PrimarySuffixWithoutSuper(Expression scope) throws ParseException {
-        Expression ret;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        NodeList<Expression> args = emptyList();
-        boolean hasArgs = false;
-        SimpleName name;
+    Expression ret;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    NodeList<Expression> args = emptyList();
+    boolean hasArgs = false;
+    SimpleName name;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case DOT:
       jj_consume_token(DOT);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case THIS:
         jj_consume_token(THIS);
-                         ret = new ThisExpr(range(scope, token()), scopeToName(scope));
+                 ret = new ThisExpr(range(scope, token()), scopeToName(scope));
         break;
       case NEW:
         ret = AllocationExpression(scope);
@@ -3301,17 +3301,17 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case LPAREN:
             args = Arguments();
-                                      hasArgs=true;
+                                hasArgs=true;
             break;
           default:
             jj_la1[108] = jj_gen;
             ;
           }
-                        if (hasArgs) {
-                                ret = new MethodCallExpr(range(scope, token()), scope, typeArgs.list, name, args);
-                        } else {
-                                ret =  new FieldAccessExpr(range(scope, token()), scope, typeArgs.list, name);
-                        }
+            if (hasArgs) {
+                  ret = new MethodCallExpr(range(scope, token()), scope, typeArgs.list, name, args);
+            } else {
+                  ret =  new FieldAccessExpr(range(scope, token()), scope, typeArgs.list, name);
+            }
         } else {
           jj_consume_token(-1);
           throw new ParseException();
@@ -3322,7 +3322,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       jj_consume_token(LBRACKET);
       ret = Expression();
       jj_consume_token(RBRACKET);
-                                      ret = new ArrayAccessExpr(range(scope, token()), scope, ret);
+                                  ret = new ArrayAccessExpr(range(scope, token()), scope, ret);
       break;
     default:
       jj_la1[110] = jj_gen;
@@ -3334,31 +3334,31 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression Literal() throws ParseException {
-        Expression ret;
+    Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
       jj_consume_token(INTEGER_LITERAL);
-                        ret = new IntegerLiteralExpr(tokenRange(), token.image);
+              ret = new IntegerLiteralExpr(tokenRange(), token.image);
       break;
     case LONG_LITERAL:
       jj_consume_token(LONG_LITERAL);
-                        ret = new LongLiteralExpr(tokenRange(), token.image);
+              ret = new LongLiteralExpr(tokenRange(), token.image);
       break;
     case FLOATING_POINT_LITERAL:
       jj_consume_token(FLOATING_POINT_LITERAL);
-                        ret = new DoubleLiteralExpr(tokenRange(), token.image);
+              ret = new DoubleLiteralExpr(tokenRange(), token.image);
       break;
     case CHARACTER_LITERAL:
       jj_consume_token(CHARACTER_LITERAL);
-                ret = new CharLiteralExpr(tokenRange(), unquote(token.image));
+          ret = new CharLiteralExpr(tokenRange(), unquote(token.image));
       break;
     case STRING_LITERAL:
       jj_consume_token(STRING_LITERAL);
-                ret = new StringLiteralExpr(tokenRange(), unquote(token.image));
+          ret = new StringLiteralExpr(tokenRange(), unquote(token.image));
       break;
     case TEXT_BLOCK_LITERAL:
       jj_consume_token(TEXT_BLOCK_LITERAL);
-                ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image));
+          ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image));
       break;
     case FALSE:
     case TRUE:
@@ -3377,15 +3377,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression BooleanLiteral() throws ParseException {
-        Expression ret;
+    Expression ret;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRUE:
       jj_consume_token(TRUE);
-                   ret = new BooleanLiteralExpr(tokenRange(), true);
+               ret = new BooleanLiteralExpr(tokenRange(), true);
       break;
     case FALSE:
       jj_consume_token(FALSE);
-                    ret = new BooleanLiteralExpr(tokenRange(), false);
+                ret = new BooleanLiteralExpr(tokenRange(), false);
       break;
     default:
       jj_la1[112] = jj_gen;
@@ -3403,7 +3403,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> Arguments() throws ParseException {
-        NodeList<Expression> ret = emptyList();
+    NodeList<Expression> ret = emptyList();
     jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
@@ -3462,8 +3462,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> ArgumentList() throws ParseException {
-        NodeList<Expression> ret = emptyList();
-        Expression expr;
+    NodeList<Expression> ret = emptyList();
+    Expression expr;
     expr = Expression();
                         ret.add(expr);
     label_41:
@@ -3485,13 +3485,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression AllocationExpression(Expression scope) throws ParseException {
-        Expression ret;
-        Type type;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        NodeList<BodyDeclaration<?>> anonymousBody = null;
-        NodeList<Expression> args;
-        JavaToken begin = INVALID;
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    Expression ret;
+    Type type;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    NodeList<BodyDeclaration<?>> anonymousBody = null;
+    NodeList<Expression> args;
+    JavaToken begin = INVALID;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     jj_consume_token(NEW);
             if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);}
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -3560,13 +3560,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ArrayCreationExpr ArrayCreation(JavaToken begin, Type type) throws ParseException {
-        Expression expr = null;
-        ArrayInitializerExpr arrayInitializerExpr = null;
-        NodeList<Expression> inits = emptyList();
-        List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-        JavaToken arrayCreationLevelStart = INVALID;
-        List<TokenRange> levelRanges = new ArrayList<TokenRange>();
+    Expression expr = null;
+    ArrayInitializerExpr arrayInitializerExpr = null;
+    NodeList<Expression> inits = emptyList();
+    List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    JavaToken arrayCreationLevelStart = INVALID;
+    List<TokenRange> levelRanges = new ArrayList<TokenRange>();
     label_42:
     while (true) {
       annotations = Annotations();
@@ -3648,7 +3648,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Statement syntax follows.
  */
   final public Statement Statement() throws ParseException {
-        Statement ret;
+    Statement ret;
     try {
       if (jj_2_41(2)) {
         ret = LabeledStatement();
@@ -3754,9 +3754,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public AssertStmt AssertStatement() throws ParseException {
-        Expression check;
-        Expression msg = null;
-        JavaToken begin;
+    Expression check;
+    Expression msg = null;
+    JavaToken begin;
     jj_consume_token(ASSERT);
             begin=token();
     check = Expression();
@@ -3775,9 +3775,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public LabeledStmt LabeledStatement() throws ParseException {
-        SimpleName label;
-        Statement stmt;
-        JavaToken begin;
+    SimpleName label;
+    Statement stmt;
+    JavaToken begin;
     label = SimpleName();
                         begin=token();
     jj_consume_token(COLON);
@@ -3787,8 +3787,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public BlockStmt Block() throws ParseException {
-        NodeList<Statement> stmts = emptyList();
-        JavaToken begin;
+    NodeList<Statement> stmts = emptyList();
+    JavaToken begin;
     jj_consume_token(LBRACE);
          begin=token();
     try {
@@ -3808,10 +3808,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
  * Classes inside body statements can only be abstract or final. The semantic must check it.
  */
   final public Statement BlockStatement() throws ParseException {
-        Statement ret;
-        Expression expr;
-        ClassOrInterfaceDeclaration typeDecl;
-        ModifierHolder modifier;
+    Statement ret;
+    Expression expr;
+    ClassOrInterfaceDeclaration typeDecl;
+    ModifierHolder modifier;
     try {
       if (jj_2_42(2147483647)) {
         modifier = Modifiers();
@@ -3893,10 +3893,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public VariableDeclarationExpr VariableDeclarationExpression() throws ParseException {
-        ModifierHolder modifier;
-        Type partialType;
-        NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
-        VariableDeclarator var;
+    ModifierHolder modifier;
+    Type partialType;
+    NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
+    VariableDeclarator var;
     modifier = Modifiers();
     partialType = Type(emptyList());
     var = VariableDeclarator(partialType);
@@ -3990,11 +3990,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ExpressionStmt StatementExpression() throws ParseException {
-        Expression expr;
-        AssignExpr.Operator op;
-        Expression value;
-        RangedList<Type> typeArgs = new RangedList<Type>(null);
-        Statement lambdaBody;
+    Expression expr;
+    AssignExpr.Operator op;
+    Expression value;
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
+    Statement lambdaBody;
     if (jj_2_44(2)) {
       expr = PreIncrementExpression();
     } else {
@@ -4103,10 +4103,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public SwitchStmt SwitchStatement() throws ParseException {
-        Expression selector;
-        SwitchEntry entry;
-        NodeList<SwitchEntry> entries = emptyList();
-        JavaToken begin;
+    Expression selector;
+    SwitchEntry entry;
+    NodeList<SwitchEntry> entries = emptyList();
+    JavaToken begin;
     jj_consume_token(SWITCH);
             begin=token();
     jj_consume_token(LPAREN);
@@ -4133,10 +4133,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public SwitchExpr SwitchExpression() throws ParseException {
-        Expression selector;
-        SwitchEntry entry;
-        NodeList<SwitchEntry> entries = emptyList();
-        JavaToken begin;
+    Expression selector;
+    SwitchEntry entry;
+    NodeList<SwitchEntry> entries = emptyList();
+    JavaToken begin;
     jj_consume_token(SWITCH);
             begin=token();
     jj_consume_token(LPAREN);
@@ -4163,19 +4163,19 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public SwitchEntry SwitchEntry() throws ParseException {
-        Expression label = null;
-        NodeList<Expression> labels = emptyList();
-        NodeList<Statement> stmts = emptyList();
-        JavaToken begin;
-        SwitchEntry ret;
-        Expression expression = null;
-        Statement stmt = null;
+    Expression label = null;
+    NodeList<Expression> labels = emptyList();
+    NodeList<Statement> stmts = emptyList();
+    JavaToken begin;
+    SwitchEntry ret;
+    Expression expression = null;
+    Statement stmt = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CASE:
       jj_consume_token(CASE);
-                        begin=token();
+                begin=token();
       label = ConditionalExpression();
-                                                                          labels = add(labels, label);
+                                                                  labels = add(labels, label);
       label_46:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4188,12 +4188,12 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         }
         jj_consume_token(COMMA);
         label = ConditionalExpression();
-                                                         labels = add(labels, label);
+                                                 labels = add(labels, label);
       }
       break;
     case _DEFAULT:
       jj_consume_token(_DEFAULT);
-                           begin=token();
+                   begin=token();
       break;
     default:
       jj_la1[131] = jj_gen;
@@ -4256,20 +4256,20 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         expression = Expression();
         jj_consume_token(SEMICOLON);
                 TokenRange r=range(begin, token());
-                                stmts.add(new ExpressionStmt(r, expression));
-                                ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
+                stmts.add(new ExpressionStmt(r, expression));
+                ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
         break;
       case LBRACE:
         stmt = Block();
-                                TokenRange r=range(begin, token());
-                                stmts.add(stmt);
-                                ret = new SwitchEntry(r, labels, BLOCK, stmts);
+                TokenRange r=range(begin, token());
+                stmts.add(stmt);
+                ret = new SwitchEntry(r, labels, BLOCK, stmts);
         break;
       case THROW:
         stmt = ThrowStatement();
-                                TokenRange r=range(begin, token());
-                                stmts.add(stmt);
-                                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
+                TokenRange r=range(begin, token());
+                stmts.add(stmt);
+                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
         break;
       default:
         jj_la1[132] = jj_gen;
@@ -4282,15 +4282,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       jj_consume_token(-1);
       throw new ParseException();
     }
-          {if (true) return ret;}
+      {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public IfStmt IfStatement() throws ParseException {
-        Expression condition;
-        Statement thenStmt;
-        Statement elseStmt = null;
-        JavaToken begin;
+    Expression condition;
+    Statement thenStmt;
+    Statement elseStmt = null;
+    JavaToken begin;
     jj_consume_token(IF);
         begin=token();
     jj_consume_token(LPAREN);
@@ -4313,9 +4313,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public WhileStmt WhileStatement() throws ParseException {
-        Expression condition;
-        Statement body;
-        JavaToken begin;
+    Expression condition;
+    Statement body;
+    JavaToken begin;
     jj_consume_token(WHILE);
            begin=token();
     jj_consume_token(LPAREN);
@@ -4327,9 +4327,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public DoStmt DoStatement() throws ParseException {
-        Expression condition;
-        Statement body;
-        JavaToken begin;
+    Expression condition;
+    Statement body;
+    JavaToken begin;
     jj_consume_token(DO);
         begin=token();
     body = Statement();
@@ -4343,12 +4343,12 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Statement ForStatement() throws ParseException {
-        VariableDeclarationExpr varExpr = null;
-        Expression expr = null;
-        NodeList<Expression> init = emptyList();
-        NodeList<Expression> update = emptyList();
-        Statement body;
-        JavaToken begin;
+    VariableDeclarationExpr varExpr = null;
+    Expression expr = null;
+    NodeList<Expression> init = emptyList();
+    NodeList<Expression> update = emptyList();
+    Statement body;
+    JavaToken begin;
     jj_consume_token(FOR);
          begin=token();
     jj_consume_token(LPAREN);
@@ -4589,19 +4589,19 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     }
     jj_consume_token(RPAREN);
     body = Statement();
-        if (varExpr != null) {
-                {if (true) return new ForEachStmt(range(begin, token()),varExpr, expr, body);}
-        }
-        {if (true) return new ForStmt(range(begin, token()),init, expr, update, body);}
+      if (varExpr != null) {
+          {if (true) return new ForEachStmt(range(begin, token()),varExpr, expr, body);}
+      }
+    {if (true) return new ForStmt(range(begin, token()),init, expr, update, body);}
     throw new Error("Missing return statement in function");
   }
 
   final public NodeList<Expression> ForInit() throws ParseException {
-        NodeList<Expression> ret;
-        Expression expr;
+    NodeList<Expression> ret;
+    Expression expr;
     if (jj_2_46(2147483647)) {
       expr = VariableDeclarationExpression();
-                                                   ret = new NodeList<Expression>(); ret.add(expr);
+                                               ret = new NodeList<Expression>(); ret.add(expr);
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case BOOLEAN:
@@ -4661,8 +4661,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> ExpressionList() throws ParseException {
-        NodeList<Expression> ret = new NodeList<Expression>();
-        Expression expr;
+    NodeList<Expression> ret = new NodeList<Expression>();
+    Expression expr;
     expr = Expression();
                         ret.add(expr);
     label_47:
@@ -4684,15 +4684,15 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> ForUpdate() throws ParseException {
-        NodeList<Expression> ret;
+    NodeList<Expression> ret;
     ret = ExpressionList();
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public BreakStmt BreakStatement() throws ParseException {
-        SimpleName label = null;
-        JavaToken begin;
+    SimpleName label = null;
+    JavaToken begin;
     jj_consume_token(BREAK);
            begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4722,8 +4722,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public YieldStmt YieldStatement() throws ParseException {
-        Expression value;
-        JavaToken begin;
+    Expression value;
+    JavaToken begin;
     jj_consume_token(YIELD);
            begin=token();
     value = Expression();
@@ -4733,8 +4733,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ContinueStmt ContinueStatement() throws ParseException {
-        SimpleName label = null;
-        JavaToken begin;
+    SimpleName label = null;
+    JavaToken begin;
     jj_consume_token(CONTINUE);
               begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4764,8 +4764,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ReturnStmt ReturnStatement() throws ParseException {
-        Expression expr = null;
-        JavaToken begin;
+    Expression expr = null;
+    JavaToken begin;
     jj_consume_token(RETURN);
             begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4825,8 +4825,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public ThrowStmt ThrowStatement() throws ParseException {
-        Expression expr;
-        JavaToken begin;
+    Expression expr;
+    JavaToken begin;
     jj_consume_token(THROW);
            begin=token();
     expr = Expression();
@@ -4836,9 +4836,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public SynchronizedStmt SynchronizedStatement() throws ParseException {
-        Expression expr;
-        BlockStmt body;
-        JavaToken begin;
+    Expression expr;
+    BlockStmt body;
+    JavaToken begin;
     jj_consume_token(SYNCHRONIZED);
                   begin=token();
     jj_consume_token(LPAREN);
@@ -4850,20 +4850,20 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public TryStmt TryStatement() throws ParseException {
-        NodeList<Expression> resources = emptyList();
-        BlockStmt tryBlock;
-        BlockStmt finallyBlock = null;
-        NodeList<CatchClause> catchs = emptyList();
-        BlockStmt catchBlock;
-        ModifierHolder exceptModifier;
-        ReferenceType exceptionType;
-        NodeList<ReferenceType> exceptionTypes = emptyList();
-        Pair<SimpleName, List<ArrayBracketPair>> exceptId;
-        JavaToken begin;
-        JavaToken catchBegin;
-        JavaToken typesBegin;
-        JavaToken paramEnd;
-        Type type;
+    NodeList<Expression> resources = emptyList();
+    BlockStmt tryBlock;
+    BlockStmt finallyBlock = null;
+    NodeList<CatchClause> catchs = emptyList();
+    BlockStmt catchBlock;
+    ModifierHolder exceptModifier;
+    ReferenceType exceptionType;
+    NodeList<ReferenceType> exceptionTypes = emptyList();
+    Pair<SimpleName, List<ArrayBracketPair>> exceptId;
+    JavaToken begin;
+    JavaToken catchBegin;
+    JavaToken typesBegin;
+    JavaToken paramEnd;
+    Type type;
     jj_consume_token(TRY);
          begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -4886,10 +4886,10 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         break label_48;
       }
       jj_consume_token(CATCH);
-                                 catchBegin=token();
+                       catchBegin=token();
       jj_consume_token(LPAREN);
       exceptModifier = Modifiers();
-                                                           typesBegin = exceptModifier.begin;
+                                                 typesBegin = exceptModifier.begin;
       exceptionType = ReferenceType(emptyList());
                                                          exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token());
       label_49:
@@ -4904,20 +4904,20 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         }
         jj_consume_token(BIT_OR);
         exceptionType = AnnotatedReferenceType();
-                                                                         exceptionTypes.add(exceptionType);
+                                                               exceptionTypes.add(exceptionType);
       }
       exceptId = VariableDeclaratorId();
-                                                            paramEnd = token();
+                                                  paramEnd = token();
       jj_consume_token(RPAREN);
       catchBlock = Block();
-                            if (exceptionTypes.size() > 1) {
-                                type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
-                            } else {
-                                type = (Type)exceptionTypes.get(0);
-                            }
-                                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
-                            catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-                            exceptionTypes = emptyList();
+                  if (exceptionTypes.size() > 1) {
+                      type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+                  } else {
+                      type = (Type)exceptionTypes.get(0);
+                  }
+                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+                  catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
+                  exceptionTypes = emptyList();
     }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case FINALLY:
@@ -4947,8 +4947,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<Expression> Resources() throws ParseException {
-        NodeList<Expression> expressions = new NodeList<Expression>();
-        Expression expr;
+    NodeList<Expression> expressions = new NodeList<Expression>();
+    Expression expr;
     expr = Resource();
                        expressions.add(expr);
     label_50:
@@ -4967,7 +4967,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression Resource() throws ParseException {
-        Expression expr;
+    Expression expr;
     if (jj_2_49(2147483647)) {
       /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
               expr = VariableDeclarationExpression();
@@ -5052,8 +5052,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 
 /* Annotation syntax follows. */
   final public NodeList<AnnotationExpr> Annotations() throws ParseException {
-        NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-        AnnotationExpr annotation;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    AnnotationExpr annotation;
     label_51:
     while (true) {
       if (jj_2_50(2147483647)) {
@@ -5069,11 +5069,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public AnnotationExpr Annotation() throws ParseException {
-        AnnotationExpr ret;
-        Name name;
-        NodeList<MemberValuePair> pairs = emptyList();
-        JavaToken begin;
-        Expression memberVal;
+    AnnotationExpr ret;
+    Name name;
+    NodeList<MemberValuePair> pairs = emptyList();
+    JavaToken begin;
+    Expression memberVal;
     jj_consume_token(AT);
           begin=token();
     name = Name();
@@ -5115,8 +5115,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<MemberValuePair> MemberValuePairs() throws ParseException {
-        NodeList<MemberValuePair> ret = new NodeList<MemberValuePair>();
-        MemberValuePair pair;
+    NodeList<MemberValuePair> ret = new NodeList<MemberValuePair>();
+    MemberValuePair pair;
     pair = MemberValuePair();
                               ret.add(pair);
     label_52:
@@ -5138,9 +5138,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public MemberValuePair MemberValuePair() throws ParseException {
-        SimpleName name;
-        Expression value;
-        JavaToken begin;
+    SimpleName name;
+    Expression value;
+    JavaToken begin;
     name = SimpleName();
                           begin=token();
     jj_consume_token(ASSIGN);
@@ -5150,7 +5150,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression MemberValue() throws ParseException {
-        Expression ret;
+    Expression ret;
     if (jj_2_53(2147483647)) {
       ret = Annotation();
     } else {
@@ -5215,9 +5215,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public Expression MemberValueArrayInitializer() throws ParseException {
-        NodeList<Expression> ret = emptyList();
-        Expression member;
-        JavaToken begin;
+    NodeList<Expression> ret = emptyList();
+    Expression member;
+    JavaToken begin;
     jj_consume_token(LBRACE);
        begin=token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -5267,7 +5267,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     case PLUS:
     case MINUS:
       member = MemberValue();
-                                 ret.add(member);
+                                ret.add(member);
       label_53:
       while (true) {
         if (jj_2_54(2)) {
@@ -5277,7 +5277,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         }
         jj_consume_token(COMMA);
         member = MemberValue();
-                                                                                                ret.add(member);
+                                                                                               ret.add(member);
       }
       break;
     default:
@@ -5299,9 +5299,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 
 /* Annotation Types. */
   final public AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier) throws ParseException {
-        SimpleName name;
+    SimpleName name;
     NodeList<BodyDeclaration<?>> members = emptyList();
-        JavaToken begin = modifier.begin;
+    JavaToken begin = modifier.begin;
     jj_consume_token(AT);
         begin=orIfInvalid(begin, token());
     jj_consume_token(INTERFACE);
@@ -5312,8 +5312,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public NodeList<BodyDeclaration<?>> AnnotationTypeBody() throws ParseException {
-        NodeList<BodyDeclaration<?>> ret = emptyList();
-        BodyDeclaration member;
+    NodeList<BodyDeclaration<?>> ret = emptyList();
+    BodyDeclaration member;
     jj_consume_token(LBRACE);
     label_54:
     while (true) {
@@ -5473,9 +5473,9 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
   final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier) throws ParseException {
-        Type type;
-        SimpleName name;
-        Expression defaultVal = null;
+    Type type;
+    SimpleName name;
+    Expression defaultVal = null;
     type = Type(emptyList());
     name = SimpleName();
     jj_consume_token(LPAREN);
@@ -5489,13 +5489,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       ;
     }
     jj_consume_token(SEMICOLON);
-        JavaToken begin = orIfInvalid(modifier.begin, type);
+    JavaToken begin = orIfInvalid(modifier.begin, type);
     {if (true) return new AnnotationMemberDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, type, name, defaultVal);}
     throw new Error("Missing return statement in function");
   }
 
   final public Expression DefaultValue() throws ParseException {
-        Expression ret;
+    Expression ret;
     jj_consume_token(_DEFAULT);
     ret = MemberValue();
     {if (true) return ret;}
@@ -5848,8 +5848,8 @@ after they matched their desired input, which will lead to unexpected behaviour
   }
 
   final public TypeDeclaration<?> TypeDeclarationParseStart() throws ParseException {
-        TypeDeclaration<?> ret;
-        ModifierHolder modifier;
+    TypeDeclaration<?> ret;
+    ModifierHolder modifier;
     modifier = Modifiers();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CLASS:
@@ -5868,17 +5868,17 @@ after they matched their desired input, which will lead to unexpected behaviour
       throw new ParseException();
     }
     jj_consume_token(0);
-         {if (true) return ret;}
+     {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
   final public ModuleDeclaration ModuleDeclarationParseStart() throws ParseException {
-        ModuleDeclaration ret;
-        ModifierHolder modifiers;
+    ModuleDeclaration ret;
+     ModifierHolder modifiers;
     modifiers = Modifiers();
     ret = ModuleDeclaration(modifiers);
     jj_consume_token(0);
-          {if (true) return ret;}
+      {if (true) return ret;}
     throw new Error("Missing return statement in function");
   }
 
@@ -5891,8 +5891,8 @@ after they matched their desired input, which will lead to unexpected behaviour
   }
 
   final public TypeParameter TypeParameterParseStart() throws ParseException {
-        TypeParameter ret;
-        NodeList<AnnotationExpr> annotations;
+    TypeParameter ret;
+    NodeList<AnnotationExpr> annotations;
     annotations = Annotations();
     ret = TypeParameter(annotations);
     jj_consume_token(0);
@@ -5902,7 +5902,7 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   final public MethodDeclaration MethodDeclarationParseStart() throws ParseException {
   MethodDeclaration ret;
-        ModifierHolder modifier;
+    ModifierHolder modifier;
     modifier = Modifiers();
     ret = MethodDeclaration(modifier);
     jj_consume_token(0);
@@ -6827,6 +6827,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_131() {
+    if (jj_3R_110()) return true;
+    if (jj_3R_195()) return true;
+    return false;
+  }
+
   private boolean jj_3R_168() {
     if (jj_3R_77()) return true;
     return false;
@@ -6834,12 +6840,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_167() {
     if (jj_scan_token(VOID)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_131() {
-    if (jj_3R_110()) return true;
-    if (jj_3R_195()) return true;
     return false;
   }
 
@@ -6914,13 +6914,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_366() {
-    if (jj_scan_token(SUPER)) return true;
-    if (jj_3R_88()) return true;
-    if (jj_3R_87()) return true;
-    return false;
-  }
-
   private boolean jj_3R_227() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_200()) return true;
@@ -6929,23 +6922,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_154() {
     if (jj_scan_token(BOOLEAN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_365() {
-    if (jj_scan_token(EXTENDS)) return true;
-    if (jj_3R_88()) return true;
-    if (jj_3R_87()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_349() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_365()) {
-    jj_scanpos = xsp;
-    if (jj_3R_366()) return true;
-    }
     return false;
   }
 
@@ -6973,6 +6949,30 @@ after they matched their desired input, which will lead to unexpected behaviour
     }
     }
     }
+    }
+    return false;
+  }
+
+  private boolean jj_3R_366() {
+    if (jj_scan_token(SUPER)) return true;
+    if (jj_3R_88()) return true;
+    if (jj_3R_87()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_365() {
+    if (jj_scan_token(EXTENDS)) return true;
+    if (jj_3R_88()) return true;
+    if (jj_3R_87()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_349() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_365()) {
+    jj_scanpos = xsp;
+    if (jj_3R_366()) return true;
     }
     return false;
   }
@@ -7107,11 +7107,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_22() {
-    if (jj_3R_89()) return true;
-    return false;
-  }
-
   private boolean jj_3R_231() {
     if (jj_3R_123()) return true;
     return false;
@@ -7122,6 +7117,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_22() {
+    if (jj_3R_89()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_229() {
+    if (jj_3R_285()) return true;
+    return false;
+  }
+
   private boolean jj_3_21() {
     if (jj_scan_token(DOT)) return true;
     if (jj_3R_88()) return true;
@@ -7129,11 +7134,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_22()) jj_scanpos = xsp;
-    return false;
-  }
-
-  private boolean jj_3R_229() {
-    if (jj_3R_285()) return true;
     return false;
   }
 
@@ -7463,18 +7463,30 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_317() {
+    if (jj_scan_token(NULL)) return true;
+    return false;
+  }
+
   private boolean jj_3_16() {
     if (jj_3R_86()) return true;
     return false;
   }
 
-  private boolean jj_3R_347() {
-    if (jj_scan_token(FALSE)) return true;
+  private boolean jj_3R_452() {
+    if (jj_3R_77()) return true;
+    if (jj_3R_90()) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_scan_token(RPAREN)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_454()) jj_scanpos = xsp;
+    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
-  private boolean jj_3R_317() {
-    if (jj_scan_token(NULL)) return true;
+  private boolean jj_3R_347() {
+    if (jj_scan_token(FALSE)) return true;
     return false;
   }
 
@@ -7503,15 +7515,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_452() {
-    if (jj_3R_77()) return true;
-    if (jj_3R_90()) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_scan_token(RPAREN)) return true;
+  private boolean jj_3R_316() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_454()) jj_scanpos = xsp;
-    if (jj_scan_token(SEMICOLON)) return true;
+    if (jj_3R_346()) {
+    jj_scanpos = xsp;
+    if (jj_3R_347()) return true;
+    }
     return false;
   }
 
@@ -7539,16 +7549,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_186() {
     if (jj_3R_89()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_316() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_346()) {
-    jj_scanpos = xsp;
-    if (jj_3R_347()) return true;
-    }
     return false;
   }
 
@@ -7587,6 +7587,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_54() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_116()) return true;
+    return false;
+  }
+
   private boolean jj_3R_447() {
     if (jj_3R_452()) return true;
     return false;
@@ -7614,12 +7620,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_54() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_116()) return true;
-    return false;
-  }
-
   private boolean jj_3R_127() {
     Token xsp;
     xsp = jj_scanpos;
@@ -7632,11 +7632,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_272() {
     if (jj_scan_token(STRING_LITERAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_271() {
-    if (jj_scan_token(CHARACTER_LITERAL)) return true;
     return false;
   }
 
@@ -7670,13 +7665,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_270() {
-    if (jj_scan_token(FLOATING_POINT_LITERAL)) return true;
+  private boolean jj_3R_271() {
+    if (jj_scan_token(CHARACTER_LITERAL)) return true;
     return false;
   }
 
-  private boolean jj_3R_269() {
-    if (jj_scan_token(LONG_LITERAL)) return true;
+  private boolean jj_3R_270() {
+    if (jj_scan_token(FLOATING_POINT_LITERAL)) return true;
     return false;
   }
 
@@ -7700,8 +7695,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_268() {
-    if (jj_scan_token(INTEGER_LITERAL)) return true;
+  private boolean jj_3R_269() {
+    if (jj_scan_token(LONG_LITERAL)) return true;
     return false;
   }
 
@@ -7722,16 +7717,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_106() {
-    if (jj_3R_89()) return true;
-    return false;
-  }
-
-  private boolean jj_3_38() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_106()) jj_scanpos = xsp;
-    if (jj_3R_76()) return true;
+  private boolean jj_3R_268() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
     return false;
   }
 
@@ -7768,15 +7755,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_164() {
-    if (jj_scan_token(LBRACKET)) return true;
-    if (jj_3R_92()) return true;
-    if (jj_scan_token(RBRACKET)) return true;
+  private boolean jj_3R_106() {
+    if (jj_3R_89()) return true;
     return false;
   }
 
-  private boolean jj_3R_257() {
-    if (jj_3R_184()) return true;
+  private boolean jj_3_38() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_106()) jj_scanpos = xsp;
+    if (jj_3R_76()) return true;
     return false;
   }
 
@@ -7786,13 +7774,10 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_225() {
-    if (jj_3R_76()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_256() {
-    if (jj_3R_89()) return true;
+  private boolean jj_3R_164() {
+    if (jj_scan_token(LBRACKET)) return true;
+    if (jj_3R_92()) return true;
+    if (jj_scan_token(RBRACKET)) return true;
     return false;
   }
 
@@ -7825,6 +7810,32 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_225() {
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_257() {
+    if (jj_3R_184()) return true;
+    return false;
+  }
+
+  private boolean jj_3_12() {
+    if (jj_3R_82()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_256() {
+    if (jj_3R_89()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_353() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_352()) return true;
+    return false;
+  }
+
   private boolean jj_3R_206() {
     Token xsp;
     xsp = jj_scanpos;
@@ -7840,22 +7851,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_12() {
-    if (jj_3R_82()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_204() {
-    if (jj_scan_token(THIS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_353() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_352()) return true;
-    return false;
-  }
-
   private boolean jj_3R_370() {
     if (jj_3R_116()) return true;
     Token xsp;
@@ -7866,23 +7861,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_182() {
-    if (jj_3R_82()) return true;
-    if (jj_scan_token(DOT)) return true;
+  private boolean jj_3R_204() {
+    if (jj_scan_token(THIS)) return true;
     return false;
   }
 
-  private boolean jj_3R_163() {
+  private boolean jj_3R_182() {
+    if (jj_3R_82()) return true;
     if (jj_scan_token(DOT)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_204()) {
-    jj_scanpos = xsp;
-    if (jj_3R_205()) {
-    jj_scanpos = xsp;
-    if (jj_3R_206()) return true;
-    }
-    }
     return false;
   }
 
@@ -7905,18 +7891,22 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_177() {
-    if (jj_3R_150()) return true;
+  private boolean jj_3R_163() {
+    if (jj_scan_token(DOT)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_204()) {
+    jj_scanpos = xsp;
+    if (jj_3R_205()) {
+    jj_scanpos = xsp;
+    if (jj_3R_206()) return true;
+    }
+    }
     return false;
   }
 
   private boolean jj_3_53() {
     if (jj_scan_token(AT)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_176() {
-    if (jj_3R_213()) return true;
     return false;
   }
 
@@ -7930,14 +7920,19 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_177() {
+    if (jj_3R_150()) return true;
+    return false;
+  }
+
   private boolean jj_3R_318() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_102()) return true;
     return false;
   }
 
-  private boolean jj_3R_224() {
-    if (jj_3R_89()) return true;
+  private boolean jj_3R_176() {
+    if (jj_3R_213()) return true;
     return false;
   }
 
@@ -7948,19 +7943,19 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_175() {
+    if (jj_3R_117()) return true;
+    return false;
+  }
+
   private boolean jj_3R_162() {
     if (jj_scan_token(DOT)) return true;
     if (jj_scan_token(SUPER)) return true;
     return false;
   }
 
-  private boolean jj_3R_175() {
-    if (jj_3R_117()) return true;
-    return false;
-  }
-
-  private boolean jj_3_37() {
-    if (jj_3R_101()) return true;
+  private boolean jj_3R_224() {
+    if (jj_3R_89()) return true;
     return false;
   }
 
@@ -7977,8 +7972,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_279() {
-    if (jj_3R_76()) return true;
+  private boolean jj_3_37() {
+    if (jj_3R_101()) return true;
     return false;
   }
 
@@ -7999,11 +7994,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_226() {
-    if (jj_3R_184()) return true;
-    return false;
-  }
-
   private boolean jj_3R_102() {
     if (jj_3R_110()) return true;
     if (jj_3R_77()) return true;
@@ -8011,6 +8001,22 @@ after they matched their desired input, which will lead to unexpected behaviour
     xsp = jj_scanpos;
     if (jj_3R_165()) jj_scanpos = xsp;
     if (jj_3R_103()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_226() {
+    if (jj_3R_184()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_279() {
+    if (jj_3R_76()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_115() {
+    if (jj_3R_76()) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
@@ -8025,19 +8031,6 @@ after they matched their desired input, which will lead to unexpected behaviour
   private boolean jj_3_36() {
     if (jj_3R_105()) return true;
     if (jj_scan_token(DOUBLECOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_115() {
-    if (jj_3R_76()) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3_35() {
-    if (jj_3R_104()) return true;
-    if (jj_scan_token(DOT)) return true;
-    if (jj_scan_token(CLASS)) return true;
     return false;
   }
 
@@ -8062,6 +8055,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_35() {
+    if (jj_3R_104()) return true;
+    if (jj_scan_token(DOT)) return true;
+    if (jj_scan_token(CLASS)) return true;
+    return false;
+  }
+
   private boolean jj_3_51() {
     if (jj_scan_token(LPAREN)) return true;
     Token xsp;
@@ -8069,20 +8069,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     if (jj_3R_115()) {
     jj_scanpos = xsp;
     if (jj_scan_token(97)) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_193() {
-    if (jj_3R_105()) return true;
-    if (jj_scan_token(DOUBLECOLON)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_224()) jj_scanpos = xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_225()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(42)) return true;
     }
     return false;
   }
@@ -8112,15 +8098,22 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_192() {
-    if (jj_3R_104()) return true;
-    if (jj_scan_token(DOT)) return true;
-    if (jj_scan_token(CLASS)) return true;
+  private boolean jj_3_33() {
+    if (jj_3R_102()) return true;
     return false;
   }
 
-  private boolean jj_3_33() {
-    if (jj_3R_102()) return true;
+  private boolean jj_3R_193() {
+    if (jj_3R_105()) return true;
+    if (jj_scan_token(DOUBLECOLON)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_224()) jj_scanpos = xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_225()) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(42)) return true;
+    }
     return false;
   }
 
@@ -8131,14 +8124,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_191() {
-    if (jj_3R_223()) return true;
-    return false;
-  }
-
   private boolean jj_3R_222() {
     if (jj_3R_92()) return true;
     if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_192() {
+    if (jj_3R_104()) return true;
+    if (jj_scan_token(DOT)) return true;
+    if (jj_scan_token(CLASS)) return true;
     return false;
   }
 
@@ -8151,14 +8146,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_10() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_80()) return true;
+  private boolean jj_3R_191() {
+    if (jj_3R_223()) return true;
     return false;
   }
 
-  private boolean jj_3R_278() {
-    if (jj_3R_89()) return true;
+  private boolean jj_3_10() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_80()) return true;
     return false;
   }
 
@@ -8209,19 +8204,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_218() {
-    if (jj_scan_token(DOUBLECOLON)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_278()) jj_scanpos = xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_279()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(42)) return true;
-    }
-    return false;
-  }
-
   private boolean jj_3_50() {
     if (jj_scan_token(AT)) return true;
     return false;
@@ -8255,6 +8237,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_278() {
+    if (jj_3R_89()) return true;
+    return false;
+  }
+
   private boolean jj_3R_412() {
     if (jj_3R_121()) return true;
     return false;
@@ -8279,6 +8266,19 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_218() {
+    if (jj_scan_token(DOUBLECOLON)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_278()) jj_scanpos = xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_279()) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(42)) return true;
+    }
+    return false;
+  }
+
   private boolean jj_3R_136() {
     if (jj_3R_117()) return true;
     return false;
@@ -8293,11 +8293,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_277() {
-    if (jj_3R_184()) return true;
-    return false;
-  }
-
   private boolean jj_3R_408() {
     if (jj_scan_token(LPAREN)) return true;
     Token xsp;
@@ -8308,6 +8303,22 @@ after they matched their desired input, which will lead to unexpected behaviour
   }
 
   private boolean jj_3R_151() {
+    return false;
+  }
+
+  private boolean jj_3_48() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    if (jj_3R_113()) return true;
+    return false;
+  }
+
+  private boolean jj_3_32() {
+    if (jj_3R_101()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_277() {
+    if (jj_3R_184()) return true;
     return false;
   }
 
@@ -8327,14 +8338,7 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_48() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    if (jj_3R_113()) return true;
-    return false;
-  }
-
-  private boolean jj_3_32() {
-    if (jj_3R_101()) return true;
+  private boolean jj_3R_152() {
     return false;
   }
 
@@ -8349,23 +8353,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_188() {
-    if (jj_scan_token(THIS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_152() {
-    return false;
-  }
-
-  private boolean jj_3R_187() {
-    if (jj_3R_216()) return true;
-    return false;
-  }
-
   private boolean jj_3R_105() {
     if (jj_3R_88()) return true;
     if (jj_3R_77()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_188() {
+    if (jj_scan_token(THIS)) return true;
     return false;
   }
 
@@ -8382,6 +8377,11 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_130() {
     if (jj_3R_101()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_187() {
+    if (jj_3R_216()) return true;
     return false;
   }
 
@@ -8557,6 +8557,27 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_47() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_351() {
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_3R_380()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_47()) jj_scanpos = xsp;
+    if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_202() {
+    if (jj_scan_token(BIT_AND)) return true;
+    if (jj_3R_251()) return true;
+    return false;
+  }
+
   private boolean jj_3R_440() {
     if (jj_scan_token(FINALLY)) return true;
     if (jj_3R_123()) return true;
@@ -8569,24 +8590,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_47() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_202() {
-    if (jj_scan_token(BIT_AND)) return true;
-    if (jj_3R_251()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_351() {
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_3R_380()) return true;
+  private boolean jj_3R_181() {
+    if (jj_scan_token(LBRACE)) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3_47()) jj_scanpos = xsp;
-    if (jj_scan_token(RPAREN)) return true;
+    if (jj_3R_342()) jj_scanpos = xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(103)) jj_scanpos = xsp;
+    if (jj_scan_token(RBRACE)) return true;
     return false;
   }
 
@@ -8602,23 +8613,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_181() {
-    if (jj_scan_token(LBRACE)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_342()) jj_scanpos = xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(103)) jj_scanpos = xsp;
-    if (jj_scan_token(RBRACE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_446() {
-    if (jj_scan_token(BIT_OR)) return true;
-    if (jj_3R_251()) return true;
-    return false;
-  }
-
   private boolean jj_3_30() {
     if (jj_3R_99()) return true;
     if (jj_scan_token(RPAREN)) return true;
@@ -8631,19 +8625,9 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_439() {
-    if (jj_scan_token(CATCH)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_3R_110()) return true;
-    if (jj_3R_87()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_446()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_3R_103()) return true;
-    if (jj_scan_token(RPAREN)) return true;
-    if (jj_3R_123()) return true;
+  private boolean jj_3R_174() {
+    if (jj_scan_token(ASSIGN)) return true;
+    if (jj_3R_80()) return true;
     return false;
   }
 
@@ -8652,9 +8636,9 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_174() {
-    if (jj_scan_token(ASSIGN)) return true;
-    if (jj_3R_80()) return true;
+  private boolean jj_3R_446() {
+    if (jj_scan_token(BIT_OR)) return true;
+    if (jj_3R_251()) return true;
     return false;
   }
 
@@ -8680,18 +8664,19 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_28() {
-    if (jj_3R_96()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_255() {
-    if (jj_3R_306()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_254() {
-    if (jj_3R_305()) return true;
+  private boolean jj_3R_439() {
+    if (jj_scan_token(CATCH)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_3R_110()) return true;
+    if (jj_3R_87()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_446()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_3R_103()) return true;
+    if (jj_scan_token(RPAREN)) return true;
+    if (jj_3R_123()) return true;
     return false;
   }
 
@@ -8711,6 +8696,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_97() {
+    if (jj_scan_token(INCR)) return true;
+    return false;
+  }
+
   private boolean jj_3_29() {
     Token xsp;
     xsp = jj_scanpos;
@@ -8718,11 +8708,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     jj_scanpos = xsp;
     if (jj_3R_98()) return true;
     }
-    return false;
-  }
-
-  private boolean jj_3R_97() {
-    if (jj_scan_token(INCR)) return true;
     return false;
   }
 
@@ -8736,18 +8721,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_28() {
+    if (jj_3R_96()) return true;
+    return false;
+  }
+
   private boolean jj_3R_78() {
     if (jj_3R_121()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_304() {
-    if (jj_scan_token(BANG)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_303() {
-    if (jj_scan_token(TILDE)) return true;
     return false;
   }
 
@@ -8764,8 +8744,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_253() {
-    if (jj_3R_96()) return true;
+  private boolean jj_3R_255() {
+    if (jj_3R_306()) return true;
     return false;
   }
 
@@ -8783,14 +8763,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_252() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_303()) {
-    jj_scanpos = xsp;
-    if (jj_3R_304()) return true;
-    }
-    if (jj_3R_171()) return true;
+  private boolean jj_3R_254() {
+    if (jj_3R_305()) return true;
     return false;
   }
 
@@ -8802,9 +8776,40 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_304() {
+    if (jj_scan_token(BANG)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_253() {
+    if (jj_3R_96()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_303() {
+    if (jj_scan_token(TILDE)) return true;
+    return false;
+  }
+
   private boolean jj_3R_411() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_114()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_252() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_303()) {
+    jj_scanpos = xsp;
+    if (jj_3R_304()) return true;
+    }
+    if (jj_3R_171()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_327() {
+    if (jj_3R_92()) return true;
     return false;
   }
 
@@ -8824,8 +8829,15 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_327() {
-    if (jj_3R_92()) return true;
+  private boolean jj_3R_362() {
+    if (jj_3R_77()) return true;
+    if (jj_3R_114()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_411()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
@@ -8862,30 +8874,23 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_362() {
-    if (jj_3R_77()) return true;
-    if (jj_3R_114()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_411()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3_6() {
-    if (jj_scan_token(AT)) return true;
-    if (jj_scan_token(INTERFACE)) return true;
-    return false;
-  }
-
   private boolean jj_3R_298() {
     if (jj_scan_token(SYNCHRONIZED)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_92()) return true;
     if (jj_scan_token(RPAREN)) return true;
     if (jj_3R_123()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_326() {
+    if (jj_3R_90()) return true;
+    return false;
+  }
+
+  private boolean jj_3_6() {
+    if (jj_scan_token(AT)) return true;
+    if (jj_scan_token(INTERFACE)) return true;
     return false;
   }
 
@@ -8899,13 +8904,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_326() {
-    if (jj_3R_90()) return true;
+  private boolean jj_3R_340() {
+    if (jj_3R_362()) return true;
     return false;
   }
 
-  private boolean jj_3R_340() {
-    if (jj_3R_362()) return true;
+  private boolean jj_3R_260() {
+    if (jj_scan_token(DECR)) return true;
+    if (jj_3R_171()) return true;
     return false;
   }
 
@@ -8914,14 +8920,15 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_338() {
-    if (jj_3R_360()) return true;
+  private boolean jj_3R_297() {
+    if (jj_scan_token(THROW)) return true;
+    if (jj_3R_92()) return true;
+    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
-  private boolean jj_3R_260() {
-    if (jj_scan_token(DECR)) return true;
-    if (jj_3R_171()) return true;
+  private boolean jj_3R_338() {
+    if (jj_3R_360()) return true;
     return false;
   }
 
@@ -8935,10 +8942,9 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_297() {
-    if (jj_scan_token(THROW)) return true;
-    if (jj_3R_92()) return true;
-    if (jj_scan_token(SEMICOLON)) return true;
+  private boolean jj_3R_112() {
+    if (jj_scan_token(INCR)) return true;
+    if (jj_3R_171()) return true;
     return false;
   }
 
@@ -8965,28 +8971,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_112() {
-    if (jj_scan_token(INCR)) return true;
-    if (jj_3R_171()) return true;
-    return false;
-  }
-
   private boolean jj_3R_296() {
     if (jj_scan_token(RETURN)) return true;
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_327()) jj_scanpos = xsp;
     if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_211() {
-    if (jj_3R_203()) return true;
-    return false;
-  }
-
-  private boolean jj_3_9() {
-    if (jj_3R_79()) return true;
     return false;
   }
 
@@ -9000,6 +8990,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_211() {
+    if (jj_3R_203()) return true;
+    return false;
+  }
+
+  private boolean jj_3_9() {
+    if (jj_3R_79()) return true;
+    return false;
+  }
+
   private boolean jj_3R_262() {
     if (jj_scan_token(MINUS)) return true;
     return false;
@@ -9007,22 +9007,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_261() {
     if (jj_scan_token(PLUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_210() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_261()) {
-    jj_scanpos = xsp;
-    if (jj_3R_262()) return true;
-    }
-    if (jj_3R_171()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_209() {
-    if (jj_3R_260()) return true;
     return false;
   }
 
@@ -9048,6 +9032,22 @@ after they matched their desired input, which will lead to unexpected behaviour
     jj_scanpos = xsp;
     if (jj_3R_310()) return true;
     }
+    return false;
+  }
+
+  private boolean jj_3R_210() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_261()) {
+    jj_scanpos = xsp;
+    if (jj_3R_262()) return true;
+    }
+    if (jj_3R_171()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_209() {
+    if (jj_3R_260()) return true;
     return false;
   }
 
@@ -9110,6 +9110,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_438() {
+    if (jj_3R_445()) return true;
+    return false;
+  }
+
   private boolean jj_3R_442() {
     if (jj_scan_token(SLASH)) return true;
     return false;
@@ -9120,8 +9125,12 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_438() {
-    if (jj_3R_445()) return true;
+  private boolean jj_3R_294() {
+    if (jj_scan_token(BREAK)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_325()) jj_scanpos = xsp;
+    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
@@ -9136,15 +9145,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     }
     }
     if (jj_3R_171()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_294() {
-    if (jj_scan_token(BREAK)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_325()) jj_scanpos = xsp;
-    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
@@ -9180,19 +9180,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_429() {
-    if (jj_scan_token(MINUS)) return true;
-    return false;
-  }
-
   private boolean jj_3_4() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_74()) return true;
     return false;
   }
 
-  private boolean jj_3R_428() {
-    if (jj_scan_token(PLUS)) return true;
+  private boolean jj_3R_429() {
+    if (jj_scan_token(MINUS)) return true;
     return false;
   }
 
@@ -9204,6 +9199,17 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_428() {
+    if (jj_scan_token(PLUS)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_424() {
+    if (jj_scan_token(ELSE)) return true;
+    if (jj_3R_196()) return true;
+    return false;
+  }
+
   private boolean jj_3R_415() {
     Token xsp;
     xsp = jj_scanpos;
@@ -9212,12 +9218,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     if (jj_3R_429()) return true;
     }
     if (jj_3R_398()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_424() {
-    if (jj_scan_token(ELSE)) return true;
-    if (jj_3R_196()) return true;
     return false;
   }
 
@@ -9253,11 +9253,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_388() {
-    if (jj_3R_391()) return true;
-    return false;
-  }
-
   private boolean jj_3R_437() {
     if (jj_3R_92()) return true;
     return false;
@@ -9270,18 +9265,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_387() {
-    if (jj_3R_111()) return true;
-    return false;
-  }
-
-  private boolean jj_3_27() {
-    if (jj_3R_95()) return true;
-    return false;
-  }
-
-  private boolean jj_3_26() {
-    if (jj_3R_94()) return true;
+  private boolean jj_3R_388() {
+    if (jj_3R_391()) return true;
     return false;
   }
 
@@ -9295,6 +9280,21 @@ after they matched their desired input, which will lead to unexpected behaviour
       if (jj_3R_179()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(GT)) return true;
+    return false;
+  }
+
+  private boolean jj_3_27() {
+    if (jj_3R_95()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_387() {
+    if (jj_3R_111()) return true;
+    return false;
+  }
+
+  private boolean jj_3_26() {
+    if (jj_3R_94()) return true;
     return false;
   }
 
@@ -9349,6 +9349,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_430() {
+    if (jj_3R_184()) return true;
+    return false;
+  }
+
   private boolean jj_3R_403() {
     if (jj_scan_token(GE)) return true;
     return false;
@@ -9359,13 +9364,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_430() {
-    if (jj_3R_184()) return true;
+  private boolean jj_3R_401() {
+    if (jj_scan_token(GT)) return true;
     return false;
   }
 
-  private boolean jj_3R_401() {
-    if (jj_scan_token(GT)) return true;
+  private boolean jj_3R_118() {
+    if (jj_3R_117()) return true;
     return false;
   }
 
@@ -9374,8 +9379,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_118() {
-    if (jj_3R_117()) return true;
+  private boolean jj_3R_364() {
+    if (jj_3R_379()) return true;
     return false;
   }
 
@@ -9393,11 +9398,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     }
     }
     if (jj_3R_392()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_364() {
-    if (jj_3R_379()) return true;
     return false;
   }
 
@@ -9638,11 +9638,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_385() {
-    if (jj_3R_297()) return true;
-    return false;
-  }
-
   private boolean jj_3R_332() {
     if (jj_scan_token(SC_OR)) return true;
     if (jj_3R_250()) return true;
@@ -9652,11 +9647,6 @@ after they matched their desired input, which will lead to unexpected behaviour
   private boolean jj_3R_421() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_313()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_384() {
-    if (jj_3R_123()) return true;
     return false;
   }
 
@@ -9681,8 +9671,18 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_385() {
+    if (jj_3R_297()) return true;
+    return false;
+  }
+
   private boolean jj_3R_228() {
     if (jj_scan_token(INTERFACE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_384() {
+    if (jj_3R_123()) return true;
     return false;
   }
 
@@ -9720,17 +9720,6 @@ after they matched their desired input, which will lead to unexpected behaviour
   private boolean jj_3R_170() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_114()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_382() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_150()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_373() {
-    if (jj_scan_token(_DEFAULT)) return true;
     return false;
   }
 
@@ -9776,6 +9765,23 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_374() {
+    if (jj_scan_token(COLON)) return true;
+    if (jj_3R_180()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_382() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_150()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_373() {
+    if (jj_scan_token(_DEFAULT)) return true;
+    return false;
+  }
+
   private boolean jj_3R_372() {
     if (jj_scan_token(CASE)) return true;
     if (jj_3R_150()) return true;
@@ -9784,12 +9790,6 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3R_382()) { jj_scanpos = xsp; break; }
     }
-    return false;
-  }
-
-  private boolean jj_3R_374() {
-    if (jj_scan_token(COLON)) return true;
-    if (jj_3R_180()) return true;
     return false;
   }
 
