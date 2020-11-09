@@ -356,6 +356,10 @@ TOKEN :
 
 TOKEN :
 {
+ /**
+  * Note that the JLS treats longs as an int followed by the letter {@code L} (upper or lowercase)
+  * Note that Javaparser differs, as it handles longs separately (as a {@code LONG_LITERAL})
+  */
   < LONG_LITERAL:
         <DECIMAL_LITERAL> (["l","L"])
       | <HEX_LITERAL> (["l","L"])
@@ -363,6 +367,103 @@ TOKEN :
       | <BINARY_LITERAL> (["l","L"])
   >
 |
+ /**
+  * Note that the JLS treats longs as an int followed by the letter {@code L} (upper or lowercase)
+  * Note that Javaparser differs, as it handles longs separately (as a {@code LONG_LITERAL})
+  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.1
+  * <pre>{@code
+  *     IntegerLiteral:
+  *         DecimalIntegerLiteral
+  *         HexIntegerLiteral
+  *         OctalIntegerLiteral
+  *         BinaryIntegerLiteral
+  *     DecimalIntegerLiteral:
+  *         DecimalNumeral [IntegerTypeSuffix]
+  *     HexIntegerLiteral:
+  *         HexNumeral [IntegerTypeSuffix]
+  *     OctalIntegerLiteral:
+  *         OctalNumeral [IntegerTypeSuffix]
+  *     BinaryIntegerLiteral:
+  *         BinaryNumeral [IntegerTypeSuffix]
+  *     IntegerTypeSuffix:
+  *         (one of)
+  *         l L
+  * }</pre>
+  * For convenience:
+  * <pre>{@code
+  *     DecimalNumeral:
+  *         0
+  *         NonZeroDigit [Digits]
+  *         NonZeroDigit Underscores Digits
+  *     NonZeroDigit:
+  *         (one of)
+  *         1 2 3 4 5 6 7 8 9
+  *     Digits:
+  *         Digit
+  *         Digit [DigitsAndUnderscores] Digit
+  *     Digit:
+  *         0
+  *         NonZeroDigit
+  *     DigitsAndUnderscores:
+  *         DigitOrUnderscore {DigitOrUnderscore}
+  *     DigitOrUnderscore:
+  *         Digit
+  *         _
+  *     Underscores:
+  *         _ {_}
+  * }</pre>
+  * For convenience:
+  * <pre>{@code
+  *     HexNumeral:
+  *         0 x HexDigits
+  *         0 X HexDigits
+  *     HexDigits:
+  *         HexDigit
+  *         HexDigit [HexDigitsAndUnderscores] HexDigit
+  *     HexDigit:
+  *         (one of)
+  *         0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
+  *     HexDigitsAndUnderscores:
+  *         HexDigitOrUnderscore {HexDigitOrUnderscore}
+  *     HexDigitOrUnderscore:
+  *         HexDigit
+  *         _
+  * }</pre>
+  * For convenience:
+  * <pre>{@code
+  *     OctalNumeral:
+  *         0 OctalDigits
+  *         0 Underscores OctalDigits
+  *     OctalDigits:
+  *         OctalDigit
+  *         OctalDigit [OctalDigitsAndUnderscores] OctalDigit
+  *     OctalDigit:
+  *         (one of)
+  *         0 1 2 3 4 5 6 7
+  *     OctalDigitsAndUnderscores:
+  *         OctalDigitOrUnderscore {OctalDigitOrUnderscore}
+  *     OctalDigitOrUnderscore:
+  *         OctalDigit
+  *         _
+  * }</pre>
+  * For convenience:
+  * <pre>{@code
+  *     BinaryNumeral:
+  *         0 b BinaryDigits
+  *         0 B BinaryDigits
+  *     BinaryDigits:
+  *         BinaryDigit
+  *         BinaryDigit [BinaryDigitsAndUnderscores] BinaryDigit
+  *     BinaryDigit:
+  *         (one of)
+  *         0 1
+  *     BinaryDigitsAndUnderscores:
+  *         BinaryDigitOrUnderscore {BinaryDigitOrUnderscore}
+  *     BinaryDigitOrUnderscore:
+  *         BinaryDigit
+  *         _
+  * }</pre>
+  */
   < INTEGER_LITERAL:
         <DECIMAL_LITERAL>
       | <HEX_LITERAL>
@@ -378,6 +479,46 @@ TOKEN :
 |
   < #BINARY_LITERAL: "0" ["b","B"] ["0","1"]((["0","1","_"])*["0","1"])? >
 |
+
+ /**
+  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.2
+  * <pre>{@code
+  *     FloatingPointLiteral:
+  *         DecimalFloatingPointLiteral
+  *         HexadecimalFloatingPointLiteral
+  *     DecimalFloatingPointLiteral:
+  *         Digits . [Digits] [ExponentPart] [FloatTypeSuffix]
+  *         . Digits [ExponentPart] [FloatTypeSuffix]
+  *         Digits ExponentPart [FloatTypeSuffix]
+  *         Digits [ExponentPart] FloatTypeSuffix
+  *     ExponentPart:
+  *         ExponentIndicator SignedInteger
+  *     ExponentIndicator:
+  *         (one of)
+  *         e E
+  *     SignedInteger:
+  *         [Sign] Digits
+  *     Sign:
+  *         (one of)
+  *         + -
+  *     FloatTypeSuffix:
+  *         (one of)
+  *         f F d D
+  * }</pre>
+  * <pre>{@code
+  *     HexadecimalFloatingPointLiteral:
+  *         HexSignificand BinaryExponent [FloatTypeSuffix]
+  *     HexSignificand:
+  *         HexNumeral [.]
+  *         0 x [HexDigits] . HexDigits
+  *         0 X [HexDigits] . HexDigits
+  *     BinaryExponent:
+  *         BinaryExponentIndicator SignedInteger
+  *     BinaryExponentIndicator:
+  *         (one of)
+  *         p P
+  * }</pre>
+  */
   < FLOATING_POINT_LITERAL:
         <DECIMAL_FLOATING_POINT_LITERAL>
       | <HEXADECIMAL_FLOATING_POINT_LITERAL>
@@ -401,6 +542,23 @@ TOKEN :
 |
   < #HEX_DIGITS: ["0"-"9","a"-"f","A"-"F"]((["0"-"9","a"-"f","A"-"F","_"])*["0"-"9","a"-"f","A"-"F"])? >
 |
+  /**
+   * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.3
+   * <pre>{@code
+   *     UnicodeInputCharacter:
+   *         UnicodeEscape
+   *         RawInputCharacter
+   *     UnicodeEscape:
+   *         \ UnicodeMarker HexDigit HexDigit HexDigit HexDigit
+   *     UnicodeMarker:
+   *         u {u}
+   *     HexDigit:
+   *         (one of)
+   *         0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
+   *     RawInputCharacter:
+   *         any Unicode character
+   * }</pre>
+   */
   < #UNICODE_ESCAPE:
     "\\u"
     ["0"-"9","A"-"F","a"-"f"]
@@ -408,39 +566,178 @@ TOKEN :
     ["0"-"9","A"-"F","a"-"f"]
     ["0"-"9","A"-"F","a"-"f"] >
 |
+  /**
+   * TODO: Verify this.
+   * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.4
+   * <pre>{@code
+   *     CharacterLiteral:
+   *         ' SingleCharacter '
+   *         ' EscapeSequence '
+   *     SingleCharacter:
+   *         InputCharacter but not ' or \
+   * }</pre>
+   * <pre>{@code
+   *     LineTerminator:
+   *         the ASCII LF character, also known as "newline"
+   *         the ASCII CR character, also known as "return"
+   *         the ASCII CR character followed by the ASCII LF character
+   *     InputCharacter:
+   *         UnicodeInputCharacter but not CR or LF
+   * }</pre>
+   * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.7
+   * <pre>{@code
+   *     EscapeSequence:
+   *         \ b (backspace BS, Unicode \u0008)
+   *         \ s (space SP, Unicode \u0020)
+   *         \ t (horizontal tab HT, Unicode \u0009)
+   *         \ n (linefeed LF, Unicode \u000a)
+   *         \ f (form feed FF, Unicode \u000c)
+   *         \ r (carriage return CR, Unicode \u000d)
+   *         \ LineTerminator (line continuation, no Unicode representation)
+   *         \ " (double quote ", Unicode \u0022)
+   *         \ ' (single quote ', Unicode \u0027)
+   *         \ \ (backslash \, Unicode \u005c)
+   *         OctalEscape (octal value, Unicode \u0000 to \u00ff)
+   *     OctalEscape:
+   *         \ OctalDigit
+   *         \ OctalDigit OctalDigit
+   *         \ ZeroToThree OctalDigit OctalDigit
+   *     OctalDigit:
+   *         (one of)
+   *         0 1 2 3 4 5 6 7
+   *     ZeroToThree:
+   *         (one of)
+   *         0 1 2 3
+   * }</pre>
+   */
   < CHARACTER_LITERAL:
       "'"
-      (   (~["'","\\","\n","\r"])
-        | ("\\"
-            ( ["n","t","b","r","f","\\","'","\""]
-            | ["0"-"7"] ( ["0"-"7"] )?
-            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
-            )
+      // TODO: Could (and the duplicate code in STRING_LITERAL) this be extracted out?
+      (
+          (~["'","\\","\n","\r"])
+       |
+          ( // TODO: Could these escape sequences be extracted out?
+              "\\"
+              (
+                  ["n","t","b","r","f","\\","'","\""]
+               |
+                  ["0"-"7"] ( ["0"-"7"] )?
+               |
+                  ["0"-"3"] ["0"-"7"] ["0"-"7"]
+              )
           )
-        | <UNICODE_ESCAPE>
+       |
+          <UNICODE_ESCAPE>
       )
       "'"
   >
 |
+  /**
+   * TODO: Verify this.
+   * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.5
+   * <pre>{@code
+   *     StringLiteral:
+   *         " {StringCharacter} "
+   *     StringCharacter:
+   *         InputCharacter but not " or \
+   *         EscapeSequence
+   * }</pre>
+   * <pre>{@code
+   *     LineTerminator:
+   *         the ASCII LF character, also known as "newline"
+   *         the ASCII CR character, also known as "return"
+   *         the ASCII CR character followed by the ASCII LF character
+   *     InputCharacter:
+   *         UnicodeInputCharacter but not CR or LF
+   * }</pre>
+   * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.7
+   * <pre>{@code
+   *     EscapeSequence:
+   *         \ b (backspace BS, Unicode \u0008)
+   *         \ s (space SP, Unicode \u0020)
+   *         \ t (horizontal tab HT, Unicode \u0009)
+   *         \ n (linefeed LF, Unicode \u000a)
+   *         \ f (form feed FF, Unicode \u000c)
+   *         \ r (carriage return CR, Unicode \u000d)
+   *         \ LineTerminator (line continuation, no Unicode representation)
+   *         \ " (double quote ", Unicode \u0022)
+   *         \ ' (single quote ', Unicode \u0027)
+   *         \ \ (backslash \, Unicode \u005c)
+   *         OctalEscape (octal value, Unicode \u0000 to \u00ff)
+   *     OctalEscape:
+   *         \ OctalDigit
+   *         \ OctalDigit OctalDigit
+   *         \ ZeroToThree OctalDigit OctalDigit
+   *     OctalDigit:
+   *         (one of)
+   *         0 1 2 3 4 5 6 7
+   *     ZeroToThree:
+   *         (one of)
+   *         0 1 2 3
+   * }</pre>
+   */
   < STRING_LITERAL:
       "\""
-      (   (~["\"","\\","\n","\r"])
-        | ("\\"
-            ( ["n","t","b","r","f","\\","'","\""]
-            | ["0"-"7"] ( ["0"-"7"] )?
-            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
-            )
+      // TODO: Could (and the duplicate code in CHARACTER_LITERAL) this be extracted out?
+      (
+          (~["\"","\\","\n","\r"])
+       |
+          ( // TODO: Could these escape sequences be extracted out?
+              "\\"
+              (
+                  ["n","t","b","r","f","\\","'","\""]
+               |
+                  ["0"-"7"] ( ["0"-"7"] )?
+               |
+                  ["0"-"3"] ["0"-"7"] ["0"-"7"]
+              )
           )
-        | ("\\u"
-            ["0"-"9","A"-"F","a"-"f"]
-            ["0"-"9","A"-"F","a"-"f"]
-            ["0"-"9","A"-"F","a"-"f"]
-            ["0"-"9","A"-"F","a"-"f"]
+       |
+          (
+              "\\u"
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
           )
       )*
       "\""
   >
 }
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.6
+ * <pre>{@code
+ *     TextBlock:
+ *         " " " {TextBlockWhiteSpace} LineTerminator {TextBlockCharacter} " " "
+ *     TextBlockWhiteSpace:
+ *         WhiteSpace but not LineTerminator
+ *     TextBlockCharacter:
+ *         InputCharacter but not \
+ *         EscapeSequence
+ *         LineTerminator
+ * }</pre>
+ * <pre>{@code
+ *     WhiteSpace:
+ *         the ASCII SP character, also known as "space"
+ *         the ASCII HT character, also known as "horizontal tab"
+ *         the ASCII FF character, also known as "form feed"
+ *         LineTerminator
+ *     LineTerminator:
+ *         the ASCII LF character, also known as "newline"
+ *         the ASCII CR character, also known as "return"
+ *         the ASCII CR character followed by the ASCII LF character
+ *     InputCharacter:
+ *         UnicodeInputCharacter but not CR or LF
+ *         UnicodeInputCharacter:
+ *         UnicodeEscape
+ *         RawInputCharacter
+ *     UnicodeEscape:
+ *         \ UnicodeMarker HexDigit HexDigit HexDigit HexDigit
+ *     RawInputCharacter:
+ *         any Unicode character
+ * }</pre>
+ */
 /* TEXT BLOCK LITERAL */
 MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 <IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
@@ -615,7 +912,17 @@ TOKEN :
 }
 
 /* SEPARATORS */
-
+/**
+ * FIXME: Only ten (10) separators are defined within this grammar, but the JLS lists twelve (12)
+ * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators"
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.11
+ * Twelve tokens, formed from ASCII characters, are the separators (punctuators).
+ * <pre>{@code
+ *     Separator:
+ *     (one of)
+ *     (   )   {   }   [   ]   ;   ,   .   ...   @   ::
+ * }</pre
+ */
 TOKEN :
 {
   < LPAREN: "(" >
@@ -630,24 +937,42 @@ TOKEN :
 | < AT: "@" >
 }
 
-/* OPERATORS */
 
+/* OPERATORS */
+/**
+ * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
+ * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators"
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.12
+ * 38 tokens, formed from ASCII characters, are the operators.
+ * <pre>{@code
+ *     Separator:
+ *     (one of)
+ *     =   >   <   !   ~   ?   :   ->
+ *     ==  >=  <=  !=  &&  ||  ++  --
+ *     +   -   *   /   &   |   ^   %   <<   >>   >>>
+ *     +=  -=  *=  /=  &=  |=  ^=  %=  <<=  >>=  >>>=
+ * }</pre
+ */
 TOKEN :
 {
   < ASSIGN: "=" >
+// GT - see below
 | < LT: "<" >
 | < BANG: "!" >
 | < TILDE: "~" >
 | < HOOK: "?" >
 | < COLON: ":" >
+| < ARROW: "->" >
+
 | < EQ: "==" >
-| < LE: "<=" >
 | < GE: ">=" >
+| < LE: "<=" >
 | < NE: "!=" >
-| < SC_OR: "||" >
 | < SC_AND: "&&" >
+| < SC_OR: "||" >
 | < INCR: "++" >
 | < DECR: "--" >
+
 | < PLUS: "+" >
 | < MINUS: "-" >
 | < STAR: "*" >
@@ -657,6 +982,9 @@ TOKEN :
 | < XOR: "^" >
 | < REM: "%" >
 | < LSHIFT: "<<" >
+// RSIGNEDSHIFT - see below
+// RUNSIGNEDSHIFT - see below
+
 | < PLUSASSIGN: "+=" >
 | < MINUSASSIGN: "-=" >
 | < STARASSIGN: "*=" >
@@ -668,12 +996,15 @@ TOKEN :
 | < LSHIFTASSIGN: "<<=" >
 | < RSIGNEDSHIFTASSIGN: ">>=" >
 | < RUNSIGNEDSHIFTASSIGN: ">>>=" >
+
 | < ELLIPSIS: "..." >
-| < ARROW: "->" >
 | < DOUBLECOLON: "::" >
 }
 
-/* >'s need special attention due to generics syntax. */
+/*
+ * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
+ * TODO: Investigate if the ordering matters, or if it's just that there's a code block associated with the token.
+.*/
 TOKEN :
 {
   < RUNSIGNEDSHIFT: ">>>" >
@@ -2164,6 +2495,20 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
     { return ret; }
 }
 
+/**
+ * Note that a Long Literal is defined as an {@code IntegerLiteral}, suffixed by "L"
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.1
+ * <pre>{@code
+ *     Literal:
+ *         IntegerLiteral
+ *         FloatingPointLiteral
+ *         BooleanLiteral
+ *         CharacterLiteral
+ *         StringLiteral
+ *         TextBlock
+ *         NullLiteral
+ * }</pre>
+ */
 Expression Literal():
 {
     Expression ret;
@@ -2189,6 +2534,14 @@ Expression Literal():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.3
+ * <pre>{@code
+ *     BooleanLiteral:
+ *         (one of)
+ *         true false
+ * }</pre>
+ */
 Expression BooleanLiteral():
 {
     Expression ret;
@@ -2202,6 +2555,13 @@ Expression BooleanLiteral():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.8
+ * <pre>{@code
+ *     NullLiteral:
+ *         null
+ * }</pre>
+ */
 Expression NullLiteral():
 {}
 {
@@ -2423,7 +2783,14 @@ VariableDeclarationExpr VariableDeclarationExpression():
     VariableDeclarator var;
 }
 {
-    modifier = Modifiers() partialType = Type(emptyNodeList()) var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
+    modifier = Modifiers()
+    partialType = Type(emptyNodeList())
+    var = VariableDeclarator(partialType) { variables.add(var); }
+    (
+        ","
+        var = VariableDeclarator(partialType) { variables.add(var); }
+    )*
+
     {
         JavaToken begin=orIfInvalid(modifier.begin, partialType);
         return new VariableDeclarationExpr(range(begin, jpToken()), modifier.modifiers, modifier.annotations, variables);
@@ -2535,29 +2902,39 @@ SwitchEntry SwitchEntry():
 }
 {
     (
-        "case" { begin=jpToken(); } label = ConditionalExpression() { labels = add(labels, label); }
-        ( "," label = ConditionalExpression()  { labels = add(labels, label); } )*
-    |
+        "case" { begin=jpToken(); }
+        label = ConditionalExpression() { labels = add(labels, label); }
+        (
+            ","
+            label = ConditionalExpression()  { labels = add(labels, label); }
+        )*
+     |
         "default" { begin=jpToken(); }
     )
     (
-        ":" stmts = Statements() { ret = new SwitchEntry(range(begin, jpToken()), labels, STATEMENT_GROUP, stmts); }
-    |
+        ":"
+        stmts = Statements()
+        { ret = new SwitchEntry(range(begin, jpToken()), labels, STATEMENT_GROUP, stmts); }
+     |
         "->"
         (
-            expression = Expression() ";" {
+            expression = Expression()
+            ";"
+            {
                 TokenRange r=range(begin, jpToken());
                 stmts.add(new ExpressionStmt(r, expression));
                 ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
             }
-        |
-            stmt = Block() {
+         |
+            stmt = Block()
+            {
                 TokenRange r=range(begin, jpToken());
                 stmts.add(stmt);
                 ret = new SwitchEntry(r, labels, BLOCK, stmts);
             }
-        |
-            stmt = ThrowStatement() {
+         |
+            stmt = ThrowStatement()
+            {
                 TokenRange r=range(begin, jpToken());
                 stmts.add(stmt);
                 ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
