@@ -1051,7 +1051,6 @@ TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
  *     ModularCompilationUnit:
  *         {ImportDeclaration} ModuleDeclaration
  * }</pre>
- *
  * Note that {@code TypeDeclaration} is defined in the JLS as a class or interface.
  * <ul>
  *   <li>A class is defined as a normal class or enum declaration.</li>
@@ -1066,7 +1065,6 @@ TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
  *         InterfaceDeclaration
  *         ;
  * }</pre>
- *
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-ClassDeclaration
  * <pre>{@code
  *     TypeDeclaration:
@@ -1074,7 +1072,6 @@ TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
  *         InterfaceDeclaration
  *         ;
  * }</pre>
- *
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-InterfaceDeclaration
  * <pre>{@code
  *     InterfaceDeclaration:
@@ -1319,6 +1316,26 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     { return new ClassOrInterfaceDeclaration(range(begin, jpToken()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.4
+ * <pre>{@code
+ *     Superclass:
+ *         extends ClassType
+ * }</pre>
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.3
+ * <pre>{@code
+ *     ClassOrInterfaceType:
+ *         ClassType
+ *         InterfaceType
+ *     ClassType:
+ *         {Annotation} TypeIdentifier [TypeArguments]
+ *         PackageName . {Annotation} TypeIdentifier [TypeArguments]
+ *         ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
+ *     InterfaceType:
+ *         ClassType
+ * }</pre>
+ */
 NodeList<ClassOrInterfaceType> ExtendsList():
 {
     boolean extendsMoreThanOne = false;
@@ -1331,6 +1348,28 @@ NodeList<ClassOrInterfaceType> ExtendsList():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.5
+ * <pre>{@code
+ *     Superinterfaces:
+ *         implements InterfaceTypeList
+ *     InterfaceTypeList:
+ *         InterfaceType {, InterfaceType}
+ * }</pre>
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.3
+ * <pre>{@code
+ *     ClassOrInterfaceType:
+ *         ClassType
+ *         InterfaceType
+ *     ClassType:
+ *         {Annotation} TypeIdentifier [TypeArguments]
+ *         PackageName . {Annotation} TypeIdentifier [TypeArguments]
+ *         ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
+ *     InterfaceType:
+ *         ClassType
+ * }</pre>
+ */
 NodeList<ClassOrInterfaceType> ImplementsList():
 {
     NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
@@ -1342,6 +1381,29 @@ NodeList<ClassOrInterfaceType> ImplementsList():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9
+ * <pre>{@code
+ *     EnumDeclaration:
+ *         {ClassModifier} enum TypeIdentifier [Superinterfaces] EnumBody
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9.1
+ * <pre>{@code
+ *     EnumBody:
+ *         { [EnumConstantList] [,] [EnumBodyDeclarations] }
+ *     EnumConstantList:
+ *         EnumConstant {, EnumConstant}
+ *     EnumConstant:
+ *         {EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody]
+ *     EnumConstantModifier:
+ *         Annotation
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9.2
+ * <pre>{@code
+ *     EnumBodyDeclarations:
+ *         ; {ClassBodyDeclaration}
+ * }</pre>
+ */
 EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 {
     SimpleName name;
@@ -1460,9 +1522,30 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
     { return ret; }
 }
 
+/**
+ * Note that {@code ClassDeclaration} and {@code InterfaceDeclaration} (in the JLS) include enum and annotation declarations.
+ * Note that {@code InstanceInitializer} and {@code StaticInitializer} are treated as an {@code Initializer} with an
+ * optional {@code static} modifier in JavaParser.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.6
+ * <pre>{@code
+ *     ClassBody:
+ *         { {ClassBodyDeclaration} }
+ *     ClassBodyDeclaration:
+ *         ClassMemberDeclaration
+ *         InstanceInitializer
+ *         StaticInitializer
+ *         ConstructorDeclaration
+ *     ClassMemberDeclaration:
+ *         FieldDeclaration
+ *         MethodDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }</pre>
+ */
 BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 {
-    ModifierHolder modifier;
+    ModifierHolder modifiers;
     BodyDeclaration<?> ret;
 }
 {
@@ -1472,28 +1555,44 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
      |
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
-        modifier = Modifiers()
+        modifiers = Modifiers()
         (
-            ret = ClassOrInterfaceDeclaration(modifier)
+            ret = ClassOrInterfaceDeclaration(modifiers)
          |
             LOOKAHEAD("enum")
-            ret = EnumDeclaration(modifier)
+            ret = EnumDeclaration(modifiers)
          |
             LOOKAHEAD("@" "interface")
-            ret = AnnotationTypeDeclaration(modifier)
+            ret = AnnotationTypeDeclaration(modifiers)
          |
             LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
-            ret = ConstructorDeclaration(modifier)
+            ret = ConstructorDeclaration(modifiers)
          |
             LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
-            ret = FieldDeclaration(modifier)
+            ret = FieldDeclaration(modifiers)
          |
-            ret = MethodDeclaration(modifier)
+            ret = MethodDeclaration(modifiers)
         )
     )
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
+ * <pre>{@code
+ *     FieldDeclaration:
+ *         {FieldModifier} UnannType VariableDeclaratorList ;
+ *     VariableDeclaratorList:
+ *         VariableDeclarator {, VariableDeclarator}
+ *     VariableDeclarator:
+ *         VariableDeclaratorId [= VariableInitializer]
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ *     VariableInitializer:
+ *         Expression
+ *         ArrayInitializer
+ * }</pre>
+ */
 FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
     Type partialType;
@@ -1502,14 +1601,32 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 }
 {
     // Modifiers are already matched in the caller
-    partialType = Type(emptyNodeList()) val = VariableDeclarator(partialType) { variables.add(val); }
-        ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
+    partialType = Type(emptyNodeList())
+    val = VariableDeclarator(partialType) { variables.add(val); }
+    (
+        ","
+        val = VariableDeclarator(partialType) { variables.add(val); }
+    )*
+    ";"
+
     {
         JavaToken begin = orIfInvalid(modifier.begin, partialType);
         return new FieldDeclaration(range(begin, jpToken()), modifier.modifiers, modifier.annotations, variables);
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
+ * <pre>{@code
+ *     VariableDeclarator:
+ *         VariableDeclaratorId [= VariableInitializer]
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ *     VariableInitializer:
+ *         Expression
+ *         ArrayInitializer
+ * }</pre>
+ */
 VariableDeclarator VariableDeclarator(Type partialType):
 {
     Pair<SimpleName, List<ArrayBracketPair>> id;
@@ -1521,6 +1638,31 @@ VariableDeclarator VariableDeclarator(Type partialType):
     { return new VariableDeclarator(range(id.a, jpToken()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
+ * <pre>{@code
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ * }</pre>
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-Identifier
+ * <pre>{@code
+ *     Identifier:
+ *         IdentifierChars but not a Keyword or BooleanLiteral or NullLiteral
+ *     IdentifierChars:
+ *         JavaLetter {JavaLetterOrDigit}
+ *     JavaLetter:
+ *         any Unicode character that is a "Java letter"
+ *     JavaLetterOrDigit:
+ *         any Unicode character that is a "Java letter-or-digit"
+ * }</pre>
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-Dims
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ */
 Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 {
     SimpleName name;
@@ -1533,6 +1675,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     (
         arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); }
     )*
+
     {
         if(storeTokens) {
             name.setTokenRange(name.getTokenRange().get().withEnd(jpToken()));
@@ -1541,6 +1684,14 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
+ * <pre>{@code
+ *     VariableInitializer:
+ *         Expression
+ *         ArrayInitializer
+ * }</pre>
+ */
 Expression VariableInitializer():
 {
     Expression ret;
@@ -1554,6 +1705,22 @@ Expression VariableInitializer():
     { return ret;}
 }
 
+/**
+ * An array initializer is written as a comma-separated list of expressions, enclosed by braces { and }.
+ * A trailing comma may appear after the last expression in an array initializer and is ignored.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-10.html#jls-10.6
+ * <pre>{@code
+ *     ArrayInitializer:
+ *         { [VariableInitializerList] [,] }
+ *     VariableInitializerList:
+ *         VariableInitializer {, VariableInitializer}
+ * }</pre>
+ * <pre>{@code
+ *     VariableInitializer:
+ *         Expression
+ *         ArrayInitializer
+ * }</pre>
+ */
 ArrayInitializerExpr ArrayInitializer():
 {
     NodeList<Expression> values = emptyNodeList();
@@ -1562,10 +1729,16 @@ ArrayInitializerExpr ArrayInitializer():
 }
 {
     "{" { begin=jpToken(); }
-    [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ]
+    [
+        val = VariableInitializer() { values = add(values, val); }
+        ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )*
+    ]
     [ "," ]
     "}"
-    { return new ArrayInitializerExpr(range(begin, jpToken()), values); }
+
+    {
+        return new ArrayInitializerExpr(range(begin, jpToken()), values);
+    }
 }
 
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
