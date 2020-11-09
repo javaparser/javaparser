@@ -1438,6 +1438,21 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 }
 
 
+/**
+ * Note that the {@code EnumConstantModifier} is defined as an {@code Annotation}.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9.1
+ * <pre>{@code
+ *     EnumConstant:
+ *         {EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody]
+ *     EnumConstantModifier:
+ *         Annotation
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9.2
+ * <pre>{@code
+ *     EnumBodyDeclarations:
+ *         ; {ClassBodyDeclaration}
+ * }</pre>
+ */
 EnumConstantDeclaration EnumConstantDeclaration():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
@@ -1452,6 +1467,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
     name = SimpleName() { begin = orIfInvalid(begin, jpToken()); }
     [ args = Arguments() ]
     [ classBody = ClassOrInterfaceBody() ]
+
     {
         return new EnumConstantDeclaration(range(begin, jpToken()), annotations, name, args, classBody);
     }
@@ -1461,6 +1477,26 @@ EnumConstantDeclaration EnumConstantDeclaration():
  * If the list inside the returned RangedList is null, there are no brackets.
  * If it is empty, there are brackets, but nothing is in them <>.
  * The normal case is that it contains TypeParameters, like <A, B, C>.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.2
+ * <pre>{@code
+ *     TypeParameters:
+ *         < TypeParameterList >
+ *     TypeParameterList:
+ *         TypeParameter {, TypeParameter}
+ * }</pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.4
+ * <pre>{@code
+ *     TypeParameter:
+ *         {TypeParameterModifier} TypeIdentifier [TypeBound]
+ *     TypeParameterModifier:
+ *         Annotation
+ *     TypeBound:
+ *         extends TypeVariable
+ *         extends ClassOrInterfaceType {AdditionalBound}
+ *     AdditionalBound:
+ *         & InterfaceType
+ * }</pre>
  */
 RangedList<TypeParameter> TypeParameters():
 {
@@ -1474,12 +1510,29 @@ RangedList<TypeParameter> TypeParameters():
     tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
     (
         ","
-        annotations = Annotations() tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
+        annotations = Annotations()
+        tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
     )*
     ">" { ret.endAt(jpToken()); }
     { return ret; }
 }
 
+/**
+ * Note that the {@code TypeParameterModifier} is defined as an {@code Annotation}.
+ * Note that the annotations are passed as a parameter to this grammar entry.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.4
+ * <pre>{@code
+ *     TypeParameter:
+ *         {TypeParameterModifier} TypeIdentifier [TypeBound]
+ *     TypeParameterModifier:
+ *         Annotation
+ *     TypeBound:
+ *         extends TypeVariable
+ *         extends ClassOrInterfaceType {AdditionalBound}
+ *     AdditionalBound:
+ *         & InterfaceType
+ * }</pre>
+ */
 TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations):
 {
     SimpleName name;
@@ -1487,11 +1540,37 @@ TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations):
     JavaToken begin;
 }
 {
+    // Annotations are passed as a parameter to this grammar entry.
     name = SimpleName() { begin=jpToken(); }
     [ typeBound = TypeBound() ]
     { return new TypeParameter(range(begin, jpToken()), name, typeBound, annotations); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.4
+ * <pre>{@code
+ *     TypeBound:
+ *         extends TypeVariable
+ *         extends ClassOrInterfaceType {AdditionalBound}
+ *     AdditionalBound:
+ *         & InterfaceType
+ * }</pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.3
+ * <pre>{@code
+ *     ClassOrInterfaceType:
+ *         ClassType
+ *         InterfaceType
+ *     ClassType:
+ *         {Annotation} TypeIdentifier [TypeArguments]
+ *         PackageName . {Annotation} TypeIdentifier [TypeArguments]
+ *         ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
+ *     InterfaceType:
+ *         ClassType
+ *     TypeVariable:
+ *         {Annotation} TypeIdentifier
+ * }</pre>
+ */
 NodeList<ClassOrInterfaceType> TypeBound():
 {
     NodeList<ClassOrInterfaceType> ret = emptyNodeList();
@@ -1506,6 +1585,35 @@ NodeList<ClassOrInterfaceType> TypeBound():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.6
+ * <pre>{@code
+ *     ClassBody:
+ *         { {ClassBodyDeclaration} }
+ *     ClassBodyDeclaration:
+ *         ClassMemberDeclaration
+ *         InstanceInitializer
+ *         StaticInitializer
+ *         ConstructorDeclaration
+ *     ClassMemberDeclaration:
+ *         FieldDeclaration
+ *         MethodDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.1.4
+ * <pre>{@code
+ *     InterfaceBody:
+ *         { {InterfaceMemberDeclaration} }
+ *     InterfaceMemberDeclaration:
+ *         ConstantDeclaration
+ *         InterfaceMethodDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }</pre>
+ */
 NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 {
     NodeList<BodyDeclaration<?>> ret = emptyNodeList();
@@ -1526,6 +1634,7 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
  * Note that {@code ClassDeclaration} and {@code InterfaceDeclaration} (in the JLS) include enum and annotation declarations.
  * Note that {@code InstanceInitializer} and {@code StaticInitializer} are treated as an {@code Initializer} with an
  * optional {@code static} modifier in JavaParser.
+ * TODO: Investigate the {@code ClassBodyDeclaration} parts existing within an interface - is permitting this a potential problem?
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.6
  * <pre>{@code
  *     ClassBody:
@@ -1538,6 +1647,17 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
  *     ClassMemberDeclaration:
  *         FieldDeclaration
  *         MethodDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.1.4
+ * <pre>{@code
+ *     InterfaceBody:
+ *         { {InterfaceMemberDeclaration} }
+ *     InterfaceMemberDeclaration:
+ *         ConstantDeclaration
+ *         InterfaceMethodDeclaration
  *         ClassDeclaration
  *         InterfaceDeclaration
  *         ;
@@ -1741,6 +1861,20 @@ ArrayInitializerExpr ArrayInitializer():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4
+ * <pre>{@code
+ *     MethodDeclaration:
+ *         {MethodModifier} MethodHeader MethodBody
+ *     MethodHeader:
+ *         Result MethodDeclarator [Throws]
+ *         TypeParameters {Annotation} Result MethodDeclarator [Throws]
+ *     MethodDeclarator:
+ *         Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
+ *     ReceiverParameter:
+ *         {Annotation} UnannType [Identifier .] this
+ * }</pre>
+ */
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
@@ -1760,10 +1894,20 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
     type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
-    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-    [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
-      ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )* ]
-    ( body = Block() | ";" )
+    name = SimpleName()
+    parameters = Parameters()
+    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
+    ]
+    (
+        body = Block()
+     |
+        ";"
+    )
+
     {
         type = juggleArrayType(type, arrayBracketPairs);
         return new MethodDeclaration(range(begin, jpToken()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
@@ -1792,6 +1936,30 @@ Type AnnotatedType():
     { return type; }
 }
 
+/**
+ * The JLS refers to parameters as {@code FormalParameter}.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4.1
+ * <pre>{@code
+ *     FormalParameterList:
+ *         FormalParameter {, FormalParameter}
+ *     FormalParameter:
+ *         {VariableModifier} UnannType VariableDeclaratorId
+ *         VariableArityParameter
+ *     VariableArityParameter:
+ *         {VariableModifier} UnannType {Annotation} ... Identifier
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-ReceiverParameter
+ * <pre>{@code
+ *     MethodDeclarator:
+ *         Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
+ *     ReceiverParameter:
+ *         {Annotation} UnannType [Identifier .] this
+ * }</pre>
+ */
 Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
 {
     NodeList<Parameter> ret = emptyNodeList();
@@ -1801,9 +1969,10 @@ Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
 {
     "("
     [
-        ( LOOKAHEAD(ReceiverParameter())
+        (
+            LOOKAHEAD(ReceiverParameter())
             rp = ReceiverParameter()
-            |
+         |
             par = Parameter() { ret = add(ret, par); }
         )
         ( "," par = Parameter() { ret = add(ret, par); } )*
@@ -1835,6 +2004,19 @@ NodeList<Parameter> InferredLambdaParameters():
     { return ret;  }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4.1
+ * <pre>{@code
+ *     FormalParameter:
+ *         {VariableModifier} UnannType VariableDeclaratorId
+ *         VariableArityParameter
+ *     VariableArityParameter:
+ *         {VariableModifier} UnannType {Annotation} ... Identifier
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ * }</pre>
+ */
 Parameter Parameter():
 {
     ModifierHolder modifier;
@@ -1844,14 +2026,30 @@ Parameter Parameter():
     NodeList<AnnotationExpr> varArgAnnotations = emptyNodeList();
 }
 {
-    modifier = Modifiers() partialType = Type(emptyNodeList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ]
+    modifier = Modifiers()
+    partialType = Type(emptyNodeList())
+    [
+        varArgAnnotations = Annotations()
+        "..." { isVarArg = true;}
+    ]
     id = VariableDeclaratorId()
+
     {
         JavaToken begin = orIfInvalid(modifier.begin, partialType);
         return new Parameter(range(begin, jpToken()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-ReceiverParameter
+ * <pre>{@code
+ *     MethodDeclarator:
+ *         Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
+ *     ReceiverParameter:
+ *         {Annotation} UnannType [Identifier .] this
+ * }</pre>
+ */
 ReceiverParameter ReceiverParameter():
 {
     Type partialType;
@@ -1867,6 +2065,16 @@ ReceiverParameter ReceiverParameter():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-ReceiverParameter
+ * <pre>{@code
+ *     MethodDeclarator:
+ *         Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
+ *     ReceiverParameter:
+ *         {Annotation} UnannType [Identifier .] this
+ * }</pre>
+ */
 Name ReceiverParameterId():
 {
     Name ret = null;
@@ -1876,6 +2084,30 @@ Name ReceiverParameterId():
     { return new Name(tokenRange(), ret, token.image); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8
+ * <pre>{@code
+ *     ConstructorDeclaration:
+ *         {ConstructorModifier} ConstructorDeclarator [Throws] ConstructorBody
+ *     ConstructorDeclarator:
+ *         [TypeParameters] SimpleTypeName ( [ReceiverParameter ,] [FormalParameterList] )
+ *     SimpleTypeName:
+ *         TypeIdentifier
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7
+ * <pre>{@code
+ *     ConstructorBody:
+ *         { [ExplicitConstructorInvocation] [BlockStatements] }
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
+ * <pre>{@code
+ *     ExplicitConstructorInvocation:
+ *         [TypeArguments] this ( [ArgumentList] ) ;
+ *         [TypeArguments] super ( [ArgumentList] ) ;
+ *         ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
+ *         Primary . [TypeArguments] super ( [ArgumentList] ) ;
+ * }</pre>
+ */
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
@@ -1891,11 +2123,19 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
     // Modifiers matched in the caller
-    name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, jpToken()); } parameters = Parameters() [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
-    ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })* ]
+    name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, jpToken()); }
+    parameters = Parameters()
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
+    ]
     "{" { blockBegin=jpToken(); }
-      [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
-      stmts = Statements()
+    [
+        LOOKAHEAD(ExplicitConstructorInvocation())
+        exConsInv = ExplicitConstructorInvocation()
+    ]
+    stmts = Statements()
     "}"
 
     {
@@ -1906,6 +2146,24 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
+ * <pre>{@code
+ *     ExplicitConstructorInvocation:
+ *         [TypeArguments] this ( [ArgumentList] ) ;
+ *         [TypeArguments] super ( [ArgumentList] ) ;
+ *         ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
+ *         Primary . [TypeArguments] super ( [ArgumentList] ) ;
+ * }</pre>
+ * The same, but aligned on {@code super}, to emphasise how this grammar relates:
+ * <pre>{@code
+ *     ExplicitConstructorInvocation:
+ *         [TypeArguments] this ( [ArgumentList] ) ;
+ *                          [TypeArguments] super ( [ArgumentList] ) ;
+ *         ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
+ *                Primary . [TypeArguments] super ( [ArgumentList] ) ;
+ * }</pre>
+ */
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 {
     boolean isThis = false;
@@ -1919,15 +2177,19 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
         LOOKAHEAD([ TypeArguments() ] <THIS> "(")
         [ typeArgs = TypeArguments() { begin=typeArgs.range.getBegin(); } ]
         <THIS> { begin = orIfInvalid(begin, jpToken()); isThis = true; }
-        args = Arguments() ";"
+        args = Arguments()
+        ";"
      |
         [
             LOOKAHEAD( PrimaryExpressionWithoutSuperSuffix() "." )
             expr = PrimaryExpressionWithoutSuperSuffix() "." { begin = orIfInvalid(begin, expr); }
         ]
-        [ typeArgs = TypeArguments() { begin = orIfInvalid(begin, typeArgs.range.getBegin()); } ]
+        [
+            typeArgs = TypeArguments() { begin = orIfInvalid(begin, typeArgs.range.getBegin()); }
+        ]
         <SUPER> { begin = orIfInvalid(begin, jpToken()); }
-        args = Arguments() ";"
+        args = Arguments()
+        ";"
     )
     { return new ExplicitConstructorInvocationStmt(range(begin, jpToken()),typeArgs.list, isThis, expr, args); }
 }
@@ -1942,6 +2204,18 @@ NodeList<Statement> Statements():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.6
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.
+ * <pre>{@code
+ *     InstanceInitializer:
+ *         Block
+ * }</pre>
+ * <pre>{@code
+ *     StaticInitializer:
+ *         static Block
+ * }</pre>
+ */
 InitializerDeclaration InitializerDeclaration():
 {
     BlockStmt body;
@@ -2970,8 +3244,37 @@ BlockStmt Block():
     }
 }
 
-/*
- * Classes inside body statements can only be abstract or final. The semantic must check it.
+/**
+ * Classes inside body statements can only be abstract or final. The semantic checks must check it.
+ * TODO/FIXME: Note that the JLS specifies {@code ClassDeclaration} (thus {@code NormalClassDeclaration} and {@code EnumDeclaration}, but not interface.
+ * TODO/FIXME: Is this a bug in the grammar?
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-Statement
+ * <pre>{@code
+ *     Block:
+ *         { [BlockStatements] }
+ *     BlockStatements:
+ *         BlockStatement {BlockStatement}
+ *     BlockStatement:
+ *         LocalVariableDeclarationStatement
+ *         ClassDeclaration
+ *         Statement
+ * }</pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1
+ * <pre>{@code
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *     NormalClassDeclaration:
+ *         {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
+ * }</pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.9
+ * <pre>{@code
+ *     EnumDeclaration:
+ *         {ClassModifier} enum TypeIdentifier [Superinterfaces] EnumBody
+ * }</pre>
+ *
  */
 Statement BlockStatement():
 {
@@ -2982,13 +3285,16 @@ Statement BlockStatement():
 }
 {
     try {
-        ( LOOKAHEAD( Modifiers() ("class" | "interface") )
+        (
+            LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, jpToken()), typeDecl); }
-        | LOOKAHEAD(VariableDeclarationExpression() )
-            expr = VariableDeclarationExpression() ";"
+         |
+            LOOKAHEAD(VariableDeclarationExpression() )
+            expr = VariableDeclarationExpression()
+            ";"
             { ret = new ExpressionStmt(range(expr, jpToken()), expr); }
-        |
+         |
             ret = Statement()
         )
         { return ret; }
