@@ -1264,9 +1264,37 @@ ModifierHolder Modifiers():
  * Declaration syntax follows.
  */
 
+/**
+ * <strong>
+ *   Note that this grammar is deliberately permissive. As a result, this grammar allows any combinations of
+ *   class/interface and extends/implements (e.g. an interface implementing an interface).
+ * </strong>
+ * Validations of these combinations are handled at the same time as validating language features used.
+ * Also note that JavaParser handles the hierarchy/specialisations of classes, interfaces, and enums differently to the JLS.
+ * <ul>
+ *   <li>This {@code ClassOrInterfaceDeclaration} refers to the {@code NormalClassDeclaration} and {@code NormalInterfaceDeclaration},</li>
+ *   <li>while {@code AnnotationTypeDeclaration} and {@code EnumDeclaration} are handled separately within this grammar.</li>
+ * </ul>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1
+ * <pre>{@code
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *     NormalClassDeclaration:
+ *         {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.1
+ * <pre>{@code
+ *     InterfaceDeclaration:
+ *         NormalInterfaceDeclaration
+ *         AnnotationTypeDeclaration
+ *     NormalInterfaceDeclaration:
+ *         {InterfaceModifier} interface TypeIdentifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
+ * }</pre>
+ */
 ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {
-    boolean isInterface = false;
+    boolean isInterface;
     SimpleName name;
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
     NodeList<ClassOrInterfaceType> extList = emptyNodeList();
@@ -1275,11 +1303,17 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     JavaToken begin = modifier.begin;
 }
 {
-    ( "class" | "interface" { isInterface = true; } ) { begin = orIfInvalid(begin, jpToken()); }
+    (
+        "class" { isInterface = false; }
+     |
+        "interface" { isInterface = true; }
+    ) { begin = orIfInvalid(begin, jpToken()); }
+
     name = SimpleName()
     [ typePar = TypeParameters() ]
     [ extList = ExtendsList() ]
     [ impList = ImplementsList() ]
+
     members = ClassOrInterfaceBody()
 
     { return new ClassOrInterfaceDeclaration(range(begin, jpToken()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
@@ -1324,13 +1358,15 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
     [ impList = ImplementsList() ]
     "{"
     [
-        entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
+        entry = EnumConstantDeclaration() { entries.add(entry); }
+        ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
     ]
     [ "," ]
     [
-        ";" (
+        ";"
+        (
             member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); }
-        |
+         |
             ";"
         )*
     ]
@@ -1352,7 +1388,8 @@ EnumConstantDeclaration EnumConstantDeclaration():
 {
     ( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
     name = SimpleName() { begin = orIfInvalid(begin, jpToken()); }
-    [ args = Arguments() ] [ classBody = ClassOrInterfaceBody() ]
+    [ args = Arguments() ]
+    [ classBody = ClassOrInterfaceBody() ]
     {
         return new EnumConstantDeclaration(range(begin, jpToken()), annotations, name, args, classBody);
     }
@@ -1373,8 +1410,10 @@ RangedList<TypeParameter> TypeParameters():
     "<" { ret.beginAt(jpToken()); }
     annotations = Annotations()
     tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
-    ( ","
-    annotations = Annotations() tp = TypeParameter(annotations) { ret.add(tp); annotations = null; } )*
+    (
+        ","
+        annotations = Annotations() tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
+    )*
     ">" { ret.endAt(jpToken()); }
     { return ret; }
 }
@@ -1386,7 +1425,8 @@ TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations):
     JavaToken begin;
 }
 {
-    name = SimpleName() { begin=jpToken(); } [ typeBound = TypeBound() ]
+    name = SimpleName() { begin=jpToken(); }
+    [ typeBound = TypeBound() ]
     { return new TypeParameter(range(begin, jpToken()), name, typeBound, annotations); }
 }
 
@@ -1397,7 +1437,10 @@ NodeList<ClassOrInterfaceType> TypeBound():
 }
 {
     "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
-    ( "&"   cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
+    (
+        "&"
+        cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+    )*
     { return ret; }
 }
 
