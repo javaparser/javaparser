@@ -91,7 +91,7 @@ abstract class GeneratedJavaParserBase {
     /* Returns a tokenRange that spans the last matched token */
     TokenRange tokenRange() {
         if (storeTokens) {
-            return new TokenRange(jpToken(), token());
+            return new TokenRange(jpToken(), jpToken());
         }
         return null;
     }
