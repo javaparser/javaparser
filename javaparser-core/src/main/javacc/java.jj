@@ -1407,11 +1407,13 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
     BodyDeclaration member;
 }
 {
-    "{" (
+    "{"
+    (
         member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }
-    |
+     |
         ";"
-    )* "}"
+    )*
+    "}"
     { return ret; }
 }
 
@@ -1471,7 +1473,8 @@ VariableDeclarator VariableDeclarator(Type partialType):
     Expression init = null;
 }
 {
-    id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
+    id = VariableDeclaratorId()
+    [ "=" init = VariableInitializer() ]
     { return new VariableDeclarator(range(id.a, jpToken()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
@@ -1483,7 +1486,10 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
 }
 {
-    name = SimpleName() { begin=jpToken();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() { begin=jpToken();}
+    (
+        arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); }
+    )*
     {
         if(storeTokens) {
             name.setTokenRange(name.getTokenRange().get().withEnd(jpToken()));
@@ -1842,11 +1848,12 @@ RangedList<Type> TypeArguments():
     Type type;
 }
 {
+    "<" { ret.beginAt(jpToken()); }
     (
-      "<" { ret.beginAt(jpToken()); }
-      (type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*)?
-      ">" { ret.endAt(jpToken()); }
-    )
+        type = TypeArgument() { ret.add(type); }
+        ( "," type = TypeArgument() { ret.add(type); } )*
+    )?
+    ">" { ret.endAt(jpToken()); }
     { return ret; }
 }
 
