@@ -654,6 +654,13 @@ public class MethodResolutionLogic {
                     paramTypeB.isAssignableBy(argType)) {
 
                 return false;
+            // if paramA and paramB are not the last parameters
+            // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
+            // then we have to consider others parameters before concluding
+            } else if (((i + 1) < numberOfArgs)
+                    && paramTypeB.isReferenceType() && paramTypeB.asReferenceType().getQualifiedName().equals("java.lang.Object")
+                    || (paramTypeA.isReferenceType() && paramTypeA.asReferenceType().getQualifiedName().equals("java.lang.Object"))) {
+                // consider others parameters
             }
             // If we get to this point then we check whether one of the methods contains a parameter type that is more
             // specific. If it does, we can assume the entire declaration is more specific as we would otherwise have
