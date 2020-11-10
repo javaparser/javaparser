@@ -2838,9 +2838,9 @@ Expression ConditionalOrExpression():
  * <pre>{@code
  *     AndExpression:
  *         EqualityExpression
- *     AndExpression & EqualityExpression
- *         ExclusiveOrExpression:
- *     AndExpression
+ *         AndExpression & EqualityExpression
+ *     ExclusiveOrExpression:
+ *         AndExpression
  *         ExclusiveOrExpression ^ AndExpression
  *     InclusiveOrExpression:
  *         ExclusiveOrExpression
@@ -2862,36 +2862,121 @@ Expression ConditionalAndExpression():
     { return ret; }
 }
 
+/**
+ * <strong>
+ * Note subtle distinctions between inclusive and exclusive expressions.
+ * </strong>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.22
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-InclusiveOrExpression
+ * <pre>{@code
+ *     AndExpression:
+ *         EqualityExpression
+ *         AndExpression & EqualityExpression
+ *     ExclusiveOrExpression:
+ *         AndExpression
+ *         ExclusiveOrExpression ^ AndExpression
+ *     InclusiveOrExpression:
+ *         ExclusiveOrExpression
+ *         InclusiveOrExpression | ExclusiveOrExpression
+ * }<pre>
+ */
 Expression InclusiveOrExpression():
 {
     Expression ret;
     Expression right;
 }
 {
-    ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
+    ret = ExclusiveOrExpression()
+    (
+        "|"
+        right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.BINARY_OR); }
+    )*
     { return ret; }
 }
 
+/**
+ * <strong>
+ * Note subtle distinctions between inclusive and exclusive expressions.
+ * </strong>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.22
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-ExclusiveOrExpression
+ * <pre>{@code
+ *     AndExpression:
+ *         EqualityExpression
+ *         AndExpression & EqualityExpression
+ *     ExclusiveOrExpression:
+ *         AndExpression
+ *         ExclusiveOrExpression ^ AndExpression
+ *     InclusiveOrExpression:
+ *         ExclusiveOrExpression
+ *         InclusiveOrExpression | ExclusiveOrExpression
+ * }<pre>
+ */
 Expression ExclusiveOrExpression():
 {
     Expression ret;
     Expression right;
 }
 {
-    ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.XOR); } )*
+    ret = AndExpression() (
+        "^"
+        right = AndExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.XOR); }
+    )*
     { return ret; }
 }
 
+/**
+ * <strong>
+ * Note subtle distinctions between inclusive and exclusive expressions.
+ * </strong>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.22
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-AndExpression
+ * <pre>{@code
+ *     AndExpression:
+ *         EqualityExpression
+ *         AndExpression & EqualityExpression
+ *     ExclusiveOrExpression:
+ *         AndExpression
+ *         ExclusiveOrExpression ^ AndExpression
+ *     InclusiveOrExpression:
+ *         ExclusiveOrExpression
+ *         InclusiveOrExpression | ExclusiveOrExpression
+ * }<pre>
+ */
 Expression AndExpression():
 {
     Expression ret;
     Expression right;
 }
 {
-    ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
+    ret = EqualityExpression() (
+        "&"
+        right = EqualityExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.BINARY_AND); }
+    )*
     { return ret; }
 }
 
+/**
+ * // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.21
+ * <pre>{@code
+ *     EqualityExpression:
+ *         RelationalExpression
+ *         EqualityExpression == RelationalExpression
+ *         EqualityExpression != RelationalExpression
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.20
+ * <pre>{@code
+ *     RelationalExpression:
+ *         ShiftExpression
+ *         RelationalExpression < ShiftExpression
+ *         RelationalExpression > ShiftExpression
+ *         RelationalExpression <= ShiftExpression
+ *         RelationalExpression >= ShiftExpression
+ *         RelationalExpression instanceof ReferenceType
+ * }<pre>
+ */
 Expression EqualityExpression():
 {
     Expression ret;
@@ -2899,15 +2984,32 @@ Expression EqualityExpression():
     BinaryExpr.Operator op;
 }
 {
-     ret = InstanceOfExpression()
+    // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
+    ret = InstanceOfExpression()
     (
-      ( "==" { op = BinaryExpr.Operator.EQUALS; } |
-        "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
-      ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, op); }
+        (
+            "==" { op = BinaryExpr.Operator.EQUALS; }
+         |
+            "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
+        )
+        right = InstanceOfExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, op); }
     )*
     { return ret; }
 }
 
+/**
+ * // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.20
+ * <pre>{@code
+ *     RelationalExpression:
+ *         ShiftExpression
+ *         RelationalExpression < ShiftExpression
+ *         RelationalExpression > ShiftExpression
+ *         RelationalExpression <= ShiftExpression
+ *         RelationalExpression >= ShiftExpression
+ *         RelationalExpression instanceof ReferenceType
+ * }<pre>
+ */
 Expression InstanceOfExpression():
 {
     Expression ret;
@@ -2921,6 +3023,19 @@ Expression InstanceOfExpression():
     { return ret; }
 }
 
+/**
+ * // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.20
+ * <pre>{@code
+ *     RelationalExpression:
+ *         ShiftExpression
+ *         RelationalExpression < ShiftExpression
+ *         RelationalExpression > ShiftExpression
+ *         RelationalExpression <= ShiftExpression
+ *         RelationalExpression >= ShiftExpression
+ *         RelationalExpression instanceof ReferenceType
+ * }<pre>
+ */
 Expression RelationalExpression():
 {
     Expression ret;
@@ -2930,15 +3045,34 @@ Expression RelationalExpression():
 {
     ret = ShiftExpression()
     (
-        ( "<"  { op = BinaryExpr.Operator.LESS; } |
-          ">"  { op = BinaryExpr.Operator.GREATER; } |
-          "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
-          ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
-        ) right = ShiftExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, op); }
+        (
+            "<"  { op = BinaryExpr.Operator.LESS; }
+         |
+            ">"  { op = BinaryExpr.Operator.GREATER; }
+         |
+            "<=" { op = BinaryExpr.Operator.LESS_EQUALS; }
+         |
+            ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
+        )
+        right = ShiftExpression()
+        {
+            ret = new BinaryExpr(range(ret, jpToken()), ret, right, op);
+        }
     )*
+
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.19
+ * <pre>{@code
+ *     ShiftExpression:
+ *         AdditiveExpression
+ *         ShiftExpression << AdditiveExpression
+ *         ShiftExpression >> AdditiveExpression
+ *         ShiftExpression >>> AdditiveExpression
+ * }<pre>
+ */
 Expression ShiftExpression():
 {
     Expression ret;
@@ -2960,6 +3094,15 @@ Expression ShiftExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.18
+ * <pre>{@code
+ *     AdditiveExpression:
+ *         MultiplicativeExpression
+ *         AdditiveExpression + MultiplicativeExpression
+ *         AdditiveExpression - MultiplicativeExpression
+ * }<pre>
+ */
 Expression AdditiveExpression():
 {
     Expression ret;
@@ -2979,6 +3122,16 @@ Expression AdditiveExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.17
+ * <pre>{@code
+ *     MultiplicativeExpression:
+ *         UnaryExpression
+ *         MultiplicativeExpression * UnaryExpression
+ *         MultiplicativeExpression / UnaryExpression
+ *         MultiplicativeExpression % UnaryExpression
+ * }<pre>
+ */
 Expression MultiplicativeExpression():
 {
     Expression ret;
@@ -3000,6 +3153,27 @@ Expression MultiplicativeExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.15
+ * <pre>{@code
+ *     UnaryExpression:
+ *         PreIncrementExpression
+ *         PreDecrementExpression
+ *         + UnaryExpression
+ *         - UnaryExpression
+ *         UnaryExpressionNotPlusMinus
+ *     PreIncrementExpression:
+ *         ++ UnaryExpression
+ *     PreDecrementExpression:
+ *         -- UnaryExpression
+ *     UnaryExpressionNotPlusMinus:
+ *         PostfixExpression
+ *         ~ UnaryExpression
+ *         ! UnaryExpression
+ *         CastExpression
+ *         SwitchExpression
+ * }<pre>
+ */
 Expression UnaryExpression():
 {
     Expression ret;
@@ -3024,6 +3198,13 @@ Expression UnaryExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.15
+ * <pre>{@code
+ *     PreIncrementExpression:
+ *         ++ UnaryExpression
+ * }<pre>
+ */
 Expression PreIncrementExpression():
 {
     Expression ret;
@@ -3035,6 +3216,13 @@ Expression PreIncrementExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.15
+ * <pre>{@code
+ *     PreDecrementExpression:
+ *         -- UnaryExpression
+ * }<pre>
+ */
 Expression PreDecrementExpression():
 {
     Expression ret;
@@ -3046,6 +3234,17 @@ Expression PreDecrementExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.15
+ * <pre>{@code
+ *     UnaryExpressionNotPlusMinus:
+ *         PostfixExpression
+ *         ~ UnaryExpression
+ *         ! UnaryExpression
+ *         CastExpression
+ *         SwitchExpression
+ * }<pre>
+ */
 Expression UnaryExpressionNotPlusMinus():
 {
     Expression ret;
@@ -3071,6 +3270,16 @@ Expression UnaryExpressionNotPlusMinus():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.15
+ * <pre>{@code
+ *     PostfixExpression:
+ *         Primary
+ *         ExpressionName
+ *         PostIncrementExpression
+ *         PostDecrementExpression
+ * }<pre>
+ */
 Expression PostfixExpression():
 {
     Expression ret;
@@ -3090,6 +3299,20 @@ Expression PostfixExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.16
+ * <pre>{@code
+ *     CastExpression:
+ *         ( PrimitiveType ) UnaryExpression
+ *         ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
+ *         ( ReferenceType {AdditionalBound} ) LambdaExpression
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     AdditionalBound:
+ *         & InterfaceType
+ * }<pre>
+ */
 Expression CastExpression():
 {
     Expression ret;
@@ -3103,18 +3326,24 @@ Expression CastExpression():
     "(" { begin=jpToken(); }
     annotations = Annotations()
     (
+        // ( PrimitiveType ) UnaryExpression
         LOOKAHEAD(2)
         primitiveType = PrimitiveType(annotations)
         ")"
-        ret = UnaryExpression() { ret = new CastExpr(range(begin, jpToken()), primitiveType, ret); }
+        ret = UnaryExpression()
+        { ret = new CastExpr(range(begin, jpToken()), primitiveType, ret); }
      |
+        // ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
+        // ( ReferenceType {AdditionalBound} ) LambdaExpression
         referenceType = ReferenceType(annotations) { typesOfMultiCast = add(typesOfMultiCast, referenceType); }
         (
             "&"
             referenceType = AnnotatedReferenceType() { typesOfMultiCast = add(typesOfMultiCast, referenceType); }
         )*
         ")"
-        ret = UnaryExpressionNotPlusMinus() {
+        ret = UnaryExpressionNotPlusMinus()
+        // TODO/FIXME: Handle LambdaExpression? Or is it handled elsewhere?
+        {
             if (typesOfMultiCast.size() > 1) {
                 ret = new CastExpr(range(begin, jpToken()), new IntersectionType(range(typesOfMultiCast.get(0), typesOfMultiCast.get(typesOfMultiCast.size() -1)), typesOfMultiCast), ret);
             } else {
@@ -3126,7 +3355,25 @@ Expression CastExpression():
 }
 
 
-
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.8
+ * <pre>{@code
+ *     Primary:
+ *         PrimaryNoNewArray
+ *         ArrayCreationExpression
+ *     PrimaryNoNewArray:
+ *         Literal
+ *         ClassLiteral
+ *         this
+ *         TypeName . this
+ *         ( Expression )
+ *         ClassInstanceCreationExpression
+ *         FieldAccess
+ *         ArrayAccess
+ *         MethodInvocation
+ *         MethodReference
+ * }<pre>
+ */
 Expression PrimaryExpression():
 {
     Expression ret;
@@ -3137,6 +3384,9 @@ Expression PrimaryExpression():
     { return ret; }
 }
 
+/**
+ * // TODO: Unclear exactly which part of the JLS this relates to - a JavaParser-specific thing with no 1:1 mapping, perhaps?
+ */
 Expression PrimaryExpressionWithoutSuperSuffix():
 {
     Expression ret;
@@ -3150,6 +3400,9 @@ Expression PrimaryExpressionWithoutSuperSuffix():
     { return ret; }
 }
 
+/**
+ * // TODO: Unclear exactly which part of the JLS this relates to - a JavaParser-specific thing with no 1:1 mapping, perhaps?
+ */
 Expression PrimaryPrefix():
 {
     Expression ret = null;
@@ -3166,7 +3419,7 @@ Expression PrimaryPrefix():
 }
 {
     (
-      ret = Literal()
+        ret = Literal()
      |
         <THIS> { ret = new ThisExpr(tokenRange(), null); }
      |
@@ -3185,10 +3438,10 @@ Expression PrimaryPrefix():
             }
          |
             "::"
-            [typeArgs = TypeArguments() ]
+            [ typeArgs = TypeArguments() ]
             (Identifier() | "new")
             {
-              ret = new MethodReferenceExpr(range(ret, jpToken()), ret, typeArgs.list, token.image);
+                ret = new MethodReferenceExpr(range(ret, jpToken()), ret, typeArgs.list, token.image);
             }
         )
     |
@@ -3213,7 +3466,7 @@ Expression PrimaryPrefix():
             { ret = new EnclosedExpr(range(begin, jpToken()), ret); }
         )
      |
-       ret = AllocationExpression(null)
+        ret = AllocationExpression(null)
      |
         LOOKAHEAD( ResultType() "." "class" )
         type = ResultType(emptyNodeList())
@@ -3244,6 +3497,9 @@ Expression PrimaryPrefix():
     { return ret; }
 }
 
+/**
+ * // TODO: Unclear exactly which part of the JLS this relates to - a JavaParser-specific thing with no 1:1 mapping, perhaps?
+ */
 Expression PrimarySuffix(Expression scope):
 {
     Expression ret;
@@ -3260,6 +3516,9 @@ Expression PrimarySuffix(Expression scope):
     { return ret; }
 }
 
+/**
+ * // TODO: Unclear exactly which part of the JLS this relates to - a JavaParser-specific thing with no 1:1 mapping, perhaps?
+ */
 Expression PrimarySuffixWithoutSuper(Expression scope):
 {
     Expression ret;
