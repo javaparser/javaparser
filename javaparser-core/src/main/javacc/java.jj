@@ -2797,6 +2797,9 @@ Expression ConditionalExpression():
 }
 
 /**
+ * <strong>
+ * Note subtle distinctions between inclusive and exclusive expressions.
+ * </strong>
  * // TODO/FIXME: Investigate --  The JLS specifies {@code AND}, or {@code OR || AND}, but the grammar below is {@code AND || AND}
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.24
  * <pre>{@code
@@ -2821,12 +2824,27 @@ Expression ConditionalOrExpression():
 }
 
 /**
+ * <strong>
+ * Note subtle distinctions between inclusive and exclusive expressions.
+ * </strong>
  * // TODO/FIXME: Investigate --  The JLS specifies {@code OR}, or {@code AND && OR}, but the grammar below is {@code OR && OR}
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.23
  * <pre>{@code
  *     ConditionalAndExpression:
  *         InclusiveOrExpression
  *         ConditionalAndExpression && InclusiveOrExpression
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     AndExpression:
+ *         EqualityExpression
+ *     AndExpression & EqualityExpression
+ *         ExclusiveOrExpression:
+ *     AndExpression
+ *         ExclusiveOrExpression ^ AndExpression
+ *     InclusiveOrExpression:
+ *         ExclusiveOrExpression
+ *         InclusiveOrExpression | ExclusiveOrExpression
  * }<pre>
  */
 Expression ConditionalAndExpression():
