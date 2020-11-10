@@ -3403,10 +3403,10 @@ Statement Statement():
 }
 {
     try {
-        ( LOOKAHEAD(2)
-            ret = LabeledStatement()
+        (
+            LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
-            | ret = YieldStatement()
+            | LOOKAHEAD(3) ret = YieldStatement()
             | ret = Block()
             | ret = EmptyStatement()
             | ret = StatementExpression()
@@ -3435,7 +3435,7 @@ Statement Statement():
  *     AssertStatement:
  *         assert Expression ;
  *         assert Expression : Expression ;
- * }
+ * }</pre>
  */
 AssertStmt AssertStatement():
 {
@@ -3459,7 +3459,7 @@ AssertStmt AssertStatement():
  *         Identifier : Statement
  *     LabeledStatementNoShortIf:
  *         Identifier : StatementNoShortIf
- * }
+ * }</pre>
  */
 LabeledStmt LabeledStatement():
 {
@@ -3474,6 +3474,19 @@ LabeledStmt LabeledStatement():
     { return new LabeledStmt(range(begin, jpToken()), label, stmt); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.2
+ * <pre>{@code
+ *     Block:
+ *         { [BlockStatements] }
+ *     BlockStatements:
+ *         BlockStatement {BlockStatement}
+ *     BlockStatement:
+ *         LocalVariableDeclarationStatement
+ *         ClassDeclaration
+ *         Statement
+ * }</pre>
+ */
 BlockStmt Block():
 {
     NodeList<Statement> stmts = emptyNodeList();
@@ -3580,7 +3593,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
  * <pre>{@code
  *     EmptyStatement:
  *         ;
- * }
+ * }</pre>
  */
 EmptyStmt EmptyStatement():
 {}
@@ -3645,7 +3658,7 @@ ExpressionStmt StatementExpression():
  * <pre>{@code
  *     SwitchStatement:
  *         switch ( Expression ) SwitchBlock
- * }
+ * }</pre>
  * For Convenience:
  * <pre>{@code
  *     SwitchBlock:
@@ -3662,7 +3675,7 @@ ExpressionStmt StatementExpression():
  *         default
  *     CaseConstant:
  *         ConditionalExpression
- * }
+ * }</pre>
  */
 SwitchStmt SwitchStatement():
 {
@@ -3692,7 +3705,7 @@ SwitchStmt SwitchStatement():
  * <pre>{@code
  *     SwitchExpression:
  *         switch ( Expression ) SwitchBlock
- * }
+ * }</pre>
  * For Convenience:
  * <pre>{@code
  *     SwitchBlock:
@@ -3709,7 +3722,7 @@ SwitchStmt SwitchStatement():
  *         default
  *     CaseConstant:
  *         ConditionalExpression
- * }
+ * }</pre>
  */
 SwitchExpr SwitchExpression():
 {
@@ -3751,7 +3764,7 @@ SwitchExpr SwitchExpression():
  *         default
  *     CaseConstant:
  *         ConditionalExpression
- * }
+ * }</pre>
  */
 SwitchEntry SwitchEntry():
 {
@@ -3816,7 +3829,7 @@ SwitchEntry SwitchEntry():
  *         if ( Expression ) StatementNoShortIf else Statement
  *     IfThenElseStatementNoShortIf:
  *         if ( Expression ) StatementNoShortIf else StatementNoShortIf
- * }
+ * }</pre>
  */
 IfStmt IfStatement():
 /*
@@ -3853,7 +3866,7 @@ IfStmt IfStatement():
  *         while ( Expression ) Statement
  *     WhileStatementNoShortIf:
  *         while ( Expression ) StatementNoShortIf
- * }
+ * }</pre>
  */
 WhileStmt WhileStatement():
 {
@@ -3875,7 +3888,7 @@ WhileStmt WhileStatement():
  * <pre>{@code
  *     DoStatement:
  *         do Statement while ( Expression ) ;
- * }
+ * }</pre>
  */
 DoStmt DoStatement():
 {
@@ -3903,7 +3916,7 @@ DoStmt DoStatement():
  *     ForStatementNoShortIf:
  *         BasicForStatementNoShortIf
  *         EnhancedForStatementNoShortIf
- * }
+ * }</pre>
  */
 Statement ForStatement():
 {
@@ -3958,7 +3971,7 @@ Statement ForStatement():
  *         StatementExpressionList
  *     StatementExpressionList:
  *         StatementExpression {, StatementExpression}
- * }
+ * }</pre>
  */
 NodeList<Expression> ForInit():
 {
@@ -3989,7 +4002,7 @@ NodeList<Expression> ForInit():
  *         StatementExpressionList
  *     StatementExpressionList:
  *         StatementExpression {, StatementExpression}
- * }
+ * }</pre>
  */
 NodeList<Expression> ExpressionList():
 {
@@ -4020,7 +4033,7 @@ NodeList<Expression> ExpressionList():
  *         StatementExpressionList
  *     StatementExpressionList:
  *         StatementExpression {, StatementExpression}
- * }
+ * }</pre>
  */
 NodeList<Expression> ForUpdate():
 {
