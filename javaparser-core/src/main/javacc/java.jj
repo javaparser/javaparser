@@ -2233,6 +2233,15 @@ InitializerDeclaration InitializerDeclaration():
  * Type, name and expression syntax follows.
  */
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.1
+ * <pre>{@code
+ *     Type:
+ *         PrimitiveType
+ *         ReferenceType
+ * }<pre>
+ */
 Type Type(NodeList<AnnotationExpr> annotations):
 {
     Type ret;
@@ -2247,6 +2256,34 @@ Type Type(NodeList<AnnotationExpr> annotations):
     { return ret; }
 }
 
+/**
+ * // TODO: JLS Has type and unannotated type, while JavaParser has type and annotated type.
+ * Note that an array of primitives is considered a reference type.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.1
+ * <pre>{@code
+ *     ReferenceType:
+ *         ClassOrInterfaceType
+ *         TypeVariable
+ *         ArrayType
+ *     ClassOrInterfaceType:
+ *         ClassType
+ *         InterfaceType
+ *     ClassType:
+ *         {Annotation} TypeIdentifier [TypeArguments]
+ *         PackageName . {Annotation} TypeIdentifier [TypeArguments]
+ *         ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
+ *     InterfaceType:
+ *         ClassType
+ *     TypeVariable:
+ *         {Annotation} TypeIdentifier
+ *     ArrayType:
+ *         PrimitiveType Dims
+ *         ClassOrInterfaceType Dims
+ *         TypeVariable Dims
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
 ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations):
 {
     Type type;
@@ -2255,21 +2292,30 @@ ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations):
 }
 {
     (
+        // Note that an array of primitives is considered a reference type.
         type = PrimitiveType(annotations)
         (
             LOOKAHEAD(Annotations() "[")
             arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); }
-        )+
+        )+ // MUST have one or more array bracket pairs to be considered a reference type.
      |
         type = ClassOrInterfaceType(annotations)
         (
             LOOKAHEAD(Annotations() "[")
             arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); }
-        )*
+        )* // Optionally MAY have zero or more array bracket pairs.
     )
     { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
+/**
+ * Array bracket pairs is referred to as {@code Dims} within the JLS.
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ *
+ */
 ArrayBracketPair ArrayBracketPair(Origin origin):
 {
     NodeList<AnnotationExpr> annotations;
@@ -2282,6 +2328,12 @@ ArrayBracketPair ArrayBracketPair(Origin origin):
     { return new ArrayBracketPair(range(begin, jpToken()), origin, annotations); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.9
+ * <blockquote>
+ * An intersection type takes the form T1 & ... & Tn (n > 0), where Ti (1 ≤ i ≤ n) are types.
+ * </blockquote>
+ */
 IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations):
 {
     JavaToken begin = INVALID;
@@ -2295,6 +2347,7 @@ IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations):
     { return new IntersectionType(range(begin, jpToken()), elements); }
 }
 
+// TODO: JLS Has type and unannotated type, while JavaParser has type and annotated type.
 ClassOrInterfaceType AnnotatedClassOrInterfaceType():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
@@ -2306,6 +2359,7 @@ ClassOrInterfaceType AnnotatedClassOrInterfaceType():
     { return cit; }
 }
 
+// TODO: JLS Has type and unannotated type, while JavaParser has type and annotated type.
 ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotations):
 {
     ClassOrInterfaceType ret;
@@ -2332,6 +2386,18 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.5.1
+ * <pre>{@code
+ *     TypeArguments:
+ *         < TypeArgumentList >
+ *     TypeArgumentList:
+ *         TypeArgument {, TypeArgument}
+ *     TypeArgument:
+ *         ReferenceType
+ *         Wildcard
+ * }<pre>
+ */
 RangedList<Type> TypeArguments():
 {
     RangedList<Type> ret = new RangedList<Type>(new NodeList<Type>());
@@ -2347,6 +2413,18 @@ RangedList<Type> TypeArguments():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.5.1
+ * <pre>{@code
+ *     TypeArguments:
+ *         < TypeArgumentList >
+ *     TypeArgumentList:
+ *         TypeArgument {, TypeArgument}
+ *     TypeArgument:
+ *         ReferenceType
+ *         Wildcard
+ * }<pre>
+ */
 Type TypeArgument():
 {
     Type ret;
@@ -2355,13 +2433,23 @@ Type TypeArgument():
 {
     annotations = Annotations()
     (
-       ret = Type(annotations)
-      |
-       ret = Wildcard(annotations)
+        ret = Type(annotations)
+     |
+        ret = Wildcard(annotations)
     )
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.5.1
+ * <pre>{@code
+ *     Wildcard:
+ *         {Annotation} ? [WildcardBounds]
+ *     WildcardBounds:
+ *         extends ReferenceType
+ *         super ReferenceType
+ * }<pre>
+ */
 WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations):
 {
     ReferenceType ext = null;
@@ -2372,13 +2460,35 @@ WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations):
 {
     "?" { begin=jpToken(); }
     [
-      "extends" annotations = Annotations() ext = ReferenceType(annotations)
+        "extends"
+        annotations = Annotations()
+        ext = ReferenceType(annotations)
      |
-      "super" annotations = Annotations() sup = ReferenceType(annotations)
+        "super"
+        annotations = Annotations()
+        sup = ReferenceType(annotations)
     ]
     { return new WildcardType(range(begin, jpToken()), ext, sup, firstAnnotations);}
 }
 
+/**
+ * Note that {@code char} and {@code byte} are treated as an {@code IntegralType}, which is a subtype of {@code NumericType}.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.2
+ * <pre>{@code
+ *     PrimitiveType:
+ *         {Annotation} NumericType
+ *         {Annotation} boolean
+ *     NumericType:
+ *         IntegralType
+ *         FloatingPointType
+ *     IntegralType:
+ *         (one of)
+ *         byte short int long char
+ *     FloatingPointType:
+ *         (one of)
+ *         float double
+ * }<pre>
+ */
 PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
 {
     PrimitiveType ret;
@@ -2404,6 +2514,14 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.4.5
+ * <pre>{@code
+ *     Result:
+ *         UnannType
+ *         void
+ * }<pre>
+ */
 Type ResultType(NodeList<AnnotationExpr> annotations):
 {
     Type ret;
