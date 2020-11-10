@@ -4877,6 +4877,15 @@ void RSIGNEDSHIFT():
 
 /* Annotation syntax follows. */
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7
+ * <pre>{@code
+ *     Annotation:
+ *         NormalAnnotation
+ *         MarkerAnnotation
+ *         SingleElementAnnotation
+ * }<pre>
+ */
 NodeList<AnnotationExpr> Annotations():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
@@ -4890,6 +4899,53 @@ NodeList<AnnotationExpr> Annotations():
     { return annotations; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7
+ * <pre>{@code
+ *     Annotation:
+ *         NormalAnnotation
+ *         MarkerAnnotation
+ *         SingleElementAnnotation
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * <pre>{@code
+ *     NormalAnnotation:
+ *         @ TypeName ( [ElementValuePairList] )
+ *     ElementValuePairList:
+ *         ElementValuePair {, ElementValuePair}
+ *     ElementValuePair:
+ *         Identifier = ElementValue
+ *     ElementValue:
+ *         ConditionalExpression
+ *         ElementValueArrayInitializer
+ *         Annotation
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.2
+ * <blockquote>
+ * It [The marker annotation] is shorthand for the normal annotation:
+ * {@code @TypeName()}
+ * </blockquote>
+ * <pre>{@code
+ *     MarkerAnnotation:
+ *         @ TypeName
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.3
+ * <blockquote>
+ * It [The single element annotation] is shorthand for the normal annotation:
+ * {@code @TypeName(value = ElementValue)}
+ * </blockquote>
+ * <pre>{@code
+ *     SingleElementAnnotation:
+ *         @ TypeName ( ElementValue )
+ * }<pre>
+ */
 AnnotationExpr Annotation():
 {
     AnnotationExpr ret;
@@ -4919,6 +4975,18 @@ AnnotationExpr Annotation():
     { return ret; }
 }
 
+/**
+ * Note that {@code MemberValuePairs} (JavaParser) is synonymous with {@code ElementValuePairList} (JLS)
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * <pre>{@code
+ *     NormalAnnotation:
+ *         @ TypeName ( [ElementValuePairList] )
+ *     ElementValuePairList:
+ *         ElementValuePair {, ElementValuePair}
+ *     ElementValuePair:
+ *         Identifier = ElementValue
+ * }<pre>
+ */
 NodeList<MemberValuePair> MemberValuePairs():
 {
     NodeList<MemberValuePair> ret = new NodeList<MemberValuePair>();
@@ -4933,6 +5001,22 @@ NodeList<MemberValuePair> MemberValuePairs():
     { return ret; }
 }
 
+/**
+ * Note that {@code MemberValuePair} (JavaParser) is synonymous with {@code ElementValuePair} (JLS)
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * <pre>{@code
+ *     ElementValuePair:
+ *         Identifier = ElementValue
+ *     ElementValue:
+ *         ConditionalExpression
+ *         ElementValueArrayInitializer
+ *         Annotation
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ */
 MemberValuePair MemberValuePair():
 {
     SimpleName name;
@@ -4946,6 +5030,20 @@ MemberValuePair MemberValuePair():
     { return new MemberValuePair(range(begin, jpToken()),name, value); }
 }
 
+/**
+ * Note that {@code MemberValue} (JavaParser) is synonymous with {@code ElementValue} (JLS)
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * <pre>{@code
+ *     ElementValue:
+ *         ConditionalExpression
+ *         ElementValueArrayInitializer
+ *         Annotation
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ */
 Expression MemberValue():
 {
     Expression ret;
@@ -4962,6 +5060,16 @@ Expression MemberValue():
     { return ret; }
 }
 
+/**
+ * Note that {@code MemberValueArrayInitializer} (JavaParser) is synonymous with {@code ElementValueArrayInitializer} (JLS)
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * <pre>{@code
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ */
 Expression  MemberValueArrayInitializer():
 {
     NodeList<Expression> ret = emptyNodeList();
