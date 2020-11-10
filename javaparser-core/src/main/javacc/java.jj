@@ -2633,6 +2633,11 @@ Type ResultType(NodeList<AnnotationExpr> annotations):
     { return ret; }
 }
 
+/**
+ * A {@code SimpleName} is just an identifier.
+ * A {@code Name} can be a {@code SimpleName} or a {@code SimpleName} with qualifiers (e.g. a class or object reference).
+ * Note that no disambiguation is made as to exactly what type of name it is - e.g. whether it is a package, subclass, or field. That happens within JavaParser, rather than the grammar.
+ */
 Name Name():
 /*
  * A lookahead is required below since "Name" can be followed
@@ -2643,10 +2648,20 @@ Name Name():
 }
 {
     Identifier() { ret = new Name(tokenRange(), null, token.image); }
-    ( LOOKAHEAD(2) "." Identifier() { ret = new Name(range(ret, jpToken()), ret, token.image); } )*
+    (
+        LOOKAHEAD(2)
+        "."
+        Identifier()
+        { ret = new Name(range(ret, jpToken()), ret, token.image); }
+    )*
     { return ret; }
 }
 
+/**
+ * A {@code SimpleName} is just an identifier.
+ * A {@code Name} can be a {@code SimpleName} or a {@code SimpleName} with qualifiers (e.g. a class or object reference).
+ * Note that no disambiguation is made as to exactly what type of name it is - e.g. whether it is a package, subclass, or field. That happens within JavaParser, rather than the grammar.
+ */
 SimpleName SimpleName():
 {
     SimpleName ret;
@@ -2656,13 +2671,46 @@ SimpleName SimpleName():
     { return ret; }
 }
 
-
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.8
+ * <pre>{@code
+ *     Identifier:
+ *         IdentifierChars but not a Keyword or BooleanLiteral or NullLiteral
+ *     IdentifierChars:
+ *         JavaLetter {JavaLetterOrDigit}
+ *     JavaLetter:
+ *         any Unicode character that is a "Java letter"
+ * }</pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.9
+ * <blockquote>
+ * 51 character sequences, formed from ASCII letters, are reserved for use as keywords and cannot be used as identifiers (§3.8).
+ * </blockquote>
+ * <pre>{@code
+ *     Keyword:
+ *         (one of)
+ *
+ *         abstract   continue   for          new         switch
+ *         assert     default    if           package     synchronized
+ *         boolean    do         goto         private     this
+ *         break      double     implements   protected   throw
+ *         byte       else       import       public      throws
+ *         case       enum       instanceof   return      transient
+ *         catch      extends    int          short       try
+ *         char       final      interface    static      void
+ *         class      finally    long         strictfp    volatile
+ *         const      float      native       super       while
+ *         _ (underscore)
+ * }</pre>
+ */
 String Identifier():
 {
     String ret;
 }
 {
     (
+        // TODO: Explain why these keywords are explicitly flagged up as "included", and why they're not already covered by {@code <IDENTIFIER>}.
+        // TODO: Explain how / where boolean and null literals are excluded.
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
@@ -2672,6 +2720,7 @@ String Identifier():
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
+
 
 /*
  * Expression syntax follows.
@@ -3631,6 +3680,21 @@ Expression NullLiteral():
     { return new NullLiteralExpr(tokenRange()); }
 }
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.12
+ * <pre>{@code
+ *     MethodInvocation:
+ *         MethodName ( [ArgumentList] )
+ *         TypeName . [TypeArguments] Identifier ( [ArgumentList] )
+ *         ExpressionName . [TypeArguments] Identifier ( [ArgumentList] )
+ *         Primary . [TypeArguments] Identifier ( [ArgumentList] )
+ *         super . [TypeArguments] Identifier ( [ArgumentList] )
+ *         TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
+ *     ArgumentList:
+ *         Expression {, Expression}
+ * }</pre>
+ */
 NodeList<Expression> Arguments():
 {
     NodeList<Expression> ret = emptyNodeList();
@@ -3642,6 +3706,13 @@ NodeList<Expression> Arguments():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.12
+ * <pre>{@code
+ *     ArgumentList:
+ *         Expression {, Expression}
+ * }</pre>
+ */
 NodeList<Expression> ArgumentList():
 {
     NodeList<Expression> ret = emptyNodeList();
@@ -3649,10 +3720,51 @@ NodeList<Expression> ArgumentList():
 }
 {
     expr = Expression() { ret.add(expr); }
-    ( "," expr = Expression() { ret.add(expr); } )*
+    (
+        ","
+        expr = Expression() { ret.add(expr); }
+    )*
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.9
+ * <pre>{@code
+ *     ClassInstanceCreationExpression:
+ *         UnqualifiedClassInstanceCreationExpression
+ *         ExpressionName . UnqualifiedClassInstanceCreationExpression
+ *         Primary . UnqualifiedClassInstanceCreationExpression
+ *     UnqualifiedClassInstanceCreationExpression:
+ *         new [TypeArguments] ClassOrInterfaceTypeToInstantiate ( [ArgumentList] ) [ClassBody]
+ *     ClassOrInterfaceTypeToInstantiate:
+ *         {Annotation} Identifier {. {Annotation} Identifier} [TypeArgumentsOrDiamond]
+ *     TypeArgumentsOrDiamond:
+ *         TypeArguments
+ *         <>
+ * }</pre>
+ * For Convenience:
+ * <pre>{@code
+ *     ArgumentList:
+ *         Expression {, Expression}
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.10
+ * <pre>{@code
+ *     ArrayCreationExpression:
+ *         new PrimitiveType DimExprs [Dims]
+ *         new ClassOrInterfaceType DimExprs [Dims]
+ *         new PrimitiveType Dims ArrayInitializer
+ *         new ClassOrInterfaceType Dims ArrayInitializer
+ *     DimExprs:
+ *         DimExpr {DimExpr}
+ *     DimExpr:
+ *         {Annotation} [ Expression ]
+ * }</pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ */
 Expression AllocationExpression(Expression scope):
 {
     Expression ret;
@@ -3664,26 +3776,52 @@ Expression AllocationExpression(Expression scope):
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-    "new" { if(scope==null) { begin=jpToken(); } else {begin = orIfInvalid(begin, scope);} }
+    "new" { if(scope==null) { begin=jpToken(); } else { begin = orIfInvalid(begin, scope); } }
 
     [ typeArgs = TypeArguments() ]
     annotations = Annotations()
     (
+        // new array of primitives
         type = PrimitiveType(annotations)
         ret = ArrayCreation(begin, type)
      |
+        // new reference type e.g. class (or an array of those)
         type = ClassOrInterfaceType(annotations)
         (
+            // new Integer[6] -- the array doesn't have parameters.
             ret = ArrayCreation(begin, type)
          |
+            // new Integer(6) -- not an array if parameters being passed.
             args = Arguments()
-            [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody() ]
+            [
+                LOOKAHEAD(2)
+                anonymousBody = ClassOrInterfaceBody()
+            ]
             { ret = new ObjectCreationExpr(range(begin, jpToken()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
         )
     )
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.10
+ * <pre>{@code
+ *     ArrayCreationExpression:
+ *         new PrimitiveType DimExprs [Dims]
+ *         new ClassOrInterfaceType DimExprs [Dims]
+ *         new PrimitiveType Dims ArrayInitializer
+ *         new ClassOrInterfaceType Dims ArrayInitializer
+ *     DimExprs:
+ *         DimExpr {DimExpr}
+ *     DimExpr:
+ *         {Annotation} [ Expression ]
+ * }</pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ */
 ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 {
     Expression expr = null;
