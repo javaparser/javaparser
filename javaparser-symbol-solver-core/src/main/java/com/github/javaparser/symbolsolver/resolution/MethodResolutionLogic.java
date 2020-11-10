@@ -263,8 +263,9 @@ public class MethodResolutionLogic {
             if (expectedParam.isReferenceType() && actualParam.isReferenceType()) {
                 ResolvedReferenceType r1 = expectedParam.asReferenceType();
                 ResolvedReferenceType r2 = actualParam.asReferenceType();
-
-                return isAssignableMatchTypeParametersMatchingQName(r1, r2, matchedParameters);
+                // we can have r1=A and r2=A.B (with B extends A and B is an inner class of A)
+                // in this case we want to verify expected parameter from the actual parameter ancestors 
+                return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
             }
 
             if (expectedParam.isTypeVariable()) {
