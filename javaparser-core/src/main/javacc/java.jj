@@ -1914,6 +1914,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     }
 }
 
+// TODO: JLS Has type and unannotated type, while JavaParser has type and annotated type.
 ReferenceType AnnotatedReferenceType():
 {
     NodeList<AnnotationExpr> annotations;
@@ -1925,6 +1926,7 @@ ReferenceType AnnotatedReferenceType():
     { return type; }
 }
 
+// TODO: JLS Has type and unannotated type, while JavaParser has type and annotated type.
 Type AnnotatedType():
 {
     NodeList<AnnotationExpr> annotations;
@@ -1981,25 +1983,89 @@ Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
     { return new Pair(ret, rp); }
 }
 
+/**
+ * Note: Similar, but not identical to, {@code FormalParameter}.
+ * Note: Distinction between {@code LambdaParameters} and {@code InferredLambdaParameters} is presence of types.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.27.1
+ * <pre>{@code
+ *     LambdaParameters:
+ *         ( [LambdaParameterList] )
+ *         Identifier
+ *     LambdaParameterList:
+ *         LambdaParameter {, LambdaParameter}
+ *         Identifier {, Identifier}
+ *     LambdaParameter:
+ *         {VariableModifier} LambdaParameterType VariableDeclaratorId
+ *         VariableArityParameter
+ *     LambdaParameterType:
+ *         UnannType
+ *         var
+ * }</pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableArityParameter:
+ *          {VariableModifier} UnannType {Annotation} ... Identifier
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ */
 NodeList<Parameter> LambdaParameters():
 {
     NodeList<Parameter> ret = null;
     Parameter par;
 }
 {
-    par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )*
+    par = Parameter() { ret = add(ret, par); }
+    ( "," par = Parameter() { ret = add(ret, par); } )*
     { return ret;  }
 }
 
+
+/**
+ * Note: Similar, but not identical to, {@code FormalParameter}.
+ * Note: Distinction between {@code LambdaParameters} and {@code InferredLambdaParameters} is presence of types.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.27.1
+ * <pre>{@code
+ *     LambdaParameters:
+ *         ( [LambdaParameterList] )
+ *         Identifier
+ *     LambdaParameterList:
+ *         LambdaParameter {, LambdaParameter}
+ *         Identifier {, Identifier}
+ *     LambdaParameter:
+ *         {VariableModifier} LambdaParameterType VariableDeclaratorId
+ *         VariableArityParameter
+ *     LambdaParameterType:
+ *         UnannType
+ *         var
+ * }</pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableArityParameter:
+ *          {VariableModifier} UnannType {Annotation} ... Identifier
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }</pre>
+ */
 NodeList<Parameter> InferredLambdaParameters():
 {
     NodeList<Parameter> ret = null;
     Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-    id = VariableDeclaratorId()     { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a));}
+    id = VariableDeclaratorId() { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a)); }
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a)); }
+        "," id = VariableDeclaratorId() { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a)); }
     )*
     { return ret;  }
 }
@@ -2194,6 +2260,38 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
     { return new ExplicitConstructorInvocationStmt(range(begin, jpToken()),typeArgs.list, isThis, expr, args); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.5
+ * <pre>{@code
+ *     Statement:
+ *         StatementWithoutTrailingSubstatement
+ *         LabeledStatement
+ *         IfThenStatement
+ *         IfThenElseStatement
+ *         WhileStatement
+ *         ForStatement
+ *     StatementNoShortIf:
+ *         StatementWithoutTrailingSubstatement
+ *         LabeledStatementNoShortIf
+ *         IfThenElseStatementNoShortIf
+ *         WhileStatementNoShortIf
+ *         ForStatementNoShortIf
+ *     StatementWithoutTrailingSubstatement:
+ *         Block
+ *         EmptyStatement
+ *         ExpressionStatement
+ *         AssertStatement
+ *         SwitchStatement
+ *         DoStatement
+ *         BreakStatement
+ *         ContinueStatement
+ *         ReturnStatement
+ *         SynchronizedStatement
+ *         ThrowStatement
+ *         TryStatement
+ *         YieldStatement
+ * }
+ */
 NodeList<Statement> Statements():
 {
     NodeList<Statement> ret = emptyNodeList();
@@ -3267,6 +3365,38 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
  * Statement syntax follows.
  */
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.5
+ * <pre>{@code
+ *     Statement:
+ *         StatementWithoutTrailingSubstatement
+ *         LabeledStatement
+ *         IfThenStatement
+ *         IfThenElseStatement
+ *         WhileStatement
+ *         ForStatement
+ *     StatementNoShortIf:
+ *         StatementWithoutTrailingSubstatement
+ *         LabeledStatementNoShortIf
+ *         IfThenElseStatementNoShortIf
+ *         WhileStatementNoShortIf
+ *         ForStatementNoShortIf
+ *     StatementWithoutTrailingSubstatement:
+ *         Block
+ *         EmptyStatement
+ *         ExpressionStatement
+ *         AssertStatement
+ *         SwitchStatement
+ *         DoStatement
+ *         BreakStatement
+ *         ContinueStatement
+ *         ReturnStatement
+ *         SynchronizedStatement
+ *         ThrowStatement
+ *         TryStatement
+ *         YieldStatement
+ * }
+ */
 Statement Statement():
 {
     Statement ret;
@@ -3275,38 +3405,22 @@ Statement Statement():
     try {
         ( LOOKAHEAD(2)
             ret = LabeledStatement()
-        |
-            ret = AssertStatement()
-        |
-            ret = YieldStatement()
-        |
-            ret = Block()
-        |
-            ret = EmptyStatement()
-        |
-            ret = StatementExpression()
-        |
-            ret = SwitchStatement()
-        |
-            ret = IfStatement()
-        |
-            ret = WhileStatement()
-        |
-            ret = DoStatement()
-        |
-            ret = ForStatement()
-        |
-            ret = BreakStatement()
-        |
-            ret = ContinueStatement()
-        |
-            ret = ReturnStatement()
-        |
-            ret = ThrowStatement()
-        |
-            ret = SynchronizedStatement()
-        |
-            ret = TryStatement()
+            | ret = AssertStatement()
+            | ret = YieldStatement()
+            | ret = Block()
+            | ret = EmptyStatement()
+            | ret = StatementExpression()
+            | ret = SwitchStatement()
+            | ret = IfStatement()
+            | ret = WhileStatement()
+            | ret = DoStatement()
+            | ret = ForStatement()
+            | ret = BreakStatement()
+            | ret = ContinueStatement()
+            | ret = ReturnStatement()
+            | ret = ThrowStatement()
+            | ret = SynchronizedStatement()
+            | ret = TryStatement()
         )
         { return ret; }
     } catch (ParseException e) {
@@ -3727,6 +3841,13 @@ NodeList<Expression> ForUpdate():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.15
+ * <pre>{@code
+ *     BreakStatement:
+ *         break [Identifier] ;
+ * }
+ */
 BreakStmt BreakStatement():
 {
     SimpleName label = null;
@@ -3751,6 +3872,13 @@ YieldStmt YieldStatement():
     { return new YieldStmt(range(begin, jpToken()), value); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.16
+ * <pre>{@code
+ *     ContinueStatement:
+ *         continue [Identifier] ;
+ * }
+ */
 ContinueStmt ContinueStatement():
 {
     SimpleName label = null;
@@ -3763,6 +3891,13 @@ ContinueStmt ContinueStatement():
     { return new ContinueStmt(range(begin, jpToken()), label); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.17
+ * <pre>{@code
+ *     ReturnStatement:
+ *         return [Expression] ;
+ * }
+ */
 ReturnStmt ReturnStatement():
 {
     Expression expr = null;
@@ -3775,6 +3910,13 @@ ReturnStmt ReturnStatement():
     { return new ReturnStmt(range(begin, jpToken()),expr); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.18
+ * <pre>{@code
+ *     ThrowStatement:
+ *         throw Expression ;
+ * }
+ */
 ThrowStmt ThrowStatement():
 {
     Expression expr;
@@ -3787,6 +3929,13 @@ ThrowStmt ThrowStatement():
     { return new ThrowStmt(range(begin, jpToken()),expr); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.19
+ * <pre>{@code
+ *     SynchronizedStatement:
+ *         synchronized ( Expression ) Block
+ * }
+ */
 SynchronizedStmt SynchronizedStatement():
 {
     Expression expr;
