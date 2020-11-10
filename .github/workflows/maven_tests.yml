@@ -54,9 +54,14 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+
       ## Actually perform the tests. Unsuccessful tests will indicate a failed build.
-      ### -e : show traces where any errors occur
-      ### -B test : run the maven lifecycle stage `test`
-      ### -P AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
+      ### -e, --errors : show traces where any errors occur
+      ### -B,--batch-mode : Run in non-interactive (batch) mode (disables output color)
+      ### clean : run the maven lifecycle stage `clean`
+      ### test : run the maven lifecycle stage `test`
+      ### -P,--activate-profiles : Comma-delimited list of profiles to activate
+      ### AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
       - name: Test with Maven (incl. slow tests)
-        run: mvn -e -B test -P AlsoSlowTests
+        run: mvn --errors clean test --activate-profiles AlsoSlowTests
+
