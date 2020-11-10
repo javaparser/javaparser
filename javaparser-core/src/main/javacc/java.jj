@@ -2405,10 +2405,10 @@ RangedList<Type> TypeArguments():
 }
 {
     "<" { ret.beginAt(jpToken()); }
-    (
+    [
         type = TypeArgument() { ret.add(type); }
         ( "," type = TypeArgument() { ret.add(type); } )*
-    )?
+    ]
     ">" { ret.endAt(jpToken()); }
     { return ret; }
 }
@@ -3204,10 +3204,7 @@ NodeList<Expression> ArgumentList():
 }
 {
     expr = Expression() { ret.add(expr); }
-    (
-        ","
-        expr = Expression() { ret.add(expr); }
-    )*
+    ( "," expr = Expression() { ret.add(expr); } )*
     { return ret; }
 }
 
@@ -3257,10 +3254,10 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
         LOOKAHEAD(2)
         annotations = Annotations()
         "[" { arrayCreationLevelStart = annotations.isEmpty() ? jpToken() : orIfInvalid(arrayCreationLevelStart, annotations.get(0)); }
-        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; }
+        [expr = Expression()] { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; }
         "]" { levelRanges.add(range(arrayCreationLevelStart, jpToken())); }
     )+
-    (arrayInitializerExpr = ArrayInitializer())?
+    [arrayInitializerExpr = ArrayInitializer()]
     {
         return juggleArrayCreation(range(begin, jpToken()), levelRanges, type, inits, accum, arrayInitializerExpr);
     }
@@ -3824,7 +3821,7 @@ TryStmt TryStatement():
 }
 {
     "try" { begin=jpToken(); }
-    (resources = ResourceSpecification())?
+    [resources = ResourceSpecification()]
     tryBlock = Block()
     (
         LOOKAHEAD(2)
@@ -4023,14 +4020,14 @@ Expression  MemberValueArrayInitializer():
 }
 {
     "{" { begin=jpToken(); }
-    (
+    [
         member = MemberValue() { ret.add(member); }
         (
             LOOKAHEAD(2)
             ","
             member = MemberValue() { ret.add(member); }
         )*
-    )?
+    ]
     [ "," ]
     "}"
     { return new ArrayInitializerExpr(range(begin, jpToken()),ret); }
