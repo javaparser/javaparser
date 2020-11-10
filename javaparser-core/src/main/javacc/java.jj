@@ -2290,7 +2290,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
  *         ThrowStatement
  *         TryStatement
  *         YieldStatement
- * }
+ * }</pre>
  */
 NodeList<Statement> Statements():
 {
@@ -3395,7 +3395,7 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
  *         ThrowStatement
  *         TryStatement
  *         YieldStatement
- * }
+ * }</pre>
  */
 Statement Statement():
 {
@@ -3429,6 +3429,14 @@ Statement Statement():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.10
+ * <pre>{@code
+ *     AssertStatement:
+ *         assert Expression ;
+ *         assert Expression : Expression ;
+ * }
+ */
 AssertStmt AssertStatement():
 {
     Expression check;
@@ -3443,6 +3451,16 @@ AssertStmt AssertStatement():
     { return new AssertStmt(range(begin, jpToken()), check, msg);  }
 }
 
+/**
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.7
+ * <pre>{@code
+ *     LabeledStatement:
+ *         Identifier : Statement
+ *     LabeledStatementNoShortIf:
+ *         Identifier : StatementNoShortIf
+ * }
+ */
 LabeledStmt LabeledStatement():
 {
     SimpleName label;
@@ -3557,6 +3575,13 @@ VariableDeclarationExpr VariableDeclarationExpression():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.6
+ * <pre>{@code
+ *     EmptyStatement:
+ *         ;
+ * }
+ */
 EmptyStmt EmptyStatement():
 {}
 {
@@ -3612,6 +3637,33 @@ ExpressionStmt StatementExpression():
     { return new ExpressionStmt(range(expr, jpToken()), expr); }
 }
 
+
+/**
+ * Note that the {@code SwitchExpression} and {@code SwitchStatemnt} are similar but different. // TODO: Why/How?
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.11
+ * <pre>{@code
+ *     SwitchStatement:
+ *         switch ( Expression ) SwitchBlock
+ * }
+ * For Convenience:
+ * <pre>{@code
+ *     SwitchBlock:
+ *         { SwitchRule {SwitchRule} }
+ *         { {SwitchBlockStatementGroup} {SwitchLabel :} }
+ *     SwitchRule:
+ *         SwitchLabel -> Expression ;
+ *         SwitchLabel -> Block
+ *         SwitchLabel -> ThrowStatement
+ *     SwitchBlockStatementGroup:
+ *         SwitchLabel : {SwitchLabel :} BlockStatements
+ *     SwitchLabel:
+ *         case CaseConstant {, CaseConstant}
+ *         default
+ *     CaseConstant:
+ *         ConditionalExpression
+ * }
+ */
 SwitchStmt SwitchStatement():
 {
     Expression selector;
@@ -3625,12 +3677,40 @@ SwitchStmt SwitchStatement():
     selector = Expression()
     ")"
     "{"
-     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
+    (
+        entry = SwitchEntry() { entries = add(entries, entry); }
+    )*
     "}"
 
     { return new SwitchStmt(range(begin, jpToken()), selector, entries); }
 }
 
+/**
+ * Note that the {@code SwitchExpression} and {@code SwitchStatemnt} are similar but different. // TODO: Why/How?
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.28
+ * <pre>{@code
+ *     SwitchExpression:
+ *         switch ( Expression ) SwitchBlock
+ * }
+ * For Convenience:
+ * <pre>{@code
+ *     SwitchBlock:
+ *         { SwitchRule {SwitchRule} }
+ *         { {SwitchBlockStatementGroup} {SwitchLabel :} }
+ *     SwitchRule:
+ *         SwitchLabel -> Expression ;
+ *         SwitchLabel -> Block
+ *         SwitchLabel -> ThrowStatement
+ *     SwitchBlockStatementGroup:
+ *         SwitchLabel : {SwitchLabel :} BlockStatements
+ *     SwitchLabel:
+ *         case CaseConstant {, CaseConstant}
+ *         default
+ *     CaseConstant:
+ *         ConditionalExpression
+ * }
+ */
 SwitchExpr SwitchExpression():
 {
     Expression selector;
@@ -3644,12 +3724,35 @@ SwitchExpr SwitchExpression():
     selector = Expression()
     ")"
     "{"
-    ( entry = SwitchEntry() { entries = add(entries, entry); } )*
+    (
+        entry = SwitchEntry() { entries = add(entries, entry); }
+    )*
     "}"
 
     { return new SwitchExpr(range(begin, jpToken()), selector, entries); }
 }
 
+/**
+ * Note that the {@code SwitchBlock} (JLS) and {@code SwitchEntry} (JavaParser) are equivlent.
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.11.1
+ * <pre>{@code
+ *     SwitchBlock:
+ *         { SwitchRule {SwitchRule} }
+ *         { {SwitchBlockStatementGroup} {SwitchLabel :} }
+ *     SwitchRule:
+ *         SwitchLabel -> Expression ;
+ *         SwitchLabel -> Block
+ *         SwitchLabel -> ThrowStatement
+ *     SwitchBlockStatementGroup:
+ *         SwitchLabel : {SwitchLabel :} BlockStatements
+ *     SwitchLabel:
+ *         case CaseConstant {, CaseConstant}
+ *         default
+ *     CaseConstant:
+ *         ConditionalExpression
+ * }
+ */
 SwitchEntry SwitchEntry():
 {
     Expression label = null;
@@ -3704,6 +3807,17 @@ SwitchEntry SwitchEntry():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.9
+ * <pre>{@code
+ *     IfThenStatement:
+ *         if ( Expression ) Statement
+ *     IfThenElseStatement:
+ *         if ( Expression ) StatementNoShortIf else Statement
+ *     IfThenElseStatementNoShortIf:
+ *         if ( Expression ) StatementNoShortIf else StatementNoShortIf
+ * }
+ */
 IfStmt IfStatement():
 /*
  * The disambiguating algorithm of JavaCC automatically binds dangling
@@ -3732,6 +3846,15 @@ IfStmt IfStatement():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.12
+ * <pre>{@code
+ *     WhileStatement:
+ *         while ( Expression ) Statement
+ *     WhileStatementNoShortIf:
+ *         while ( Expression ) StatementNoShortIf
+ * }
+ */
 WhileStmt WhileStatement():
 {
     Expression condition;
@@ -3747,6 +3870,13 @@ WhileStmt WhileStatement():
     { return new WhileStmt(range(begin, jpToken()),condition, body); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.12
+ * <pre>{@code
+ *     DoStatement:
+ *         do Statement while ( Expression ) ;
+ * }
+ */
 DoStmt DoStatement():
 {
     Expression condition;
@@ -3764,6 +3894,17 @@ DoStmt DoStatement():
     { return new DoStmt(range(begin, jpToken()),body, condition); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.14
+ * <pre>{@code
+ *     ForStatement:
+ *         BasicForStatement
+ *         EnhancedForStatement
+ *     ForStatementNoShortIf:
+ *         BasicForStatementNoShortIf
+ *         EnhancedForStatementNoShortIf
+ * }
+ */
 Statement ForStatement():
 {
     VariableDeclarationExpr varExpr = null;
@@ -3778,16 +3919,18 @@ Statement ForStatement():
     "("
 
     (
+        // Enhanced for statement
         LOOKAHEAD(VariableDeclarationExpression() ":")
         varExpr = VariableDeclarationExpression()
         ":"
         expr = Expression()
      |
-       [ init = ForInit() ]
-       ";"
-       [ expr = Expression() ]
-       ";"
-       [ update = ForUpdate() ]
+        // Basic for statement
+        [ init = ForInit() ]
+        ";"
+        [ expr = Expression() ]
+        ";"
+        [ update = ForUpdate() ]
     )
 
     ")"
@@ -3801,6 +3944,22 @@ Statement ForStatement():
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.14
+ * <pre>{@code
+ *     BasicForStatement:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) Statement
+ *     BasicForStatementNoShortIf:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) StatementNoShortIf
+ *     ForInit:
+ *         StatementExpressionList
+ *         LocalVariableDeclaration
+ *     ForUpdate:
+ *         StatementExpressionList
+ *     StatementExpressionList:
+ *         StatementExpression {, StatementExpression}
+ * }
+ */
 NodeList<Expression> ForInit():
 {
     NodeList<Expression> ret;
@@ -3816,6 +3975,22 @@ NodeList<Expression> ForInit():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.14
+ * <pre>{@code
+ *     BasicForStatement:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) Statement
+ *     BasicForStatementNoShortIf:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) StatementNoShortIf
+ *     ForInit:
+ *         StatementExpressionList
+ *         LocalVariableDeclaration
+ *     ForUpdate:
+ *         StatementExpressionList
+ *     StatementExpressionList:
+ *         StatementExpression {, StatementExpression}
+ * }
+ */
 NodeList<Expression> ExpressionList():
 {
     NodeList<Expression> ret = new NodeList<Expression>();
@@ -3831,6 +4006,22 @@ NodeList<Expression> ExpressionList():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.14
+ * <pre>{@code
+ *     BasicForStatement:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) Statement
+ *     BasicForStatementNoShortIf:
+ *         for ( [ForInit] ; [Expression] ; [ForUpdate] ) StatementNoShortIf
+ *     ForInit:
+ *         StatementExpressionList
+ *         LocalVariableDeclaration
+ *     ForUpdate:
+ *         StatementExpressionList
+ *     StatementExpressionList:
+ *         StatementExpression {, StatementExpression}
+ * }
+ */
 NodeList<Expression> ForUpdate():
 {
     NodeList<Expression> ret;
@@ -3846,7 +4037,7 @@ NodeList<Expression> ForUpdate():
  * <pre>{@code
  *     BreakStatement:
  *         break [Identifier] ;
- * }
+ * }</pre>
  */
 BreakStmt BreakStatement():
 {
@@ -3860,6 +4051,13 @@ BreakStmt BreakStatement():
     { return new BreakStmt(range(begin, jpToken()), label); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.21
+ * <pre>{@code
+ *     YieldStatement:
+ *         yield Expression ;
+ * }</pre>
+ */
 YieldStmt YieldStatement():
 {
     Expression value;
@@ -3877,7 +4075,7 @@ YieldStmt YieldStatement():
  * <pre>{@code
  *     ContinueStatement:
  *         continue [Identifier] ;
- * }
+ * }</pre>
  */
 ContinueStmt ContinueStatement():
 {
@@ -3896,7 +4094,7 @@ ContinueStmt ContinueStatement():
  * <pre>{@code
  *     ReturnStatement:
  *         return [Expression] ;
- * }
+ * }</pre>
  */
 ReturnStmt ReturnStatement():
 {
@@ -3915,7 +4113,7 @@ ReturnStmt ReturnStatement():
  * <pre>{@code
  *     ThrowStatement:
  *         throw Expression ;
- * }
+ * }</pre>
  */
 ThrowStmt ThrowStatement():
 {
@@ -3934,7 +4132,7 @@ ThrowStmt ThrowStatement():
  * <pre>{@code
  *     SynchronizedStatement:
  *         synchronized ( Expression ) Block
- * }
+ * }</pre>
  */
 SynchronizedStmt SynchronizedStatement():
 {
@@ -3951,6 +4149,36 @@ SynchronizedStmt SynchronizedStatement():
     { return new SynchronizedStmt(range(begin, jpToken()),expr, body); }
 }
 
+/**
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.20
+ * <pre>{@code
+ *     TryStatement:
+ *         try Block Catches
+ *         try Block [Catches] Finally
+ *         TryWithResourcesStatement
+ *     Catches:
+ *         CatchClause {CatchClause}
+ *     CatchClause:
+ *         catch ( CatchFormalParameter ) Block
+ *     CatchFormalParameter:
+ *        {VariableModifier} CatchType VariableDeclaratorId
+ *     CatchType:
+ *         UnannClassType {| ClassType}
+ *     Finally:
+ *         finally Block
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     VariableDeclaratorId:
+ *         Identifier [Dims]
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
 TryStmt TryStatement():
 {
     NodeList<Expression> resources = emptyNodeList();
@@ -4009,7 +4237,32 @@ TryStmt TryStatement():
     { return new TryStmt(range(begin, jpToken()), resources, tryBlock, catchs, finallyBlock); }
 }
 
-
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.20.3
+ * <pre>{@code
+ *     TryWithResourcesStatement:
+ *         try ResourceSpecification Block [Catches] [Finally]
+ *     ResourceSpecification:
+ *         ( ResourceList [;] )
+ *     ResourceList:
+ *         Resource {; Resource}
+ *     Resource:
+ *         {VariableModifier} LocalVariableType Identifier = Expression
+ *         VariableAccess
+ *     VariableAccess:
+ *         ExpressionName
+ *         FieldAccess
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     LocalVariableType:
+ *         UnannType
+ *         var
+ * }<pre>
+ */
 NodeList<Expression> ResourceSpecification():
 {
     NodeList<Expression> variables;
@@ -4022,7 +4275,28 @@ NodeList<Expression> ResourceSpecification():
     { return variables; }
 }
 
-
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.20.3
+ * <pre>{@code
+ *     ResourceList:
+ *         Resource {; Resource}
+ *     Resource:
+ *         {VariableModifier} LocalVariableType Identifier = Expression
+ *         VariableAccess
+ *     VariableAccess:
+ *         ExpressionName
+ *         FieldAccess
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     LocalVariableType:
+ *         UnannType
+ *         var
+ * }<pre>
+ */
 NodeList<Expression> Resources():
 {
     NodeList<Expression> expressions = new NodeList<Expression>();
@@ -4033,6 +4307,27 @@ NodeList<Expression> Resources():
     { return expressions; }
 }
 
+/**
+ * // TODO: Examine more closely.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.20.3
+ * <pre>{@code
+ *     Resource:
+ *         {VariableModifier} LocalVariableType Identifier = Expression
+ *         VariableAccess
+ *     VariableAccess:
+ *         ExpressionName
+ *         FieldAccess
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     VariableModifier:
+ *         Annotation
+ *         final
+ *     LocalVariableType:
+ *         UnannType
+ *         var
+ * }<pre>
+ */
 Expression Resource():
 {
     Expression expr;
