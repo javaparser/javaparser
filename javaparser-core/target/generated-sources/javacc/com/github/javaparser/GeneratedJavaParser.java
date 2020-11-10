@@ -317,59 +317,59 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PUBLIC:
         jj_consume_token(PUBLIC);
-                    add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PUBLIC)); begin = orIfInvalid(begin, jpToken());
+                       add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PUBLIC)); begin = orIfInvalid(begin, jpToken());
         break;
       case STATIC:
         jj_consume_token(STATIC);
-                    add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STATIC)); begin = orIfInvalid(begin, jpToken());
+                       add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STATIC)); begin = orIfInvalid(begin, jpToken());
         break;
       case PROTECTED:
         jj_consume_token(PROTECTED);
-                        add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PROTECTED)); begin = orIfInvalid(begin, jpToken());
+                           add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PROTECTED)); begin = orIfInvalid(begin, jpToken());
         break;
       case PRIVATE:
         jj_consume_token(PRIVATE);
-                     add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PRIVATE)); begin = orIfInvalid(begin, jpToken());
+                        add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PRIVATE)); begin = orIfInvalid(begin, jpToken());
         break;
       case FINAL:
         jj_consume_token(FINAL);
-                   add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.FINAL)); begin = orIfInvalid(begin, jpToken());
+                      add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.FINAL)); begin = orIfInvalid(begin, jpToken());
         break;
       case ABSTRACT:
         jj_consume_token(ABSTRACT);
-                      add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.ABSTRACT)); begin = orIfInvalid(begin, jpToken());
+                         add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.ABSTRACT)); begin = orIfInvalid(begin, jpToken());
         break;
       case SYNCHRONIZED:
         jj_consume_token(SYNCHRONIZED);
-                          add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SYNCHRONIZED)); begin = orIfInvalid(begin, jpToken());
+                             add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SYNCHRONIZED)); begin = orIfInvalid(begin, jpToken());
         break;
       case NATIVE:
         jj_consume_token(NATIVE);
-                    add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NATIVE)); begin = orIfInvalid(begin, jpToken());
+                       add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NATIVE)); begin = orIfInvalid(begin, jpToken());
         break;
       case TRANSIENT:
         jj_consume_token(TRANSIENT);
-                       add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSIENT)); begin = orIfInvalid(begin, jpToken());
+                          add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSIENT)); begin = orIfInvalid(begin, jpToken());
         break;
       case VOLATILE:
         jj_consume_token(VOLATILE);
-                      add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.VOLATILE)); begin = orIfInvalid(begin, jpToken());
+                         add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.VOLATILE)); begin = orIfInvalid(begin, jpToken());
         break;
       case STRICTFP:
         jj_consume_token(STRICTFP);
-                      add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STRICTFP));  begin = orIfInvalid(begin, jpToken());
+                         add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STRICTFP));  begin = orIfInvalid(begin, jpToken());
         break;
       case TRANSITIVE:
         jj_consume_token(TRANSITIVE);
-                        add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, jpToken());
+                           add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, jpToken());
         break;
       case _DEFAULT:
         jj_consume_token(_DEFAULT);
-                     add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, jpToken());
+                        add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, jpToken());
         break;
       case AT:
         ann = Annotation();
-                              annotations = add(annotations, ann); begin = orIfInvalid(begin, ann);
+                                  annotations = add(annotations, ann); begin = orIfInvalid(begin, ann);
         break;
       default:
         jj_la1[6] = jj_gen;
@@ -377,7 +377,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         throw new ParseException();
       }
     }
-       {if (true) return new ModifierHolder(begin, modifiers, annotations);}
+        {if (true) return new ModifierHolder(begin, modifiers, annotations);}
     throw new Error("Missing return statement in function");
   }
 
@@ -2485,8 +2485,8 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
       } else {
         ;
       }
-          ret = new ClassOrInterfaceType(range(begin, jpToken()), ret, name, typeArgs.list, annotations);
-          typeArgs = new RangedList<Type>(null);
+            ret = new ClassOrInterfaceType(range(begin, jpToken()), ret, name, typeArgs.list, annotations);
+            typeArgs = new RangedList<Type>(null);
     }
       {if (true) return ret;}
     throw new Error("Missing return statement in function");
@@ -2682,35 +2682,35 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BOOLEAN:
       jj_consume_token(BOOLEAN);
-                  ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations);
+                    ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations);
       break;
     case CHAR:
       jj_consume_token(CHAR);
-               ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations);
+                 ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations);
       break;
     case BYTE:
       jj_consume_token(BYTE);
-               ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations);
+                 ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations);
       break;
     case SHORT:
       jj_consume_token(SHORT);
-                ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations);
+                  ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations);
       break;
     case INT:
       jj_consume_token(INT);
-              ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations);
+                ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations);
       break;
     case LONG:
       jj_consume_token(LONG);
-               ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations);
+                 ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations);
       break;
     case FLOAT:
       jj_consume_token(FLOAT);
-                ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations);
+                  ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations);
       break;
     case DOUBLE:
       jj_consume_token(DOUBLE);
-                 ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations);
+                   ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations);
       break;
     default:
       jj_la1[62] = jj_gen;
@@ -4021,11 +4021,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
           jj_la1[95] = jj_gen;
           ;
         }
-               if (hasArgs) {
-                     ret = new MethodCallExpr(range(ret, jpToken()), ret, typeArgs.list, name, args);
-               } else {
-                     ret = new FieldAccessExpr(range(ret, jpToken()), ret, emptyNodeList(), name);
-               }
+                if (hasArgs) {
+                    ret = new MethodCallExpr(range(ret, jpToken()), ret, typeArgs.list, name, args);
+                } else {
+                    ret = new FieldAccessExpr(range(ret, jpToken()), ret, emptyNodeList(), name);
+                }
         break;
       case DOUBLECOLON:
         jj_consume_token(DOUBLECOLON);
@@ -4212,21 +4212,21 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
         case TRANSITIVE:
         case IDENTIFIER:
           name = SimpleName();
-                                begin=jpToken();
+                              begin=jpToken();
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case LPAREN:
             args = Arguments();
-                                 hasArgs=true;
+                               hasArgs=true;
             break;
           default:
             jj_la1[103] = jj_gen;
             ;
           }
-              if (hasArgs) {
-                  ret = new MethodCallExpr(range(begin, jpToken()), null, null, name, args);
-              } else {
-                  ret = new NameExpr(name);
-              }
+            if (hasArgs) {
+                ret = new MethodCallExpr(range(begin, jpToken()), null, null, name, args);
+            } else {
+                ret = new NameExpr(name);
+            }
           break;
         default:
           jj_la1[105] = jj_gen;
@@ -4304,11 +4304,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
             jj_la1[108] = jj_gen;
             ;
           }
-              if (hasArgs) {
-                  ret = new MethodCallExpr(range(scope, jpToken()), scope, typeArgs.list, name, args);
-              } else {
-                  ret =  new FieldAccessExpr(range(scope, jpToken()), scope, typeArgs.list, name);
-              }
+                if (hasArgs) {
+                    ret = new MethodCallExpr(range(scope, jpToken()), scope, typeArgs.list, name, args);
+                } else {
+                    ret =  new FieldAccessExpr(range(scope, jpToken()), scope, typeArgs.list, name);
+                }
         } else {
           jj_consume_token(-1);
           throw new ParseException();
@@ -7311,7 +7311,7 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   final public ModuleDeclaration ModuleDeclarationParseStart() throws ParseException {
     ModuleDeclaration ret;
-     ModifierHolder modifiers;
+    ModifierHolder modifiers;
     modifiers = Modifiers();
     ret = ModuleDeclaration(modifiers);
     jj_consume_token(0);
@@ -8827,6 +8827,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_73() {
+    if (jj_3R_118()) return true;
+    return false;
+  }
+
   private boolean jj_3R_319() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_102()) return true;
@@ -8838,8 +8843,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_73() {
-    if (jj_3R_118()) return true;
+  private boolean jj_3R_72() {
+    if (jj_scan_token(_DEFAULT)) return true;
     return false;
   }
 
@@ -8859,6 +8864,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_71() {
+    if (jj_scan_token(TRANSITIVE)) return true;
+    return false;
+  }
+
   private boolean jj_3R_284() {
     if (jj_3R_102()) return true;
     Token xsp;
@@ -8869,11 +8879,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_72() {
-    if (jj_scan_token(_DEFAULT)) return true;
-    return false;
-  }
-
   private boolean jj_3R_165() {
     if (jj_scan_token(LBRACKET)) return true;
     if (jj_3R_92()) return true;
@@ -8881,13 +8886,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_71() {
-    if (jj_scan_token(TRANSITIVE)) return true;
+  private boolean jj_3R_70() {
+    if (jj_scan_token(STRICTFP)) return true;
     return false;
   }
 
-  private boolean jj_3R_70() {
-    if (jj_scan_token(STRICTFP)) return true;
+  private boolean jj_3R_69() {
+    if (jj_scan_token(VOLATILE)) return true;
     return false;
   }
 
@@ -8904,8 +8909,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_69() {
-    if (jj_scan_token(VOLATILE)) return true;
+  private boolean jj_3R_68() {
+    if (jj_scan_token(TRANSIENT)) return true;
     return false;
   }
 
@@ -8914,8 +8919,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_68() {
-    if (jj_scan_token(TRANSIENT)) return true;
+  private boolean jj_3R_67() {
+    if (jj_scan_token(NATIVE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_66() {
+    if (jj_scan_token(SYNCHRONIZED)) return true;
     return false;
   }
 
@@ -8929,8 +8939,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_67() {
-    if (jj_scan_token(NATIVE)) return true;
+  private boolean jj_3R_65() {
+    if (jj_scan_token(ABSTRACT)) return true;
     return false;
   }
 
@@ -8939,13 +8949,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_66() {
-    if (jj_scan_token(SYNCHRONIZED)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_65() {
-    if (jj_scan_token(ABSTRACT)) return true;
+  private boolean jj_3R_64() {
+    if (jj_scan_token(FINAL)) return true;
     return false;
   }
 
@@ -8954,23 +8959,23 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_63() {
+    if (jj_scan_token(PRIVATE)) return true;
+    return false;
+  }
+
   private boolean jj_3R_441() {
     if (jj_3R_445()) return true;
     return false;
   }
 
-  private boolean jj_3R_64() {
-    if (jj_scan_token(FINAL)) return true;
+  private boolean jj_3R_62() {
+    if (jj_scan_token(PROTECTED)) return true;
     return false;
   }
 
   private boolean jj_3R_440() {
     if (jj_3R_92()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_63() {
-    if (jj_scan_token(PRIVATE)) return true;
     return false;
   }
 
@@ -8980,13 +8985,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_365() {
-    if (jj_3R_380()) return true;
+  private boolean jj_3R_61() {
+    if (jj_scan_token(STATIC)) return true;
     return false;
   }
 
-  private boolean jj_3R_62() {
-    if (jj_scan_token(PROTECTED)) return true;
+  private boolean jj_3R_365() {
+    if (jj_3R_380()) return true;
     return false;
   }
 
@@ -9004,6 +9009,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_60() {
+    if (jj_scan_token(PUBLIC)) return true;
+    return false;
+  }
+
   private boolean jj_3R_346() {
     Token xsp;
     xsp = jj_scanpos;
@@ -9017,11 +9027,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_61() {
-    if (jj_scan_token(STATIC)) return true;
-    return false;
-  }
-
   private boolean jj_3R_150() {
     if (jj_scan_token(ORASSIGN)) return true;
     return false;
@@ -9029,11 +9034,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_149() {
     if (jj_scan_token(XORASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_60() {
-    if (jj_scan_token(PUBLIC)) return true;
     return false;
   }
 
@@ -9059,23 +9059,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_146() {
     if (jj_scan_token(RSIGNEDSHIFTASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_145() {
-    if (jj_scan_token(LSHIFTASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_345() {
-    if (jj_3R_112()) return true;
-    if (jj_scan_token(COLON)) return true;
-    if (jj_3R_92()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_144() {
-    if (jj_scan_token(MINUSASSIGN)) return true;
     return false;
   }
 
@@ -9122,6 +9105,23 @@ after they matched their desired input, which will lead to unexpected behaviour
     }
     }
     }
+    return false;
+  }
+
+  private boolean jj_3R_145() {
+    if (jj_scan_token(LSHIFTASSIGN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_345() {
+    if (jj_3R_112()) return true;
+    if (jj_scan_token(COLON)) return true;
+    if (jj_3R_92()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_144() {
+    if (jj_scan_token(MINUSASSIGN)) return true;
     return false;
   }
 
@@ -9293,11 +9293,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_228() {
-    if (jj_3R_185()) return true;
-    return false;
-  }
-
   private boolean jj_3R_263() {
     if (jj_scan_token(DOUBLECOLON)) return true;
     Token xsp;
@@ -9311,17 +9306,22 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_195() {
-    if (jj_3R_90()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_228()) jj_scanpos = xsp;
+  private boolean jj_3R_228() {
+    if (jj_3R_185()) return true;
     return false;
   }
 
   private boolean jj_3_36() {
     if (jj_3R_105()) return true;
     if (jj_scan_token(DOUBLECOLON)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_195() {
+    if (jj_3R_90()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_228()) jj_scanpos = xsp;
     return false;
   }
 
@@ -9870,6 +9870,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_162() {
+    if (jj_scan_token(DOUBLE)) return true;
+    return false;
+  }
+
   private boolean jj_3R_383() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_151()) return true;
@@ -9881,8 +9886,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_162() {
-    if (jj_scan_token(DOUBLE)) return true;
+  private boolean jj_3R_161() {
+    if (jj_scan_token(FLOAT)) return true;
     return false;
   }
 
@@ -9898,13 +9903,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_161() {
-    if (jj_scan_token(FLOAT)) return true;
+  private boolean jj_3R_160() {
+    if (jj_scan_token(LONG)) return true;
     return false;
   }
 
-  private boolean jj_3R_160() {
-    if (jj_scan_token(LONG)) return true;
+  private boolean jj_3R_159() {
+    if (jj_scan_token(INT)) return true;
     return false;
   }
 
@@ -9924,13 +9929,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_159() {
-    if (jj_scan_token(INT)) return true;
+  private boolean jj_3R_158() {
+    if (jj_scan_token(SHORT)) return true;
     return false;
   }
 
-  private boolean jj_3R_158() {
-    if (jj_scan_token(SHORT)) return true;
+  private boolean jj_3R_157() {
+    if (jj_scan_token(BYTE)) return true;
     return false;
   }
 
@@ -9939,8 +9944,8 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_157() {
-    if (jj_scan_token(BYTE)) return true;
+  private boolean jj_3R_156() {
+    if (jj_scan_token(CHAR)) return true;
     return false;
   }
 
@@ -9968,11 +9973,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_450() {
     if (jj_3R_360()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_156() {
-    if (jj_scan_token(CHAR)) return true;
     return false;
   }
 

@@ -1221,39 +1221,39 @@ ModifierHolder Modifiers():
 }
 {
     (
-      LOOKAHEAD(2)
-      (
-         "public" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PUBLIC)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "static" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STATIC)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "protected" {  add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PROTECTED)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "private" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PRIVATE)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "final" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.FINAL)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "abstract" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.ABSTRACT)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "synchronized" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SYNCHRONIZED)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "native" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NATIVE)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "transient" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSIENT)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "volatile" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.VOLATILE)); begin = orIfInvalid(begin, jpToken()); }
-        |
-         "strictfp" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STRICTFP));  begin = orIfInvalid(begin, jpToken()); }
-        |
-         "transitive" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, jpToken()); }
-        |
-         "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, jpToken()); }
-        |
-         ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
-      )
+        LOOKAHEAD(2)
+        (
+            "public" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PUBLIC)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "static" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STATIC)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "protected" {  add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PROTECTED)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "private" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.PRIVATE)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "final" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.FINAL)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "abstract" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.ABSTRACT)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "synchronized" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SYNCHRONIZED)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "native" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NATIVE)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "transient" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSIENT)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "volatile" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.VOLATILE)); begin = orIfInvalid(begin, jpToken()); }
+         |
+            "strictfp" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.STRICTFP));  begin = orIfInvalid(begin, jpToken()); }
+         |
+            "transitive" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, jpToken()); }
+         |
+            "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, jpToken()); }
+         |
+             ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
+        )
     )*
     {
-       return new ModifierHolder(begin, modifiers, annotations);
+        return new ModifierHolder(begin, modifiers, annotations);
     }
 }
 
@@ -2477,8 +2477,8 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
         LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
         [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
         {
-          ret = new ClassOrInterfaceType(range(begin, jpToken()), ret, name, typeArgs.list, annotations);
-          typeArgs = new RangedList<Type>(null);
+            ret = new ClassOrInterfaceType(range(begin, jpToken()), ret, name, typeArgs.list, annotations);
+            typeArgs = new RangedList<Type>(null);
         }
     )*
     { return ret; }
@@ -2593,21 +2593,21 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
 }
 {
     (
-      "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations); }
-    |
-      "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations); }
-    |
-      "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations); }
-    |
-      "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations); }
-    |
-      "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations); }
-    |
-      "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations); }
-    |
-      "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
-    |
-      "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
+        "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations); }
+     |
+        "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations); }
+     |
+        "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations); }
+     |
+        "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations); }
+     |
+        "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations); }
+     |
+        "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations); }
+     |
+        "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
+     |
+        "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
     )
     { return ret; }
 }
@@ -3430,11 +3430,11 @@ Expression PrimaryPrefix():
             name = SimpleName()
             [ args = Arguments() { hasArgs=true; } ]
             {
-               if (hasArgs) {
-                     ret = new MethodCallExpr(range(ret, jpToken()), ret, typeArgs.list, name, args);
-               } else {
-                     ret = new FieldAccessExpr(range(ret, jpToken()), ret, emptyNodeList(), name);
-               }
+                if (hasArgs) {
+                    ret = new MethodCallExpr(range(ret, jpToken()), ret, typeArgs.list, name, args);
+                } else {
+                    ret = new FieldAccessExpr(range(ret, jpToken()), ret, emptyNodeList(), name);
+                }
             }
          |
             "::"
@@ -3484,15 +3484,15 @@ Expression PrimaryPrefix():
             ret = new MethodReferenceExpr(range(ret, jpToken()), ret, typeArgs.list, token.image);
         }
      |
-          name = SimpleName() { begin=jpToken(); }
-          [ args = Arguments() { hasArgs=true; } ]
-          {
-              if (hasArgs) {
-                  ret = new MethodCallExpr(range(begin, jpToken()), null, null, name, args);
-              } else {
-                  ret = new NameExpr(name);
-              }
-          }
+        name = SimpleName() { begin=jpToken(); }
+        [ args = Arguments() { hasArgs=true; } ]
+        {
+            if (hasArgs) {
+                ret = new MethodCallExpr(range(begin, jpToken()), null, null, name, args);
+            } else {
+                ret = new NameExpr(name);
+            }
+        }
     )
     { return ret; }
 }
@@ -3541,11 +3541,11 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
             name = SimpleName()
             [ args = Arguments() {hasArgs=true;} ]
             {
-              if (hasArgs) {
-                  ret = new MethodCallExpr(range(scope, jpToken()), scope, typeArgs.list, name, args);
-              } else {
-                  ret =  new FieldAccessExpr(range(scope, jpToken()), scope, typeArgs.list, name);
-              }
+                if (hasArgs) {
+                    ret = new MethodCallExpr(range(scope, jpToken()), scope, typeArgs.list, name, args);
+                } else {
+                    ret =  new FieldAccessExpr(range(scope, jpToken()), scope, typeArgs.list, name);
+                }
             }
         )
      |
@@ -5108,7 +5108,7 @@ TypeDeclaration<?> TypeDeclarationParseStart():
 ModuleDeclaration ModuleDeclarationParseStart():
 {
     ModuleDeclaration ret;
-     ModifierHolder modifiers;
+    ModifierHolder modifiers;
 }
 {
     modifiers = Modifiers()
