@@ -6798,6 +6798,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
 /**
  * Note that {@code MemberValue} (JavaParser) is synonymous with {@code ElementValue} (JLS)
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-ElementValue
  * <pre>{@code
  *     ElementValue:
  *         ConditionalExpression
@@ -6968,6 +6969,18 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
 /* Annotation Types. */
+
+/**
+ * <blockquote>
+ * An annotation type declaration specifies a new annotation type, a special kind of interface type.
+ * To distinguish an annotation type declaration from a normal interface declaration, the keyword interface is preceded by an at-sign (@).
+ * </blockquote>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6
+ * <pre>{@code
+ *     AnnotationTypeDeclaration:
+ *         {InterfaceModifier} @ interface TypeIdentifier AnnotationTypeBody
+ * }<pre>
+ */
   final public AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier) throws ParseException {
     SimpleName name;
     NodeList<BodyDeclaration<?>> members = emptyNodeList();
@@ -6981,6 +6994,19 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeBody:
+ *         { {AnnotationTypeMemberDeclaration} }
+ *     AnnotationTypeMemberDeclaration:
+ *         AnnotationTypeElementDeclaration
+ *         ConstantDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }<pre>
+ */
   final public NodeList<BodyDeclaration<?>> AnnotationTypeBody() throws ParseException {
     NodeList<BodyDeclaration<?>> ret = emptyNodeList();
     BodyDeclaration member;
@@ -7085,6 +7111,31 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Note that {@code AnnotationTypeMemberDeclaration} (JLS) and {@code AnnotationBodyDeclaration} (JavaParser) are synonymous.
+ https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeBody:
+ *         { {AnnotationTypeMemberDeclaration} }
+ *     AnnotationTypeMemberDeclaration:
+ *         AnnotationTypeElementDeclaration
+ *         ConstantDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ *     AnnotationTypeElementDeclaration:
+ *         {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ *     AnnotationTypeElementModifier:
+ *         (one of)
+ *         Annotation public
+ *         abstract
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
   final public BodyDeclaration<?> AnnotationBodyDeclaration() throws ParseException {
     ModifierHolder modifier;
     BodyDeclaration ret;
@@ -7142,11 +7193,32 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Note that {@code AnnotationTypeElementDeclaration} (JLS) and {@code AnnotationTypeMemberDeclaration} (JavaParser) are synonymous.
+ * // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
+ * // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeElementDeclaration:
+ *         {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ *     AnnotationTypeElementModifier:
+ *         (one of)
+ *         Annotation public
+ *         abstract
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
   final public AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier) throws ParseException {
     Type type;
     SimpleName name;
     Expression defaultVal = null;
-    type = Type(emptyNodeList());
+    // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
+        // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+        type = Type(emptyNodeList());
     name = SimpleName();
     jj_consume_token(LPAREN);
     jj_consume_token(RPAREN);
@@ -7164,6 +7236,26 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.2
+ * <pre>{@code
+ *     DefaultValue:
+ *     default ElementValue
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-ElementValue
+ * <pre>{@code
+ *     ElementValue:
+ *         ConditionalExpression
+ *         ElementValueArrayInitializer
+ *         Annotation
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ */
   final public Expression DefaultValue() throws ParseException {
     Expression ret;
     jj_consume_token(_DEFAULT);
@@ -7173,6 +7265,22 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
   }
 
 /* Module syntax follows */
+
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-ModuleDirective
+ * <pre>{@code
+ *     ModuleDirective:
+ *         requires {RequiresModifier} ModuleName ;
+ *         exports PackageName [to ModuleName {, ModuleName}] ;
+ *         opens PackageName [to ModuleName {, ModuleName}] ;
+ *         uses TypeName ;
+ *         provides TypeName with TypeName {, TypeName} ;
+ *     RequiresModifier:
+ *         (one of)
+ *         transitive static
+ * }<pre>
+ */
   final public ModuleDirective ModuleDirective() throws ParseException {
     ModifierHolder modifiers;
     Name name;
@@ -7301,6 +7409,13 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase implements Gener
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.7
+ * <pre>{@code
+ *     ModuleDeclaration:
+ *         {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }
+ * }<pre>
+ */
   final public ModuleDeclaration ModuleDeclaration(ModifierHolder modifier) throws ParseException {
     NodeList<ModuleDirective> directives = new NodeList<ModuleDirective>();
     boolean open=false;
@@ -8177,6 +8292,13 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_58() {
+    if (jj_scan_token(REQUIRES)) return true;
+    if (jj_scan_token(TRANSITIVE)) return true;
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
   private boolean jj_3R_225() {
     if (jj_scan_token(NEW)) return true;
     Token xsp;
@@ -8248,11 +8370,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     if (jj_3R_433()) jj_scanpos = xsp;
     xsp = jj_scanpos;
     if (jj_3R_434()) jj_scanpos = xsp;
-    return false;
-  }
-
-  private boolean jj_3_59() {
-    if (jj_3R_86()) return true;
     return false;
   }
 
@@ -8337,6 +8454,12 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3R_419()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  private boolean jj_3R_455() {
+    if (jj_scan_token(_DEFAULT)) return true;
+    if (jj_3R_117()) return true;
     return false;
   }
 
@@ -8472,8 +8595,25 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_454() {
+    if (jj_3R_455()) return true;
+    return false;
+  }
+
   private boolean jj_3_12() {
     if (jj_3R_82()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_452() {
+    if (jj_3R_77()) return true;
+    if (jj_3R_90()) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_scan_token(RPAREN)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_454()) jj_scanpos = xsp;
+    if (jj_scan_token(SEMICOLON)) return true;
     return false;
   }
 
@@ -8535,13 +8675,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3_58() {
-    if (jj_scan_token(REQUIRES)) return true;
-    if (jj_scan_token(TRANSITIVE)) return true;
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
   private boolean jj_3R_365() {
     if (jj_3R_380()) return true;
     return false;
@@ -8570,6 +8703,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3_57() {
+    if (jj_scan_token(ENUM)) return true;
+    return false;
+  }
+
   private boolean jj_3R_348() {
     if (jj_scan_token(FALSE)) return true;
     return false;
@@ -8587,6 +8725,23 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_451() {
+    if (jj_3R_362()) return true;
+    return false;
+  }
+
+  private boolean jj_3_56() {
+    if (jj_3R_77()) return true;
+    if (jj_3R_76()) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_450() {
+    if (jj_3R_360()) return true;
+    return false;
+  }
+
   private boolean jj_3R_317() {
     Token xsp;
     xsp = jj_scanpos;
@@ -8597,10 +8752,20 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_449() {
+    if (jj_3R_359()) return true;
+    return false;
+  }
+
   private boolean jj_3R_81() {
     if (jj_3R_88()) return true;
     if (jj_3R_77()) return true;
     if (jj_3R_127()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_448() {
+    if (jj_3R_196()) return true;
     return false;
   }
 
@@ -8618,9 +8783,34 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
+  private boolean jj_3R_447() {
+    if (jj_3R_452()) return true;
+    return false;
+  }
+
   private boolean jj_3R_424() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_314()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_444() {
+    if (jj_3R_111()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_447()) {
+    jj_scanpos = xsp;
+    if (jj_3R_448()) {
+    jj_scanpos = xsp;
+    if (jj_3R_449()) {
+    jj_scanpos = xsp;
+    if (jj_3R_450()) {
+    jj_scanpos = xsp;
+    if (jj_3R_451()) return true;
+    }
+    }
+    }
+    }
     return false;
   }
 
@@ -8652,12 +8842,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_276() {
     if (jj_scan_token(STRING_LITERAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_455() {
-    if (jj_scan_token(_DEFAULT)) return true;
-    if (jj_3R_117()) return true;
     return false;
   }
 
@@ -8713,11 +8897,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_454() {
-    if (jj_3R_455()) return true;
-    return false;
-  }
-
   private boolean jj_3R_218() {
     Token xsp;
     xsp = jj_scanpos;
@@ -8757,47 +8936,28 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_452() {
-    if (jj_3R_77()) return true;
-    if (jj_3R_90()) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_scan_token(RPAREN)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_454()) jj_scanpos = xsp;
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  private boolean jj_3_57() {
-    if (jj_scan_token(ENUM)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_451() {
-    if (jj_3R_362()) return true;
-    return false;
-  }
-
   private boolean jj_3R_269() {
     if (jj_3R_313()) return true;
     return false;
   }
 
-  private boolean jj_3_56() {
-    if (jj_3R_77()) return true;
-    if (jj_3R_76()) return true;
-    if (jj_scan_token(LPAREN)) return true;
+  private boolean jj_3R_436() {
+    if (jj_3R_444()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_420() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_436()) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(102)) return true;
+    }
     return false;
   }
 
   private boolean jj_3R_268() {
     if (jj_3R_312()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_450() {
-    if (jj_3R_360()) return true;
     return false;
   }
 
@@ -8811,11 +8971,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_449() {
-    if (jj_3R_359()) return true;
-    return false;
-  }
-
   private boolean jj_3R_230() {
     if (jj_scan_token(CLASS)) return true;
     return false;
@@ -8826,8 +8981,14 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_448() {
-    if (jj_3R_196()) return true;
+  private boolean jj_3R_408() {
+    if (jj_scan_token(LBRACE)) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_420()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(RBRACE)) return true;
     return false;
   }
 
@@ -8850,11 +9011,6 @@ after they matched their desired input, which will lead to unexpected behaviour
   private boolean jj_3R_320() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_103()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_447() {
-    if (jj_3R_452()) return true;
     return false;
   }
 
@@ -8915,26 +9071,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_444() {
-    if (jj_3R_111()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_447()) {
-    jj_scanpos = xsp;
-    if (jj_3R_448()) {
-    jj_scanpos = xsp;
-    if (jj_3R_449()) {
-    jj_scanpos = xsp;
-    if (jj_3R_450()) {
-    jj_scanpos = xsp;
-    if (jj_3R_451()) return true;
-    }
-    }
-    }
-    }
-    return false;
-  }
-
   private boolean jj_3R_258() {
     if (jj_3R_89()) return true;
     return false;
@@ -8960,21 +9096,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_436() {
-    if (jj_3R_444()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_420() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_436()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(102)) return true;
-    }
-    return false;
-  }
-
   private boolean jj_3R_164() {
     if (jj_scan_token(DOT)) return true;
     Token xsp;
@@ -8995,19 +9116,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_408() {
-    if (jj_scan_token(LBRACE)) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_420()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_scan_token(RBRACE)) return true;
+  private boolean jj_3R_150() {
+    if (jj_scan_token(ORASSIGN)) return true;
     return false;
   }
 
-  private boolean jj_3R_150() {
-    if (jj_scan_token(ORASSIGN)) return true;
+  private boolean jj_3R_360() {
+    if (jj_scan_token(AT)) return true;
+    if (jj_scan_token(INTERFACE)) return true;
+    if (jj_3R_90()) return true;
+    if (jj_3R_408()) return true;
     return false;
   }
 
@@ -9085,14 +9203,6 @@ after they matched their desired input, which will lead to unexpected behaviour
 
   private boolean jj_3R_139() {
     if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_360() {
-    if (jj_scan_token(AT)) return true;
-    if (jj_scan_token(INTERFACE)) return true;
-    if (jj_3R_90()) return true;
-    if (jj_3R_408()) return true;
     return false;
   }
 
@@ -9199,11 +9309,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_69() {
-    if (jj_scan_token(VOLATILE)) return true;
-    return false;
-  }
-
   private boolean jj_3R_371() {
     if (jj_3R_117()) return true;
     Token xsp;
@@ -9211,6 +9316,11 @@ after they matched their desired input, which will lead to unexpected behaviour
       xsp = jj_scanpos;
       if (jj_3_55()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  private boolean jj_3R_69() {
+    if (jj_scan_token(VOLATILE)) return true;
     return false;
   }
 
@@ -9234,16 +9344,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_386() {
-    if (jj_3R_300()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_334() {
-    if (jj_3R_89()) return true;
-    return false;
-  }
-
   private boolean jj_3R_215() {
     if (jj_scan_token(LBRACE)) return true;
     Token xsp;
@@ -9252,6 +9352,16 @@ after they matched their desired input, which will lead to unexpected behaviour
     xsp = jj_scanpos;
     if (jj_scan_token(103)) jj_scanpos = xsp;
     if (jj_scan_token(RBRACE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_386() {
+    if (jj_3R_300()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_334() {
+    if (jj_3R_89()) return true;
     return false;
   }
 
@@ -9524,17 +9634,6 @@ after they matched their desired input, which will lead to unexpected behaviour
     return false;
   }
 
-  private boolean jj_3R_383() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_151()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_374() {
-    if (jj_scan_token(_DEFAULT)) return true;
-    return false;
-  }
-
   private boolean jj_3R_117() {
     Token xsp;
     xsp = jj_scanpos;
@@ -9545,6 +9644,17 @@ after they matched their desired input, which will lead to unexpected behaviour
     if (jj_3R_178()) return true;
     }
     }
+    return false;
+  }
+
+  private boolean jj_3R_383() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_151()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_374() {
+    if (jj_scan_token(_DEFAULT)) return true;
     return false;
   }
 
@@ -11414,6 +11524,11 @@ after they matched their desired input, which will lead to unexpected behaviour
     }
     }
     if (jj_3R_393()) return true;
+    return false;
+  }
+
+  private boolean jj_3_59() {
+    if (jj_3R_86()) return true;
     return false;
   }
 

@@ -5033,6 +5033,7 @@ MemberValuePair MemberValuePair():
 /**
  * Note that {@code MemberValue} (JavaParser) is synonymous with {@code ElementValue} (JLS)
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-ElementValue
  * <pre>{@code
  *     ElementValue:
  *         ConditionalExpression
@@ -5094,6 +5095,17 @@ Expression  MemberValueArrayInitializer():
 
 /* Annotation Types. */
 
+/**
+ * <blockquote>
+ * An annotation type declaration specifies a new annotation type, a special kind of interface type.
+ * To distinguish an annotation type declaration from a normal interface declaration, the keyword interface is preceded by an at-sign (@).
+ * </blockquote>
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6
+ * <pre>{@code
+ *     AnnotationTypeDeclaration:
+ *         {InterfaceModifier} @ interface TypeIdentifier AnnotationTypeBody
+ * }<pre>
+ */
 AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
     SimpleName name;
@@ -5108,6 +5120,19 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
     { return new AnnotationDeclaration(range(begin, jpToken()), modifier.modifiers, modifier.annotations, name, members); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeBody:
+ *         { {AnnotationTypeMemberDeclaration} }
+ *     AnnotationTypeMemberDeclaration:
+ *         AnnotationTypeElementDeclaration
+ *         ConstantDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }<pre>
+ */
 NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 {
     NodeList<BodyDeclaration<?>> ret = emptyNodeList();
@@ -5124,6 +5149,31 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
     { return ret; }
 }
 
+/**
+ * Note that {@code AnnotationTypeMemberDeclaration} (JLS) and {@code AnnotationBodyDeclaration} (JavaParser) are synonymous.
+ https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeBody:
+ *         { {AnnotationTypeMemberDeclaration} }
+ *     AnnotationTypeMemberDeclaration:
+ *         AnnotationTypeElementDeclaration
+ *         ConstantDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ *     AnnotationTypeElementDeclaration:
+ *         {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ *     AnnotationTypeElementModifier:
+ *         (one of)
+ *         Annotation public
+ *         abstract
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
 BodyDeclaration<?> AnnotationBodyDeclaration():
 {
     ModifierHolder modifier;
@@ -5147,6 +5197,25 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
     { return ret; }
 }
 
+/**
+ * Note that {@code AnnotationTypeElementDeclaration} (JLS) and {@code AnnotationTypeMemberDeclaration} (JavaParser) are synonymous.
+ * // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
+ * // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.1
+ * <pre>{@code
+ *     AnnotationTypeElementDeclaration:
+ *         {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+ *     AnnotationTypeElementModifier:
+ *         (one of)
+ *         Annotation public
+ *         abstract
+ * }<pre>
+ * For Convenience:
+ * <pre>{@code
+ *     Dims:
+ *         {Annotation} [ ] {{Annotation} [ ]}
+ * }<pre>
+ */
 AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modifier):
 {
     Type type;
@@ -5154,6 +5223,8 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
     Expression defaultVal = null;
 }
 {
+    // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
+    // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
     type = Type(emptyNodeList())
     name = SimpleName()
     "(" ")"
@@ -5166,6 +5237,26 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
     }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.6.2
+ * <pre>{@code
+ *     DefaultValue:
+ *     default ElementValue
+ * }<pre>
+ * For Convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7.1
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-ElementValue
+ * <pre>{@code
+ *     ElementValue:
+ *         ConditionalExpression
+ *         ElementValueArrayInitializer
+ *         Annotation
+ *     ElementValueArrayInitializer:
+ *         { [ElementValueList] [,] }
+ *     ElementValueList:
+ *         ElementValue {, ElementValue}
+ * }<pre>
+ */
 Expression DefaultValue():
 {
     Expression ret;
@@ -5179,6 +5270,20 @@ Expression DefaultValue():
 /* Module syntax follows */
 
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-ModuleDirective
+ * <pre>{@code
+ *     ModuleDirective:
+ *         requires {RequiresModifier} ModuleName ;
+ *         exports PackageName [to ModuleName {, ModuleName}] ;
+ *         opens PackageName [to ModuleName {, ModuleName}] ;
+ *         uses TypeName ;
+ *         provides TypeName with TypeName {, TypeName} ;
+ *     RequiresModifier:
+ *         (one of)
+ *         transitive static
+ * }<pre>
+ */
 ModuleDirective ModuleDirective():
 {
     ModifierHolder modifiers;
@@ -5191,6 +5296,7 @@ ModuleDirective ModuleDirective():
 }
 {
     (
+        // {@code requires {RequiresModifier} ModuleName ;}
         // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'"
         LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
         <REQUIRES> { begin=jpToken(); }
@@ -5198,11 +5304,13 @@ ModuleDirective ModuleDirective():
         ";"
         { directive=new ModuleRequiresDirective(range(begin, jpToken()), new NodeList<Modifier>(), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText())); }
     |
+        // {@code requires {RequiresModifier} ModuleName ;}
         <REQUIRES> { begin=jpToken(); }
         modifiers=Modifiers() name=Name()
         ";"
         { directive=new ModuleRequiresDirective(range(begin, jpToken()), modifiers.modifiers, name); }
     |
+        // {@code exports PackageName [to ModuleName {, ModuleName}] ;}
         <EXPORTS> { begin=jpToken(); }
         name=Name()
         [
@@ -5216,6 +5324,7 @@ ModuleDirective ModuleDirective():
         ";"
         { directive=new ModuleExportsDirective(range(begin, jpToken()), name, names); }
     |
+        // {@code opens PackageName [to ModuleName {, ModuleName}] ;}
         <OPENS> { begin=jpToken(); }
         name=Name()
         [
@@ -5229,11 +5338,13 @@ ModuleDirective ModuleDirective():
         ";"
         { directive=new ModuleOpensDirective(range(begin, jpToken()), name, names); }
     |
+        // {@code uses TypeName ;}
         <USES> { begin=jpToken(); }
         name=Name()
         ";"
         { directive=new ModuleUsesDirective(range(begin, jpToken()), name); }
     |
+        // {@code provides TypeName with TypeName {, TypeName} ;}
         <PROVIDES> { begin=jpToken(); }
         name=Name()
         <WITH>
@@ -5248,6 +5359,13 @@ ModuleDirective ModuleDirective():
     { return directive; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.7
+ * <pre>{@code
+ *     ModuleDeclaration:
+ *         {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }
+ * }<pre>
+ */
 ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
 {
     NodeList<ModuleDirective> directives = new NodeList<ModuleDirective>();
