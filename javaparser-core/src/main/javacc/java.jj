@@ -2677,6 +2677,7 @@ String Identifier():
  * Expression syntax follows.
  */
 
+
 Expression Expression():
 /*
  * This expansion has been written this way instead of:
@@ -2696,10 +2697,13 @@ Expression Expression():
 {
     ret = ConditionalExpression()
     [
-        ( LOOKAHEAD(2)
-            op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret, jpToken()), ret, value, op); }
-        |
-            "->" lambdaBody = LambdaBody()
+        (
+            LOOKAHEAD(2)
+            op = AssignmentOperator()
+            value = Expression() { ret = new AssignExpr(range(ret, jpToken()), ret, value, op); }
+         |
+            "->"
+            lambdaBody = LambdaBody()
             {
                 if (ret instanceof CastExpr) {
                     ret = generateLambda(ret, lambdaBody);
@@ -2712,14 +2716,33 @@ Expression Expression():
                     ret = generateLambda(ret, lambdaBody);
                 }
             }
-        |
-            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, jpToken()), ret, typeArgs.list, token.image); }
+         |
+            "::"
+            [typeArgs = TypeArguments()]
+            (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, jpToken()), ret, typeArgs.list, token.image); }
         )
     ]
 
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.26
+ * <pre>{@code
+ *     AssignmentExpression:
+ *         ConditionalExpression
+ *         Assignment
+ *     Assignment:
+ *         LeftHandSide AssignmentOperator Expression
+ *     LeftHandSide:
+ *         ExpressionName
+ *         FieldAccess
+ *         ArrayAccess
+ *     AssignmentOperator:
+ *         (one of)
+ *         =  *=  /=  %=  +=  -=  <<=  >>=  >>>=  &=  ^=  |=
+ * }<pre>
+ */
 AssignExpr.Operator AssignmentOperator():
 {
     AssignExpr.Operator ret;
@@ -2742,6 +2765,16 @@ AssignExpr.Operator AssignmentOperator():
     { return ret; }
 }
 
+/**
+ * // TODO: Examine further re: missing(?) {@code LambdaExpression} or whether it is permissive enough to include it.
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.25
+ * <pre>{@code
+ *     ConditionalExpression:
+ *         ConditionalOrExpression
+ *         ConditionalOrExpression ? Expression : ConditionalExpression
+ *         ConditionalOrExpression ? Expression : LambdaExpression
+ * }<pre>
+ */
 Expression ConditionalExpression():
 {
     Expression ret;
@@ -2750,27 +2783,64 @@ Expression ConditionalExpression():
 }
 {
     ret = ConditionalOrExpression()
-    [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret, jpToken()), ret, left, right); } ]
+    [
+        "?"
+        left = Expression()
+        ":"
+        right = ConditionalExpression()
+        // TODO: Examine further re: missing(?) {@code LambdaExpression} or whether it is permissive enough to include it.
+        {
+            ret = new ConditionalExpr(range(ret, jpToken()), ret, left, right);
+        }
+    ]
     { return ret; }
 }
 
+/**
+ * // TODO/FIXME: Investigate --  The JLS specifies {@code AND}, or {@code OR || AND}, but the grammar below is {@code AND || AND}
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.24
+ * <pre>{@code
+ *     ConditionalOrExpression:
+ *         ConditionalAndExpression
+ *         ConditionalOrExpression || ConditionalAndExpression
+ * }<pre>
+ */
 Expression ConditionalOrExpression():
 {
     Expression ret;
     Expression right;
 }
 {
-    ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.OR); } )*
+    // TODO/FIXME: Investigate --  The JLS specifies {@code AND}, or {@code OR || AND}, but the grammar below is {@code AND || AND}
+    ret = ConditionalAndExpression()
+    (
+        "||"
+        right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.OR); }
+    )*
     { return ret; }
 }
 
+/**
+ * // TODO/FIXME: Investigate --  The JLS specifies {@code OR}, or {@code AND && OR}, but the grammar below is {@code OR && OR}
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.23
+ * <pre>{@code
+ *     ConditionalAndExpression:
+ *         InclusiveOrExpression
+ *         ConditionalAndExpression && InclusiveOrExpression
+ * }<pre>
+ */
 Expression ConditionalAndExpression():
 {
     Expression ret;
     Expression right;
 }
 {
-    ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.AND); } )*
+    // TODO/FIXME: Investigate --  The JLS specifies {@code OR}, or {@code AND && OR}, but the grammar below is {@code OR && OR}
+    ret = InclusiveOrExpression()
+    (
+        "&&"
+        right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret, jpToken()), ret, right, BinaryExpr.Operator.AND); }
+    )*
     { return ret; }
 }
 
@@ -3602,6 +3672,14 @@ EmptyStmt EmptyStatement():
     { return new EmptyStmt(tokenRange()); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.27.2
+ * <pre>{@code
+ *     LambdaBody:
+ *         Expression
+ *         Block
+ * }</pre>
+ */
 Statement LambdaBody():
 {
     Expression expr;
@@ -3610,7 +3688,7 @@ Statement LambdaBody():
 {
     (
         expr = Expression() { n = new ExpressionStmt(range(expr, jpToken()), expr); }
-        |
+     |
         n = Block()
     )
     { return n; }
