@@ -222,7 +222,8 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <preparationGoals>-Preleasing clean verify</preparationGoals>
+                        <!-- Update the readme only when compiling a new release. -->
+                        <preparationGoals>-Preleasing clean verify scm:add scm:checkin</preparationGoals>
                         <pushChanges>false</pushChanges>
                     </configuration>
                 </plugin>
@@ -391,6 +392,7 @@
         </profile>
         <profile>
             <id>releasing</id>
+            <!-- Update the readme only when compiling a new release. -->
             <build>
                 <plugins>
                     <plugin>
@@ -417,6 +419,15 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <configuration>
+                            <includes>readme.md</includes>
+                            <message>[maven-release-plugin] commit updated readme</message>
+                            <pushChanges>false</pushChanges><!-- because I use git -->
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
