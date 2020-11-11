@@ -1249,7 +1249,7 @@ Type Type(NodeList<AnnotationExpr> annotations):
 }
 {
  (
-   LOOKAHEAD(2) ret = ReferenceType(annotations)
+   LOOKAHEAD(PrimitiveType(annotations) Annotations() "[" | ClassOrInterfaceType(annotations)) ret = ReferenceType(annotations)
  |
    ret = PrimitiveType(annotations )
  )
