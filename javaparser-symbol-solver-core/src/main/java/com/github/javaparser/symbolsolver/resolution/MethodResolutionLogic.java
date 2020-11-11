@@ -658,9 +658,9 @@ public class MethodResolutionLogic {
             // if paramA and paramB are not the last parameters
             // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
             // then we have to consider others parameters before concluding
-            } else if (((i + 1) < numberOfArgs)
-                    && paramTypeB.isReferenceType() && paramTypeB.asReferenceType().getQualifiedName().equals("java.lang.Object")
-                    || (paramTypeA.isReferenceType() && paramTypeA.asReferenceType().getQualifiedName().equals("java.lang.Object"))) {
+            } else if ((i < numberOfArgs - 1)
+                    && (paramTypeB.isReferenceType() && paramTypeB.asReferenceType().getQualifiedName().equals("java.lang.Object")
+                    || (paramTypeA.isReferenceType() && paramTypeA.asReferenceType().getQualifiedName().equals("java.lang.Object")))) {
                 // consider others parameters
             }
             // If we get to this point then we check whether one of the methods contains a parameter type that is more
