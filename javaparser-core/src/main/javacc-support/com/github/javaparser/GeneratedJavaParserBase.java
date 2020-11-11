@@ -50,7 +50,7 @@ abstract class GeneratedJavaParserBase {
     abstract void ReInit(Provider provider);
 
     /* Returns the JavaParser specific token type of the last matched token */
-    abstract JavaToken javaToken();
+    abstract JavaToken token();
 
     abstract Token getNextToken();
 
@@ -91,7 +91,7 @@ abstract class GeneratedJavaParserBase {
     /* Returns a tokenRange that spans the last matched token */
     TokenRange tokenRange() {
         if (storeTokens) {
-            return new TokenRange(javaToken(), javaToken());
+            return new TokenRange(token(), token());
         }
         return null;
     }
@@ -173,7 +173,7 @@ abstract class GeneratedJavaParserBase {
 
     /* Sets the kind of the last matched token to newKind */
     void setTokenKind(int newKind) {
-        javaToken().setKind(newKind);
+        token().setKind(newKind);
     }
 
     /* Makes the parser keep a list of tokens */
@@ -187,14 +187,14 @@ abstract class GeneratedJavaParserBase {
     TokenRange recover(int recoveryTokenType, ParseException p) {
         JavaToken begin = null;
         if (p.currentToken != null) {
-            begin = javaToken();
+            begin = token();
         }
         Token t;
         do {
             t = getNextToken();
         } while (t.kind != recoveryTokenType && t.kind != EOF);
 
-        JavaToken end = javaToken();
+        JavaToken end = token();
 
         TokenRange tokenRange = null;
         if (begin != null && end != null) {
