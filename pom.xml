@@ -431,7 +431,7 @@
                         <artifactId>maven-scm-plugin</artifactId>
                         <configuration>
                             <includes>readme.md</includes>
-                            <message>[maven-release-plugin] commit updated readme</message>
+                            <message>[maven-release-plugin] update readme</message>
                             <!-- disabled here, as it will be pushed separately (either once the release has been prepared, or manually) -->
                             <pushChanges>false</pushChanges>
                         </configuration>
