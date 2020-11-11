@@ -224,6 +224,7 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <!-- Update the readme only when compiling a new release. -->
                         <preparationGoals>-Preleasing clean verify scm:add scm:checkin</preparationGoals>
+                        <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
                     </configuration>
                 </plugin>
@@ -415,7 +416,7 @@
                                             <filtering>true</filtering>
                                         </resource>
                                     </resources>
-                                    <encoding>UTF-8</encoding>
+                                    <encoding>{project.build.sourceEncoding}</encoding>
                                 </configuration>
                             </execution>
                         </executions>
@@ -426,7 +427,8 @@
                         <configuration>
                             <includes>readme.md</includes>
                             <message>[maven-release-plugin] commit updated readme</message>
-                            <pushChanges>false</pushChanges><!-- because I use git -->
+                            <!-- disabled here, as it will be pushed separately (either once the release has been prepared, or manually) -->
+                            <pushChanges>false</pushChanges>
                         </configuration>
                     </plugin>
                 </plugins>
