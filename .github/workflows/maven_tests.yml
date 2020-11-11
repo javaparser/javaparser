@@ -27,6 +27,9 @@ jobs:
         ### exclude pre-8 (min development version jdk8)
         ### exclude post-12 (changes to jdk causes reflection tests to fail due to added methods #1701 )
         jdk: [8,9,10,11,12,13,14,15]
+    env:
+      OS: ${{ matrix.os }}
+      JDK: ${{ matrix.jdk }}
 
     runs-on: ${{ matrix.os }}
 
@@ -77,3 +80,4 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
           flags: AlsoSlowTests,aggregate
+          env_vars: 'AlsoSlowTests','aggregate',OS,JDK
