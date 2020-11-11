@@ -222,6 +222,10 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <!-- Update the readme only when compiling a new release. -->
+                        <preparationGoals>-Preleasing clean verify scm:add scm:checkin</preparationGoals>
+                        <!-- Disable pushing of changes (i.e. false, for local testing) -->
+                        <pushChanges>false</pushChanges>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -233,6 +237,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.11.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -386,6 +395,49 @@
             <activation>
                 <jdk>[1.8,)</jdk>
             </activation>
+        </profile>
+        <profile>
+            <id>releasing</id>
+            <!-- Update the readme only when compiling a new release. -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-readme</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/doc</directory>
+                                            <includes>
+                                                <include>readme.md</include>
+                                            </includes>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <configuration>
+                            <includes>readme.md</includes>
+                            <message>[maven-release-plugin] update readme</message>
+                            <!-- disabled here, as it will be pushed separately (either once the release has been prepared, or manually) -->
+                            <pushChanges>false</pushChanges>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
