@@ -77,4 +77,4 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
           flags: AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: AlsoSlowTests,aggregate,OS,JDK
+          env_vars: AlsoSlowTests,OS,JDK
