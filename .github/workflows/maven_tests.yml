@@ -75,4 +75,4 @@ jobs:
         with:
           file: target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false):
+          verbose: false # optional (default = false):
