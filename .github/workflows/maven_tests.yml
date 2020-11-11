@@ -68,15 +68,12 @@ jobs:
       - name: Test with Maven (incl. slow tests)
         run: mvn --errors clean test --activate-profiles AlsoSlowTests
 
-      - name: Generate jacoco reports
-        run: mvn -e -B jacoco:report-aggregate
-
       - name: CodeCov
         uses: codecov/codecov-action@v1
         if: matrix.os == 'ubuntu-latest' && matrix.jdk == 15 && github.repository == 'mysteraitch/javaparser'
         timeout-minutes: 10
         with:
-          file: target/site/jacoco-aggregate/jacoco.xml
+          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml,javaparser-symbol-solver-core/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
           flags: AlsoSlowTests,aggregate,OS,JDK
