@@ -76,5 +76,5 @@ jobs:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml,javaparser-symbol-solver-core/target/site/jacoco-aggregate/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
-          flags: AlsoSlowTests,aggregate,OS,JDK
+          flags: AlsoSlowTests,aggregate,${{ runner.os }},jdk-${{ runner.jdk }}
           env_vars: AlsoSlowTests,aggregate,OS,JDK
