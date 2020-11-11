@@ -22,7 +22,6 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-
     <build>
         <plugins>
             <plugin>
@@ -36,8 +35,8 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <id>jacoco-report</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
