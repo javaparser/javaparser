@@ -416,7 +416,7 @@
                                             <filtering>true</filtering>
                                         </resource>
                                     </resources>
-                                    <encoding>{project.build.sourceEncoding}</encoding>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
                                 </configuration>
                             </execution>
                         </executions>
