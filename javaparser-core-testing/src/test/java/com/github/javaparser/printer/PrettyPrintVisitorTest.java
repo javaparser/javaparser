@@ -56,7 +56,7 @@ class PrettyPrintVisitorTest {
         assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
-        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().get().toString());
+        assertEquals("int[][] @Foo []", vde2.getMaximumCommonType().get().toString());
     }
 
     private String print(Node node) {
