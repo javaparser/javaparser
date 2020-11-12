@@ -2849,7 +2849,6 @@ Expression ConditionalExpression():
  * <strong>
  * Note subtle distinctions between inclusive and exclusive expressions.
  * </strong>
- * // TODO/FIXME: Investigate --  The JLS specifies {@code AND}, or {@code OR || AND}, but the grammar below is {@code AND || AND}
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.24
  * <pre>{@code
  *     ConditionalOrExpression:
@@ -2863,7 +2862,7 @@ Expression ConditionalOrExpression():
     Expression right;
 }
 {
-    // TODO/FIXME: Investigate --  The JLS specifies {@code AND}, or {@code OR || AND}, but the grammar below is {@code AND || AND}
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     ret = ConditionalAndExpression()
     (
         "||"
@@ -2877,7 +2876,6 @@ Expression ConditionalOrExpression():
  * <strong>
  * Note subtle distinctions between inclusive and exclusive expressions.
  * </strong>
- * // TODO/FIXME: Investigate --  The JLS specifies {@code OR}, or {@code AND && OR}, but the grammar below is {@code OR && OR}
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.23
  * <pre>{@code
  *     ConditionalAndExpression:
@@ -2903,7 +2901,7 @@ Expression ConditionalAndExpression():
     Expression right;
 }
 {
-    // TODO/FIXME: Investigate --  The JLS specifies {@code OR}, or {@code AND && OR}, but the grammar below is {@code OR && OR}
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     ret = InclusiveOrExpression()
     (
         "&&"
@@ -2937,6 +2935,7 @@ Expression InclusiveOrExpression():
     Expression right;
 }
 {
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     ret = ExclusiveOrExpression()
     (
         "|"
@@ -2970,6 +2969,7 @@ Expression ExclusiveOrExpression():
     Expression right;
 }
 {
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     ret = AndExpression() (
         "^"
         right = AndExpression()
@@ -3002,6 +3002,7 @@ Expression AndExpression():
     Expression right;
 }
 {
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     ret = EqualityExpression() (
         "&"
         right = EqualityExpression()
@@ -3038,6 +3039,7 @@ Expression EqualityExpression():
     BinaryExpr.Operator op;
 }
 {
+    // First consider a higher-precedence operator, before considering the token as the left-hand part of this expression.
     // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
     ret = InstanceOfExpression()
     (
