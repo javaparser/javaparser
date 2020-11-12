@@ -21,6 +21,7 @@
 
 package com.github.javaparser.generator;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -40,14 +41,15 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
  * It will create missing visit methods on the fly,
  * and will ask you to fill in the bodies of the visit methods.
  */
-public abstract class VisitorGenerator extends Generator {
+public abstract class AbstractVisitorGenerator extends AbstractGenerator {
+
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    protected VisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
+    protected AbstractVisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
         super(sourceRoot);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;
@@ -56,6 +58,8 @@ public abstract class VisitorGenerator extends Generator {
         this.createMissingVisitMethods = createMissingVisitMethods;
     }
 
+
+    @Override
     public final void generate() throws Exception {
         Log.info("Running %s", () -> getClass().getSimpleName());
 
@@ -70,21 +74,26 @@ public abstract class VisitorGenerator extends Generator {
         JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
                 .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
+
+        //
         after();
     }
 
-    protected void after() throws Exception {
-
-    }
+    protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
-        final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods().stream()
+        // TODO: Pretty Print..
+        final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods()
+                .stream()
                 .filter(m -> m.getNameAsString().equals("visit"))
                 .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
                 .findFirst();
 
         if (existingVisitMethod.isPresent()) {
             generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
+
+            MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(existingVisitMethod.get().toString());
+            addOrReplaceWhenSameSignature(visitorClass, prettyMethodDeclaration);
         } else if (createMissingVisitMethods) {
             MethodDeclaration newVisitMethod = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
@@ -96,8 +105,10 @@ public abstract class VisitorGenerator extends Generator {
                         .addModifier(PUBLIC);
             }
             generateVisitMethodBody(node, newVisitMethod, compilationUnit);
+
+            // Code above modifies the method body
+            MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(newVisitMethod.toString());
+            addOrReplaceWhenSameSignature(visitorClass, prettyMethodDeclaration);
         }
     }
-
-    protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 }

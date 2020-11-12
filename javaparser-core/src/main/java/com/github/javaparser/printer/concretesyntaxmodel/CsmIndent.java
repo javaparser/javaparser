@@ -40,4 +40,9 @@ public class CsmIndent implements CsmElement {
     public boolean equals(Object obj) {
         return obj instanceof CsmIndent;
     }
+
+    @Override
+    public String toString() {
+        return "CsmIndent{}";
+    }
 }

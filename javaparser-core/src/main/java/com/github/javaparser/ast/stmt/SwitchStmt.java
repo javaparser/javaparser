@@ -221,4 +221,14 @@ public class SwitchStmt extends Statement implements SwitchNode {
     public Optional<SwitchStmt> toSwitchStmt() {
         return Optional.of(this);
     }
+
+    public Optional<SwitchEntry> getDefaultSwitchEntry() {
+        // The 'default' entry, if present, should be the only entry with no label.
+        SwitchEntry switchEntry = entries.stream()
+                .filter(e -> e.getLabels().isEmpty())
+                .findFirst()
+                .orElse(null);
+
+        return Optional.ofNullable(switchEntry);
+    }
 }

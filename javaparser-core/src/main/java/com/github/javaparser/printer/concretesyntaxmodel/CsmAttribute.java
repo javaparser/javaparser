@@ -39,7 +39,6 @@ public class CsmAttribute implements CsmElement {
     public CsmAttribute(ObservableProperty property) {
         this.property = property;
     }
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         Object value = property.getRawValue(node);

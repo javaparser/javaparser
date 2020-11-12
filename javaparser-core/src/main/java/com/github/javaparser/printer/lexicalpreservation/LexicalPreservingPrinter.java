@@ -296,7 +296,7 @@ public class LexicalPreservingPrinter {
 
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
-                if (!spaceCandidate.isSpaceOrTab()) {
+                if (!spaceCandidate.isWhitespaceButNotEndOfLine()) {
                     if (spaceCandidate.isNewline() && i != index - 1) {
                         for (int j = 0; j < (index - 1) - i; j++) {
                             nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
@@ -312,9 +312,18 @@ public class LexicalPreservingPrinter {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(
+                        findNodeListName(changedList),
+                        changedList,
+                        index
+                );
             } else if (type == AstObserver.ListChangeType.ADDITION) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(
+                        findNodeListName(changedList),
+                        changedList,
+                        index,
+                        nodeAddedOrRemoved
+                );
             } else {
                 throw new UnsupportedOperationException();
             }
@@ -527,8 +536,7 @@ public class LexicalPreservingPrinter {
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
-                if (calculatedSyntaxModel.elements.size() > indexCurrentElement &&
-                        !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                if (indexCurrentElement < calculatedSyntaxModel.elements.size()) {
                     for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
                         indentation.add(new TokenTextElement(SPACE, " "));
                     }
@@ -545,7 +553,7 @@ public class LexicalPreservingPrinter {
 
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChildNode());
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
@@ -605,7 +613,7 @@ public class LexicalPreservingPrinter {
         }
         Collections.reverse(followingNewlines);
         for (int i = 0; i < followingNewlines.size(); i++) {
-            if (!followingNewlines.get(i).isSpaceOrTab()) {
+            if (!followingNewlines.get(i).isWhitespaceButNotEndOfLine()) {
                 return followingNewlines.subList(0, i);
             }
         }

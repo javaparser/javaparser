@@ -21,60 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -87,8 +42,27 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
+
     private NodeText getTextForNode(Node node) {
         return node.getData(NODE_TEXT_DATA);
     }
@@ -1136,6 +1110,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     static class AddFooCallModifierVisitor extends ModifierVisitor<Void> {
+
         @Override
         public Visitable visit(MethodCallExpr n, Void arg) {
             // Add a call to foo() on every found method call
@@ -1159,6 +1134,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     static class CallModifierVisitor extends ModifierVisitor<Void> {
+
         @Override
         public Visitable visit(MethodCallExpr n, Void arg) {
             // Add a call to foo() on every found method call
@@ -1518,4 +1494,1367 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void removeAnnotationsTest() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+//        String eol = EOL;
+        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "public class AssertStmt extends Statement {" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setCheck(check);" + eol +
+                "        setMessage(message);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "}" + eol +
+                "";
+
+        String expected = "" +
+                "public class AssertStmt extends Statement {" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setCheck(check);" + eol +
+                "        setMessage(message);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "}" + eol +
+                "";
+
+        final Node b = javaParser.parse(code)
+                .getResult()
+                .orElseThrow(AssertionError::new);
+
+        List<AnnotationExpr> allAnnotations = b.findAll(AnnotationExpr.class);
+
+        List<Node> annotatedNodes = allAnnotations.stream()
+                .filter(annotationExpr -> annotationExpr.getParentNode().isPresent())
+                .map(annotationExpr -> annotationExpr.getParentNode().get())
+                .collect(Collectors.toList());
+
+        annotatedNodes.stream()
+                .filter(node -> node instanceof NodeWithAnnotations)
+                .map(node -> (NodeWithAnnotations<?>) node)
+                .forEach(nodeWithAnnotations -> {
+                    NodeList<AnnotationExpr> annotations = nodeWithAnnotations.getAnnotations();
+
+                    NodeList<AnnotationExpr> newAnnotations = annotations.stream()
+//                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Override.class.getSimpleName()))
+                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
+                            .collect(Collectors.toCollection(NodeList::new));
+
+//                    nodeWithAnnotations.setAnnotations(new NodeList<>());
+                    nodeWithAnnotations.setAnnotations(newAnnotations);
+                });
+
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        System.out.println(actual);
+        assertEqualsStringIgnoringEol(expected, actual);
+
+//        // toString still uses the pretty printer -- avoid within this test...
+//        final String actual2 = b.toString();
+//        System.out.println(actual2);
+//        assertEqualsStringIgnoringEol(expected, actual2);
+    }
+
+    @Test
+    public void removeAnnotationsTest_fullClass() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+        String eol = SYSTEM_EOL;
+//        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {" + eol +
+                "" + eol +
+                "    private Name name;" + eol +
+                "" + eol +
+                "    private NodeList<Name> moduleNames;" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective() {" + eol +
+                "        this(null, new Name(), new NodeList<>());" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @AllFieldsConstructor" + eol +
+                "    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {" + eol +
+                "        this(null, name, moduleNames);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    /**" + eol +
+                "     * This constructor is used by the parser and is considered private." + eol +
+                "     */" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setName(name);" + eol +
+                "        setModuleNames(moduleNames);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol +
+                "        v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol +
+                "    public boolean remove(Node node) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.remove(i);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        return super.remove(node);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public Name getName() {" + eol +
+                "        return name;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setName(final Name name) {" + eol +
+                "        assertNotNull(name);" + eol +
+                "        if (name == this.name) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.NAME, this.name, name);" + eol +
+                "        if (this.name != null)" + eol +
+                "            this.name.setParentNode(null);" + eol +
+                "        this.name = name;" + eol +
+                "        setAsParentNodeOf(name);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public NodeList<Name> getModuleNames() {" + eol +
+                "        return moduleNames;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {" + eol +
+                "        assertNotNull(moduleNames);" + eol +
+                "        if (moduleNames == this.moduleNames) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);" + eol +
+                "        if (this.moduleNames != null)" + eol +
+                "            this.moduleNames.setParentNode(null);" + eol +
+                "        this.moduleNames = moduleNames;" + eol +
+                "        setAsParentNodeOf(moduleNames);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + eol +
+                "    public ModuleExportsDirective clone() {" + eol +
+                "        return (ModuleExportsDirective) accept(new CloneVisitor(), null);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + eol +
+                "    public boolean replace(Node node, Node replacementNode) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.set(i, (Name) replacementNode);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        if (node == name) {" + eol +
+                "            setName((Name) replacementNode);" + eol +
+                "            return true;" + eol +
+                "        }" + eol +
+                "        return super.replace(node, replacementNode);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsStmt() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsStmt() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsStmt() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective addModuleName(String name) {" + eol +
+                "        moduleNames.add(parseName(name));" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsDirective() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsDirective() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsDirective() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + eol +
+                "    public ModuleExportsDirectiveMetaModel getMetaModel() {" + eol +
+                "        return JavaParserMetaModel.moduleExportsDirectiveMetaModel;" + eol +
+                "    }" + eol +
+                "}" + eol + eol +
+                "";
+
+        String expected = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {" + eol +
+                "" + eol +
+                "    private Name name;" + eol +
+                "" + eol +
+                "    private NodeList<Name> moduleNames;" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective() {" + eol +
+                "        this(null, new Name(), new NodeList<>());" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @AllFieldsConstructor" + eol +
+                "    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {" + eol +
+                "        this(null, name, moduleNames);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    /**" + eol +
+                "     * This constructor is used by the parser and is considered private." + eol +
+                "     */" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.MainConstructorGenerator\")" + eol +
+                "    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {" + eol +
+                "        super(tokenRange);" + eol +
+                "        setName(name);" + eol +
+                "        setModuleNames(moduleNames);" + eol +
+                "        customInitialization();" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {" + eol +
+                "        return v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.AcceptGenerator\")" + eol +
+                "    public <A> void accept(final VoidVisitor<A> v, final A arg) {" + eol +
+                "        v.visit(this, arg);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.RemoveMethodGenerator\")" + eol +
+                "    public boolean remove(Node node) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.remove(i);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        return super.remove(node);" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public Name getName() {" + eol +
+                "        return name;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setName(final Name name) {" + eol +
+                "        assertNotNull(name);" + eol +
+                "        if (name == this.name) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.NAME, this.name, name);" + eol +
+                "        if (this.name != null)" + eol +
+                "            this.name.setParentNode(null);" + eol +
+                "        this.name = name;" + eol +
+                "        setAsParentNodeOf(name);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public NodeList<Name> getModuleNames() {" + eol +
+                "        return moduleNames;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")" + eol +
+                "    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {" + eol +
+                "        assertNotNull(moduleNames);" + eol +
+                "        if (moduleNames == this.moduleNames) {" + eol +
+                "            return (ModuleExportsDirective) this;" + eol +
+                "        }" + eol +
+                "        notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);" + eol +
+                "        if (this.moduleNames != null)" + eol +
+                "            this.moduleNames.setParentNode(null);" + eol +
+                "        this.moduleNames = moduleNames;" + eol +
+                "        setAsParentNodeOf(moduleNames);" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.CloneGenerator\")" + eol +
+                "    public ModuleExportsDirective clone() {" + eol +
+                "        return (ModuleExportsDirective) accept(new CloneVisitor(), null);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.ReplaceMethodGenerator\")" + eol +
+                "    public boolean replace(Node node, Node replacementNode) {" + eol +
+                "        if (node == null)" + eol +
+                "            return false;" + eol +
+                "        for (int i = 0; i < moduleNames.size(); i++) {" + eol +
+                "            if (moduleNames.get(i) == node) {" + eol +
+                "                moduleNames.set(i, (Name) replacementNode);" + eol +
+                "                return true;" + eol +
+                "            }" + eol +
+                "        }" + eol +
+                "        if (node == name) {" + eol +
+                "            setName((Name) replacementNode);" + eol +
+                "            return true;" + eol +
+                "        }" + eol +
+                "        return super.replace(node, replacementNode);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsStmt() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsStmt() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsStmt() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    public ModuleExportsDirective addModuleName(String name) {" + eol +
+                "        moduleNames.add(parseName(name));" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public boolean isModuleExportsDirective() {" + eol +
+                "        return true;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public ModuleExportsDirective asModuleExportsDirective() {" + eol +
+                "        return this;" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public Optional<ModuleExportsDirective> toModuleExportsDirective() {" + eol +
+                "        return Optional.of(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.TypeCastingGenerator\")" + eol +
+                "    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {" + eol +
+                "        action.accept(this);" + eol +
+                "    }" + eol +
+                "" + eol +
+                "    @Override" + eol +
+//                "    @Generated(\"com.github.javaparser.generator.core.node.GetMetaModelGenerator\")" + eol +
+                "    public ModuleExportsDirectiveMetaModel getMetaModel() {" + eol +
+                "        return JavaParserMetaModel.moduleExportsDirectiveMetaModel;" + eol +
+                "    }" + eol +
+                "}" + eol + eol +
+                "";
+
+        final Node b = javaParser.parse(code)
+                .getResult()
+                .orElseThrow(AssertionError::new);
+
+        List<AnnotationExpr> allAnnotations = b.findAll(AnnotationExpr.class);
+
+        List<Node> annotatedNodes = allAnnotations.stream()
+                .filter(annotationExpr -> annotationExpr.getParentNode().isPresent())
+                .map(annotationExpr -> annotationExpr.getParentNode().get())
+                .collect(Collectors.toList());
+
+        annotatedNodes.stream()
+                .filter(node -> node instanceof NodeWithAnnotations)
+                .map(node -> (NodeWithAnnotations<?>) node)
+                .forEach(nodeWithAnnotations -> {
+                    NodeList<AnnotationExpr> annotations = nodeWithAnnotations.getAnnotations();
+
+                    NodeList<AnnotationExpr> newAnnotations = annotations.stream()
+//                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Override.class.getSimpleName()))
+                            .filter(annotationExpr -> !annotationExpr.getName().asString().equals(Generated.class.getSimpleName()))
+                            .collect(Collectors.toCollection(NodeList::new));
+
+//                    nodeWithAnnotations.setAnnotations(new NodeList<>());
+                    nodeWithAnnotations.setAnnotations(newAnnotations);
+                });
+
+
+        final String actual = LexicalPreservingPrinter.print(b);
+        System.out.println(actual);
+        assertEqualsStringIgnoringEol(expected, actual);
+
+//        // toString still uses the pretty printer -- avoid within this test...
+//        final String actual2 = b.toString();
+//        System.out.println(actual2);
+//        assertEqualsStringIgnoringEol(expected, actual2);
+    }
+
+    @Disabled("Exploratory test")
+    @Test
+    public void addEnumConstantDeclaration() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+        String eol = SYSTEM_EOL;
+//        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "/*\n" +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+                " *\n" +
+                " * This file is part of JavaParser.\n" +
+                " *\n" +
+                " * JavaParser can be used either under the terms of\n" +
+                " * a) the GNU Lesser General Public License as published by\n" +
+                " *     the Free Software Foundation, either version 3 of the License, or\n" +
+                " *     (at your option) any later version.\n" +
+                " * b) the terms of the Apache License\n" +
+                " *\n" +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
+                " * LICENCE.APACHE. Please refer to those files for details.\n" +
+                " *\n" +
+                " * JavaParser is distributed in the hope that it will be useful,\n" +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                " * GNU Lesser General Public License for more details.\n" +
+                " */\n" +
+                "package com.github.javaparser.ast.observer;\n" +
+                "\n" +
+                "import com.github.javaparser.ast.Generated;\n" +
+                "import com.github.javaparser.ast.Node;\n" +
+                "import com.github.javaparser.ast.NodeList;\n" +
+                "import com.github.javaparser.utils.Utils;\n" +
+                "\n" +
+                "import java.lang.reflect.InvocationTargetException;\n" +
+                "import java.util.Arrays;\n" +
+                "import java.util.Collection;\n" +
+                "import java.util.Optional;\n" +
+                "\n" +
+                "/**\n" +
+                " * Properties considered by the AstObserver\n" +
+                " */\n" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
+                "\n" +
+                "    ANNOTATIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),\n" +
+                "    ARGUMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ASTERISK(Type.SINGLE_ATTRIBUTE),\n" +
+                "    BODY(Type.SINGLE_REFERENCE),\n" +
+                "    CATCH_CLAUSES(Type.MULTIPLE_REFERENCE),\n" +
+                "    CHECK(Type.SINGLE_REFERENCE),\n" +
+                "    CLASS_BODY(Type.MULTIPLE_REFERENCE),\n" +
+                "    CLASS_DECLARATION(Type.SINGLE_REFERENCE),\n" +
+                "    COMMENT(Type.SINGLE_REFERENCE),\n" +
+                "    COMPARE(Type.SINGLE_REFERENCE),\n" +
+                "    COMPONENT_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    CONDITION(Type.SINGLE_REFERENCE),\n" +
+                "    CONTENT(Type.SINGLE_ATTRIBUTE),\n" +
+                "    DEFAULT_VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    DIMENSION(Type.SINGLE_REFERENCE),\n" +
+                "    DIRECTIVES(Type.MULTIPLE_REFERENCE),\n" +
+                "    ELEMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    ELEMENT_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    ELSE_EXPR(Type.SINGLE_REFERENCE),\n" +
+                "    ELSE_STMT(Type.SINGLE_REFERENCE),\n" +
+                "    ENCLOSING_PARAMETERS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ENTRIES(Type.MULTIPLE_REFERENCE),\n" +
+                "    EXPRESSION(Type.SINGLE_REFERENCE),\n" +
+                "    EXTENDED_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    EXTENDED_TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    FINALLY_BLOCK(Type.SINGLE_REFERENCE),\n" +
+                "    IDENTIFIER(Type.SINGLE_ATTRIBUTE),\n" +
+                "    IMPLEMENTED_TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    IMPORTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    INDEX(Type.SINGLE_REFERENCE),\n" +
+                "    INITIALIZATION(Type.MULTIPLE_REFERENCE),\n" +
+                "    INITIALIZER(Type.SINGLE_REFERENCE),\n" +
+                "    INNER(Type.SINGLE_REFERENCE),\n" +
+                "    INTERFACE(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ITERABLE(Type.SINGLE_REFERENCE),\n" +
+                "    KEYWORD(Type.SINGLE_ATTRIBUTE),\n" +
+                "    LABEL(Type.SINGLE_REFERENCE),\n" +
+                "    LABELS(Type.MULTIPLE_REFERENCE),\n" +
+                "    LEFT(Type.SINGLE_REFERENCE),\n" +
+                "    LEVELS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MEMBERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MEMBER_VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    MESSAGE(Type.SINGLE_REFERENCE),\n" +
+                "    MODIFIERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    MODULE(Type.SINGLE_REFERENCE),\n" +
+                "    MODULE_NAMES(Type.MULTIPLE_REFERENCE),\n" +
+                "    NAME(Type.SINGLE_REFERENCE),\n" +
+                "    OPEN(Type.SINGLE_ATTRIBUTE),\n" +
+                "    OPERATOR(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ORIGIN(Type.SINGLE_ATTRIBUTE),\n" +
+                "    PACKAGE_DECLARATION(Type.SINGLE_REFERENCE),\n" +
+                "    PAIRS(Type.MULTIPLE_REFERENCE),\n" +
+                "    PARAMETER(Type.SINGLE_REFERENCE),\n" +
+                "    PARAMETERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    QUALIFIER(Type.SINGLE_REFERENCE),\n" +
+                "    RECEIVER_PARAMETER(Type.SINGLE_REFERENCE),\n" +
+                "    RESOURCES(Type.MULTIPLE_REFERENCE),\n" +
+                "    RIGHT(Type.SINGLE_REFERENCE),\n" +
+                "    SCOPE(Type.SINGLE_REFERENCE),\n" +
+                "    SELECTOR(Type.SINGLE_REFERENCE),\n" +
+                "    STATEMENT(Type.SINGLE_REFERENCE),\n" +
+                "    STATEMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    STATIC(Type.SINGLE_ATTRIBUTE),\n" +
+                "    SUPER_TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    TARGET(Type.SINGLE_REFERENCE),\n" +
+                "    THEN_EXPR(Type.SINGLE_REFERENCE),\n" +
+                "    THEN_STMT(Type.SINGLE_REFERENCE),\n" +
+                "    THIS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    THROWN_EXCEPTIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    TRY_BLOCK(Type.SINGLE_REFERENCE),\n" +
+                "    TYPE(Type.SINGLE_REFERENCE),\n" +
+                "    TYPES(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_ARGUMENTS(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_BOUND(Type.MULTIPLE_REFERENCE),\n" +
+                "    TYPE_NAME(Type.SINGLE_REFERENCE),\n" +
+                "    TYPE_PARAMETERS(Type.MULTIPLE_REFERENCE),\n" +
+                "    UPDATE(Type.MULTIPLE_REFERENCE),\n" +
+                "    VALUE(Type.SINGLE_REFERENCE),\n" +
+                "    VALUES(Type.MULTIPLE_REFERENCE),\n" +
+                "    VARIABLE(Type.SINGLE_REFERENCE),\n" +
+                "    VARIABLES(Type.MULTIPLE_REFERENCE),\n" +
+                "    VAR_ARGS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    VAR_ARGS_ANNOTATIONS(Type.MULTIPLE_REFERENCE),\n" +
+                "    WITH(Type.MULTIPLE_REFERENCE),\n" +
+                "    CASCADING_IF_STMT(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    ELSE_BLOCK(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    ELSE_BRANCH(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    EXPRESSION_BODY(Type.SINGLE_REFERENCE, true),\n" +
+                "    MAXIMUM_COMMON_TYPE(Type.SINGLE_REFERENCE, true),\n" +
+                "    POSTFIX(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    PREFIX(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    THEN_BLOCK(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    USING_DIAMOND_OPERATOR(Type.SINGLE_ATTRIBUTE, true),\n" +
+                "    RANGE,\n" +
+                "    COMMENTED_NODE;\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    ObservableProperty(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
+                "\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n" +
+                "";
+
+        String expected_lexical = "" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE),\n" +
+                "    ANONYMOUS_CLASS_BODY(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    ObservableProperty(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
+                "\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
+                "    }\n" +
+                "}" + // "\n" +
+                "";
+
+        String expected_lexical1 = "" +
+                "@Generated(\"com.github.javaparser.generator.core.node.PropertyGenerator\")\n" +
+                "public enum ObservableProperty {\n" +
+                "    ANNOTATIONS(Type.SINGLE_ATTRIBUTE);\n" +
+                "\n" +
+                "    private final boolean derived;\n" +
+                "    private final Type type;\n" +
+                "\n" +
+                "    ObservableProperty(Type type) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = false;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty(Type type, boolean derived) {\n" +
+                "        this.type = type;\n" +
+                "        this.derived = derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    ObservableProperty() {\n" +
+                "        this(Type.SINGLE_REFERENCE, false);\n" +
+                "    }\n" +
+                "\n" +
+                "    public static ObservableProperty fromCamelCaseName(String camelCaseName) {\n" +
+                "        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();\n" +
+                "        if (observableProperty.isPresent()) {\n" +
+                "            return observableProperty.get();\n" +
+                "        } else {\n" +
+                "            throw new IllegalArgumentException(\"No property found with the given camel case name: \" + camelCaseName);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String camelCaseName() {\n" +
+                "        return Utils.screamingToCamelCase(name());\n" +
+                "    }\n" +
+                "\n" +
+                "    public Object getRawValue(Node node) {\n" +
+                "        String getterName = \"get\" + Utils.capitalize(camelCaseName());\n" +
+                "        if (!hasMethod(node, getterName)) {\n" +
+                "            getterName = \"is\" + Utils.capitalize(camelCaseName());\n" +
+                "            if (!hasMethod(node, getterName)) {\n" +
+                "                getterName = \"has\" + Utils.capitalize(camelCaseName());\n" +
+                "            }\n" +
+                "        }\n" +
+                "        try {\n" +
+                "            return node.getClass().getMethod(getterName).invoke(node);\n" +
+                "        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get value for \" + this.name() + \" from \" + node + \" (\" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Boolean getValueAsBooleanAttribute(Node node) {\n" +
+                "        return (Boolean) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public Collection<?> getValueAsCollection(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            return (Collection) rawValue;\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue == null) {\n" +
+                "                return null;\n" +
+                "            }\n" +
+                "            if (rawValue instanceof NodeList) {\n" +
+                "                return (NodeList) rawValue;\n" +
+                "            } else {\n" +
+                "                Optional<NodeList> opt = (Optional<NodeList>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(\"Unable to get list value for \" + this.name() + \" from \" + node + \" (class: \" + node.getClass().getSimpleName() + \")\", e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public Node getValueAsSingleReference(Node node) {\n" +
+                "        Object rawValue = getRawValue(node);\n" +
+                "        try {\n" +
+                "            if (rawValue instanceof Node) {\n" +
+                "                return (Node) rawValue;\n" +
+                "            } else if (rawValue instanceof Optional) {\n" +
+                "                Optional<Node> opt = (Optional<Node>) rawValue;\n" +
+                "                if (opt.isPresent()) {\n" +
+                "                    return opt.get();\n" +
+                "                } else {\n" +
+                "                    return null;\n" +
+                "                }\n" +
+                "            } else {\n" +
+                "                throw new RuntimeException(String.format(\"Property %s returned %s (%s)\", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));\n" +
+                "            }\n" +
+                "        } catch (ClassCastException e) {\n" +
+                "            throw new RuntimeException(e);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public String getValueAsStringAttribute(Node node) {\n" +
+                "        return (String) getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    private boolean hasMethod(Node node, String name) {\n" +
+                "        try {\n" +
+                "            node.getClass().getMethod(name);\n" +
+                "            return true;\n" +
+                "        } catch (NoSuchMethodException e) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutNodes() {\n" +
+                "        return type.node;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isAboutValues() {\n" +
+                "        return !isAboutNodes();\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isDerived() {\n" +
+                "        return derived;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isMultiple() {\n" +
+                "        return type.multiple;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNull(Node node) {\n" +
+                "        return null == getRawValue(node);\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrEmpty(Node node) {\n" +
+                "        return Utils.valueIsNullOrEmpty(getRawValue(node));\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isNullOrNotPresent(Node node) {\n" +
+                "        Object result = getRawValue(node);\n" +
+                "        if (result == null) {\n" +
+                "            return true;\n" +
+                "        }\n" +
+                "        if (result instanceof Optional) {\n" +
+                "            return !((Optional) result).isPresent();\n" +
+                "        }\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "\n" +
+                "    public boolean isSingle() {\n" +
+                "        return !isMultiple();\n" +
+                "    }\n" +
+                "\n" +
+                "    enum Type {\n" +
+                "\n" +
+                "        SINGLE_ATTRIBUTE(false, false),\n" +
+                "        SINGLE_REFERENCE(false, true),\n" +
+                "        MULTIPLE_ATTRIBUTE(true, false),\n" +
+                "        MULTIPLE_REFERENCE(true, true);\n" +
+                "\n" +
+                "        private final boolean multiple;\n" +
+                "\n" +
+                "        private final boolean node;\n" +
+                "\n" +
+                "        Type(boolean multiple, boolean node) {\n" +
+                "            this.multiple = multiple;\n" +
+                "            this.node = node;\n" +
+                "        }\n" +
+                "    }\n" +
+                "}" + // "\n" +
+                "";
+
+
+        //
+        final Node b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
+        Optional<EnumDeclaration> optionalEnumDeclaration = ((CompilationUnit) b).getEnumByName("ObservableProperty");
+        assertTrue(optionalEnumDeclaration.isPresent());
+        EnumDeclaration enumDeclaration = optionalEnumDeclaration.get();
+
+        // Clear all the declarations
+        enumDeclaration.getEntries().clear();
+
+        //
+        EnumConstantDeclaration enumConstantDeclaration;
+
+        // Re-add the one constant
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANNOTATIONS");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+////        assertEqualsStringIgnoringEol(expected_lexical1, LexicalPreservingPrinter.print(enumDeclaration));
+//
+//        // Re-add a second constant
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY1");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY2");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+//        enumConstantDeclaration = enumDeclaration.addEnumConstant("ANONYMOUS_CLASS_BODY3");
+//        enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+        assertEqualsStringIgnoringEol(expected_lexical, LexicalPreservingPrinter.print(enumDeclaration));
+
+
+
+//        //// FIRST CONFIRM THAT THE PRETTY PRINTED VERSION MATCHES EXPECTATIONS
+//        final String prettyString = b.toString();
+////        System.out.println("Pretty: \n" + prettyString);
+////        assertEqualsStringIgnoringEol(expected_pretty, prettyString);
+//
+//
+//        //// NEXT CONFIRM THAT THE LEXICAL PREVERVING PRINTER PRINTS THE SAME
+//        TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(prettyString);
+//        String print = LexicalPreservingPrinter.print(prettyEnumDeclaration.asEnumDeclaration());
+//
+//        System.out.println("Lexical preserving: \n" + print);
+//        assertEqualsStringIgnoringEol(expected_lexical, print);
+
+    }
+
+
+    @Test
+    public void addRemoveImportDeclaration() {
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+        );
+
+//        String eol = SYSTEM_EOL;
+        String eol = "\n"; // Used to fail on Windows due to not matching line separators within the CSM / difference logic
+
+        String code = "" +
+                "/*" + eol +
+                " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + eol +
+                " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + eol +
+                " *" + eol +
+                " * This file is part of JavaParser." + eol +
+                " *" + eol +
+                " * JavaParser can be used either under the terms of" + eol +
+                " * a) the GNU Lesser General Public License as published by" + eol +
+                " *     the Free Software Foundation, either version 3 of the License, or" + eol +
+                " *     (at your option) any later version." + eol +
+                " * b) the terms of the Apache License" + eol +
+                " *" + eol +
+                " * You should have received a copy of both licenses in LICENCE.LGPL and" + eol +
+                " * LICENCE.APACHE. Please refer to those files for details." + eol +
+                " *" + eol +
+                " * JavaParser is distributed in the hope that it will be useful," + eol +
+                " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + eol +
+                " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + eol +
+                " * GNU Lesser General Public License for more details." + eol +
+                " */" + eol +
+                "package com.github.javaparser.ast.modules;" + eol +
+                "" + eol +
+                "import com.github.javaparser.ast.AllFieldsConstructor;" + eol +
+                "import com.github.javaparser.ast.Node;" + eol +
+                "import com.github.javaparser.ast.NodeList;" + eol +
+                "import com.github.javaparser.ast.expr.Name;" + eol +
+                "import com.github.javaparser.ast.nodeTypes.NodeWithName;" + eol +
+                "import com.github.javaparser.ast.observer.ObservableProperty;" + eol +
+                "import com.github.javaparser.ast.visitor.CloneVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.GenericVisitor;" + eol +
+                "import com.github.javaparser.ast.visitor.VoidVisitor;" + eol +
+                "import static com.github.javaparser.StaticJavaParser.parseName;" + eol +
+                "import static com.github.javaparser.utils.Utils.assertNotNull;" + eol +
+                "import com.github.javaparser.TokenRange;" + eol +
+                "import java.util.function.Consumer;" + eol +
+                "import java.util.Optional;" + eol +
+                "import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;" + eol +
+                "import com.github.javaparser.metamodel.JavaParserMetaModel;" + eol +
+                "import com.github.javaparser.ast.Generated;" + eol +
+                "" + eol +
+                "/**" + eol +
+                " * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}" + eol +
+                " */" + eol +
+                "public class X {" + eol +
+                "" + eol +
+                "}" + eol +
+                "";
+
+        //
+        final Node b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
+
+        CompilationUnit cu = (CompilationUnit) b;
+        LexicalPreservingPrinter.setup(cu);
+
+        Class<StaleGenerated> annotationClass = StaleGenerated.class;
+
+        cu.addImport(annotationClass);
+        cu.getImports().removeIf(importDeclaration -> {
+            return importDeclaration.getNameAsString().equals(annotationClass.getCanonicalName());
+        });
+        cu.addImport(annotationClass);
+        cu.getImports().removeIf(importDeclaration -> {
+            return importDeclaration.getNameAsString().equals(annotationClass.getCanonicalName());
+        });
+
+        System.out.println("cu = " + cu);
+
+
+    }
+
 }

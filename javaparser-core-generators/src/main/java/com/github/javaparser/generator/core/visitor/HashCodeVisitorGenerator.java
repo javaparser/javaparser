@@ -24,11 +24,11 @@ package com.github.javaparser.generator.core.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.utils.SourceRoot;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.List;
 
@@ -37,7 +37,8 @@ import static com.github.javaparser.StaticJavaParser.parseStatement;
 /**
  * Generates JavaParser's HashCodeVisitor.
  */
-public class HashCodeVisitorGenerator extends VisitorGenerator {
+public class HashCodeVisitorGenerator extends AbstractVisitorGenerator {
+
     public HashCodeVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true);
     }
@@ -50,7 +51,7 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
         body.getStatements().clear();
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
-        final List<PropertyMetaModel> propertyMetaModels= node.getAllPropertyMetaModels();
+        final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {

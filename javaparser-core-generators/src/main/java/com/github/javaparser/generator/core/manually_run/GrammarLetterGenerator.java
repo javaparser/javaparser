@@ -19,17 +19,18 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.generator.core.other;
+package com.github.javaparser.generator.core.manually_run;
 
 import java.util.function.Function;
 
 /**
  * Prints the LETTER and PART_LETTER tokens. They should be inserted into the grammar manually.
+ * TODO: Investigate further
  */
 public class GrammarLetterGenerator {
-    public static void main(String[] args) {
-        generate("LETTER", c -> Character.isJavaIdentifierStart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
-        generate("PART_LETTER", c -> Character.isJavaIdentifierPart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
+
+    private static String format(int i) {
+        return String.format("\"\\u%04x\"", i);
     }
 
     private static void generate(String tokenName, Function<Integer, Boolean> f) {
@@ -69,7 +70,8 @@ public class GrammarLetterGenerator {
         System.out.println("  >");
     }
 
-    private static String format(int i) {
-        return String.format("\"\\u%04x\"", i);
+    public static void main(String[] args) {
+        generate("LETTER", c -> Character.isJavaIdentifierStart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
+        generate("PART_LETTER", c -> Character.isJavaIdentifierPart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
     }
 }

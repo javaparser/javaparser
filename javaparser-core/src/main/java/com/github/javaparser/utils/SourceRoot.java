@@ -464,6 +464,15 @@ public class SourceRoot {
     private SourceRoot save(CompilationUnit cu, Path path, Charset encoding) {
         assertNotNull(cu);
         assertNotNull(path);
+
+        if(!cu.getStorage().isPresent()) {
+            Log.info("Storage changed (during save) for compilation unit, from <empty> to %s", path::toString);
+        }
+
+        if (cu.getStorage().isPresent() && !cu.getStorage().get().getPath().equals(path)) {
+            Log.info("Storage changed (during save) for compilation unit from %s to %s", () -> cu.getStorage().get().getPath().toString(), path::toString);
+        }
+
         cu.setStorage(path, encoding);
         cu.getStorage().get().save(printer);
         return this;

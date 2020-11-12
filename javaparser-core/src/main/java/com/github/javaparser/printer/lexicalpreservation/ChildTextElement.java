@@ -85,8 +85,17 @@ class ChildTextElement extends TextElement {
         return false;
     }
 
+    /**
+     * @deprecated Use {@link #isWhitespaceButNotEndOfLine()}
+     */
     @Override
+    @Deprecated
     public boolean isSpaceOrTab() {
+        return isWhitespaceButNotEndOfLine();
+    }
+
+    @Override
+    public boolean isWhitespaceButNotEndOfLine() {
         return false;
     }
 

@@ -25,7 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
@@ -33,7 +33,8 @@ import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
-public class ModifierVisitorGenerator extends VisitorGenerator {
+public class ModifierVisitorGenerator extends AbstractVisitorGenerator {
+
     public ModifierVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
     }
@@ -68,15 +69,15 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             }
         }
 
-        if(node.is(BinaryExpr.class)){
+        if (node.is(BinaryExpr.class)) {
             body.addStatement("if (left == null) return right;");
             body.addStatement("if (right == null) return left;");
-        }else {
+        } else {
             final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
             for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
                 if (property.isRequired() && property.isNode()) {
                     if (property.isNodeList()) {
-                        if(property.isNonEmpty()){
+                        if (property.isNonEmpty()) {
                             collapseCheck.append(f("%s.isEmpty()", property.getName()));
                         }
                     } else {

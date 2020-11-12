@@ -47,6 +47,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,14 +56,11 @@ import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
 
 /**
  * <p>
@@ -243,17 +241,48 @@ public class CompilationUnit extends Node {
      * adds an import if not implicitly imported by java (i.e. java.lang) or
      * added before. Asterisk imports overrule the other imports within the same package.
      *
-     * @param importDeclaration
+     * @param newImportDeclaration
      * @return {@code this}
      */
-    public CompilationUnit addImport(ImportDeclaration importDeclaration) {
-        if (importDeclaration.isAsterisk()) {
-            getImports().removeIf(im -> Objects.equals(getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null)));
+    public CompilationUnit addImport(ImportDeclaration newImportDeclaration) {
+        if (newImportDeclaration.isAsterisk()) {
+            getImports().removeIf(im -> Objects.equals(
+                    getImportPackageName(im).get(),
+                    getImportPackageName(newImportDeclaration).orElse(null)
+            ));
         }
-        if (!isImplicitImport(importDeclaration) && getImports().stream().noneMatch(im -> im.equals(importDeclaration) || (im.isAsterisk() && Objects.equals(getImportPackageName(im).get(), getImportPackageName(importDeclaration).orElse(null))))) {
-            getImports().add(importDeclaration);
+        if (isImplicitImport(newImportDeclaration)) {
+            // No change required if the import we are attempting to add is implicitly imported in Java.
+            return this;
+        }
+        if (!wouldBeRedundantAddition(getImports(), newImportDeclaration)) {
+            // Only add this new import if it is not already included (e.g. duplicate entry, or an existing asterisk entry).
+            getImports().add(newImportDeclaration);
+        } else {
+            // TODO: Log entry indicating that the import was not actually added (i.e. no AST change)
         }
         return this;
+    }
+
+
+    /**
+     * @return true, if the new import would be a redundant addition to the collection of imports
+     */
+    public static boolean wouldBeRedundantAddition(Collection<ImportDeclaration> importDeclarations, ImportDeclaration newImportDeclaration) {
+        return importDeclarations.stream()
+                .anyMatch(existingImportDeclaration -> {
+                    if (existingImportDeclaration.equals(newImportDeclaration)) {
+                        // It matches
+                        return true;
+                    }
+
+                    // Are we attempting to a single import that is already covered given an existing asterisk import?
+                    return existingImportDeclaration.isAsterisk() &&
+                            Objects.equals(
+                                    getImportPackageName(existingImportDeclaration).get(),
+                                    getImportPackageName(newImportDeclaration).orElse(null)
+                            );
+                });
     }
 
     /**
@@ -263,7 +292,8 @@ public class CompilationUnit extends Node {
     private boolean isImplicitImport(ImportDeclaration importDeclaration) {
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
-            if (parseName(JAVA_LANG).equals(importPackageName.get())) {
+            // TODO/FIXME: Is it intentional to use StaticJavaParser rather than an instance of a parser?
+            if (StaticJavaParser.parseName(JAVA_LANG).equals(importPackageName.get())) {
                 // java.lang is implicitly imported
                 return true;
             }
@@ -341,7 +371,8 @@ public class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageDeclaration(String name) {
-        setPackageDeclaration(new PackageDeclaration(parseName(name)));
+        // TODO/FIXME: Is it intentional to use StaticJavaParser rather than an instance of a parser?
+        setPackageDeclaration(new PackageDeclaration(StaticJavaParser.parseName(name)));
         return this;
     }
 
@@ -365,13 +396,20 @@ public class CompilationUnit extends Node {
      * @throws IllegalArgumentException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
-        if (clazz.isArray()) {
-            return addImport(clazz.getComponentType());
-        }
-        if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName()))
+        if (clazz.isAnonymousClass() || clazz.isLocalClass()) {
+            throw new IllegalArgumentException(clazz.getName() + " is an anonymous or local class, therefore it cannot be added with addImport");
+        } else if (ClassUtils.isPrimitiveOrWrapper(clazz)) {
+            // Importing primitive values or java.lang is unnecessary.
             return this;
-        else if (clazz.isAnonymousClass() || clazz.isLocalClass())
-            throw new IllegalArgumentException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
+        } else if (clazz.isArray()) {
+            // If we're adding an array type, recursively call this method but with the component type of the array.
+            return addImport(clazz.getComponentType());
+        } else if (JAVA_LANG.equals(clazz.getPackage().getName())) {
+            // Note that this relies upon the clazz.isArray check above being false (where clazz.getPackage() would be null)
+            // Importing primitive values or java.lang is unnecessary.
+            return this;
+        }
+
         return addImport(clazz.getCanonicalName());
     }
 
@@ -397,7 +435,10 @@ public class CompilationUnit extends Node {
             i.append(".*");
         }
         i.append(";");
-        return addImport(parseImport(i.toString()));
+
+        // TODO/FIXME: Is it intentional to use StaticJavaParser rather than an instance of a parser?
+        ImportDeclaration importDeclaration = StaticJavaParser.parseImport(i.toString());
+        return addImport(importDeclaration);
     }
 
     /**
@@ -631,7 +672,8 @@ public class CompilationUnit extends Node {
      * @return the module
      */
     public ModuleDeclaration setModule(String name) {
-        final ModuleDeclaration module = new ModuleDeclaration(parseName(name), false);
+        // TODO/FIXME: Is it intentional to use StaticJavaParser rather than an instance of a parser?
+        final ModuleDeclaration module = new ModuleDeclaration(StaticJavaParser.parseName(name), false);
         setModule(module);
         return module;
     }

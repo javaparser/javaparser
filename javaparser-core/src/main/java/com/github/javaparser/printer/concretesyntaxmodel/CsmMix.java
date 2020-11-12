@@ -43,7 +43,6 @@ public class CsmMix implements CsmElement {
         }
         this.elements = elements;
     }
-
     public List<CsmElement> getElements() {
         return elements;
     }

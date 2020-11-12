@@ -87,7 +87,11 @@ public class CsmToken implements CsmElement {
 
     @Override
     public String toString() {
-        return "token(" + content + ")";
+        return "CsmToken{" +
+//                "tokenType=" + tokenType +
+//                ", content='" + content + '\'' +
+                "content='" + content + '\'' +
+                '}';
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
@@ -380,11 +382,11 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmIndent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(eolTokenKind())), differenceElements.get(i++));
-        assertEquals(DifferenceElement.added(new CsmIndent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.added(new CsmChild(s)), differenceElements.get(i++));
         assertEquals(DifferenceElement.added(new CsmToken(eolTokenKind())), differenceElements.get(i++));
-        assertEquals(DifferenceElement.added(new CsmUnindent()), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmUnindent()), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(i++));
         assertEquals(i, differenceElements.size());
     }
@@ -427,6 +429,66 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RPAREN)), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmChild(md.getBody().get())), differenceElements.get(i++));
+        assertEquals(i, differenceElements.size());
+    }
+
+    @Test
+    void classDeclarationRemoveField() {
+        considerCode("" +
+                "// This is my class, with my comment\n" +
+                "class A {\n" +
+                "    int a;\n" +
+                "}" +
+                "");
+        ClassOrInterfaceDeclaration classByName = cu.getClassByName("A").orElseThrow(RuntimeException::new);
+        FieldDeclaration fieldDeclaration = new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), "a");
+
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(classByName);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(
+                classByName, ObservableProperty.MEMBERS, 0
+        );
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.CLASS)), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmChild(classByName.getName())), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmIndent()), differenceElements.get(i++));
+        assertEquals(kept(new CsmToken(eolTokenKind())), differenceElements.get(i++));
+        assertEquals(removed(new CsmToken(eolTokenKind())), differenceElements.get(i++));
+        assertEquals(removed(new CsmChild(fieldDeclaration)), differenceElements.get(i++));
+        assertEquals(removed(new CsmToken(eolTokenKind())), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmUnindent()), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(i++));
+        assertEquals(i, differenceElements.size());
+    }
+
+    @Test
+    void methodDeclarationAddStatement() {
+        considerCode("" +
+                "// This is my class, with my comment\n" +
+                "class A {\n" +
+                "    int foo(int p1, char p2) { }\n" +
+                "}" +
+                "");
+        ClassOrInterfaceDeclaration classByName = cu.getClassByName("A").get();
+        MethodDeclaration methodDeclaration = classByName.getMethodsByName("foo").get(0);
+        ReturnStmt returnStmt = new ReturnStmt("return foo;");
+
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(methodDeclaration.getBody().get());
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListAddition(
+                methodDeclaration.getBody().get(), ObservableProperty.STATEMENTS, 0, returnStmt
+        );
+        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmIndent()), differenceElements.get(i++));
+        assertEquals(kept(new CsmToken(eolTokenKind())), differenceElements.get(i++));
+        assertEquals(added(new CsmChild(returnStmt)), differenceElements.get(i++));
+        assertEquals(added(new CsmToken(eolTokenKind())), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmUnindent()), differenceElements.get(i++));
+        assertEquals(DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(i++));
         assertEquals(i, differenceElements.size());
     }
 

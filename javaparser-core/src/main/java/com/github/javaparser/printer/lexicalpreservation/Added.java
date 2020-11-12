@@ -74,7 +74,7 @@ public class Added implements DifferenceElement {
 
     public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-            return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+            return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChildNode());
         } else if (element instanceof CsmToken) {
             return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(null));
         } else {

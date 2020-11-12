@@ -272,8 +272,8 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
                         assignStatement);
         int index = 0;
         assertEquals(CsmElement.token(GeneratedJavaParserConstants.LBRACE), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
         assertEquals(CsmElement.indent(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
         assertTrue(isChild(calculatedSyntaxModel.elements.get(index++), ExpressionStmt.class));
         assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
         assertEquals(CsmElement.unindent(), calculatedSyntaxModel.elements.get(index++));
@@ -301,11 +301,11 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
                 assignStatement);
         int index = 0;
         assertEquals(DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(index++));
+        assertEquals(DifferenceElement.kept(CsmElement.indent()), differenceElements.get(index++));
         assertEquals(DifferenceElement.kept(CsmElement.newline()), differenceElements.get(index++));
-        assertEquals(DifferenceElement.added(CsmElement.indent()), differenceElements.get(index++));
         assertTrue(isAddedChild(differenceElements.get(index++), ExpressionStmt.class));
         assertEquals(DifferenceElement.added(CsmElement.newline()), differenceElements.get(index++));
-        assertEquals(DifferenceElement.added(CsmElement.unindent()), differenceElements.get(index++));
+        assertEquals(DifferenceElement.kept(CsmElement.unindent()), differenceElements.get(index++));
         assertEquals(DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(index++));
         assertEquals(index, differenceElements.size());
     }
@@ -315,7 +315,7 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
     }
 
     private boolean isChild(CsmElement element, Class<? extends Node> childClass) {
-        return element instanceof CsmChild && childClass.isInstance(((CsmChild)element).getChild());
+        return element instanceof CsmChild && childClass.isInstance(((CsmChild)element).getChildNode());
     }
 
     protected EnumConstantDeclaration considerEcd(String code) {

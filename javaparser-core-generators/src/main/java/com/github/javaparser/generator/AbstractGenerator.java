@@ -28,6 +28,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.StaleGenerated;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -42,7 +43,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -58,50 +58,6 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * A general pattern that the generators in this module will follow.
  */
 public abstract class AbstractGenerator {
-
-    protected static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
-
-    protected static final String COPYRIGHT_NOTICE_JP_CORE = "" + SYSTEM_EOL +
-            " * Copyright (C) 2007-2010 Júlio Vilmar Gesser." + SYSTEM_EOL +
-            " * Copyright (C) 2011, 2013-2020 The JavaParser Team." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * This file is part of JavaParser." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * JavaParser can be used either under the terms of" + SYSTEM_EOL +
-            " * a) the GNU Lesser General Public License as published by" + SYSTEM_EOL +
-            " *     the Free Software Foundation, either version 3 of the License, or" + SYSTEM_EOL +
-            " *     (at your option) any later version." + SYSTEM_EOL +
-            " * b) the terms of the Apache License" + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and" + SYSTEM_EOL +
-            " * LICENCE.APACHE. Please refer to those files for details." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * JavaParser is distributed in the hope that it will be useful," + SYSTEM_EOL +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + SYSTEM_EOL +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + SYSTEM_EOL +
-            " * GNU Lesser General Public License for more details." + SYSTEM_EOL +
-            " ";
-
-    protected static final String COPYRIGHT_NOTICE_JP_SS = "" + SYSTEM_EOL +
-            " * Copyright (C) 2015-2016 Federico Tomassetti" + SYSTEM_EOL +
-            " * Copyright (C) 2017-2020 The JavaParser Team." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * This file is part of JavaParser." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * JavaParser can be used either under the terms of" + SYSTEM_EOL +
-            " * a) the GNU Lesser General Public License as published by" + SYSTEM_EOL +
-            " *     the Free Software Foundation, either version 3 of the License, or" + SYSTEM_EOL +
-            " *     (at your option) any later version." + SYSTEM_EOL +
-            " * b) the terms of the Apache License" + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and" + SYSTEM_EOL +
-            " * LICENCE.APACHE. Please refer to those files for details." + SYSTEM_EOL +
-            " *" + SYSTEM_EOL +
-            " * JavaParser is distributed in the hope that it will be useful," + SYSTEM_EOL +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of" + SYSTEM_EOL +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + SYSTEM_EOL +
-            " * GNU Lesser General Public License for more details." + SYSTEM_EOL +
-            " ";
 
     protected final SourceRoot sourceRoot;
 
@@ -204,6 +160,7 @@ public abstract class AbstractGenerator {
      */
     protected <T extends Node & NodeWithAnnotations<?>> void annotateGenerated(T node) {
         annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
+        removeStale(node);
     }
 
     protected <T extends Node & NodeWithAnnotations<?>> void removeAnnotation(T node, Class<?> annotation) {
@@ -217,6 +174,10 @@ public abstract class AbstractGenerator {
             removeAnnotationImportIfUnused(compilationUnit, annotation);
         });
 
+    }
+
+    protected <T extends Node & NodeWithAnnotations<?>> void removeStale(T node) {
+        removeAnnotation(node, StaleGenerated.class);
     }
 
     protected <T extends Node & NodeWithAnnotations<?>> void removeGenerated(T node) {
@@ -244,6 +205,14 @@ public abstract class AbstractGenerator {
     }
 
     /**
+     * @param node The node to which the {@code @StaleGenerated} annotation will be added.
+     * @param <T>
+     */
+    protected <T extends NodeWithAnnotations<?>> void annotateStale(T node) {
+        annotate(node, StaleGenerated.class, null);
+    }
+
+    /**
      * @param method The node to which the {@code @Override} annotation will be added.
      */
     protected void annotateOverridden(MethodDeclaration method) {
@@ -257,6 +226,11 @@ public abstract class AbstractGenerator {
     protected <T extends NodeWithAnnotations<?>> void annotateSuppressWarnings(T node, String warningType) {
         annotate(node, SuppressWarnings.class, new StringLiteralExpr(warningType));
     }
+
+    /**
+     * @throws Exception -- TODO: Investigate removal or narrowing of this.
+     */
+    public abstract void generate() throws Exception;
 
     /**
      * Removes all methods from containingClassOrInterface that have the same signature as callable.

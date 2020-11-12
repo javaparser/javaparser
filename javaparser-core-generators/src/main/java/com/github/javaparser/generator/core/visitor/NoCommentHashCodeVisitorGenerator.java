@@ -21,29 +21,28 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import java.util.List;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.generator.VisitorGenerator;
+import com.github.javaparser.generator.AbstractVisitorGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.List;
+
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
-public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
+public class NoCommentHashCodeVisitorGenerator extends AbstractVisitorGenerator {
 
     public NoCommentHashCodeVisitorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot, "com.github.javaparser.ast.visitor", "NoCommentHashCodeVisitor", "Integer", "Void", true);
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
-                                           CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();
@@ -53,7 +52,9 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
         final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel) || propertyMetaModels.isEmpty()) {
+                || node.equals(JavaParserMetaModel.javadocCommentMetaModel)
+                || propertyMetaModels.isEmpty()
+        ) {
             builder.append("0");
         } else {
             for (PropertyMetaModel field : propertyMetaModels) {

@@ -31,7 +31,6 @@ import java.util.List;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 public class CsmOrphanCommentsEnding implements CsmElement {
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         List<Node> everything = new LinkedList<>();

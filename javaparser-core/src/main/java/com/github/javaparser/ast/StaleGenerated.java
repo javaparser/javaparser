@@ -19,30 +19,23 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.printer.concretesyntaxmodel;
+package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.SourcePrinter;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public class CsmUnindent implements CsmElement {
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-    @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
-        printer.unindent();
-    }
+/**
+ * Copied from javax.annotation.Generated and reduced a bit.
+ * <p>
+ * Indicates a part of code that was previously marked as {@link Generated},
+ * but a later run of the generator did not re-generate this (thus is "stale").
+ */
+@Retention(SOURCE)
+@Target({PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD,
+        LOCAL_VARIABLE, PARAMETER})
+public @interface StaleGenerated {
 
-    @Override
-    public int hashCode() {
-        return 2;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof CsmUnindent;
-    }
-
-    @Override
-    public String toString() {
-        return "CsmUnindent{}";
-    }
 }
