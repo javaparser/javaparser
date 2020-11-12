@@ -2867,7 +2867,8 @@ Expression ConditionalOrExpression():
     ret = ConditionalAndExpression()
     (
         "||"
-        right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.OR); }
+        right = ConditionalAndExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.OR); }
     )*
     { return ret; }
 }
@@ -2906,7 +2907,8 @@ Expression ConditionalAndExpression():
     ret = InclusiveOrExpression()
     (
         "&&"
-        right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.AND); }
+        right = InclusiveOrExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.AND); }
     )*
     { return ret; }
 }
@@ -2938,7 +2940,8 @@ Expression InclusiveOrExpression():
     ret = ExclusiveOrExpression()
     (
         "|"
-        right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_OR); }
+        right = ExclusiveOrExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_OR); }
     )*
     { return ret; }
 }
@@ -2969,7 +2972,8 @@ Expression ExclusiveOrExpression():
 {
     ret = AndExpression() (
         "^"
-        right = AndExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.XOR); }
+        right = AndExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.XOR); }
     )*
     { return ret; }
 }
@@ -3000,7 +3004,8 @@ Expression AndExpression():
 {
     ret = EqualityExpression() (
         "&"
-        right = EqualityExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_AND); }
+        right = EqualityExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_AND); }
     )*
     { return ret; }
 }
@@ -3041,7 +3046,8 @@ Expression EqualityExpression():
          |
             "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
         )
-        right = InstanceOfExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
+        right = InstanceOfExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
     { return ret; }
 }
@@ -3066,9 +3072,12 @@ Expression InstanceOfExpression():
     NodeList<AnnotationExpr> annotations;
 }
 {
-    ret = RelationalExpression() [ "instanceof" type = AnnotatedReferenceType() {
-        ret = new InstanceOfExpr(range(ret, token()), ret, type);
-    } ]
+    ret = RelationalExpression()
+    [
+        "instanceof"
+        type = AnnotatedReferenceType()
+        { ret = new InstanceOfExpr(range(ret, token()), ret, type);}
+    ]
     { return ret; }
 }
 
@@ -3104,9 +3113,7 @@ Expression RelationalExpression():
             ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
         )
         right = ShiftExpression()
-        {
-            ret = new BinaryExpr(range(ret, token()), ret, right, op);
-        }
+        { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
 
     { return ret; }
@@ -3138,7 +3145,8 @@ Expression ShiftExpression():
          |
             RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
         )
-        right = AdditiveExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
+        right = AdditiveExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
     { return ret; }
 }
@@ -3166,7 +3174,8 @@ Expression AdditiveExpression():
          |
             "-" { op = BinaryExpr.Operator.MINUS; }
         )
-        right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
+        right = MultiplicativeExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
     { return ret; }
 }
@@ -3197,7 +3206,8 @@ Expression MultiplicativeExpression():
          |
             "%" { op = BinaryExpr.Operator.REMAINDER; }
         )
-        right = UnaryExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
+        right = UnaryExpression()
+        { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
     { return ret; }
 }
@@ -3240,7 +3250,8 @@ Expression UnaryExpression():
          |
             "-" { op = UnaryExpr.Operator.MINUS; begin=token();}
         )
-        ret = UnaryExpression() {ret = new UnaryExpr(range(begin, token()), ret, op);}
+        ret = UnaryExpression()
+        { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
     )
