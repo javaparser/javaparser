@@ -21,6 +21,20 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -580,6 +594,9 @@ public class Difference {
         removeTextElementThenShiftIndex(currentTextElementIndex);
     }
 
+    // note:
+    // increment originalIndex if we want to keep the original element
+    // increment diffIndex if we don't want to skip the diff element
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (kept.isIndent()) {
             for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
@@ -655,6 +672,8 @@ public class Difference {
             } else {
                 throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
             }
+        } else if (kept.isToken() && originalElementIsChild) {
+            incrementCurrentDifferenceElementIndex();
         } else if (kept.isWhiteSpace()) {
             incrementCurrentDifferenceElementIndex();
         } else if (kept.isIndent()) {

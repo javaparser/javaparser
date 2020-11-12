@@ -44,6 +44,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -93,9 +94,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
                     ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
-                    SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
-                    if (ref.isSolved()) {
-                        return ref;
+
+                    // avoid infinite recursion
+                    if (!isAncestorOf(importedType)) {
+                        SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                        if (ref.isSolved()) {
+                            return ref;
+                        }
                     }
                 } else {
                     String whole = importDecl.getNameAsString();
@@ -274,10 +279,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     }
 
                     ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
-                    SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
-
-                    if (method.isSolved()) {
-                        return method;
+                    // avoid infinite recursion
+                    if (!isAncestorOf(ref)) {
+                        SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
+                        if (method.isSolved()) {
+                            return method;
+                        }
                     }
                 } else {
                     String qName = importDecl.getNameAsString();
@@ -336,6 +343,21 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
         String memberName = qName.substring(index + 1);
         return memberName;
+    }
+
+    private boolean isAncestorOf(ResolvedTypeDeclaration descendant) {
+        if (descendant instanceof AssociableToAST) {
+            Optional<Node> astOpt = ((AssociableToAST<Node>) descendant).toAst();
+            if (astOpt.isPresent()) {
+                return wrappedNode.isAncestorOf(astOpt.get());
+            } else {
+                return false;
+            }
+        } else if (descendant instanceof JavaParserEnumDeclaration) {
+            return wrappedNode.isAncestorOf(((JavaParserEnumDeclaration) descendant).getWrappedNode());
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }

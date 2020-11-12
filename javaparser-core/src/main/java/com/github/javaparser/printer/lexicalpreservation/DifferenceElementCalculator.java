@@ -21,6 +21,10 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -39,6 +43,33 @@ import java.util.List;
 import java.util.Map;
 
 class DifferenceElementCalculator {
+
+    // internally keep track of a node position in a List<CsmElement>
+    public static class ChildPositionInfo {
+        Node node;
+        Integer position;
+        ChildPositionInfo(Node node, Integer position) {
+            this.node = node;
+            this.position = position;
+        }
+        @Override
+        public boolean equals(Object other) {
+            if ( other == null || !(other instanceof ChildPositionInfo))
+                return false;
+            ChildPositionInfo cpi = (ChildPositionInfo)other;
+            // verify that the node content and the position are equal
+            // because we can have nodes with the same content but in different lines
+            // in this case we consider that nodes are not equals
+            return this.node.equals(cpi.node)
+                    && this.node.getRange().isPresent() && cpi.node.getRange().isPresent()
+                    && this.node.getRange().get().contains(cpi.node.getRange().get());
+        }
+        @Override
+        public int hashCode() {
+            return node.hashCode() + position.hashCode();
+        }
+    }
+
     static boolean matching(CsmElement a, CsmElement b) {
         if (a instanceof CsmChild) {
             if (b instanceof CsmChild) {
@@ -110,12 +141,12 @@ class DifferenceElementCalculator {
     /**
      * Find the positions of all the given children.
      */
-    private static Map<Node, Integer> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
-        Map<Node, Integer> positions = new HashMap<>();
+    private static List<ChildPositionInfo> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
+        List<ChildPositionInfo> positions = new ArrayList<>();
         for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
             CsmElement element = calculatedSyntaxModel.elements.get(i);
             if (element instanceof CsmChild) {
-                positions.put(((CsmChild)element).getChildNode(), i);
+                positions.add(new ChildPositionInfo(((CsmChild)element).getChildNode(), i));
             }
         }
         return positions;
@@ -138,12 +169,11 @@ class DifferenceElementCalculator {
         // We would calculate the Difference between "qwerty" and "qwer" then we know the A is kept, and then we
         // would calculate the difference between "uiop" and "uiop"
 
-        Map<Node, Integer> childrenInOriginal = findChildrenPositions(original);
-        Map<Node, Integer> childrenInAfter = findChildrenPositions(after);
+        List<ChildPositionInfo> childrenInOriginal = findChildrenPositions(original);
+        List<ChildPositionInfo> childrenInAfter = findChildrenPositions(after);
 
-        List<Node> commonChildren = new LinkedList<>(childrenInOriginal.keySet());
-        commonChildren.retainAll(childrenInAfter.keySet());
-        commonChildren.sort(Comparator.comparingInt(childrenInOriginal::get));
+        List<ChildPositionInfo> commonChildren = new ArrayList<>(childrenInOriginal);
+        commonChildren.retainAll(childrenInAfter);
 
         List<DifferenceElement> differenceElements = new LinkedList<>();
 
@@ -151,9 +181,12 @@ class DifferenceElementCalculator {
         int afterIndex = 0;
         int commonChildrenIndex = 0;
         while (commonChildrenIndex < commonChildren.size()) {
-            Node child = commonChildren.get(commonChildrenIndex);
-            int posOfNextChildInOriginal = childrenInOriginal.get(child);
-            int posOfNextChildInAfter = childrenInAfter.get(child);
+            ChildPositionInfo child = commonChildren.get(commonChildrenIndex);
+            // search the position of the node "child" in the original list of cms element
+            int posOfNextChildInOriginal = childrenInOriginal.stream().filter(i->i.equals(child)).map(i->i.position).findFirst().get();
+            // search the position of the node "child" in the modified list of cms element
+            int posOfNextChildInAfter = childrenInAfter.stream().filter(i->i.equals(child)).map(i->i.position).findFirst().get();
+
 
             //
             boolean unhandledDifferencesRemain = originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter;
@@ -166,7 +199,7 @@ class DifferenceElementCalculator {
                 differenceElements.addAll(changeDifferences);
             }
 
-            differenceElements.add(new Kept(new CsmChild(child)));
+            differenceElements.add(new Kept(new CsmChild(child.node)));
             originalIndex = posOfNextChildInOriginal + 1;
             afterIndex = posOfNextChildInAfter + 1;
 

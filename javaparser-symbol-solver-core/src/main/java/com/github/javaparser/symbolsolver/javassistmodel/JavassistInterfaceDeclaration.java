@@ -48,6 +48,8 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
@@ -176,11 +178,10 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
+        if (ctClass.getGenericSignature() == null) {
+            for (String superInterface : ctClass.getClassFile().getInterfaces()) {
                 try {
-                    ResolvedReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
-                    ancestors.add(superInterfaze);
+                    ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(superInterface)), typeSolver));
                 } catch (UnsolvedSymbolException e) {
                     if (!acceptIncompleteList) {
                         // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
@@ -188,8 +189,22 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
                     }
                 }
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+        } else {
+            try {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                for (SignatureAttribute.ClassType superInterface : classSignature.getInterfaces()) {
+                    try {
+                        ancestors.add(JavassistUtils.signatureTypeToType(superInterface, typeSolver, this).asReferenceType());
+                    } catch (UnsolvedSymbolException e) {
+                        if (!acceptIncompleteList) {
+                            // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                            throw e;
+                        }
+                    }
+                }
+            } catch (BadBytecode e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // Remove all {@code java.lang.Object}, then add precisely one.
