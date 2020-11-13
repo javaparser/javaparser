@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -56,8 +57,6 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-
-import classes.com.github.javaparser.GeneratedJavaParserConstants;
 
 class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
 
