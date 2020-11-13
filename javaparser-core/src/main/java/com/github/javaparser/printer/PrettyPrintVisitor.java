@@ -1236,9 +1236,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 s.accept(this, arg);
                 printer.println();
             }
-            printer.unindent();
         }
         printOrphanCommentsEnding(n);
+        printer.unindent();
         printer.print("}");
     }
 

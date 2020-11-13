@@ -31,6 +31,7 @@ import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentTyp
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -490,5 +491,28 @@ class PrettyPrinterTest {
         td.setPublic(true); // --- simple AST change -----
         System.out.println(cu.toString()); // orphan and /*orphan*/ must be printed
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
+    }
+    
+    @Test
+    public void testIssue2535() {
+
+        String code = 
+                "public class A {\n" +
+                " public static A m() {\n" +
+                "  System.out.println(\"\");\n" +
+                "  // TODO\n" +
+                "  /* TODO */\n" +
+                "  /** TODO */\n" +
+                " }\n" +
+                "}";
+
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        // default indent is 4 spaces
+        assertTrue(cu.toString().contains("        // TODO"));
+        assertTrue(cu.toString().contains("        /* TODO */"));
+
     }
 }
