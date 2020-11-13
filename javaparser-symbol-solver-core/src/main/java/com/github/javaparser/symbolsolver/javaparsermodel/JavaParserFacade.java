@@ -532,22 +532,7 @@ public class JavaParserFacade {
         boolean isRightNumeric = rightType.isPrimitive() && rightType.asPrimitive().isNumeric();
 
         if (isLeftNumeric && isRightNumeric) {
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)) {
-                return ResolvedPrimitiveType.DOUBLE;
-            }
-
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)) {
-                return ResolvedPrimitiveType.FLOAT;
-            }
-
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.LONG)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.LONG)) {
-                return ResolvedPrimitiveType.LONG;
-            }
-
-            return ResolvedPrimitiveType.INT;
+            return leftType.asPrimitive().bnp(rightType.asPrimitive());
         }
 
         if (rightType.isAssignableBy(leftType)) {
