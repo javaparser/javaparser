@@ -21,7 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -31,7 +42,12 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -40,17 +56,8 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.util.List;
-
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.TokenTypes.spaceTokenKind;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import classes.com.github.javaparser.GeneratedJavaParserConstants;
 
 class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
 
@@ -304,7 +311,9 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
         assertEquals(DifferenceElement.kept(CsmElement.newline()), differenceElements.get(index++));
         assertEquals(DifferenceElement.added(CsmElement.indent()), differenceElements.get(index++));
         assertTrue(isAddedChild(differenceElements.get(index++), ExpressionStmt.class));
-        assertEquals(DifferenceElement.added(CsmElement.newline()), differenceElements.get(index++));
+        CsmElement cmsElement = differenceElements.get(index++).getElement();
+        // all end of line tokens are not equal so it's safer to check if it's a token and then a end of line token
+        assertTrue(CsmToken.class.isAssignableFrom(cmsElement.getClass()) && ((CsmToken)cmsElement).isNewLine());
         assertEquals(DifferenceElement.added(CsmElement.unindent()), differenceElements.get(index++));
         assertEquals(DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), differenceElements.get(index++));
         assertEquals(index, differenceElements.size());

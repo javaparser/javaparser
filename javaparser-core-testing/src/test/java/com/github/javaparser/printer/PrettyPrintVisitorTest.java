@@ -21,20 +21,28 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.utils.TestParser.parseBodyDeclaration;
+import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
+import static com.github.javaparser.utils.TestParser.parseExpression;
+import static com.github.javaparser.utils.TestParser.parseStatement;
+import static com.github.javaparser.utils.TestParser.parseVariableDeclarationExpr;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.utils.TestParser.*;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PrettyPrintVisitorTest {
 
@@ -381,9 +389,9 @@ class PrettyPrintVisitorTest {
         assertEqualsStringIgnoringEol("class A {\n" +
                 "\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
-                "    // sdfsdfsdf\n" +
-                "    // sdfds\n" +
-                "    /*\n" +
+                "        // sdfsdfsdf\n" +
+                "        // sdfds\n" +
+                "        /*\n" +
                 "                            dgfdgfdgfdgfdgfd\n" +
                 "         */\n" +
                 "    }\n" +
