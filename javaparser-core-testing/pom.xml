@@ -22,7 +22,6 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-
     <build>
         <plugins>
             <plugin>
