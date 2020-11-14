@@ -21,6 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
+import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -35,26 +36,29 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.metamodel.InternalProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.utils.LineSeparator;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -278,6 +282,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Override
     public final String toString() {
+        if (containsData(LINE_SEPARATOR_KEY)) {
+            LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.asRawString());
+        }
         return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
     }
 
@@ -401,9 +409,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }
     }
 
-    public static final int ABSOLUTE_BEGIN_LINE = -1;
+    /**
+     * @deprecated Use {@link Position#ABSOLUTE_BEGIN_LINE}
+     */
+    @Deprecated
+    public static final int ABSOLUTE_BEGIN_LINE = Position.ABSOLUTE_BEGIN_LINE;
 
-    public static final int ABSOLUTE_END_LINE = -2;
+    /**
+     * @deprecated Use {@link Position#ABSOLUTE_END_LINE}
+     */
+    @Deprecated
+    public static final int ABSOLUTE_END_LINE = Position.ABSOLUTE_END_LINE;
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
         findAncestor(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
@@ -708,6 +724,34 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Optional.empty();
     }
 
+    public LineSeparator getLineEndingStyleOrDefault(LineSeparator defaultLineSeparator) {
+        if (getLineEndingStyle().isStandardEol()) {
+            return getLineEndingStyle();
+        }
+        return defaultLineSeparator;
+    }
+
+    public LineSeparator getLineEndingStyle() {
+        Node current = this;
+
+        // First check this node
+        if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+            LineSeparator lineSeparator = current.getData(Node.LINE_SEPARATOR_KEY);
+            return lineSeparator;
+        }
+
+        // Then check parent/ancestor nodes
+        while(current.getParentNode().isPresent()) {
+            current = current.getParentNode().get();
+            if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+                return current.getData(Node.LINE_SEPARATOR_KEY);
+            }
+        }
+
+        // Default to the system line separator if it's not already set within the parsed node/code.
+        return LineSeparator.SYSTEM;
+    }
+
     protected SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
@@ -720,6 +764,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     // We need to expose it because we will need to use it to inject the SymbolSolver
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
+    };
+
+    public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
     };
 
     public enum TreeTraversal {
@@ -764,7 +811,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Walks the AST, calling the consumer for every node, with traversal algorithm "traversal".
-     * <br/>This is the most general walk method. All other walk and findAll methods are based on this.
+     * <br>This is the most general walk method. All other walk and findAll methods are based on this.
      */
     public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
         // Could be implemented as a call to the above walk method, but this is a little more efficient.
@@ -814,7 +861,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Walks the AST, applying the function for every node, with traversal algorithm "traversal". If the function
-     * returns something else than null, the traversal is stopped and the function result is returned. <br/>This is the
+     * returns something else than null, the traversal is stopped and the function result is returned. <br>This is the
      * most general findFirst method. All other findFirst methods are based on this.
      */
     public <T> Optional<T> findFirst(TreeTraversal traversal, Function<Node, Optional<T>> consumer) {

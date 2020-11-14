@@ -38,7 +38,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
- * An opens directive in module-info.java. <code>opens R.S to T1.U1, T2.U2;</code>
+ * An opens directive in module-info.java. {@code opens R.S to T1.U1, T2.U2;}
  */
 public class ModuleOpensDirective extends ModuleDirective implements NodeWithName<ModuleOpensDirective> {
 

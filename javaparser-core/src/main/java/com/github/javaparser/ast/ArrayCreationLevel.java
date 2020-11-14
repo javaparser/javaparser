@@ -38,7 +38,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
+ * In {@code new int[1][2];} there are two ArrayCreationLevel objects,
  * the first one contains the expression "1",
  * the second the expression "2".
  */

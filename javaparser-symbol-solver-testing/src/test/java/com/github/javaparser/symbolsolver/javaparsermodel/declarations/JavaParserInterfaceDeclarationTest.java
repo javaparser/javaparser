@@ -48,12 +48,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -164,8 +168,8 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetSuperclassWithTypeParameters() {
         JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals("com.github.javaparser.ast.body.BodyDeclaration", compilationUnit.getSuperClass().getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.BodyDeclaration", compilationUnit.getSuperClass().get().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().get().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -637,7 +641,8 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         List<String> signatures = sortedMethods.stream().map(m -> m.getQualifiedSignature()).collect(Collectors.toList());
 
-        assertEquals(ImmutableList.of("com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
+        List<String> expected = new ArrayList<>(Arrays.asList(
+                "com.github.javaparser.ast.Node.addOrphanComment(com.github.javaparser.ast.comments.Comment)",
                 "com.github.javaparser.ast.Node.clone()",
                 "com.github.javaparser.ast.Node.contains(com.github.javaparser.ast.Node)",
                 "com.github.javaparser.ast.Node.equals(java.lang.Object)",
@@ -737,7 +742,15 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                 "java.lang.Object.registerNatives()",
                 "java.lang.Object.wait()",
                 "java.lang.Object.wait(long)",
-                "java.lang.Object.wait(long, int)"), signatures);
+                "java.lang.Object.wait(long, int)"
+        ));
+
+        // Temporary workaround to allow tests to pass on JDK14
+        if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+            expected.remove("java.lang.Object.registerNatives()");
+        }
+
+        assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 
     ///

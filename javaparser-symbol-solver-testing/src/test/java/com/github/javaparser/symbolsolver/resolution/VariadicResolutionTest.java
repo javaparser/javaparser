@@ -42,10 +42,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VariadicResolutionTest extends AbstractResolutionTest {
 
-	@Test
+    @Test
     void issue7() {
         CompilationUnit cu = parseSample("Generics_issue7");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
@@ -60,15 +61,15 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         assertEquals(List.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
         assertEquals("java.util.List<java.lang.Long>", type.describe());
     }
-	
-	@Test
+
+    @Test
     void methodCallWithReferenceTypeAsVaridicArgumentIsSolved() {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "variadicMethod");
         MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicMethod").get();
-        
+
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
@@ -101,10 +102,37 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0));
-        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1));
-        assertEquals("int", call1.returnType().describe());
-        assertEquals("void", call2.returnType().describe());
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0)); // foobar();
+        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1)); // foobar("a");
+        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(2)); // foobar("a", "a");
+        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(3)); // foobar(varArg);
+        assertEquals("void", call1.returnType().describe()); // foobar();
+        assertEquals("int", call2.returnType().describe()); // foobar("a");
+        assertEquals("void", call3.returnType().describe()); // foobar("a", "a");
+        assertEquals("void", call4.returnType().describe()); // foobar(varArg);
+
+        assertThrows(RuntimeException.class, () -> {
+            MethodUsage call5 = javaParserFacade.solveMethodAsUsage(calls.get(4));
+            System.out.println("call5.returnType().describe() = " + call5.returnType().describe());
+        });
     }
 
+    @Test
+    void getDeclaredConstructorTest() {
+        CompilationUnit cu = parseSample("MethodCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getDeclaredConstructorTest");
+        List<MethodCallExpr> calls = method.findAll(MethodCallExpr.class);
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(1));
+        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(2));
+        MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(3));
+        MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(4));
+        assertEquals("java.lang.reflect.Constructor", call1.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call2.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call3.returnType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.reflect.Constructor", call4.returnType().asReferenceType().getQualifiedName());
+    }
 }

@@ -46,8 +46,14 @@ public final class FunctionalInterfaceLogic {
      * Get the functional method defined by the type, if any.
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
-        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
-            return getFunctionalMethod(type.asReferenceType().getTypeDeclaration());
+        Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.asReferenceType().getTypeDeclaration();
+        if(!optionalTypeDeclaration.isPresent()) {
+            return Optional.empty();
+        }
+
+        ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
+        if (type.isReferenceType() && typeDeclaration.isInterface()) {
+            return getFunctionalMethod(typeDeclaration);
         } else {
             return Optional.empty();
         }
@@ -73,8 +79,11 @@ public final class FunctionalInterfaceLogic {
     }
 
     public static boolean isFunctionalInterfaceType(ResolvedType type) {
-        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().hasAnnotation(FunctionalInterface.class.getCanonicalName())) {
-            return true;
+        if (type.isReferenceType()) {
+            Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.asReferenceType().getTypeDeclaration();
+            if (optionalTypeDeclaration.isPresent() && optionalTypeDeclaration.get().hasAnnotation(FunctionalInterface.class.getCanonicalName())) {
+                return true;
+            }
         }
         return getFunctionalMethod(type).isPresent();
     }

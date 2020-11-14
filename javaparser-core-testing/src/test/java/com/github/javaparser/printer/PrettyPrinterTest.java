@@ -21,26 +21,32 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
+import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
-import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PrettyPrinterTest {
 
@@ -188,13 +194,13 @@ class PrettyPrinterTest {
     @Test
     void enumConstantsHorizontally() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E}");
-        assertEqualsNoEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrinter().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrinter().print(cu));
     }
 
     @Test
     void enumConstantsVertically() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
-        assertEqualsNoEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrinter().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrinter().print(cu));
     }
 
     @Test
@@ -219,7 +225,7 @@ class PrettyPrinterTest {
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
                 .print(cu);
 
-        assertEqualsNoEol("class Foo {\n" +
+        assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
                 "\t\ta.b.c.d.e;\n" +
@@ -261,7 +267,7 @@ class PrettyPrinterTest {
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
 
-        assertEqualsNoEol("if (x.y().z()) {\n" +
+        assertEqualsStringIgnoringEol("if (x.y().z()) {\n" +
                 "    boo().baa()\n" +
                 "         .bee();\n" +
                 "}", printed);
@@ -274,7 +280,7 @@ class PrettyPrinterTest {
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
 
-        assertEqualsNoEol("for (int x = 1; x.y().z(); x.z().z()) {\n" +
+        assertEqualsStringIgnoringEol("for (int x = 1; x.y().z(); x.z().z()) {\n" +
                 "    boo().baa()\n" +
                 "         .bee();\n" +
                 "}", printed);
@@ -287,7 +293,7 @@ class PrettyPrinterTest {
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true))
                 .print(cu);
 
-        assertEqualsNoEol("while (x.y().z()) {\n" +
+        assertEqualsStringIgnoringEol("while (x.y().z()) {\n" +
                 "    boo().baa()\n" +
                 "         .bee();\n" +
                 "}", printed);
@@ -304,7 +310,7 @@ class PrettyPrinterTest {
                 .setIndentSize(1))
                 .print(cu);
 
-        assertEqualsNoEol("class Foo {\n" +
+        assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
                 "\t\tfoo().bar()\n" +
@@ -330,7 +336,7 @@ class PrettyPrinterTest {
                 .setIndentSize(1))
                 .print(cu);
 
-        assertEqualsNoEol("class Foo {\n" +
+        assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
                 "\t\tfoo().bar()\n" +
@@ -414,7 +420,7 @@ class PrettyPrinterTest {
         CompilationUnit cu = parseResult.getResult().orElseThrow(AssertionError::new);
         String printed = new PrettyPrinter().print(cu);
 
-        assertEqualsNoEol("@Documented\n" +
+        assertEqualsStringIgnoringEol("@Documented\n" +
                 "@Repeatable\n" +
                 "package com.github.javaparser;\n" +
                 "\n" +
@@ -470,5 +476,43 @@ class PrettyPrinterTest {
                 "@Repeatable\n" +
                 "module foo.bar {\n" +
                 "}\n", printed);
+    }
+    
+    @Test
+    public void testIssue2578() {
+        String code = 
+                "class C{\n" +
+                "  //orphan\n" +
+                "  /*orphan*/\n" +
+                "}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
+        assertEquals(2, td.getAllContainedComments().size());
+        td.setPublic(true); // --- simple AST change -----
+        System.out.println(cu.toString()); // orphan and /*orphan*/ must be printed
+        assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
+    }
+    
+    @Test
+    public void testIssue2535() {
+
+        String code = 
+                "public class A {\n" +
+                " public static A m() {\n" +
+                "  System.out.println(\"\");\n" +
+                "  // TODO\n" +
+                "  /* TODO */\n" +
+                "  /** TODO */\n" +
+                " }\n" +
+                "}";
+
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        // default indent is 4 spaces
+        assertTrue(cu.toString().contains("        // TODO"));
+        assertTrue(cu.toString().contains("        /* TODO */"));
+
     }
 }

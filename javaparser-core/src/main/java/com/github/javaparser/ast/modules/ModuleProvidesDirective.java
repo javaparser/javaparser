@@ -38,7 +38,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A provides directive in module-info.java. <code>provides X.Y with Z1.Z2, Z3.Z4;</code>
+ * A provides directive in module-info.java. {@code provides X.Y with Z1.Z2, Z3.Z4;}
  */
 public class ModuleProvidesDirective extends ModuleDirective implements NodeWithName<ModuleProvidesDirective> {
 

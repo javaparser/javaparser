@@ -34,7 +34,7 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * Transforming ClassOrInterfaceDeclaration and verifying the LexicalPreservation works as expected.
@@ -169,7 +169,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     void addingField() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addField("int", "foo");
-        assertTransformedToString("class A {" + EOL + "    int foo;" + EOL + "}", cid);
+        assertTransformedToString("class A {" + SYSTEM_EOL + "    int foo;" + SYSTEM_EOL + "}", cid);
     }
 
     @Test
@@ -190,7 +190,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void removingAnnotations() {
         ClassOrInterfaceDeclaration cid = consider(
-                "@Value" + EOL +
+                "@Value" + SYSTEM_EOL +
                 "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);
@@ -199,7 +199,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void removingAnnotationsWithSpaces() {
         ClassOrInterfaceDeclaration cid = consider(
-                  "   @Value " + EOL +
+                  "   @Value " + SYSTEM_EOL +
                         "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);

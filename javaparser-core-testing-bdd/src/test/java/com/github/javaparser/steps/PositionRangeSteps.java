@@ -28,7 +28,6 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.Range.range;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,12 +47,12 @@ public class PositionRangeSteps {
         secondRange = null;
     }
     /*
-	 * Given steps
+     * Given steps
      */
 
     @Given("the position $line, $column")
     public void givenThePosition(int line, int column) {
-        this.position = pos(line, column);
+        this.position = new Position(line, column);
     }
 
     @Given("the range $line1, $column1 - $line2, $column2")
@@ -62,12 +61,12 @@ public class PositionRangeSteps {
     }
 
     /*
-	 * When steps
+     * When steps
      */
 
     @When("I compare to position $line, $column")
     public void iCompareToPosition(int line, int column) {
-        secondPosition = pos(line, column);
+        secondPosition = new Position(line, column);
     }
 
     @When("I compare to range $line1, $column1 - $line2, $column2")
@@ -76,7 +75,7 @@ public class PositionRangeSteps {
     }
 
     /*
-	 * Then steps
+     * Then steps
      */
 
     @Then("the positions are equal")

@@ -26,9 +26,7 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * Transforming CompilationUnit and verifying the LexicalPreservation works as expected.
@@ -41,7 +39,7 @@ class CompilationUnitTransformationsTest extends AbstractLexicalPreservingTest {
     void addingPackageDeclaration() {
         considerCode("class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo"), "bar")));
-        assertTransformedToString("package foo.bar;"+ EOL + EOL + "class A {}", cu);
+        assertTransformedToString("package foo.bar;"+ SYSTEM_EOL + SYSTEM_EOL + "class A {}", cu);
     }
 
     @Test
@@ -56,7 +54,7 @@ class CompilationUnitTransformationsTest extends AbstractLexicalPreservingTest {
         considerCode("package foo.bar; class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo2"), "baz")));
         assertTransformedToString("package foo2.baz;" +
-                EOL + EOL +
+                SYSTEM_EOL + SYSTEM_EOL +
                 " class A {}", cu);
     }
 

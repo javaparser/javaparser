@@ -28,8 +28,6 @@ import com.github.javaparser.utils.Utils;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import static com.github.javaparser.Position.*;
-
 /**
  * A support class for code that outputs formatted source code.
  */
@@ -43,7 +41,7 @@ public class SourcePrinter {
     private final Deque<String> reindentedIndents = new LinkedList<>();
     private String lastPrintedIndent = "";
     private final StringBuilder buf = new StringBuilder();
-    private Position cursor = new Position(1, 0);
+    private Position cursor = new Position(Position.FIRST_LINE, Position.FIRST_COLUMN - 1); // Start before the first column
     private boolean indented = false;
 
     SourcePrinter() {
@@ -198,7 +196,7 @@ public class SourcePrinter {
      */
     public SourcePrinter println() {
         buf.append(endOfLineCharacter);
-        cursor = pos(cursor.line + 1, 0);
+        cursor = new Position(cursor.line + 1, Position.FIRST_COLUMN - 1); // Start before the first column
         indented = false;
         return this;
     }

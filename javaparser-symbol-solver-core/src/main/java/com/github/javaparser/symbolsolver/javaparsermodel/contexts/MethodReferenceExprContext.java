@@ -78,7 +78,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             // we don't make this _ex_plicit in the data representation because that would affect codegen
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
+            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
         }
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
