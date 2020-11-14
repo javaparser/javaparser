@@ -3,9 +3,9 @@ codecov:
 
 
 coverage:
-  precision: 2
+  precision: 3
   round: down
-  range: "70...100"
+  range: "70...90" # Colour range - 70% coverage (and below) is solid red, 90% coverage (and above) is solid green.
 
 
 comment:
