@@ -7,14 +7,14 @@ coverage:
   round: down
   range: "70...90" # Colour range - 70% coverage (and below) is solid red, 90% coverage (and above) is solid green.
 
-  notify:
-    gitter:
-      default:
-        url: "https://webhooks.gitter.im/e/683560e480138f1f8b1e"
-        threshold: 1% # allow coverage to drop by 1% without posting a notification
-        only_pulls: false
-        branches:
-          - "master"
+#  notify:
+#    gitter:
+#      default:
+#        url: "https://webhooks.gitter.im/e/683560e480138f1f8b1e"
+#        threshold: 1% # allow coverage to drop by 1% without posting a notification
+#        only_pulls: false
+#        branches:
+#          - "master"
 
 
 comment:
