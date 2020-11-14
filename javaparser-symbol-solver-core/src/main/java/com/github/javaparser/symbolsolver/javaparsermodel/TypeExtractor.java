@@ -372,12 +372,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // Attempt to resolve locally in Compilation unit
             Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
             if (cu.isPresent()) {
-                Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
+                // Try to resolve in the compilation unit by its name
+                Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getLocaleDeclarationFromClassname(className);
                 if (classByName.isPresent()) {
                     return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
                 }
             }
-
+            return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)), typeSolver);
         }
         return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
     }

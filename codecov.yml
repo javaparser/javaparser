@@ -1,0 +1,44 @@
+codecov:
+  require_ci_to_pass: true
+
+
+coverage:
+  precision: 3
+  round: down
+  range: "70...90" # Colour range - 70% coverage (and below) is solid red, 90% coverage (and above) is solid green.
+
+#  notify:
+#    gitter:
+#      default:
+#        url: "https://webhooks.gitter.im/e/683560e480138f1f8b1e"
+#        threshold: 1% # allow coverage to drop by 1% without posting a notification
+#        only_pulls: false
+#        branches:
+#          - "master"
+
+  # Split the coverage reporting into two sub-projects.
+  # https://docs.codecov.io/docs/commit-status
+  # https://docs.codecov.io/docs/codecovyml-reference#coveragestatus
+  status:
+    project:
+      javaparser-core:
+        threshold: 0.5%
+        flags:
+          - javaparser-core
+        paths:
+          - javaparser-core/src/main/java*
+          - javaparser-core-testing/src/test/java*
+          - javaparser-core-testing-bdd/src/test/java*
+      javaparser-symbol-solver:
+        threshold: 0.5%
+        flags:
+          - javaparser-symbol-solver
+        paths:
+          - javaparser-symbol-solver-core/src/main/java*
+          - javaparser-symbol-solver-testing/src/test/java*
+
+# Comments on PRs
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: false
