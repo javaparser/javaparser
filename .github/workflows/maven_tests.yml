@@ -68,12 +68,23 @@ jobs:
       - name: Test with Maven (incl. slow tests)
         run: mvn --errors clean test --activate-profiles AlsoSlowTests
 
-      - name: CodeCov
+
+      - name: CodeCov - JavaParser Core
         uses: codecov/codecov-action@v1
         timeout-minutes: 10
         with:
-          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml,javaparser-symbol-solver-core/target/site/jacoco-aggregate/jacoco.xml
+          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
-          flags: AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
+          flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
+          env_vars: AlsoSlowTests,OS,JDK
+
+      - name: CodeCov - JavaParser Symbol Solver
+        uses: codecov/codecov-action@v1
+        timeout-minutes: 10
+        with:
+          file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
+          fail_ci_if_error: true # optional (default = false)
+          verbose: false # optional (default = false):
+          flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
           env_vars: AlsoSlowTests,OS,JDK
