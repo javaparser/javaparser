@@ -53,4 +53,22 @@ class FunctionInterfaceLogicTest {
         assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
         assertEquals("accept", FunctionalInterfaceLogic.getFunctionalMethod(consumer).get().getName());
     }
+
+    @Test
+    void testGetFunctionalMethodWith2AbstractMethodsInHierarcy() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Foo.class, typeSolver), typeSolver);
+        assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
+        assertEquals("foo", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
+    }
+
+    public static interface Foo<S, T> extends Function<S, T> {
+
+        T foo(S str);
+
+        @Override
+        default T apply(S str) {
+            return foo(str);
+        }
+    }
 }

@@ -68,7 +68,9 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
@@ -80,7 +82,9 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent().solveSymbolAsValue(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbolAsValue(name);
     }
 
     @Override
@@ -90,21 +94,28 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
-        return getParent().solveGenericType(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveGenericType(name);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        // First attempt to resolve against implemented classes - cf. issue #2195
+        if (wrappedNode.getName().getId().equals(name)) {
+            return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
+        }
+
         for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
             if (implementedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver).solveType(name);
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
+                    .solveType(implementedType.getNameWithScope());
             }
         }
 
         for (ClassOrInterfaceType extendedType : wrappedNode.getExtendedTypes()) {
             if (extendedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver).solveType(name);
+                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
+                    .solveType(extendedType.getNameWithScope());
             }
         }
 

@@ -25,7 +25,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -43,7 +48,7 @@ import java.util.Optional;
  */
 public interface Context {
 
-    Context getParent();
+    Optional<Context> getParent();
 
     /* Type resolution */
 
@@ -52,18 +57,17 @@ public interface Context {
     }
 
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        Context parent = getParent();
-        if (parent == null) {
+        Optional<Context> optionalParent = getParent();
+        if (!optionalParent.isPresent()) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-        } else {
-            return parent.solveType(name);
         }
+        return optionalParent.get().solveType(name);
     }
 
     /* Symbol resolution */
 
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent().solveSymbol(name);
+        return getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty.")).solveSymbol(name);
     }
 
     default Optional<Value> solveSymbolAsValue(String name) {
@@ -126,42 +130,51 @@ public interface Context {
      * associated with the try-with-resources statement.
      */
     default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
-        if (getParent() == null) {
+        if (!getParent().isPresent()) {
             return Optional.empty();
         }
-        Optional<VariableDeclarator> localRes = getParent().localVariablesExposedToChild(((AbstractJavaParserContext)this)
-                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        Context parentContext = getParent().get();
+        Optional<VariableDeclarator> localRes = parentContext
+                .localVariablesExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+                .stream()
+                .filter(vd -> vd.getNameAsString().equals(name))
+                .findFirst();
         if (localRes.isPresent()) {
             return localRes;
         }
-
-        return getParent().localVariableDeclarationInScope(name);
+        return parentContext.localVariableDeclarationInScope(name);
     }
 
     default Optional<Parameter> parameterDeclarationInScope(String name) {
-        if (getParent() == null) {
+        if (!getParent().isPresent()) {
             return Optional.empty();
         }
-        Optional<Parameter> localRes = getParent().parametersExposedToChild(((AbstractJavaParserContext)this)
-                .getWrappedNode()).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
+        Context parentContext = getParent().get();
+        Optional<Parameter> localRes = parentContext
+                .parametersExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+                .stream()
+                .filter(vd -> vd.getNameAsString().equals(name))
+                .findFirst();
         if (localRes.isPresent()) {
             return localRes;
         }
-
-        return getParent().parameterDeclarationInScope(name);
+        return parentContext.parameterDeclarationInScope(name);
     }
 
     default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {
-        if (getParent() == null) {
+        if (!getParent().isPresent()) {
             return Optional.empty();
         }
-        Optional<ResolvedFieldDeclaration> localRes = getParent().fieldsExposedToChild(((AbstractJavaParserContext)this)
-                .getWrappedNode()).stream().filter(vd -> vd.getName().equals(name)).findFirst();
+        Context parentContext = getParent().get();
+        Optional<ResolvedFieldDeclaration> localRes = parentContext
+                .fieldsExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+                .stream()
+                .filter(vd -> vd.getName().equals(name))
+                .findFirst();
         if (localRes.isPresent()) {
             return localRes;
         }
-
-        return getParent().fieldDeclarationInScope(name);
+        return parentContext.fieldDeclarationInScope(name);
     }
 
     /* Constructor resolution */
@@ -180,7 +193,9 @@ public interface Context {
      */
     default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                    boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, staticOnly);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, staticOnly);
     }
 
     /**

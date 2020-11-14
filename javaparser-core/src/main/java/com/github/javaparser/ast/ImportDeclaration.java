@@ -36,11 +36,11 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * An import declaration.
- * <br/><code>import com.github.javaparser.JavaParser;</code>
- * <br/><code>import com.github.javaparser.*;</code>
- * <br/><code>import com.github.javaparser.JavaParser.*; </code>
- * <br/><code>import static com.github.javaparser.JavaParser.*;</code>
- * <br/><code>import static com.github.javaparser.JavaParser.parse;</code>
+ * <br>{@code import com.github.javaparser.JavaParser;}
+ * <br>{@code import com.github.javaparser.*;}
+ * <br>{@code import com.github.javaparser.JavaParser.*; }
+ * <br>{@code import static com.github.javaparser.JavaParser.*;}
+ * <br>{@code import static com.github.javaparser.JavaParser.parse;}
  *
  * <p>The name does not include the asterisk or the static keyword.</p>
  * @author Julio Vilmar Gesser

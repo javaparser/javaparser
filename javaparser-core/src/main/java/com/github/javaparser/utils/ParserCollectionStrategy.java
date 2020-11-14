@@ -24,7 +24,11 @@ package com.github.javaparser.utils;
 import com.github.javaparser.ParserConfiguration;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import static java.nio.file.FileVisitResult.*;
@@ -36,6 +40,7 @@ import static java.nio.file.FileVisitResult.*;
  * No project definition files like pom.xml or build.gradle are used.
  * This strategy is crude, but can work for many cases.
  * Note that any build artifacts will also be detected: jar files in target directories and so on.
+ * Note that if your project has a module-info.java file, ensure that you have set the language level to at least 9.
  */
 public class ParserCollectionStrategy implements CollectionStrategy {
 
@@ -47,6 +52,11 @@ public class ParserCollectionStrategy implements CollectionStrategy {
 
     public ParserCollectionStrategy(ParserConfiguration parserConfiguration) {
         this.parserConfiguration = parserConfiguration;
+    }
+
+    @Override
+    public ParserConfiguration getParserConfiguration() {
+        return parserConfiguration;
     }
 
     @Override

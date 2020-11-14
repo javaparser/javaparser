@@ -204,7 +204,7 @@ public abstract class BaseNodeMetaModel {
     /**
      * Creates a new node of this type.
      *
-     * @param parameters a map of propertyName -> value.
+     * @param parameters a map of propertyName -&gt; value.
      * This should at least contain a pair for every required property for this node.
      */
     public Node construct(Map<String, Object> parameters) {

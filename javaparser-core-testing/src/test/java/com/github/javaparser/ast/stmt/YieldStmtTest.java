@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_12;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static com.github.javaparser.utils.TestParser.parseStatement;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class YieldStmtTest {
@@ -46,7 +46,7 @@ class YieldStmtTest {
     @Test
     void keywordShouldNotInterfereWithIdentifiers() {
         CompilationUnit compilationUnit = parseCompilationUnit(JAVA_12, "class yield { yield yield(yield yield){yield();} }");
-        assertEqualsNoEol("class yield {\n" +
+        assertEqualsStringIgnoringEol("class yield {\n" +
                 "\n" +
                 "    yield yield(yield yield) {\n" +
                 "        yield();\n" +

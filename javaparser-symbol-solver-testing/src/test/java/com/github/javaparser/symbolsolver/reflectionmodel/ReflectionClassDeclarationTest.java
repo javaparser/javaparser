@@ -22,7 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -72,8 +72,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
-        assertEquals(Object.class.getCanonicalName(), foo.getSuperClass().getQualifiedName());
-        assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
+        assertEquals(Object.class.getCanonicalName(), foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
+        assertEquals(Collections.emptyList(), foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues());
     }
 
     @Test
@@ -88,8 +88,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
-        assertEquals("Bar", foo.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
+        assertEquals("Bar", foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
+        assertEquals(Collections.emptyList(), foo.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues());
     }
 
     @Test
@@ -105,9 +105,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
         ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
-        assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(1, bar.getSuperClass().typeParametersValues().size());
-        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().typeParametersValues().get(0).asReferenceType().getQualifiedName());
+        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
+        assertEquals(1, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().size());
+        assertEquals(String.class.getCanonicalName(), bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -123,13 +123,13 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
         ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
-        assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
-        assertEquals(1, bar.getSuperClass().typeParametersValues().size());
-        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).isTypeVariable());
-        assertEquals("E", bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getName());
-        assertEquals(true, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnType());
-        assertEquals(false, bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().declaredOnMethod());
-        assertTrue(bar.getSuperClass().typeParametersValues().get(0).asTypeParameter().getQualifiedName().endsWith("Bar.E"));
+        assertEquals("Foo", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getTypeDeclaration().get().getName());
+        assertEquals(1, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().size());
+        assertEquals(true, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).isTypeVariable());
+        assertEquals("E", bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asTypeParameter().getName());
+        assertEquals(true, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asTypeParameter().declaredOnType());
+        assertEquals(false, bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asTypeParameter().declaredOnMethod());
+        assertTrue(bar.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersValues().get(0).asTypeParameter().getQualifiedName().endsWith("Bar.E"));
     }
 
     @Test
@@ -285,14 +285,40 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     // solveSymbol
     // solveType
     // getDeclaredMethods
-    // getAllMethods
+
+    @Test
+    void testGetAllMethods() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(ReflectionTestObject.class, typeResolver);
+
+        ImmutableSet<String> expected = ImmutableSet.of(
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getC()",
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getB()",
+                "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getA()"
+        );
+
+        Set<String> actual = testObject.getAllMethods()
+                .stream()
+                .map(MethodUsage::getQualifiedSignature)
+                .filter(s -> !"com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.$jacocoInit()".equals(s)) // Ignore the methods injected via reflection by jacoco -- see also #1701 and #2637
+                .collect(Collectors.toSet());
+
+        assertEquals(expected, actual);
+    }
 
     @Test
     void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
-                arraylist.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+        ResolvedClassDeclaration testObject = new ReflectionClassDeclaration(ReflectionTestObject.class, typeResolver);
+
+        ImmutableSet<String> expected = ImmutableSet.of("a", "b", "c");
+        Set<String> actual = testObject.getAllFields()
+                .stream()
+                .map(ResolvedDeclaration::getName)
+                .filter(s -> !"$jacocoData".equals(s)) // Ignore the fields injected via reflection by jacoco -- see also #1701 and #2637
+                .collect(Collectors.toSet());
+
+        assertEquals(expected, actual);
     }
 
     ///
@@ -322,14 +348,14 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetSuperclassWithoutTypeParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
     }
 
     @Test
     void testGetSuperclassWithTypeParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals("com.github.javaparser.ast.body.CallableDeclaration", compilationUnit.getSuperClass().getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.CallableDeclaration.T").get().asReferenceType().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.CallableDeclaration", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.CallableDeclaration.T").get().asReferenceType().getQualifiedName());
     }
 
     @Test
