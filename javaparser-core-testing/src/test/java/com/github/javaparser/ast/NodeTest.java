@@ -29,22 +29,12 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.observer.AstObserver;
-import com.github.javaparser.ast.observer.AstObserverAdapter;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -145,7 +135,7 @@ class NodeTest {
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
-        assertEquals(String.format("class X {%1$s}%1$s", EOL), cu.toString());
+        assertEquals(String.format("class X {%1$s}%1$s", SYSTEM_EOL), cu.toString());
     }
 
     @Test
@@ -156,7 +146,7 @@ class NodeTest {
                 "    swapped=false;%1$s" +
                 "    swapped=false;%1$s" +
                 "  }%1$s" +
-                "}%1$s", EOL));
+                "}%1$s", SYSTEM_EOL));
         // remove the second swapped=false
         ExpressionStmt target = unit.findAll(ExpressionStmt.class).get(2);
         target.remove();

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * Transforming EnumDeclaration and verifying the LexicalPreservation works as expected.
@@ -78,13 +78,13 @@ class EnumDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addingConstants() {
-        EnumDeclaration ed = consider("enum A {" + EOL +
-                " E1" + EOL +
+        EnumDeclaration ed = consider("enum A {" + SYSTEM_EOL +
+                " E1" + SYSTEM_EOL +
                 "}");
         ed.getEntries().addLast(new EnumConstantDeclaration("E2"));
-        assertTransformedToString("enum A {" + EOL +
-                " E1," + EOL +
-                " E2" + EOL +
+        assertTransformedToString("enum A {" + SYSTEM_EOL +
+                " E1," + SYSTEM_EOL +
+                " E2" + SYSTEM_EOL +
                 "}", ed);
     }
 

@@ -56,7 +56,7 @@ class Issue2362Test extends AbstractSymbolResolutionTest {
         JavaParser javaParser = new JavaParser(pc);
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
         
         ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
         assertEquals(oce.resolve().getSignature(), "InnerClass(int)");

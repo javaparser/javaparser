@@ -21,14 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.Utils.*;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ParseResult.PostProcessor;
 import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
@@ -37,7 +29,19 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.version.*;
+import com.github.javaparser.utils.LineSeparator;
+import com.github.javaparser.version.Java10PostProcessor;
+import com.github.javaparser.version.Java11PostProcessor;
+import com.github.javaparser.version.Java12PostProcessor;
+import com.github.javaparser.version.Java13PostProcessor;
+import com.github.javaparser.version.Java14PostProcessor;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
 
 /**
  * The configuration that is used by the parser.
@@ -45,6 +49,7 @@ import com.github.javaparser.version.*;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+
     public enum LanguageLevel {
         /**
          * Java 1.0
@@ -133,6 +138,10 @@ public class ParserConfiguration {
         }
     }
 
+
+
+    // TODO: Add a configurable option e.g. setDesiredLineEnding(...) to replace/swap out existing line endings
+    private boolean detectOriginalLineSeparator = true;
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
@@ -148,6 +157,7 @@ public class ParserConfiguration {
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
+
         class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
             private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
@@ -177,9 +187,47 @@ public class ParserConfiguration {
                 }
             }
         }
+        
+        class LineEndingProcessor implements PreProcessor, PostProcessor {
+            private LineEndingProcessingProvider _lineEndingProcessingProvider;
+
+            @Override
+            public Provider process(Provider innerProvider) {
+                if (isDetectOriginalLineSeparator()) {
+                    _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
+                    return _lineEndingProcessingProvider;
+                }
+                return innerProvider;
+            }
+
+            @Override
+            public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                if (isDetectOriginalLineSeparator()) {
+                    result.getResult().ifPresent(
+                            rootNode -> {
+                                LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+
+                                // Set the line ending on the root node
+                                rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
+
+//                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
+//                                rootNode.findAll(Node.class)
+//                                        .forEach(node -> node.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator));
+                            }
+                    );
+                }
+            }
+        }
+        
         UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
+        
+        LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
+        preProcessors.add(lineEndingProcessor);
+        postProcessors.add(lineEndingProcessor);
+        
+        
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
                 result.ifSuccessful(resultNode -> result
@@ -328,6 +376,15 @@ public class ParserConfiguration {
 
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
+    }
+    
+    public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {
+        this.detectOriginalLineSeparator = detectOriginalLineSeparator;
+        return this;
+    }
+
+    public boolean isDetectOriginalLineSeparator() {
+        return detectOriginalLineSeparator;
     }
 
     public Charset getCharacterEncoding() {

@@ -39,15 +39,15 @@ import com.github.javaparser.ast.Generated;
  * <h1>The break statement</h1>
  * <h2>Java 1.0-11</h2>
  * Break has an optional label:
- * <br/><code>break;</code>
- * <br/><code>break somewhere;</code>
- * <br/>The label is in the "value" property as a NameExpr.
+ * <br>{@code break;}
+ * <br>{@code break somewhere;}
+ * <br>The label is in the "value" property as a NameExpr.
  * <h2>Java 12</h2>
  * Break can now also have any expression,
  * to be used in the switch-expression:
- * <br/><code>break 123+456;</code>
- * <br/><code>break "more or less";</code>
- * <br/>The expression will be in the "value" property.
+ * <br>{@code break 123+456;}
+ * <br>{@code break "more or less";}
+ * <br>The expression will be in the "value" property.
  * <h2>Java 13</h2>
  * The break statement has been reverted to what it was before Java 12, and break-with-value is now the YieldStatement.
  *

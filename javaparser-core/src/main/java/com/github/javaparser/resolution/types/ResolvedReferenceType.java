@@ -21,21 +21,26 @@
 
 package com.github.javaparser.resolution.types;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -190,7 +195,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (values.contains(tpToReplace)) {
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
-            return create(result.getTypeDeclaration(), values);
+            if(result.getTypeDeclaration().isPresent()) {
+                return create(result.getTypeDeclaration().get(), values);
+            }
         }
 
         return result;
@@ -234,13 +241,15 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isInterface())
+                .filter(it -> it.getTypeDeclaration().isPresent())
+                .filter(it -> it.getTypeDeclaration().get().isInterface())
                 .collect(Collectors.toList());
     }
 
     public final List<ResolvedReferenceType> getAllClassesAncestors() {
         return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isClass())
+                .filter(it -> it.getTypeDeclaration().isPresent())
+                .filter(it -> it.getTypeDeclaration().get().isClass())
                 .collect(Collectors.toList());
     }
 
@@ -295,8 +304,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     /**
      * Corresponding TypeDeclaration
      */
-    public final ResolvedReferenceTypeDeclaration getTypeDeclaration() {
-        return typeDeclaration;
+    public final Optional<ResolvedReferenceTypeDeclaration> getTypeDeclaration() {
+        return Optional.of(typeDeclaration);
     }
 
     /**
@@ -363,7 +372,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        String typeId = this.getTypeDeclaration().getId();
+        if(!this.getTypeDeclaration().isPresent()) {
+            return Optional.empty(); // TODO: Consider IllegalStateException or similar
+        }
+
+        String typeId = this.getTypeDeclaration().get().getId();
         if (typeId.equals(typeParameterDeclaration.getContainerId())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
         }
@@ -383,9 +396,17 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(this.getTypeDeclaration().getDeclaredMethods());
-        getDirectAncestors().forEach(a ->
-                allMethods.addAll(a.getAllMethods()));
+        if(!this.getTypeDeclaration().isPresent()) {
+            return new ArrayList<>(); // empty list -- consider IllegalStateException or similar
+        }
+
+        // Get the methods declared directly on this.
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(
+                this.getTypeDeclaration().get().getDeclaredMethods()
+        );
+        // Also get methods inherited from ancestors.
+        getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods()));
+
         return allMethods;
     }
 
@@ -455,11 +476,12 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             if (this.isRawType() || other.isRawType()) {
                 return true;
             }
-            if (this.typeParametersValues().size() != other.typeParametersValues().size()) {
+            List<ResolvedType> typeParametersValues = typeParametersValues();
+            if (typeParametersValues.size() != other.typeParametersValues().size()) {
                 throw new IllegalStateException();
             }
-            for (int i = 0; i < typeParametersValues().size(); i++) {
-                ResolvedType thisParam = typeParametersValues().get(i);
+            for (int i = 0; i < typeParametersValues.size(); i++) {
+                ResolvedType thisParam = typeParametersValues.get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof ResolvedWildcard) {
@@ -475,9 +497,17 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                         }
                     } else {
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
-                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
+                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds()
+                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
+                                    .collect(Collectors.toList());
+                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds()
+                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
+                                    .collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
+                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
+                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
+                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
+                            return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
                         return false;
                     }
@@ -491,6 +521,22 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
     // Private methods
     //
+    
+    private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
+        // verify if the ResolvedTypeVariable has only one type variable and the bound is
+        // not a reference type with a bound parameter 
+        // for example EnumSet<E> noneOf(Class<E> elementType)
+        List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
+        if (bounds.size() == 1) {
+            ResolvedType boundType = bounds.get(0).getType();
+            boolean hasTypeParameter = boundType.isReferenceType()
+                    && !boundType.asReferenceType().typeParametersMap.isEmpty();
+            return hasTypeParameter
+                    ? compareConsideringTypeParameters(boundType.asReferenceType())
+                    : boundType.isAssignableBy(referenceType);
+        }
+        return false;
+    }
 
     private static List<ResolvedType> deriveParams(ResolvedReferenceTypeDeclaration typeDeclaration) {
         if (typeDeclaration == null) {
@@ -504,4 +550,30 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     }
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);
+
+
+    /**
+     * We don't make this _ex_plicit in the data representation because that would affect codegen
+     * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
+     *
+     * @return true, if this represents {@code java.lang.Object}
+     * @see ResolvedReferenceTypeDeclaration#isJavaLangObject()
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
+     */
+    public boolean isJavaLangObject() {
+        return this.isReferenceType()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+    }
+
+    /**
+     * @return true, if this represents {@code java.lang.Enum}
+     * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
+     */
+    public boolean isJavaLangEnum() {
+        return this.isReferenceType()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+    }
+
 }
