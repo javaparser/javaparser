@@ -308,4 +308,13 @@ class JavaParserTest {
     void xxx(){
         YamlPrinter.print(StaticJavaParser.parse("class X{}"));
     }
+
+    @Test
+    void issue2879() {
+        StaticJavaParser.parse(
+            "public class Test {" +
+            "    public void method(int @MyAnno ... param) {}" +
+            "}" +
+            "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
+    }
 }
