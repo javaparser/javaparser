@@ -72,7 +72,7 @@ jobs:
         uses: codecov/codecov-action@v1
         timeout-minutes: 10
         with:
-          file: javaparser-symbol-solver-core/target/site/jacoco/jacoco.xml
+          file: javaparser-core-testing/target/site/jacoco/jacoco.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
