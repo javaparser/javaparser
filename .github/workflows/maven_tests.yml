@@ -68,7 +68,7 @@ jobs:
       - name: Test with Maven (incl. slow tests)
         run: mvn --errors clean test --activate-profiles AlsoSlowTests
 
-      - name: CodeCov
+      - name: CodeCov - JavaParser Symbol Solver
         uses: codecov/codecov-action@v1
         timeout-minutes: 10
         with:
@@ -79,7 +79,7 @@ jobs:
           env_vars: AlsoSlowTests,OS,JDK
 
 
-      - name: CodeCov
+      - name: CodeCov - JavaParser Core
         uses: codecov/codecov-action@v1
         timeout-minutes: 10
         with:
