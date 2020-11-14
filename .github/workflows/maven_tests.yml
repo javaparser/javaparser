@@ -70,7 +70,6 @@ jobs:
 
       - name: CodeCov
         uses: codecov/codecov-action@v1
-#        if: matrix.os == 'ubuntu-latest' && matrix.jdk == 15 && github.repository == 'mysteraitch/javaparser'
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml,javaparser-symbol-solver-core/target/site/jacoco-aggregate/jacoco.xml
