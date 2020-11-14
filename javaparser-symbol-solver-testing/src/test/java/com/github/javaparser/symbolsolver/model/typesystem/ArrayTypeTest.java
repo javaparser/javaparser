@@ -150,7 +150,7 @@ class ArrayTypeTest {
                         .asReferenceType().typeParametersValues());
         assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
-                        .asReferenceType().getTypeDeclaration());
+                        .asReferenceType().getTypeDeclaration().get());
         assertEquals(new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(List.class, typeSolver),
                         ImmutableList.of(OBJECT), typeSolver),

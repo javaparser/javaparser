@@ -38,7 +38,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
+ * A (possibly static) initializer body. "static { a=3; }" in this example: {@code class X { static { a=3; }  } }
  *
  * @author Julio Vilmar Gesser
  */

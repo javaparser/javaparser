@@ -70,7 +70,7 @@ public abstract class Bound {
     }
 
     /**
-     * Given a bound of the form α <: T, we say T is a proper upper bound of α.
+     * Given a bound of the form α &lt;: T, we say T is a proper upper bound of α.
      *
      * Return empty if it is not a proper upper bound. Otherwise it returns the variable of which this is an
      * proper upper bound.
@@ -80,7 +80,7 @@ public abstract class Bound {
     }
 
     /**
-     * Given a bound of the form T <: α, we say T is a proper lower bound of α.
+     * Given a bound of the form T &lt;: α, we say T is a proper lower bound of α.
      *
      * Return empty if it is not a proper lower bound. Otherwise it returns the variable of which this is an
      * proper lower bound.
@@ -109,7 +109,7 @@ public abstract class Bound {
 
     /**
      * Other bounds relate two inference variables, or an inference variable to a type that contains inference
-     * variables. Such bounds, of the form S = T or S <: T, are called dependencies.
+     * variables. Such bounds, of the form S = T or S &lt;: T, are called dependencies.
      */
     public boolean isADependency() {
         return false;

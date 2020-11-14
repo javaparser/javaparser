@@ -35,7 +35,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * A value for a member of an annotation.
- * In <code>@Counters(a=15)</code> a=15 is a MemberValuePair. Its name is a, and its value is 15.
+ * In {@code @Counters(a=15)} a=15 is a MemberValuePair. Its name is a, and its value is 15.
  *
  * @author Julio Vilmar Gesser
  */

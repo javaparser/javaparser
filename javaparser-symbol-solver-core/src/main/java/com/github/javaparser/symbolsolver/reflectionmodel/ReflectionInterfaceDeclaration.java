@@ -192,7 +192,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        if (other.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (other.isJavaLangObject()) {
+            // Everything can be assigned to {@code java.lang.Object}
             return true;
         }
 
@@ -218,7 +219,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            return otherTypeDeclaration.getTypeDeclaration().canBeAssignedTo(this);
+            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+                return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
+            }
         }
 
         return false;

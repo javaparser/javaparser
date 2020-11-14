@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NodeWithParametersBuildersTest {
@@ -41,7 +41,7 @@ class NodeWithParametersBuildersTest {
         addMethod.addParameter(int.class, "yay");
         Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(0).toString());
+        assertEquals("import " + List.class.getName() + ";" + SYSTEM_EOL, cu.getImport(0).toString());
         assertEquals(2, addMethod.getParameters().size());
         assertEquals("yay", addMethod.getParameter(0).getNameAsString());
         assertEquals("List", addMethod.getParameter(1).getType().toString());

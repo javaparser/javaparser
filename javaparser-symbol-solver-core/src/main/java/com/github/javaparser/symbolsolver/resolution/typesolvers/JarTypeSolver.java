@@ -21,16 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.NotFoundException;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -39,15 +34,22 @@ import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
+
 /**
  * Will let the symbol solver look inside a jar file while solving types.
  *
  * @author Federico Tomassetti
  */
 public class JarTypeSolver implements TypeSolver {
-
-    @Deprecated
-    private static JarTypeSolver instance;
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
@@ -70,19 +72,13 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     /**
-     * Suitable for being called only once. If called multiple times, it will cause an IllegalStateException per #2547 .
-     *
-     * @deprecated Use of this static method / singleton pattern is strongly discouraged and will be removed (#2547).
-     * Instead, a new instance should be created for each jar (consistent with the other type solvers e.g. AarTypeSolver, JavaParserTypeSolver, ClassLoaderTypeSolver).
+     * @deprecated Use of this static method (previously following singleton pattern) is strongly discouraged
+     * and will be removed in a future version. For now, it has been modified to return a new instance to
+     * prevent the IllegalStateException being thrown (as reported in #2547), allowing it to be called multiple times.
      */
     @Deprecated
     public static JarTypeSolver getJarTypeSolver(String pathToJar) throws IOException {
-        if (instance == null) {
-            instance = new JarTypeSolver(pathToJar);
-        } else {
-            instance.addPathToJar(pathToJar);
-        }
-        return instance;
+        return new JarTypeSolver(pathToJar);
     }
 
     private File dumpToTempFile(InputStream inputStream) throws IOException {
@@ -177,6 +173,7 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     private class ClasspathElement {
+
         private JarFile jarFile;
         private JarEntry entry;
 

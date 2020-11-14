@@ -23,6 +23,8 @@ package com.github.javaparser.ast.validator;
 
 /**
  * This validator validates according to Java 13 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/13/">https://openjdk.java.net/projects/jdk/13/</a>
  */
 public class Java13Validator extends Java12Validator {
 

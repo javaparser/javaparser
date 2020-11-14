@@ -34,7 +34,7 @@ import java.util.List;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 import static com.github.javaparser.javadoc.description.JavadocInlineTag.Type.*;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,52 +49,52 @@ class JavadocTest {
 
     @Test
     void toTextForJavadocWithTwoLinesOfJustDescription() {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
-        assertEquals("first line" + EOL + "second line" + EOL, javadoc.toText());
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + SYSTEM_EOL + "second line"));
+        assertEquals("first line" + SYSTEM_EOL + "second line" + SYSTEM_EOL, javadoc.toText());
     }
 
     @Test
     void toTextForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + SYSTEM_EOL + "second line"));
         javadoc.addBlockTag("foo", "something useful");
-        assertEquals("first line" + EOL + "second line" + EOL + EOL + "@foo something useful" + EOL, javadoc.toText());
+        assertEquals("first line" + SYSTEM_EOL + "second line" + SYSTEM_EOL + SYSTEM_EOL + "@foo something useful" + SYSTEM_EOL, javadoc.toText());
     }
 
     @Test
     void toCommentForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
-        assertEquals(new JavadocComment("" + EOL + "\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new JavadocComment("" + SYSTEM_EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
     void toCommentorJavadocWithTwoLinesOfJustDescription() {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
-        assertEquals(new JavadocComment("" + EOL + "\t\t * first line" + EOL + "\t\t * second line" + EOL + "\t\t "), javadoc.toComment("\t\t"));
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + SYSTEM_EOL + "second line"));
+        assertEquals(new JavadocComment("" + SYSTEM_EOL + "\t\t * first line" + SYSTEM_EOL + "\t\t * second line" + SYSTEM_EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
     void toCommentForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + SYSTEM_EOL + "second line"));
         javadoc.addBlockTag("foo", "something useful");
-        assertEquals(new JavadocComment("" + EOL + "\t\t * first line" + EOL + "\t\t * second line" + EOL + "\t\t * " + EOL + "\t\t * @foo something useful" + EOL + "\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new JavadocComment("" + SYSTEM_EOL + "\t\t * first line" + SYSTEM_EOL + "\t\t * second line" + SYSTEM_EOL + "\t\t * " + SYSTEM_EOL + "\t\t * @foo something useful" + SYSTEM_EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
     void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
-        assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
+        Javadoc javadoc = parseJavadoc("first line" + SYSTEM_EOL + "second line" + SYSTEM_EOL + SYSTEM_EOL + "@param node a node" + SYSTEM_EOL + "@return result the result");
+        assertEquals("first line" + SYSTEM_EOL + "second line", javadoc.getDescription().toText());
         assertEquals(2, javadoc.getBlockTags().size());
     }
 
     @Test
     void inlineTagsAreParsable() {
         String docText =
-                "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
-                        "{@link TOVersion}. Set {@systemProperty JAVA_HOME} correctly." + EOL +
-                        "" + EOL +
-                        "@param versionID the id of the {@link TOVersion}." + EOL +
-                        "@return the filenames" + EOL +
-                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
+                "Returns the {@link TOFilename}s of all files that existed during the requested" + SYSTEM_EOL +
+                        "{@link TOVersion}. Set {@systemProperty JAVA_HOME} correctly." + SYSTEM_EOL +
+                        "" + SYSTEM_EOL +
+                        "@param versionID the id of the {@link TOVersion}." + SYSTEM_EOL +
+                        "@return the filenames" + SYSTEM_EOL +
+                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + SYSTEM_EOL;
         Javadoc javadoc = parseJavadoc(docText);
 
         List<JavadocInlineTag> inlineTags = javadoc.getDescription().getElements().stream()
@@ -118,13 +118,13 @@ class JavadocTest {
 
     @Test
     void emptyLinesBetweenBlockTagsGetsFiltered() {
-        String comment = " * The type of the Object to be mapped." + EOL +
-                " * This interface maps the given Objects to existing ones in the database and" + EOL +
-                " * saves them." + EOL +
-                " * " + EOL +
-                " * @author censored" + EOL +
-                " * " + EOL +
-                " * @param <T>" + EOL;
+        String comment = " * The type of the Object to be mapped." + SYSTEM_EOL +
+                " * This interface maps the given Objects to existing ones in the database and" + SYSTEM_EOL +
+                " * saves them." + SYSTEM_EOL +
+                " * " + SYSTEM_EOL +
+                " * @author censored" + SYSTEM_EOL +
+                " * " + SYSTEM_EOL +
+                " * @param <T>" + SYSTEM_EOL;
         Javadoc javadoc = parseJavadoc(comment);
         assertEquals(2, javadoc.getBlockTags().size());
     }
