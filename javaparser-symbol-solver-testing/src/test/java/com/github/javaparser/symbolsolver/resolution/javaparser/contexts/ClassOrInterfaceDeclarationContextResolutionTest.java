@@ -48,9 +48,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Federico Tomassetti
@@ -70,8 +68,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        assertFalse(null == context.getParent());
-        assertEquals(new CompilationUnitContext(cu, typeSolver), context.getParent());
+        assertTrue(context.getParent().isPresent());
+        assertEquals(new CompilationUnitContext(cu, typeSolver), context.getParent().get());
     }
 
     @Test

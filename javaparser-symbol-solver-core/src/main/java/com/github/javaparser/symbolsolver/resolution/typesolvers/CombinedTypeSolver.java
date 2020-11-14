@@ -44,8 +44,8 @@ public class CombinedTypeSolver implements TypeSolver {
     
     /**
      * A predicate which determines what to do if an exception is raised during the parsing process.
-     * If it returns <code>true</code> the exception will be ignored, and solving will continue using the next solver in line.
-     * If it returns <code>false</code> the exception will be thrown, stopping the solving process.
+     * If it returns {@code true} the exception will be ignored, and solving will continue using the next solver in line.
+     * If it returns {@code false} the exception will be thrown, stopping the solving process.
      * 
      * Main use case for this is to circumvent bugs or missing functionality in some type solvers.
      * If for example solver A has a bug resulting in a {@link NullPointerException}, you could use a {@link ExceptionHandlers#getTypeBasedWhitelist(Class...) whitelist} to ignore that type of exception.

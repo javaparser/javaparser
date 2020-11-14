@@ -46,6 +46,8 @@ public abstract class TextElement implements TextElementMatcher {
 
     abstract boolean isNode(Node node);
 
+    public abstract boolean isLiteral();
+
     public abstract boolean isWhiteSpace();
 
     public abstract boolean isSpaceOrTab();
@@ -76,8 +78,8 @@ public abstract class TextElement implements TextElementMatcher {
     abstract Optional<Range> getRange();
 
     /**
-     * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br/>
-     * This can be used to curry another TextElementMatcher.<br/>
+     * Creates a {@link TextElementMatcher} that matches any TextElement with the same range as this TextElement.<br>
+     * This can be used to curry another TextElementMatcher.<br>
      * e.g. {@code someTextElementMatcher.and(textElement.matchByRange());}
      *
      * @return TextElementMatcher that matches any TextElement with the same Range
