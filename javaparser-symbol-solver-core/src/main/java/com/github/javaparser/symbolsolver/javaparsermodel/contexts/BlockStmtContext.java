@@ -21,17 +21,20 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
@@ -69,4 +72,28 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
         }
         return Collections.emptyList();
     }
+    
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        // tries to resolve a declaration from local variables defined in child statements
+        // or from parent node context
+        // for example resolve declaration for the MethodCallExpr a.method() in
+        // A a = this;
+        // { 
+        //   a.method(); 
+        // }
+        if (wrappedNode.getStatements().size() > 0) {
+            List<VariableDeclarator> variableDeclarators = new LinkedList<>();
+            // find all variable declarators exposed in child
+            wrappedNode.getStatements().forEach(stmt-> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
+            if (!variableDeclarators.isEmpty()) {
+                for (VariableDeclarator vd : variableDeclarators) {
+                    if (vd.getNameAsString().equals(name) ) {
+                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
+                    }
+                }
+            }
+        }
+        return super.solveSymbol(name);
+    } 
 }

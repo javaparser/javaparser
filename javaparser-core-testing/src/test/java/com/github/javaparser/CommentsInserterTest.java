@@ -21,20 +21,18 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.utils.TestParser;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.utils.TestParser;
 
 class CommentsInserterTest {
     private String makeFilename(String sampleName) {
