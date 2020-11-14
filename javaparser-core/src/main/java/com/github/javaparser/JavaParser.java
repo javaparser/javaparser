@@ -123,10 +123,11 @@ public final class JavaParser {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
 
-            configuration.getPostProcessors().forEach(postProcessor ->
-                    postProcessor.process(result, configuration));
+            configuration.getPostProcessors()
+                    .forEach(postProcessor -> postProcessor.process(result, configuration));
 
-            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
+            result.getProblems()
+                    .sort(PROBLEM_BY_BEGIN_POSITION);
 
             return result;
         } catch (Exception e) {
@@ -417,7 +418,7 @@ public final class JavaParser {
      * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr}
      * that represents it.
      *
-     * @param declaration a variable declaration like <code>int x=2;</code>
+     * @param declaration a variable declaration like {@code int x=2;}
      * @return VariableDeclarationExpr representing the type
      * @throws ParseProblemException if the source code has parser errors
      */

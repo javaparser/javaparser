@@ -181,9 +181,34 @@ public class MethodUsage implements ResolvedTypeParametrized {
         return typeParametersMap;
     }
 
+    /**
+     * The qualified signature of the method. It is composed by the qualified name of the declaring type
+     * followed by the signature of the method.
+     */
     public String getQualifiedSignature() {
-        // TODO use the type parameters
-        return this.getDeclaration().getQualifiedSignature();
+        return getDeclaration().declaringType().getQualifiedName() + "." + getSignature();
+    }
+
+    /**
+     * The signature of the method.
+     */
+    public String getSignature() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getName());
+        sb.append("(");
+        for (int i = 0; i < getNoParams(); i++) {
+            if (i != 0) {
+                sb.append(", ");
+            }
+            ResolvedType type = getParamType(i);
+            if (type.isArray() && getDeclaration().getParam(i).isVariadic()) {
+                sb.append(type.asArrayType().getComponentType().describe()).append("...");
+            } else {
+                sb.append(type.describe());
+            }
+        }
+        sb.append(")");
+        return sb.toString();
     }
 
     public List<ResolvedType> exceptionTypes() {

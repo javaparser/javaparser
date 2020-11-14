@@ -24,7 +24,7 @@ package com.github.javaparser;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -47,12 +47,12 @@ public class Problem {
     public String toString() {
         final StringBuilder str = new StringBuilder(getVerboseMessage());
         if (cause != null) {
-            str.append(EOL).append("Problem stacktrace : ").append(EOL);
+            str.append(SYSTEM_EOL).append("Problem stacktrace : ").append(SYSTEM_EOL);
             for (int i = 0; i < cause.getStackTrace().length; i++) {
                 StackTraceElement ste = cause.getStackTrace()[i];
                 str.append("  ").append(ste.toString());
                 if (i + 1 != cause.getStackTrace().length)
-                    str.append(EOL);
+                    str.append(SYSTEM_EOL);
             }
         }
         return str.toString();

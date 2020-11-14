@@ -92,8 +92,8 @@ class SubtypeOfBoundTest {
 
         InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);
         InferenceVariable beta = new InferenceVariable("β", typeParameterDeclaration2);
-        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration(), Arrays.asList(ResolvedWildcard.UNBOUNDED), typeSolver);
-        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration(), Arrays.asList(beta), typeSolver);
+        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration().get(), Arrays.asList(ResolvedWildcard.UNBOUNDED), typeSolver);
+        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration().get(), Arrays.asList(beta), typeSolver);
 
         Bound bound1 = new SubtypeOfBound(alpha, iterableOfWildcard);
         Bound bound2 = new SubtypeOfBound(beta, objectType);

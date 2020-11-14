@@ -21,23 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import com.github.javaparser.utils.Pair;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,6 +28,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+import com.github.javaparser.utils.Pair;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -99,8 +111,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
+            // Scope is present -- search/solve within that type
             typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
         } else {
+            // Scope not present -- search/solve within itself.
             typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
         }
 
@@ -141,12 +155,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        Context parentContext = getParent();
+        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
         return parentContext.solveSymbolAsValue(name);
     }
 
@@ -159,7 +175,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // we don't make this _ex_plicit in the data representation because that would affect codegen
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.solveType(Object.class.getCanonicalName()));
+            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
         }
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
@@ -179,7 +195,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedReferenceType refType, String name,
                                                      List<ResolvedType> argumentsTypes,
                                                      Context invokationContext) {
-        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, invokationContext, refType.typeParametersValues());
+        if(!refType.getTypeDeclaration().isPresent()) {
+            return Optional.empty();
+        }
+
+        Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration().get(), name, argumentsTypes, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 
@@ -207,8 +227,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
                 ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
                 ResolvedType parameterType = parameter.getType();
+                // Don't continue if a vararg parameter is reached and there are no arguments left
+                if (parameter.isVariadic() && argumentsTypes.size() < methodUsage.getNoParams()) {
+                    break;
+                }
                 if (!argumentsTypes.get(i).isArray() && parameter.isVariadic()) {
-                	parameterType = parameterType.asArrayType().getComponentType();
+                    parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
@@ -369,10 +393,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
-            if (!actualType.isTypeVariable() && !actualType.isReferenceType()) {
-                throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
+            ResolvedType type = actualType;
+            // in case of primitive type, the expected type must be compared with the boxed type of the actual type
+            if (type.isPrimitive()) { 
+                type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
             }
-            matchedTypeParameters.put(expectedType.asTypeParameter(), actualType);
+            if (!type.isTypeVariable() && !type.isReferenceType()) {
+                throw new UnsupportedOperationException(type.getClass().getCanonicalName());
+            }
+            matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {
         	// Issue 2258 : NullType must not fail this search
             if (!(actualType.isArray() || actualType.isNull())) {

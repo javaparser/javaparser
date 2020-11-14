@@ -45,10 +45,10 @@ import com.github.javaparser.ast.Generated;
  * As of Java 8 it is used in casts or while expressing bounds for generic types.
  * <p>
  * For example:
- * <code>public class A&lt;T extends Serializable &amp; Cloneable&gt; { }</code>
+ * {@code public class A<T extends Serializable & Cloneable> { }}
  * <p>
  * Or:
- * <code>void foo((Serializable &amp; Cloneable)myObject);</code>
+ * {@code void foo((Serializable & Cloneable)myObject);}
  *
  * @since 3.0.0
  */

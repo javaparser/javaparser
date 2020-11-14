@@ -28,10 +28,16 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
- * A node that explicitly extends other types, using the <code>extends</code> keyword.
+ * A node that explicitly extends other types, using the {@code extends} keyword.
  */
 public interface NodeWithExtends<N extends Node> {
 
+    /**
+     * @return All extended types that have been explicitly added (thus exist within the AST).
+     *   Note that this can contain more than one item if this is an interface.
+     *   Note that this will not include {@code java.lang.Object} unless it is explicitly added (e.g. {@code class X extends Object {}})
+     *   If you want the implicitly extended types, you will need a resolved reference.
+     */
     NodeList<ClassOrInterfaceType> getExtendedTypes();
 
     void tryAddImportToParentCompilationUnit(Class<?> clazz);

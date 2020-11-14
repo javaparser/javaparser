@@ -21,34 +21,67 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.ProtocolException;
+import java.nio.Buffer;
+import java.nio.CharBuffer;
+import java.nio.file.FileSystemException;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.RandomAccess;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.io.Serializable;
-import java.nio.Buffer;
-import java.nio.CharBuffer;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-class ReferenceTypeTest {
+class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
     private ReferenceTypeImpl listOfA;
     private ReferenceTypeImpl listOfStrings;
@@ -59,6 +92,9 @@ class ReferenceTypeTest {
     private ReferenceTypeImpl object;
     private ReferenceTypeImpl string;
     private TypeSolver typeSolver;
+    private ReferenceTypeImpl ioException;
+    private ResolvedType unionWithIOExceptionAsCommonAncestor;
+    private ResolvedType unionWithThrowableAsCommonAncestor;
 
     @BeforeEach
     void setup() {
@@ -83,6 +119,15 @@ class ReferenceTypeTest {
         listOfWildcardSuperString = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(ResolvedWildcard.superBound(string)), typeSolver);
+        ioException = new ReferenceTypeImpl(new ReflectionClassDeclaration(IOException.class, typeSolver), typeSolver);
+        unionWithIOExceptionAsCommonAncestor = new ResolvedUnionType(Arrays.asList(
+                new ReferenceTypeImpl(new ReflectionClassDeclaration(ProtocolException.class, typeSolver), typeSolver),
+                new ReferenceTypeImpl(new ReflectionClassDeclaration(FileSystemException.class, typeSolver), typeSolver)
+        ));
+        unionWithThrowableAsCommonAncestor = new ResolvedUnionType(Arrays.asList(
+                new ReferenceTypeImpl(new ReflectionClassDeclaration(ClassCastException.class, typeSolver), typeSolver),
+                new ReferenceTypeImpl(new ReflectionClassDeclaration(AssertionError.class, typeSolver), typeSolver)
+        ));
     }
 
     @Test
@@ -243,13 +288,19 @@ class ReferenceTypeTest {
         assertEquals(false, linkedListOfString.isAssignableBy(listOfStrings));
         assertEquals(true, linkedListOfString.isAssignableBy(linkedListOfString));
     }
+    
+    @Test
+    void testIsAssignableByUnionType() {
+        assertEquals(true, ioException.isAssignableBy(unionWithIOExceptionAsCommonAncestor));
+        assertEquals(false, ioException.isAssignableBy(unionWithThrowableAsCommonAncestor));
+    }
 
     @Test
     void testGetAllAncestorsConsideringTypeParameters() {
-        assertTrue(linkedListOfString.getAllAncestors().contains(object));
-        assertTrue(linkedListOfString.getAllAncestors().contains(listOfStrings));
-        assertTrue(linkedListOfString.getAllAncestors().contains(collectionOfString));
-        assertFalse(linkedListOfString.getAllAncestors().contains(listOfA));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(object));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(listOfStrings));
+        assertThat(linkedListOfString.getAllAncestors(), hasItem(collectionOfString));
+        assertThat(linkedListOfString.getAllAncestors(), not(hasItem(listOfA)));
     }
 
     class Foo {
@@ -333,7 +384,9 @@ class ReferenceTypeTest {
 
         // To debug the following
         List<ResolvedReferenceType> ancestors = right.getAllAncestors();
-        ResolvedReferenceType moreBazzingAncestor = ancestors.stream().filter(a -> a.getQualifiedName().endsWith("Bazzer")).findFirst().get();
+        ResolvedReferenceType moreBazzingAncestor = ancestors.stream()
+                .filter(a -> a.getQualifiedName().endsWith("Bazzer"))
+                .findFirst().get();
 
         assertEquals(true, left.isAssignableBy(right));
 
@@ -410,6 +463,7 @@ class ReferenceTypeTest {
     @Test
     void testGetFieldTypeExisting() {
         class Foo<A> {
+
             List<A> elements;
         }
 
@@ -438,6 +492,7 @@ class ReferenceTypeTest {
     @Test
     void testGetFieldTypeUnexisting() {
         class Foo<A> {
+
             List<A> elements;
         }
 
@@ -583,7 +638,7 @@ class ReferenceTypeTest {
         ResolvedMethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
         ResolvedTypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
         ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(streamMapR);
-        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().getTypeParameters().get(0), typeVariable).build());
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().get().getTypeParameters().get(0), typeVariable).build());
 
         ResolvedTypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
         ResolvedType replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
@@ -601,7 +656,7 @@ class ReferenceTypeTest {
         ResolvedMethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
         ResolvedTypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
         ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(streamMapR);
-        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().getTypeParameters().get(0), typeVariable).build());
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().get().getTypeParameters().get(0), typeVariable).build());
 
         ResolvedTypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
         ResolvedType replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
@@ -641,36 +696,73 @@ class ReferenceTypeTest {
 
     @Test
     void testDirectAncestorsOfClassWithoutSuperClassOrInterfaces() {
-        ResolvedReferenceType buffer = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
-        Set<String> ancestors = buffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertEquals(new HashSet<>(Arrays.asList("java.lang.Object")), ancestors);
+        ResolvedReferenceType buffer = new ReferenceTypeImpl(new ReflectionClassDeclaration(Buffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = buffer.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        assertThat(ancestors, equalTo(new HashSet<>(Arrays.asList("java.lang.Object"))));
     }
 
     @Test
     void testDirectAncestorsOfObjectClass() {
-        ResolvedReferenceType object = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        Set<String> ancestors = object.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
+        ResolvedReferenceType object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        Set<String> ancestors = object.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
         assertEquals(new HashSet<>(), ancestors);
     }
 
     @Test
     void testDirectAncestorsOfClassWithSuperClass() {
-        ResolvedReferenceType charbuffer = new ReferenceTypeImpl(
-                new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
-        Set<String> ancestors = charbuffer.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertEquals(new HashSet<>(Arrays.asList("java.lang.CharSequence", "java.lang.Appendable",
-                "java.nio.Buffer", "java.lang.Readable", "java.lang.Comparable<java.nio.CharBuffer>")), ancestors);
+        ResolvedReferenceType charbuffer = new ReferenceTypeImpl(new ReflectionClassDeclaration(CharBuffer.class, typeSolver), typeSolver);
+        Set<String> ancestors = charbuffer.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        assertThat(ancestors, containsInAnyOrder(
+                "java.lang.CharSequence",
+                "java.lang.Appendable",
+                "java.nio.Buffer",
+                "java.lang.Readable",
+                "java.lang.Comparable<java.nio.CharBuffer>"
+        ));
     }
 
     @Test
     void testDirectAncestorsOfClassWithInterfaces() {
-        Set<String> ancestors = string.getDirectAncestors().stream().map(a -> a.describe()).collect(Collectors.toSet());
-        assertTrue(ancestors.containsAll(Arrays.asList("java.lang.CharSequence",
-                "java.lang.Object",
-                "java.lang.Comparable<java.lang.String>",
-                "java.io.Serializable")));
+        Set<String> ancestors = string.getDirectAncestors()
+                .stream()
+                .map(ResolvedReferenceType::describe)
+                .collect(Collectors.toSet());
+
+        // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these tests.
+        TestJdk currentJdk = TestJdk.getCurrentHostJdk();
+        System.out.println("currentJdk = " + currentJdk);
+        if (currentJdk.getMajorVersion() < 12) {
+            // JDK 12 introduced "java.lang.constant.Constable"
+            assertThat(ancestors, containsInAnyOrder(
+                    "java.lang.CharSequence",
+                    "java.lang.Object",
+                    "java.lang.Comparable<java.lang.String>",
+                    "java.io.Serializable"
+            ));
+        } else {
+            // JDK 12 introduced "java.lang.constant.Constable"
+            System.out.println("ancestors = " + ancestors);
+            assertThat(ancestors, containsInAnyOrder(
+                    "java.lang.CharSequence",
+                    "java.lang.Object",
+                    "java.lang.Comparable<java.lang.String>",
+                    "java.io.Serializable",
+                    "java.lang.constant.Constable",
+                    "java.lang.constant.ConstantDesc"
+            ));
+        }
     }
 
     @Test

@@ -124,9 +124,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     /**
-     * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to
-     * right, mirroring the actual code. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds
-     * to the rightmost ArrayBracketPair.
+     * Takes lists of arrayBracketPairs, assumes the lists are ordered outer to inner and the pairs are ordered left to
+     * right. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the leftmost
+     * ArrayBracketPair in the first list.
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {

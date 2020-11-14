@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -74,9 +75,11 @@ class CombinedTypeSolverTest {
     @MethodSource("parameters")
     void testExceptionFilter(Exception toBeThrownException, Predicate<Exception> filter, boolean expectForward) {
         TypeSolver erroringTypeSolver = mock(TypeSolver.class);
+        when(erroringTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, erroringTypeSolver));
         doThrow(toBeThrownException).when(erroringTypeSolver).tryToSolveType(any(String.class));
 
         TypeSolver secondaryTypeSolver = mock(TypeSolver.class);
+        when(secondaryTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, secondaryTypeSolver));
         when(secondaryTypeSolver.tryToSolveType(any(String.class)))
                 .thenReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
 

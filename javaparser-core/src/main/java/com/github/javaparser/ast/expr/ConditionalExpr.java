@@ -37,7 +37,7 @@ import com.github.javaparser.ast.Generated;
 
 /**
  * The ternary conditional expression.
- * In <code>b==0?x:y</code>, b==0 is the condition, x is thenExpr, and y is elseExpr.
+ * In {@code b==0?x:y}, b==0 is the condition, x is thenExpr, and y is elseExpr.
  *
  * @author Julio Vilmar Gesser
  */

@@ -66,7 +66,9 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
         if (demandParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
         } else {
-            return getParent().solveSymbolAsValue(name);
+            return getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveSymbolAsValue(name);
         }
     }
 
@@ -85,14 +87,18 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
         if (demandParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
-            return getParent().solveSymbol(name);
+            return getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveSymbol(name);
         }
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 
     @Override
