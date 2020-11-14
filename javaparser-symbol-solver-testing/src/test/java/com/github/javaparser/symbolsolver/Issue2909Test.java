@@ -16,7 +16,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 public class Issue2909Test extends AbstractResolutionTest {
 
     @Test
-    void test() {
+    void testResolvingLocallyFromCompleteReferenceToInnerClass() {
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
@@ -35,6 +35,34 @@ public class Issue2909Test extends AbstractResolutionTest {
                 "        }\n" + 
                 "    }\n" + 
                 "}";
+        
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
+        exprs.forEach(expr-> {
+            assertEquals("Program.OuterClass",expr.calculateResolvedType().describe());
+        });
+    }
+    
+    @Test
+    void testResolvingLocallyFromPartialReferenceToInnerClass() {
+        ParserConfiguration config = new ParserConfiguration();
+        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        StaticJavaParser.setConfiguration(config);
+
+        String s = 
+                "public class Program {\n" +
+                        "\n" +
+                        "    public class OuterClass {\n" +
+                        "        int field = 0;\n" +
+                        "\n" +
+                        "        public class InnerClass {\n" +
+                        "            InnerClass() {\n" +
+                        "               OuterClass outer = OuterClass.this;\n" +
+                        "               OuterClass.this.field = 1;\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}";
         
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
