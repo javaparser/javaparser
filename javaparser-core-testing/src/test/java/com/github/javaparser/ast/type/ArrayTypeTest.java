@@ -32,7 +32,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,10 +47,10 @@ class ArrayTypeTest {
         ArrayType arrayType4 = arrayType3.getComponentType().asArrayType();
         PrimitiveType elementType = arrayType4.getComponentType().asPrimitiveType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
         assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
@@ -69,10 +69,10 @@ class ArrayTypeTest {
         ArrayType arrayType4 = arrayType3.getComponentType().asArrayType();
         PrimitiveType elementType = arrayType4.getComponentType().asPrimitiveType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
         assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
@@ -89,8 +89,8 @@ class ArrayTypeTest {
         Type elementType = arrayType2.getComponentType();
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
         assertThat(methodDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(methodDeclaration.getType().getParentNode().get()).isSameAs(methodDeclaration);
@@ -108,8 +108,8 @@ class ArrayTypeTest {
         PrimitiveType elementType = innerArrayType.getComponentType().asPrimitiveType();
 
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
-        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
-        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
         assertThat(parameter.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(parameter.getType().getParentNode().get()).isSameAs(parameter);
@@ -121,7 +121,7 @@ class ArrayTypeTest {
         VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
         variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.intType())));
-        assertEquals("@C" + EOL + "int[][] a;", variableDeclarationStatement.toString());
+        assertEquals("@C" + SYSTEM_EOL + "int[][] a;", variableDeclarationStatement.toString());
     }
 
     @Test
@@ -137,7 +137,7 @@ class ArrayTypeTest {
         MethodDeclaration method = parseBodyDeclaration("int[][] a()[][] {}").asMethodDeclaration();
         method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
-        assertEquals("Blob[][] a() {" + EOL + "}", method.toString());
+        assertEquals("Blob[][] a() {" + SYSTEM_EOL + "}", method.toString());
     }
 
     @Test
@@ -145,8 +145,8 @@ class ArrayTypeTest {
         FieldDeclaration fieldDeclaration = parseBodyDeclaration("int[] a[];").asFieldDeclaration();
 
         Type outerType = fieldDeclaration.getVariables().get(0).getType();
-        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getOrigin());
-        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
     }
 
     @Test
@@ -154,8 +154,8 @@ class ArrayTypeTest {
         MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[] a()[] {}");
 
         Type outerType = method.getType();
-        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getOrigin());
-        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
     }
 
     @Test
@@ -163,7 +163,7 @@ class ArrayTypeTest {
         MethodDeclaration method = parseBodyDeclaration("void a(int[][] a[][]) {}").asMethodDeclaration();
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
-        assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
+        assertEquals("void a(Blob[][] a) {" + SYSTEM_EOL + "}", method.toString());
     }
 
     @Test

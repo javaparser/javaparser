@@ -41,7 +41,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * An annotation type declaration.<br/><code>@interface X { ... }</code>
+ * An annotation type declaration.<br>{@code @interface X { ... }}
  *
  * @author Julio Vilmar Gesser
  */

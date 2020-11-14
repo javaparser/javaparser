@@ -26,6 +26,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -53,13 +54,15 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
             ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
-            if (scopeType.isReferenceType()) {
-                ResolvedReferenceType referenceType = scopeType.asReferenceType();
-                for (ResolvedTypeDeclaration it : referenceType.getTypeDeclaration().internalTypes()) {
+            if (scopeType.isReferenceType() && scopeType.asReferenceType().getTypeDeclaration().isPresent()) {
+                ResolvedReferenceTypeDeclaration scopeTypeDeclaration = scopeType.asReferenceType().getTypeDeclaration().get();
+                for (ResolvedTypeDeclaration it : scopeTypeDeclaration.internalTypes()) {
                     if (it.getName().equals(name)) {
                         return SymbolReference.solved(it);
                     }
                 }
+            } else {
+                // Consider IllegalStateException or similar?
             }
             throw new UnsolvedSymbolException("Unable to solve qualified object creation expression in the context of expression of type " + scopeType.describe());
         }

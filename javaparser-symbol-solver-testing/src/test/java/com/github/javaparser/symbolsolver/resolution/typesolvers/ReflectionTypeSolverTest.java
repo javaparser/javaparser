@@ -67,7 +67,7 @@ class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
         JavaParser javaParser = new JavaParser(pc);
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
         
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override

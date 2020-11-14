@@ -104,16 +104,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        Context parent = getParent();
-        if (parent == null) {
+        Optional<Context> optionalParent = getParent();
+        if (!optionalParent.isPresent()) {
             return Optional.empty();
-        } else {
-            return parent.solveGenericType(name);
         }
+        return optionalParent.get().solveGenericType(name);
     }
 
     @Override
-    public final Context getParent() {
+    public final Optional<Context> getParent() {
         Node parent = wrappedNode.getParentNode().orElse(null);
         if (parent instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) parent;
@@ -122,6 +121,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 for (Expression expression : parentCall.getArguments()) {
                     if (expression == wrappedNode) {
                         found = true;
+                        break;
                     }
                 }
             }
@@ -130,7 +130,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 while (notMethod instanceof MethodCallExpr) {
                     notMethod = demandParentNode(notMethod);
                 }
-                return JavaParserFactory.getContext(notMethod, typeSolver);
+                return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
             }
         }
         Node notMethod = parent;
@@ -138,9 +138,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             notMethod = notMethod.getParentNode().orElse(null);
         }
         if (notMethod == null) {
-            return null;
+            return Optional.empty();
         }
-        return JavaParserFactory.getContext(notMethod, typeSolver);
+        return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
     }
 
     ///
@@ -182,7 +182,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
-                    return singletonList(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration());
+                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                    return singletonList(
+                            typeOfScope.asWildcard()
+                                    .getBoundedType()
+                                    .asReferenceType()
+                                    .getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                    );
                 } else {
                     return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
                 }
@@ -192,22 +199,47 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             } else if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
-                    result.add(bound.getType().asReferenceType().getTypeDeclaration());
+                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                    result.add(
+                            bound.getType()
+                                    .asReferenceType()
+                                    .getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                    );
                 }
                 return result;
             } else if (typeOfScope.isConstraint()) {
-                return singletonList(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration());
+                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                return singletonList(
+                        typeOfScope.asConstraintType()
+                                .getBound()
+                                .asReferenceType()
+                                .getTypeDeclaration()
+                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                );
             } else if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
-                        .map(ResolvedReferenceType::getTypeDeclaration)
+                        .flatMap(ResolvedReferenceType::getTypeDeclaration)
                         .map(Collections::singletonList)
-                        .orElseThrow(() -> new UnsolvedSymbolException("No common ancestor available for UnionType"
-                                + typeOfScope.describe()));
+                        .orElseThrow(() -> new UnsolvedSymbolException("No common ancestor available for UnionType" + typeOfScope.describe()));
             }
-            return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
+
+            // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+            return singletonList(
+                    typeOfScope.asReferenceType()
+                            .getTypeDeclaration()
+                            .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+            );
         }
+
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-        return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
+
+        // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+        return singletonList(
+                typeOfScope.asReferenceType()
+                        .getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+        );
     }
 
     public N getWrappedNode() {

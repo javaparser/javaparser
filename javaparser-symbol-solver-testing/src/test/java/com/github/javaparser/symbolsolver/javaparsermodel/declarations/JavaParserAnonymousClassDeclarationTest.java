@@ -50,8 +50,10 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
     MethodUsage methodUsage =
         JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
+    assertThat(methodUsage.getDeclaration().getQualifiedSignature(),
+            is("AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<I, O>)"));
     assertThat(methodUsage.getQualifiedSignature(),
-               is("AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<I, O>)"));
+               is("AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<java.lang.Integer, java.lang.Long>)"));
   }
 
   @Test

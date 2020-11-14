@@ -36,7 +36,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Generated;
 
 /**
- * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
+ * An annotation that has zero or more key-value pairs.<br>{@code @Mapping(a=5, d=10)}
  * @author Julio Vilmar Gesser
  */
 public class NormalAnnotationExpr extends AnnotationExpr {

@@ -42,7 +42,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The declaration of an enum.<br/><code>enum X { ... }</code>
+ * The declaration of an enum.<br>{@code enum X { ... }}
  *
  * @author Julio Vilmar Gesser
  */

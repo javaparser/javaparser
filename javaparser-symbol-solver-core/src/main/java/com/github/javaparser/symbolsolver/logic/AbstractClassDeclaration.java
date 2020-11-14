@@ -47,13 +47,13 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration
     @Override
     public final List<ResolvedReferenceType> getAllSuperClasses() {
         List<ResolvedReferenceType> superclasses = new ArrayList<>();
-        ResolvedReferenceType superClass = getSuperClass();
-        if (superClass != null) {
+
+        getSuperClass().ifPresent(superClass -> {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllClassesAncestors());
-        }
+        });
 
-        if (superclasses.removeIf(s -> s.getQualifiedName().equals(Object.class.getCanonicalName()))) {
+        if (superclasses.removeIf(ResolvedReferenceType::isJavaLangObject)) {
             superclasses.add(object());
         }
         return superclasses;
@@ -66,10 +66,9 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
-        ResolvedReferenceType superClass = this.getSuperClass();
-        if (superClass != null) {
+        getSuperClass().ifPresent(superClass -> {
             interfaces.addAll(superClass.getAllInterfacesAncestors());
-        }
+        });
         return interfaces;
     }
 

@@ -35,7 +35,7 @@ import static com.github.javaparser.utils.Utils.*;
  * It is composed by a description and a list of block tags.
  * <p>
  * An example would be the text contained in this very Javadoc comment. At the moment
- * of this writing this comment does not contain any block tags (such as <code>@see AnotherClass</code>)
+ * of this writing this comment does not contain any block tags (such as {@code @see AnotherClass})
  */
 public class Javadoc {
 
@@ -83,14 +83,14 @@ public class Javadoc {
         StringBuilder sb = new StringBuilder();
         if (!description.isEmpty()) {
             sb.append(description.toText());
-            sb.append(EOL);
+            sb.append(SYSTEM_EOL);
         }
         if (!blockTags.isEmpty()) {
-            sb.append(EOL);
+            sb.append(SYSTEM_EOL);
         }
         blockTags.forEach(bt -> {
             sb.append(bt.toText());
-            sb.append(EOL);
+            sb.append(SYSTEM_EOL);
         });
         return sb.toString();
     }
@@ -112,14 +112,14 @@ public class Javadoc {
             }
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(EOL);
+        sb.append(SYSTEM_EOL);
         final String text = toText();
         if (!text.isEmpty()) {
-            for (String line : text.split(EOL)) {
+            for (String line : text.split(SYSTEM_EOL)) {
                 sb.append(indentation);
                 sb.append(" * ");
                 sb.append(line);
-                sb.append(EOL);
+                sb.append(SYSTEM_EOL);
             }
         }
         sb.append(indentation);
