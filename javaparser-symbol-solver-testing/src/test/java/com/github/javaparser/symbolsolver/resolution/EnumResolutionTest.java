@@ -34,6 +34,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -41,6 +42,7 @@ import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
@@ -121,6 +123,38 @@ class EnumResolutionTest extends AbstractResolutionTest {
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
         }
+    }
+
+    @Test
+    public void testResolveValueOfMethod() {
+        String s =
+                "public class ClassTest {\n" +
+                        "    public enum SecurityPolicyScopedTemplatesKeys {\n" +
+                        "        SUSPICIOUS(\"suspicious\");\n" +
+                        "        private String displayName;\n" +
+                        "\n" +
+                        "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n" +
+                        "            this.displayName = displayName;\n" +
+                        "        }\n" +
+                        "\n" +
+                        "        public String getDisplayName() {\n" +
+                        "            return this.displayName;\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public void m() {\n" +
+                        "        SecurityPolicyScopedTemplatesKeys a = SecurityPolicyScopedTemplatesKeys.valueOf(\"SUSPICIOUS\");\n" +
+                        "    }\n" +
+                        "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rd = methodCallExpr.resolve();
+        assertEquals("valueOf", rd.getName());
+        assertEquals("ClassTest.SecurityPolicyScopedTemplatesKeys", rd.getReturnType().describe());
+        assertEquals(1, rd.getNumberOfParams());
+        assertEquals("java.lang.String", rd.getParam(0).describeType());
     }
 
 }

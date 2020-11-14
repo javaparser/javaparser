@@ -1,5 +1,3 @@
-
-
 on:
   push:
     # Sequence of patterns matched against refs/tags
@@ -16,6 +14,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -25,13 +24,13 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           ## Body content doesn't yet seem to appear in the Github UI
-          body: |
-            Bug Fixes:
-            - TODO: Describe any bug fixes
-
-            Enhancements:
-            - TODO: Describe any new features or enhancements
+#          body: |
+#            Bug Fixes:
+#            - TODO: Describe any bug fixes
+#
+#            Enhancements:
+#            - TODO: Describe any new features or enhancements
           ## Option -- trigger as a draft release, followed by the addition of any key release notes and manual approval?
           ## Alternative -- replace the above body with a link to the changelog? We can always edit release after the fact to add in e.g. notes about breaking changes.
-          draft: false
+          draft: true
           prerelease: false

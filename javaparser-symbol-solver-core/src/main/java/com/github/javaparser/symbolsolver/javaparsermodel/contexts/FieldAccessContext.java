@@ -21,11 +21,24 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -33,12 +46,6 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -56,7 +63,12 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getName().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 ResolvedType typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-                return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
+                if(typeOfThis.asReferenceType().getTypeDeclaration().isPresent()) {
+                    return new SymbolSolver(typeSolver).solveSymbolInType(
+                            typeOfThis.asReferenceType().getTypeDeclaration().get(),
+                            name
+                    );
+                }
             }
         }
         return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveSymbol(name);
@@ -81,20 +93,35 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return Optional.of(new Value(ResolvedPrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME));
             }
             if (typeOfScope.isReferenceType()) {
-                if (typeOfScope.asReferenceType().getTypeDeclaration().isEnum()) {
-                    ResolvedEnumDeclaration enumDeclaration = (ResolvedEnumDeclaration)typeOfScope.asReferenceType().getTypeDeclaration();
-                    if (enumDeclaration.hasEnumConstant(name)) {
-                        return Optional.of(new Value(enumDeclaration.getEnumConstant(name).getType(), name));
-                    }
-                }
-                Optional<ResolvedType> typeUsage = typeOfScope.asReferenceType().getFieldType(name);
-                return typeUsage.map(resolvedType -> new Value(resolvedType, name));
+                return solveSymbolAsValue(name, typeOfScope.asReferenceType());
+            } else if (typeOfScope.isConstraint()) {
+                return solveSymbolAsValue(name, typeOfScope.asConstraintType().getBound().asReferenceType());
             } else {
                 return Optional.empty();
             }
         } else {
-            return getParent().solveSymbolAsValue(name);
+            return getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveSymbolAsValue(name);
         }
+    }
+    
+    /*
+     * Try to resolve the name parameter as a field of the reference type
+     */
+    private Optional<Value> solveSymbolAsValue(String name, ResolvedReferenceType type) {
+        Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.getTypeDeclaration();
+        if (optionalTypeDeclaration.isPresent()) {
+            ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
+            if (typeDeclaration.isEnum()) {
+                ResolvedEnumDeclaration enumDeclaration = (ResolvedEnumDeclaration) typeDeclaration;
+                if (enumDeclaration.hasEnumConstant(name)) {
+                    return Optional.of(new Value(enumDeclaration.getEnumConstant(name).getType(), name));
+                }
+            }
+        }
+        Optional<ResolvedType> typeUsage = type.getFieldType(name);
+        return typeUsage.map(resolvedType -> new Value(resolvedType, name));
     }
 
     public SymbolReference<ResolvedValueDeclaration> solveField(String name) {

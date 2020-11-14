@@ -25,6 +25,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -51,17 +52,25 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         SwitchStmt switchStmt = (SwitchStmt) demandParentNode(wrappedNode);
         ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
-        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isEnum()) {
-            if (type instanceof ReferenceTypeImpl) {
-                ReferenceTypeImpl typeUsageOfTypeDeclaration = (ReferenceTypeImpl) type;
-                if (typeUsageOfTypeDeclaration.getTypeDeclaration().asEnum().hasEnumConstant(name)) {
-                    return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().asEnum().getEnumConstant(name));
+        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isPresent()) {
+            ResolvedReferenceTypeDeclaration typeDeclaration = type.asReferenceType().getTypeDeclaration().get();
+            if (typeDeclaration.isEnum()) {
+                if (type instanceof ReferenceTypeImpl) {
+                    ReferenceTypeImpl referenceType = (ReferenceTypeImpl) type;
+                    if(referenceType.getTypeDeclaration().isPresent()) {
+                        ResolvedReferenceTypeDeclaration typeUsageTypeDeclaration = referenceType.getTypeDeclaration().get();
+                        if (typeUsageTypeDeclaration.asEnum().hasEnumConstant(name)) {
+                            return SymbolReference.solved(typeUsageTypeDeclaration.asEnum().getEnumConstant(name));
+                        }
+                        if (typeUsageTypeDeclaration.hasField(name)) {
+                            return SymbolReference.solved(typeUsageTypeDeclaration.getField(name));
+                        }
+                    } else {
+                        // Consider IllegalStateException or similar?
+                    }
+                } else {
+                    throw new UnsupportedOperationException();
                 }
-                if (typeUsageOfTypeDeclaration.getTypeDeclaration().hasField(name)) {
-                    return SymbolReference.solved(typeUsageOfTypeDeclaration.getTypeDeclaration().getField(name));
-                }
-            } else {
-                throw new UnsupportedOperationException();
             }
         }
 
@@ -80,11 +89,15 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
             }
         }
 
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 }

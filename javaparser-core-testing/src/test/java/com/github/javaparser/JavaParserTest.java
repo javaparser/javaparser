@@ -47,7 +47,7 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserTest {
@@ -163,9 +163,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfIntersectionType() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -177,9 +177,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfCast() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -190,9 +190,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfCastNonIntersection() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
-                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
+                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -203,9 +203,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfLambda() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -219,9 +219,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfLambdaBody() {
-        String code = "class A {" + EOL
-                + "  Object f() {" + EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+        String code = "class A {" + SYSTEM_EOL
+                + "  Object f() {" + SYSTEM_EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -307,5 +307,14 @@ class JavaParserTest {
     @Test
     void xxx(){
         YamlPrinter.print(StaticJavaParser.parse("class X{}"));
+    }
+
+    @Test
+    void issue2879() {
+        StaticJavaParser.parse(
+            "public class Test {" +
+            "    public void method(int @MyAnno ... param) {}" +
+            "}" +
+            "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
     }
 }

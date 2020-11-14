@@ -50,7 +50,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "int x = 14"  and "int y = 3"  are
+ * The declaration of a variable.<br>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.
  * <p/>The type is on all of the variable declarators because, thanks to array brackets, each variable can have a different type.
  *
@@ -87,7 +87,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
      *
      * @param name The identifier for this variable. IE. The variables name.
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
-     * is unnecessary as the <code>=</code> operator is already added.
+     * is unnecessary as the {@code =} operator is already added.
      */
     @AllFieldsConstructor
     public VariableDeclarator(Type type, SimpleName name, Expression initializer) {

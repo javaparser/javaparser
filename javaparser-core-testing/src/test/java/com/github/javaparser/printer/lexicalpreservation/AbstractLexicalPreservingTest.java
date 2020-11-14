@@ -21,33 +21,39 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
+import static com.github.javaparser.utils.TestUtils.assertEqualsString;
+import static com.github.javaparser.utils.TestUtils.readResource;
 
 import java.io.IOException;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
-import static com.github.javaparser.utils.TestUtils.readResource;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.AfterEach;
+
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
 
 public abstract class AbstractLexicalPreservingTest {
 
     protected CompilationUnit cu;
     protected Expression expression;
+    
+    @AfterEach
+    public void reset() {
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
 
     protected void considerCode(String code) {
-        cu = LexicalPreservingPrinter.setup(parse(code));
+        cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(code));
     }
 
     protected void considerExpression(String code) {
-        expression = LexicalPreservingPrinter.setup(parseExpression(code));
+        expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseExpression(code));
     }
-    
+
     protected void considerVariableDeclaration(String code) {
-        expression = LexicalPreservingPrinter.setup(parseVariableDeclarationExpr(code));
+        expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseVariableDeclarationExpr(code));
     }
 
     protected String considerExample(String resourceName) throws IOException {
@@ -63,17 +69,24 @@ public abstract class AbstractLexicalPreservingTest {
     protected void assertTransformed(String exampleName, Node node) throws IOException {
         String expectedCode = readExample(exampleName + "_expected");
         String actualCode = LexicalPreservingPrinter.print(node);
-        assertEquals(expectedCode, actualCode);
+
+        // Note that we explicitly care about line endings when handling lexical preservation.
+        assertEqualsString(expectedCode, actualCode);
     }
 
     protected void assertUnchanged(String exampleName) throws IOException {
-        String code = considerExample(exampleName + "_original");
-        assertEquals(code, LexicalPreservingPrinter.print(cu != null ? cu : expression));
+        String expectedCode = considerExample(exampleName + "_original");
+        String actualCode = LexicalPreservingPrinter.print(cu != null ? cu : expression);
+
+        // Note that we explicitly care about line endings when handling lexical preservation.
+        assertEqualsString(expectedCode, actualCode);
     }
 
     protected void assertTransformedToString(String expectedPartialCode, Node node) {
         String actualCode = LexicalPreservingPrinter.print(node);
-        assertEquals(expectedPartialCode, actualCode);
+
+        // Note that we explicitly care about line endings when handling lexical preservation.
+        assertEqualsString(expectedPartialCode, actualCode);
     }
 
 }

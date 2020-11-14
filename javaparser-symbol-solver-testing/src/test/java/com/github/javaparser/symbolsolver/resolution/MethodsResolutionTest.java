@@ -469,7 +469,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
         assertEquals(true, type.isReferenceType());
-        assertEquals(true, type.asReferenceType().getTypeDeclaration() instanceof JavaParserAnonymousClassDeclaration);
+        assertEquals(true, type.asReferenceType().getTypeDeclaration().get() instanceof JavaParserAnonymousClassDeclaration);
     }
 
     @Test
@@ -502,7 +502,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
         ReferenceTypeImpl resolvedType =
                 (ReferenceTypeImpl) JavaParserFacade.get(new ReflectionTypeSolver()).getType(stmt.getExpression());
         ClassOrInterfaceDeclaration resolvedTypeDeclaration
-                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration()).getWrappedNode();
+                = ((JavaParserClassDeclaration) resolvedType.getTypeDeclaration().get()).getWrappedNode();
 
         assertEquals(mainClass, resolvedTypeDeclaration.getParentNode().get());
     }
