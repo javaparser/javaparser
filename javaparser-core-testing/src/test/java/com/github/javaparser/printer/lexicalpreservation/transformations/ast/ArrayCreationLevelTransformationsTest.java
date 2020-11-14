@@ -31,8 +31,6 @@ import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservi
 import com.github.javaparser.utils.Utils;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 /**
  * Transforming ArrayCreationLevel and verifying the LexicalPreservation works as expected.
  */
@@ -73,7 +71,7 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     void addingAnnotation() {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()"+ Utils.EOL+"[]", it);
+        assertTransformedToString("@myAnno()"+ Utils.SYSTEM_EOL +"[]", it);
     }
 
     @Test

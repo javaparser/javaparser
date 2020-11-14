@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.TestUtils.readTextResource;
 
 class YamlPrinterTest {
@@ -41,7 +41,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = parseExpression("x(1,1)");
         String output = yamlPrinter.output(expression);
-        assertEqualsNoEol(read("yamlWithType.yaml"), output);
+        assertEqualsStringIgnoringEol(read("yamlWithType.yaml"), output);
     }
 
     @Test
@@ -49,7 +49,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(false);
         Expression expression = parseExpression("1+1");
         String output = yamlPrinter.output(expression);
-        assertEqualsNoEol(read("yamlWithoutType.yaml"), output);
+        assertEqualsStringIgnoringEol(read("yamlWithoutType.yaml"), output);
     }
 
     @Test
@@ -57,7 +57,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = parseExpression("\"a\\\\: b\"");
         String output = yamlPrinter.output(expression);
-        assertEqualsNoEol(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
+        assertEqualsStringIgnoringEol(read("yamlWithColonFollowedBySpaceInValue.yaml"), output);
     }
 
     @Test
@@ -65,7 +65,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = parseExpression("\"a\\\\:\\\\nb\"");
         String output = yamlPrinter.output(expression);
-        assertEqualsNoEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
+        assertEqualsStringIgnoringEol(read("yamlWithColonFollowedByLineSeparatorInValue.yaml"), output);
     }
 
     @Test
@@ -78,6 +78,6 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         CompilationUnit computationUnit = parse(code);
         String output = yamlPrinter.output(computationUnit);
-        assertEqualsNoEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
+        assertEqualsStringIgnoringEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
     }
 }

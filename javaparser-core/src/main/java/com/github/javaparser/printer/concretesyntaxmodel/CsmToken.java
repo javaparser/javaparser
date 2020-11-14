@@ -22,13 +22,12 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.TokenTypes;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.LineSeparator;
 
-import static com.github.javaparser.TokenTypes.isEndOfLineToken;
-import static com.github.javaparser.TokenTypes.isSpaceOrTab;
+import static com.github.javaparser.TokenTypes.*;
 
 public class CsmToken implements CsmElement {
     private final int tokenType;
@@ -56,9 +55,13 @@ public class CsmToken implements CsmElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
+
+        // Replace "raw" values with escaped textual counterparts (e.g. newlines {@code \r\n})
+        //  and "placeholder" values ({@code <SPACE>}) with their textual counterparts
         if (isEndOfLineToken(tokenType)) {
-            content = Utils.EOL;
-        } else if (isSpaceOrTab(tokenType)) {
+            // Use the unescaped version
+            content = LineSeparator.lookupEscaped(this.content).get().asRawString();
+        } else if (isWhitespaceButNotEndOfLine(tokenType)) {
             content = " ";
         }
     }

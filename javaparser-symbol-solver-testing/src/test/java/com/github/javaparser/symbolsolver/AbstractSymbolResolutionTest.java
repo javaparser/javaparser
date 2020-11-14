@@ -21,13 +21,99 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.utils.CodeGenerationUtils;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.AfterEach;
+
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.utils.CodeGenerationUtils;
+
 public abstract class AbstractSymbolResolutionTest {
+
+    @AfterEach
+    public void reset() {
+        // reset configuration to not potentially disturb others tests.
+        // So we have to set specific configuration between each test.
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
+    
+    /**
+     * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
+     * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+     */
+    @Deprecated
+    protected enum TestJdk {
+        JDK8(8),
+        JDK9(9),
+        JDK10(10),
+        JDK11(11),
+        JDK12(12),
+        JDK13(13),
+        JDK14(14),
+        JDK15(15);
+
+        private final Integer major;
+
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
+        TestJdk(Integer major) {
+            this.major = major;
+        }
+
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
+        public int getMajorVersion() {
+            return this.major;
+        }
+
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
+        public static TestJdk getCurrentHostJdk() {
+            String javaVersion = System.getProperty("java.version");
+
+            // JavaParser explicitly requires a minimum of JDK8 to build.
+            if("8".equals(javaVersion) || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
+                return JDK8;
+            } else if("9".equals(javaVersion) || javaVersion.startsWith("9.")) {
+                return JDK9;
+            } else if("10".equals(javaVersion) || javaVersion.startsWith("10.")) {
+                return JDK10;
+            } else if("11".equals(javaVersion) || javaVersion.startsWith("11.")) {
+                return JDK11;
+            } else if("12".equals(javaVersion) || javaVersion.startsWith("12.")) {
+                return JDK12;
+            } else if("13".equals(javaVersion) || javaVersion.startsWith("13.")) {
+                return JDK13;
+            } else if("14".equals(javaVersion) || javaVersion.startsWith("14.")) {
+                return JDK14;
+            } else if("15".equals(javaVersion) || javaVersion.startsWith("15.")) {
+                return JDK15;
+            }
+
+            throw new IllegalStateException("Unable to determine the current version of java running");
+        }
+
+        /**
+         * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
+         */
+        @Deprecated
+        @Override
+        public String toString() {
+            return "TestJdk{" +
+                    "System.getProperty(\"java.version\")=" + System.getProperty("java.version") +
+                    ",major=" + major +
+                    '}';
+        }
+    }
 
     protected static Path adaptPath(Path path) {
         if (Files.exists(path)) {

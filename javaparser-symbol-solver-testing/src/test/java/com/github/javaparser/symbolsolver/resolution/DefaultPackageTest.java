@@ -107,7 +107,7 @@ class DefaultPackageTest {
         }
 
         @Override
-        public ResolvedReferenceType getSuperClass() {
+        public Optional<ResolvedReferenceType> getSuperClass() {
             throw new UnsupportedOperationException();
         }
 

@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -115,7 +115,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingAnnotation() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()" + EOL + "int foo();", it);
+        assertTransformedToString("@myAnno()" + SYSTEM_EOL + "int foo();", it);
     }
 
     @Test
@@ -123,7 +123,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         it.addAnnotation("myAnno2");
-        assertTransformedToString("@myAnno()" + EOL + "@myAnno2()" + EOL + "int foo();", it);
+        assertTransformedToString("@myAnno()" + SYSTEM_EOL + "@myAnno2()" + SYSTEM_EOL + "int foo();", it);
     }
 
     @Test
@@ -135,7 +135,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void removingAnnotationOnPrevLine() {
-        AnnotationMemberDeclaration it = consider("@myAnno" + EOL + "int foo();");
+        AnnotationMemberDeclaration it = consider("@myAnno" + SYSTEM_EOL + "int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
@@ -153,7 +153,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
-        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + EOL +
+        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + SYSTEM_EOL +
                 "int foo(); }", it.getParentNode().get());
     }
 

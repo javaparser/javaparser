@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import java.io.InputStream;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -28,8 +30,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.io.InputStream;
 
 /**
  * @author Federico Tomassetti

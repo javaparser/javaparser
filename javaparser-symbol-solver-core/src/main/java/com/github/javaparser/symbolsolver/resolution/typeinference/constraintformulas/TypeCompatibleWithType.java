@@ -85,7 +85,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
         //    form G<...> that is a supertype of S, but the raw type G is a supertype of S, then the constraint reduces
         //    to true.
 
-        if (t.isReferenceType() && !t.asReferenceType().getTypeDeclaration().getTypeParameters().isEmpty()) {
+        if (t.isReferenceType() && t.asReferenceType().getTypeDeclaration().isPresent() && !t.asReferenceType().getTypeDeclaration().get().getTypeParameters().isEmpty()) {
             // FIXME I really cannot understand what the specification means...
 
             // there exists a type of the form G<...> that is a supertype of S?

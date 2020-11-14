@@ -1,4 +1,119 @@
-Next Release (3.15.19)
+Next Release (Version 3.16.4)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/178?closed=1)
+
+
+Version 3.16.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/177?closed=1)
+* ADDED: Created MANY test cases for older issues resolved but not directly linked/closed.
+    (PRs
+    [#2838](https://github.com/javaparser/javaparser/pull/2838), 
+    [#2842](https://github.com/javaparser/javaparser/pull/2842), 
+    [#2843](https://github.com/javaparser/javaparser/pull/2843), 
+    [#2852](https://github.com/javaparser/javaparser/pull/2852), 
+    [#2853](https://github.com/javaparser/javaparser/pull/2853), 
+    [#2854](https://github.com/javaparser/javaparser/pull/2854), 
+    [#2855](https://github.com/javaparser/javaparser/pull/2855), 
+    [#2867](https://github.com/javaparser/javaparser/pull/2867), 
+    [#2868](https://github.com/javaparser/javaparser/pull/2868), 
+    [#2862](https://github.com/javaparser/javaparser/pull/2862), 
+    [#2873](https://github.com/javaparser/javaparser/pull/2873), 
+    by [@jlerbsc](https://github.com/jlerbsc)
+    )
+* ADDED: Added helper method to `ResolvedPrimitiveType.java` which checks if it is a boolean
+    (PR [#2856](https://github.com/javaparser/javaparser/pull/2856), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED: Added helper method to `ResolvedPrimitiveType.java` which returns all numeric types
+    (PR [#2858](https://github.com/javaparser/javaparser/pull/2858), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED/CHANGED: Minor refactoring - formatting code and adding convenient methods to `TypeHelper` and `ResolvedPrimitveType`
+    (PR [#2860](https://github.com/javaparser/javaparser/pull/2860), by [@jlerbsc](https://github.com/jlerbsc))
+* ADDED: Allow the symbol resolver for a `SymbolSolverCollectionStrategy` to be set via the given parser configuration
+    (PR [#2864](https://github.com/javaparser/javaparser/pull/2864), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: `MethodResolutionLogic.findMostApplicable` not return correct symbol reference when resolving overloaded method
+    (PR [#2866](https://github.com/javaparser/javaparser/pull/2866), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Updated `AbstractSymbolResolutionTest.java` with better `@BeforeEach`/`@AfterEach`  
+    (PR [#2871](https://github.com/javaparser/javaparser/pull/2871), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: `TypeResolver` fails on method with args to static imported fields
+    (PR [#2872](https://github.com/javaparser/javaparser/pull/2872), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Resolution error for non-generic constructor if generic constructor declared
+    (PR [#2874](https://github.com/javaparser/javaparser/pull/2874), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Fails to calculate the type of a generic return type constructed from a Primitive type
+    (PR [#2875](https://github.com/javaparser/javaparser/pull/2875), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Can't get qualified signature of a resolved method inside a Constant Enum declaration 
+    (PR [#2876](https://github.com/javaparser/javaparser/pull/2876), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Constructor resolution error for overloaded variadic constructor
+    (PR [#2877](https://github.com/javaparser/javaparser/pull/2877), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Unable to find the constructor declaration when the argument list contains multiple `Optional.empty()` for different `Optional<T>`
+    (PR [#2880](https://github.com/javaparser/javaparser/pull/2880), by [@jlerbsc](https://github.com/jlerbsc))
+* FIXED: Fix issue Solving symbol as value in the case where the scope is a constraint
+    (PR [#2883](https://github.com/javaparser/javaparser/pull/2883), by [@jlerbsc](https://github.com/jlerbsc))
+
+
+
+Version 3.16.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/176?closed=1)
+* FIXED: Enhanced the handling of line separator, introducing an enum `LineSeparator` that can be used.
+    (PR [#2685](https://github.com/javaparser/javaparser/pull/2685), by [@MysterAitch](https://github.com/MysterAitch))
+* FIXED: The generated metamodel classes now have the `@Generated` annotation 
+    (PR [#2706](https://github.com/javaparser/javaparser/pull/2706), by [@MysterAitch](https://github.com/MysterAitch))
+* various other bugfixes and enhancements
+
+Version 3.16.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
+* FIXED: Fixed typo
+    (PR [#2697](https://github.com/javaparser/javaparser/pull/2697), by [@hfreeb](https://github.com/hfreeb))
+
+Version 3.16.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/174?closed=1)
+
+There are two breaking changes within this release. 
+If you would like assistance with upgrading, get in touch.
+
+* FIXED: Edits to the value of a string value are now correctly handled for use with Lexical Preservation 
+    (PR [#2646](https://github.com/javaparser/javaparser/pull/2646), by [@lemoncurry](https://github.com/lemoncurry))
+* FIXED: Edits to the value of other literal values also now handled 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+* BREAKING CHANGE: Tokens relating to literal values now have the category of `JavaToken.Category.LITERAL` (previously `JavaToken.Category.KEYWORD`) 
+    (PR [#2679](https://github.com/javaparser/javaparser/pull/2679), by [@MysterAitch](https://github.com/MysterAitch))
+* FIXED: Add symbol solver support for variadic parameters given zero or more than one argument, and when an array is given
+    (PR [#2675](https://github.com/javaparser/javaparser/pull/2675), by [@hfreeb](https://github.com/hfreeb))
+* CHANGED: Added the keyword `synchronized` to `JavaParserFacade#get`. This is specifically in response to #2668 - JavaParser is not otherwise threadsafe.  
+    (PR [#2694](https://github.com/javaparser/javaparser/pull/2694), by [@MysterAitch](https://github.com/MysterAitch))
+* BREAKING CHANGE: The following methods now return `Optional<>` _(as do all classes which implement/extend them)_:
+    `ResolvedClassDeclaration#getSuperClass()`, 
+    `ResolvedReferenceType#getTypeDeclaration()`.  
+    _Note that Converting to use optional should be as simple as adding `.get()`, given that any cases where returning `Optional.empty()` causes problems would  have also previously triggered a `NullPointerException`. 
+    You might also use `.orElseThrow()`._  
+    (PR [#2693](https://github.com/javaparser/javaparser/pull/2693), by [@MysterAitch](https://github.com/MysterAitch))
+* CHANGED: Added some temporary logic to allow tests to use slightly different expected results based on the version of java used _(e.g. `java.lang.Object.registerNatives()` removed in JDK14)_  
+    (PR [#2637](https://github.com/javaparser/javaparser/pull/2637), by [@EFregnan](https://github.com/EFregnan))
+* FIXED: Fix resolving overloaded methods of external types  
+    (PR [#2687](https://github.com/javaparser/javaparser/pull/2687), by [@maartenc](https://github.com/maartenc))
+* FIXED: Fix resolving method references on expressions other than ReferenceType::methodname  
+    (PR [#2674](https://github.com/javaparser/javaparser/pull/2674), by [@maartenc](https://github.com/maartenc))
+
+
+
+Version 3.15.22
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/173?closed=1)
+* REVERT: Rollback of upgrade to `ph-javacc-maven-plugin` from v4.1.3 to v4.1.2 
+    _(this undoes the transitive dependency update `parser-generator-cc` from v1.1.2 to v1.1.1, which appears to have isuse with handling tokens longer than the buffer length)_  
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* ADDED: Support resolving an enum's `valueOf` method
+    ([#2652](https://github.com/javaparser/javaparser/pull/2652))
+* FIXED: Fixed build warning -- bnd-maven-plugin flagging missing id 
+    ([#2605](https://github.com/javaparser/javaparser/pull/2605))
+* FIXED: Fixed cases where nodes added after a trailing comment would incorrectly be added to the same line (thus be part of the comment)
+    ([#2646](https://github.com/javaparser/javaparser/pull/2646))
+* FIXED: Fixed resolving overloaded static method references (e.g. `String::valueOf` in a stream map/filter)
+    ([#2662](https://github.com/javaparser/javaparser/pull/2662))
+
+
+Version 3.15.21
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
 
@@ -16,6 +131,14 @@ Next Release (3.15.19)
 * FIXED: The collection strategies now correctly take into account the parser configuration that is passed in via the constructor.
     ([#2619](https://github.com/javaparser/javaparser/pull/2619))
 
+
+Version 3.15.20
+------------------
+_skipped_
+
+Version 3.15.19
+------------------
+_skipped_
 
 Version 3.15.18
 ------------------

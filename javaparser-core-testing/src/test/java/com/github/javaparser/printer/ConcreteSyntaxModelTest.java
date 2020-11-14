@@ -26,7 +26,7 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConcreteSyntaxModelTest {
@@ -56,42 +56,42 @@ class ConcreteSyntaxModelTest {
     @Test
     void printSimplestClass() {
         Node node = parse("class A {}");
-        assertEquals("class A {" + EOL +
-                "}" + EOL, print(node));
+        assertEquals("class A {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL, print(node));
     }
 
     @Test
     void printAClassWithField() {
         Node node = parse("class A { int a; }");
-        assertEquals("class A {" + EOL
-                + EOL +
-                "    int a;" + EOL +
-                "}" + EOL, print(node));
+        assertEquals("class A {" + SYSTEM_EOL
+                + SYSTEM_EOL +
+                "    int a;" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL, print(node));
     }
 
     @Test
     void printParameters() {
         Node node = parseBodyDeclaration("int x(int y, int z) {}");
-        assertEquals("int x(int y, int z) {" + EOL + "}", print(node));
+        assertEquals("int x(int y, int z) {" + SYSTEM_EOL + "}", print(node));
     }
 
     @Test
     void printReceiverParameter() {
         Node node = parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
-        assertEquals("int x(X A.B.this, int y, int z) {" + EOL + "}", print(node));
+        assertEquals("int x(X A.B.this, int y, int z) {" + SYSTEM_EOL + "}", print(node));
     }
 
     @Test
     void printAnEmptyInterface() {
         Node node = parse("interface A {}");
-        assertEquals("interface A {" + EOL +
-                "}" + EOL, print(node));
+        assertEquals("interface A {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL, print(node));
     }
 
     @Test
     void printAnEmptyInterfaceWithModifier() {
         Node node = parse("public interface A {}");
-        assertEquals("public interface A {" + EOL +
-                "}" + EOL, print(node));
+        assertEquals("public interface A {" + SYSTEM_EOL +
+                "}" + SYSTEM_EOL, print(node));
     }
 }

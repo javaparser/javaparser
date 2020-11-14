@@ -21,18 +21,28 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
 
 /**
  * The term "type" is used loosely in this chapter to include type-like syntax that contains inference variables.
@@ -75,6 +85,13 @@ public class TypeHelper {
             return isProperType(type.asArrayType().getComponentType());
         }
         throw new UnsupportedOperationException(type.toString());
+    }
+    
+    /*
+     * Returns true if the ResolvedType is a numeric
+     */
+    public static boolean isNumericType(ResolvedType type) {
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(type));
     }
 
     /**
@@ -154,22 +171,31 @@ public class TypeHelper {
         return t.isAssignableBy(s);
     }
 
-    private static boolean isUnboxable(ResolvedType referenceType) {
+    public static boolean isUnboxable(ResolvedType referenceType) {
         if (!referenceType.isReferenceType()) {
             return false;
         }
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
     }
-
-    private static ResolvedType toUnboxedType(ResolvedReferenceType referenceType) {
-        throw new UnsupportedOperationException(referenceType.toString());
+    
+    /*
+     * Returns true if the reference type can be unboxed to the primitive type
+     * For example : Integer to int
+     */
+    public static boolean isUnboxableTo(ResolvedPrimitiveType primitiveType, ResolvedReferenceType referenceType) {
+        return primitiveType.getBoxTypeQName().equals(referenceType.asReferenceType().describe());
     }
 
-    private static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
+    public static ResolvedPrimitiveType toUnboxedType(ResolvedReferenceType referenceType) {
+        // perhaps we have to verify that the referenceType is unboxable ?
+        return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst().get();
+    }
+
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
     }
 
-    private static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
+    public static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
         Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName())).findFirst();
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
@@ -177,7 +203,7 @@ public class TypeHelper {
         throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s="+s+", t=" + t);
     }
 
-    private static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
+    public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
         if (s.isPrimitive() && t.isPrimitive()) {
             return s.isAssignableBy(t);
         } else {
@@ -191,7 +217,7 @@ public class TypeHelper {
 
     public static Set<InferenceVariable> usedInferenceVariables(ResolvedType type) {
         if (isInferenceVariable(type)) {
-            return new HashSet<>(Arrays.asList((InferenceVariable)type));
+            return new HashSet<>(Arrays.asList((InferenceVariable) type));
         }
         if (type.isReferenceType()) {
             Set<InferenceVariable> res = new HashSet<>();
@@ -207,7 +233,7 @@ public class TypeHelper {
      * See JLS 4.10.4. Least Upper Bound.
      */
     public static ResolvedType leastUpperBound(Set<ResolvedType> types) {
-        if (types.size() == 0) {
+        if (types.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
@@ -342,14 +368,16 @@ public class TypeHelper {
      * See JLS 9.9
      */
     private static ResolvedReferenceType nonWildcardParameterizationOf(ResolvedReferenceType originalType, TypeSolver typeSolver) {
+        ResolvedReferenceTypeDeclaration originalTypeDeclaration = originalType.getTypeDeclaration().orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+
         List<ResolvedType> TIs = new LinkedList<>();
         List<ResolvedType> AIs = originalType.typeParametersValues();
-        List<ResolvedTypeParameterDeclaration> TPs = originalType.getTypeDeclaration().getTypeParameters();
+        List<ResolvedTypeParameterDeclaration> TPs = originalTypeDeclaration.getTypeParameters();
 
         // Let P1...Pn be the type parameters of I with corresponding bounds B1...Bn. For all i (1 ≤ i ≤ n),
         // Ti is derived according to the form of Ai:
 
-        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
 
         for (int i=0;i<AIs.size();i++) {
             ResolvedType Ai = AIs.get(i);
@@ -364,7 +392,7 @@ public class TypeHelper {
             // - If Ai is a wildcard, and the corresponding type parameter's bound, Bi, mentions one of P1...Pn, then
             //   Ti is undefined and there is no function type.
 
-            if (Ti == null && Ai.isWildcard() && Ai.asWildcard().mention(originalType.getTypeDeclaration().getTypeParameters())) {
+            if (Ti == null && Ai.isWildcard() && Ai.asWildcard().mention(originalTypeDeclaration.getTypeParameters())) {
                 throw new IllegalArgumentException();
             }
 
@@ -393,13 +421,15 @@ public class TypeHelper {
                     Ti = Ai.asWildcard().getBoundedType();
                 }
 
-                else throw new RuntimeException("This should not happen");
+                else {
+                    throw new RuntimeException("This should not happen");
+                }
             }
 
             TIs.add(Ti);
         }
 
-        return new ReferenceTypeImpl(originalType.getTypeDeclaration(), TIs, typeSolver);
+        return new ReferenceTypeImpl(originalTypeDeclaration, TIs, typeSolver);
     }
 
     public static MethodType getFunctionType(ResolvedType type) {
@@ -415,7 +445,7 @@ public class TypeHelper {
      * See JLS 5.1.10. Capture Conversion.
      */
     public static ResolvedType glb(Set<ResolvedType> types) {
-        if (types.size() == 0) {
+        if (types.isEmpty()) {
             throw new IllegalArgumentException();
         }
         if (types.size() == 1) {
