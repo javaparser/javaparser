@@ -372,7 +372,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // Attempt to resolve locally in Compilation unit
             Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
             if (cu.isPresent()) {
+                // Try to get a top level class declaration by its name
                 Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
+                if (classByName.isPresent()) {
+                    return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
+                }
+                // Try to resolve locally from inner class
+                classByName = getLocalDeclarationFromClassname(cu.get(), className);
                 if (classByName.isPresent()) {
                     return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
                 }
@@ -381,6 +387,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         }
         return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
+    }
+    
+    private Optional<ClassOrInterfaceDeclaration> getLocalDeclarationFromClassname(CompilationUnit cu, String className) {
+        return cu.findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid->cid.getNameAsString().equals(className)).findFirst();
     }
 
     @Override
