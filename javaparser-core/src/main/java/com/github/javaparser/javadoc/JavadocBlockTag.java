@@ -34,9 +34,9 @@ import static com.github.javaparser.utils.Utils.screamingToCamelCase;
  * Typically they are found at the end of Javadoc comments.
  * <p>
  * Examples:
- * <code>@see AnotherClass</code>
- * <code>@since v0.0.1</code>
- * <code>@author Jim O'Java</code>
+ * {@code @see AnotherClass}
+ * {@code @since v0.0.1}
+ * {@code @author Jim O'Java}
  */
 public class JavadocBlockTag {
 

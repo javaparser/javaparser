@@ -21,18 +21,17 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * @author Federico Tomassetti
@@ -88,12 +87,12 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
-     * This list does not contains duplicates with the exacting same type parameters.
+     * This list does not contains duplicates with the exact same type parameters.
      */
     default List<ResolvedReferenceType> getAllAncestors() {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
+        if (!isJavaLangObject()) {
             for (ResolvedReferenceType ancestor : getAncestors()) {
                 ancestors.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
@@ -122,7 +121,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Bar I should get a FieldDeclaration with type String.
      */
     default ResolvedFieldDeclaration getField(String name) {
-        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
         } else {
@@ -247,7 +248,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream().anyMatch(it -> it.asReferenceType().getTypeDeclaration().hasDirectlyAnnotation(qualifiedName));
+        return getAllAncestors().stream()
+                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                .anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
     }
 
     /**
@@ -274,4 +277,30 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     }
 
     List<ResolvedConstructorDeclaration> getConstructors();
+
+
+    /**
+     * We don't make this _ex_plicit in the data representation because that would affect codegen
+     * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
+     *
+     * @return true, if this represents {@code java.lang.Object}
+     * @see ResolvedReferenceType#isJavaLangObject()
+     * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
+     */
+    default boolean isJavaLangObject() {
+        return this.isClass()
+                && !isAnonymousClass()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+    }
+
+    /**
+     * @return true, if this represents {@code java.lang.Enum}
+     * @see ResolvedReferenceType#isJavaLangEnum()
+     */
+    default boolean isJavaLangEnum() {
+        return this.isEnum()
+                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+    }
+
 }

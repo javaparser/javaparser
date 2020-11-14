@@ -55,7 +55,9 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbol(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     @Override
@@ -68,13 +70,17 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent().solveSymbolAsValue(name);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbolAsValue(name);
     }
 
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent().solveMethod(name, argumentsTypes, false);
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveMethod(name, argumentsTypes, false);
     }
 
     @Override

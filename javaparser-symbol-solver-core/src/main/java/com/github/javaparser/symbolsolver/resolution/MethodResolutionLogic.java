@@ -21,20 +21,34 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.resolution.MethodAmbiguityException;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.resolution.MethodAmbiguityException;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 /**
  * @author Federico Tomassetti
@@ -66,70 +80,130 @@ public class MethodResolutionLogic {
         return isApplicable(method, name, argumentsTypes, typeSolver, false);
     }
 
-    private static boolean isApplicable(ResolvedMethodDeclaration method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
-        if (!method.getName().equals(name)) {
+    /**
+     * Note the specific naming here -- parameters are part of the method declaration,
+     * while arguments are the values passed when calling a method.
+     * Note that "needle" refers to that value being used as a search/query term to match against.
+     *
+     * @return true, if the given ResolvedMethodDeclaration matches the given name/types (normally obtained from a MethodUsage)
+     *
+     * @see {@link MethodResolutionLogic#isApplicable(MethodUsage, String, List, TypeSolver)}
+     */
+    private static boolean isApplicable(ResolvedMethodDeclaration methodDeclaration, String needleName, List<ResolvedType> needleArgumentTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
+        if (!methodDeclaration.getName().equals(needleName)) {
             return false;
         }
-        if (method.hasVariadicParameter()) {
-            int pos = method.getNumberOfParams() - 1;
-            if (method.getNumberOfParams() == argumentsTypes.size()) {
-                // check if the last value is directly assignable as an array
-                ResolvedType expectedType = method.getLastParam().getType();
-                ResolvedType actualType = argumentsTypes.get(pos);
-                if (!expectedType.isAssignableBy(actualType)) {
-                    for (ResolvedTypeParameterDeclaration tp : method.getTypeParameters()) {
-                        expectedType = replaceTypeParam(expectedType, tp, typeSolver);
+
+        // The index of the final method parameter (on the method declaration).
+        int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
+        int lastMethodParameterIndex = Math.max(0, countOfMethodParametersDeclared - 1);
+
+        // The index of the final argument passed (on the method usage).
+        int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
+        int lastNeedleArgumentIndex = Math.max(0, countOfNeedleArgumentsPassed - 1);
+
+        boolean methodIsDeclaredWithVariadicParameter = methodDeclaration.hasVariadicParameter();
+
+        if (!methodIsDeclaredWithVariadicParameter && (countOfNeedleArgumentsPassed != countOfMethodParametersDeclared)) {
+            // If it is not variadic, and the number of parameters/arguments are unequal -- this is not a match.
+            return false;
+        }
+
+        if (methodIsDeclaredWithVariadicParameter) {
+            // If the method declaration we're considering has a variadic parameter,
+            // attempt to convert the given list of arguments to fit this pattern
+            // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
+
+            ResolvedType expectedVariadicParameterType = methodDeclaration.getLastParam().getType();
+            for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
+                expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
+            }
+
+            if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
+                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+                return false;
+            } else if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+                // If it is variadic and we are short of **exactly one** parameter, this is a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+
+                // thus group the "empty" value into an empty array...
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+            } else if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
+                // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
+                // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
+                for(int variadicArgumentIndex = countOfMethodParametersDeclared; variadicArgumentIndex < countOfNeedleArgumentsPassed; variadicArgumentIndex++) {
+                    ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
+                    boolean argumentIsAssignableToVariadicComponentType = expectedVariadicParameterType.asArrayType().getComponentType().isAssignableBy(currentArgumentType);
+                    if(!argumentIsAssignableToVariadicComponentType) {
+                        // If any of the arguments are not assignable to the expected variadic type, this is not a match.
+                        return false;
                     }
-                    if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
-                            argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
-                        } else {
-                            argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
-                        }
-                    }
-                } // else it is already assignable, nothing to do
-            } else {
-                if (pos > argumentsTypes.size()) {
-                    return false;
                 }
-                argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+            } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
+                ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
+                boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
+                if(finalArgumentIsArray) {
+                    // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
+                    // no need to do anything
+//                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
+                } else {
+                    // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
+                    needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+                }
+            } else {
+                // Should be unreachable.
             }
         }
 
-        if (method.getNumberOfParams() != argumentsTypes.size()) {
+
+        // The index of the final argument passed (on the method usage).
+        int countOfNeedleArgumentsPassedAfterGrouping = needleArgumentTypes.size();
+        int lastNeedleArgumentIndexAfterGrouping = Math.max(0, countOfNeedleArgumentsPassed - 1);
+
+        // If variadic parameters are possible then they will have been "grouped" into a single argument.
+        // At this point, therefore, the number of arguments must be equal -- if they're not, then there is no match.
+        if (countOfNeedleArgumentsPassedAfterGrouping != countOfMethodParametersDeclared) {
             return false;
         }
+
+
         Map<String, ResolvedType> matchedParameters = new HashMap<>();
         boolean needForWildCardTolerance = false;
-        for (int i = 0; i < method.getNumberOfParams(); i++) {
-            ResolvedType expectedType = method.getParam(i).getType();
-            ResolvedType actualType = argumentsTypes.get(i);
-            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
-                matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
+        for (int i = 0; i < countOfMethodParametersDeclared; i++) {
+            ResolvedType expectedDeclaredType = methodDeclaration.getParam(i).getType();
+            ResolvedType actualArgumentType = needleArgumentTypes.get(i);
+            if ((expectedDeclaredType.isTypeVariable() && !(expectedDeclaredType.isWildcard())) && expectedDeclaredType.asTypeParameter().declaredOnMethod()) {
+                matchedParameters.put(expectedDeclaredType.asTypeParameter().getName(), actualArgumentType);
                 continue;
             }
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
-                    (method.getParam(i).isVariadic() && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
-            if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
+
+            boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
+                    (methodDeclaration.getParam(i).isVariadic() && new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType));
+
+            if (!isAssignableWithoutSubstitution && expectedDeclaredType.isReferenceType() && actualArgumentType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
-                        expectedType.asReferenceType(),
-                        actualType.asReferenceType(),
+                        expectedDeclaredType.asReferenceType(),
+                        actualArgumentType.asReferenceType(),
                         matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
-                List<ResolvedTypeParameterDeclaration> typeParameters = method.getTypeParameters();
-                typeParameters.addAll(method.declaringType().getTypeParameters());
+                List<ResolvedTypeParameterDeclaration> typeParameters = methodDeclaration.getTypeParameters();
+                typeParameters.addAll(methodDeclaration.declaringType().getTypeParameters());
                 for (ResolvedTypeParameterDeclaration tp : typeParameters) {
-                    expectedType = replaceTypeParam(expectedType, tp, typeSolver);
+                    expectedDeclaredType = replaceTypeParam(expectedDeclaredType, tp, typeSolver);
                 }
 
-                if (!expectedType.isAssignableBy(actualType)) {
-                    if (actualType.isWildcard() && withWildcardTolerance && !expectedType.isPrimitive()) {
+                if (!expectedDeclaredType.isAssignableBy(actualArgumentType)) {
+                    if (actualArgumentType.isWildcard() && withWildcardTolerance && !expectedDeclaredType.isPrimitive()) {
                         needForWildCardTolerance = true;
                         continue;
                     }
-                    if (method.hasVariadicParameter() && i == method.getNumberOfParams() - 1) {
-                        if (new ResolvedArrayType(expectedType).isAssignableBy(actualType)) {
+                    if (methodIsDeclaredWithVariadicParameter && i == countOfMethodParametersDeclared - 1) {
+                        if (new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType)) {
                             continue;
                         }
                     }
@@ -146,6 +220,9 @@ public class MethodResolutionLogic {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
         } else if (expected.isTypeVariable()) {
             matchedParameters.put(expected.asTypeParameter().getName(), actual);
+            return true;
+        } else if (expected.isArray()) {
+            matchedParameters.put(expected.asArrayType().getComponentType().toString(), actual);
             return true;
         } else {
             throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
@@ -186,8 +263,9 @@ public class MethodResolutionLogic {
             if (expectedParam.isReferenceType() && actualParam.isReferenceType()) {
                 ResolvedReferenceType r1 = expectedParam.asReferenceType();
                 ResolvedReferenceType r2 = actualParam.asReferenceType();
-
-                return isAssignableMatchTypeParametersMatchingQName(r1, r2, matchedParameters);
+                // we can have r1=A and r2=A.B (with B extends A and B is an inner class of A)
+                // in this case we want to verify expected parameter from the actual parameter ancestors 
+                return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
             }
 
             if (expectedParam.isTypeVariable()) {
@@ -258,35 +336,86 @@ public class MethodResolutionLogic {
         }
     }
 
-    public static boolean isApplicable(MethodUsage method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        if (!method.getName().equals(name)) {
+    /**
+     * Note the specific naming here -- parameters are part of the method declaration,
+     * while arguments are the values passed when calling a method.
+     * Note that "needle" refers to that value being used as a search/query term to match against.
+     *
+     * @return true, if the given MethodUsage matches the given name/types (normally obtained from a ResolvedMethodDeclaration)
+     *
+     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)}  }
+     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver, boolean)}
+     */
+    public static boolean isApplicable(MethodUsage methodUsage, String needleName, List<ResolvedType> needleParameterTypes, TypeSolver typeSolver) {
+        if (!methodUsage.getName().equals(needleName)) {
             return false;
         }
-        // TODO Consider varargs
-        if (method.getNoParams() != argumentsTypes.size()) {
+
+        // The index of the final method parameter (on the method declaration).
+        int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
+        int lastMethodUsageArgumentIndex = Math.max(0, countOfMethodUsageArgumentsPassed - 1);
+
+        // The index of the final argument passed (on the method usage).
+        int needleParameterCount = needleParameterTypes.size();
+        int lastNeedleParameterIndex = Math.max(0, needleParameterCount - 1);
+
+        // TODO: Does the method usage have a declaration at this point..?
+        boolean methodIsDeclaredWithVariadicParameter = methodUsage.getDeclaration().hasVariadicParameter();
+
+        // If the counts do not match and the method is not variadic, this is not a match.
+        if (!methodIsDeclaredWithVariadicParameter && !(needleParameterCount == countOfMethodUsageArgumentsPassed)) {
             return false;
         }
-        for (int i = 0; i < method.getNoParams(); i++) {
-            ResolvedType expectedType = method.getParamType(i);
-            ResolvedType expectedTypeWithoutSubstitutions = expectedType;
-            ResolvedType expectedTypeWithInference = method.getParamType(i);
-            ResolvedType actualType = argumentsTypes.get(i);
 
-            List<ResolvedTypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
-            typeParameters.addAll(method.declaringType().getTypeParameters());
+        // If the counts do not match and we have provided too few arguments, this is not a match. Note that variadic parameters
+        // allow you to omit the vararg, which would allow a difference of one, but a difference in count of 2 or more is not a match.
+        if (!(needleParameterCount == countOfMethodUsageArgumentsPassed) && needleParameterCount < lastMethodUsageArgumentIndex) {
+            return false;
+        }
 
-            if (expectedType.describe().equals(actualType.describe())) {
-                return true;
+        // Iterate over the arguments given to the method, and compare their types against the given method's declared parameter types
+        for (int i = 0; i < needleParameterCount; i++) {
+            ResolvedType actualArgumentType = needleParameterTypes.get(i);
+
+            ResolvedType expectedArgumentType;
+            boolean reachedVariadicParam = methodIsDeclaredWithVariadicParameter && i >= lastMethodUsageArgumentIndex;
+            if (!reachedVariadicParam) {
+                // Not yet reached the variadic parameters -- the expected type is just whatever is at that position.
+                expectedArgumentType = methodUsage.getParamType(i);
+            } else {
+                // We have reached the variadic parameters -- the expected type is the type of the last declared parameter.
+                expectedArgumentType = methodUsage.getParamType(lastMethodUsageArgumentIndex);
+                // Note that the given variadic value might be an array - if so, use the array's component type rather.
+                // This is only valid if ONE argument has been given to the vararg parameter.
+                // Example: {@code void test(String... s) {}} and {@code test(stringArray)} -- {@code String... is assignable by stringArray}
+                // Example: {@code void test(String[]... s) {}} and {@code test(stringArrayArray)} -- {@code String[]... is assignable by stringArrayArray}
+                boolean argumentIsArray = (needleParameterCount == countOfMethodUsageArgumentsPassed) && expectedArgumentType.isAssignableBy(actualArgumentType);
+                if (!argumentIsArray) {
+                    // Get the component type of the declared parameter type.
+                    expectedArgumentType = expectedArgumentType.asArrayType().getComponentType();
+                }
             }
 
+            // Consider type parameters directly on the method declaration, and ALSO on the enclosing type (e.g. a class)
+            List<ResolvedTypeParameterDeclaration> typeParameters = methodUsage.getDeclaration().getTypeParameters();
+            typeParameters.addAll(methodUsage.declaringType().getTypeParameters());
+
+            ResolvedType expectedTypeWithoutSubstitutions = expectedArgumentType;
+            ResolvedType expectedTypeWithInference = expectedArgumentType;
             Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
-            for (int j = 0; j < method.getParamTypes().size(); j++) {
-                ResolvedParameterDeclaration parameter = method.getDeclaration().getParam(i);
+
+            // For each declared parameter, infer the types that will replace generics (type parameters)
+            for (int j = 0; j < countOfMethodUsageArgumentsPassed; j++) {
+                ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(j);
                 ResolvedType parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
+                    // Don't continue if a vararg parameter is reached and there are no arguments left
+                    if (needleParameterCount == j) {
+                        break;
+                    }
                     parameterType = parameterType.asArrayType().getComponentType();
                 }
-                inferTypes(argumentsTypes.get(j), parameterType, derivedValues);
+                inferTypes(needleParameterTypes.get(j), parameterType, derivedValues);
             }
 
             for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()) {
@@ -294,57 +423,63 @@ public class MethodResolutionLogic {
                 expectedTypeWithInference = expectedTypeWithInference.replaceTypeVariables(tp, entry.getValue());
             }
 
+            // Consider cases where type variables can be replaced (e.g. add(E element) vs add(String element))
             for (ResolvedTypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds().isEmpty()) {
-                    //expectedType = expectedType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
-                    expectedType = expectedType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
+                    //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
                 } else if (tp.getBounds().size() == 1) {
                     ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                     if (bound.isExtends()) {
-                        //expectedType = expectedType.replaceTypeVariables(tp.getName(), bound.getType());
-                        expectedType = expectedType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(bound.getType()));
+                        //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), bound.getType());
+                        expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(bound.getType()));
                     } else {
-                        //expectedType = expectedType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
-                        expectedType = expectedType.replaceTypeVariables(tp, ResolvedWildcard.superBound(bound.getType()));
+                        //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.superBound(bound.getType()));
                     }
                 } else {
                     throw new UnsupportedOperationException();
                 }
             }
-            ResolvedType expectedType2 = expectedTypeWithoutSubstitutions;
+
+            // Consider cases where type variables involve bounds e.g. super/extends
+            ResolvedType expectedTypeWithSubstitutions = expectedTypeWithoutSubstitutions;
             for (ResolvedTypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds().isEmpty()) {
-                    expectedType2 = expectedType2.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                 } else if (tp.getBounds().size() == 1) {
                     ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                     if (bound.isExtends()) {
-                        expectedType2 = expectedType2.replaceTypeVariables(tp, bound.getType());
+                        expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, bound.getType());
                     } else {
-                        expectedType2 = expectedType2.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
                     }
                 } else {
                     throw new UnsupportedOperationException();
                 }
             }
-            if (!expectedType.isAssignableBy(actualType)
-                    && !expectedType2.isAssignableBy(actualType)
-                    && !expectedTypeWithInference.isAssignableBy(actualType)
-                    && !expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
+
+            // If the given argument still isn't applicable even after considering type arguments/generics, this is not a match.
+            if (!expectedArgumentType.isAssignableBy(actualArgumentType)
+                    && !expectedTypeWithSubstitutions.isAssignableBy(actualArgumentType)
+                    && !expectedTypeWithInference.isAssignableBy(actualArgumentType)
+                    && !expectedTypeWithoutSubstitutions.isAssignableBy(actualArgumentType)) {
                 return false;
             }
         }
+
+        // If the checks above haven't failed, then we've found a match.
         return true;
     }
-    
+
     /**
      * Filters by given function {@param keyExtractor} using a stateful filter mechanism.
-     * 
+     *
      * <pre>
      *      persons.stream().filter(distinctByKey(Person::getName))
      * </pre>
-     * 
+     * <p>
      * The example above would return a distinct list of persons containing only one person per name.
-     * 
      */
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
@@ -364,23 +499,26 @@ public class MethodResolutionLogic {
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods,
-                                                                                String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        
-        List<ResolvedMethodDeclaration> methodsWithMatchingName = methods.stream()
+                                                                                String name, List<ResolvedType> argumentsTypes,
+                                                                                TypeSolver typeSolver,
+                                                                                boolean wildcardTolerance
+    ) {
+
+        List<ResolvedMethodDeclaration> applicableMethods = methods.stream()
+                // Only consider methods with a matching name
                 .filter(m -> m.getName().equals(name))
-                .collect(Collectors.toList());
-        
-        List<ResolvedMethodDeclaration> applicableMethods = methodsWithMatchingName.stream()
                 // Filters out duplicate ResolvedMethodDeclaration by their signature.
-                .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)) 
+                .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
                 // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
-        
+
+        // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
 
+        // If there are multiple possible methods found, null arguments can help to eliminate some matches.
         if (applicableMethods.size() > 1) {
             List<Integer> nullParamIndexes = new ArrayList<>();
             for (int i = 0; i < argumentsTypes.size(); i++) {
@@ -388,6 +526,8 @@ public class MethodResolutionLogic {
                     nullParamIndexes.add(i);
                 }
             }
+
+            // If some null arguments have been provided, use this to eliminate some opitons.
             if (!nullParamIndexes.isEmpty()) {
                 // remove method with array param if a non array exists and arg is null
                 Set<ResolvedMethodDeclaration> removeCandidates = new HashSet<>();
@@ -398,44 +538,51 @@ public class MethodResolutionLogic {
                         }
                     }
                 }
+
+                // Where candidiates for removal are found, remove them.
                 if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
                     applicableMethods.removeAll(removeCandidates);
                 }
             }
         }
+
+        // If only one applicable method found, short-circuit and return it here.
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
-        } else {
-            ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
-            ResolvedMethodDeclaration other = null;
-            boolean possibleAmbiguity = false;
-            for (int i = 1; i < applicableMethods.size(); i++) {
-                other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
-                    possibleAmbiguity = false;
-                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
-                    possibleAmbiguity = false;
+        }
+
+        // Examine the applicable methods found, and evaluate each to determine the "best" one
+        ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
+        ResolvedMethodDeclaration other = null;
+        boolean possibleAmbiguity = false;
+        for (int i = 1; i < applicableMethods.size(); i++) {
+            other = applicableMethods.get(i);
+            if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
+                possibleAmbiguity = false;
+            } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
+                possibleAmbiguity = false;
+                winningCandidate = other;
+            } else {
+                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                    possibleAmbiguity = true;
+                } else {
+                    // we expect the methods to be ordered such that inherited methods are later in the list
+                }
+            }
+        }
+
+        if (possibleAmbiguity) {
+            // pick the first exact match if it exists
+            if (!isExactMatch(winningCandidate, argumentsTypes)) {
+                if (isExactMatch(other, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
-                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        possibleAmbiguity = true;
-                    } else {
-                        // we expect the methods to be ordered such that inherited methods are later in the list
-                    }
+                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
                 }
             }
-            if (possibleAmbiguity) {
-                // pick the first exact match if it exists
-                if (!isExactMatch(winningCandidate, argumentsTypes)) {
-                    if (isExactMatch(other, argumentsTypes)) {
-                        winningCandidate = other;
-                    } else {
-                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
-                    }
-                }
-            }
-            return SymbolReference.solved(winningCandidate);
         }
+
+        return SymbolReference.solved(winningCandidate);
     }
 
     protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
@@ -473,15 +620,15 @@ public class MethodResolutionLogic {
         // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
         // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
         if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic && (bNumberOfParams != numberOfArgs ||
-                                                                            !isLastArgArray))) {
+                !isLastArgArray))) {
             return true;
         } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
-                                                                                   !isLastArgArray))) {
+                !isLastArgArray))) {
             return false;
         }
 
         // Either both methods are variadic or neither is. So we must compare the parameter types.
-        for (int i = 0 ; i < numberOfArgs ; i++) {
+        for (int i = 0; i < numberOfArgs; i++) {
             ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
             ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
             ResolvedType argType = argumentTypes.get(i);
@@ -499,15 +646,22 @@ public class MethodResolutionLogic {
             // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
             else if (paramTypeA.isPrimitive() == argType.isPrimitive() &&
-                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
-                     paramTypeA.isAssignableBy(argType)) {
+                    paramTypeB.isPrimitive() != argType.isPrimitive() &&
+                    paramTypeA.isAssignableBy(argType)) {
 
                 return true;
             } else if (paramTypeB.isPrimitive() == argType.isPrimitive() &&
-                       paramTypeA.isPrimitive() != argType.isPrimitive() &&
-                       paramTypeB.isAssignableBy(argType)) {
+                    paramTypeA.isPrimitive() != argType.isPrimitive() &&
+                    paramTypeB.isAssignableBy(argType)) {
 
                 return false;
+            // if paramA and paramB are not the last parameters
+            // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
+            // then we have to consider others parameters before concluding
+            } else if ((i < numberOfArgs - 1)
+                    && (paramTypeB.isReferenceType() && paramTypeB.asReferenceType().getQualifiedName().equals("java.lang.Object")
+                    || (paramTypeA.isReferenceType() && paramTypeA.asReferenceType().getQualifiedName().equals("java.lang.Object")))) {
+                // consider others parameters
             }
             // If we get to this point then we check whether one of the methods contains a parameter type that is more
             // specific. If it does, we can assume the entire declaration is more specific as we would otherwise have
@@ -516,7 +670,7 @@ public class MethodResolutionLogic {
                 boolean aAssignableFromB = paramTypeA.isAssignableBy(paramTypeB);
                 boolean bAssignableFromA = paramTypeB.isAssignableBy(paramTypeA);
 
-                if (bAssignableFromA && !aAssignableFromB){
+                if (bAssignableFromA && !aAssignableFromB) {
                     // A's parameter is more specific
                     return true;
                 } else if (aAssignableFromB && !bAssignableFromA) {
@@ -547,13 +701,18 @@ public class MethodResolutionLogic {
             boolean aIsAssignableByB = tdA.isAssignableBy(tdB);
             boolean bIsAssignableByA = tdB.isAssignableBy(tdA);
 
-            // B is more specific
+            // A is more specific
             if (bIsAssignableByA && !aIsAssignableByB) {
                 oneMoreSpecificFound = true;
             }
-            // A is more specific
+            // B is more specific
             if (aIsAssignableByB && !bIsAssignableByA) {
                 return false;
+            }
+
+            // If B is vararg and A is not, A is more specific
+            if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
+                oneMoreSpecificFound = true;
             }
         }
         return oneMoreSpecificFound;
@@ -619,7 +778,7 @@ public class MethodResolutionLogic {
 
         if (typeDeclaration instanceof MethodResolutionCapability) {
             return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes,
-                                                                              staticOnly);
+                    staticOnly);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }

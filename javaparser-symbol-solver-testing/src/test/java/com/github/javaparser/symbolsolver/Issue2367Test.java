@@ -53,7 +53,7 @@ class Issue2367Test extends AbstractSymbolResolutionTest {
         javaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8)).getResult().get();
+                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
 
         NameExpr nameExpr = unit.findFirst(NameExpr.class, m -> m.getName().getIdentifier().equals("privateField")).get();
         ResolvedValueDeclaration resolvedValueDeclaration = nameExpr.resolve();

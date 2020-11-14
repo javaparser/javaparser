@@ -32,7 +32,7 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
- * S <: T, where at least one of S or T is an inference variable: S is a subtype of T
+ * S &lt;: T, where at least one of S or T is an inference variable: S is a subtype of T
  *
  * @author Federico Tomassetti
  */

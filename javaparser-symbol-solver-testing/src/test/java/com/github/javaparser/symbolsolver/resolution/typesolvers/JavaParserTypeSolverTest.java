@@ -30,8 +30,7 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,8 +56,7 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    @ExtendWith(TempDirectory.class)
-    void folderTraversalDoesNotKeepFolderHandlesHostage(@TempDirectory.TempDir Path tempDir) throws IOException {
+    void folderTraversalDoesNotKeepFolderHandlesHostage(@TempDir Path tempDir) throws IOException {
         File folder = tempDir.resolve("folder").toFile();
         assertTrue(folder.mkdirs());
 

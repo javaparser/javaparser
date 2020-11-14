@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DotPrinterTest {
@@ -84,7 +84,7 @@ class DotPrinterTest {
         DotPrinter printer = new DotPrinter(false);
         CompilationUnit cu = parse("//q\"q\nclass X{}");
         String output = printer.output(cu);
-        assertEqualsNoEol("digraph {\n" +
+        assertEqualsStringIgnoringEol("digraph {\n" +
                 "n0 [label=\"root\"];\n" +
                 "n1 [label=\"types\"];\n" +
                 "n0 -> n1;\n" +

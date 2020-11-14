@@ -346,7 +346,7 @@ public final class StaticJavaParser {
      * Parses a variable declaration expression and returns a {@link VariableDeclarationExpr}
      * that represents it.
      *
-     * @param declaration a variable declaration like <code>int x=2;</code>
+     * @param declaration a variable declaration like {@code int x=2;}
      * @return VariableDeclarationExpr representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
@@ -358,7 +358,7 @@ public final class StaticJavaParser {
      * Parses the content of a JavadocComment and returns a {@link Javadoc} that
      * represents it.
      *
-     * @param content a variable declaration like <code>content of my javadoc\n * second line\n * third line</code>
+     * @param content a variable declaration like {@code content of my javadoc\n * second line\n * third line}
      * @return Javadoc representing the content of the comment
      * @throws ParseProblemException if the source code has parser errors
      */
