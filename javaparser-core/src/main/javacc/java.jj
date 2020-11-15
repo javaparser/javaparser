@@ -941,7 +941,7 @@ TOKEN :
 /* OPERATORS */
 /**
  * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
- * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators"
+ * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators" (see #2897)
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.12
  * 38 tokens, formed from ASCII characters, are the operators.
  * <pre>{@code
@@ -1003,7 +1003,7 @@ TOKEN :
 
 /*
  * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
- * TODO: Investigate if the ordering matters, or if it's just that there's a code block associated with the token.
+ * TODO: Investigate (and comment) if the ordering matters, or if it's just that there's a code block associated with the token.
 .*/
 TOKEN :
 {
