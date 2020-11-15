@@ -1127,7 +1127,9 @@ Parameter Parameter():
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
 }
 {
-    modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
+    modifier = Modifiers()
+    partialType = Type(emptyList())
+    [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ]
     id = VariableDeclaratorId()
     {
         JavaToken begin = orIfInvalid(modifier.begin, partialType);
@@ -1251,7 +1253,7 @@ Type Type(NodeList<AnnotationExpr> annotations):
  (
    LOOKAHEAD(PrimitiveType(annotations) Annotations() "[" | ClassOrInterfaceType(annotations)) ret = ReferenceType(annotations)
  |
-   ret = PrimitiveType(annotations )
+   ret = PrimitiveType(annotations)
  )
  { return ret; }
 }
