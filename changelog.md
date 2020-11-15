@@ -25,6 +25,8 @@ Next Release (Version 3.16.4)
 * Issue 2909 Improving how to resolve inner classes  
     (PR [#2920](https://github.com/javaparser/javaparser/pull/2920), by [@jlerbsc](https://github.com/jlerbsc))
     (PR [#2921](https://github.com/javaparser/javaparser/pull/2921), by [@jlerbsc](https://github.com/jlerbsc))
+* Ensure spaces between annotations and types for lexical-preserving printing
+    (PR [#2795](https://github.com/javaparser/javaparser/pull/2918), by [@jwaataja](https://github.com/jwaataja))
 
 ### Changed
 * Updated dependencies, and dependabot config
