@@ -1,7 +1,44 @@
 Next Release (Version 3.16.4)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/178?closed=1)
+### Fixed
+* API CHANGE: Fix ArrayType brackets precedence
+    (PR [#2758](https://github.com/javaparser/javaparser/pull/2758), by [@iTakeshi](https://github.com/iTakeshi))
+* Issue 2290 Removing the second instance of a cloned statement within a block fails
+    (PR [#2892](https://github.com/javaparser/javaparser/pull/2892), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2393 Apply difference in node text after if condition replacement
+    (PR [#2895](https://github.com/javaparser/javaparser/pull/2895), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2406 Symbol solver fails to solve generic array type 
+    (PR [#2896](https://github.com/javaparser/javaparser/pull/2896), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2062 Type inference issue for method arguments 
+    (PR [#2900](https://github.com/javaparser/javaparser/pull/2900), by [@jlerbsc](https://github.com/jlerbsc))
+* Fix LOOKAHEAD for ReferenceType 
+    (PR [#2904](https://github.com/javaparser/javaparser/pull/2904), by [@mernst](https://github.com/mernst))
+* Issue 2578 Orphaned Comments exist but not printed on unrelated change to AST 
+    (PR [#2916](https://github.com/javaparser/javaparser/pull/2916), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2909 Unexpected result when solving an outer class reference 
+    (PR [#2914](https://github.com/javaparser/javaparser/pull/2914), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2535 Comments within method missing indentation  
+    (PR [#2918](https://github.com/javaparser/javaparser/pull/2918), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2909 Improving how to resolve inner classes  
+    (PR [#2920](https://github.com/javaparser/javaparser/pull/2920), by [@jlerbsc](https://github.com/jlerbsc))
+    (PR [#2921](https://github.com/javaparser/javaparser/pull/2921), by [@jlerbsc](https://github.com/jlerbsc))
 
+### Changed
+* Updated dependencies, and dependabot config
+    (PR [#2893](https://github.com/javaparser/javaparser/pull/2893), by [@mysteraitch](https://github.com/mysteraitch))
+    (PR [#2902](https://github.com/javaparser/javaparser/pull/2902), by Dependabot)
+* Issue 2613 Auto update the version in the readme 
+    (PR [#2903](https://github.com/javaparser/javaparser/pull/2903), by [@mysteraitch](https://github.com/mysteraitch))
+* Fix jacoco and enable codecov.io action
+    (PR [#2906](https://github.com/javaparser/javaparser/pull/2906), by [@mysteraitch](https://github.com/mysteraitch))
+* Minor refactoring of binary numeric promotion 
+    (PR [#2915](https://github.com/javaparser/javaparser/pull/2915), by [@jlerbsc](https://github.com/jlerbsc))
+* Testcases for logical and/or 
+    (PR [#2907](https://github.com/javaparser/javaparser/pull/2907), by [@mysteraitch](https://github.com/mysteraitch))
+* Format and document the grammar 
+    (PR [#2901](https://github.com/javaparser/javaparser/pull/2901), by [@mysteraitch](https://github.com/mysteraitch))
+    (PR [#2913](https://github.com/javaparser/javaparser/pull/2913), by [@mernst](https://github.com/mernst))
 
 Version 3.16.3
 ------------------
