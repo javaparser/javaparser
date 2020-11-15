@@ -10,6 +10,8 @@ Next Release (Version 3.16.4)
     (PR [#2895](https://github.com/javaparser/javaparser/pull/2895), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2406 Symbol solver fails to solve generic array type 
     (PR [#2896](https://github.com/javaparser/javaparser/pull/2896), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2489 SymbolSolver choosing wrong method after resolving 
+    (PR [#2898](https://github.com/javaparser/javaparser/pull/2898), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2062 Type inference issue for method arguments 
     (PR [#2900](https://github.com/javaparser/javaparser/pull/2900), by [@jlerbsc](https://github.com/jlerbsc))
 * Fix LOOKAHEAD for ReferenceType 
