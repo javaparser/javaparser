@@ -2,8 +2,10 @@ Next Release (Version 3.16.4)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/178?closed=1)
 ### Fixed
-* API CHANGE: Fix ArrayType brackets precedence
+* BEHAVIOUR CHANGE: Fix ArrayType brackets precedence
     (PR [#2758](https://github.com/javaparser/javaparser/pull/2758), by [@iTakeshi](https://github.com/iTakeshi))
+* BEHAVIOUR CHANGE: Issue 2535 Comments within method missing indentation  
+    (PR [#2918](https://github.com/javaparser/javaparser/pull/2918), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2290 Removing the second instance of a cloned statement within a block fails
     (PR [#2892](https://github.com/javaparser/javaparser/pull/2892), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2393 Apply difference in node text after if condition replacement
@@ -20,8 +22,6 @@ Next Release (Version 3.16.4)
     (PR [#2916](https://github.com/javaparser/javaparser/pull/2916), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2909 Unexpected result when solving an outer class reference 
     (PR [#2914](https://github.com/javaparser/javaparser/pull/2914), by [@jlerbsc](https://github.com/jlerbsc))
-* Issue 2535 Comments within method missing indentation  
-    (PR [#2918](https://github.com/javaparser/javaparser/pull/2918), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2909 Improving how to resolve inner classes  
     (PR [#2920](https://github.com/javaparser/javaparser/pull/2920), by [@jlerbsc](https://github.com/jlerbsc))
     (PR [#2921](https://github.com/javaparser/javaparser/pull/2921), by [@jlerbsc](https://github.com/jlerbsc))
