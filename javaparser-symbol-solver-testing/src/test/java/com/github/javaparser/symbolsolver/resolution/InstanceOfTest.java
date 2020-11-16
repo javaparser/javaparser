@@ -37,26 +37,23 @@ public class InstanceOfTest {
      * Locations:
      * - Local variables
      * - If conditionals
-     *
+     * <p>
      * - Usage after declaration
      * - Usage before declaration
-     *
+     * <p>
      * Simple:
      * - A && B    Resolves     instanceof String s && s
      * - A || B    Not          instanceof String s || s
-     *
+     * <p>
      * Negated:
      * - !A && B   Not
-     *
+     * <p>
      * If/Else If/Else Blocks
      * - if(A) { B - Resolves }
      * - if(!A) { B - Not }
-     *
+     * <p>
      * - if() {} else if (A) { B - Resolves }
      * - if() {} else if (!A) { B - Not }
-     *
-     *
-     *
      */
     protected String sourceCode = "" +
             "import java.util.List;\n" +
@@ -112,6 +109,26 @@ public class InstanceOfTest {
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) {\n" +
+            "            result = s.contains(\"b\");\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_else_conditional() {\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if ((obj instanceof String s) && true) {\n" +
+            "            result = s.contains(\"b\");\n" +
+            "        } else {\n" +
+            "            result = s.contains(\"error\");\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_else_conditional_negated() {\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (!(obj instanceof String s) && true) {\n" +
+            "            result = s.contains(\"error\");\n" +
+            "        } else {\n" +
             "            result = s.contains(\"b\");\n" +
             "        }\n" +
             "    }\n" +
@@ -176,6 +193,30 @@ public class InstanceOfTest {
         compilationUnit = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, sourceCode);
     }
 
+
+    @Test
+    public void givenInstanceOfPattern_usingJdk13_thenExpectException() {
+        final String x = "" +
+                "class X {\n" +
+                "  public X() {\n" +
+                "    boolean result;\n" +
+                "    String obj = \"abc\";\n" +
+                "    if (!(obj instanceof String s) && true) {\n" +
+                "        result = s.contains(\"b\");\n" +
+                "    }\n" +
+                "  }\n" +
+                " }\n";
+
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_13);
+
+        ParseResult<CompilationUnit> parseResult = new JavaParser(parserConfiguration)
+                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(x));
+
+        assertEquals(1, parseResult.getProblems().size());
+        assertEquals("Use of patterns with instanceof is not supported.", parseResult.getProblem(0).getMessage());
+    }
 
     @Nested
     class VariableInBlock {
@@ -291,132 +332,122 @@ public class InstanceOfTest {
     @Nested
     class IfElseIfElse {
 
-        @Test
-        public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
+        @Nested
+        class Condition {
 
-            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
-            assertEquals("s.contains(\"b\")", inScopeMethodCall.toString());
+            @Test
+            public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+                assertEquals(1, methodCalls.size());
 
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
+                MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+                assertEquals("s.contains(\"b\")", inScopeMethodCall.toString());
 
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+                // Resolving the method call .contains()
+                final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
+                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
-
-            // Resolving the variable `s`
-            assertTrue(inScopeMethodCall.getScope().isPresent());
-            final Expression expression = inScopeMethodCall.getScope().get();
-
-            final ResolvedType resolvedType = expression.calculateResolvedType();
-            assertEquals("java.lang.String", resolvedType.describe());
+                assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
+                assertEquals("boolean", resolve.getReturnType().describe());
+                assertEquals("contains", resolve.getName());
+                assertEquals(1, resolve.getNumberOfParams());
+                assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
 
 
+                // Resolving the variable `s`
+                assertTrue(inScopeMethodCall.getScope().isPresent());
+                final Expression expression = inScopeMethodCall.getScope().get();
+
+                final ResolvedType resolvedType = expression.calculateResolvedType();
+                assertEquals("java.lang.String", resolvedType.describe());
+
+
+            }
+
+
+            /**
+             * This tests that the components on the right hand side resolve.
+             * Useful when debugging (e.g. if the variable resolves, but not the method call).
+             */
+            @Test
+            public void condition_rightBranch_nameExprResolves() {
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+                assertEquals(1, methodCalls.size());
+
+                final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
+                assertEquals(1, binaryExprs.size());
+
+                BinaryExpr binaryExpr = binaryExprs.get(0);
+                List<NameExpr> nameExprs = binaryExpr.getRight().findAll(NameExpr.class);
+                assertEquals(1, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(0);
+                ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+                System.out.println(resolvedNameExpr);
+            }
+
+
+            /**
+             * This tests that the components on the right hand side resolve.
+             * Useful when debugging (e.g. if the variable resolves, but not the method call).
+             */
+            @Test
+            public void condition_rightBranch_methodCallResolves() {
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+                assertEquals(1, methodCalls.size());
+
+                final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
+                assertEquals(1, binaryExprs.size());
+
+                BinaryExpr binaryExpr = binaryExprs.get(0);
+                List<MethodCallExpr> methodCallExprs = binaryExpr.getRight().findAll(MethodCallExpr.class);
+                assertEquals(1, methodCallExprs.size());
+
+                MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+                System.out.println("resolvedType = " + resolvedType);
+
+                ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+                System.out.println("resolvedMethodDeclaration = " + resolvedMethodDeclaration);
+            }
+
+
+            @Test
+            public void condition_leftBranchMethodCall_doesNotResolve() {
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+                assertEquals(1, methodCalls.size());
+
+                MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
+
+                // Expected to not be able to resolve s, as out of scope within an else block.
+                assertThrows(UnsolvedSymbolException.class, () -> {
+                    final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+                    // Note: Only printed if the above line doesn't error...
+                    System.out.println("resolve = " + resolve);
+                });
+            }
         }
 
-
-        /**
-         * This tests that the components on the right hand side resolve.
-         * Useful when debugging (e.g. if the variable resolves, but not the method call).
-         */
-        @Test
-        public void condition_rightBranch_nameExprResolves() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
-            assertEquals(1, binaryExprs.size());
-
-            BinaryExpr binaryExpr = binaryExprs.get(0);
-            List<NameExpr> nameExprs = binaryExpr.getRight().findAll(NameExpr.class);
-            assertEquals(1, nameExprs.size());
-
-            NameExpr nameExpr = nameExprs.get(0);
-            ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
-            System.out.println(resolvedNameExpr);
-        }
-
-
-        /**
-         * This tests that the components on the right hand side resolve.
-         * Useful when debugging (e.g. if the variable resolves, but not the method call).
-         */
-        @Test
-        public void condition_rightBranch_methodCallResolves() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
-            assertEquals(1, binaryExprs.size());
-
-            BinaryExpr binaryExpr = binaryExprs.get(0);
-            List<MethodCallExpr> methodCallExprs = binaryExpr.getRight().findAll(MethodCallExpr.class);
-            assertEquals(1, methodCallExprs.size());
-
-            MethodCallExpr methodCallExpr = methodCallExprs.get(0);
-            ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
-            System.out.println("resolvedType = " + resolvedType);
-
-            ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
-            System.out.println("resolvedMethodDeclaration = " + resolvedMethodDeclaration);
-        }
-
-
-        @Test
-        public void condition_leftBranchMethodCall_doesNotResolve() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
-
-            // Expected to not be able to resolve s, as out of scope within an else block.
-            assertThrows(UnsolvedSymbolException.class, () -> {
-                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
-            });
-        }
 
         @Nested
         class IfElseIfElseBlock {
 
-
-            private static final String CODE_INSTANCEOF_PATTERN_IF_ELSE = "" +
-                    "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if ((obj instanceof String s) && true) {\n" +
-                    "        result = s.contains(\"b\");\n" +
-                    "    } else {\n" +
-                    "        result = s.contains(\"error\");\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    " }\n";
-
             @Test
             public void givenInstanceOfPattern_thenCorrectNumberOfMethodCalls() {
-                final CompilationUnit cu = parseWithTypeSolver(CODE_INSTANCEOF_PATTERN_IF_ELSE);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
-
-                System.out.println(methodCalls);
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
+
             }
 
             @Test
             public void givenInstanceOfPattern_whenSolvingInvalidNotInScope_thenFails() {
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, CODE_INSTANCEOF_PATTERN_IF_ELSE);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -433,8 +464,8 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_whenSolvingValidInScope_thenSuccessful() {
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, CODE_INSTANCEOF_PATTERN_IF_ELSE);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -458,114 +489,69 @@ public class InstanceOfTest {
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();
                 assertEquals("java.lang.String", resolvedType.describe());
-
-
             }
         }
 
 
-        @Nested
-        class IfElseIfElseBlock_Negated {
-
-            private static final String CODE_INSTANCEOF_PATTERN_IF_ELSE_NEGATED = "" +
-                    "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if (!(obj instanceof String s) && true) {\n" +
-                    "        result = s.contains(\"error\");\n" +
-                    "    } else {\n" +
-                    "        result = s.contains(\"b\");\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    " }\n";
-
-            private static final String CODE_INSTANCEOF_PATTERN_IF = "" +
-                    "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if (!(obj instanceof String s) && true) {\n" +
-                    "        result = s.contains(\"b\");\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    " }\n";
-
-
-            @Test
-            public void givenInstanceOfPattern_usingJdk13_thenExpectException() {
-                ParserConfiguration parserConfiguration = new ParserConfiguration();
-                parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-                parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_13);
-
-                ParseResult<CompilationUnit> parseResult = new JavaParser(parserConfiguration)
-                        .parse(ParseStart.COMPILATION_UNIT, new StringProvider(CODE_INSTANCEOF_PATTERN_IF));
-
-                assertEquals(1, parseResult.getProblems().size());
-                assertEquals("Use of patterns with instanceof is not supported.", parseResult.getProblem(0).getMessage());
-            }
-
-
-            @Test
-            public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else");
-                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-                assertEquals(1, methodCalls.size());
+        @Test
+        public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
 //        MethodCallExpr inScopeMethodCall = methodCalls.get(0);
-                MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-                // Resolving the method call .contains()
-                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
+            // Resolving the method call .contains()
+            final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
-                assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
-                assertEquals("boolean", resolve.getReturnType().describe());
-                assertEquals("contains", resolve.getName());
-                assertEquals(1, resolve.getNumberOfParams());
-                assertEquals("contains(java.lang.Object)", resolve.getSignature());
+            assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
+            assertEquals("boolean", resolve.getReturnType().describe());
+            assertEquals("contains", resolve.getName());
+            assertEquals(1, resolve.getNumberOfParams());
+            assertEquals("contains(java.lang.Object)", resolve.getSignature());
 
-            }
+        }
 
-            @Test
-            public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if");
-                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-                assertEquals(1, methodCalls.size());
+        @Test
+        public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
-                MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
 
-                // Resolving the method call .contains()
-                final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
+            // Resolving the method call .contains()
+            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
+            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
-                assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-                assertEquals("boolean", resolve.getReturnType().describe());
-                assertEquals("contains", resolve.getName());
-                assertEquals(1, resolve.getNumberOfParams());
-                assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
+            assertEquals("boolean", resolve.getReturnType().describe());
+            assertEquals("contains", resolve.getName());
+            assertEquals(1, resolve.getNumberOfParams());
+            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
 
-            }
+        }
 
-            @Test
-            public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
-                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-                assertEquals(1, methodCalls.size());
+        @Test
+        public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
-                MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
 
-                // Resolving the method call .contains()
-                final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
+            // Resolving the method call .contains()
+            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
+            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
-                assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-                assertEquals("boolean", resolve.getReturnType().describe());
-                assertEquals("contains", resolve.getName());
-                assertEquals(1, resolve.getNumberOfParams());
-                assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
+            assertEquals("boolean", resolve.getReturnType().describe());
+            assertEquals("contains", resolve.getName());
+            assertEquals(1, resolve.getNumberOfParams());
+            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
 
-            }
         }
 
 
