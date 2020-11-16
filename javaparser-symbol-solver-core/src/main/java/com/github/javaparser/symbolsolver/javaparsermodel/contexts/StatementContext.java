@@ -185,6 +185,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
 
         // if we're in a multiple Variable declaration line (for ex: double a=0, b=a;)
+        // FIXME: This makes pattern expression variables available when resolving the right hand side of a BinaryExpr...
         SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
         if (symbolReference.isSolved()) {
