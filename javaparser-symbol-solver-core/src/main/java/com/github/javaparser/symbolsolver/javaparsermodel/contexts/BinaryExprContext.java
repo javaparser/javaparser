@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -39,8 +40,13 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        BinaryExpr binaryExpr = wrappedNode;
+        // If there is no parent
+        if(!getParent().isPresent()) {
+            return Optional.empty();
+        }
+        Context parentContext = getParent().get();
 
+        BinaryExpr binaryExpr = wrappedNode;
         // FIXME: Consider negations...
         // FIXME: Consider child binary expressions...
         // FIXME: Do something with "variables available" methods...
@@ -57,6 +63,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             }
         }
 
-        return Optional.empty();
+        // if nothing is found we should ask the parent context
+        return parentContext.solveSymbolAsValue(name);
     }
 }

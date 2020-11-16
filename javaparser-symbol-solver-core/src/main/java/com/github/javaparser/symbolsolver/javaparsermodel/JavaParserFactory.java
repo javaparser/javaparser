@@ -34,13 +34,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -62,6 +56,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
@@ -72,10 +67,13 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
+        // TODO: Is order important here?
         if (node == null) {
             throw new NullPointerException("Node should not be null");
         } else if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
+        } else if (node instanceof BinaryExpr) {
+            return new BinaryExprContext((BinaryExpr) node, typeSolver);
         } else if (node instanceof BlockStmt) {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
