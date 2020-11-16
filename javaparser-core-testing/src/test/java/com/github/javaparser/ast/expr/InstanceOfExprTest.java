@@ -87,6 +87,14 @@ class InstanceOfExprTest {
     }
 
     @Test
+    void instanceOf_patternExpression_prettyPrinter() {
+        String x = "obj instanceof String s";
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);
+
+        assertEquals("obj instanceof String s", expr.toString());
+    }
+
+    @Test
     void instanceOf_referenceTypeExpression() {
         String x = "obj instanceof String";
         InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);

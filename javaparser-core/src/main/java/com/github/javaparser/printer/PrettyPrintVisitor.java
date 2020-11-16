@@ -767,6 +767,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
+        if(n.getName().isPresent()) {
+            printer.print(" ");
+            n.getName().get().accept(this, arg);
+        }
     }
 
     @Override
