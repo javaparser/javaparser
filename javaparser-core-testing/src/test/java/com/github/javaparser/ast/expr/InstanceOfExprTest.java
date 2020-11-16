@@ -21,16 +21,103 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * See JEP305 for switch pattern matching for instanceof
+ * https://bugs.openjdk.java.net/browse/JDK-8181287
+ *
+ * <pre>
+ * The instanceof grammar is extended accordingly:
+ *
+ * RelationalExpression:
+ *      ...
+ *      RelationalExpression instanceof ReferenceType
+ *      RelationalExpression instanceof Pattern
+ *
+ * Pattern:
+ *      ReferenceType Identifier
+ * </pre>
+ */
 class InstanceOfExprTest {
-    @Test
-    void annotationsOnTheType() {
-        InstanceOfExpr expr = parseExpression("s instanceof @A @DA String");
 
-        assertThat(expr.getType().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"), new MarkerAnnotationExpr("DA"));
+    @Test
+    void annotationsOnTheType_patternExpression() {
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, "obj instanceof @A @DA String s");
+
+        assertThat(expr.getType().getAnnotations())
+                .containsExactly(
+                        new MarkerAnnotationExpr("A"),
+                        new MarkerAnnotationExpr("DA")
+                );
     }
+
+    @Test
+    void annotationsOnTheType_referenceTypeExpression() {
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, "obj instanceof @A @DA String");
+
+        assertThat(expr.getType().getAnnotations())
+                .containsExactly(
+                        new MarkerAnnotationExpr("A"),
+                        new MarkerAnnotationExpr("DA")
+                );
+    }
+
+    @Test
+    void instanceOf_patternExpression() {
+        String x = "obj instanceof String s";
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);
+
+        assertEquals("obj", expr.getExpression().toString());
+        assertEquals("String", expr.getType().asString());
+        assertTrue(expr.getPattern().isPresent());
+
+        PatternExpr patternExpr = expr.getPattern().get();
+        assertEquals("String", patternExpr.getType().asString());
+        assertEquals("s", patternExpr.getName().asString());
+
+        //
+        assertTrue(expr.getName().isPresent());
+        assertEquals("s", expr.getName().get().asString());
+    }
+
+    @Test
+    void instanceOf_referenceTypeExpression() {
+        String x = "obj instanceof String";
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);
+
+        assertEquals("obj", expr.getExpression().toString());
+        assertEquals(String.class.getSimpleName(), expr.getType().asString());
+        assertFalse(expr.getPattern().isPresent());
+
+        //
+        assertFalse(expr.getName().isPresent());
+    }
+
+
+
+    /*
+     * resolution / scoping tests?
+     *
+     * <pre>
+     * {@code
+     * if (!(obj instanceof String s)) {
+     *     .. s.contains(..) ..
+     * } else {
+     *     .. s.contains(..) ..
+     * }
+     * }
+     * </pre>
+     *
+     * Allowed / in scope: {@code if (obj instanceof String s && s.length() > 5) {..}}
+     * Not in scope:       {@code if (obj instanceof String s || s.length() > 5) {..}}
+     *
+     */
+
+
 }
