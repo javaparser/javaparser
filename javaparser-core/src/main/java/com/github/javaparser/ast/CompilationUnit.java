@@ -29,7 +29,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -39,7 +38,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -504,14 +502,14 @@ public class CompilationUnit extends Node {
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
-    
+
     /**
      * Try to get a locally class declaration by its name (top level or inner class)
      *
      * @param className the class name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getLocaleDeclarationFromClassname(String className) {
-        return findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid->cid.getNameAsString().equals(className)).findFirst();
+        return findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid -> cid.getNameAsString().equals(className)).findFirst();
     }
 
     /**

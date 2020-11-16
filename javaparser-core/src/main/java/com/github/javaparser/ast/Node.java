@@ -45,14 +45,12 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
@@ -733,21 +731,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public LineSeparator getLineEndingStyle() {
         Node current = this;
-
         // First check this node
-        if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+        if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = current.getData(Node.LINE_SEPARATOR_KEY);
             return lineSeparator;
         }
-
         // Then check parent/ancestor nodes
-        while(current.getParentNode().isPresent()) {
+        while (current.getParentNode().isPresent()) {
             current = current.getParentNode().get();
-            if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+            if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
                 return current.getData(Node.LINE_SEPARATOR_KEY);
             }
         }
-
         // Default to the system line separator if it's not already set within the parsed node/code.
         return LineSeparator.SYSTEM;
     }

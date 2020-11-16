@@ -46,7 +46,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     private EqualsVisitor() {
-    // hide constructor
+        // hide constructor
     }
 
     /**

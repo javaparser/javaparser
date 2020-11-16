@@ -39,7 +39,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     private static final HashCodeVisitor SINGLETON = new HashCodeVisitor();
 
     private HashCodeVisitor() {
-    // hide constructor
+        // hide constructor
     }
 
     public static int hashCode(final Node node) {

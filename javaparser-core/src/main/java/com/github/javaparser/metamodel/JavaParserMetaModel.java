@@ -190,9 +190,9 @@ public final class JavaParserMetaModel {
         objectCreationExprMetaModel.getConstructorParameters().add(objectCreationExprMetaModel.anonymousClassBodyPropertyMetaModel);
         patternExprMetaModel.getConstructorParameters().add(patternExprMetaModel.typePropertyMetaModel);
         patternExprMetaModel.getConstructorParameters().add(patternExprMetaModel.namePropertyMetaModel);
-        simpleNameMetaModel.getConstructorParameters().add(simpleNameMetaModel.identifierPropertyMetaModel);
         singleMemberAnnotationExprMetaModel.getConstructorParameters().add(annotationExprMetaModel.namePropertyMetaModel);
         singleMemberAnnotationExprMetaModel.getConstructorParameters().add(singleMemberAnnotationExprMetaModel.memberValuePropertyMetaModel);
+        simpleNameMetaModel.getConstructorParameters().add(simpleNameMetaModel.identifierPropertyMetaModel);
         superExprMetaModel.getConstructorParameters().add(superExprMetaModel.typeNamePropertyMetaModel);
         switchExprMetaModel.getConstructorParameters().add(switchExprMetaModel.selectorPropertyMetaModel);
         switchExprMetaModel.getConstructorParameters().add(switchExprMetaModel.entriesPropertyMetaModel);
@@ -630,10 +630,10 @@ public final class JavaParserMetaModel {
         patternExprMetaModel.getDeclaredPropertyMetaModels().add(patternExprMetaModel.namePropertyMetaModel);
         patternExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(patternExprMetaModel, "type", com.github.javaparser.ast.type.ReferenceType.class, Optional.of(referenceTypeMetaModel), false, false, false, false);
         patternExprMetaModel.getDeclaredPropertyMetaModels().add(patternExprMetaModel.typePropertyMetaModel);
-        simpleNameMetaModel.identifierPropertyMetaModel = new PropertyMetaModel(simpleNameMetaModel, "identifier", java.lang.String.class, Optional.empty(), false, true, false, false);
-        simpleNameMetaModel.getDeclaredPropertyMetaModels().add(simpleNameMetaModel.identifierPropertyMetaModel);
         singleMemberAnnotationExprMetaModel.memberValuePropertyMetaModel = new PropertyMetaModel(singleMemberAnnotationExprMetaModel, "memberValue", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         singleMemberAnnotationExprMetaModel.getDeclaredPropertyMetaModels().add(singleMemberAnnotationExprMetaModel.memberValuePropertyMetaModel);
+        simpleNameMetaModel.identifierPropertyMetaModel = new PropertyMetaModel(simpleNameMetaModel, "identifier", java.lang.String.class, Optional.empty(), false, true, false, false);
+        simpleNameMetaModel.getDeclaredPropertyMetaModels().add(simpleNameMetaModel.identifierPropertyMetaModel);
         superExprMetaModel.typeNamePropertyMetaModel = new PropertyMetaModel(superExprMetaModel, "typeName", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
         superExprMetaModel.getDeclaredPropertyMetaModels().add(superExprMetaModel.typeNamePropertyMetaModel);
         switchExprMetaModel.entriesPropertyMetaModel = new PropertyMetaModel(switchExprMetaModel, "entries", com.github.javaparser.ast.stmt.SwitchEntry.class, Optional.of(switchEntryMetaModel), false, false, true, false);
@@ -998,10 +998,10 @@ public final class JavaParserMetaModel {
     public static final PatternExprMetaModel patternExprMetaModel = new PatternExprMetaModel(Optional.of(expressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final SimpleNameMetaModel simpleNameMetaModel = new SimpleNameMetaModel(Optional.of(nodeMetaModel));
+    public static final SingleMemberAnnotationExprMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final SingleMemberAnnotationExprMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
+    public static final SimpleNameMetaModel simpleNameMetaModel = new SimpleNameMetaModel(Optional.of(nodeMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SuperExprMetaModel superExprMetaModel = new SuperExprMetaModel(Optional.of(expressionMetaModel));
