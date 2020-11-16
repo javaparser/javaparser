@@ -140,7 +140,6 @@ public class InstanceOfTest {
 
     }
 
-    @Disabled("Temporarily skipped while copying across implementation.")
     @Test
     public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
         String x = "class X {\n" +
@@ -172,7 +171,6 @@ public class InstanceOfTest {
 
     }
 
-    @Disabled("Temporarily skipped while copying across implementation.")
     @Test
     public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
         String x = "class X {\n" +
@@ -243,7 +241,6 @@ public class InstanceOfTest {
         });
     }
 
-    @Disabled("Temporarily skipped while copying across implementation.")
     @Test
     public void givenInstanceOfPattern_whenSolvingValidInScope_thenSuccessful() {
         final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, CODE_INSTANCEOF_PATTERN_IF_ELSE);
@@ -376,7 +373,6 @@ public class InstanceOfTest {
         });
     }
 
-    @Disabled("Temporarily skipped while copying across implementation.")
     @Test
     public void variable_shouldPass() {
         String x = "class X {\n" +

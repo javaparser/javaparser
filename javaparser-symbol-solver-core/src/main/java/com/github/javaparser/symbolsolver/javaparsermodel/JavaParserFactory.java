@@ -53,27 +53,7 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AnnotationDeclarationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AnonymousClassDeclarationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.BlockStmtContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CatchClauseContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ConstructorContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ForEachStatementContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ForStatementContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodReferenceExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreationContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.StatementContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.SwitchEntryContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.TryWithResourceContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.VariableDeclarationExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.VariableDeclaratorContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -104,6 +84,8 @@ public class JavaParserFactory {
             return new ForEachStatementContext((ForEachStmt) node, typeSolver);
         } else if (node instanceof ForStmt) {
             return new ForStatementContext((ForStmt) node, typeSolver);
+        } else if (node instanceof IfStmt) {
+            return new IfStatementContext((IfStmt) node, typeSolver);
         } else if (node instanceof LambdaExpr) {
             return new LambdaExprContext((LambdaExpr) node, typeSolver);
         } else if (node instanceof MethodDeclaration) {
@@ -180,8 +162,6 @@ public class JavaParserFactory {
             } else {
                 return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
             }
-        } else if (node instanceof IfStmt) {
-            return new NoSymbolDeclarator<>((IfStmt) node, typeSolver);
         } else if (node instanceof ForEachStmt) {
             ForEachStmt foreachStmt = (ForEachStmt) node;
             return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);

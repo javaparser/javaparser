@@ -22,11 +22,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,9 +49,24 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
 
     @Override
     public List<ResolvedValueDeclaration> getSymbolDeclarations() {
-        return wrappedNode.getVariables().stream()
+        LinkedList<JavaParserSymbolDeclaration> variables = wrappedNode.getVariables()
+                .stream()
                 .map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver))
                 .collect(Collectors.toCollection(LinkedList::new));
+
+        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
+                .stream()
+                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())
+                .map(variableDeclarator -> variableDeclarator.getInitializer().get())
+                .map(expression -> expression.findAll(PatternExpr.class))
+                .flatMap(Collection::stream)
+                .map(v -> JavaParserSymbolDeclaration.patternVar(v, typeSolver))
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        LinkedList<ResolvedValueDeclaration> all = new LinkedList<>(variables);
+        all.addAll(patterns);
+
+        return all;
     }
 
 }

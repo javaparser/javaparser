@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -69,6 +70,10 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
         return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getName().getId(), typeSolver);
+    }
+
+    public static JavaParserSymbolDeclaration patternVar(PatternExpr patternExpr, TypeSolver typeSolver) {
+        return new JavaParserSymbolDeclaration(patternExpr, patternExpr.getName().getId(), typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {
@@ -153,6 +158,13 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
             } else if (demandParentNode(wrappedNode) instanceof FieldDeclaration) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
             }
+        } else if (wrappedNode instanceof PatternExpr) {
+            PatternExpr patternExpr = (PatternExpr) wrappedNode;
+
+            final ResolvedType rawType = JavaParserFacade.get(typeSolver)
+                    .convertToUsage(patternExpr.getType(), wrappedNode);
+
+            return rawType;
         }
         throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
     }

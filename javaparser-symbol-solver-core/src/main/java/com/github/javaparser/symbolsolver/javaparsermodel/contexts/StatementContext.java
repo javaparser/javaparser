@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -34,6 +35,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -129,11 +131,25 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return parentContext.solveSymbolAsValue(name);
         }
         if (demandParentNode(wrappedNode) instanceof IfStmt) {
+            // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
+            if (nodeContextIsThenOfIfStmt(getParent().get())) {
+                List<PatternExpr> patternExprs = getParent().get().patternExprExposedToChild(wrappedNode);
+                for (PatternExpr patternExpr : patternExprs) {
+                    if (patternExpr.getName().getIdentifier().equals(name)) {
+                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+                        return Optional.of(Value.from(decl));
+                    }
+                }
+            }
+
+            // Otherwise continue up the scope chain as normal...
             return parentContext.solveSymbolAsValue(name);
         }
+
         if (!(demandParentNode(wrappedNode) instanceof NodeWithStatements)) {
             return parentContext.solveSymbolAsValue(name);
         }
+
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) demandParentNode(wrappedNode);
         int position = -1;
         for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
