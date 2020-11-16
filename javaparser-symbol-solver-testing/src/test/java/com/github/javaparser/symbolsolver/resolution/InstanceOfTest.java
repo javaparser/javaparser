@@ -33,7 +33,34 @@ public class InstanceOfTest {
 
     protected final TypeSolver typeSolver = new ReflectionTypeSolver();
 
+    /**
+     * Locations:
+     * - Local variables
+     * - If conditionals
+     *
+     * - Usage after declaration
+     * - Usage before declaration
+     *
+     * Simple:
+     * - A && B    Resolves     instanceof String s && s
+     * - A || B    Not          instanceof String s || s
+     *
+     * Negated:
+     * - !A && B   Not
+     *
+     * If/Else If/Else Blocks
+     * - if(A) { B - Resolves }
+     * - if(!A) { B - Not }
+     *
+     * - if() {} else if (A) { B - Resolves }
+     * - if() {} else if (!A) { B - Not }
+     *
+     *
+     *
+     */
     protected String sourceCode = "" +
+            "import java.util.List;\n" +
+            "\n" +
             "class X {\n" +
             "\n" +
             "    public void localVariable() {\n" +
@@ -61,6 +88,11 @@ public class InstanceOfTest {
             "        boolean condition = obj instanceof String s && s.contains(\"b\");\n" +
             "    }\n" +
             "\n" +
+            "    public void localVariable_logicalOr_shouldNotResolve() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        boolean condition = obj instanceof String s || s.contains(\"b\");\n" +
+            "    }\n" +
+            "\n" +
             "    public void if_conditional_and() {\n" +
             "        String obj = \"abc\";\n" +
             "        if (obj instanceof String s && s.contains(\"b\")) {\n" +
@@ -81,6 +113,50 @@ public class InstanceOfTest {
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) {\n" +
             "            result = s.contains(\"b\");\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_usageBeforeDeclaration() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        if(s.contains(\"b\") && obj instanceof String s) {\n" +
+            "            // Empty BlockStmt\n" +
+            "        }\n" +
+            "    \n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_1() {\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if ((obj instanceof String s) && true) {\n" +
+            "            result = s.contains(\"b\");\n" +
+            "        } else {\n" +
+            "            result = s.contains(\"error\");\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_negated_no_braces_on_else() {\n" +
+            "        List<Integer> s;\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (!(obj instanceof String s) && true) {\n" +
+            "            // Empty BlockStmt\n" +
+            "        } else\n" +
+            "            result = s.contains(\"b\");\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_negated_no_braces_on_if() {\n" +
+            "        List<Integer> s;\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (!(obj instanceof String s) && true) \n" +
+            "            result = s.contains(\"b\");\n" +
+            "        \n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_or() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        if(obj instanceof String s || s.contains(\"b\")) {\n" +
+            "            // Empty BlockStmt\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
@@ -160,7 +236,6 @@ public class InstanceOfTest {
 
             @Test
             public void logicalAndShouldResolve() {
-
                 MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalAndShouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
@@ -192,15 +267,8 @@ public class InstanceOfTest {
             @Disabled("FIXME: Temporarily disabled -- this is a relatively minor bug, to be fixed later.")
             @Test
             public void logicalOrShouldNotResolve() {
-                String x = "class X {\n" +
-                        "  public void foo() {\n" +
-                        "    String obj = \"abc\";\n" +
-                        "    boolean condition = obj instanceof String s || s.contains(\"b\");\n" +
-                        "  }\n" +
-                        "}\n";
-
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalOr_shouldNotResolve");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
@@ -225,18 +293,8 @@ public class InstanceOfTest {
 
         @Test
         public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
-            String x = "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
-                    "        // empty block\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    "}\n";
-
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -270,18 +328,11 @@ public class InstanceOfTest {
          */
         @Test
         public void condition_rightBranch_nameExprResolves() {
-            String x = "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
-                    "        // empty block\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    "}\n";
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<BinaryExpr> binaryExprs = cu.findAll(BinaryExpr.class);
+            final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
             assertEquals(1, binaryExprs.size());
 
             BinaryExpr binaryExpr = binaryExprs.get(0);
@@ -300,18 +351,11 @@ public class InstanceOfTest {
          */
         @Test
         public void condition_rightBranch_methodCallResolves() {
-            String x = "class X {\n" +
-                    "  public X() {\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
-                    "        // empty block\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    "}\n";
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<BinaryExpr> binaryExprs = cu.findAll(BinaryExpr.class);
+            final List<BinaryExpr> binaryExprs = methodDeclaration.findAll(BinaryExpr.class);
             assertEquals(1, binaryExprs.size());
 
             BinaryExpr binaryExpr = binaryExprs.get(0);
@@ -329,18 +373,8 @@ public class InstanceOfTest {
 
         @Test
         public void condition_leftBranchMethodCall_doesNotResolve() {
-            String x = "class X {\n" +
-                    "    public X() {\n" +
-                    "        String obj = \"abc\";\n" +
-                    "        if(s.contains(\"b\") && obj instanceof String s) {\n" +
-                    "            // Empty BlockStmt\n" +
-                    "        }\n" +
-                    "    \n" +
-                    "    }\n" +
-                    "}\n";
-
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
@@ -355,6 +389,7 @@ public class InstanceOfTest {
 
         @Nested
         class IfElseIfElseBlock {
+
 
             private static final String CODE_INSTANCEOF_PATTERN_IF_ELSE = "" +
                     "class X {\n" +
@@ -473,23 +508,8 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-                String x = "import java.util.List;\n" +
-                        "\n" +
-                        "class X {\n" +
-                        "    public X() {\n" +
-                        "        List<Integer> s;\n" +
-                        "        boolean result;\n" +
-                        "        String obj = \"abc\";\n" +
-                        "        if (!(obj instanceof String s) && true) {\n" +
-                        "            // Empty BlockStmt\n" +
-                        "        } else\n" +
-                        "            result = s.contains(\"b\");\n" +
-                        "\n" +
-                        "    }\n" +
-                        "}\n";
-
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
 //        MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -509,19 +529,8 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
-                String x = "class X {\n" +
-                        "  public X() {\n" +
-                        "    List<Integer> s;\n" +
-                        "    boolean result;\n" +
-                        "    String obj = \"abc\";\n" +
-                        "    if (!(obj instanceof String s) && true) \n" +
-                        "        result = s.contains(\"b\");\n" +
-                        "    \n" +
-                        "  }\n" +
-                        " }\n";
-
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -540,19 +549,8 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
-                String x = "class X {\n" +
-                        "  public X() {\n" +
-                        "    List<Integer> s;\n" +
-                        "    boolean result;\n" +
-                        "    String obj = \"abc\";\n" +
-                        "    if (!(obj instanceof String s) && true) {\n" +
-                        "        result = s.contains(\"b\");\n" +
-                        "    }\n" +
-                        "  }\n" +
-                        " }\n";
-
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -573,19 +571,8 @@ public class InstanceOfTest {
 
         @Test
         public void givenInstanceOfPattern_andField_thenResolvesToPattern2() {
-            String x = "class X {\n" +
-                    "  public X() {\n" +
-                    "    List<Integer> s;\n" +
-                    "    boolean result;\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    if (!(obj instanceof String s) && true) {\n" +
-                    "        result = s.contains(\"b\");\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    " }\n";
-
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -604,18 +591,10 @@ public class InstanceOfTest {
 
         @Test
         public void test_shouldFail() {
-            String x = "class X {\n" +
-                    "    public X() {\n" +
-                    "        String obj = \"abc\";\n" +
-                    "        if(obj instanceof String s || s.contains(\"b\")) {\n" +
-                    "            // Empty BlockStmt\n" +
-                    "        }\n" +
-                    "    \n" +
-                    "    }\n" +
-                    "}\n";
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_or");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
 
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
