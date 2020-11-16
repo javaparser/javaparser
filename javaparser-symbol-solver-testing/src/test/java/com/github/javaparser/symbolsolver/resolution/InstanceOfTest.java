@@ -63,7 +63,6 @@ public class InstanceOfTest {
 
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
 
-    @Disabled
     @Test
     public void binaryExpr_shouldPass() {
         String x = "class X {\n" +

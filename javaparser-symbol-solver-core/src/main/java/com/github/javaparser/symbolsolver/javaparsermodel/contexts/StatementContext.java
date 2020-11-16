@@ -186,6 +186,19 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
         Node parentOfWrappedNode = demandParentNode(wrappedNode);
 
+
+        // If this is the "then" section of an if/else if (i.e. not an else) -- e.g. wrappedNode of ExpressionStmt
+        // ... consider pattern expressions defined within the IfStmt condition
+        boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
+        if (nodeContextIsThenOfIfStmt) {
+            List<PatternExpr> patternExprs = parentContext.patternExprExposedToChild(getWrappedNode());
+            for (PatternExpr patternExpr : patternExprs) {
+                if (patternExpr.getName().getIdentifier().equals(name)) {
+                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+                }
+            }
+        }
+
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (parentOfWrappedNode instanceof MethodDeclaration) {
             return parentContext.solveSymbol(name);
