@@ -18,18 +18,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+package com.github.javaparser.metamodel;
 
-package com.github.javaparser.ast.validator;
+import java.util.Optional;
 
-/**
- * This validator validates according to Java 14 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
- */
-public class Java14Validator extends Java13Validator {
+public class PatternExprMetaModel extends ExpressionMetaModel {
 
-    public Java14Validator() {
-        super();
-        remove(noInstanceOfPattern);
+    PatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.PatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", false, false);
     }
+
+    public PropertyMetaModel namePropertyMetaModel;
+
+    public PropertyMetaModel typePropertyMetaModel;
 }

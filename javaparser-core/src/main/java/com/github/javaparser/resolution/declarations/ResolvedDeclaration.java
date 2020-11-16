@@ -58,6 +58,10 @@ public interface ResolvedDeclaration {
         return false;
     }
 
+    default boolean isPattern() {
+        return false;
+    }
+
     /**
      * Does this declaration represents a method parameter?
      */
@@ -109,5 +113,9 @@ public interface ResolvedDeclaration {
 
     default ResolvedEnumConstantDeclaration asEnumConstant() {
         throw new UnsupportedOperationException(String.format("%s is not an EnumConstantDeclaration", this));
+    }
+
+    default ResolvedPatternDeclaration asPattern() {
+        throw new UnsupportedOperationException(String.format("%s is not an Pattern", this));
     }
 }

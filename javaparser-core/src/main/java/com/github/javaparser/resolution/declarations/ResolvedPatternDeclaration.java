@@ -19,17 +19,30 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.resolution.declarations;
 
 /**
- * This validator validates according to Java 14 syntax rules.
+ * Declaration of a pattern expression.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
- */
-public class Java14Validator extends Java13Validator {
+ * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
 
-    public Java14Validator() {
-        super();
-        remove(noInstanceOfPattern);
+ * @author Roger Howell
+ * @see com.github.javaparser.ast.expr.PatternExpr
+ */
+public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
+
+    @Override
+    default boolean isPattern() {
+        return true;
+    }
+
+
+    default boolean hasName() {
+        return true;
+    }
+
+
+    default String describeType() {
+        return getType().describe();
     }
 }
