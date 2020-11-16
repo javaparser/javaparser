@@ -53,6 +53,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         super(wrappedNode, typeSolver);
     }
 
+    @Override
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
@@ -105,7 +106,7 @@ public abstract class AbstractMethodLikeDeclarationContext
                 }
             }
         }
-        
+
         // Local types
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
         for (TypeDeclaration<?> localType : localTypes) {
@@ -116,7 +117,7 @@ public abstract class AbstractMethodLikeDeclarationContext
                         name.substring(localType.getName().getId().length() + 1));
             }
         }
-        
+
         return getParent()
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                 .solveType(name);

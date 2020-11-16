@@ -24,6 +24,8 @@ package com.github.javaparser.symbolsolver.core.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -80,6 +82,15 @@ public interface Context {
         }
     }
 
+
+    /**
+     * The fields that are declared and in this immediate context made visible to a given child.
+     * This list could include values which are shadowed.
+     */
+    default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
     /**
      * The local variables that are declared in this immediate context and made visible to a given child.
      * This list could include values which are shadowed.
@@ -97,34 +108,36 @@ public interface Context {
     }
 
     /**
-     * The fields that are declared and in this immediate context made visible to a given child.
+     * The parameters that are declared in this immediate context and made visible to a given child.
      * This list could include values which are shadowed.
      */
-    default List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
+    default List<PatternExpr> patternExprExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
      * Aim to resolve the given name by looking for a variable matching it.
-     *
-     * To do it consider local variables that are visible in a certain scope as defined in JLS 6.3. Scope of a Declaration.
-     *
-     * 1. The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the declaration
+     * <p>
+     * To do it consider local variables that are visible in a certain scope as defined in JLS 6.3. Scope of a
+     * Declaration.
+     * <p>
+     * 1. The scope of a local variable declaration in a block (§14.4) is the rest of the block in which the
+     * declaration
      * appears, starting with its own initializer and including any further declarators to the right in the local
      * variable declaration statement.
-     *
+     * <p>
      * 2. The scope of a local variable declared in the ForInit part of a basic for statement (§14.14.1) includes all
      * of the following:
      * 2.1 Its own initializer
      * 2.2 Any further declarators to the right in the ForInit part of the for statement
      * 2.3 The Expression and ForUpdate parts of the for statement
      * 2.4 The contained Statement
-     *
+     * <p>
      * 3. The scope of a local variable declared in the FormalParameter part of an enhanced for statement (§14.14.2) is
      * the contained Statement.
      * 4. The scope of a parameter of an exception handler that is declared in a catch clause of a try statement
      * (§14.20) is the entire block associated with the catch.
-     *
+     * <p>
      * 5. The scope of a variable declared in the ResourceSpecification of a try-with-resources statement (§14.20.3) is
      * from the declaration rightward over the remainder of the ResourceSpecification and the entire try block
      * associated with the try-with-resources statement.
@@ -133,15 +146,22 @@ public interface Context {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
+
+        // First check if the variable is directly declared within this context.
+        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
         Context parentContext = getParent().get();
-        Optional<VariableDeclarator> localRes = parentContext
-                .localVariablesExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+        Optional<VariableDeclarator> localResolutionResults = parentContext
+                .localVariablesExposedToChild(wrappedNode)
                 .stream()
                 .filter(vd -> vd.getNameAsString().equals(name))
                 .findFirst();
-        if (localRes.isPresent()) {
-            return localRes;
+
+        if (localResolutionResults.isPresent()) {
+            return localResolutionResults;
         }
+
+
+        // If we don't find the variable locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.localVariableDeclarationInScope(name);
     }
 
@@ -149,16 +169,63 @@ public interface Context {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
+
+        // First check if the parameter is directly declared within this context.
+        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
         Context parentContext = getParent().get();
-        Optional<Parameter> localRes = parentContext
-                .parametersExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+        Optional<Parameter> localResolutionResults = parentContext
+                .parametersExposedToChild(wrappedNode)
                 .stream()
                 .filter(vd -> vd.getNameAsString().equals(name))
                 .findFirst();
-        if (localRes.isPresent()) {
-            return localRes;
+
+        if (localResolutionResults.isPresent()) {
+            return localResolutionResults;
         }
+
+        // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.parameterDeclarationInScope(name);
+    }
+
+
+    /**
+     * With respect to solving, the AST "parent" of a block statement is not necessarily the same as the scope parent.
+     * <br>Example:
+     * <br>
+     * <pre>{@code
+     *  public String x() {
+     *      if(x) {
+     *          // Parent node: the block attached to the method declaration
+     *          // Scope-parent: the block attached to the method declaration
+     *      } else if {
+     *          // Parent node: the if
+     *          // Scope-parent: the block attached to the method declaration
+     *      } else {
+     *          // Parent node: the elseif
+     *          // Scope-parent: the block attached to the method declaration
+     *      }
+     *  }
+     * }</pre>
+     */
+    default Optional<PatternExpr> patternExprInScope(String name) {
+        if (!getParent().isPresent()) {
+            return Optional.empty();
+        }
+        Context parentContext = getParent().get();
+        // First check if the parameter is directly declared within this context.
+        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Optional<PatternExpr> localResolutionResults = parentContext
+                .patternExprExposedToChild(wrappedNode)
+                .stream()
+                .filter(vd -> vd.getNameAsString().equals(name))
+                .findFirst();
+
+        if (localResolutionResults.isPresent()) {
+            return localResolutionResults;
+        }
+
+        // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
+        return parentContext.patternExprInScope(name);
     }
 
     default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {
@@ -166,16 +233,22 @@ public interface Context {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
-        Optional<ResolvedFieldDeclaration> localRes = parentContext
-                .fieldsExposedToChild(((AbstractJavaParserContext)this).getWrappedNode())
+        // First check if the parameter is directly declared within this context.
+        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Optional<ResolvedFieldDeclaration> localResolutionResults = parentContext
+                .fieldsExposedToChild(wrappedNode)
                 .stream()
                 .filter(vd -> vd.getName().equals(name))
                 .findFirst();
-        if (localRes.isPresent()) {
-            return localRes;
+
+        if (localResolutionResults.isPresent()) {
+            return localResolutionResults;
         }
+
+        // If we don't find the field locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.fieldDeclarationInScope(name);
     }
+
 
     /* Constructor resolution */
 
@@ -210,16 +283,110 @@ public interface Context {
             MethodUsage methodUsage;
             if (methodDeclaration instanceof TypeVariableResolutionCapability) {
                 methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
-                                      .resolveTypeVariables(this, argumentsTypes);
+                        .resolveTypeVariables(this, argumentsTypes);
             } else {
                 throw new UnsupportedOperationException("Resolved method declarations should have the " +
-                                                        TypeVariableResolutionCapability.class.getName() + ".");
+                        TypeVariableResolutionCapability.class.getName() + ".");
             }
 
             return Optional.of(methodUsage);
         } else {
             return Optional.empty();
         }
+    }
+
+
+    /**
+     * <pre>{@code
+     * if() {
+     *     // Does not match here (doesn't need to, as stuff inside of the if() is likely in context..)
+     * } else if() {
+     *     // Matches here
+     * } else {
+     *     // Matches here
+     * }
+     * }</pre>
+     *
+     * @return true, If this is an if inside of an if...
+     */
+    default boolean nodeContextIsChainedIfElseIf(Context parentContext) {
+        return parentContext instanceof AbstractJavaParserContext
+                && ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt
+                && ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
+    }
+
+    /**
+     * <pre>{@code
+     * if() {
+     *     // Does not match here (doesn't need to, as stuff inside of the if() is likely in context..)
+     * } else {
+     *     // Does not match here, as the else block is a field inside of an ifstmt as opposed to child
+     * }
+     * }</pre>
+     *
+     * @return true, If this is an else inside of an if...
+     */
+    default boolean nodeContextIsImmediateChildElse(Context parentContext) {
+        if (!(parentContext instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+        if (!(this instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+
+        AbstractJavaParserContext<?> abstractContext = (AbstractJavaParserContext<?>) this;
+        AbstractJavaParserContext<?> abstractParentContext = (AbstractJavaParserContext<?>) parentContext;
+
+        Node wrappedNode = abstractContext.getWrappedNode();
+        Node wrappedParentNode = abstractParentContext.getWrappedNode();
+
+        if (wrappedParentNode instanceof IfStmt) {
+            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+            if (parentIfStmt.getElseStmt().isPresent()) {
+                boolean currentNodeIsAnElseBlock = parentIfStmt.getElseStmt().get() == wrappedNode;
+                if (currentNodeIsAnElseBlock) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <pre>{@code
+     * if() {
+     *     // Does not match here (doesn't need to, as stuff inside of the if() is likely in context..)
+     * } else {
+     *     // Does not match here, as the else block is a field inside of an ifstmt as opposed to child
+     * }
+     * }</pre>
+     *
+     * @return true, If this is an else inside of an if...
+     */
+    default boolean nodeContextIsThenOfIfStmt(Context parentContext) {
+        if (!(parentContext instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+        if (!(this instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+
+        AbstractJavaParserContext<?> abstractContext = (AbstractJavaParserContext<?>) this;
+        AbstractJavaParserContext<?> abstractParentContext = (AbstractJavaParserContext<?>) parentContext;
+
+        Node wrappedNode = abstractContext.getWrappedNode();
+        Node wrappedParentNode = abstractParentContext.getWrappedNode();
+
+        if (wrappedParentNode instanceof IfStmt) {
+            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+            boolean currentNodeIsAnElseBlock = parentIfStmt.getThenStmt() == wrappedNode;
+            if (currentNodeIsAnElseBlock) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
