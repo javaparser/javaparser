@@ -3064,6 +3064,15 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://openjdk.java.net/jeps/375
+ * The instanceof grammar is extended accordingly:
+ * <pre>{@code
+ *     Pattern:
+ *         ReferenceType Identifier
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
     ReferenceType type;
@@ -3123,6 +3132,18 @@ Expression InstanceOfExpression():
  *         RelationalExpression <= ShiftExpression
  *         RelationalExpression >= ShiftExpression
  *         RelationalExpression instanceof ReferenceType
+ * }<pre>
+ * // Note that JDK 13/14 introduce pattern Matching for instanceof
+ * https://openjdk.java.net/jeps/375
+ * The instanceof grammar is extended accordingly:
+ * <pre>{@code
+ *     RelationalExpression:
+ *         ...
+ *         RelationalExpression instanceof ReferenceType
+ *         RelationalExpression instanceof Pattern
+ *
+ *     Pattern:
+ *         ReferenceType Identifier
  * }<pre>
  */
 Expression RelationalExpression():
