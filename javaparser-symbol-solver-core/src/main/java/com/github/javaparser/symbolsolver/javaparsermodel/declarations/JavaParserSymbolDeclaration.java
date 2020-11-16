@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
@@ -135,8 +136,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
                 final ResolvedType rawType;
-                if (parameter.getType() instanceof com.github.javaparser.ast.type.PrimitiveType) {
-                    rawType = ResolvedPrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name());
+                if (parameter.getType() instanceof PrimitiveType) {
+                    rawType = ResolvedPrimitiveType.byName(((PrimitiveType) parameter.getType()).getType().name());
                 } else {
                     rawType = JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
                 }

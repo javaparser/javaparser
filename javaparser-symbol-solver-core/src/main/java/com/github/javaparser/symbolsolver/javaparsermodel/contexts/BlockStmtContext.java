@@ -62,9 +62,9 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
     private List<VariableDeclarator> localVariablesDeclaredIn(Statement statement) {
         if (statement instanceof ExpressionStmt) {
-            ExpressionStmt expressionStmt = (ExpressionStmt)statement;
+            ExpressionStmt expressionStmt = (ExpressionStmt) statement;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr)expressionStmt.getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expressionStmt.getExpression();
                 List<VariableDeclarator> variableDeclarators = new LinkedList<>();
                 variableDeclarators.addAll(variableDeclarationExpr.getVariables());
                 return variableDeclarators;
@@ -72,15 +72,15 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
         }
         return Collections.emptyList();
     }
-    
+
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         // tries to resolve a declaration from local variables defined in child statements
         // or from parent node context
         // for example resolve declaration for the MethodCallExpr a.method() in
         // A a = this;
-        // { 
-        //   a.method(); 
+        // {
+        //   a.method();
         // }
         if (wrappedNode.getStatements().size() > 0) {
             List<VariableDeclarator> variableDeclarators = new LinkedList<>();
@@ -95,5 +95,5 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
             }
         }
         return super.solveSymbol(name);
-    } 
+    }
 }

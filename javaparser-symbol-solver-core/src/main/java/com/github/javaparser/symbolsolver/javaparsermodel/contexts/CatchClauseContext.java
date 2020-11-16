@@ -47,6 +47,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         super(wrappedNode, typeSolver);
     }
 
+    @Override
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
