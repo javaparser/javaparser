@@ -1,6 +1,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -9,8 +11,10 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
@@ -27,7 +31,8 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
         // Not applicable for || -- Pattern will only be created and used on the right when instanceof evaluates to true
         if (binaryExpr.getOperator() == BinaryExpr.Operator.AND) {
-            List<PatternExpr> patternExprs = binaryExpr.getLeft().findAll(PatternExpr.class);
+            Expression leftBranch = binaryExpr.getLeft();
+            List<PatternExpr> patternExprs = leftBranch.findAll(PatternExpr.class);
             for (PatternExpr patternExpr : patternExprs) {
                 if (patternExpr.getName().getIdentifier().equals(name)) {
                     return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
@@ -40,12 +45,6 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        // If there is no parent
-        if(!getParent().isPresent()) {
-            return Optional.empty();
-        }
-        Context parentContext = getParent().get();
-
         BinaryExpr binaryExpr = wrappedNode;
         // FIXME: Consider negations...
         // FIXME: Consider child binary expressions...
@@ -63,7 +62,47 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             }
         }
 
+        if (binaryExpr.getOperator() == BinaryExpr.Operator.AND) {
+            // FIXME: If the usage is in the right branch, is it defined in the right branch... etc...
+            List<PatternExpr> patternExprs = binaryExpr.getLeft().findAll(PatternExpr.class);
+            for (PatternExpr patternExpr : patternExprs) {
+                if (patternExpr.getName().getIdentifier().equals(name)) {
+                    JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+                    return Optional.of(Value.from(decl));
+                }
+            }
+        }
+
+            // If there is no parent
+        if(!getParent().isPresent()) {
+            return Optional.empty();
+        }
+        Context parentContext = getParent().get();
+
         // if nothing is found we should ask the parent context
         return parentContext.solveSymbolAsValue(name);
+    }
+
+
+    /**
+     * FIXME: This returns the patternExpr POTENTIALLY available to the child.
+     */
+    @Override
+    public List<PatternExpr> patternExprExposedToChild(Node child) {
+        List<PatternExpr> res = new LinkedList<>();
+
+        // PatternExpr will only be exposed to the given child IF it is in the right-hand branch of this binary expr.
+        boolean givenNodeIsWithinRightBranch = wrappedNode.getRight().containsWithinRange(child);
+        if (!givenNodeIsWithinRightBranch) {
+            return res;
+        }
+
+        List<PatternExpr> allPatternExprInLeftBranch = wrappedNode.getLeft()
+                .findAll(PatternExpr.class);
+
+        // Filter to include only the pattern expressions that exist prior to the given node.
+        return allPatternExprInLeftBranch.stream()
+                .filter(patternExpr -> patternExpr.getRange().get().end.isBefore(child.getRange().get().begin))
+                .collect(Collectors.toList());
     }
 }

@@ -389,4 +389,30 @@ public interface Context {
         return false;
     }
 
+
+    default boolean nodeContextIsConditionOfIfStmt(Context parentContext) {
+        if (!(parentContext instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+        if (!(this instanceof AbstractJavaParserContext)) {
+            return false;
+        }
+
+        AbstractJavaParserContext<?> abstractContext = (AbstractJavaParserContext<?>) this;
+        AbstractJavaParserContext<?> abstractParentContext = (AbstractJavaParserContext<?>) parentContext;
+
+        Node wrappedNode = abstractContext.getWrappedNode();
+        Node wrappedParentNode = abstractParentContext.getWrappedNode();
+
+        if (wrappedParentNode instanceof IfStmt) {
+            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+            boolean currentNodeIsCondition = parentIfStmt.getCondition() == wrappedNode;
+            if (currentNodeIsCondition) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

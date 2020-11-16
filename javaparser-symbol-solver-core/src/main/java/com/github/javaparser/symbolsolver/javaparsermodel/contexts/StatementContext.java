@@ -132,7 +132,16 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         if (demandParentNode(wrappedNode) instanceof IfStmt) {
             // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
+            // ... or if we're in the condiiton
             if (nodeContextIsThenOfIfStmt(getParent().get())) {
+                List<PatternExpr> patternExprs = getParent().get().patternExprExposedToChild(wrappedNode);
+                for (PatternExpr patternExpr : patternExprs) {
+                    if (patternExpr.getName().getIdentifier().equals(name)) {
+                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+                        return Optional.of(Value.from(decl));
+                    }
+                }
+            } else if (nodeContextIsConditionOfIfStmt(getParent().get())) {
                 List<PatternExpr> patternExprs = getParent().get().patternExprExposedToChild(wrappedNode);
                 for (PatternExpr patternExpr : patternExprs) {
                     if (patternExpr.getName().getIdentifier().equals(name)) {

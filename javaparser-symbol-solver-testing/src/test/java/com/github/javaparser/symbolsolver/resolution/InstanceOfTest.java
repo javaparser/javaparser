@@ -6,20 +6,27 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InstanceOfTest {
 
@@ -101,6 +108,88 @@ public class InstanceOfTest {
         assertEquals("java.lang.String", resolvedType.describe());
 
 
+    }
+
+    @Test
+    public void binaryExpr_patternExprComponentsResolve() {
+        String x = "class X {\n" +
+                "  public X() {\n" +
+                "    boolean result;\n" +
+                "    String obj = \"abc\";\n" +
+                "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
+                "        // empty block\n" +
+                "    }\n" +
+                "  }\n" +
+                "}\n";
+
+        final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
+        final List<BinaryExpr> binaryExprs = cu.findAll(BinaryExpr.class);
+        assertEquals(1, binaryExprs.size());
+
+        BinaryExpr binaryExpr = binaryExprs.get(0);
+        List<PatternExpr> patternExprs = binaryExpr.findAll(PatternExpr.class);
+        assertEquals(1, patternExprs.size());
+
+        PatternExpr patternExpr = patternExprs.get(0);
+        SimpleName patternExprName = patternExpr.getName();
+        ReferenceType patternExprType = patternExpr.getType();
+
+        assertEquals("s", patternExprName.asString());
+        ResolvedType resolvedPatternExprType = patternExprType.resolve();
+        System.out.println(resolvedPatternExprType);
+    }
+
+    @Test
+    public void binaryExpr_rightBranchNameExprResolves() {
+        String x = "class X {\n" +
+                "  public X() {\n" +
+                "    boolean result;\n" +
+                "    String obj = \"abc\";\n" +
+                "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
+                "        // empty block\n" +
+                "    }\n" +
+                "  }\n" +
+                "}\n";
+
+        final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
+        final List<BinaryExpr> binaryExprs = cu.findAll(BinaryExpr.class);
+        assertEquals(1, binaryExprs.size());
+
+        BinaryExpr binaryExpr = binaryExprs.get(0);
+        List<NameExpr> nameExprs = binaryExpr.getRight().findAll(NameExpr.class);
+        assertEquals(1, nameExprs.size());
+
+        NameExpr nameExpr = nameExprs.get(0);
+        ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+        System.out.println(resolvedNameExpr);
+    }
+
+    @Test
+    public void binaryExpr_rightBranchMethodCallResolves() {
+        String x = "class X {\n" +
+                "  public X() {\n" +
+                "    boolean result;\n" +
+                "    String obj = \"abc\";\n" +
+                "    if(obj instanceof String s && s.contains(\"b\")) {\n" +
+                "        // empty block\n" +
+                "    }\n" +
+                "  }\n" +
+                "}\n";
+
+        final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
+        final List<BinaryExpr> binaryExprs = cu.findAll(BinaryExpr.class);
+        assertEquals(1, binaryExprs.size());
+
+        BinaryExpr binaryExpr = binaryExprs.get(0);
+        List<MethodCallExpr> methodCallExprs = binaryExpr.getRight().findAll(MethodCallExpr.class);
+        assertEquals(1, methodCallExprs.size());
+
+        MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+        ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+        System.out.println("resolvedType = " + resolvedType);
+
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
+        System.out.println("resolvedMethodDeclaration = " + resolvedMethodDeclaration);
     }
 
     @Test
@@ -237,6 +326,7 @@ public class InstanceOfTest {
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
             // Note: Only printed if the above line doesn't error...
             System.out.println("resolve = " + resolve);
+            System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
         });
     }
 
@@ -373,7 +463,7 @@ public class InstanceOfTest {
     }
 
     @Test
-    public void variable_shouldPass() {
+    public void variableInBlock_shouldPass() {
         String x = "class X {\n" +
                 "  public void foo() {\n" +
                 "    String obj = \"abc\";\n" +
