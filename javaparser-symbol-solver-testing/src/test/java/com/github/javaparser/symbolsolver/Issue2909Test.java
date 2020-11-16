@@ -70,4 +70,47 @@ public class Issue2909Test extends AbstractResolutionTest {
             assertEquals("Program.OuterClass",expr.calculateResolvedType().describe());
         });
     }
+    
+    @Test
+    void test() {
+        ParserConfiguration config = new ParserConfiguration();
+        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        StaticJavaParser.setConfiguration(config);
+
+        String s = "package test;\n" +
+                "\n" +
+                "public class Program {\n" +
+                "\n" +
+                "    public class OuterClass {\n" +
+                "    }\n" +
+                "\n" +
+                "    public class FarOuterClass {\n" +
+                "\n" +
+                "        public class OuterClass {\n" +
+                "            int field = 0;\n" +
+                "\n" +
+                "            public class InnerClass {\n" +
+                "                InnerClass() {\n" +
+                "                    // Different cases to refer to enclosing type\n" +
+                "                    OuterClass outer1 = OuterClass.this; // case1\n" +
+                "                    OuterClass.this.field = 1; // case1\n" +
+                "                    OuterClass outer2 = FarOuterClass.OuterClass.this; // case2\n" +
+                "                    FarOuterClass.OuterClass.this.field = 1; // case2\n" +
+                "                    OuterClass outer3 = Program.FarOuterClass.OuterClass.this; // case3\n" +
+                "                    Program.FarOuterClass.OuterClass.this.field = 1; // case3\n" +
+                "                    OuterClass outer4 = test.Program.FarOuterClass.OuterClass.this; // case4\n" +
+                "                    test.Program.FarOuterClass.OuterClass.this.field = 1; // case4\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
+        exprs.forEach(expr-> {
+            assertEquals("test.Program.FarOuterClass.OuterClass",expr.calculateResolvedType().describe());
+            System.out.println(String.format("%s is resolved to %s", expr.toString(), expr.calculateResolvedType().describe()));
+        });
+    }
 }
