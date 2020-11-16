@@ -6,6 +6,7 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -17,6 +18,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,29 +31,86 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InstanceOfTest {
 
+    protected final TypeSolver typeSolver = new ReflectionTypeSolver();
 
-    private final TypeSolver typeSolver = new ReflectionTypeSolver();
+    protected String sourceCode = "" +
+            "class X {\n" +
+            "\n" +
+            "    public void localVariable() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        boolean condition = obj instanceof String s;\n" +
+            "        boolean result = s.contains(\"b\");\n" +
+            "    }\n" +
+            "\n" +
+            "    public void localVariable_usageFollowsDeclaration() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        boolean condition = obj instanceof String s;\n" +
+            "        boolean result;\n" +
+            "        result = s.contains(\"b\");\n" +
+            "    }\n" +
+            "\n" +
+            "    public void localVariable_usagePreceedsDeclaration() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        boolean result;\n" +
+            "        result = s.contains(\"b\");\n" +
+            "        boolean condition = obj instanceof String s;\n" +
+            "    }\n" +
+            "\n" +
+            "    public void localVariable_logicalAndShouldResolve() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        boolean condition = obj instanceof String s && s.contains(\"b\");\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_and() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (obj instanceof String s && s.contains(\"b\")) {\n" +
+            "            // Empty BlockStmt\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_or() {\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (obj instanceof String s || s.contains(\"b\")) {\n" +
+            "            // Empty BlockStmt\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "    public void if_conditional_negated() {\n" +
+            "        List<Integer> s;\n" +
+            "        boolean result;\n" +
+            "        String obj = \"abc\";\n" +
+            "        if (!(obj instanceof String s) && true) {\n" +
+            "            result = s.contains(\"b\");\n" +
+            "        }\n" +
+            "    }\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "}\n";
+
+
+    protected CompilationUnit compilationUnit;
+
+
+    @BeforeEach
+    public void setup() {
+        compilationUnit = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, sourceCode);
+    }
+
 
     @Nested
     class VariableInBlock {
 
         @Test
         public void variableInBlock_shouldResolveOnFollowingLines() {
-            String x = "class X {\n" +
-                    "  public void foo() {\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    boolean condition = obj instanceof String s;\n" +
-                    "    boolean result;\n" +
-                    "    result = s.contains(\"b\");\n" +
-                    "  }\n" +
-                    "}\n";
-
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable_usageFollowsDeclaration");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr inScopeMethodCall = methodCalls.get(0);
-
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
@@ -75,17 +134,9 @@ public class InstanceOfTest {
 
         @Test
         public void variableInBlock_mustNotResolveBeforeDeclaration() {
-            String x = "class X {\n" +
-                    "  public void foo() {\n" +
-                    "    String obj = \"abc\";\n" +
-                    "    boolean result;\n" +
-                    "    result = s.contains(\"b\");\n" +
-                    "    boolean condition = obj instanceof String s;\n" +
-                    "  }\n" +
-                    "}\n";
 
-            final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-            final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable_usagePreceedsDeclaration");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
@@ -109,15 +160,9 @@ public class InstanceOfTest {
 
             @Test
             public void logicalAndShouldResolve() {
-                String x = "class X {\n" +
-                        "  public void foo() {\n" +
-                        "    String obj = \"abc\";\n" +
-                        "    boolean condition = obj instanceof String s && s.contains(\"b\");\n" +
-                        "  }\n" +
-                        "}\n";
 
-                final CompilationUnit cu = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, x);
-                final List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
+                MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalAndShouldResolve");
+                final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
@@ -176,7 +221,7 @@ public class InstanceOfTest {
     }
 
     @Nested
-    class IfElseIfElseScope {
+    class IfElseIfElse {
 
         @Test
         public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
@@ -583,6 +628,38 @@ public class InstanceOfTest {
             });
         }
 
+    }
+
+
+    @Nested
+    class Simpler {
+
+        @Test
+        public void test() {
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable");
+
+            List<NameExpr> nameExprs = methodDeclaration.findAll(NameExpr.class);
+            System.out.println("nameExprs = " + nameExprs);
+
+            assertEquals(2, nameExprs.size());
+
+            NameExpr nameExpr = nameExprs.get(0);
+            ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+            ResolvedType resolvedNameExprType = nameExpr.calculateResolvedType();
+
+            System.out.println("resolvedNameExpr = " + resolvedNameExpr);
+            System.out.println("resolvedNameExprType = " + resolvedNameExprType);
+
+        }
+    }
+
+    private MethodDeclaration getMethodByName(String name) {
+        return compilationUnit
+                .findAll(MethodDeclaration.class)
+                .stream()
+                .filter(methodDeclaration -> methodDeclaration.getNameAsString().equals(name))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
     }
 
     private CompilationUnit parseWithTypeSolver(String code) {
