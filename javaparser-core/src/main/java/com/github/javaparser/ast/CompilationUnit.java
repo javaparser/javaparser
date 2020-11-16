@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -504,12 +505,14 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Try to get a locally class declaration by its name (top level or inner class)
+     * Try to get all local class declarations ending by its name (top level or inner class)
      *
      * @param className the class name (case-sensitive)
      */
-    public Optional<ClassOrInterfaceDeclaration> getLocaleDeclarationFromClassname(String className) {
-        return findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid -> cid.getNameAsString().equals(className)).findFirst();
+    public List<ClassOrInterfaceDeclaration> getLocalDeclarationFromClassname(String className) {
+        return findAll(ClassOrInterfaceDeclaration.class).stream()
+                .filter(cid->cid.getFullyQualifiedName().get().endsWith(className))
+                .collect(Collectors.toList());
     }
 
     /**
