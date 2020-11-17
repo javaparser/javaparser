@@ -20,11 +20,13 @@
  */
 package com.github.javaparser;
 
-import java.util.List;
-import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -132,6 +134,13 @@ public class JavaToken {
 
     public Optional<Range> getRange() {
         return Optional.ofNullable(range);
+    }
+    
+    /*
+     * Returns true if the token has a range
+     */
+    public boolean hasRange() {
+        return getRange().isPresent();
     }
 
     public int getKind() {
