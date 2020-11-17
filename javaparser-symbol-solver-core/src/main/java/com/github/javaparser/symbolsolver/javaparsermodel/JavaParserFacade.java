@@ -56,6 +56,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -573,6 +574,47 @@ public class JavaParserFacade {
         }
         return findContainingTypeDecl(demandParentNode(node));
 
+    }
+
+    protected TypeDeclaration<?> findContainingTypeDecl(Node node, String className) {
+        return findContainingTypeDecl(node, className, node.findCompilationUnit().map(cu -> cu.getPackageDeclaration().map(pd -> pd.getNameAsString()).orElse("")), "", null);
+    }
+
+    protected TypeDeclaration<?> findContainingTypeDecl(Node node, String className, Optional<String> packageName, String pseudoName, TypeDeclaration<?> result) {
+        if (node instanceof TypeDeclaration) {
+            boolean flagMatches = false;
+            TypeDeclaration<?> typeDecl = (TypeDeclaration<?>) node;
+            if (typeDecl.getFullyQualifiedName().isPresent()) {
+                if (typeDecl.getFullyQualifiedName().get().equals(className)) {
+                    return typeDecl;
+                } else {
+                    if (packageName.isPresent() && typeDecl.getFullyQualifiedName().get().equals(packageName.get() + "." + className)) {
+                        return typeDecl;
+                    } else {
+                        if (pseudoName.isEmpty()) {
+                            result = typeDecl;
+                            pseudoName = typeDecl.getNameAsString();
+                        } else {
+                            pseudoName = typeDecl.getNameAsString() + "." + pseudoName;
+                        }
+                        if (className.endsWith(pseudoName)) {
+                            if (className.equals(pseudoName)) {
+                                return result;
+                            }
+                            flagMatches = true;
+                        }
+                    }
+                }
+            }
+            if (!flagMatches) {
+                pseudoName = "";
+            }
+        } else if (node instanceof LocalClassDeclarationStmt) {
+            pseudoName = "";
+        } else if (node instanceof ObjectCreationExpr) {
+            pseudoName = "";
+        }
+        return findContainingTypeDecl(demandParentNode(node), className, packageName, pseudoName, result);
     }
 
     /**
