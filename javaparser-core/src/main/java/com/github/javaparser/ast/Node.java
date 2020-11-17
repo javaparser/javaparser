@@ -134,11 +134,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * This can be used to sort nodes on position.
      */
     public static Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
-        if (a.getRange().isPresent() && b.getRange().isPresent()) {
+        if (a.hasRange() && b.hasRange()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
-        if (a.getRange().isPresent() || b.getRange().isPresent()) {
-            if (a.getRange().isPresent()) {
+        if (a.hasRange() || b.hasRange()) {
+            if (a.hasRange()) {
                 return 1;
             }
             return -1;
@@ -215,7 +215,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
-        if (tokenRange == null || !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getEnd().getRange().isPresent())) {
+        if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
         } else {
             range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);
