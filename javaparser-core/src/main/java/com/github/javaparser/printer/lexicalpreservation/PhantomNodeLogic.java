@@ -21,15 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.observer.AstObserver;
-import com.github.javaparser.ast.observer.AstObserverAdapter;
-import com.github.javaparser.ast.type.UnknownType;
+import static java.util.Collections.synchronizedMap;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static java.util.Collections.synchronizedMap;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
+import com.github.javaparser.ast.type.UnknownType;
 
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration
@@ -54,8 +54,10 @@ public class PhantomNodeLogic {
             if (node instanceof UnknownType) {
                 return true;
             }
-            boolean res = (node.getParentNode().isPresent() &&
-                    !node.getParentNode().get().getRange().get().contains(node.getRange().get())
+            boolean res = (node.getParentNode().isPresent() 
+                    && node.getParentNode().get().hasRange()
+                    && node.hasRange()
+                    && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
                     || inPhantomNode(node, LEVELS_TO_EXPLORE));
             isPhantomNodeCache.put(node, res);
             node.register(cacheCleaner);
