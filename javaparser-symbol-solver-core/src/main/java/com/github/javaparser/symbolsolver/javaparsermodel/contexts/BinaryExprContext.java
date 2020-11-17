@@ -40,7 +40,8 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             }
         }
 
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        // If not solved here, continue searching...
+        return super.solveSymbol(name);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             }
         }
 
-            // If there is no parent
+        // If there is no parent
         if(!getParent().isPresent()) {
             return Optional.empty();
         }
