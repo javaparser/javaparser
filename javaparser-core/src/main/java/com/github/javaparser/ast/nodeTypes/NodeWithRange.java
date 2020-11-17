@@ -21,11 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import java.util.Optional;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-
-import java.util.Optional;
 
 /**
  * A node that has a Range, which is every Node.
@@ -71,9 +71,16 @@ public interface NodeWithRange<N> {
      * otherwise.
      */
     default boolean containsWithinRange(Node other) {
-        if (getRange().isPresent() && other.getRange().isPresent()) {
+        if (hasRange() && other.hasRange()) {
             return getRange().get().contains(other.getRange().get());
         }
         return false;
+    }
+    
+    /*
+     * Returns true if the node has a range
+     */
+    default boolean hasRange() {
+        return getRange().isPresent();
     }
 }
