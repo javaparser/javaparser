@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -364,21 +363,20 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getTypeName().isPresent()) {
             // Get the class name
             String className = node.getTypeName().get().asString();
-            // Attempt to resolve using a typeSolver
-            SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
-            if (clazz.isSolved()) {
-                return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
-            }
             // Attempt to resolve locally in Compilation unit
-            Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
-            if (cu.isPresent()) {
-                // Try to resolve the class name from the compilation unit (the last statement is considered to be the most relevant)
-                List<ClassOrInterfaceDeclaration> localDeclarations = cu.get().getLocalDeclarationFromClassname(className);
-                if (!localDeclarations.isEmpty()) {
-                    return new ReferenceTypeImpl(facade.getTypeDeclaration(localDeclarations.get(localDeclarations.size()-1)), typeSolver);
+            // first try a buttom/up approach 
+            try {
+                return new ReferenceTypeImpl(
+                        facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)),
+                        typeSolver);
+            } catch (IllegalStateException e) {
+                // trying another approach from type solver
+                Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
+                SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
+                if (clazz.isSolved()) {
+                    return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
                 }
             }
-            return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)), typeSolver);
         }
         return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
     }
