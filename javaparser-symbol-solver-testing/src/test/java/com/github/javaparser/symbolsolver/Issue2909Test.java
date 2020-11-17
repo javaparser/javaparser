@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 public class Issue2909Test extends AbstractResolutionTest {
@@ -72,17 +75,20 @@ public class Issue2909Test extends AbstractResolutionTest {
     }
     
     @Test
-    void test() {
+    void testInDepth() {
+        Path rootSourceDir = adaptPath("src/test/resources/issue2909");
+        
         ParserConfiguration config = new ParserConfiguration();
-        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(false), new JavaParserTypeSolver(rootSourceDir.toFile()));
+        config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 
         String s = "package test;\n" +
                 "\n" +
                 "public class Program {\n" +
-                "\n" +
-                "    public class OuterClass {\n" +
-                "    }\n" +
+//                "\n" +
+//                "    public class OuterClass {\n" +
+//                "    }\n" +
                 "\n" +
                 "    public class FarOuterClass {\n" +
                 "\n" +
@@ -104,13 +110,16 @@ public class Issue2909Test extends AbstractResolutionTest {
                 "            }\n" +
                 "        }\n" +
                 "    }\n" +
+                "\n" +
+                "    public class OuterClass {\n" +
+                "    }\n" +
                 "}";
         
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
         exprs.forEach(expr-> {
-            assertEquals("test.Program.FarOuterClass.OuterClass",expr.calculateResolvedType().describe());
             System.out.println(String.format("%s is resolved to %s", expr.toString(), expr.calculateResolvedType().describe()));
+            assertEquals("test.Program.FarOuterClass.OuterClass",expr.calculateResolvedType().describe());
         });
     }
 }
