@@ -59,6 +59,7 @@ public interface Context {
     }
 
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        // Default to solving within the parent context.
         Optional<Context> optionalParent = getParent();
         if (!optionalParent.isPresent()) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
@@ -69,7 +70,10 @@ public interface Context {
     /* Symbol resolution */
 
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty.")).solveSymbol(name);
+        // Default to solving within the parent context.
+        return getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveSymbol(name);
     }
 
     default Optional<Value> solveSymbolAsValue(String name) {

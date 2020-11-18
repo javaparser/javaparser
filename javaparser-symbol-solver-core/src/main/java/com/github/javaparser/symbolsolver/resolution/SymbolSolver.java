@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
@@ -55,10 +56,12 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDec
  */
 public class SymbolSolver {
 
-    private TypeSolver typeSolver;
+    private final TypeSolver typeSolver;
 
     public SymbolSolver(TypeSolver typeSolver) {
-        if (typeSolver == null) throw new IllegalArgumentException();
+        if (typeSolver == null) {
+            throw new IllegalArgumentException("Missing Parameter - Cannot initialise a SymbolSolver, without a way to solve types.");
+        }
 
         this.typeSolver = typeSolver;
     }
@@ -100,7 +103,7 @@ public class SymbolSolver {
         return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public ResolvedTypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
+    public ResolvedTypeDeclaration solveType(Type type) {
         if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!
