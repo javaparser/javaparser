@@ -620,7 +620,7 @@ public class JavaParserFacade {
      * references an outer class -- as its ancestor, return the declaration corresponding to the class name specified.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node, String className) {
-        if (node instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) node).getFullyQualifiedName().get().equals(className)) {
+        if (node instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) node).getFullyQualifiedName().get().endsWith(className)) {
             return node;
         }
         if (node instanceof EnumDeclaration) {
