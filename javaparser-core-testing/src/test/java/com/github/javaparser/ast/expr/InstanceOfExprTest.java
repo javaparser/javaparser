@@ -29,20 +29,26 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * See JEP305 for switch pattern matching for instanceof
- * https://bugs.openjdk.java.net/browse/JDK-8181287
+ * See the following JEPs: "Pattern Matching for instanceof"
+ * <ul>
+ *     <li>JDK14 - Preview - https://openjdk.java.net/jeps/305</li>
+ *     <li>JDK15 - Second Preview - https://openjdk.java.net/jeps/375</li>
+ *     <li>JDK16 - Release - https://openjdk.java.net/jeps/395</li>
+ * </ul>
  *
- * <pre>
+ * <blockquote>
  * The instanceof grammar is extended accordingly:
  *
- * RelationalExpression:
- *      ...
- *      RelationalExpression instanceof ReferenceType
- *      RelationalExpression instanceof Pattern
+ * <pre>
+ *     RelationalExpression:
+ *          ...
+ *          RelationalExpression instanceof ReferenceType
+ *          RelationalExpression instanceof Pattern
  *
- * Pattern:
- *      ReferenceType Identifier
+ *     Pattern:
+ *          ReferenceType Identifier
  * </pre>
+ * </blockquote>
  */
 class InstanceOfExprTest {
 
