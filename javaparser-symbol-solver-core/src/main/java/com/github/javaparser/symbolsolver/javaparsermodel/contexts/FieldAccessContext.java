@@ -105,7 +105,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                     .solveSymbolAsValue(name);
         }
     }
-    
+
     /*
      * Try to resolve the name parameter as a field of the reference type
      */

@@ -18,7 +18,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
 
 
     @Override
-    public List<PatternExpr> patternExprExposedToChild(Node child) {
+    public List<PatternExpr> patternExprsExposedToChild(Node child) {
         // If the given node is not within the "then" section, any PatternExpr variable is not within scope.
         // If the given node is not within the "condition", any PatternExpr variable is not within scope.
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);

@@ -134,7 +134,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
             // ... or if we're in the condiiton
             if (nodeContextIsThenOfIfStmt(getParent().get())) {
-                List<PatternExpr> patternExprs = getParent().get().patternExprExposedToChild(wrappedNode);
+                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
                 for (PatternExpr patternExpr : patternExprs) {
                     if (patternExpr.getName().getIdentifier().equals(name)) {
                         JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
@@ -142,7 +142,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
                     }
                 }
             } else if (nodeContextIsConditionOfIfStmt(getParent().get())) {
-                List<PatternExpr> patternExprs = getParent().get().patternExprExposedToChild(wrappedNode);
+                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
                 for (PatternExpr patternExpr : patternExprs) {
                     if (patternExpr.getName().getIdentifier().equals(name)) {
                         JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
@@ -201,7 +201,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         // ... consider pattern expressions defined within the IfStmt condition
         boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
         if (nodeContextIsThenOfIfStmt) {
-            List<PatternExpr> patternExprs = parentContext.patternExprExposedToChild(getWrappedNode());
+            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
             for (PatternExpr patternExpr : patternExprs) {
                 if (patternExpr.getName().getIdentifier().equals(name)) {
                     return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));

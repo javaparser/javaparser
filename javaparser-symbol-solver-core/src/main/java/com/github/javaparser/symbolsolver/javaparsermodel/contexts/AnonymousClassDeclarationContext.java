@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -122,9 +123,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
 
   @Override
   public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-    List<com.github.javaparser.ast.body.TypeDeclaration> typeDeclarations =
-        myDeclaration
-            .findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class);
+    List<TypeDeclaration> typeDeclarations = myDeclaration.findMembersOfKind(TypeDeclaration.class);
 
     Optional<SymbolReference<ResolvedTypeDeclaration>> exactMatch =
         typeDeclarations

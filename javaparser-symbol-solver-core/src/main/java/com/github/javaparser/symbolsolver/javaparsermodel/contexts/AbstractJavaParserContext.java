@@ -99,48 +99,41 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public int hashCode() {
-        return wrappedNode != null ? wrappedNode.hashCode() : 0;
-    }
-
-    @Override
-    public Optional<ResolvedType> solveGenericType(String name) {
-        Optional<Context> optionalParent = getParent();
-        if (!optionalParent.isPresent()) {
-            return Optional.empty();
-        }
-        return optionalParent.get().solveGenericType(name);
+        return wrappedNode == null ? 0 : wrappedNode.hashCode();
     }
 
     @Override
     public final Optional<Context> getParent() {
-        Node parent = wrappedNode.getParentNode().orElse(null);
-        if (parent instanceof MethodCallExpr) {
-            MethodCallExpr parentCall = (MethodCallExpr) parent;
+        Node parentNode = wrappedNode.getParentNode().orElse(null);
+
+        // TODO/FiXME: Document why the method call expression is treated differently.
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr parentCall = (MethodCallExpr) parentNode;
+            // TODO: Can this be replaced with: boolean found = parentCall.getArguments().contains(wrappedNode);
             boolean found = false;
-            if (parentCall.getArguments() != null) {
-                for (Expression expression : parentCall.getArguments()) {
-                    if (expression == wrappedNode) {
-                        found = true;
-                        break;
-                    }
+            for (Expression expression : parentCall.getArguments()) {
+                if (expression == wrappedNode) {
+                    found = true;
+                    break;
                 }
             }
             if (found) {
-                Node notMethod = parent;
+                Node notMethod = parentNode;
                 while (notMethod instanceof MethodCallExpr) {
                     notMethod = demandParentNode(notMethod);
                 }
                 return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
             }
         }
-        Node notMethod = parent;
-        while (notMethod instanceof MethodCallExpr || notMethod instanceof FieldAccessExpr) {
-            notMethod = notMethod.getParentNode().orElse(null);
+        Node notMethodNode = parentNode;
+        while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr) {
+            notMethodNode = notMethodNode.getParentNode().orElse(null);
         }
-        if (notMethod == null) {
+        if (notMethodNode == null) {
             return Optional.empty();
         }
-        return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
+        Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
+        return Optional.of(parentContext);
     }
 
     ///

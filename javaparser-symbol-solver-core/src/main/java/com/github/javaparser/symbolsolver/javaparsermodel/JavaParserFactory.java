@@ -21,29 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -56,10 +38,11 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -67,10 +50,12 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
-        // TODO: Is order important here?
         if (node == null) {
             throw new NullPointerException("Node should not be null");
-        } else if (node instanceof AnnotationDeclaration) {
+        }
+
+        // TODO: Is order important here?
+        if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof BinaryExpr) {
             return new BinaryExprContext((BinaryExpr) node, typeSolver);
@@ -136,13 +121,12 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = demandParentNode(node);
-            if (parentNode instanceof ObjectCreationExpr
-                    && (node == ((ObjectCreationExpr) parentNode).getType()
-                        || ((ObjectCreationExpr) parentNode).getArguments().contains(node))) {
-                return getContext(demandParentNode(parentNode), typeSolver);
-            }
-            if (parentNode == null) {
-                throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");
+            if (parentNode instanceof ObjectCreationExpr) {
+                ObjectCreationExpr parentObjectCreationExpr = (ObjectCreationExpr) parentNode;
+                if (node == parentObjectCreationExpr.getType() || parentObjectCreationExpr.getArguments().contains(node)) {
+                    Node grandParentNode = demandParentNode(parentNode);
+                    return getContext(grandParentNode, typeSolver);
+                }
             }
             return getContext(parentNode, typeSolver);
         }

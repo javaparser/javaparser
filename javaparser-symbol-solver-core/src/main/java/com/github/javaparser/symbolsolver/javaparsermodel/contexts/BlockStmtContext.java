@@ -89,7 +89,7 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
         // If this is directly within a "then" section of an if/else if (i.e. not an else)
         boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
         if (nodeContextIsThenOfIfStmt) {
-            List<PatternExpr> patternExprs = parentContext.patternExprExposedToChild(getWrappedNode());
+            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
             for (PatternExpr patternExpr : patternExprs) {
                 if (patternExpr.getName().getIdentifier().equals(name)) {
                     return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));

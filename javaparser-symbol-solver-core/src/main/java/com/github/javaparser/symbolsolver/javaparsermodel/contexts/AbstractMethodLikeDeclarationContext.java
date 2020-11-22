@@ -71,11 +71,15 @@ public abstract class AbstractMethodLikeDeclarationContext
 
     @Override
     public final Optional<ResolvedType> solveGenericType(String name) {
+        // First check if the method-like declaration has type parameters defined.
+        // For example: {@code public <T> boolean containsAll(Collection<T> c);}
         for (TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
+
+        // If no generic types on the method declaration, continue to solve elsewhere as usual.
         return super.solveGenericType(name);
     }
 

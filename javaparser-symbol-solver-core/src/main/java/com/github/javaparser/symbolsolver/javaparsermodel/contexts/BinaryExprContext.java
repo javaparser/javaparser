@@ -89,7 +89,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
      * FIXME: This returns the patternExpr POTENTIALLY available to the child.
      */
     @Override
-    public List<PatternExpr> patternExprExposedToChild(Node child) {
+    public List<PatternExpr> patternExprsExposedToChild(Node child) {
         List<PatternExpr> res = new LinkedList<>();
 
         // PatternExpr will only be exposed to the given child IF it is in the right-hand branch of this binary expr.

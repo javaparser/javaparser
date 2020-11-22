@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -89,14 +90,16 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
+        // First check if the method-like declaration has type parameters defined.
+        // For example: {@code public <T> boolean containsAll(Collection<T> c);}
+        for (TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveGenericType(name);
+
+        // If no generic types on the method declaration, continue to solve as usual.
+        return super.solveGenericType(name);
     }
 
     @Override

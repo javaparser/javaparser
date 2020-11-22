@@ -50,25 +50,57 @@ import java.util.Optional;
  */
 public interface Context {
 
+    /**
+     * @return The parent context, if there is one. For example, a method exists within a compilation unit.
+     */
     Optional<Context> getParent();
+
 
     /* Type resolution */
 
+    /**
+     * Default to no generics available in this context, delegating solving to the parent context.
+     * Contexts which have generics available to it will override this method.
+     * For example class and method declarations, and method calls.
+     *
+     * @param name For example, solving {@code T} within {@code class Foo<T> {}} or
+     * @return The resolved generic type, if found.
+     */
     default Optional<ResolvedType> solveGenericType(String name) {
-        return Optional.empty();
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return Optional.empty();
+        }
+
+        // Delegate solving to the parent context.
+        return optionalParentContext.get().solveGenericType(name);
     }
 
+    /**
+     * Default to being unable to solve any reference in this context, delegating solving to the parent context.
+     * Contexts which exist as the "parent" of a resolvable type will override this method.
+     * For example, a compilation unit can contain classes. A class declaration can also contain types (e.g. a subclass).
+     *
+     * @param name For example, solving {@code List} or {@code java.util.List}.
+     * @return The declaration associated with the given type name.
+     */
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        // Default to solving within the parent context.
-        Optional<Context> optionalParent = getParent();
-        if (!optionalParent.isPresent()) {
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
-        return optionalParent.get().solveType(name);
+
+        // Delegate solving to the parent context.
+        return optionalParentContext.get().solveType(name);
     }
 
     /* Symbol resolution */
 
+    /**
+     * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
+     * @param name the variable / reference / identifier used.
+     * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
+     */
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         // Default to solving within the parent context.
         return getParent()
@@ -76,14 +108,18 @@ public interface Context {
                 .solveSymbol(name);
     }
 
+    /**
+     * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
+     * @param name the variable / reference / identifier used.
+     * @return // FIXME: Better documentation on how this is different to solveSymbol()
+     */
     default Optional<Value> solveSymbolAsValue(String name) {
         SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name);
-        if (ref.isSolved()) {
-            Value value = Value.from(ref.getCorrespondingDeclaration());
-            return Optional.of(value);
-        } else {
+        if (!ref.isSolved()) {
             return Optional.empty();
         }
+
+        return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
     }
 
 
@@ -112,10 +148,10 @@ public interface Context {
     }
 
     /**
-     * The parameters that are declared in this immediate context and made visible to a given child.
+     * The pattern expressions that are declared in this immediate context and made visible to a given child.
      * This list could include values which are shadowed.
      */
-    default List<PatternExpr> patternExprExposedToChild(Node child) {
+    default List<PatternExpr> patternExprsExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
@@ -219,7 +255,7 @@ public interface Context {
         // First check if the parameter is directly declared within this context.
         Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
         Optional<PatternExpr> localResolutionResults = parentContext
-                .patternExprExposedToChild(wrappedNode)
+                .patternExprsExposedToChild(wrappedNode)
                 .stream()
                 .filter(vd -> vd.getNameAsString().equals(name))
                 .findFirst();
