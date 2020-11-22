@@ -48,11 +48,11 @@ import java.util.stream.Stream;
  */
 public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
     @InternalProperty
-    private List<N> innerList = new ArrayList<>(0);
+    private final List<N> innerList = new ArrayList<>(0);
 
     private Node parentNode;
 
-    private List<AstObserver> observers = new ArrayList<>();
+    private final List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
         parentNode = null;
@@ -133,8 +133,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public Iterator<N> iterator() {
-        // TODO take care of "Iterator.remove"
-        return innerList.iterator();
+        // Custom iterator required, to ensure that the relevant `notifyElement...` methods are called.
+        return new NodeListIterator(innerList);
     }
 
     @Override
@@ -449,7 +449,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public ListIterator<N> listIterator() {
-        return innerList.listIterator();
+        // Custom iterator required, to ensure that the relevant `notifyElement...` methods are called.
+        return new NodeListIterator(innerList);
     }
 
     /**
@@ -457,7 +458,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
      */
     @Override
     public ListIterator<N> listIterator(int index) {
-        return innerList.listIterator(index);
+        // Custom iterator required, to ensure that the relevant `notifyElement...` methods are called.
+        return new NodeListIterator(innerList, index);
     }
 
     /**
@@ -563,5 +565,90 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public String toString() {
         return innerList.stream().map(Node::toString).collect(Collectors.joining(", ", "[", "]"));
+    }
+
+    protected class NodeListIterator implements ListIterator<N>{
+
+        ListIterator<N> iterator;
+        N current = null;
+
+        // initialize pointer to head of the list for iteration
+        public NodeListIterator(List<N> list) {
+            iterator = list.listIterator();
+        }
+
+        public NodeListIterator(List<N> list, int index) {
+            iterator = list.listIterator(index);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public N next() {
+            current = iterator.next();
+            return current;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return iterator.hasPrevious();
+        }
+
+        @Override
+        public N previous() {
+            current = iterator.previous();
+            return current;
+        }
+
+        @Override
+        public int nextIndex() {
+            return iterator.nextIndex();
+        }
+
+        @Override
+        public int previousIndex() {
+            return iterator.previousIndex();
+        }
+
+        @Override
+        public void remove() {
+            int index = innerList.indexOf(current);
+            if (index != -1) {
+                notifyElementRemoved(index, current);
+                current.setParentNode(null);
+            }
+            iterator.remove();
+        }
+
+        @Override
+        public void set(N n) {
+            int index = innerList.indexOf(current);
+            if (index < 0 || index >= innerList.size()) {
+                throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
+                        + " excluded. It is instead " + index);
+            }
+            if (n != innerList.get(index)) {
+                notifyElementReplaced(index, n);
+                innerList.get(index).setParentNode(null);
+                setAsParentNodeOf(n);
+
+                iterator.set(n);
+            }
+        }
+
+        @Override
+        public void add(N n) {
+            notifyElementAdded(innerList.size(), n);
+            own(n);
+            iterator.add(n);
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super N> action) {
+            iterator.forEachRemaining(action);
+        }
     }
 }
