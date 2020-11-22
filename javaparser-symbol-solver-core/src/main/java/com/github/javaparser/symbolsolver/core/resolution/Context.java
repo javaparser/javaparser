@@ -102,10 +102,13 @@ public interface Context {
      * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
      */
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        // Default to solving within the parent context.
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        }
+
+        // Delegate solving to the parent context.
+        return optionalParentContext.get().solveSymbol(name);
     }
 
     /**
@@ -304,11 +307,14 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
-                                                                   boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, staticOnly);
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        }
+
+        // Delegate solving to the parent context.
+        return optionalParentContext.get().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     /**
