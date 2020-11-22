@@ -21,9 +21,16 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -272,6 +279,45 @@ class NodeListTest {
                 assertEquals("Name replaced within NodeList at position 0", listReplacements.get(0));
             }
 
+
+            @Test
+            void usageTest() {
+                final String REFERENCE_TO_BE_DELETED = "bad";
+                String original = "" +
+                        "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n" +
+                        "public final class MyClass {\n" +
+                        "}";
+                String expected = "" +
+                        "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n" +
+                        "public final class MyClass {\n" +
+                        "}";
+
+                JavaParser javaParser = new JavaParser();
+                javaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+
+                CompilationUnit compilationUnit = javaParser.parse(original).getResult().get();
+                List<NormalAnnotationExpr> annotations = compilationUnit.findAll(NormalAnnotationExpr.class);
+
+                annotations.forEach(annotation -> {
+                    // testcase, per https://github.com/javaparser/javaparser/issues/2936#issuecomment-731370505
+                    MemberValuePair mvp = annotation.getPairs().get(0);
+                    Expression value = mvp.getValue();
+                    if ((value instanceof ArrayInitializerExpr)) {
+                        NodeList<Expression> myElements = ((ArrayInitializerExpr) value).getValues();
+
+                        for (Iterator<Expression> iterator = myElements.iterator(); iterator.hasNext(); ) {
+                            Node elt = iterator.next();
+                            {
+                                String nameAsString = ((StringLiteralExpr) elt).asString();
+                                if (REFERENCE_TO_BE_DELETED.equals(nameAsString))
+                                    iterator.remove();
+                            }
+                        }
+                    }
+                });
+
+                assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+            }
         }
 
         @Nested
