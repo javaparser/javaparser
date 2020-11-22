@@ -21,9 +21,25 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
@@ -136,6 +152,7 @@ class NodeListTest {
         assertTrue(first.isPresent());
         assertEquals("Optional[abc]", first.toString());
     }
+
     @Test
     public void getLastWhenEmpty() {
         final NodeList<Name> list = nodeList();
@@ -154,5 +171,276 @@ class NodeListTest {
 
         assertTrue(last.isPresent());
         assertEquals("Optional[cde]", last.toString());
+    }
+
+    @Nested
+    class IteratorTest {
+
+        @Nested
+        class ObserversTest {
+            NodeList<Name> list;
+            ListIterator<Name> iterator;
+
+            List<String> propertyChanges;
+            List<String> parentChanges;
+            List<String> listChanges;
+            List<String> listReplacements;
+            AstObserver testObserver = new AstObserver() {
+                @Override
+                public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                    propertyChanges.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                }
+
+                @Override
+                public void parentChange(Node observedNode, Node previousParent, Node newParent) {
+                    parentChanges.add(String.format("%s 's parent changed from %s to %s", observedNode.getClass().getSimpleName(), previousParent, newParent));
+                }
+
+                @Override
+                public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                    listChanges.add(String.format("%s %s to/from %s at position %d", nodeAddedOrRemoved.getClass().getSimpleName(), type.name(), observedNode.getClass().getSimpleName(), index));
+                }
+
+                @Override
+                public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
+                    listReplacements.add(String.format("%s replaced within %s at position %d", newNode.getClass().getSimpleName(), observedNode.getClass().getSimpleName(), index));
+                }
+
+            };
+
+            @BeforeEach
+            void pre() {
+                list = nodeList();
+                list.register(testObserver);
+                iterator = list.listIterator();
+
+                propertyChanges = new ArrayList<>();
+                parentChanges = new ArrayList<>();
+                listChanges = new ArrayList<>();
+                listReplacements = new ArrayList<>();
+            }
+
+            @Test
+            void whenAdd() {
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(0, listChanges.size());
+                assertEquals(0, listReplacements.size());
+
+                iterator.add(new Name("abc"));
+
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(1, listChanges.size());
+                assertEquals(0, listReplacements.size());
+
+                assertEquals("Name ADDITION to/from NodeList at position 0", listChanges.get(0));
+            }
+
+            @Test
+            void whenRemove() {
+                iterator.add(new Name("abc"));
+
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(1, listChanges.size());
+                assertEquals(0, listReplacements.size());
+
+                iterator.previous();
+                iterator.remove();
+
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(2, listChanges.size());
+                assertEquals(0, listReplacements.size());
+
+                assertEquals("Name ADDITION to/from NodeList at position 0", listChanges.get(0));
+                assertEquals("Name REMOVAL to/from NodeList at position 0", listChanges.get(1));
+            }
+
+            @Test
+            void whenSet() {
+                iterator.add(new Name("abc"));
+
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(1, listChanges.size());
+                assertEquals(0, listReplacements.size());
+
+                iterator.previous();
+                iterator.set(new Name("xyz"));
+
+                assertEquals(0, propertyChanges.size());
+                assertEquals(0, parentChanges.size());
+                assertEquals(1, listChanges.size());
+                assertEquals(1, listReplacements.size());
+
+                assertEquals("Name ADDITION to/from NodeList at position 0", listChanges.get(0));
+                assertEquals("Name replaced within NodeList at position 0", listReplacements.get(0));
+            }
+
+
+            @Test
+            void usageTest() {
+                final String REFERENCE_TO_BE_DELETED = "bad";
+                String original = "" +
+                        "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n" +
+                        "public final class MyClass {\n" +
+                        "}";
+                String expected = "" +
+                        "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n" +
+                        "public final class MyClass {\n" +
+                        "}";
+
+                JavaParser javaParser = new JavaParser();
+                javaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+
+                CompilationUnit compilationUnit = javaParser.parse(original).getResult().get();
+                List<NormalAnnotationExpr> annotations = compilationUnit.findAll(NormalAnnotationExpr.class);
+
+                annotations.forEach(annotation -> {
+                    // testcase, per https://github.com/javaparser/javaparser/issues/2936#issuecomment-731370505
+                    MemberValuePair mvp = annotation.getPairs().get(0);
+                    Expression value = mvp.getValue();
+                    if ((value instanceof ArrayInitializerExpr)) {
+                        NodeList<Expression> myElements = ((ArrayInitializerExpr) value).getValues();
+
+                        for (Iterator<Expression> iterator = myElements.iterator(); iterator.hasNext(); ) {
+                            Node elt = iterator.next();
+                            {
+                                String nameAsString = ((StringLiteralExpr) elt).asString();
+                                if (REFERENCE_TO_BE_DELETED.equals(nameAsString))
+                                    iterator.remove();
+                            }
+                        }
+                    }
+                });
+
+                assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+            }
+        }
+
+        @Nested
+        class AddRemoveListIteratorTest {
+            NodeList<Name> list;
+            ListIterator<Name> iterator;
+
+            @BeforeEach
+            void pre() {
+                list = nodeList();
+                iterator = list.listIterator();
+            }
+
+            @Test
+            void whenAdd() {
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+                // Note that the element is added before the current cursor, thus is accessible via "previous"
+                iterator.add(new Name("abc"));
+                assertFalse(iterator.hasNext());
+                assertTrue(iterator.hasPrevious());
+            }
+
+        }
+
+        @Nested
+        class EmptyIteratorTest {
+            NodeList<Name> list;
+            ListIterator<Name> iterator;
+
+            @BeforeEach
+            void pre() {
+                list = nodeList();
+                iterator = list.listIterator();
+            }
+
+            @Test
+            void whenNext() {
+                assertThrows(NoSuchElementException.class, () -> {
+                    iterator.next();
+                });
+            }
+
+            @Test
+            void whenHasNext() {
+                assertFalse(iterator.hasNext());
+            }
+
+            @Test
+            void whenAdd() {
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+                // Note that the element is added before the current cursor, thus is accessible via "previous"
+                iterator.add(new Name("abc"));
+                assertFalse(iterator.hasNext());
+                assertTrue(iterator.hasPrevious());
+            }
+
+            @Test
+            void whenSet() {
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+                assertThrows(IllegalArgumentException.class, () -> {
+                    // Note that the cursor is initially at -1, thus not possible to set the value here
+                    iterator.set(new Name("abc"));
+                });
+                // Assert that next/previous are still empty
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+            }
+
+        }
+
+        @Nested
+        class SingleItemIteratorTest {
+            NodeList<Name> list;
+            Iterator<Name> iterator;
+
+            @BeforeEach
+            void pre() {
+                list = nodeList(new Name("abc"));
+                iterator = list.iterator();
+            }
+
+            @Test
+            void whenNext() {
+                Name next = iterator.next();
+                assertNotNull(next);
+            }
+
+            @Test
+            void whenHasNext() {
+                assertTrue(iterator.hasNext());
+            }
+
+            @Test
+            void whenHasNextRepeated() {
+                assertTrue(iterator.hasNext());
+                assertTrue(iterator.hasNext());
+                assertTrue(iterator.hasNext());
+                assertTrue(iterator.hasNext());
+            }
+
+            @Test
+            void whenHasNextThenNext() {
+                assertTrue(iterator.hasNext());
+                iterator.next();
+                assertFalse(iterator.hasNext());
+                assertThrows(NoSuchElementException.class, () -> {
+                    iterator.next();
+                });
+            }
+
+            @Test
+            void whenRemove() {
+                Name current = iterator.next();
+                iterator.remove();
+                assertFalse(iterator.hasNext());
+                assertThrows(NoSuchElementException.class, () -> {
+                    iterator.next();
+                });
+            }
+
+        }
     }
 }
