@@ -304,8 +304,6 @@ public class InstanceOfTest {
 
             }
 
-            // FIXME: Temporarily disabled -- this is a relatively minor bug, to be fixed later.
-            @Disabled("FIXME: Temporarily disabled -- this is a relatively minor bug, to be fixed later.")
             @Test
             public void logicalOrShouldNotResolve() {
                 MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalOr_shouldNotResolve");
