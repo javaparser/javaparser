@@ -53,6 +53,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -61,7 +62,7 @@ import static org.mockito.Mockito.when;
 
 class ContextTest extends AbstractSymbolResolutionTest {
 
-    private TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
+    private final TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
 
     private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
@@ -71,7 +72,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveDeclaredFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
@@ -87,7 +88,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveInheritedFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
@@ -103,7 +104,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveParameterReference() {
         CompilationUnit cu = parseSample("ReferencesToParameter");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
         NameExpr foo = Navigator.findNameExpression(method1, "foo").get();
 
@@ -118,7 +119,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToImportedType() {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -142,7 +143,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceUsingQualifiedName() {
         CompilationUnit cu = parseSample("Navigator2");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -156,7 +157,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        
+
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
         assertTrue(ref.isSolved());
@@ -167,7 +168,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToClassesInTheSamePackage() {
         CompilationUnit cu = parseSample("Navigator3");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -191,7 +192,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToClassInJavaLang() {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(1);
 
@@ -216,7 +217,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -235,7 +236,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveCascadeOfReferencesToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
@@ -251,7 +252,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethodCalledOnArrayAccess() {
         CompilationUnit cu = parseSample("ArrayAccess");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim").get();
 
@@ -267,7 +268,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToJreType() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         com.github.javaparser.ast.type.Type streamJavaParserType = method.getParameters().get(0).getType();
 
@@ -280,7 +281,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethodWithLambda() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter").get();
 
@@ -295,7 +296,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParamBase() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         NameExpr refToT = Navigator.findNameExpression(method, "t").get();
 
@@ -309,7 +310,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParamSimplified() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty").get();
 
@@ -324,7 +325,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -341,7 +342,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveCompoundGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "doubleTyped");
         MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithDoubleTypedReturnType").get();
 
@@ -356,7 +357,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveNestedGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTyped");
         MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithNestedReturnType").get();
 
@@ -371,7 +372,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveSimpleGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "simple");
         MethodCallExpr call = Navigator.findMethodCall(method, "get").get();
 
@@ -386,7 +387,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveGenericReturnTypeFromInputParam() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "input");
         MethodCallExpr call = Navigator.findMethodCall(method, "copy").get();
 
@@ -401,7 +402,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveComplexGenericReturnType() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "complex");
         MethodCallExpr call = Navigator.findMethodCall(method, "complexGenerics").get();
 
@@ -416,7 +417,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveDoubleNestedClassType() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTypes");
         MethodCallExpr call = Navigator.findMethodCall(method, "asList").get();
 
@@ -431,7 +432,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -447,7 +448,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
@@ -461,7 +462,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfCascadeMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
 
@@ -475,7 +476,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveLambdaType() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
         Expression lambdaExpr = callToFilter.getArguments().get(0);
@@ -490,7 +491,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
         Expression referenceToT = callToGetName.getScope().get();
@@ -505,7 +506,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToCallOnLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
 
@@ -520,7 +521,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodWithNullParam() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
@@ -535,7 +536,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodFindStricter() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
@@ -565,7 +566,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveInheritedMethodFromInterface() {
         CompilationUnit cu = parseSample("InterfaceInheritance");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
         MethodDeclaration method = Navigator.demandMethod(clazz, "test");
         MethodCallExpr call = Navigator.findMethodCall(method, "foobar").get();
 
@@ -579,7 +580,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodFindOnlyCompatible() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
