@@ -343,23 +343,21 @@ public interface Context {
     }
 
     /**
-     * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
-     * resolved type variables.
+     * Similar to solveMethod but we return a MethodUsage.
+     * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-
-            MethodUsage methodUsage;
-            if (methodDeclaration instanceof TypeVariableResolutionCapability) {
-                methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
-                        .resolveTypeVariables(this, argumentsTypes);
-            } else {
-                throw new UnsupportedOperationException("Resolved method declarations should have the " +
-                        TypeVariableResolutionCapability.class.getName() + ".");
+            if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
+                throw new UnsupportedOperationException(String.format(
+                        "Resolved method declarations must implement %s.",
+                        TypeVariableResolutionCapability.class.getName()
+                ));
             }
 
+            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
             return Optional.of(methodUsage);
         } else {
             return Optional.empty();
