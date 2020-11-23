@@ -30,7 +30,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +54,7 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
                 .map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver))
                 .collect(Collectors.toCollection(ArrayList::new));
 
+//        // FIXME: This returns ALL PatternExpr, regardless of whether it is in scope or not.
 //        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
 //                .stream()
 //                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())

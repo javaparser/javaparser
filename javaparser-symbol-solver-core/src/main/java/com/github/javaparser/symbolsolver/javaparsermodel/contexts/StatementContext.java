@@ -171,7 +171,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         // Working backwards from the node, try to solve the symbol. This limits the scope to declarations that appear prior to usage.
         for (int statementIndex = position - 1; statementIndex >= 0; statementIndex--) {
-            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(statementIndex), typeSolver);
+            Statement statement = nodeWithStmt.getStatements().get(statementIndex);
+            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(statement, typeSolver);
             symbolReference = solveWithAsValue(symbolDeclarator, name);
             if (symbolReference.isPresent()) {
                 return symbolReference;
