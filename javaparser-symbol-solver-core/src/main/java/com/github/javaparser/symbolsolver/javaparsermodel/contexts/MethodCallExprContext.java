@@ -401,6 +401,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (!type.isTypeVariable() && !type.isReferenceType()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
             }
+            if (type.isNull()) {
+                type = MyObjectProvider.INSTANCE.object();
+            }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {
         	// Issue 2258 : NullType must not fail this search
