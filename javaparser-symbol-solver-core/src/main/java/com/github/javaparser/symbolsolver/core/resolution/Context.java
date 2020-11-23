@@ -131,12 +131,16 @@ public interface Context {
      * @return // FIXME: Better documentation on how this is different to solveSymbol()
      */
     default Optional<Value> solveSymbolAsValue(String name) {
-        // Default to solving within the parent context.
-        return solveSymbolAsValueInParentContext(name);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name);
+        if (!ref.isSolved()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
     }
 
     default Optional<Value> solveSymbolAsValueInParentContext(String name) {
-        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbolInParentContext(name);
         if (!ref.isSolved()) {
             return Optional.empty();
         }
