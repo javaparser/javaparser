@@ -179,13 +179,13 @@ public interface Context {
 
     /**
      */
-    default List<PatternExpr> patternExprsExposedToDirectParent() {
+    default List<PatternExpr> patternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
     /**
      */
-    default List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+    default List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 

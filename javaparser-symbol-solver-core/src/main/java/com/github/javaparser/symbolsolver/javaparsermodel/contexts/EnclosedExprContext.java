@@ -1,7 +1,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -18,19 +17,19 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
     }
 
     @Override
-    public List<PatternExpr> patternExprsExposedToDirectParent() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
         // Propagate any pattern expressions "up"
         Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedToDirectParent());
+        List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
 
         return results;
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         // Propagate any pattern expressions "up"
         Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedToDirectParent());
+        List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
 
         return results;
     }

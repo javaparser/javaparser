@@ -1,6 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.PatternExpr;
@@ -12,7 +11,6 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,25 +23,25 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     // TODO: Add in mechanism where any PatternExpr on the left branch becomes available within the right branch
 
 
-//    @Override
-//    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-//        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
-//
-//        // Filter to include only the pattern expressions that exist prior to the given node.
-//        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
-//        List<PatternExpr> matches = patternExprs.stream()
-//                .filter(patternExpr -> patternExpr.getNameAsString().equals(name))
-//                .collect(Collectors.toList());
-//
-//        if(matches.size() == 1) {
-//            return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(matches.get(0), typeSolver));
-//        } else if(matches.size() > 1) {
-//            throw new IllegalStateException("Too many matches -- unclear how to solve.");
-//        } else {
-//            // if nothing is found we should ask the parent context
-//            return solveSymbolInParentContext(name);
-//        }
-//    }
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
+
+        // Filter to include only the pattern expressions that exist prior to the given node.
+        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
+        List<PatternExpr> matches = patternExprs.stream()
+                .filter(patternExpr -> patternExpr.getNameAsString().equals(name))
+                .collect(Collectors.toList());
+
+        if(matches.size() == 1) {
+            return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(matches.get(0), typeSolver));
+        } else if(matches.size() > 1) {
+            throw new IllegalStateException("Too many matches -- unclear how to solve.");
+        } else {
+            // if nothing is found we should ask the parent context
+            return solveSymbolInParentContext(name);
+        }
+    }
 //
 //
 //    /**
@@ -77,7 +75,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
 
     @Override
-    public List<PatternExpr> patternExprsExposedToDirectParent() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
 
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
@@ -128,7 +126,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
 
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
@@ -181,7 +179,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     private List<PatternExpr> patternExprsExposedToDirectParentFromBranch(Expression branch) {
         if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
             Context leftBranchContext = JavaParserFactory.getContext(branch, typeSolver);
-            return leftBranchContext.patternExprsExposedToDirectParent();
+            return leftBranchContext.patternExprsExposedFromChildren();
         }
 
         return new ArrayList<>();

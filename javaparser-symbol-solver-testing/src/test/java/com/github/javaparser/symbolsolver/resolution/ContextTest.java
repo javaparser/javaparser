@@ -35,7 +35,6 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -55,7 +54,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -672,7 +670,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .patternExprsExposedToDirectParent();
+                .patternExprsExposedFromChildren();
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
     }
 
@@ -685,7 +683,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .negatedPatternExprsExposedToDirectParent();
+                .negatedPatternExprsExposedFromChildren();
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
     }
 
@@ -965,8 +963,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
                 SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
 
-                assertTrue(symbolReference.isSolved());
-                assertEquals("s", symbolReference.getCorrespondingDeclaration().getName());
+                assertTrue(symbolReference.isSolved(), "symbol not solved");
+                assertEquals("s", symbolReference.getCorrespondingDeclaration().getName(), "unexpected name for the solved symbol");
                 assertTrue(symbolReference.getCorrespondingDeclaration().isPattern());
 
                 System.out.println("symbolReference = " + symbolReference);

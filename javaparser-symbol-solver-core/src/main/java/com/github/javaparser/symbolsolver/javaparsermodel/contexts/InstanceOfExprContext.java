@@ -35,7 +35,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
     }
 
     @Override
-    public List<PatternExpr> patternExprsExposedToDirectParent() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
         List<PatternExpr> results = new ArrayList<>();
 
         // If this instanceof expression has a pattern, add it to the list.

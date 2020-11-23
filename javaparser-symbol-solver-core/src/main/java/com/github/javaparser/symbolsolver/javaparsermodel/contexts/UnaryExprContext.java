@@ -16,7 +16,7 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
     }
 
     @Override
-    public List<PatternExpr> patternExprsExposedToDirectParent() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
         List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
@@ -25,14 +25,14 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
 
             // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
             // Previously negated pattern expressions are now now available (double negatives) -- e.g. if(!!("a" instanceof String s)) {}
-            results.addAll(innerContext.negatedPatternExprsExposedToDirectParent());
+            results.addAll(innerContext.negatedPatternExprsExposedFromChildren());
         }
 
         return results;
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
@@ -41,7 +41,7 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
 
             // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
             // Previously available pattern expressions are now negated (double negatives) -- e.g. if(!("a" instanceof String s)) {}
-            results.addAll(innerContext.patternExprsExposedToDirectParent());
+            results.addAll(innerContext.patternExprsExposedFromChildren());
         }
 
         return results;
