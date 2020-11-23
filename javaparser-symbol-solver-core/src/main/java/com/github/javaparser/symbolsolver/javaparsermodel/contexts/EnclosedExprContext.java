@@ -26,4 +26,13 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
         return results;
     }
 
+    @Override
+    public List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+        // Propagate any pattern expressions "up"
+        Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
+        List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedToDirectParent());
+
+        return results;
+    }
+
 }

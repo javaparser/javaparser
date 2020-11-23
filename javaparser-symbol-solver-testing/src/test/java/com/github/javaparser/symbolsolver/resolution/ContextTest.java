@@ -865,6 +865,83 @@ class ContextTest extends AbstractSymbolResolutionTest {
         @Nested
         class PatternExprBinaryExprTests {
 
+            @Test
+            void instanceOfPatternExprBinaryExpr1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s == true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr2() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "true == a instanceof String s", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr3() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s == false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr4() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "false == a instanceof String s", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr5() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s != true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr5_negated() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s != true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr5b() {
+                EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s != true)", ParseStart.EXPRESSION).asEnclosedExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr5b_negated() {
+                EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s != true)", ParseStart.EXPRESSION).asEnclosedExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr6() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s != false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr6_negated() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s != false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr7() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s != true)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr7_negated() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s != true)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr8() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s != false)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+            @Test
+            void instanceOfPatternExprBinaryExpr8_negated() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s != false)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+
         }
     }
 

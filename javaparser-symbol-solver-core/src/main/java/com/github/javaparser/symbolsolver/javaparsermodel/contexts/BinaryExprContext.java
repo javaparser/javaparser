@@ -6,11 +6,12 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -105,5 +106,117 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         return allPatternExprInLeftBranch.stream()
                 .filter(patternExpr -> patternExpr.getRange().get().end.isBefore(child.getRange().get().begin))
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<PatternExpr> patternExprsExposedToDirectParent() {
+
+        BinaryExpr binaryExpr = wrappedNode;
+        Expression leftBranch = binaryExpr.getLeft();
+        Expression rightBranch = binaryExpr.getRight();
+
+        List<PatternExpr> results = new ArrayList<>();
+
+        if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
+            if (rightBranch.isBooleanLiteralExpr()) {
+                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // "x" instanceof String s == true
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+                } else {
+                    // "x" instanceof String s == false
+                }
+            } else if (leftBranch.isBooleanLiteralExpr()) {
+                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // true == "x" instanceof String s
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
+                } else {
+                    // false == "x" instanceof String s
+                }
+            }
+        } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.NOT_EQUALS)) {
+            if (rightBranch.isBooleanLiteralExpr()) {
+                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // "x" instanceof String s != true
+                } else {
+                    // "x" instanceof String s != false
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+                }
+            } else if (leftBranch.isBooleanLiteralExpr()) {
+                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // true != "x" instanceof String s
+                } else {
+                    // false != "x" instanceof String s
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
+                }
+            }
+
+            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
+
+        } else {
+            return new ArrayList<>();
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+
+        BinaryExpr binaryExpr = wrappedNode;
+        Expression leftBranch = binaryExpr.getLeft();
+        Expression rightBranch = binaryExpr.getRight();
+
+        List<PatternExpr> results = new ArrayList<>();
+
+        if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
+            if (rightBranch.isBooleanLiteralExpr()) {
+                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // "x" instanceof String s == true
+                } else {
+                    // "x" instanceof String s == false
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+                }
+            } else if (leftBranch.isBooleanLiteralExpr()) {
+                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // true == "x" instanceof String s
+                } else {
+                    // false == "x" instanceof String s
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
+                }
+            }
+        } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.NOT_EQUALS)) {
+            if (rightBranch.isBooleanLiteralExpr()) {
+                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // "x" instanceof String s != true
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+                } else {
+                    // "x" instanceof String s != false
+                }
+            } else if (leftBranch.isBooleanLiteralExpr()) {
+                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                    // true != "x" instanceof String s
+                    results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
+                } else {
+                    // false != "x" instanceof String s
+                }
+            }
+
+            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
+
+        } else {
+            return new ArrayList<>();
+        }
+
+        return results;
+    }
+
+    private List<PatternExpr> patternExprsExposedToDirectParentFromBranch(Expression branch) {
+        if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
+            Context leftBranchContext = JavaParserFactory.getContext(branch, typeSolver);
+            return leftBranchContext.patternExprsExposedToDirectParent();
+        }
+
+        return new ArrayList<>();
     }
 }

@@ -20,11 +20,11 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
         List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
-        // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
         if(wrappedNode.getOperator() == UnaryExpr.Operator.LOGICAL_COMPLEMENT) {
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getExpression(), typeSolver);
 
-            // Previously negated exprs are now now available (double negatives) -- e.g. if(!!("a" instanceof String s)) {}
+            // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
+            // Previously negated pattern expressions are now now available (double negatives) -- e.g. if(!!("a" instanceof String s)) {}
             results.addAll(innerContext.negatedPatternExprsExposedToDirectParent());
         }
 
@@ -36,11 +36,11 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
         List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
-        // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
         if(wrappedNode.getOperator() == UnaryExpr.Operator.LOGICAL_COMPLEMENT) {
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getExpression(), typeSolver);
 
-            // Previously available exprs are now available (double negatives) and are now negated -- e.g. if(!("a" instanceof String s)) {}
+            // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
+            // Previously available pattern expressions are now negated (double negatives) -- e.g. if(!("a" instanceof String s)) {}
             results.addAll(innerContext.patternExprsExposedToDirectParent());
         }
 
