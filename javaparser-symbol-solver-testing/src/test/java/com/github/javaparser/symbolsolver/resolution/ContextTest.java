@@ -593,8 +593,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     private <PS extends Node> PS parse(String code, ParseStart<PS> parseStart) {
+        return parse(ParserConfiguration.LanguageLevel.JAVA_10, code, parseStart);
+    }
+
+    private <PS extends Node> PS parse(ParserConfiguration.LanguageLevel languageLevel, String code, ParseStart<PS> parseStart) {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
+        parserConfiguration.setLanguageLevel(languageLevel);
         ParseResult<PS> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
         if (!parseResult.isSuccessful()) {
             parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));
