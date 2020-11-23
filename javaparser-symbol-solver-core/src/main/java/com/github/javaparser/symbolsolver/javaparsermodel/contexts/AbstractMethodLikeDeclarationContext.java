@@ -64,9 +64,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
@@ -80,7 +78,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // If no generic types on the method declaration, continue to solve elsewhere as usual.
-        return super.solveGenericType(name);
+        return solveGenericTypeInParentContext(name);
     }
 
     @Override
@@ -95,9 +93,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -122,15 +118,11 @@ public abstract class AbstractMethodLikeDeclarationContext
             }
         }
 
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return solveTypeInParentContext(name);
     }
 
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 }

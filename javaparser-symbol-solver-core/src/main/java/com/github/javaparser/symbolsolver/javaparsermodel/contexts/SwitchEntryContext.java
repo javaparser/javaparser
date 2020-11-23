@@ -89,15 +89,11 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
             }
         }
 
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 }

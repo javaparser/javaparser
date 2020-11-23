@@ -83,7 +83,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(nodeScope.get());
         Optional<ResolvedType> resolvedType = typeOfScope.asReferenceType().getGenericParameterByName(name);
 
-        // TODO/FIXME: Consider if we should check if the result is present, else delegate "up" the context chain (e.g. {@code super.solveGenericType()})
+        // TODO/FIXME: Consider if we should check if the result is present, else delegate "up" the context chain (e.g. {@code solveGenericTypeInParent()})
         return resolvedType;
     }
 
@@ -155,13 +155,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
 
         return methodUsage;
-    }
-
-    @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
     }
 
     @Override

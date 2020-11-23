@@ -193,9 +193,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       }
     }
 
-    return getParent()
-            .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-            .solveType(name);
+    return solveTypeInParentContext(name);
   }
 
   @Override
@@ -206,9 +204,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       return SymbolReference.solved(myDeclaration.getVisibleField(name));
     }
 
-    return getParent()
-            .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-            .solveSymbol(name);
+    return solveSymbolInParentContext(name);
   }
 
 }

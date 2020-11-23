@@ -41,7 +41,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         }
 
         // If not solved here, continue searching...
-        return super.solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override

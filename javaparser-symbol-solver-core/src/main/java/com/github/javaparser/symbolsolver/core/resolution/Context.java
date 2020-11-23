@@ -67,6 +67,11 @@ public interface Context {
      * @return The resolved generic type, if found.
      */
     default Optional<ResolvedType> solveGenericType(String name) {
+        // Default to solving within the parent context.
+        return solveGenericTypeInParentContext(name);
+    }
+
+    default Optional<ResolvedType> solveGenericTypeInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
             return Optional.empty();
@@ -85,6 +90,11 @@ public interface Context {
      * @return The declaration associated with the given type name.
      */
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        // Default to solving within the parent context.
+        return solveTypeInParentContext(name);
+    }
+
+    default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
@@ -102,6 +112,11 @@ public interface Context {
      * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
      */
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        // Default to solving within the parent context.
+        return solveSymbolInParentContext(name);
+    }
+
+    default SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
@@ -117,6 +132,11 @@ public interface Context {
      * @return // FIXME: Better documentation on how this is different to solveSymbol()
      */
     default Optional<Value> solveSymbolAsValue(String name) {
+        // Default to solving within the parent context.
+        return solveSymbolAsValueInParentContext(name);
+    }
+
+    default Optional<Value> solveSymbolAsValueInParentContext(String name) {
         SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name);
         if (!ref.isSolved()) {
             return Optional.empty();
@@ -308,6 +328,11 @@ public interface Context {
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
     default SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // Default to solving within the parent context.
+        return solveMethodInParentContext(name, argumentsTypes, staticOnly);
+    }
+
+    default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);

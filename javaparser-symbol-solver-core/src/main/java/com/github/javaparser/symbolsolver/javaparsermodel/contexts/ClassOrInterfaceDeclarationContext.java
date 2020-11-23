@@ -69,9 +69,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
@@ -83,9 +81,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -99,7 +95,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // If no generic types on the method declaration, continue to solve as usual.
-        return super.solveGenericType(name);
+        return solveGenericTypeInParentContext(name);
     }
 
     @Override
