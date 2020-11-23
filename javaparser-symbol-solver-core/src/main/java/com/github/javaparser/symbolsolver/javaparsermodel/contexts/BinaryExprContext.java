@@ -25,49 +25,55 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     // TODO: Add in mechanism where any PatternExpr on the left branch becomes available within the right branch
 
 
-    @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
-
-        // Filter to include only the pattern expressions that exist prior to the given node.
-        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
-        List<PatternExpr> matches = patternExprs.stream()
-                .filter(patternExpr -> patternExpr.getNameAsString().equals(name))
-                .collect(Collectors.toList());
-
-        if(matches.size() == 1) {
-            return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(matches.get(0), typeSolver));
-        } else if(matches.size() > 1) {
-            throw new IllegalStateException("Too many matches -- unclear how to solve.");
-        } else {
-            // if nothing is found we should ask the parent context
-            return solveSymbolInParentContext(name);
-        }
-    }
-
-
-    /**
-     * FIXME: This returns the patternExpr POTENTIALLY available to the child.
-     */
-    @Override
-    public List<PatternExpr> patternExprsExposedToChild(Node child) {
-        List<PatternExpr> res = new LinkedList<>();
-
-        // PatternExpr will only be exposed to the given child IF it is in the right-hand branch of this binary expr.
-        boolean givenNodeIsWithinRightBranch = wrappedNode.getRight().containsWithinRange(child);
-        if (!givenNodeIsWithinRightBranch) {
-            return res;
-        }
-
-        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
-        List<PatternExpr> negatedPatternExprs = negatedPatternExprsExposedToDirectParent();
-
-        // Filter to include only the pattern expressions that exist prior to the given node.
-        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
-        return patternExprs.stream()
-                .filter(patternExpr -> patternExpr.getRange().get().end.isBefore(child.getRange().get().begin))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+//        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
+//
+//        // Filter to include only the pattern expressions that exist prior to the given node.
+//        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
+//        List<PatternExpr> matches = patternExprs.stream()
+//                .filter(patternExpr -> patternExpr.getNameAsString().equals(name))
+//                .collect(Collectors.toList());
+//
+//        if(matches.size() == 1) {
+//            return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(matches.get(0), typeSolver));
+//        } else if(matches.size() > 1) {
+//            throw new IllegalStateException("Too many matches -- unclear how to solve.");
+//        } else {
+//            // if nothing is found we should ask the parent context
+//            return solveSymbolInParentContext(name);
+//        }
+//    }
+//
+//
+//    /**
+//     * FIXME: This returns the patternExpr POTENTIALLY available to the child.
+//     */
+//    @Override
+//    public List<PatternExpr> patternExprsExposedToChild(Node child) {
+//        List<PatternExpr> res = new LinkedList<>();
+//
+//
+//        // PatternExpr will only be exposed to the given child IF it is in the right-hand branch of this binary expr.
+//        boolean givenNodeIsWithinRightBranch = wrappedNode.getRight().containsWithinRange(child);
+//        if (!givenNodeIsWithinRightBranch) {
+//            return res;
+//        }
+//
+//        // PatternExpr only propagates across and AND relationship..? TODO: Confirm/verify.
+//        if(!wrappedNode.getOperator().equals(BinaryExpr.Operator.AND)) {
+//            return res;
+//        }
+//
+//        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
+//        List<PatternExpr> negatedPatternExprs = negatedPatternExprsExposedToDirectParent();
+//
+//        // Filter to include only the pattern expressions that exist prior to the given node.
+//        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
+//        return patternExprs.stream()
+//                .filter(patternExpr -> patternExpr.getRange().get().end.isBefore(child.getRange().get().begin))
+//                .collect(Collectors.toList());
+//    }
 
 
     @Override

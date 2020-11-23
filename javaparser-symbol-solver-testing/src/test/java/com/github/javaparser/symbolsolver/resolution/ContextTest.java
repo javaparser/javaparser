@@ -35,6 +35,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -943,6 +944,36 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
 
         }
+
+        @Nested
+        class PatternExprScopeTests {
+            @Test
+            void instanceOfPatternExprResolution1() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = ((a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr =  enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+
+                assertTrue(symbolReference.isSolved());
+                assertEquals("s", symbolReference.getCorrespondingDeclaration().getName());
+                assertTrue(symbolReference.getCorrespondingDeclaration().isPattern());
+
+                System.out.println("symbolReference = " + symbolReference);
+
+            }
+        }
+
     }
 
 }

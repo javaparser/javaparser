@@ -123,6 +123,11 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     }
 
     @Override
+    public boolean isPattern() {
+        return getWrappedNode() instanceof PatternExpr;
+    }
+
+    @Override
     public boolean isType() {
         return false;
     }

@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,22 +50,22 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
 
     @Override
     public List<ResolvedValueDeclaration> getSymbolDeclarations() {
-        LinkedList<JavaParserSymbolDeclaration> variables = wrappedNode.getVariables()
+        List<JavaParserSymbolDeclaration> variables = wrappedNode.getVariables()
                 .stream()
                 .map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver))
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
-                .stream()
-                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())
-                .map(variableDeclarator -> variableDeclarator.getInitializer().get())
-                .map(expression -> expression.findAll(PatternExpr.class))
-                .flatMap(Collection::stream)
-                .map(v -> JavaParserSymbolDeclaration.patternVar(v, typeSolver))
-                .collect(Collectors.toCollection(LinkedList::new));
+//        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
+//                .stream()
+//                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())
+//                .map(variableDeclarator -> variableDeclarator.getInitializer().get())
+//                .map(expression -> expression.findAll(PatternExpr.class))
+//                .flatMap(Collection::stream)
+//                .map(v -> JavaParserSymbolDeclaration.patternVar(v, typeSolver))
+//                .collect(Collectors.toCollection(ArrayList::new));
 
-        LinkedList<ResolvedValueDeclaration> all = new LinkedList<>(variables);
-        all.addAll(patterns);
+        List<ResolvedValueDeclaration> all = new ArrayList<>(variables);
+//        all.addAll(patterns);
 
         return all;
     }
