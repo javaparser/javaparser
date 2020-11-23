@@ -398,11 +398,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (type.isPrimitive()) { 
                 type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
             }
-            if (!type.isTypeVariable() && !type.isReferenceType()) {
-                throw new UnsupportedOperationException(type.getClass().getCanonicalName());
-            }
             if (type.isNull()) {
                 type = MyObjectProvider.INSTANCE.object();
+            }
+            if (!type.isTypeVariable() && !type.isReferenceType()) {
+                throw new UnsupportedOperationException(type.getClass().getCanonicalName());
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {
