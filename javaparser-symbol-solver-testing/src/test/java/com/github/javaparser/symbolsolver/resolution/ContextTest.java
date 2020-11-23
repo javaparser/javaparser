@@ -56,6 +56,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -968,7 +969,48 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertTrue(symbolReference.getCorrespondingDeclaration().isPattern());
 
                 System.out.println("symbolReference = " + symbolReference);
+            }
 
+            @Test
+            void instanceOfPatternExprResolution1_negated() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = (!(a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr =  enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+
+                assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
+            }
+
+            @Test
+            void instanceOfPatternExprResolution2() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = ((a instanceof String s) || s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr =  enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+
+                assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
             }
         }
 

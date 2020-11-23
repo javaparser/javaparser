@@ -118,6 +118,9 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
             // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
 
+        } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
+            // "x" instanceof String s && s.length() > 0
+            results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
         } else {
             return new ArrayList<>();
         }
@@ -134,10 +137,12 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
         List<PatternExpr> results = new ArrayList<>();
 
+        // FIXME: Redo the `.getValue() == true` to take more complex code into account when determining if definitively true (e.g. `
         if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
             if (rightBranch.isBooleanLiteralExpr()) {
                 if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
                     // "x" instanceof String s == true
+                    // No negations.
                 } else {
                     // "x" instanceof String s == false
                     results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
@@ -145,6 +150,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             } else if (leftBranch.isBooleanLiteralExpr()) {
                 if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
                     // true == "x" instanceof String s
+                    // No negations.
                 } else {
                     // false == "x" instanceof String s
                     results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
@@ -169,6 +175,9 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
             // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
 
+        } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
+            // "x" instanceof String s && s.length() > 0
+            // No negations.
         } else {
             return new ArrayList<>();
         }
@@ -183,5 +192,23 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         }
 
         return new ArrayList<>();
+    }
+
+    private boolean isDefinitivelyTrue(Expression expression) {
+        if (expression.isBooleanLiteralExpr()) {
+            if (expression.asBooleanLiteralExpr().getValue() == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDefinitivelyFalse(Expression expression) {
+        if (expression.isBooleanLiteralExpr()) {
+            if (expression.asBooleanLiteralExpr().getValue() == false) {
+                return true;
+            }
+        }
+        return false;
     }
 }
