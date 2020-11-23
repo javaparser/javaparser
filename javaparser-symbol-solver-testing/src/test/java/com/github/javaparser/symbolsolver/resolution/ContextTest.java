@@ -661,6 +661,19 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
     }
 
+    private void assertNoPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
+    }
+    private void assertOnePatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
+    }
+    private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
+                                                                  int expectedNumber, String message) {
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .patternExprsExposedToDirectParent();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
+    }
+
     @Test
     void parametersExposedToChildForMethod() {
         MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
@@ -771,6 +784,24 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
         assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+    }
+
+    @Test
+    void instanceOfPatternExpr0() {
+        InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String", ParseStart.EXPRESSION).asInstanceOfExpr();
+        assertNoPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "", "");
+    }
+
+    @Test
+    void instanceOfPatternExpr1() {
+        InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s", ParseStart.EXPRESSION).asInstanceOfExpr();
+        assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", "");
+    }
+
+    @Test
+    void instanceOfPatternExpr2() {
+        EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s)", ParseStart.EXPRESSION).asEnclosedExpr();
+        assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
     }
 
 }

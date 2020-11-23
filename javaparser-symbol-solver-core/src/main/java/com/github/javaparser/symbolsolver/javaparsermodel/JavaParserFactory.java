@@ -63,12 +63,16 @@ public class JavaParserFactory {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
         } else if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
+        } else if (node instanceof EnclosedExpr) {
+            return new EnclosedExprContext((EnclosedExpr) node, typeSolver);
         } else if (node instanceof ForEachStmt) {
             return new ForEachStatementContext((ForEachStmt) node, typeSolver);
         } else if (node instanceof ForStmt) {
             return new ForStatementContext((ForStmt) node, typeSolver);
         } else if (node instanceof IfStmt) {
             return new IfStatementContext((IfStmt) node, typeSolver);
+        } else if (node instanceof InstanceOfExpr) {
+            return new InstanceOfExprContext((InstanceOfExpr) node, typeSolver);
         } else if (node instanceof LambdaExpr) {
             return new LambdaExprContext((LambdaExpr) node, typeSolver);
         } else if (node instanceof MethodDeclaration) {

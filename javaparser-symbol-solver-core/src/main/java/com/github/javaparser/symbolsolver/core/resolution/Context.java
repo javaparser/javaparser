@@ -25,7 +25,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -175,6 +174,12 @@ public interface Context {
      * This list could include values which are shadowed.
      */
     default List<PatternExpr> patternExprsExposedToChild(Node child) {
+        return Collections.emptyList();
+    }
+
+    /**
+     */
+    default List<PatternExpr> patternExprsExposedToDirectParent() {
         return Collections.emptyList();
     }
 
