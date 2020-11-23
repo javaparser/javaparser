@@ -121,17 +121,16 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return Optional.empty();
         }
         Context parentContext = getParent().get();
+        Node parentOfWrappedNode = demandParentNode(wrappedNode);
 
         // we should look in all the statements preceding, treating them as SymbolDeclarators
-        if (demandParentNode(wrappedNode) instanceof MethodDeclaration) {
+        if (parentOfWrappedNode instanceof MethodDeclaration) {
             return parentContext.solveSymbolAsValue(name);
-        }
-        if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
+        }else if (parentOfWrappedNode instanceof LambdaExpr) {
             return parentContext.solveSymbolAsValue(name);
-        }
-        if (demandParentNode(wrappedNode) instanceof IfStmt) {
+        } else if (parentOfWrappedNode instanceof IfStmt) {
             // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
-            // ... or if we're in the condiiton
+            // ... or if we're in the condition
             if (nodeContextIsThenOfIfStmt(getParent().get())) {
                 List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
                 for (PatternExpr patternExpr : patternExprs) {
@@ -152,14 +151,14 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
             // Otherwise continue up the scope chain as normal...
             return parentContext.solveSymbolAsValue(name);
-        }
-
-        if (!(demandParentNode(wrappedNode) instanceof NodeWithStatements)) {
+        } else if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
             return parentContext.solveSymbolAsValue(name);
         }
 
-        NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) demandParentNode(wrappedNode);
+        NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
         int position = -1;
+
+        // Get the position of the wrapped node.
         for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
             if (nodeWithStmt.getStatements().get(i).equals(wrappedNode)) {
                 position = i;
@@ -168,16 +167,18 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         if (position == -1) {
             throw new RuntimeException();
         }
-        for (int i = position - 1; i >= 0; i--) {
-            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver);
+
+        // Working backwards from the node, try to solve the symbol. This limits the scope to declarations that appear prior to usage.
+        for (int statementIndex = position - 1; statementIndex >= 0; statementIndex--) {
+            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(statementIndex), typeSolver);
             symbolReference = solveWithAsValue(symbolDeclarator, name);
             if (symbolReference.isPresent()) {
                 return symbolReference;
             }
         }
 
-        // if nothing is found we should ask the parent context
-        return parentContext.solveSymbolAsValue(name);
+        // If nothing is found we should ask the parent context.
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -240,11 +241,12 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // if nothing is found we should ask the parent context
-        return parentContext.solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
 

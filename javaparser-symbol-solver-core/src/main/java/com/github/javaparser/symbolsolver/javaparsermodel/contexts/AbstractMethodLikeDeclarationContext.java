@@ -111,10 +111,11 @@ public abstract class AbstractMethodLikeDeclarationContext
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
         for (TypeDeclaration<?> localType : localTypes) {
             if (localType.getName().getId().equals(name)) {
-                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver)
+                        .getTypeDeclaration(localType));
             } else if (name.startsWith(String.format("%s.", localType.getName()))) {
-                return JavaParserFactory.getContext(localType, typeSolver).solveType(
-                        name.substring(localType.getName().getId().length() + 1));
+                return JavaParserFactory.getContext(localType, typeSolver)
+                        .solveType(name.substring(localType.getName().getId().length() + 1));
             }
         }
 
@@ -123,6 +124,7 @@ public abstract class AbstractMethodLikeDeclarationContext
 
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
 }
