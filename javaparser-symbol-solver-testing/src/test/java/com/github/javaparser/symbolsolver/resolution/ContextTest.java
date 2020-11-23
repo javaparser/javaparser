@@ -830,31 +830,41 @@ class ContextTest extends AbstractSymbolResolutionTest {
             assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
         }
 
-        @Test
-        void instanceOfPatternExpr4() {
-            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
-            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
-            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+
+        @Nested
+        class PatternExprNegationTests {
+            @Test
+            void instanceOfPatternExpr4() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExpr5() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExpr6() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExpr7() {
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
+            }
         }
 
-        @Test
-        void instanceOfPatternExpr5() {
-            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
-            assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
-            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
-        }
 
-        @Test
-        void instanceOfPatternExpr6() {
-            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
-            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
-            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
-        }
+        @Nested
+        class PatternExprBinaryExprTests {
 
-        @Test
-        void instanceOfPatternExpr7() {
-            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
-            assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
         }
     }
 
