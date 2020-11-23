@@ -184,6 +184,12 @@ public interface Context {
     }
 
     /**
+     */
+    default List<PatternExpr> negatedPatternExprsExposedToDirectParent() {
+        return Collections.emptyList();
+    }
+
+    /**
      * Aim to resolve the given name by looking for a variable matching it.
      * <p>
      * To do it consider local variables that are visible in a certain scope as defined in JLS 6.3. Scope of a

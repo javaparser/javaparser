@@ -46,6 +46,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -674,6 +675,19 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
     }
 
+    private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
+    }
+    private void assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
+    }
+    private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
+                                                                  int expectedNumber, String message) {
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .negatedPatternExprsExposedToDirectParent();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
+    }
+
     @Test
     void parametersExposedToChildForMethod() {
         MethodDeclaration method = parse("void foo(int myParam) { aCall(); }",
@@ -786,22 +800,62 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
     }
 
-    @Test
-    void instanceOfPatternExpr0() {
-        InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String", ParseStart.EXPRESSION).asInstanceOfExpr();
-        assertNoPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "", "");
-    }
+    @Nested
+    class PatternExprTests {
+        @Test
+        void instanceOfPatternExpr0() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String", ParseStart.EXPRESSION).asInstanceOfExpr();
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "", "");
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", "");
+        }
 
-    @Test
-    void instanceOfPatternExpr1() {
-        InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s", ParseStart.EXPRESSION).asInstanceOfExpr();
-        assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", "");
-    }
+        @Test
+        void instanceOfPatternExpr1() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s", ParseStart.EXPRESSION).asInstanceOfExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", "");
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", "");
+        }
 
-    @Test
-    void instanceOfPatternExpr2() {
-        EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s)", ParseStart.EXPRESSION).asEnclosedExpr();
-        assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+        @Test
+        void instanceOfPatternExpr2() {
+            EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s)", ParseStart.EXPRESSION).asEnclosedExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+        }
+
+        @Test
+        void instanceOfPatternExpr3() {
+            EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(((a instanceof String s)))", ParseStart.EXPRESSION).asEnclosedExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", "");
+        }
+
+        @Test
+        void instanceOfPatternExpr4() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+        }
+
+        @Test
+        void instanceOfPatternExpr5() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+        }
+
+        @Test
+        void instanceOfPatternExpr6() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "");
+        }
+
+        @Test
+        void instanceOfPatternExpr7() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "!!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
+        }
     }
 
 }
