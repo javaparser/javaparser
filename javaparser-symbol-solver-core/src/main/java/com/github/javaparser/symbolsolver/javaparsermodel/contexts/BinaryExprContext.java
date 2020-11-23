@@ -7,14 +7,13 @@ import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
@@ -28,61 +27,22 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        BinaryExpr binaryExpr = wrappedNode;
+        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
 
-        // Not applicable for || -- Pattern will only be created and used on the right when instanceof evaluates to true
-        if (binaryExpr.getOperator() == BinaryExpr.Operator.AND) {
-            Expression leftBranch = binaryExpr.getLeft();
-            List<PatternExpr> patternExprs = leftBranch.findAll(PatternExpr.class);
-            for (PatternExpr patternExpr : patternExprs) {
-                if (patternExpr.getName().getIdentifier().equals(name)) {
-                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
-                }
-            }
+        // Filter to include only the pattern expressions that exist prior to the given node.
+        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
+        List<PatternExpr> matches = patternExprs.stream()
+                .filter(patternExpr -> patternExpr.getNameAsString().equals(name))
+                .collect(Collectors.toList());
+
+        if(matches.size() == 1) {
+            return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(matches.get(0), typeSolver));
+        } else if(matches.size() > 1) {
+            throw new IllegalStateException("Too many matches -- unclear how to solve.");
+        } else {
+            // if nothing is found we should ask the parent context
+            return solveSymbolInParentContext(name);
         }
-
-        // If not solved here, continue searching...
-        return solveSymbolInParentContext(name);
-    }
-
-    @Override
-    public Optional<Value> solveSymbolAsValue(String name) {
-        BinaryExpr binaryExpr = wrappedNode;
-        // FIXME: Consider negations...
-        // FIXME: Consider child binary expressions...
-        // FIXME: Do something with "variables available" methods...
-
-        // Not applicable for || -- Pattern will only be created and used on the right when instanceof evaluates to true
-        if (binaryExpr.getOperator() == BinaryExpr.Operator.EQUALS) {
-            // Only consider the left branch -- patterns on the right hand side should never be available to the left branch.
-            List<PatternExpr> patternExprs = binaryExpr.getLeft().findAll(PatternExpr.class);
-            for (PatternExpr patternExpr : patternExprs) {
-                if (patternExpr.getName().getIdentifier().equals(name)) {
-                    JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
-                    return Optional.of(Value.from(decl));
-                }
-            }
-        }
-
-        if (binaryExpr.getOperator() == BinaryExpr.Operator.AND) {
-            // FIXME: If the usage is in the right branch, is it defined in the right branch... etc...
-            List<PatternExpr> patternExprs = binaryExpr.getLeft().findAll(PatternExpr.class);
-            for (PatternExpr patternExpr : patternExprs) {
-                if (patternExpr.getName().getIdentifier().equals(name)) {
-                    JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
-                    return Optional.of(Value.from(decl));
-                }
-            }
-        }
-
-        // If there is no parent
-        if(!getParent().isPresent()) {
-            return Optional.empty();
-        }
-        Context parentContext = getParent().get();
-
-        // if nothing is found we should ask the parent context
-        return parentContext.solveSymbolAsValue(name);
     }
 
 
@@ -99,11 +59,12 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
             return res;
         }
 
-        List<PatternExpr> allPatternExprInLeftBranch = wrappedNode.getLeft()
-                .findAll(PatternExpr.class);
+        List<PatternExpr> patternExprs = patternExprsExposedToDirectParent();
+        List<PatternExpr> negatedPatternExprs = negatedPatternExprsExposedToDirectParent();
 
         // Filter to include only the pattern expressions that exist prior to the given node.
-        return allPatternExprInLeftBranch.stream()
+        // FIXME: Consider the shared parent between the given nodes -- may be affected by negations.
+        return patternExprs.stream()
                 .filter(patternExpr -> patternExpr.getRange().get().end.isBefore(child.getRange().get().begin))
                 .collect(Collectors.toList());
     }

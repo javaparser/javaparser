@@ -83,19 +83,7 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }
 
-        Context parentContext = optionalParent.get();
-
-        // TODO:
-        // If this is directly within a "then" section of an if/else if (i.e. not an else)
-        boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
-        if (nodeContextIsThenOfIfStmt) {
-            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
-            for (PatternExpr patternExpr : patternExprs) {
-                if (patternExpr.getName().getIdentifier().equals(name)) {
-                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
-                }
-            }
-        } else if (wrappedNode.getStatements().size() > 0) {
+        if (wrappedNode.getStatements().size() > 0) {
             // tries to resolve a declaration from local variables defined in child statements
             // or from parent node context
             // for example resolve declaration for the MethodCallExpr a.method() in
@@ -108,6 +96,7 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
             // find all variable declarators exposed in child
             wrappedNode.getStatements().forEach(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
             if (!variableDeclarators.isEmpty()) {
+                // FIXME: Work backwards from the current statement, to only consider declarations prior to this statement.
                 for (VariableDeclarator vd : variableDeclarators) {
                     if (vd.getNameAsString().equals(name)) {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
@@ -117,6 +106,6 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
         }
 
         // Otherwise continue as normal...
-        return parentContext.solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 }

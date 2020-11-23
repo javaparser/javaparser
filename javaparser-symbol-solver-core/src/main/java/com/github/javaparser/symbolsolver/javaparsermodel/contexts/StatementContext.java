@@ -129,25 +129,26 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }else if (parentOfWrappedNode instanceof LambdaExpr) {
             return parentContext.solveSymbolAsValue(name);
         } else if (parentOfWrappedNode instanceof IfStmt) {
-            // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
-            // ... or if we're in the condition
-            if (nodeContextIsThenOfIfStmt(getParent().get())) {
-                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
-                for (PatternExpr patternExpr : patternExprs) {
-                    if (patternExpr.getName().getIdentifier().equals(name)) {
-                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
-                        return Optional.of(Value.from(decl));
-                    }
-                }
-            } else if (nodeContextIsConditionOfIfStmt(getParent().get())) {
-                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
-                for (PatternExpr patternExpr : patternExprs) {
-                    if (patternExpr.getName().getIdentifier().equals(name)) {
-                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
-                        return Optional.of(Value.from(decl));
-                    }
-                }
-            }
+            // FIXME: Ignore this -- logic should be contained within the IfStatementContext re: whether it exposes any types / variables.
+//            // Only try to get the patternExprs from the IfStmt condition if we're directly inside the "then" section
+//            // ... or if we're in the condition
+//            if (nodeContextIsThenOfIfStmt(getParent().get())) {
+//                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
+//                for (PatternExpr patternExpr : patternExprs) {
+//                    if (patternExpr.getName().getIdentifier().equals(name)) {
+//                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+//                        return Optional.of(Value.from(decl));
+//                    }
+//                }
+//            } else if (nodeContextIsConditionOfIfStmt(getParent().get())) {
+//                List<PatternExpr> patternExprs = getParent().get().patternExprsExposedToChild(wrappedNode);
+//                for (PatternExpr patternExpr : patternExprs) {
+//                    if (patternExpr.getName().getIdentifier().equals(name)) {
+//                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+//                        return Optional.of(Value.from(decl));
+//                    }
+//                }
+//            }
 
             // Otherwise continue up the scope chain as normal...
             return parentContext.solveSymbolAsValue(name);
@@ -197,17 +198,18 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         Node parentOfWrappedNode = demandParentNode(wrappedNode);
 
 
-        // If this is the "then" section of an if/else if (i.e. not an else) -- e.g. wrappedNode of ExpressionStmt
-        // ... consider pattern expressions defined within the IfStmt condition
-        boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
-        if (nodeContextIsThenOfIfStmt) {
-            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
-            for (PatternExpr patternExpr : patternExprs) {
-                if (patternExpr.getName().getIdentifier().equals(name)) {
-                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
-                }
-            }
-        }
+        // FIXME: Ignore this -- logic should be contained within the IfStatementContext re: whether it exposes any types / variables.
+//        // If this is the "then" section of an if/else if (i.e. not an else) -- e.g. wrappedNode of ExpressionStmt
+//        // ... consider pattern expressions defined within the IfStmt condition
+//        boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
+//        if (nodeContextIsThenOfIfStmt) {
+//            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
+//            for (PatternExpr patternExpr : patternExprs) {
+//                if (patternExpr.getName().getIdentifier().equals(name)) {
+//                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+//                }
+//            }
+//        }
 
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (parentOfWrappedNode instanceof MethodDeclaration) {
