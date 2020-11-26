@@ -49,11 +49,11 @@ public class InstanceOfTest {
      * - !A && B   Not
      * <p>
      * If/Else If/Else Blocks
-     * - if(A) { B - Resolves }
-     * - if(!A) { B - Not }
+     * - if(A) { Resolves }
+     * - if(!A) { Not }
      * <p>
-     * - if() {} else if (A) { B - Resolves }
-     * - if() {} else if (!A) { B - Not }
+     * - if() {} else if (A) { Resolves }
+     * - if() {} else if (!A) { Not }
      */
     protected String sourceCode = "" +
             "import java.util.List;\n" +
