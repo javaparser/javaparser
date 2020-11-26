@@ -64,6 +64,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -188,7 +189,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(ClassExpr node, Boolean solveLambdas) {
         // This implementation does not regard the actual type argument of the ClassExpr.
-        com.github.javaparser.ast.type.Type astType = node.getType();
+        Type astType = node.getType();
         ResolvedType jssType = facade.convertToUsage(astType, node.getType());
         return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
     }
@@ -255,7 +256,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         Optional<Value> value = Optional.empty();
         try {
             value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
-        } catch (com.github.javaparser.resolution.UnsolvedSymbolException use) {
+        } catch (UnsolvedSymbolException use) {
             // This node may have a package name as part of its fully qualified name.
             // We should solve for the type declaration inside this package.
             SymbolReference<ResolvedReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
@@ -266,7 +267,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (value.isPresent()) {
             return value.get().getType();
         }
-        throw new com.github.javaparser.resolution.UnsolvedSymbolException(node.getName().getId());
+        throw new UnsolvedSymbolException(node.getName().getId());
     }
 
     @Override
@@ -328,7 +329,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         Log.trace("getType on name expr %s", ()-> node);
         Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
-            throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, node.getName().getId());
+            throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
         } else {
             return value.get().getType();
         }
@@ -337,7 +338,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
         Log.trace("getType on type expr %s", ()-> node);
-        if (!(node.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
+        if (!(node.getType() instanceof ClassOrInterfaceType)) {
             // TODO / FIXME... e.g. System.out::println
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
@@ -346,7 +347,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 .getContext(classOrInterfaceType, typeSolver)
                 .solveType(classOrInterfaceType.getName().getId());
         if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
+            throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
         } else {
             return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
@@ -364,7 +365,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // Get the class name
             String className = node.getTypeName().get().asString();
             // Attempt to resolve locally in Compilation unit
-            // first try a buttom/up approach 
+            // first try a buttom/up approach
             try {
                 return new ReferenceTypeImpl(
                         facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)),
@@ -447,7 +448,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
@@ -558,7 +559,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
