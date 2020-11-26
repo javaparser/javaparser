@@ -187,21 +187,18 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
 
         // if we're in a multiple Variable declaration line (for ex: double a=0, b=a;)
-        // FIXME: This makes pattern expression variables available when resolving the right hand side of a BinaryExpr...
         SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
         if (symbolReference.isSolved()) {
             return symbolReference;
         }
 
-        // If no parent context / node, no point continuing... TODO: Tidy this up.
-        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
-        Node parentOfWrappedNode = demandParentNode(wrappedNode);
-
+        // FIXME: This makes pattern expression variables available when resolving the right hand side of a BinaryExpr...
 
         // FIXME: Ignore this -- logic should be contained within the IfStatementContext re: whether it exposes any types / variables.
 //        // If this is the "then" section of an if/else if (i.e. not an else) -- e.g. wrappedNode of ExpressionStmt
 //        // ... consider pattern expressions defined within the IfStmt condition
+//        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
 //        boolean nodeContextIsThenOfIfStmt = nodeContextIsThenOfIfStmt(parentContext);
 //        if (nodeContextIsThenOfIfStmt) {
 //            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(getWrappedNode());
@@ -212,18 +209,20 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 //            }
 //        }
 
+        Node parentOfWrappedNode = demandParentNode(wrappedNode);
+
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (parentOfWrappedNode instanceof MethodDeclaration) {
-            return parentContext.solveSymbol(name);
+            return solveSymbolInParentContext(name);
         }
         if (parentOfWrappedNode instanceof ConstructorDeclaration) {
-            return parentContext.solveSymbol(name);
+            return solveSymbolInParentContext(name);
         }
         if (parentOfWrappedNode instanceof LambdaExpr) {
-            return parentContext.solveSymbol(name);
+            return solveSymbolInParentContext(name);
         }
         if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
-            return parentContext.solveSymbol(name);
+            return solveSymbolInParentContext(name);
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
         int position = -1;
