@@ -18,7 +18,7 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
 
     @Override
     public List<PatternExpr> patternExprsExposedFromChildren() {
-        // Propagate any pattern expressions "up"
+        // Propagate any pattern expressions "up" without modification
         Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
         List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
 
@@ -27,7 +27,7 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
 
     @Override
     public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        // Propagate any pattern expressions "up"
+        // Propagate any pattern expressions "up" without modification
         Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
         List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
 
