@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -40,10 +44,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.google.common.base.Preconditions;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * A symbol resolution context for an object creation node.
@@ -203,8 +203,8 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
     Preconditions.checkArgument(typeSolver != null);
 
-    if (myDeclaration.hasVisibleField(name)) {
-      return SymbolReference.solved(myDeclaration.getVisibleField(name));
+    if (myDeclaration.hasField(name)) {
+      return SymbolReference.solved(myDeclaration.getField(name));
     }
 
     return getParent()
