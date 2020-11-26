@@ -21,7 +21,12 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -31,7 +36,12 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -45,8 +55,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -1003,6 +1018,63 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
                 assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
+            }
+
+            @Disabled
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple1() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = s.equals(\"\");", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(2, variables.size());
+
+                VariableDeclarator variableDeclarator = variables.get(1);
+
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator2() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator3() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y  = a instanceof String s2 == true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s","");
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2","");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator4() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s != true, y  = a instanceof String s2 != true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s","");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2","");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator5() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = !(a instanceof String s != true), y  = a instanceof String s2 != true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s","");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2","");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
             }
         }
 
