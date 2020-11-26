@@ -38,6 +38,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
@@ -143,6 +144,8 @@ public class JavaParserFactory {
             return new FieldSymbolDeclarator((FieldDeclaration) node, typeSolver);
         } else if (node instanceof Parameter) {
             return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
+        } else if (node instanceof PatternExpr) {
+            return new PatternSymbolDeclarator((PatternExpr) node, typeSolver);
         } else if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
