@@ -706,6 +706,13 @@ public class CompilationUnit extends Node {
         public void setPrinter(Printable printer) {
             this.printer = printer;
         }
+        
+        /**
+         * Returns the internal printer
+         */
+        public Printable getPrinter() {
+            return this.printer;
+        }
 
         /**
          * @return the path to the source for this CompilationUnit
