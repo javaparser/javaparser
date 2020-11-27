@@ -1022,19 +1022,79 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
             }
 
-            @Disabled
             @Test
             void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple1() {
                 ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = s.equals(\"\");", ParseStart.STATEMENT).asExpressionStmt();
 
                 VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+
                 NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
                 assertEquals(2, variables.size());
 
-                VariableDeclarator variableDeclarator = variables.get(1);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
 
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", "");
+                VariableDeclarator variableDeclaratorX = variables.get(0);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+
+                VariableDeclarator variableDeclaratorY = variables.get(1);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple2() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = s instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(2, variables.size());
+
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+
+                VariableDeclarator variableDeclaratorX = variables.get(0);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", "");
+
+                VariableDeclarator variableDeclaratorY = variables.get(1);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", "");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple3() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = !(s instanceof String s2);", ParseStart.STATEMENT).asExpressionStmt();
+
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(2, variables.size());
+
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
+
+                VariableDeclarator variableDeclaratorX = variables.get(0);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", "");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", "");
+
+                VariableDeclarator variableDeclaratorY = variables.get(1);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", "");
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", "");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", "");
             }
 
             @Test
