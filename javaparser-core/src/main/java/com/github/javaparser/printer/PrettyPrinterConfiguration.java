@@ -21,15 +21,15 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.function.Function;
-
 import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.SPACES;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNonNegative;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.assertPositive;
+
+import java.util.function.Function;
+
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Configuration options for the {@link PrettyPrinter}.
@@ -39,13 +39,13 @@ public class PrettyPrinterConfiguration {
         /**
          * Indent with spaces.
          */
-        SPACES,
+        SPACES(' '),
 
         /**
          * Indent with tabs as far as possible.
          * For proper aligning, the tab width is necessary and by default 4.
          */
-        TABS,
+        TABS('\t'),
 
         /**
          * Indent with tabs but align with spaces when wrapping and aligning
@@ -68,7 +68,17 @@ public class PrettyPrinterConfiguration {
          * }
          * </pre>
          */
-        TABS_WITH_SPACE_ALIGN
+        TABS_WITH_SPACE_ALIGN('\t');
+        
+        private Character car;
+        
+        private IndentType(Character c) {
+            this.car = c;
+        }
+        
+        public Character getChar() {
+            return this.car;
+        }
     }
 
     public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
@@ -101,20 +111,7 @@ public class PrettyPrinterConfiguration {
      */
     public String getIndent() {
         StringBuilder indentString = new StringBuilder();
-        char indentChar;
-        switch (indentType) {
-            case SPACES:
-                indentChar = ' ';
-                break;
-
-            case TABS:
-            case TABS_WITH_SPACE_ALIGN:
-                indentChar = '\t';
-                break;
-
-            default:
-                throw new AssertionError("Unhandled indent type");
-        }
+        char indentChar = indentType.getChar();
         for (int i = 0; i < indentSize; i++) {
             indentString.append(indentChar);
         }
