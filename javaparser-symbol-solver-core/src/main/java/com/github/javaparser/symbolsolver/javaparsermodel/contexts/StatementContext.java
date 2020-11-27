@@ -42,7 +42,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -283,48 +283,15 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
     @Override
     public List<PatternExpr> patternExprsExposedFromChildren() {
-        if(wrappedNode.isExpressionStmt()) {
-            Expression expression = wrappedNode.asExpressionStmt().getExpression();
+        // Statements never make pattern expressions available.
+        return Collections.emptyList();
 
-            if (expression.isVariableDeclarationExpr()) {
-                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
-
-                // Propagate any pattern expressions "up" without modification
-                Context innerContext = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
-                List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
-
-                return results;
-            } else if (expression.isPatternExpr()) {
-                PatternExpr patternExpr = expression.asPatternExpr();
-
-                // Propagate any pattern expressions "up" without modification
-                Context innerContext = JavaParserFactory.getContext(patternExpr, typeSolver);
-                List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
-
-                return results;
-            }
-        }
-
-        return super.patternExprsExposedFromChildren();
     }
 
     @Override
     public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        if(wrappedNode.isExpressionStmt()) {
-            Expression expression = wrappedNode.asExpressionStmt().getExpression();
-
-            if (expression.isVariableDeclarationExpr()) {
-                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
-
-                // Propagate any pattern expressions "up" without modification
-                Context innerContext = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
-                List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
-
-                return results;
-            }
-        }
-
-        return super.patternExprsExposedFromChildren();
+        // Statements never make pattern expressions available.
+        return Collections.emptyList();
     }
 
 }

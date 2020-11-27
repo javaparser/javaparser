@@ -1205,9 +1205,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 NodeList<Statement> statements = blockStmt.getStatements();
                 assertEquals(2, statements.size(), "Expected 2 statements -- issue with test configuration/sample?");
 
-                String message = "s must be available";
+                String message = "No pattern must be available from this statement.";
                 Statement xStatement = statements.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
 
                 Statement resultStatement = statements.get(1);
@@ -1216,7 +1216,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
-                assertTrue(s.isSolved());
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
 
             }
 
@@ -1235,15 +1235,15 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertEquals(3, statements.size(), "Expected 3 statements -- issue with test configuration/sample?");
 
                 String message;
-                message = "s must be available for this statement (x)";
+                message = "No pattern must be available from this statement (x)";
                 Statement xStatement = statements.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
 
-                message = "s (NEGATED) must be available for this statement (y)";
+                message = "No pattern must be available from this statement (y)";
                 Statement yStatement = statements.get(1);
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s", message);
 
                 Statement resultStatement = statements.get(2);
                 Expression expression = resultStatement.asExpressionStmt().getExpression();
@@ -1251,7 +1251,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
-                assertTrue(s.isSolved());
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
             }
 
             @Test
@@ -1267,10 +1267,10 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 NodeList<Statement> statements = blockStmt.getStatements();
                 assertEquals(2, statements.size(), "Expected 2 statements -- issue with test configuration/sample?");
 
-                String message = "s must be available for this statement (x)";
+                String message = "No pattern must be available from this statement (x)";
                 Statement xStatement = statements.get(0);
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
 
                 Statement resultStatement = statements.get(1);
                 Expression expression = resultStatement.asExpressionStmt().getExpression();
@@ -1278,7 +1278,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
-                assertFalse(s.isSolved());
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
 
             }
 
@@ -1310,6 +1310,21 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
                 assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr3() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = \"\" instanceof String s || \"\" instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+//                String message = "Both s and s2 must be available from this declaration expression (AND).";
+                String message = "No pattern must be available from this statement.";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+
+                // TODO: Assert pattern available from the binaryexpr
             }
 
 
