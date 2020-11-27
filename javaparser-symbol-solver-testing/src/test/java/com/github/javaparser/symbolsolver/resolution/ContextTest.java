@@ -661,7 +661,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
                                                                   int expectedNumber, String message) {
         assertEquals(expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
-                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
+                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count(), "[" + paramName + "]: " + message);
     }
 
     private void assertNoVarsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
@@ -676,7 +676,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .localVariablesExposedToChild(child);
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), "[" + paramName + "]: " + message);
     }
 
     private void assertNoPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -689,7 +689,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -702,7 +702,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -1286,6 +1286,32 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         @Nested
         class PatternExprScopeTests {
+
+            @Test
+            void instanceOfPatternExprResolution_expr1() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s && a instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "Both s and s2 must be available from this declaration expression (AND).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr2() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = !(a instanceof String s) && a instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "Both s (NEGATED) and s2 must be available from this declaration expression (AND).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+            }
+
+
             @Test
             void instanceOfPatternExprResolution1() {
                 CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = ((a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);

@@ -120,7 +120,9 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
         } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
             // "x" instanceof String s && s.length() > 0
+            // "x" instanceof String s && "x" instanceof String s2
             results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+            results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
         } else {
             return new ArrayList<>();
         }
@@ -177,7 +179,9 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
         } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
             // "x" instanceof String s && s.length() > 0
-            // No negations.
+            // "x" instanceof String s && "x" instanceof String s2
+            results.addAll(negatedPatternExprsExposedToDirectParentFromBranch(leftBranch));
+            results.addAll(negatedPatternExprsExposedToDirectParentFromBranch(rightBranch));
         } else {
             return new ArrayList<>();
         }
@@ -187,8 +191,17 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
     private List<PatternExpr> patternExprsExposedToDirectParentFromBranch(Expression branch) {
         if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
-            Context leftBranchContext = JavaParserFactory.getContext(branch, typeSolver);
-            return leftBranchContext.patternExprsExposedFromChildren();
+            Context branchContext = JavaParserFactory.getContext(branch, typeSolver);
+            return branchContext.patternExprsExposedFromChildren();
+        }
+
+        return new ArrayList<>();
+    }
+
+    private List<PatternExpr> negatedPatternExprsExposedToDirectParentFromBranch(Expression branch) {
+        if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
+            Context branchContext = JavaParserFactory.getContext(branch, typeSolver);
+            return branchContext.negatedPatternExprsExposedFromChildren();
         }
 
         return new ArrayList<>();
