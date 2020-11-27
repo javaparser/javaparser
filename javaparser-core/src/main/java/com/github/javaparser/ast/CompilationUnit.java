@@ -65,6 +65,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.Printable;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -684,17 +685,33 @@ public class CompilationUnit extends Node {
         private final Path path;
 
         private final Charset encoding;
+        
+        private Printable printer;
 
         private Storage(CompilationUnit compilationUnit, Path path) {
-            this.compilationUnit = compilationUnit;
-            this.path = path.toAbsolutePath();
-            this.encoding = UTF8;
+            this(compilationUnit, path, UTF8);
         }
 
         private Storage(CompilationUnit compilationUnit, Path path, Charset encoding) {
             this.compilationUnit = compilationUnit;
             this.path = path.toAbsolutePath();
             this.encoding = encoding;
+            // default printer
+            this.printer = new PrettyPrinter();
+        }
+        
+        /**
+         * Set a new printer
+         */
+        public void setPrinter(Printable printer) {
+            this.printer = printer;
+        }
+        
+        /**
+         * Returns the internal printer
+         */
+        public Printable getPrinter() {
+            return this.printer;
         }
 
         /**
@@ -740,7 +757,7 @@ public class CompilationUnit extends Node {
          * Saves the compilation unit to its original location
          */
         public void save() {
-            save(cu -> new PrettyPrinter().print(cu));
+            save(cu -> printer.print(cu));
         }
 
         /**
