@@ -48,23 +48,8 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration 
     }
 
     @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
     public boolean isPattern() {
         return true;
-    }
-
-    @Override
-    public boolean isType() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -81,5 +66,9 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration 
         return wrappedNode;
     }
 
+    @Override
+    public ResolvedPatternDeclaration asPattern() {
+        return this;
+    }
 
 }

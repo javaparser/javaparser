@@ -1336,6 +1336,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
                 assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
                 assertTrue(correspondingDeclaration.isPattern());
+                assertEquals("s", correspondingDeclaration.asPattern().getName(), "unexpected name for the solved pattern");
+                assertEquals("java.lang.String", correspondingDeclaration.asPattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
 
             }
 

@@ -116,6 +116,6 @@ public interface ResolvedDeclaration {
     }
 
     default ResolvedPatternDeclaration asPattern() {
-        throw new UnsupportedOperationException(String.format("%s is not an Pattern", this));
+        throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
     }
 }
