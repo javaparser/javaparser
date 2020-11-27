@@ -45,6 +45,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -1328,12 +1329,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertEquals("s", nameExpr.getNameAsString());
 
                 SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = symbolSolver.solveSymbol("s", nameExpr);
                 System.out.println("symbolReference = " + symbolReference);
 
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
-                assertEquals("s", symbolReference.getCorrespondingDeclaration().getName(), "unexpected name for the solved symbol");
-                assertTrue(symbolReference.getCorrespondingDeclaration().isPattern());
+                ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
+                assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
+                assertTrue(correspondingDeclaration.isPattern());
 
             }
 

@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.InstanceOfExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -25,7 +26,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
         Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
         if(optionalPatternExpr.isPresent()) {
             if(optionalPatternExpr.get().getNameAsString().equals(name)) {
-                JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr.get(), typeSolver);
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr.get(), typeSolver);
                 return SymbolReference.solved(decl);
             }
         }

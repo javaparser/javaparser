@@ -72,8 +72,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
         return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getName().getId(), typeSolver);
     }
 
-    public static JavaParserSymbolDeclaration patternVar(PatternExpr patternExpr, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(patternExpr, patternExpr.getName().getId(), typeSolver);
+    public static JavaParserPatternDeclaration patternVar(PatternExpr patternExpr, TypeSolver typeSolver) {
+        return new JavaParserPatternDeclaration(patternExpr, typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {
