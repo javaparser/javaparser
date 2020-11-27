@@ -24,8 +24,10 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -40,7 +42,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
@@ -184,14 +188,40 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     @Override
+    protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name) {
+//        symbolDeclarator.getSymbolDeclarations().get(0).
+//        ResolvedValueDeclaration resolvedValueDeclaration = symbolDeclarator.getSymbolDeclarations().get(0);
+//        boolean isVariable = resolvedValueDeclaration.isVariable();
+        // TODO: Try to get the context of the declarator / initialisations -- then check if the declarations themselves match (or vice versa)
+        return super.solveWithAsValue(symbolDeclarator, name);
+    }
+
+    @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
 
-        // if we're in a multiple Variable declaration line (for ex: double a=0, b=a;)
+        /*
+         * If we're in a variable declaration line.
+         * Example: {@code double a=0, b=a;}
+         * Example: {@code a instanceof String s;}
+         */
         SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
         if (symbolReference.isSolved()) {
             return symbolReference;
         }
+
+         /*
+         * If we're in a statement that contains a pattern expression.
+         * Example: {@code double x = a instanceof String s;}
+         */
+        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
+        for (int i = 0; i < patternExprs.size(); i++) {
+            PatternExpr patternExpr = patternExprs.get(i);
+            if(patternExpr.getNameAsString().equals(name)) {
+                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+            }
+        }
+
 
         // FIXME: This makes pattern expression variables available when resolving the right hand side of a BinaryExpr...
 
@@ -214,35 +244,33 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (parentOfWrappedNode instanceof MethodDeclaration) {
             return solveSymbolInParentContext(name);
-        }
-        if (parentOfWrappedNode instanceof ConstructorDeclaration) {
+        } else if (parentOfWrappedNode instanceof ConstructorDeclaration) {
             return solveSymbolInParentContext(name);
-        }
-        if (parentOfWrappedNode instanceof LambdaExpr) {
+        } else if (parentOfWrappedNode instanceof LambdaExpr) {
             return solveSymbolInParentContext(name);
-        }
-        if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
-            return solveSymbolInParentContext(name);
-        }
-        NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
-        int position = -1;
-        for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
-            if (nodeWithStmt.getStatements().get(i).equals(wrappedNode)) {
-                position = i;
+        } else if (parentOfWrappedNode instanceof NodeWithStatements) {
+            NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
+
+            // Assuming the wrapped node exists within the parent's collection of statements...
+            int position = nodeWithStmt.getStatements().indexOf(wrappedNode);
+            if (position == -1) {
+                throw new IllegalStateException("This node is not a statement within the current NodeWithStatements");
             }
-        }
-        if (position == -1) {
-            throw new RuntimeException();
-        }
-        for (int i = position - 1; i >= 0; i--) {
-            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver);
-            symbolReference = solveWith(symbolDeclarator, name);
-            if (symbolReference.isSolved()) {
-                return symbolReference;
+
+            // Start at the current node and work backwards...
+            ListIterator<Statement> statementListIterator = nodeWithStmt.getStatements().listIterator(position);
+            while(statementListIterator.hasPrevious()) {
+                symbolReference = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver).solveSymbol(name);
+                if (symbolReference.isSolved()) {
+                    return symbolReference;
+                }
             }
+
+            // If nothing is found, attempt to solve within the parent context
+            return solveSymbolInParentContext(name);
         }
 
-        // if nothing is found we should ask the parent context
+        // If nothing is found, attempt to solve within the parent context
         return solveSymbolInParentContext(name);
     }
 
@@ -250,6 +278,53 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
+    }
+
+
+    @Override
+    public List<PatternExpr> patternExprsExposedFromChildren() {
+        if(wrappedNode.isExpressionStmt()) {
+            Expression expression = wrappedNode.asExpressionStmt().getExpression();
+
+            if (expression.isVariableDeclarationExpr()) {
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                // Propagate any pattern expressions "up" without modification
+                Context innerContext = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+
+                return results;
+            } else if (expression.isPatternExpr()) {
+                PatternExpr patternExpr = expression.asPatternExpr();
+
+                // Propagate any pattern expressions "up" without modification
+                Context innerContext = JavaParserFactory.getContext(patternExpr, typeSolver);
+                List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+
+                return results;
+            }
+        }
+
+        return super.patternExprsExposedFromChildren();
+    }
+
+    @Override
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+        if(wrappedNode.isExpressionStmt()) {
+            Expression expression = wrappedNode.asExpressionStmt().getExpression();
+
+            if (expression.isVariableDeclarationExpr()) {
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                // Propagate any pattern expressions "up" without modification
+                Context innerContext = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+
+                return results;
+            }
+        }
+
+        return super.patternExprsExposedFromChildren();
     }
 
 }

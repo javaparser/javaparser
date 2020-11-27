@@ -159,8 +159,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
-        return parentContext.solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override

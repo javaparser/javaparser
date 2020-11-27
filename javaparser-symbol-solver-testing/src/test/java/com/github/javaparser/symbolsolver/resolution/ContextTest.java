@@ -41,11 +41,13 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -1076,7 +1078,100 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", "");
                 assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", "");
             }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator6() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = a instanceof String s;\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(2, statements.size());
+
+                Statement xStatement = statements.get(0);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(xStatement, "s","");
+
+                Statement resultStatement = statements.get(1);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertTrue(s.isSolved());
+
+                Expression expression1 = variableDeclarationExpr.getVariables().get(0).getInitializer().get();
+                System.out.println("expression1 = " + expression1);
+
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator7() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = (a instanceof String s);\n" +
+                        "    boolean y = !(a instanceof String s);\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(3, statements.size());
+
+                Statement xStatement = statements.get(0);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(xStatement, "s","");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s","");
+
+                Statement yStatement = statements.get(1);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s","");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s","");
+
+                Statement resultStatement = statements.get(2);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertTrue(s.isSolved());
+
+                Expression expression1 = variableDeclarationExpr.getVariables().get(0).getInitializer().get();
+                System.out.println("expression1 = " + expression1);
+
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator8() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = !(a instanceof String s);\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(2, statements.size());
+
+                Statement xStatement = statements.get(0);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s","");
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s","");
+
+                Statement resultStatement = statements.get(1);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertFalse(s.isSolved());
+
+            }
+
         }
+
 
         @Nested
         class PatternExprScopeTests {
@@ -1097,12 +1192,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
                 SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+                System.out.println("symbolReference = " + symbolReference);
 
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
                 assertEquals("s", symbolReference.getCorrespondingDeclaration().getName(), "unexpected name for the solved symbol");
                 assertTrue(symbolReference.getCorrespondingDeclaration().isPattern());
 
-                System.out.println("symbolReference = " + symbolReference);
             }
 
             @Test

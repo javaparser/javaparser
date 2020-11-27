@@ -59,9 +59,14 @@ public class VariableDeclaratorContext extends AbstractJavaParserContext<Variabl
             return new ArrayList<>();
         }
 
-        // Propagate any pattern expressions "up" without modification
         Context innerContext = JavaParserFactory.getContext(initializer.get(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+        List<PatternExpr> results = new ArrayList<>();
+
+        // Avoid infinite loop
+        if(!this.equals(innerContext)) {
+            // Propagate any pattern expressions "up" without modification
+            results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+        }
 
         return results;
     }
@@ -73,9 +78,14 @@ public class VariableDeclaratorContext extends AbstractJavaParserContext<Variabl
             return new ArrayList<>();
         }
 
-        // Propagate any pattern expressions "up" without modification
         Context innerContext = JavaParserFactory.getContext(initializer.get(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+        List<PatternExpr> results = new ArrayList<>();
+
+        // Avoid infinite loop
+        if(!this.equals(innerContext)) {
+            // Propagate any pattern expressions "up" without modification
+            results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+        }
 
         return results;
     }

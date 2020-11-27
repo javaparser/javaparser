@@ -26,8 +26,11 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
@@ -41,6 +44,19 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
 
     public VariableDeclarationExprContext(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
+        for (int i = 0; i < patternExprs.size(); i++) {
+            PatternExpr patternExpr = patternExprs.get(i);
+            if(patternExpr.getNameAsString().equals(name)) {
+                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+            }
+        }
+
+        // Default to solving in parent context if unable to solve directly here.
+        return solveSymbolInParentContext(name);
     }
 
     @Override
