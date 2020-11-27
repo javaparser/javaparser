@@ -1000,154 +1000,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         class PatternExprVariableDeclarationTests {
 
             @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator1() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                VariableDeclarator variableDeclarator = variables.get(0);
-
-                String message = "Only s must be available from this expression.";
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_enclosedExpr() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = (a instanceof String s == true);", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                VariableDeclarator variableDeclarator = variables.get(0);
-
-                String message = "Only s must be available from this expression.";
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_negatedEnclosedExpr() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = !(a instanceof String s == true);", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                VariableDeclarator variableDeclarator = variables.get(0);
-
-                String message = "Only s (NEGATED) must be available from this expression.";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_negated2() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s != true;", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                VariableDeclarator variableDeclarator = variables.get(0);
-
-                String message = "Only s (NEGATED) must be available from this expression.";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarator, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple1() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = s.equals(\"\");", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                String message;
-                message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-
-                message = "Only s (NEGATED) must be available from this expression (x).";
-                VariableDeclarator variableDeclaratorX = variables.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-
-                message = "Only s (NEGATED) must be available from this expression (y).";
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple2() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = s instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 2 variables -- issue with test configuration/sample?");
-
-                String message = null;
-                message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-
-                message = "Only s must be available from this declarator (x).";
-                VariableDeclarator variableDeclaratorX = variables.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-
-                message = "Only s2 must be available from this declarator (y).";
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator_multiple3() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = !(s instanceof String s2);", ParseStart.STATEMENT).asExpressionStmt();
-
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 2 variables -- issue with test configuration/sample?");
-
-                String message = null;
-                message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-
-                VariableDeclarator variableDeclaratorX = variables.get(0);
-                message = "Only s must be available from this declarator (x).";
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                message = "Only s2 (NEGATED) must be available from this declarator (y).";
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator2() {
+            void instanceOfPatternExprVariableDeclaration_variableDeclaration() {
                 ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
 
                 String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
@@ -1157,101 +1010,29 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
 
             @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator3() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true, y = a instanceof String s2 == true;", ParseStart.STATEMENT).asExpressionStmt();
-
-                String message = "Both s and s2 must be available from this declaration expression.";
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-
-
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                message = "Only s must be available from this declarator (x).";
-                VariableDeclarator variableDeclaratorX = variables.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-
-                message = "Only s2 must be available from this declarator (y).";
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator4() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s != true, y = a instanceof String s2 != true;", ParseStart.STATEMENT).asExpressionStmt();
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
 
                 String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
                 VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-
 
                 NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
+                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
 
-                // FIXME: Double check this.
-                message = "Only s (NEGATED) must be available from this declarator (x).";
+
+                message = "No pattern must be available outside of this variable declarator (x).";
                 VariableDeclarator variableDeclaratorX = variables.get(0);
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
-
-                // FIXME: Double check this.
-                message = "Only s2 (NEGATED) must be available from this declarator (y).";
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-            }
-
-            @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator5() {
-                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, "boolean x = !(a instanceof String s != true), y = a instanceof String s2 != true;", ParseStart.STATEMENT).asExpressionStmt();
-
-                String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
-                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
-
-
-                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
-                assertEquals(2, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
-
-                // FIXME: Double check this.
-                message = "Only s must be available from this declarator (x).";
-                VariableDeclarator variableDeclaratorX = variables.get(0);
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
                 assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
 
-                // FIXME: Double check this.
-                message = "Only s2 (NEGATED) must be available from this declarator (y).";
-                VariableDeclarator variableDeclaratorY = variables.get(1);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s", message);
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorY, "s2", message);
             }
 
             @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator6() {
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements1() {
                 String x = "" +
                         "{\n" +
                         "    boolean x = a instanceof String s;\n" +
@@ -1279,7 +1060,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
 
             @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator7() {
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements2() {
                 String x = "" +
                         "{\n" +
                         "    boolean x = (a instanceof String s);\n" +
@@ -1313,7 +1094,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
 
             @Test
-            void instanceOfPatternExprVariableDeclaration_variableDeclarator8() {
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements3() {
                 String x = "" +
                         "{\n" +
                         "    boolean x = !(a instanceof String s);\n" +
