@@ -74,38 +74,14 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
 
     @Override
     public List<PatternExpr> patternExprsExposedFromChildren() {
-        NodeList<VariableDeclarator> variables = wrappedNode.getVariables();
-        if(variables.size() == 0) {
-            return new ArrayList<>();
-        }
-
-        List<PatternExpr> results = new ArrayList<>();
-
-        // Propagate any pattern expressions "up" without modification
-        variables.forEach(variableDeclarator -> {
-            Context innerContext = JavaParserFactory.getContext(variableDeclarator, typeSolver);
-            results.addAll(innerContext.patternExprsExposedFromChildren());
-        });
-
-        return results;
+        // Variable declarations never make pattern expressions available.
+        return Collections.emptyList();
     }
 
     @Override
     public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        NodeList<VariableDeclarator> variables = wrappedNode.getVariables();
-        if(variables.size() == 0) {
-            return new ArrayList<>();
-        }
-
-        List<PatternExpr> results = new ArrayList<>();
-
-        // Propagate any pattern expressions "up" without modification
-        variables.forEach(variableDeclarator -> {
-            Context innerContext = JavaParserFactory.getContext(variableDeclarator, typeSolver);
-            results.addAll(innerContext.negatedPatternExprsExposedFromChildren());
-        });
-
-        return results;
+        // Variable declarations never make pattern expressions available.
+        return Collections.emptyList();
     }
 
 }
