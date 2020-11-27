@@ -54,10 +54,16 @@ public interface ResolvedDeclaration {
         return false;
     }
 
+    /**
+     * Does this declaration represents an enum constant?
+     */
     default boolean isEnumConstant() {
         return false;
     }
 
+    /**
+     * Does this declaration represents a pattern declaration?
+     */
     default boolean isPattern() {
         return false;
     }
@@ -78,6 +84,7 @@ public interface ResolvedDeclaration {
 
     /**
      * Does this declaration represents a method?
+     * // FIXME: This is never overridden.
      */
     default boolean isMethod() {
         return false;
@@ -106,15 +113,22 @@ public interface ResolvedDeclaration {
 
     /**
      * Return this as a MethodDeclaration or throw an UnsupportedOperationException
+     * // FIXME: This is never overridden.
      */
     default ResolvedMethodDeclaration asMethod() {
         throw new UnsupportedOperationException(String.format("%s is not a MethodDeclaration", this));
     }
 
+    /**
+     * Return this as a EnumConstantDeclaration or throw an UnsupportedOperationException
+     */
     default ResolvedEnumConstantDeclaration asEnumConstant() {
         throw new UnsupportedOperationException(String.format("%s is not an EnumConstantDeclaration", this));
     }
 
+    /**
+     * Return this as a PatternDeclaration or throw an UnsupportedOperationException
+     */
     default ResolvedPatternDeclaration asPattern() {
         throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
     }
