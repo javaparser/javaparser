@@ -26,6 +26,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -36,6 +37,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -45,6 +48,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
@@ -134,6 +138,38 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
         Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
         return Optional.of(parentContext);
+    }
+
+
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        }
+
+        // First check if there are any pattern expressions available to this node.
+        Context parentContext = optionalParentContext.get();
+        if(parentContext instanceof BinaryExprContext) {
+            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+
+            Optional<PatternExpr> localResolutionResults = patternExprs
+                    .stream()
+                    .filter(vd -> vd.getNameAsString().equals(name))
+                    .findFirst();
+
+            if (localResolutionResults.isPresent()) {
+                if(patternExprs.size() == 1) {
+                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
+                    return SymbolReference.solved(decl);
+                } else if(patternExprs.size() > 1) {
+                    throw new IllegalStateException("Unexpectedly more than one reference in scope");
+                }
+            }
+        }
+
+        // Delegate solving to the parent context.
+        return parentContext.solveSymbol(name);
     }
 
     ///

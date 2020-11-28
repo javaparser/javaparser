@@ -168,11 +168,15 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         if (child == leftBranch) {
             results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
         } else if (child == rightBranch) {
-            if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child)) {
+            if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
                 // "" instanceof String s && "" instanceof String s2
                 results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
             }
         }
+//        else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child)) {
+//            // "" instanceof String s && "" instanceof String s2
+//            results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+//        }
 
         return results;
     }
