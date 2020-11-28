@@ -329,7 +329,7 @@ public class InstanceOfTest {
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
-                assertEquals("s.contains(\"b\")", inScopeMethodCall.toString());
+                assertEquals("s.contains(\"in scope\")", inScopeMethodCall.toString());
 
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
