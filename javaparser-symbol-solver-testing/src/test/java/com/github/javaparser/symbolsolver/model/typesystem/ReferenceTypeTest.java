@@ -65,6 +65,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -253,6 +254,12 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver), typeSolver);
         ResolvedReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
         ResolvedReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        ResolvedReferenceType byteType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
+        ResolvedReferenceType shortType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
+        ResolvedReferenceType charType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
+        ResolvedReferenceType longType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
+        ResolvedReferenceType booleanType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
+        ResolvedReferenceType floatType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
 
         assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.INT));
         assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
@@ -262,6 +269,67 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertEquals(false, numberType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
         assertEquals(true, intType.isAssignableBy(ResolvedPrimitiveType.INT));
         assertEquals(true, doubleType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
+        assertEquals(true, byteType.isAssignableBy(ResolvedPrimitiveType.BYTE));
+        assertEquals(true, shortType.isAssignableBy(ResolvedPrimitiveType.SHORT));
+        assertEquals(true, charType.isAssignableBy(ResolvedPrimitiveType.CHAR));
+        assertEquals(true, longType.isAssignableBy(ResolvedPrimitiveType.LONG));
+        assertEquals(true, booleanType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertEquals(true, floatType.isAssignableBy(ResolvedPrimitiveType.FLOAT));
+    }
+
+    @Test
+    void testIsCorresponding() {
+
+        // ResolvedReferenceTypeTester is defined to allow to test protected method isCorrespondingBoxingType(..)
+        class ResolvedReferenceTypeTester extends ReferenceTypeImpl {
+
+            public ResolvedReferenceTypeTester(ResolvedReferenceTypeDeclaration typeDeclaration,
+                                               TypeSolver typeSolver) {
+                super(typeDeclaration, typeSolver);
+            }
+
+            public boolean isCorrespondingBoxingType(String name) {
+                return super.isCorrespondingBoxingType(name);
+            }
+
+        }
+
+        ResolvedReferenceTypeTester numberType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Number.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester intType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester doubleType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester byteType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester shortType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester charType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester longType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester booleanType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester floatType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
+
+        ResolvedReferenceTypeTester otherType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+
+        assertEquals(true, intType.isCorrespondingBoxingType(ResolvedPrimitiveType.INT.describe()));
+        assertEquals(true, doubleType.isCorrespondingBoxingType(ResolvedPrimitiveType.DOUBLE.describe()));
+        assertEquals(true, byteType.isCorrespondingBoxingType(ResolvedPrimitiveType.BYTE.describe()));
+        assertEquals(true, shortType.isCorrespondingBoxingType(ResolvedPrimitiveType.SHORT.describe()));
+        assertEquals(true, charType.isCorrespondingBoxingType(ResolvedPrimitiveType.CHAR.describe()));
+        assertEquals(true, longType.isCorrespondingBoxingType(ResolvedPrimitiveType.LONG.describe()));
+        assertEquals(true, booleanType.isCorrespondingBoxingType(ResolvedPrimitiveType.BOOLEAN.describe()));
+        assertEquals(true, floatType.isCorrespondingBoxingType(ResolvedPrimitiveType.FLOAT.describe()));
+
+        assertEquals(false, numberType.isCorrespondingBoxingType(ResolvedPrimitiveType.INT.describe()));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            intType.isCorrespondingBoxingType("String");
+        });
     }
 
     @Test

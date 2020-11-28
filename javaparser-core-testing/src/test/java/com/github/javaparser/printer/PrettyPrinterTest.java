@@ -100,7 +100,7 @@ class PrettyPrinterTest {
 
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = parse(code);
-        PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
+        Printable printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
 

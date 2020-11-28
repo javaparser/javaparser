@@ -18,24 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+package com.github.javaparser.printer;
 
-package com.github.javaparser.printer.concretesyntaxmodel;
-
-import com.github.javaparser.printer.Stringable;
-
-class PrintingHelper {
-
-    static String printToString(Object value) {
-        if (value instanceof Stringable) {
-            return ((Stringable)value).asString();
-        }
-        if (value instanceof Enum) {
-            return ((Enum) value).name().toLowerCase();
-        } else {
-            if (value != null) {
-                return value.toString();
-            }
-        }
-        return "";
-    }
+/**
+ * Something that has a printable form. I.e., it can be converted to a user-facing String.
+ */
+public interface Stringable {
+    String asString();
 }
