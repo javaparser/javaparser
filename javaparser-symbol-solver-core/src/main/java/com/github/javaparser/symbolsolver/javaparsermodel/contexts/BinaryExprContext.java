@@ -86,36 +86,44 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         // FIXME: Redo the `.getValue() == true` to take more complex code into account when determining if definitively true (e.g. `
         if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
             if (rightBranch.isBooleanLiteralExpr()) {
-                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                if (isDefinitivelyTrue(rightBranch)) {
                     // "x" instanceof String s == true
+                    // "x" instanceof String s == !(false)
                     // No negations.
                 } else {
                     // "x" instanceof String s == false
+                    // "x" instanceof String s == !(true)
                     results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
                 }
             } else if (leftBranch.isBooleanLiteralExpr()) {
-                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                if (isDefinitivelyTrue(leftBranch)) {
                     // true == "x" instanceof String s
+                    // !(false) == "x" instanceof String s
                     // No negations.
                 } else {
                     // false == "x" instanceof String s
+                    // !(true) == "x" instanceof String s
                     results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
                 }
             }
         } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.NOT_EQUALS)) {
             if (rightBranch.isBooleanLiteralExpr()) {
-                if (rightBranch.asBooleanLiteralExpr().getValue() == true) {
+                if (isDefinitivelyTrue(rightBranch)) {
                     // "x" instanceof String s != true
+                    // "x" instanceof String s != !(false)
                     results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
                 } else {
                     // "x" instanceof String s != false
+                    // "x" instanceof String s != !(true)
                 }
             } else if (leftBranch.isBooleanLiteralExpr()) {
-                if (leftBranch.asBooleanLiteralExpr().getValue() == true) {
+                if (isDefinitivelyTrue(leftBranch)) {
                     // true != "x" instanceof String s
+                    // !(false) != "x" instanceof String s
                     results.addAll(patternExprsExposedToDirectParentFromBranch(rightBranch));
                 } else {
                     // false != "x" instanceof String s
+                    // !(true) != "x" instanceof String s
                 }
             }
 
@@ -157,10 +165,10 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         Expression rightBranch = binaryExpr.getRight();
 
         List<PatternExpr> results = new ArrayList<>();
-        if(child == leftBranch) {
+        if (child == leftBranch) {
             results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
-        } else if(child == rightBranch) {
-            if(binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child)) {
+        } else if (child == rightBranch) {
+            if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child)) {
                 // "" instanceof String s && "" instanceof String s2
                 results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
             }
@@ -195,6 +203,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
     private boolean isDefinitivelyTrue(Expression expression) {
+        // TODO: Consider combinations of literal true/false, enclosed expressions, and negations.
         if (expression.isBooleanLiteralExpr()) {
             if (expression.asBooleanLiteralExpr().getValue() == true) {
                 return true;
@@ -204,6 +213,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
     private boolean isDefinitivelyFalse(Expression expression) {
+        // TODO: Consider combinations of literal true/false, enclosed expressions, and negations.
         if (expression.isBooleanLiteralExpr()) {
             if (expression.asBooleanLiteralExpr().getValue() == false) {
                 return true;
