@@ -90,14 +90,14 @@ public class InstanceOfTest {
             "        boolean condition = obj instanceof String s || s.contains(\"fails - not in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_and_shouldResolve() {\n" +
+            "    public void if_conditional_emptyBlock_logicalAnd_shouldResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        if (obj instanceof String s && s.contains(\"in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_or_shouldNotResolve() {\n" +
+            "    public void if_conditional_emptyBlock_logicalOr_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        if (obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
@@ -170,7 +170,7 @@ public class InstanceOfTest {
             "        \n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_or_shouldNotResolve() {\n" +
+            "    public void if_conditional_OR_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        if(obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
@@ -324,7 +324,7 @@ public class InstanceOfTest {
 
             @Test
             public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -359,7 +359,7 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_nameExprResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -382,7 +382,7 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_methodCallResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -554,7 +554,7 @@ public class InstanceOfTest {
 
         @Test
         public void test_shouldFail() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_or_shouldNotResolve");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_OR_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
