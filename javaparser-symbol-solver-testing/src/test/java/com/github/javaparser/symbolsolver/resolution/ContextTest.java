@@ -1220,16 +1220,20 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 message = "Only s must be available on the LEFT branch of an AND.";
                 Expression leftBranch = binaryExpr.getLeft();
                 Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
-                assertTrue(leftBranchContext.solveSymbol("s").isSolved());
+                SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
+                assertTrue(left_s.isSolved());
                 Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
-                assertFalse(leftBranchContext.solveSymbol("s2").isSolved());
+                SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
+                assertFalse(left_s2.isSolved());
 
 
                 message = "s and s2 must be available on the RIGHT branch of an AND.";
                 Expression rightBranch = binaryExpr.getRight();
                 Context rightBranchContext = JavaParserFactory.getContext(rightBranch, typeSolver);
-                assertTrue(rightBranchContext.solveSymbol("s").isSolved());
-                assertTrue(rightBranchContext.solveSymbol("s2").isSolved());
+                SymbolReference<? extends ResolvedValueDeclaration> right_s = rightBranchContext.solveSymbol("s");
+                assertTrue(right_s.isSolved());
+                SymbolReference<? extends ResolvedValueDeclaration> right_s2 = rightBranchContext.solveSymbol("s2");
+                assertTrue(right_s2.isSolved());
             }
 
             @Test
@@ -1254,7 +1258,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
 
 
-            @Disabled
             @Test
             void instanceOfPatternExprResolution1() {
                 CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = ((a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
@@ -1270,8 +1273,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 NameExpr nameExpr = nameExprs.get(1);
                 assertEquals("s", nameExpr.getNameAsString());
 
-                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
                 System.out.println("symbolReference = " + symbolReference);
 
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
@@ -1298,8 +1301,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 NameExpr nameExpr = nameExprs.get(1);
                 assertEquals("s", nameExpr.getNameAsString());
 
-                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
+                System.out.println("symbolReference = " + symbolReference);
 
                 assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
             }
@@ -1319,8 +1323,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 NameExpr nameExpr = nameExprs.get(1);
                 assertEquals("s", nameExpr.getNameAsString());
 
-                SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-                SymbolReference symbolReference = symbolSolver.solveSymbol("s", nameExpr);
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
+                System.out.println("symbolReference = " + symbolReference);
 
                 assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
             }

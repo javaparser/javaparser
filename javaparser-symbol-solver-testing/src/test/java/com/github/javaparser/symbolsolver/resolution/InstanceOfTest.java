@@ -55,7 +55,7 @@ public class InstanceOfTest {
      * - if() {} else if (A) { Resolves }
      * - if() {} else if (!A) { Not }
      */
-    protected String sourceCode = "" +
+    protected final String sourceCode = "" +
             "import java.util.List;\n" +
             "\n" +
             "class X {\n" +
