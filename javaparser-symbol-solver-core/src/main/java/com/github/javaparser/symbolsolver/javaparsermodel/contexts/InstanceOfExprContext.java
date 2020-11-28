@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.InstanceOfExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -30,6 +31,22 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
                 return SymbolReference.solved(decl);
             }
         }
+
+
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        }
+
+        Context parentContext = optionalParentContext.get();
+        if(parentContext instanceof BinaryExprContext) {
+            Optional<PatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
+            if(optionalPatternExpr1.isPresent()) {
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr1.get(), typeSolver);
+                return SymbolReference.solved(decl);
+            }
+        } // TODO: Also consider unary expr context
+
 
         // if nothing is found we should ask the parent context
         return solveSymbolInParentContext(name);

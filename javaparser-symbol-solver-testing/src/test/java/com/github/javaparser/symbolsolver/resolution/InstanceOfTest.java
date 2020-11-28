@@ -60,119 +60,119 @@ public class InstanceOfTest {
             "\n" +
             "class X {\n" +
             "\n" +
-            "    public void localVariable() {\n" +
+            "    public void localVariable_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        boolean condition = obj instanceof String s;\n" +
-            "        boolean result = s.contains(\"b\");\n" +
+            "        boolean result = s.contains(\"fails - not in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void localVariable_usageFollowsDeclaration() {\n" +
+            "    public void localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        boolean condition = obj instanceof String s;\n" +
             "        boolean result;\n" +
-            "        result = s.contains(\"b\");\n" +
+            "        result = s.contains(\"fails - not in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void localVariable_usagePreceedsDeclaration() {\n" +
+            "    public void localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
             "        boolean result;\n" +
-            "        result = s.contains(\"b\");\n" +
+            "        result = s.contains(\"fails - not in scope\");\n" +
             "        boolean condition = obj instanceof String s;\n" +
             "    }\n" +
             "\n" +
-            "    public void localVariable_logicalAndShouldResolve() {\n" +
+            "    public void localVariable_shouldNotResolve_logicalAnd_shouldResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s && s.contains(\"b\");\n" +
+            "        boolean condition = obj instanceof String s && s.contains(\"in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void localVariable_logicalOr_shouldNotResolve() {\n" +
+            "    public void localVariable_shouldNotResolve_logicalOr_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s || s.contains(\"b\");\n" +
+            "        boolean condition = obj instanceof String s || s.contains(\"fails - not in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_and() {\n" +
+            "    public void if_conditional_and_shouldResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        if (obj instanceof String s && s.contains(\"b\")) {\n" +
+            "        if (obj instanceof String s && s.contains(\"in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_or() {\n" +
+            "    public void if_conditional_or_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        if (obj instanceof String s || s.contains(\"b\")) {\n" +
+            "        if (obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated() {\n" +
+            "    public void if_conditional_negated_shouldNotResolve() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"fails - not in scope\");\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_else_conditional() {\n" +
+            "    public void if_else_conditional_mixedResolveResults() {\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if ((obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"in scope\");\n" +
             "        } else {\n" +
-            "            result = s.contains(\"error\");\n" +
+            "            result = s.contains(\"fails - not in scope\");\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_else_conditional_negated() {\n" +
+            "    public void if_else_conditional_negated_mixedResolveResults() {\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"error\");\n" +
+            "            result = s.contains(\"fails - not in scope\");\n" +
             "        } else {\n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"in scope\");\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_usageBeforeDeclaration() {\n" +
+            "    public void if_conditional_usageBeforeDeclaration_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        if(s.contains(\"b\") && obj instanceof String s) {\n" +
+            "        if(s.contains(\"fails - not in scope\") && obj instanceof String s) {\n" +
             "            // Empty BlockStmt\n" +
             "        }\n" +
             "    \n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_1() {\n" +
+            "    public void if_conditional_1_mixedResolveResults() {\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if ((obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"in scope\");\n" +
             "        } else {\n" +
-            "            result = s.contains(\"error\");\n" +
+            "            result = s.contains(\"fails - not in scope\");\n" +
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated_no_braces_on_else() {\n" +
+            "    public void if_conditional_negated_no_braces_on_else_shouldNotResolve() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) {\n" +
             "            // Empty BlockStmt\n" +
             "        } else\n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated_no_braces_on_if() {\n" +
+            "    public void if_conditional_negated_no_braces_on_if_shouldNotResolve() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
             "        if (!(obj instanceof String s) && true) \n" +
-            "            result = s.contains(\"b\");\n" +
+            "            result = s.contains(\"fails - not in scope\");\n" +
             "        \n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_or() {\n" +
+            "    public void if_conditional_or_shouldNotResolve() {\n" +
             "        String obj = \"abc\";\n" +
-            "        if(obj instanceof String s || s.contains(\"b\")) {\n" +
+            "        if(obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
             "            // Empty BlockStmt\n" +
             "        }\n" +
             "    }\n" +
@@ -222,37 +222,26 @@ public class InstanceOfTest {
     class VariableInBlock {
 
         @Test
-        public void variableInBlock_shouldResolveOnFollowingLines() {
-            MethodDeclaration methodDeclaration = getMethodByName("localVariable_usageFollowsDeclaration");
+        public void variableInBlock_shouldNotResolveOnFollowingLines() {
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
-            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
-
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
-
-
-            // Resolving the variable `s`
-            assertTrue(inScopeMethodCall.getScope().isPresent());
-            final Expression expression = inScopeMethodCall.getScope().get();
-
-            final ResolvedType resolvedType = expression.calculateResolvedType();
-            assertEquals("java.lang.String", resolvedType.describe());
+            // Expected to not be able to resolve s, as out of scope within an else block.
+            assertThrows(UnsolvedSymbolException.class, () -> {
+                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+                // Note: Only printed if the above line doesn't error...
+                System.out.println("resolve = " + resolve);
+            });
 
         }
 
         @Test
         public void variableInBlock_mustNotResolveBeforeDeclaration() {
 
-            MethodDeclaration methodDeclaration = getMethodByName("localVariable_usagePreceedsDeclaration");
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -277,7 +266,7 @@ public class InstanceOfTest {
 
             @Test
             public void logicalAndShouldResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalAndShouldResolve");
+                MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -306,7 +295,7 @@ public class InstanceOfTest {
 
             @Test
             public void logicalOrShouldNotResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("localVariable_logicalOr_shouldNotResolve");
+                MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_logicalOr_shouldNotResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -335,7 +324,7 @@ public class InstanceOfTest {
 
             @Test
             public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -370,7 +359,7 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_nameExprResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -393,7 +382,7 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_methodCallResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_and_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -415,7 +404,7 @@ public class InstanceOfTest {
 
             @Test
             public void condition_leftBranchMethodCall_doesNotResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration");
+                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration_shouldNotResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -436,7 +425,7 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_thenCorrectNumberOfMethodCalls() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional_mixedResolveResults");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
 
@@ -444,7 +433,7 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_whenSolvingInvalidNotInScope_thenFails() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional_mixedResolveResults");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
 
@@ -462,7 +451,7 @@ public class InstanceOfTest {
 
             @Test
             public void givenInstanceOfPattern_whenSolvingValidInScope_thenSuccessful() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional");
+                MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional_mixedResolveResults");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
 
@@ -493,7 +482,7 @@ public class InstanceOfTest {
 
         @Test
         public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -514,68 +503,58 @@ public class InstanceOfTest {
 
         @Test
         public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
-            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
-
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+            // Expected to not be able to resolve s, as out of scope within an else block.
+            assertThrows(UnsolvedSymbolException.class, () -> {
+                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+                // Note: Only printed if the above line doesn't error...
+                System.out.println("resolve = " + resolve);
+            });
 
         }
 
         @Test
         public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
-            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
-
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
-
+            // Expected to not be able to resolve s, as out of scope within an else block.
+            assertThrows(UnsolvedSymbolException.class, () -> {
+                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+                // Note: Only printed if the above line doesn't error...
+                System.out.println("resolve = " + resolve);
+            });
         }
 
 
         @Test
         public void givenInstanceOfPattern_andField_thenResolvesToPattern2() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
-            MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
-
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+            // Expected to not be able to resolve s, as out of scope within an else block.
+            assertThrows(UnsolvedSymbolException.class, () -> {
+                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+                // Note: Only printed if the above line doesn't error...
+                System.out.println("resolve = " + resolve);
+            });
 
         }
 
         @Test
         public void test_shouldFail() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_or");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_or_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -599,7 +578,7 @@ public class InstanceOfTest {
 
         @Test
         public void test() {
-            MethodDeclaration methodDeclaration = getMethodByName("localVariable");
+            MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve");
 
             List<NameExpr> nameExprs = methodDeclaration.findAll(NameExpr.class);
             System.out.println("nameExprs = " + nameExprs);

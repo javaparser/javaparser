@@ -64,6 +64,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +73,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -1138,7 +1140,25 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
 
-                // TODO: Assert pattern available from the binaryexpr
+
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
+
+                BinaryExpr binaryExpr = variables.get(0).getInitializer().get().asBinaryExpr();
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "Only s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
             }
 
             @Test
@@ -1170,7 +1190,71 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 // TODO: Assert pattern available from the binaryexpr
             }
 
+            @Test
+            void instanceOfPatternExprResolution_expr_AND1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s && s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
 
+                String message;
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "s and s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr_AND_solving1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s && s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+
+                String message;
+
+                message = "Only s must be available on the LEFT branch of an AND.";
+                Expression leftBranch = binaryExpr.getLeft();
+                Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
+                assertTrue(leftBranchContext.solveSymbol("s").isSolved());
+                Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                assertFalse(leftBranchContext.solveSymbol("s2").isSolved());
+
+
+                message = "s and s2 must be available on the RIGHT branch of an AND.";
+                Expression rightBranch = binaryExpr.getRight();
+                Context rightBranchContext = JavaParserFactory.getContext(rightBranch, typeSolver);
+                assertTrue(rightBranchContext.solveSymbol("s").isSolved());
+                assertTrue(rightBranchContext.solveSymbol("s2").isSolved());
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr_OR1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "a instanceof String s || s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+
+                String message;
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "Only s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+            }
+
+
+            @Disabled
             @Test
             void instanceOfPatternExprResolution1() {
                 CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14, "class X { void x() { boolean foo = ((a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);

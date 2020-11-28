@@ -290,7 +290,11 @@ public interface Context {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
-        // First check if the parameter is directly declared within this context.
+
+        // FIXME: "scroll backwards" from the wrapped node
+        // FIXME: If there are multiple patterns, throw an error?
+
+        // First check if the pattern is directly declared within this context.
         Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
         Optional<PatternExpr> localResolutionResults = parentContext
                 .patternExprsExposedToChild(wrappedNode)
