@@ -140,7 +140,7 @@ class JavassistUtils {
         if (typeArgument instanceof SignatureAttribute.ClassType) {
             return signatureTypeToType(typeArgument, typeSolver, typeParametrizable);
         } else if (typeArgument instanceof SignatureAttribute.ArrayType) {
-            return signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable);
+            return new ResolvedArrayType(signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
         } else {
             String typeName = typeArgument.jvmTypeName();
             return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
