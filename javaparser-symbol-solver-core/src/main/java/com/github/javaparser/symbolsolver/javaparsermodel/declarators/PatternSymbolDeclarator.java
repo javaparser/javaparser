@@ -19,36 +19,31 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
+package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Federico Tomassetti
+ * @author Roger Howell
  */
-public class ConstructorContext extends AbstractMethodLikeDeclarationContext<ConstructorDeclaration> {
+public class PatternSymbolDeclarator extends AbstractSymbolDeclarator<PatternExpr> {
 
-    ///
-    /// Constructors
-    ///
-
-    public ConstructorContext(ConstructorDeclaration wrappedNode, TypeSolver typeSolver) {
+    public PatternSymbolDeclarator(PatternExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
     @Override
-    public List<Parameter> parametersExposedToChild(Node child) {
-        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
-        if (child == wrappedNode.getBody()) {
-            return wrappedNode.getParameters();
-        }
-        return Collections.emptyList();
+    public List<ResolvedValueDeclaration> getSymbolDeclarations() {
+        List<ResolvedValueDeclaration> symbols = new LinkedList<>();
+        symbols.add(JavaParserSymbolDeclaration.patternVar(wrappedNode, typeSolver));
+        return symbols;
     }
+
 
 }

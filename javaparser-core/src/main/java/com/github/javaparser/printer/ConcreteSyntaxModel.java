@@ -355,6 +355,12 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.TYPE)
         ));
 
+        concreteSyntaxModelByClass.put(PatternExpr.class, sequence(
+                child(ObservableProperty.TYPE),
+                space(),
+                child(ObservableProperty.NAME)
+        ));
+
         concreteSyntaxModelByClass.put(IntegerLiteralExpr.class, sequence(
                 comment(),
                 attribute(ObservableProperty.VALUE)

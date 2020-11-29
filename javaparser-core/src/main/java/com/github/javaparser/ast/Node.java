@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast;
 
+import com.github.javaparser.HasParentNode;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
@@ -43,7 +44,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;

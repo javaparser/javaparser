@@ -182,6 +182,11 @@ SPECIAL_TOKEN :
 | <OLD_MAC_EOL: "\r">
 }
 
+
+/*
+ * GeneratedJavaParserTokenManager.java is generated,
+ * based on the template within this TOKEN_MGR_DECLS block.
+ */
 TOKEN_MGR_DECLS :
 {
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
@@ -250,6 +255,7 @@ TOKEN_MGR_DECLS :
     }
 }
 
+
 /* COMMENTS */
 
 SPECIAL_TOKEN :
@@ -281,6 +287,7 @@ MORE :
 {
   <COMMENT_CONTENT: ~[] >
 }
+
 
 /* RESERVED WORDS AND LITERALS */
 
@@ -745,6 +752,7 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 // which might match that doublequote with following doublequotes.
 <IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
 
+
 /* IDENTIFIERS */
 
 TOKEN :
@@ -911,6 +919,7 @@ TOKEN :
   >
 }
 
+
 /* SEPARATORS */
 /**
  * FIXME: Only ten (10) separators are defined within this grammar, but the JLS lists twelve (12)
@@ -1000,6 +1009,7 @@ TOKEN :
 | < ELLIPSIS: "..." >
 | < DOUBLECOLON: "::" >
 }
+
 
 /*
  * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
@@ -1095,18 +1105,18 @@ public CompilationUnit CompilationUnit():
         [ LOOKAHEAD(PackageDeclaration()) packageDeclaration = PackageDeclaration() ]
         (
             in = ImportDeclaration() { imports = add(imports, in); }
-        |
+         |
             (
                 modifier = Modifiers()
                 (
                     tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-                |
+                 |
                     tn = EnumDeclaration(modifier) { types = add(types, tn); }
-                |
+                 |
                     tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-                |
+                 |
                     module = ModuleDeclaration(modifier)
-                |
+                 |
                     ";"
                 )
             )
@@ -1822,7 +1832,7 @@ Expression VariableInitializer():
      |
         ret = Expression()
     )
-    { return ret;}
+    { return ret; }
 }
 
 /**
@@ -3054,6 +3064,27 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://openjdk.java.net/jeps/375
+ * The instanceof grammar is extended accordingly:
+ * <pre>{@code
+ *     Pattern:
+ *         ReferenceType Identifier
+ * }<pre>
+ */
+PatternExpr PatternExpression():
+{
+    ReferenceType type;
+    SimpleName name;
+}
+{
+    type = AnnotatedReferenceType()
+    name = SimpleName()
+    { return new PatternExpr(range(type, token()), type, name); }
+}
+
+
 /**
  * // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.20
@@ -3072,13 +3103,20 @@ Expression InstanceOfExpression():
     Expression ret;
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
+    PatternExpr pattern;
 }
 {
     ret = RelationalExpression()
     [
         "instanceof"
-        type = AnnotatedReferenceType()
-        { ret = new InstanceOfExpr(range(ret, token()), ret, type);}
+        (
+            LOOKAHEAD(PatternExpression())
+            pattern = PatternExpression()
+            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
+         |
+            type = AnnotatedReferenceType()
+            { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
+        )
     ]
     { return ret; }
 }
@@ -3094,6 +3132,18 @@ Expression InstanceOfExpression():
  *         RelationalExpression <= ShiftExpression
  *         RelationalExpression >= ShiftExpression
  *         RelationalExpression instanceof ReferenceType
+ * }<pre>
+ * // Note that JDK 13/14 introduce pattern Matching for instanceof
+ * https://openjdk.java.net/jeps/375
+ * The instanceof grammar is extended accordingly:
+ * <pre>{@code
+ *     RelationalExpression:
+ *         ...
+ *         RelationalExpression instanceof ReferenceType
+ *         RelationalExpression instanceof Pattern
+ *
+ *     Pattern:
+ *         ReferenceType Identifier
  * }<pre>
  */
 Expression RelationalExpression():
@@ -4717,7 +4767,7 @@ TryStmt TryStatement():
 }
 {
     "try" { begin=token(); }
-    [resources = ResourceSpecification()]
+    [ resources = ResourceSpecification() ]
     tryBlock = Block()
     (
         LOOKAHEAD(2)
@@ -4888,7 +4938,8 @@ void RSIGNEDSHIFT():
     ">"
 }
 
-/* Annotation syntax follows. */
+
+/*  ANNOTATION SYNTAX - Annotation syntax follows. */
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-9.html#jls-9.7
@@ -5106,7 +5157,7 @@ Expression  MemberValueArrayInitializer():
 }
 
 
-/* Annotation Types. */
+/* ANNOTATION TYPES */
 
 /**
  * <blockquote>
@@ -5280,8 +5331,8 @@ Expression DefaultValue():
     { return ret; }
 }
 
-/* Module syntax follows */
 
+/* MODULES - Module syntax follows */
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-ModuleDirective
@@ -5401,10 +5452,10 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
 
 
 /* Rules for matching partial inputs.
-These rules are needed to properly terminate them -
-if we simply use the usual rules, they will ignore everything in the provider
-after they matched their desired input, which will lead to unexpected behaviour
-*/
+ * These rules are needed to properly terminate them -
+ * if we simply use the usual rules, they will ignore everything in the provider
+ * after they matched their desired input, which will lead to unexpected behaviour
+ */
 
 
 BlockStmt BlockParseStart():
@@ -5479,7 +5530,7 @@ TypeDeclaration<?> TypeDeclarationParseStart():
     |ret = AnnotationTypeDeclaration(modifier)
     )
     <EOF>
-    {return ret;}
+    { return ret; }
 }
 
 ModuleDeclaration ModuleDeclarationParseStart():

@@ -74,13 +74,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        if(wrappedNode.getScope().isPresent()){
-            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
-            Optional<ResolvedType> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
-            return res;
-        } else{
+        Optional<Expression> nodeScope = wrappedNode.getScope();
+        if (!nodeScope.isPresent()) {
             return Optional.empty();
         }
+
+        // Method calls can have generic types defined, for example: {@code expr.<T1, T2>method(x, y, z);} or {@code super.<T, E>check2(val1, val2).}
+        ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(nodeScope.get());
+        Optional<ResolvedType> resolvedType = typeOfScope.asReferenceType().getGenericParameterByName(name);
+
+        // TODO/FIXME: Consider if we should check if the result is present, else delegate "up" the context chain (e.g. {@code solveGenericTypeInParent()})
+        return resolvedType;
     }
 
     @Override
@@ -154,16 +158,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
-    }
-
-    @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
-        return parentContext.solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -395,7 +391,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
-            if (type.isPrimitive()) { 
+            if (type.isPrimitive()) {
                 type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
             }
             if (!type.isTypeVariable() && !type.isReferenceType()) {

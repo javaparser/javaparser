@@ -882,6 +882,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getPattern().isPresent()) {
+            result = n.getPattern().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getType().accept(this, arg);
             if (result != null)
@@ -2057,6 +2062,27 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final TextBlockLiteralExpr n, final A arg) {
         R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final PatternExpr n, final A arg) {
+        R result;
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
