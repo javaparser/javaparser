@@ -519,7 +519,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                                     .orElse(ResolvedVoidType.INSTANCE);
 
                         } else {
-                            return ResolvedVoidType.INSTANCE;
+                            actualType = ResolvedVoidType.INSTANCE;
                         }
 
 
