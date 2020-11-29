@@ -18,19 +18,39 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
 
     @Override
     public List<PatternExpr> patternExprsExposedFromChildren() {
-        // Propagate any pattern expressions "up" without modification
-        Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+        List<PatternExpr> results = new ArrayList<>();
 
+        /*
+         * Test for an assignment expression
+         * Example:
+         *     while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
+         *         result.append(buffer, 0, numChars);
+         *     }
+         */
+        if(!wrappedNode.getInner().isAssignExpr()) {
+            // Propagate any pattern expressions "up" without modification
+            Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
+            results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+        }
         return results;
     }
 
     @Override
     public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        // Propagate any pattern expressions "up" without modification
-        Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
-        List<PatternExpr> results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+        List<PatternExpr> results = new ArrayList<>();
 
+        /*
+         * Test for an assignment expression
+         * Example:
+         *     while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
+         *         result.append(buffer, 0, numChars);
+         *     }
+         */
+        if(!wrappedNode.getInner().isAssignExpr()) {
+            // Propagate any pattern expressions "up" without modification
+            Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
+            results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+        }
         return results;
     }
 
