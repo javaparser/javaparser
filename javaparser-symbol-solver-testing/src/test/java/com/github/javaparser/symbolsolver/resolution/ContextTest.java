@@ -989,6 +989,14 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
             }
 
+            @Test
+            void instanceOfPatternExprBinaryExpr9() {
+                String message = "Must be no patterns available from this || expression (neither is guaranteed to be true).";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14, "(a instanceof String s) || a instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
         }
 
 
