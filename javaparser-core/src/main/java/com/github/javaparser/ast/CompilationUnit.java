@@ -683,7 +683,7 @@ public class CompilationUnit extends Node {
         private final Path path;
 
         private final Charset encoding;
-        
+
         private Printable printer;
 
         private Storage(CompilationUnit compilationUnit, Path path) {
@@ -697,14 +697,14 @@ public class CompilationUnit extends Node {
             // default printer
             this.printer = new PrettyPrinter();
         }
-        
+
         /**
          * Set a new printer
          */
         public void setPrinter(Printable printer) {
             this.printer = printer;
         }
-        
+
         /**
          * Returns the internal printer
          */

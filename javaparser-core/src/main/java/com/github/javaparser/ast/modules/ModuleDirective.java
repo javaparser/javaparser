@@ -174,7 +174,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleExportsDirective asModuleExportsDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleExportsDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleExportsDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -193,7 +193,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensDirective asModuleOpensDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleOpensDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleOpensDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -212,7 +212,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesDirective asModuleProvidesDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleProvidesDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleProvidesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -231,7 +231,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleRequiresDirective asModuleRequiresDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleRequiresDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleRequiresDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -250,7 +250,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesDirective asModuleUsesDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleUsesDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleUsesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

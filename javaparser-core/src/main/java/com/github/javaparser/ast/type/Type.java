@@ -161,7 +161,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ArrayType asArrayType() {
-        throw new IllegalStateException(f("%s is not an ArrayType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ArrayType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -171,7 +171,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassOrInterfaceType asClassOrInterfaceType() {
-        throw new IllegalStateException(f("%s is not an ClassOrInterfaceType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ClassOrInterfaceType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -181,7 +181,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public IntersectionType asIntersectionType() {
-        throw new IllegalStateException(f("%s is not an IntersectionType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not IntersectionType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -191,7 +191,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public PrimitiveType asPrimitiveType() {
-        throw new IllegalStateException(f("%s is not an PrimitiveType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not PrimitiveType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -201,7 +201,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ReferenceType asReferenceType() {
-        throw new IllegalStateException(f("%s is not an ReferenceType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ReferenceType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -211,7 +211,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypeParameter asTypeParameter() {
-        throw new IllegalStateException(f("%s is not an TypeParameter, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not TypeParameter, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -221,7 +221,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnionType asUnionType() {
-        throw new IllegalStateException(f("%s is not an UnionType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not UnionType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -231,7 +231,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnknownType asUnknownType() {
-        throw new IllegalStateException(f("%s is not an UnknownType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not UnknownType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -241,7 +241,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public VoidType asVoidType() {
-        throw new IllegalStateException(f("%s is not an VoidType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not VoidType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -251,7 +251,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public WildcardType asWildcardType() {
-        throw new IllegalStateException(f("%s is not an WildcardType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not WildcardType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -354,7 +354,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public VarType asVarType() {
-        throw new IllegalStateException(f("%s is not an VarType, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not VarType, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

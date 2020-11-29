@@ -21,6 +21,29 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Spliterators;
+import java.util.Stack;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
@@ -45,18 +68,6 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-import static com.github.javaparser.ast.Node.Parsedness.PARSED;
-import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.

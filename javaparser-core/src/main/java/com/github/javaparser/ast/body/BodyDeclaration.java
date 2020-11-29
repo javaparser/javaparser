@@ -135,7 +135,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AnnotationDeclaration asAnnotationDeclaration() {
-        throw new IllegalStateException(f("%s is not an AnnotationDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not AnnotationDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -145,7 +145,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
-        throw new IllegalStateException(f("%s is not an AnnotationMemberDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not AnnotationMemberDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -155,7 +155,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public CallableDeclaration asCallableDeclaration() {
-        throw new IllegalStateException(f("%s is not an CallableDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not CallableDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -165,7 +165,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassOrInterfaceDeclaration asClassOrInterfaceDeclaration() {
-        throw new IllegalStateException(f("%s is not an ClassOrInterfaceDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ClassOrInterfaceDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -175,7 +175,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ConstructorDeclaration asConstructorDeclaration() {
-        throw new IllegalStateException(f("%s is not an ConstructorDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ConstructorDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -185,7 +185,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EnumConstantDeclaration asEnumConstantDeclaration() {
-        throw new IllegalStateException(f("%s is not an EnumConstantDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not EnumConstantDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -195,7 +195,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EnumDeclaration asEnumDeclaration() {
-        throw new IllegalStateException(f("%s is not an EnumDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not EnumDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -205,7 +205,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public FieldDeclaration asFieldDeclaration() {
-        throw new IllegalStateException(f("%s is not an FieldDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not FieldDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -215,7 +215,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public InitializerDeclaration asInitializerDeclaration() {
-        throw new IllegalStateException(f("%s is not an InitializerDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not InitializerDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -225,7 +225,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MethodDeclaration asMethodDeclaration() {
-        throw new IllegalStateException(f("%s is not an MethodDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not MethodDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -235,7 +235,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypeDeclaration asTypeDeclaration() {
-        throw new IllegalStateException(f("%s is not an TypeDeclaration, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not TypeDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
