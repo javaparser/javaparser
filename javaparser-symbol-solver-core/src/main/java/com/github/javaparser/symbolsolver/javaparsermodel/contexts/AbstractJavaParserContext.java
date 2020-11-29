@@ -150,7 +150,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
-        if(parentContext instanceof BinaryExprContext) {
+        if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
             List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
 
             Optional<PatternExpr> localResolutionResults = patternExprs

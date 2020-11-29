@@ -36,13 +36,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
@@ -1328,6 +1322,230 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 System.out.println("symbolReference = " + symbolReference);
 
                 assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
+            }
+
+            @Nested
+            class IfElse {
+
+
+                @Test
+                void instanceOfPattern_ifBlock1() {
+                    String x = "" +
+                            "if (a instanceof String s) {\n" +
+                            "    result = s.contains(\"in scope\");\n" +
+                            "}\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertTrue(s.isSolved());
+                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_noBraces() {
+                    String x = "" +
+                            "if (a instanceof String s) \n" +
+                            "    result = s.contains(\"in scope\");\n" +
+                            "\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertTrue(s.isSolved());
+                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_negatedCondition() {
+                    String x = "" +
+                            "if (!(a instanceof String s)) {\n" +
+                            "    result = s.contains(\"NOT in scope\");\n" +
+                            "}\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertFalse(s.isSolved());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_noBraces_negatedCondition() {
+                    String x = "" +
+                            "if (!(a instanceof String s)) \n" +
+                            "    result = s.contains(\"NOT in scope\");\n" +
+                            "\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertFalse(s.isSolved());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock1() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"in scope\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"in scope\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(2, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+
+                    // The second one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock2() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(4, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+
+                    // The second one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+
+                    // The third one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
+                    Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
+                    assertTrue(s_string2.isSolved());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+
+                    // The fourth one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
+                    Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
+                    assertTrue(s_string3.isSolved());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock3() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (false) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(4, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+
+                    // The second one should resolve to the standard variable (the list).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertFalse(s_string.getCorrespondingDeclaration().isPattern());
+
+                    // The third one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
+                    Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
+                    assertTrue(s_string2.isSolved());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+
+                    // The fourth one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
+                    Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
+                    assertTrue(s_string3.isSolved());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                }
             }
         }
 

@@ -104,7 +104,7 @@ public class InstanceOfTest {
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated_shouldNotResolve() {\n" +
+            "    public void if_conditional_negated_shouldResolveToLocalVariableNotPattern() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
@@ -151,7 +151,7 @@ public class InstanceOfTest {
             "        }\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated_no_braces_on_else_shouldNotResolve() {\n" +
+            "    public void if_conditional_negated_no_braces_on_else_mixed() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
@@ -161,7 +161,7 @@ public class InstanceOfTest {
             "            result = s.contains(\"in scope\");\n" +
             "    }\n" +
             "\n" +
-            "    public void if_conditional_negated_no_braces_on_if_shouldNotResolve() {\n" +
+            "    public void if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern() {\n" +
             "        List<Integer> s;\n" +
             "        boolean result;\n" +
             "        String obj = \"abc\";\n" +
@@ -482,17 +482,38 @@ public class InstanceOfTest {
 
         @Test
         public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else_shouldNotResolve");
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else_mixed");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
-//        MethodCallExpr inScopeMethodCall = methodCalls.get(0);
+            MethodCallExpr methodCallExprInElse = methodCalls.get(0);
+
+            // Resolving the method call .contains()
+            final ResolvedMethodDeclaration resolve = methodCallExprInElse.resolve();
+            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
+
+            // The method call in the else block should be in scope of the pattern (String) due to the negated condition
+            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
+            assertEquals("boolean", resolve.getReturnType().describe());
+            assertEquals("contains", resolve.getName());
+            assertEquals(1, resolve.getNumberOfParams());
+            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
+
+        }
+
+        @Test
+        public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern");
+            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
+            assertEquals(1, methodCalls.size());
+
             MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
             System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
+            // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
             assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
             assertEquals("boolean", resolve.getReturnType().describe());
             assertEquals("contains", resolve.getName());
@@ -502,54 +523,23 @@ public class InstanceOfTest {
         }
 
         @Test
-        public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if_shouldNotResolve");
+        public void givenInstanceOfPattern_andField_thenResolvesToField() {
+            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldResolveToLocalVariableNotPattern");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
             MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
 
-            // Expected to not be able to resolve s, as out of scope within an else block.
-            assertThrows(UnsolvedSymbolException.class, () -> {
-                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
-            });
+            // Resolving the method call .contains()
+            final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
+            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
-        }
-
-        @Test
-        public void givenInstanceOfPattern_andField_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldNotResolve");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
-
-            // Expected to not be able to resolve s, as out of scope within an else block.
-            assertThrows(UnsolvedSymbolException.class, () -> {
-                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
-            });
-        }
-
-
-        @Test
-        public void givenInstanceOfPattern_andField_thenResolvesToPattern2() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldNotResolve");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            MethodCallExpr outOfScopeMethodCall = methodCalls.get(0);
-
-            // Expected to not be able to resolve s, as out of scope within an else block.
-            assertThrows(UnsolvedSymbolException.class, () -> {
-                final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
-            });
-
+            // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
+            assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
+            assertEquals("boolean", resolve.getReturnType().describe());
+            assertEquals("contains", resolve.getName());
+            assertEquals(1, resolve.getNumberOfParams());
+            assertEquals("contains(java.lang.Object)", resolve.getSignature());
         }
 
         @Test
