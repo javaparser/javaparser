@@ -187,7 +187,7 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(lambdaExpr);
-        assertEquals("void", type.describe());
+        assertEquals("java.util.function.Consumer<? super java.lang.String>", type.describe());
     }
 
 
