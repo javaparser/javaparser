@@ -19,17 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.version;
 
 /**
- * This validator validates according to Java 15 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
+ * Processes the generic AST into a Java 16 AST and validates it.
  */
-public class Java15Validator extends Java14Validator {
-
-    public Java15Validator() {
-        super();
-        // No new language features (only promotion of previews to second preview and to release)
-    }
+public class Java16PostProcessor extends Java15PostProcessor {
 }
