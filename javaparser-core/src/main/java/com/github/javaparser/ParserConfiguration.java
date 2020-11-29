@@ -40,6 +40,7 @@ import com.github.javaparser.version.Java16PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,9 +143,15 @@ public class ParserConfiguration {
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
 
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{JAVA_13, JAVA_14, JAVA_15, JAVA_16};
+
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
             this.validator = validator;
             this.postProcessor = postProcessor;
+        }
+
+        public boolean isYieldSupported() {
+            return Arrays.stream(yieldSupport).anyMatch(level -> level == this);
         }
     }
 
