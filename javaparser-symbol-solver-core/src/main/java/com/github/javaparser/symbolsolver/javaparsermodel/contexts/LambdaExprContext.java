@@ -31,7 +31,6 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
@@ -181,9 +180,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -197,27 +194,18 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
-    }
-
-    @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        // TODO: Document why staticOnly is forced to be false.
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
         if (child == wrappedNode.getBody()) {
             return wrappedNode.getParameters();
         }

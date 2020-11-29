@@ -48,7 +48,7 @@
                 <executions>
                     <execution>
                         <id>copy-javaparser-core-classes</id>
-                        <phase>compile</phase>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -65,7 +65,7 @@
                     </execution>
                     <execution>
                         <id>copy-javaparser-core-generated-sources</id>
-                        <phase>compile</phase>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>

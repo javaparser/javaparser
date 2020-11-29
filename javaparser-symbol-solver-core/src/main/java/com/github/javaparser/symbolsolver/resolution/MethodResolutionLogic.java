@@ -202,6 +202,13 @@ public class MethodResolutionLogic {
                         needForWildCardTolerance = true;
                         continue;
                     }
+                    // if the expected is java.lang.Math.max(double,double) and the type parameters are defined with constrain
+                    // for example LambdaConstraintType{bound=TypeVariable {ReflectionTypeParameter{typeVariable=T}}}, LambdaConstraintType{bound=TypeVariable {ReflectionTypeParameter{typeVariable=U}}}
+                    // we want to keep this method for future resolution
+                    if (actualArgumentType.isConstraint() && withWildcardTolerance && expectedDeclaredType.isPrimitive()) {
+                        needForWildCardTolerance = true;
+                        continue;
+                    }
                     if (methodIsDeclaredWithVariadicParameter && i == countOfMethodParametersDeclared - 1) {
                         if (new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType)) {
                             continue;

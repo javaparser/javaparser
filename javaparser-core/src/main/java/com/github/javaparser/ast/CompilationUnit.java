@@ -29,7 +29,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -40,7 +39,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -65,6 +63,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.Printable;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -505,7 +504,7 @@ public class CompilationUnit extends Node {
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
-    
+
     /**
      * Try to get all local class declarations ending by its name (top level or inner class)
      *
@@ -685,16 +684,32 @@ public class CompilationUnit extends Node {
 
         private final Charset encoding;
 
+        private Printable printer;
+
         private Storage(CompilationUnit compilationUnit, Path path) {
-            this.compilationUnit = compilationUnit;
-            this.path = path.toAbsolutePath();
-            this.encoding = UTF8;
+            this(compilationUnit, path, UTF8);
         }
 
         private Storage(CompilationUnit compilationUnit, Path path, Charset encoding) {
             this.compilationUnit = compilationUnit;
             this.path = path.toAbsolutePath();
             this.encoding = encoding;
+            // default printer
+            this.printer = new PrettyPrinter();
+        }
+
+        /**
+         * Set a new printer
+         */
+        public void setPrinter(Printable printer) {
+            this.printer = printer;
+        }
+
+        /**
+         * Returns the internal printer
+         */
+        public Printable getPrinter() {
+            return this.printer;
         }
 
         /**
@@ -740,7 +755,7 @@ public class CompilationUnit extends Node {
          * Saves the compilation unit to its original location
          */
         public void save() {
-            save(cu -> new PrettyPrinter().print(cu));
+            save(cu -> printer.print(cu));
         }
 
         /**

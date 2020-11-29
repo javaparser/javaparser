@@ -45,6 +45,7 @@ public class MethodContext extends AbstractMethodLikeDeclarationContext<MethodDe
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
         if (wrappedNode.getBody().isPresent() && child == wrappedNode.getBody().get()) {
             return wrappedNode.getParameters();
         }

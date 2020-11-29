@@ -503,9 +503,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final InstanceOfExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
+        PatternExpr pattern = cloneNode(n.getPattern(), arg);
         ReferenceType type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        InstanceOfExpr r = new InstanceOfExpr(n.getTokenRange().orElse(null), expression, type);
+        InstanceOfExpr r = new InstanceOfExpr(n.getTokenRange().orElse(null), expression, type, pattern);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1224,6 +1225,18 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final TextBlockLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         TextBlockLiteralExpr r = new TextBlockLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final PatternExpr n, final Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        ReferenceType type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        PatternExpr r = new PatternExpr(n.getTokenRange().orElse(null), type, name);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

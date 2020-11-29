@@ -74,7 +74,7 @@ public class TypeCastingGenerator extends NodeGenerator {
         final String typeName = nodeMetaModel.getTypeName();
         final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
         final CompilationUnit baseCu = baseCode.a;
-        
+
         generateIsType(baseCu, nodeCoid, baseCoid, typeName);
         generateAsType(baseCu, nodeCoid, baseCoid, typeName);
         generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
@@ -82,7 +82,7 @@ public class TypeCastingGenerator extends NodeGenerator {
     }
 
     private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
-        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not an %s\", this)); }", typeName, typeName, typeName));
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not %s, it is %%s\", this, this.getClass().getSimpleName())); }", typeName, typeName, typeName));
         final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
         addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
         addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);

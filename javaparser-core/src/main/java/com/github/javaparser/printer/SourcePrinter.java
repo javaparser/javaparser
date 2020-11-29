@@ -21,12 +21,12 @@
 
 package com.github.javaparser.printer;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
 import com.github.javaparser.utils.Utils;
-
-import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * A support class for code that outputs formatted source code.
@@ -97,29 +97,29 @@ public class SourcePrinter {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
-                    newIndent.append(' ');
+                    newIndent.append(IndentType.SPACES.getChar());
                 }
                 break;
 
             case TABS:
                 int logicalIndentLength = newIndent.length();
                 while ((logicalIndentLength + tabWidth) <= column) {
-                    newIndent.insert(0, '\t');
+                    newIndent.insert(0, indentType.getChar());
                     logicalIndentLength += tabWidth;
                 }
                 while (logicalIndentLength < column) {
-                    newIndent.append(' ');
+                    newIndent.append(IndentType.SPACES.getChar());
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
                 for(int i=0; i<tabWidth; i++){
-                    fullTab.append(' ');
+                    fullTab.append(IndentType.SPACES.getChar());
                 }
                 String fullTabString = fullTab.toString();
                 if ((newIndent.length() >= tabWidth)
                         && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + tabWidth, "\t");
+                    newIndent.replace(i, i + tabWidth, indentType.getChar().toString());
                 }
                 break;
 

@@ -29,7 +29,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import java.util.Optional;
@@ -47,7 +47,7 @@ import com.github.javaparser.ast.Generated;
  */
 public class AssignExpr extends Expression {
 
-    public enum Operator implements Printable {
+    public enum Operator implements Stringable {
 
         ASSIGN("="),
         PLUS("+="),
