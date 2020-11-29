@@ -394,6 +394,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (type.isPrimitive()) {
                 type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
             }
+            /*
+             * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
+             * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
+             */
+            if (type.isNull()) {
+                type = MyObjectProvider.INSTANCE.object();
+            }
             if (!type.isTypeVariable() && !type.isReferenceType()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
             }
