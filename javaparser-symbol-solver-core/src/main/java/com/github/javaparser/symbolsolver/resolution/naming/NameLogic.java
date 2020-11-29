@@ -180,6 +180,12 @@ public class NameLogic {
         if (whenParentIs(Parameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
+        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
         if (whenParentIs(ReceiverParameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
@@ -342,12 +348,12 @@ public class NameLogic {
             return reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(name, typeSolver);
         }
         if (ambiguousCategory == NameCategory.PACKAGE_OR_TYPE_NAME) {
-            return reclassificationOfContextuallyAmbiguosPackageOrTypeName(name, typeSolver);
+            return reclassificationOfContextuallyAmbiguousPackageOrTypeName(name, typeSolver);
         }
         throw new UnsupportedOperationException("I do not know how to handle this semantic reclassification of ambiguous name categories");
     }
 
-    private static NameCategory reclassificationOfContextuallyAmbiguosPackageOrTypeName(Node name, TypeSolver typeSolver) {
+    private static NameCategory reclassificationOfContextuallyAmbiguousPackageOrTypeName(Node name, TypeSolver typeSolver) {
         // 6.5.4.1. Simple PackageOrTypeNames
         //
         // If the PackageOrTypeName, Q, is a valid TypeIdentifier and occurs in the scope of a type named Q, then the
@@ -466,6 +472,9 @@ public class NameLogic {
 
         String name = nameAsString(nameNode);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+        if (context.patternExprInScope(name).isPresent()) {
+            return NameCategory.EXPRESSION_NAME;
+        }
         if (context.localVariableDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }

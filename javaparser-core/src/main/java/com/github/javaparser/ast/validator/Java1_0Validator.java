@@ -124,6 +124,13 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n, "Switch expressions are not supported.")
     );
 
+
+    final Validator noInstanceOfPattern = new SimpleValidator<>(InstanceOfExpr.class,
+            n -> n.getPattern().isPresent(),
+            (n, reporter) -> reporter.report(n, "Use of patterns with instanceof is not supported.")
+    );
+
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -145,5 +152,6 @@ public class Java1_0Validator extends Validators {
         add(noLambdas);
         add(noModules);
         add(noSwitchExpressions);
+        add(noInstanceOfPattern);
     }
 }

@@ -30,5 +30,6 @@ public class Java15Validator extends Java14Validator {
 
     public Java15Validator() {
         super();
+        // No new language features (only promotion of previews to second preview and to release)
     }
 }

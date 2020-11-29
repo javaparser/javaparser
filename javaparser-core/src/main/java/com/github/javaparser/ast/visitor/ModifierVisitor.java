@@ -530,11 +530,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final InstanceOfExpr n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
+        PatternExpr pattern = n.getPattern().map(s -> (PatternExpr) s.accept(this, arg)).orElse(null);
         ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expression == null || type == null)
             return null;
         n.setExpression(expression);
+        n.setPattern(pattern);
         n.setType(type);
         n.setComment(comment);
         return n;
@@ -1254,6 +1256,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final PatternExpr n, final A arg) {
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
+            return null;
+        n.setName(name);
+        n.setType(type);
         n.setComment(comment);
         return n;
     }

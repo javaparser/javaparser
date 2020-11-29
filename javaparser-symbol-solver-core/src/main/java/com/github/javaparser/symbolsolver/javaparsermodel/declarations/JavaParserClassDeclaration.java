@@ -351,7 +351,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
             try {
                 // If an implemented interface is found, add it as an ancestor
-                ancestors.add(toReferenceType(implemented));
+                ResolvedReferenceType rrt = toReferenceType(implemented);
+                ResolvedTypeDeclaration rtd = rrt.getTypeDeclaration().get().asType();
+                // do not consider an inner or nested class as an ancestor
+                if (!rtd.getQualifiedName().contains(wrappedNode.getFullyQualifiedName().get())) {
+                    ancestors.add(rrt);
+                }
             } catch (UnsolvedSymbolException e) {
                 // in case we could not resolve some implemented interface, we may still be able to resolve the
                 // extended class or (some of) the other implemented interfaces and so we continue gracefully
