@@ -22,13 +22,13 @@
 package com.github.javaparser.ast.validator;
 
 /**
- * This validator validates according to Java 15 syntax rules.
+ * This validator validates according to Java 16 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public class Java15Validator extends Java14Validator {
+public class Java16Validator extends Java15Validator {
 
-    public Java15Validator() {
+    public Java16Validator() {
         super();
         // No new language features (only promotion of previews to second preview and to release)
     }

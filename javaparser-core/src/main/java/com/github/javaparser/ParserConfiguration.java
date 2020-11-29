@@ -35,9 +35,12 @@ import com.github.javaparser.version.Java11PostProcessor;
 import com.github.javaparser.version.Java12PostProcessor;
 import com.github.javaparser.version.Java13PostProcessor;
 import com.github.javaparser.version.Java14PostProcessor;
+import com.github.javaparser.version.Java15PostProcessor;
+import com.github.javaparser.version.Java16PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,7 +113,15 @@ public class ParserConfiguration {
         /**
          * Java 14
          */
-        JAVA_14(new Java14Validator(), new Java14PostProcessor());
+        JAVA_14(new Java14Validator(), new Java14PostProcessor()),
+        /**
+         * Java 15
+         */
+        JAVA_15(new Java15Validator(), new Java15PostProcessor()),
+        /**
+         * Java 16
+         */
+        JAVA_16(new Java16Validator(), new Java16PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -123,18 +134,24 @@ public class ParserConfiguration {
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_13;
+        public static LanguageLevel CURRENT = JAVA_15;
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_14;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_16;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
 
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{JAVA_13, JAVA_14, JAVA_15, JAVA_16};
+
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
             this.validator = validator;
             this.postProcessor = postProcessor;
+        }
+
+        public boolean isYieldSupported() {
+            return Arrays.stream(yieldSupport).anyMatch(level -> level == this);
         }
     }
 
@@ -187,7 +204,7 @@ public class ParserConfiguration {
                 }
             }
         }
-        
+
         class LineEndingProcessor implements PreProcessor, PostProcessor {
             private LineEndingProcessingProvider _lineEndingProcessingProvider;
 
@@ -218,16 +235,16 @@ public class ParserConfiguration {
                 }
             }
         }
-        
+
         UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
-        
+
         LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
         preProcessors.add(lineEndingProcessor);
         postProcessors.add(lineEndingProcessor);
-        
-        
+
+
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
                 result.ifSuccessful(resultNode -> result
@@ -377,7 +394,7 @@ public class ParserConfiguration {
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
     }
-    
+
     public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {
         this.detectOriginalLineSeparator = detectOriginalLineSeparator;
         return this;
