@@ -97,7 +97,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        throw new IllegalStateException(f("%s is not an LineComment", this));
+        throw new IllegalStateException(f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -197,7 +197,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BlockComment asBlockComment() {
-        throw new IllegalStateException(f("%s is not an BlockComment", this));
+        throw new IllegalStateException(f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -207,7 +207,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JavadocComment asJavadocComment() {
-        throw new IllegalStateException(f("%s is not an JavadocComment", this));
+        throw new IllegalStateException(f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

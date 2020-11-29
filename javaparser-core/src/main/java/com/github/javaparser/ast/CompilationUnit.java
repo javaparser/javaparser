@@ -29,7 +29,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -40,7 +39,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -506,7 +504,7 @@ public class CompilationUnit extends Node {
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
-    
+
     /**
      * Try to get all local class declarations ending by its name (top level or inner class)
      *
@@ -685,7 +683,7 @@ public class CompilationUnit extends Node {
         private final Path path;
 
         private final Charset encoding;
-        
+
         private Printable printer;
 
         private Storage(CompilationUnit compilationUnit, Path path) {
@@ -699,14 +697,14 @@ public class CompilationUnit extends Node {
             // default printer
             this.printer = new PrettyPrinter();
         }
-        
+
         /**
          * Set a new printer
          */
         public void setPrinter(Printable printer) {
             this.printer = printer;
         }
-        
+
         /**
          * Returns the internal printer
          */

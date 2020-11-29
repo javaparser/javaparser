@@ -526,6 +526,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final InstanceOfExpr n2 = (InstanceOfExpr) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
             return false;
+        if (!nodeEquals(n.getPattern(), n2.getPattern()))
+            return false;
         if (!nodeEquals(n.getType(), n2.getType()))
             return false;
         return true;
@@ -1091,6 +1093,16 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final PatternExpr n, final Visitable arg) {
+        final PatternExpr n2 = (PatternExpr) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getType(), n2.getType()))
             return false;
         return true;
     }

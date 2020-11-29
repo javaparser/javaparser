@@ -28,12 +28,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A resolved type. It could be a primitive type or a reference type (enum, class, interface). In the later case it
- * could take type typeParametersValues (other TypeUsages). It could also be a TypeVariable, like in:
- * <p>
- * class A&lt;Bgt; { }
- * <p>
- * where B is a TypeVariable. It could also be Wildcard Type, possibly with constraints.
+ * <p>A resolved type. </p>
+ * <ul>
+ *     <li>
+ *         It could be a primitive type or a reference type (enum, class, interface).
+ *         In the latter case, it could take type typeParametersValues (other {@code TypeUsages}).</p>
+ *     </li>
+ *     <li>
+ *         It could also be a {@code TypeVariable}, like in: {@code class A<B> {} } where {@code B} is a {@code TypeVariable}.
+ *     </li>
+ *     <li>
+ *         It could also be {@code Wildcard} Type, possibly with constraints.
+ *     </li>
+ *     <li>
+ *         It could also be a {@code TypeVariable}, like in: {@code class A<B> {}}.
+ *     </li>
+ * </ul>
  *
  * @author Federico Tomassetti
  */
@@ -44,12 +54,16 @@ public interface ResolvedType {
     ///
 
     /**
-     * Does this type represent an array?
+     * @return true, if this type represent an array - otherwise false.
      */
     default boolean isArray() {
         return false;
     }
 
+    /**
+     * @return The level of nesting that this type is present at.
+     * For example, int[][] would have an array level of 2, and int would have an array level of 0 (not an array).
+     */
     default int arrayLevel() {
         if (isArray()) {
             return 1 + this.asArrayType().getComponentType().arrayLevel();

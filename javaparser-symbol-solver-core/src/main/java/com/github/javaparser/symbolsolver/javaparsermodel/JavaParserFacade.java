@@ -372,7 +372,7 @@ public class JavaParserFacade {
      * }
      * </pre>
      * <p>
-     * To accomodate this usage and avoid confusion this method return
+     * To accommodate this usage and avoid confusion this method return
      * the type itself when used on the name of type.
      */
     public ResolvedType getType(Node node) {
@@ -614,7 +614,7 @@ public class JavaParserFacade {
         }
         return findContainingTypeDeclOrObjectCreationExpr(parent);
     }
-    
+
     /**
      * Where a node has an interface/class/enum declaration -- or an object creation expression in an inner class
      * references an outer class -- as its ancestor, return the declaration corresponding to the class name specified.
@@ -632,7 +632,7 @@ public class JavaParserFacade {
         }
         return findContainingTypeDeclOrObjectCreationExpr(parent, className);
     }
-    
+
 
     public ResolvedType convertToUsageVariableType(VariableDeclarator var) {
         return get(typeSolver).convertToUsage(var.getType(), var);
