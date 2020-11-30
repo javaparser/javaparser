@@ -183,15 +183,20 @@ public class MethodResolutionLogic {
 
             // If argument type is a type variable, it has to be inferred.
             // Check if expected type can be apply to the type variable.
-            if (actualArgumentType.isTypeVariable()) {
+            if (!expectedDeclaredType.isTypeVariable() && actualArgumentType.isTypeVariable()) {
+                boolean inferred = true;
                 for (ResolvedTypeParameterDeclaration.Bound bound : actualArgumentType.asTypeVariable().asTypeParameter().getBounds()) {
                     if (bound.isExtends() && !bound.getType().isAssignableBy(expectedDeclaredType)) {
-                        return false;
+                        inferred = false;
+                        break;
                     } else if (bound.isSuper() && !expectedDeclaredType.isAssignableBy(bound.getType())){
-                        return false;
+                        inferred = false;
+                        break;
                     }
                 }
-                continue;
+                if (inferred) {
+                    continue;
+                }
             }
 
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
