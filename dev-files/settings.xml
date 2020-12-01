@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+
+
+    <!-- THIS IS A TEMPLATE/SAMPLE FOR THE ~/.m2/settings.xml CONFIGURATION FILE TO BE USED WHEN PERFORMING A RELEASE -->
+
+
+    <servers>
+        <server>
+            <!-- Sign in to Bintray with your github credentials, to generate your. -->
+            <!-- The Bintray API key can be generated/accessed via https://bintray.com/profile/edit -->
+            <id>bintray-javaparser-JavaParser</id>
+            <username>BINTRAY_USERNAME</username>
+            <password>BINTRAY_API_KEY</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-javaparser-JavaParser</id>
+                    <name>bintray</name>
+                    <url>https://dl.bintray.com/javaparser/JavaParser</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-javaparser-JavaParser</id>
+                    <name>bintray-plugins</name>
+                    <url>https://dl.bintray.com/javaparser/JavaParser</url>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>bintray</id>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>bintray</activeProfile>
+    </activeProfiles>
+
+</settings>
