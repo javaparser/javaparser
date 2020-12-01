@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -238,7 +237,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
 
             ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
-            if (returnType != methodUsage.returnType()) {
+            // we don't want to replace the return type in case of UNBOUNDED type (<?>)
+            if (returnType != methodUsage.returnType() && !(returnType == ResolvedWildcard.UNBOUNDED)) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
@@ -490,7 +490,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private ResolvedType usingParameterTypesFromScope(ResolvedType scope, ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (type.isReferenceType()) {
             for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : type.asReferenceType().getTypeParametersMap()) {
-                if (entry.a.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry.a.getName()).isPresent()) {
+                if (entry.a.declaredOnType() && scope.isReferenceType() && scope.asReferenceType().getGenericParameterByName(entry.a.getName()).isPresent()) {
                     type = type.replaceTypeVariables(entry.a, scope.asReferenceType().getGenericParameterByName(entry.a.getName()).get(), inferredTypes);
                 }
             }
