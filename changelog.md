@@ -1,12 +1,58 @@
-Next Release (Version 3.17.1)
+Next Release (Version 3.18.0)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/179?closed=1)
 
 ### Added
+* Add a convenient method (hasRange) to the interface NodeWithRange  
+    (PR [#2929](https://github.com/javaparser/javaparser/pull/2929), by [@jlerbsc](https://github.com/jlerbsc))
+* Add test case to issue 1017 LambdaExpr left side too permissive
+    (PR [#2946](https://github.com/javaparser/javaparser/pull/2946), by [@jlerbsc](https://github.com/jlerbsc))
+* Added Pattern Matching for instanceof (Java 14 preview, Java 15 second preview, Java 16 targeted release)
+    (PR [#2654](https://github.com/javaparser/javaparser/pull/2654), by [@MysterAitch](https://github.com/MysterAitch))
+* Added java 15 (latest released) and java 16 (bleeding edge) language level options, incl. some validators / post processors / configuration options
+    (PR [#2959](https://github.com/javaparser/javaparser/pull/2959), by [@MysterAitch](https://github.com/MysterAitch))
 ### Changed
+* Minor change in PrettyPrinterConfiguration : adding default char in enum IndentType
+    (PR [#2948](https://github.com/javaparser/javaparser/pull/2948), by [@jlerbsc](https://github.com/jlerbsc))
+* Minor refactoring rename interface Printable to Stringable. Something that has a printable form. I.e., it can be converted to a user-facing String
+    (PR [#2949](https://github.com/javaparser/javaparser/pull/2949), by [@jlerbsc](https://github.com/jlerbsc))
+* Adding interface Printable for printer
+    (PR [#2950](https://github.com/javaparser/javaparser/pull/2950), by [@jlerbsc](https://github.com/jlerbsc))
+* Minor refactoring in ResolvedReferenceType and add corresponding tests 
+    (PR [#2955](https://github.com/javaparser/javaparser/pull/2955), by [@jlerbsc](https://github.com/jlerbsc))
+* Tweak the property generator to add imports when generating and improve the typecastinggenerator's error message
+    (PR [#2957](https://github.com/javaparser/javaparser/pull/2957), by [@MysterAitch](https://github.com/MysterAitch))
+* Bump mockito-core from 3.6.0 to 3.6.28
+    (PR [#2942](https://github.com/javaparser/javaparser/pull/2942), by dependabot
 ### Deprecated
 ### Removed
+* Removed .travis.yml -- per #2919 
+    (PR [#2958](https://github.com/javaparser/javaparser/pull/2958), by [@MysterAitch](https://github.com/MysterAitch))
 ### Fixed
+* Issue 2909 Improving search for the most relevant declaration of the specified class  
+    (PR [#2927](https://github.com/javaparser/javaparser/pull/2927), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2926 NoSuchElementException in PhantomNodeLogic after adding node  
+    (PR [#2930](https://github.com/javaparser/javaparser/pull/2930), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2909 try different bottom / up and try with type solver strategies 
+    (PR [#2931](https://github.com/javaparser/javaparser/pull/2931), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2936 Triggering observer notifications for the NodeList iterator
+    (PR [#2938](https://github.com/javaparser/javaparser/pull/2938), by [@MysterAitch](https://github.com/MysterAitch))
+* Issue 2065 Problem resolving type of lambda with Math method invocation inside 
+    (PR [#2945](https://github.com/javaparser/javaparser/pull/2945), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2740 Issue related to a method call in an anonymous class on a field with a private visibility
+    (PR [#2947](https://github.com/javaparser/javaparser/pull/2947), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2951 Cannot solve function with List<byte[]> argument defined in jar 
+    (PR [#2952](https://github.com/javaparser/javaparser/pull/2952), by [@qzchenwl](https://github.com/qzchenwl))
+* Issue 2781 Resolve Stack overflow occurs when the name of the interface implemented by the class is the same as the name of the internal class 
+    (PR [#2956](https://github.com/javaparser/javaparser/pull/2956), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue 2953 UnsolvedSymbolException throw when resolving method in enum class implement in interface by default.  
+    (PR [#2954](https://github.com/javaparser/javaparser/pull/2954), by [@qzchenwl](https://github.com/qzchenwl))
+* Fixed MethodCallExprContext generic parameter issue. (NullType must not fail matchTypeParameters)
+    (PR [#2939](https://github.com/javaparser/javaparser/pull/2939), by [@zcbbpo](https://github.com/zcbbpo))
+* Issue 2943 UnsolvedSymbolException thrown on `Stream.<func>(<some lambda>)` 
+    (PR [#2961](https://github.com/javaparser/javaparser/pull/2961), by [@qzchenwl](https://github.com/qzchenwl))
+* Issue 1945 JavaParser choking on multiple generic method calls on the same line 
+    (PR [#2966](https://github.com/javaparser/javaparser/pull/2966), by [@jlerbsc](https://github.com/jlerbsc))
 ### Security
 
 
