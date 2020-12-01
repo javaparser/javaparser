@@ -1,4 +1,16 @@
-Next Release (Version 3.18.0)
+Next Release (Version 3.18.1)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/180?closed=1)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+Version 3.18.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/179?closed=1)
 
@@ -24,7 +36,6 @@ Next Release (Version 3.18.0)
     (PR [#2957](https://github.com/javaparser/javaparser/pull/2957), by [@MysterAitch](https://github.com/MysterAitch))
 * Bump mockito-core from 3.6.0 to 3.6.28
     (PR [#2942](https://github.com/javaparser/javaparser/pull/2942), by dependabot
-### Deprecated
 ### Removed
 * Removed .travis.yml -- per #2919 
     (PR [#2958](https://github.com/javaparser/javaparser/pull/2958), by [@MysterAitch](https://github.com/MysterAitch))
@@ -53,7 +64,6 @@ Next Release (Version 3.18.0)
     (PR [#2961](https://github.com/javaparser/javaparser/pull/2961), by [@qzchenwl](https://github.com/qzchenwl))
 * Issue 1945 JavaParser choking on multiple generic method calls on the same line 
     (PR [#2966](https://github.com/javaparser/javaparser/pull/2966), by [@jlerbsc](https://github.com/jlerbsc))
-### Security
 
 
 Version 3.17.0
@@ -102,6 +112,7 @@ Version 3.17.0
     (PR [#2901](https://github.com/javaparser/javaparser/pull/2901), by [@mysteraitch](https://github.com/mysteraitch))
     (PR [#2913](https://github.com/javaparser/javaparser/pull/2913), by [@mernst](https://github.com/mernst))
 
+
 Version 3.16.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/177?closed=1)
@@ -148,7 +159,6 @@ Version 3.16.3
     (PR [#2883](https://github.com/javaparser/javaparser/pull/2883), by [@jlerbsc](https://github.com/jlerbsc))
 
 
-
 Version 3.16.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/176?closed=1)
@@ -158,11 +168,13 @@ Version 3.16.2
     (PR [#2706](https://github.com/javaparser/javaparser/pull/2706), by [@MysterAitch](https://github.com/MysterAitch))
 * various other bugfixes and enhancements
 
+
 Version 3.16.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
 * FIXED: Fixed typo
     (PR [#2697](https://github.com/javaparser/javaparser/pull/2697), by [@hfreeb](https://github.com/hfreeb))
+
 
 Version 3.16.0
 ------------------
