@@ -37,27 +37,40 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public class PrettyPrinterConfiguration {
     
     public static class Indentation {
+        private static final int DEFAULT_SIZE = 4; 
         IndentType type;
         int size;
+        // formatted indentation
+        private String formattedIndentation = "";
         public Indentation(IndentType type, int size) {
             this.type = type;
             this.size = size;
+            format();
+        }
+        public Indentation(IndentType type) {
+            this(type, DEFAULT_SIZE);
         }
         public Indentation size(int size) {
             this.size = size;
+            format();
             return this;
         }
         public Indentation type(IndentType type) {
             this.type = type;
+            format();
             return this;
         }
         public String getIndent() {
+            return formattedIndentation;
+        }
+        // format the indentation string
+        private void format() {
             StringBuilder indentString = new StringBuilder();
-            char indentChar = type.getChar();
+            char indentChar = type.car;
             for (int i = 0; i < size; i++) {
                 indentString.append(indentChar);
             }
-            return indentString.toString();
+            formattedIndentation = indentString.toString();
         }
     }
     
@@ -65,13 +78,13 @@ public class PrettyPrinterConfiguration {
         /**
          * Indent with spaces.
          */
-        SPACES(' '),
+        SPACES(' ', 1),
 
         /**
          * Indent with tabs as far as possible.
          * For proper aligning, the tab width is necessary and by default 4.
          */
-        TABS('\t'),
+        TABS('\t', 4),
 
         /**
          * Indent with tabs but align with spaces when wrapping and aligning
@@ -94,16 +107,15 @@ public class PrettyPrinterConfiguration {
          * }
          * </pre>
          */
-        TABS_WITH_SPACE_ALIGN('\t');
+        TABS_WITH_SPACE_ALIGN('\t', 4);
         
-        private Character car;
+        Character car;
         
-        private IndentType(Character c) {
+        int width;
+        
+        private IndentType(Character c, int width) {
             this.car = c;
-        }
-        
-        public Character getChar() {
-            return this.car;
+            this.width = width;
         }
         
     }
@@ -127,9 +139,6 @@ public class PrettyPrinterConfiguration {
      */
     private boolean indentCaseInSwitch = true;
     private Indentation indentation = new Indentation(SPACES, 4);
-//    private IndentType indentType = SPACES;
-    private int tabWidth = 4;
-//    private int indentSize = 4;
     private String endOfLineCharacter = SYSTEM_EOL;
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
@@ -178,6 +187,7 @@ public class PrettyPrinterConfiguration {
      * Get the type of indent to produce.
      * @deprecated (@see Indentation.type)
      */
+    @Deprecated
     public IndentType getIndentType() {
         return this.indentation.type;
     }
@@ -186,6 +196,7 @@ public class PrettyPrinterConfiguration {
      * Set the type of indent to produce.
      * @deprecated (@see Indentation.type())
      */
+    @Deprecated
     public PrettyPrinterConfiguration setIndentType(IndentType indentType) {
         this.indentation.type(assertNotNull(indentType));
         return this;
@@ -195,16 +206,20 @@ public class PrettyPrinterConfiguration {
 
     /**
      * Get the tab width for pretty aligning.
+     * @deprecated (@see Indentation.size)
      */
+    @Deprecated
     public int getTabWidth() {
-        return tabWidth;
+        return this.indentation.size;
     }
 
     /**
      * Set the tab width for pretty aligning.
+     * @deprecated (@see Indentation.size)
      */
+    @Deprecated
     public PrettyPrinterConfiguration setTabWidth(int tabWidth) {
-        this.tabWidth = assertPositive(tabWidth);
+        this.indentation.size(assertPositive(tabWidth));
         return this;
     }
 
