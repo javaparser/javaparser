@@ -26,6 +26,7 @@ import java.util.LinkedList;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
+import com.github.javaparser.printer.PrettyPrinterConfiguration.Indentation;
 import com.github.javaparser.utils.Utils;
 
 /**
@@ -33,9 +34,7 @@ import com.github.javaparser.utils.Utils;
  */
 public class SourcePrinter {
     private final String endOfLineCharacter;
-    private final String indentation;
-    private final int tabWidth;
-    private final IndentType indentType;
+    private final Indentation indentation;
 
     private final Deque<String> indents = new LinkedList<>();
     private final Deque<String> reindentedIndents = new LinkedList<>();
@@ -49,10 +48,8 @@ public class SourcePrinter {
     }
 
     SourcePrinter(final PrettyPrinterConfiguration configuration) {
-        indentation = configuration.getIndentation().getIndent();
+        indentation = configuration.getIndentation();
         endOfLineCharacter = configuration.getEndOfLineCharacter();
-        tabWidth = configuration.getTabWidth();
-        indentType = configuration.getIndentType();
         indents.push("");
     }
 
@@ -62,14 +59,14 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch (indentType) {
+        switch (indentation.type) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
-                indents.push(currentIndent + indentation);
+                indents.push(currentIndent + indentation.getIndent());
                 break;
 
             case TABS:
-                indents.push(indentation + currentIndent);
+                indents.push(indentation.getIndent() + currentIndent);
                 break;
 
             default:
@@ -93,33 +90,34 @@ public class SourcePrinter {
         }
 
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch (indentType) {
+        switch (indentation.type) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
-                    newIndent.append(IndentType.SPACES.getChar());
+                    newIndent.append(IndentType.SPACES.car);
                 }
                 break;
 
             case TABS:
+                IndentType currentIndentType = indentation.type; 
                 int logicalIndentLength = newIndent.length();
-                while ((logicalIndentLength + tabWidth) <= column) {
-                    newIndent.insert(0, indentType.getChar());
-                    logicalIndentLength += tabWidth;
+                while ((logicalIndentLength + currentIndentType.width) <= column) {
+                    newIndent.insert(0, currentIndentType.car);
+                    logicalIndentLength += currentIndentType.width;
                 }
                 while (logicalIndentLength < column) {
-                    newIndent.append(IndentType.SPACES.getChar());
+                    newIndent.append(IndentType.SPACES.car);
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
-                for(int i=0; i<tabWidth; i++){
-                    fullTab.append(IndentType.SPACES.getChar());
+                for(int i=0; i<currentIndentType.width; i++){
+                    fullTab.append(IndentType.SPACES.car);
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= tabWidth)
-                        && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.width)
+                        && newIndent.substring(newIndent.length() - currentIndentType.width).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + tabWidth, indentType.getChar().toString());
+                    newIndent.replace(i, i + currentIndentType.width, currentIndentType.car.toString());
                 }
                 break;
 
