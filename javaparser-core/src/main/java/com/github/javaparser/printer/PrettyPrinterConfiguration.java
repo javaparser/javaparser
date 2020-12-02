@@ -35,6 +35,32 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * Configuration options for the {@link PrettyPrinter}.
  */
 public class PrettyPrinterConfiguration {
+    
+    public static class Indentation {
+        IndentType type;
+        int size;
+        public Indentation(IndentType type, int size) {
+            this.type = type;
+            this.size = size;
+        }
+        public Indentation size(int size) {
+            this.size = size;
+            return this;
+        }
+        public Indentation type(IndentType type) {
+            this.type = type;
+            return this;
+        }
+        public String getIndent() {
+            StringBuilder indentString = new StringBuilder();
+            char indentChar = type.getChar();
+            for (int i = 0; i < size; i++) {
+                indentString.append(indentChar);
+            }
+            return indentString.toString();
+        }
+    }
+    
     public enum IndentType {
         /**
          * Indent with spaces.
@@ -79,6 +105,7 @@ public class PrettyPrinterConfiguration {
         public Character getChar() {
             return this.car;
         }
+        
     }
 
     public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
@@ -99,49 +126,68 @@ public class PrettyPrinterConfiguration {
      *}                       }
      */
     private boolean indentCaseInSwitch = true;
-    private IndentType indentType = SPACES;
+    private Indentation indentation = new Indentation(SPACES, 4);
+//    private IndentType indentType = SPACES;
     private int tabWidth = 4;
-    private int indentSize = 4;
+//    private int indentSize = 4;
     private String endOfLineCharacter = SYSTEM_EOL;
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
     private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
+    
+    /*
+     * returns the indentation parameters
+     */
+    public Indentation getIndentation() {
+        return indentation;
+    }
+    
+    public PrettyPrinterConfiguration setIndentation(Indentation indentation) {
+        this.indentation = indentation;
+        return this;
+    }
 
     /**
      * @return the string that will be used to indent.
+     * @deprecated (@see Indentation.getIndent())
      */
+    @Deprecated
     public String getIndent() {
-        StringBuilder indentString = new StringBuilder();
-        char indentChar = indentType.getChar();
-        for (int i = 0; i < indentSize; i++) {
-            indentString.append(indentChar);
-        }
-        return indentString.toString();
+        return indentation.getIndent();
     }
 
+    /**
+     * @return the indentation size.
+     * @deprecated (@see Indentation.size)
+     */
+    @Deprecated
     public int getIndentSize() {
-        return indentSize;
+        return indentation.size;
     }
 
     /**
      * Set the size of the indent in characters.
+     * @deprecated (@see Indentation.size())
      */
+    @Deprecated
     public PrettyPrinterConfiguration setIndentSize(int indentSize) {
-        this.indentSize = assertNonNegative(indentSize);
+        this.indentation.size(assertNonNegative(indentSize));
         return this;
     }
 
     /**
      * Get the type of indent to produce.
+     * @deprecated (@see Indentation.type)
      */
     public IndentType getIndentType() {
-        return indentType;
+        return this.indentation.type;
     }
 
     /**
      * Set the type of indent to produce.
+     * @deprecated (@see Indentation.type())
      */
     public PrettyPrinterConfiguration setIndentType(IndentType indentType) {
-        this.indentType = assertNotNull(indentType);
+        this.indentation.type(assertNotNull(indentType));
         return this;
     }
 
