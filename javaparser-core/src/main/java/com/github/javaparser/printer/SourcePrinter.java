@@ -49,7 +49,7 @@ public class SourcePrinter {
     }
 
     SourcePrinter(final PrettyPrinterConfiguration configuration) {
-        indentation = configuration.getIndent();
+        indentation = configuration.getIndentation().getIndent();
         endOfLineCharacter = configuration.getEndOfLineCharacter();
         tabWidth = configuration.getTabWidth();
         indentType = configuration.getIndentType();

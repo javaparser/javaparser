@@ -47,6 +47,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.printer.PrettyPrinterConfiguration.Indentation;
 
 class PrettyPrinterTest {
 
@@ -222,7 +223,8 @@ class PrettyPrinterTest {
     void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
         CompilationUnit cu = parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
-        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentSize(1).setIndentType(TABS_WITH_SPACE_ALIGN))
+        Indentation indentation = new Indentation(TABS_WITH_SPACE_ALIGN, 1);
+        String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setColumnAlignFirstMethodChain(true).setColumnAlignParameters(true).setIndentation(indentation))
                 .print(cu);
 
         assertEqualsStringIgnoringEol("class Foo {\n" +
@@ -303,11 +305,11 @@ class PrettyPrinterTest {
     void indentWithTabsAsFarAsPossible() {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        Indentation indentation = new Indentation(TABS, 1);
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
-                .setIndentType(TABS)
-                .setIndentSize(1))
+                .setIndentation(indentation))
                 .print(cu);
 
         assertEqualsStringIgnoringEol("class Foo {\n" +
@@ -329,11 +331,11 @@ class PrettyPrinterTest {
     void indentWithTabsAlignWithSpaces() {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
+        Indentation indentation = new Indentation(TABS_WITH_SPACE_ALIGN, 1);
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()
                 .setColumnAlignFirstMethodChain(true)
                 .setColumnAlignParameters(true)
-                .setIndentType(TABS_WITH_SPACE_ALIGN)
-                .setIndentSize(1))
+                .setIndentation(indentation))
                 .print(cu);
 
         assertEqualsStringIgnoringEol("class Foo {\n" +
