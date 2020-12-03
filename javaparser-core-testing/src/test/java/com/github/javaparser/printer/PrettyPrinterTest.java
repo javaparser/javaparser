@@ -47,6 +47,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
 import com.github.javaparser.printer.PrettyPrinterConfiguration.Indentation;
 
 class PrettyPrinterTest {
@@ -516,5 +517,35 @@ class PrettyPrinterTest {
         assertTrue(cu.toString().contains("        // TODO"));
         assertTrue(cu.toString().contains("        /* TODO */"));
 
+    }
+    
+    @Test
+    public void testIndentationWithDefaultSize() {
+        Indentation indentation = new Indentation(IndentType.SPACES);
+        assertTrue(indentation.size==4);
+        assertEquals("    ", indentation.getIndent());
+        // on-the-fly modification
+        indentation.size(2);
+        assertTrue(indentation.size==2);
+        assertEquals("  ", indentation.getIndent());
+    }
+    
+    @Test
+    public void testIndentationWithCustomSize() {
+        Indentation indentation = new Indentation(IndentType.TABS,2);
+        assertTrue(indentation.size==2);
+        assertEquals("\t\t", indentation.getIndent());
+    }
+    
+    @Test
+    public void testIndentationWithOnTheFlyModifcation() {
+        Indentation indentation = new Indentation(IndentType.SPACES);
+        // on-the-fly modification
+        indentation.size(2);
+        assertTrue(indentation.size==2);
+        assertEquals("  ", indentation.getIndent());
+        indentation.type(IndentType.TABS);
+        assertTrue(indentation.type == IndentType.TABS);
+        assertEquals("\t\t", indentation.getIndent());
     }
 }
