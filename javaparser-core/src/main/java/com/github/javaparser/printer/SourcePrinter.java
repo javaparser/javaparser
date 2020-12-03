@@ -25,8 +25,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
-import com.github.javaparser.printer.PrettyPrinterConfiguration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.utils.Utils;
 
 /**
@@ -59,7 +59,7 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch (indentation.type) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 indents.push(currentIndent + indentation.getIndent());
@@ -90,34 +90,34 @@ public class SourcePrinter {
         }
 
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch (indentation.type) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
-                    newIndent.append(IndentType.SPACES.car);
+                    newIndent.append(IndentType.SPACES.getCar());
                 }
                 break;
 
             case TABS:
-                IndentType currentIndentType = indentation.type; 
+                IndentType currentIndentType = indentation.getType(); 
                 int logicalIndentLength = newIndent.length();
-                while ((logicalIndentLength + currentIndentType.width) <= column) {
-                    newIndent.insert(0, currentIndentType.car);
-                    logicalIndentLength += currentIndentType.width;
+                while ((logicalIndentLength + currentIndentType.getWidth()) <= column) {
+                    newIndent.insert(0, currentIndentType.getCar());
+                    logicalIndentLength += currentIndentType.getWidth();
                 }
                 while (logicalIndentLength < column) {
-                    newIndent.append(IndentType.SPACES.car);
+                    newIndent.append(IndentType.SPACES.getCar());
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
-                for(int i=0; i<currentIndentType.width; i++){
-                    fullTab.append(IndentType.SPACES.car);
+                for(int i=0; i<currentIndentType.getWidth(); i++){
+                    fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= currentIndentType.width)
-                        && newIndent.substring(newIndent.length() - currentIndentType.width).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth())
+                        && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + currentIndentType.width, currentIndentType.car.toString());
+                    newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
                 }
                 break;
 

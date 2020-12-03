@@ -27,8 +27,8 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS;
-import static com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType.TABS_WITH_SPACE_ALIGN;
+import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS;
+import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,8 +47,8 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
-import com.github.javaparser.printer.PrettyPrinterConfiguration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
 
 class PrettyPrinterTest {
 
@@ -522,18 +522,18 @@ class PrettyPrinterTest {
     @Test
     public void testIndentationWithDefaultSize() {
         Indentation indentation = new Indentation(IndentType.SPACES);
-        assertTrue(indentation.size==4);
+        assertTrue(indentation.getSize()==4);
         assertEquals("    ", indentation.getIndent());
         // on-the-fly modification
-        indentation.size(2);
-        assertTrue(indentation.size==2);
+        indentation.setSize(2);
+        assertTrue(indentation.getSize()==2);
         assertEquals("  ", indentation.getIndent());
     }
     
     @Test
     public void testIndentationWithCustomSize() {
         Indentation indentation = new Indentation(IndentType.TABS,2);
-        assertTrue(indentation.size==2);
+        assertTrue(indentation.getSize()==2);
         assertEquals("\t\t", indentation.getIndent());
     }
     
@@ -541,11 +541,11 @@ class PrettyPrinterTest {
     public void testIndentationWithOnTheFlyModifcation() {
         Indentation indentation = new Indentation(IndentType.SPACES);
         // on-the-fly modification
-        indentation.size(2);
-        assertTrue(indentation.size==2);
+        indentation.setSize(2);
+        assertTrue(indentation.getSize()==2);
         assertEquals("  ", indentation.getIndent());
-        indentation.type(IndentType.TABS);
-        assertTrue(indentation.type == IndentType.TABS);
+        indentation.setType(IndentType.TABS);
+        assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
     }
 }
