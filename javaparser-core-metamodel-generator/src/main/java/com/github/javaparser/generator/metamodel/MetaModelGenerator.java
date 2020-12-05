@@ -199,7 +199,7 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        ConfigurablePrinter config = new PrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n");
+        ConfigurablePrinter config = new PrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n"));
         Printable printer = new PrettyPrintable(config);
         sourceRoot.setPrinter(printer::print);
         StaticJavaParser.setConfiguration(parserConfiguration);
