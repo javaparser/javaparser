@@ -21,6 +21,15 @@
 
 package com.github.javaparser.generator.metamodel;
 
+import static com.github.javaparser.utils.Utils.decapitalize;
+
+import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,18 +39,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.PrettyPrintable;
+import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
 import com.github.javaparser.utils.SourceRoot;
-
-import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator extends AbstractGenerator {
 
@@ -196,7 +199,9 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
+        ConfigurablePrinter config = new PrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n");
+        Printable printer = new PrettyPrintable(config);
+        sourceRoot.setPrinter(printer::print);
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         new MetaModelGenerator(sourceRoot).generate();

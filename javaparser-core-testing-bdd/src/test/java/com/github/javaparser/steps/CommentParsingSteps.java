@@ -31,8 +31,8 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;

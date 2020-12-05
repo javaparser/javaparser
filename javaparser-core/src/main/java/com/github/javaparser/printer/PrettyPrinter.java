@@ -21,41 +21,60 @@
 
 package com.github.javaparser.printer;
 
+import java.util.function.Function;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 
 /**
  * Pretty printer for AST nodes.
+ * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
+ * <p> Use {@link Printable interface or PrettyPrintable default implementation } instead.
  */
+@Deprecated
 public class PrettyPrinter implements Printable {
-    private PrettyPrinterConfiguration configuration;
+    
+    private ConfigurablePrinter configuration;
+    
+    private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory;
 
     public PrettyPrinter() {
         this(new PrettyPrinterConfiguration());
     }
-
+    
     public PrettyPrinter(PrettyPrinterConfiguration configuration) {
-        this.configuration = configuration;
+        this(configuration, PrettyPrintVisitor::new);
     }
-
+    
+    public PrettyPrinter(PrettyPrinterConfiguration configuration, Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
+        this.configuration = configuration;
+        this.visitorFactory = visitorFactory;
+    }
+    
     /*
      * Returns the PrettyPrinter configuration
      */
-    public PrettyPrinterConfiguration getConfiguration() {
+    public ConfigurablePrinter getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public void setConfiguration(PrettyPrinterConfiguration configuration) {
+    public Printable setConfiguration(ConfigurablePrinter configuration) {
+        if (!(configuration instanceof PrettyPrinterConfiguration))
+            throw new IllegalArgumentException("PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
         this.configuration = configuration;
+        return this;
     }
 
     @Override
     public String print(Node node) {
-        final VoidVisitor<Void> visitor = configuration.getVisitorFactory().apply(configuration);
+        final VoidVisitor<Void> visitor = visitorFactory.apply((PrettyPrinterConfiguration)configuration);
         node.accept(visitor, null);
         return visitor.toString();
     }
+
 }

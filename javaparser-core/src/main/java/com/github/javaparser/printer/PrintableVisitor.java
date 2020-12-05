@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -150,36 +149,24 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
 
 /**
  * Outputs the AST as formatted Java source code.
- * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link PrintableVisitor default implementation } instead.
- * @author Julio Vilmar Gesser
- * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link PrintableVisitor default implementation } instead.
+ *
  */
-@Deprecated
-public class PrettyPrintVisitor implements VoidVisitor<Void> {
-    protected PrettyPrinterConfiguration configuration;
-    protected final SourcePrinter printer;
+public class PrintableVisitor implements VoidVisitor<Void> {
+    protected final ConfigurablePrinter configuration;
+    protected final PrintableSource printer;
 
-    public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
-        this.configuration = prettyPrinterConfiguration;
-        printer = new SourcePrinter(configuration);
+    public PrintableVisitor(ConfigurablePrinter configuration) {
+        this(configuration, new DefaultPrintableSource(configuration));
     }
     
-    public void setConfiguration(PrettyPrinterConfiguration prettyPrinterConfiguration) {
-        this.configuration = prettyPrinterConfiguration;
-    }
-
-    /**
-     * @deprecated use toString()
-     */
-    @Deprecated
-    public String getSource() {
-        return printer.toString();
+    public PrintableVisitor(ConfigurablePrinter configuration, PrintableSource printer) {
+        this.configuration = configuration;
+        this.printer = printer;
     }
 
     @Override
@@ -257,7 +244,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     protected void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
         if (!isNullOrEmpty(args)) {
-            boolean columnAlignParameters = (args.size() > 1) && configuration.isColumnAlignParameters();
+            boolean columnAlignParameters = (args.size() > 1) && configuration.get(ConfigOption.COLUMN_ALIGN_PARAMETERS).isPresent();
             if (columnAlignParameters) {
                 printer.indentWithAlignTo(printer.getCursor().column);
             }
@@ -437,9 +424,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final JavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
+        if (configuration.get(ConfigOption.PRINT_COMMENTS).isPresent() && configuration.get(ConfigOption.PRINT_JAVADOC).isPresent()) {
             printer.println("/**");
-            final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+            final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
             String[] lines = commentContent.split("\\R");
             List<String> strippedLines = new ArrayList<>();
             for (String line : lines) {
@@ -729,11 +716,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getTarget().accept(this, arg);
-        if (configuration.isSpaceAroundOperators()) {
+        if (configuration.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent()) {
             printer.print(" ");
         }
         printer.print(n.getOperator().asString());
-        if (configuration.isSpaceAroundOperators()) {
+        if (configuration.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent()) {
             printer.print(" ");
         }
         n.getValue().accept(this, arg);
@@ -750,11 +737,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getLeft().accept(this, arg);
-        if (configuration.isSpaceAroundOperators()) {
+        if (configuration.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent()) {
             printer.print(" ");
         }
         printer.print(n.getOperator().asString());
-        if (configuration.isSpaceAroundOperators()) {
+        if (configuration.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent()) {
             printer.print(" ");
         }
         n.getRight().accept(this, arg);
@@ -926,7 +913,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         // - are we in a statement where we want the alignment?
         // - are we not directly in the argument list of a method call expression?
         AtomicBoolean columnAlignFirstMethodChain = new AtomicBoolean();
-        if (configuration.isColumnAlignFirstMethodChain()) {
+        if (configuration.get(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN).isPresent()) {
             // pick the kind of expressions where vertically aligning method calls is okay.
             if (n.findAncestor(Statement.class).map(p -> p.isReturnStmt()
                     || p.isThrowStmt()
@@ -1305,11 +1292,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getSelector().accept(this, arg);
         printer.println(") {");
         if (n.getEntries() != null) {
-            indentIf(configuration.isIndentCaseInSwitch());
+            indentIf(configuration.get(ConfigOption.INDENT_CASE_IN_SWITCH).isPresent());
             for (final SwitchEntry e : n.getEntries()) {
                 e.accept(this, arg);
             }
-            unindentIf(configuration.isIndentCaseInSwitch());
+            unindentIf(configuration.get(ConfigOption.INDENT_CASE_IN_SWITCH).isPresent());
         }
         printer.print("}");
     }
@@ -1399,7 +1386,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getEntries().isNonEmpty()) {
             final boolean alignVertically =
                     // Either we hit the constant amount limit in the configurations, or...
-                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() ||
+                    n.getEntries().size() > configuration.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() ||
                             // any of the constants has a comment.
                             n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
@@ -1716,7 +1703,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final LineComment n, final Void arg) {
-        if (configuration.isIgnoreComments()) {
+        if (!configuration.get(ConfigOption.PRINT_COMMENTS).isPresent()) {
             return;
         }
         printer
@@ -1726,15 +1713,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final BlockComment n, final Void arg) {
-        if (configuration.isIgnoreComments()) {
+        if (!configuration.get(ConfigOption.PRINT_COMMENTS).isPresent()) {
             return;
         }
-        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
         String[] lines = commentContent.split("\\R", -1); // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
         printer.print("/*");
         for (int i = 0; i < (lines.length - 1); i++) {
             printer.print(lines[i]);
-            printer.print(configuration.getEndOfLineCharacter()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+            printer.print(configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
         }
         printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
         printer.println("*/");
@@ -1800,7 +1787,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(NodeList n, Void arg) {
-        if (configuration.isOrderImports() && n.size() > 0 && n.get(0) instanceof ImportDeclaration) {
+        if (configuration.get(ConfigOption.ORDER_IMPORTS).isPresent() && n.size() > 0 && n.get(0) instanceof ImportDeclaration) {
             //noinspection unchecked
             NodeList<ImportDeclaration> modifiableList = new NodeList<>(n);
             modifiableList.sort(
@@ -1892,7 +1879,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {
-        if (configuration.isIgnoreComments()) return;
+        if (!configuration.get(ConfigOption.PRINT_COMMENTS).isPresent()) return;
         if (node instanceof Comment) return;
 
         Node parent = node.getParentNode().orElse(null);
@@ -1924,7 +1911,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printOrphanCommentsEnding(final Node node) {
-        if (configuration.isIgnoreComments()) return;
+        if (!configuration.get(ConfigOption.PRINT_COMMENTS).isPresent()) return;
 
         // extract all nodes for which the position/range is indicated to avoid to skip orphan comments
         List<Node> everything = node.getChildNodes().stream().filter(n->n.getRange().isPresent()).collect(Collectors.toList());

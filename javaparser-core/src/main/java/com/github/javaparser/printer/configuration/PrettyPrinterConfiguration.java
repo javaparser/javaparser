@@ -19,32 +19,30 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.printer;
+package com.github.javaparser.printer.configuration;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNonNegative;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.assertPositive;
 
-import java.util.function.Function;
+import java.util.Optional;
+import java.util.Set;
 
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.Indentation;
+import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
 
 /**
  * Configuration options for the {@link PrettyPrinter}.
+ * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
+ * <p> Use {@link ConfigurablePrinter interface or PrinterConfiguration default implementation } instead.
  */
-public class PrettyPrinterConfiguration {
+@Deprecated
+public class PrettyPrinterConfiguration implements ConfigurablePrinter {
     
-    public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
-
-    private boolean orderImports = false;
-    private boolean printComments = true;
-    private boolean printJavadoc = true;
-    private boolean spaceAroundOperators = true;
-    private boolean columnAlignParameters = false;
-    private boolean columnAlignFirstMethodChain = false;
+    
+    ConfigurablePrinter wrapped;
+    
     /**
      * Indent the case when it is true, don't if false
      * switch(x) {            switch(x) {
@@ -54,11 +52,15 @@ public class PrettyPrinterConfiguration {
      *        return z;           return x;
      *}                       }
      */
-    private boolean indentCaseInSwitch = true;
-    private Indentation indentation = new Indentation(IndentType.SPACES, 4);
-    private String endOfLineCharacter = SYSTEM_EOL;
-    private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
-    private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
+    private Indentation indentation;
+    
+    /*
+     * Default constructor
+     */
+    public PrettyPrinterConfiguration() {
+        this.wrapped = new PrinterConfiguration();
+        this.indentation = new Indentation(IndentType.SPACES, 4);
+    }
     
     /*
      * returns the indentation parameters
@@ -141,31 +143,35 @@ public class PrettyPrinterConfiguration {
     }
 
     public boolean isOrderImports() {
-        return orderImports;
+        return get(ConfigOption.ORDER_IMPORTS).isPresent();
     }
 
     public boolean isPrintComments() {
-        return printComments;
+        return get(ConfigOption.PRINT_COMMENTS).isPresent();
     }
 
     public boolean isIgnoreComments() {
-        return !printComments;
+        return !get(ConfigOption.PRINT_COMMENTS).isPresent();
     }
     
-    public boolean isSpaceAroundOperators() { return spaceAroundOperators; }
+    public boolean isSpaceAroundOperators() {
+        return get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent();
+    }
 
     public boolean isPrintJavadoc() {
-        return printJavadoc;
+        return get(ConfigOption.PRINT_JAVADOC).isPresent();
     }
 
     public boolean isColumnAlignParameters() {
-        return columnAlignParameters;
+        return get(ConfigOption.COLUMN_ALIGN_PARAMETERS).isPresent();
     }
 
-    public boolean isColumnAlignFirstMethodChain() { return columnAlignFirstMethodChain; }
+    public boolean isColumnAlignFirstMethodChain() {
+        return get(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN).isPresent();
+    }
 
     public boolean isIndentCaseInSwitch() {
-        return indentCaseInSwitch;
+        return get(ConfigOption.INDENT_CASE_IN_SWITCH).isPresent();
     }
 
 
@@ -174,7 +180,7 @@ public class PrettyPrinterConfiguration {
      * printed.
      */
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
-        this.printComments = printComments;
+        wrapped = printComments ? addOption(ConfigOption.PRINT_COMMENTS) : removeOption(ConfigOption.PRINT_COMMENTS);
         return this;
     }
 
@@ -182,7 +188,7 @@ public class PrettyPrinterConfiguration {
      * When true, Javadoc will be printed.
      */
     public PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
-        this.printJavadoc = printJavadoc;
+        wrapped = printJavadoc ? addOption(ConfigOption.PRINT_JAVADOC) : removeOption(ConfigOption.PRINT_JAVADOC);
         return this;
     }
 
@@ -190,47 +196,34 @@ public class PrettyPrinterConfiguration {
      * Set if there should be spaces between operators
      */
     public PrettyPrinterConfiguration setSpaceAroundOperators(boolean spaceAroundOperators){
-        this.spaceAroundOperators = spaceAroundOperators;
+        wrapped = spaceAroundOperators ? addOption(ConfigOption.SPACE_AROUND_OPERATORS) : removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         return this;
     }
 
     public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
-        this.columnAlignParameters = columnAlignParameters;
+        wrapped = columnAlignParameters ? addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS) : removeOption(ConfigOption.COLUMN_ALIGN_PARAMETERS);
         return this;
     }
 
     public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
-        this.columnAlignFirstMethodChain = columnAlignFirstMethodChain;
+        wrapped = columnAlignFirstMethodChain ? addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN) : removeOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN);
         return this;
     }
 
     public PrettyPrinterConfiguration setIndentCaseInSwitch(boolean indentInSwitch) {
-        this.indentCaseInSwitch = indentInSwitch;
-        return this;
-    }
-
-    public Function<PrettyPrinterConfiguration, VoidVisitor<Void>> getVisitorFactory() {
-        return visitorFactory;
-    }
-
-    /**
-     * Set the factory that creates the PrettyPrintVisitor. By changing this you can make the PrettyPrinter use a custom
-     * PrettyPrinterVisitor.
-     */
-    public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
-        this.visitorFactory = assertNotNull(visitorFactory);
+        wrapped = indentInSwitch ? addOption(ConfigOption.INDENT_CASE_IN_SWITCH) : removeOption(ConfigOption.INDENT_CASE_IN_SWITCH);
         return this;
     }
 
     public String getEndOfLineCharacter() {
-        return endOfLineCharacter;
+        return get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
     }
 
     /**
      * Set the character to append when a line should end. Example values: "\n", "\r\n", "".
      */
     public PrettyPrinterConfiguration setEndOfLineCharacter(String endOfLineCharacter) {
-        this.endOfLineCharacter = assertNotNull(endOfLineCharacter);
+        addOption(ConfigOption.END_OF_LINE_CHARACTER.value(endOfLineCharacter));
         return this;
     }
 
@@ -238,14 +231,14 @@ public class PrettyPrinterConfiguration {
      * When true, orders imports by alphabetically.
      */
     public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
-        this.orderImports = orderImports;
+        wrapped = orderImports ? addOption(ConfigOption.ORDER_IMPORTS) : removeOption(ConfigOption.ORDER_IMPORTS);
         return this;
     }
 
 
 
     public int getMaxEnumConstantsToAlignHorizontally() {
-        return maxEnumConstantsToAlignHorizontally;
+        return get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger();
     }
 
     /**
@@ -272,7 +265,32 @@ public class PrettyPrinterConfiguration {
      * Set it to 1 or less to always align vertically.
      */
     public PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
-        this.maxEnumConstantsToAlignHorizontally = maxEnumConstantsToAlignHorizontally;
+        addOption(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(maxEnumConstantsToAlignHorizontally));
         return this;
+    }
+
+    @Override
+    public ConfigurablePrinter addOption(ConfigOption option) {
+        return wrapped.addOption(option);
+    }
+
+    @Override
+    public boolean isActivated(ConfigOption option) {
+        return wrapped.isActivated(option);
+    }
+
+    @Override
+    public Optional<ConfigOption> get(ConfigOption option) {
+        return wrapped.get(option);
+    }
+
+    @Override
+    public Set<ConfigOption> get() {
+        return wrapped.get();
+    }
+
+    @Override
+    public ConfigurablePrinter removeOption(ConfigOption option) {
+        return wrapped.removeOption(option);
     }
 }

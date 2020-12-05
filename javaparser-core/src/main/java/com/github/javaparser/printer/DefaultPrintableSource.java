@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -21,39 +20,35 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.printer.configuration.Indentation.IndentType.SPACES;
+
 import java.util.Deque;
 import java.util.LinkedList;
 
 import com.github.javaparser.Position;
+import com.github.javaparser.printer.configuration.ConfigurablePrinter;
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
 import com.github.javaparser.utils.Utils;
 
 /**
  * A support class for code that outputs formatted source code.
- * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link PrintableSource interface or DefaultPrintableSource default implementation } instead.
  */
-@Deprecated
-public class SourcePrinter{
+public class DefaultPrintableSource implements PrintableSource {
     private final String endOfLineCharacter;
     private final Indentation indentation;
 
     private final Deque<String> indents = new LinkedList<>();
     private final Deque<String> reindentedIndents = new LinkedList<>();
     private String lastPrintedIndent = "";
-    private final StringBuilder buf = new StringBuilder();
+    private StringBuilder buf = new StringBuilder();
     private Position cursor = new Position(Position.FIRST_LINE, Position.FIRST_COLUMN - 1); // Start before the first column
     private boolean indented = false;
 
-    SourcePrinter() {
-        this(new PrettyPrinterConfiguration());
-    }
-
-    SourcePrinter(final PrettyPrinterConfiguration configuration) {
+    public DefaultPrintableSource(final ConfigurablePrinter configuration) {
         indentation = configuration.getIndentation();
-        endOfLineCharacter = configuration.getEndOfLineCharacter();
+        endOfLineCharacter = configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString();
         indents.push("");
     }
 
@@ -61,7 +56,8 @@ public class SourcePrinter{
      * Add the default indentation to the current indentation and push it on the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter indent() {
+    @Override
+    public PrintableSource indent() {
         String currentIndent = indents.peek();
         switch (indentation.getType()) {
             case SPACES:
@@ -83,7 +79,8 @@ public class SourcePrinter{
      * Add to the current indentation until it is reaches "column" and push it on the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter indentWithAlignTo(int column) {
+    @Override
+    public PrintableSource indentWithAlignTo(int column) {
         indents.push(calculateIndentWithAlignTo(column));
         return this;
     }
@@ -98,7 +95,7 @@ public class SourcePrinter{
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
-                    newIndent.append(IndentType.SPACES.getCar());
+                    newIndent.append(SPACES.getCar());
                 }
                 break;
 
@@ -110,12 +107,12 @@ public class SourcePrinter{
                     logicalIndentLength += currentIndentType.getWidth();
                 }
                 while (logicalIndentLength < column) {
-                    newIndent.append(IndentType.SPACES.getCar());
+                    newIndent.append(SPACES.getCar());
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
                 for(int i=0; i<currentIndentType.getWidth(); i++){
-                    fullTab.append(IndentType.SPACES.getCar());
+                    fullTab.append(SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
                 if ((newIndent.length() >= currentIndentType.getWidth())
@@ -136,7 +133,8 @@ public class SourcePrinter{
      * Pop the last indentation of the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter unindent() {
+    @Override
+    public PrintableSource unindent() {
         if (indents.isEmpty()) {
             // Since we start out with an empty indent on the stack, this will only occur
             // the second time we over-unindent.
@@ -162,9 +160,10 @@ public class SourcePrinter{
      *
      * @param arg source line to be printed (should not contain newline/carriage-return characters)
      * @return this instance, for nesting calls to method as fluent interface
-     * @see SourcePrinter#println(String)
+     * @see DefaultPrintableSource#println(String)
      */
-    public SourcePrinter print(final String arg) {
+    @Override
+    public PrintableSource print(final String arg) {
         if (!indented) {
             lastPrintedIndent = indents.peek();
             append(lastPrintedIndent);
@@ -185,7 +184,8 @@ public class SourcePrinter{
      * @param arg source line to be printed (should not contain newline/carriage-return characters)
      * @return this instance, for nesting calls to method as fluent interface
      */
-    public SourcePrinter println(final String arg) {
+    @Override
+    public PrintableSource println(final String arg) {
         print(arg);
         println();
         return this;
@@ -196,7 +196,8 @@ public class SourcePrinter{
      *
      * @return this instance, for nesting calls to method as fluent interface
      */
-    public SourcePrinter println() {
+    @Override
+    public PrintableSource println() {
         buf.append(endOfLineCharacter);
         cursor = new Position(cursor.line + 1, Position.FIRST_COLUMN - 1); // Start before the first column
         indented = false;
@@ -213,17 +214,9 @@ public class SourcePrinter{
      *
      * @return the current cursor position (line, column).
      */
+    @Override
     public Position getCursor() {
         return cursor;
-    }
-
-    /**
-     * @return the currently printed source code.
-     * @deprecated use toString()
-     */
-    @Deprecated
-    public String getSource() {
-        return toString();
     }
 
     /**
@@ -237,6 +230,7 @@ public class SourcePrinter{
     /**
      * Changes all EOL characters in "content" to the EOL character this SourcePrinter is using.
      */
+    @Override
     public String normalizeEolInTextBlock(String content) {
         return Utils.normalizeEolInTextBlock(content, endOfLineCharacter);
     }
@@ -245,6 +239,7 @@ public class SourcePrinter{
      * Set the top-most indent to the column the cursor is currently in, can be undone with
      * {@link #reindentToPreviousLevel()}. Does not actually output anything.
      */
+    @Override
     public void reindentWithAlignToCursor() {
         String newIndent = calculateIndentWithAlignTo(cursor.column);
         reindentedIndents.push(indents.pop());
@@ -255,6 +250,7 @@ public class SourcePrinter{
      * Set the top-most indent to the column the cursor was before the last {@link #reindentWithAlignToCursor()} call.
      * Does not actually output anything.
      */
+    @Override
     public void reindentToPreviousLevel() {
         if (reindentedIndents.isEmpty()) {
             throw new IllegalStateException("Reindent calls are not well-balanced.");
@@ -269,6 +265,7 @@ public class SourcePrinter{
      * Once you do know, you can pop this indent ("unindent") and indent to the right column.
      * (Does not actually output anything.)
      */
+    @Override
     public void duplicateIndent() {
         indents.push(indents.peek());
     }
