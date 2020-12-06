@@ -82,7 +82,7 @@ public class PrinterConfiguration implements ConfigurablePrinter {
          *        G
          *     }
          * }</pre>
-         * Set it to a large number to always align horizontally.
+         * Set it to a very large number (e.g. {@code Integer.MAX_VALUE} to always align horizontally.
          * Set it to 1 or less to always align vertically.
          */
         DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.valueOf(5)),
@@ -166,7 +166,7 @@ public class PrinterConfiguration implements ConfigurablePrinter {
     private Indentation indentation = new Indentation(IndentType.SPACES, 4);
     
     /*
-     * add or update an option
+     * add the specified option if it does not exist or replace the existing option
      */
     @Override
     public ConfigurablePrinter addOption(ConfigOption option) {
@@ -176,7 +176,7 @@ public class PrinterConfiguration implements ConfigurablePrinter {
     }
     
     /*
-     * add or update an option
+     * remove the specified option
      */
     @Override
     public ConfigurablePrinter removeOption(ConfigOption option) {
