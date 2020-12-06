@@ -35,32 +35,43 @@ import com.github.javaparser.utils.Utils;
 public class PrinterConfiguration implements ConfigurablePrinter {
     
     public enum ConfigOption {
+        /**
+         * Order imports alphabetically
+         */
         ORDER_IMPORTS(Boolean.class), 
+        /**
+         * Print comments only. It can be combined with {@code PRINT_JAVADOC} to print regular comments and javadoc.
+         */
         PRINT_COMMENTS(Boolean.class), 
+        /**
+         * Print javadoc comments only. It can be combined with {@code PRINT_COMMENTS} to print regular javadoc and comments
+         */
         PRINT_JAVADOC(Boolean.class), 
         SPACE_AROUND_OPERATORS(Boolean.class), 
         COLUMN_ALIGN_PARAMETERS(Boolean.class), 
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
          * Indent the case when it is true, don't if false
+         * <pre>{@code
          * switch(x) {            switch(x) {
          *    case 1:             case 1:
          *        return y;           return y;
          *    case 2:             case 2:
          *        return z;           return x;
-         *}                       }
+         * }                       }
+         * }<pre>
          */
         INDENT_CASE_IN_SWITCH(Boolean.class),
         /**
          * By default enum constants get aligned like this:
-         * <pre>
+         * <pre>{@code
          *     enum X {
          *        A, B, C, D
          *     }
-         * </pre>
+         * }<pre>
          * until the amount of constants passes this value (5 by default).
          * Then they get aligned like this:
-         * <pre>
+         * <pre>{@code
          *     enum X {
          *        A,
          *        B,
@@ -70,7 +81,7 @@ public class PrinterConfiguration implements ConfigurablePrinter {
          *        F,
          *        G
          *     }
-         * </pre>
+         * }</pre>
          * Set it to a large number to always align horizontally.
          * Set it to 1 or less to always align vertically.
          */
@@ -153,8 +164,6 @@ public class PrinterConfiguration implements ConfigurablePrinter {
             ));
 
     private Indentation indentation = new Indentation(IndentType.SPACES, 4);
-    
-    //    private Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory = PrettyPrintVisitor::new;
     
     /*
      * add or update an option

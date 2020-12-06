@@ -5,8 +5,9 @@ import java.util.Set;
 
 import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
 
-/*
- * This interface defines the api for printer configuration
+/**
+ * This interface defines the API for printer configuration.
+ * An option can be added or removed from the configuration. An indentation can also be added to it.
  */
 public interface ConfigurablePrinter {
 
