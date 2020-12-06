@@ -42,7 +42,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOp
 public class PrettyPrinterConfiguration implements ConfigurablePrinter {
     
     
-    ConfigurablePrinter wrapped;
+    ConfigurablePrinter wrappedConfiguration;
     
     /**
      * Indent the case when it is true, don't if false
@@ -59,7 +59,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * Default constructor
      */
     public PrettyPrinterConfiguration() {
-        this.wrapped = new PrinterConfiguration();
+        this.wrappedConfiguration = new PrinterConfiguration();
         this.indentation = new Indentation(IndentType.SPACES, 4);
     }
     
@@ -181,7 +181,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * printed.
      */
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
-        wrapped = printComments ? addOption(ConfigOption.PRINT_COMMENTS) : removeOption(ConfigOption.PRINT_COMMENTS);
+        wrappedConfiguration = printComments ? addOption(ConfigOption.PRINT_COMMENTS) : removeOption(ConfigOption.PRINT_COMMENTS);
         return this;
     }
 
@@ -189,7 +189,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * When true, Javadoc will be printed.
      */
     public PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
-        wrapped = printJavadoc ? addOption(ConfigOption.PRINT_JAVADOC) : removeOption(ConfigOption.PRINT_JAVADOC);
+        wrappedConfiguration = printJavadoc ? addOption(ConfigOption.PRINT_JAVADOC) : removeOption(ConfigOption.PRINT_JAVADOC);
         return this;
     }
 
@@ -197,22 +197,22 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * Set if there should be spaces between operators
      */
     public PrettyPrinterConfiguration setSpaceAroundOperators(boolean spaceAroundOperators){
-        wrapped = spaceAroundOperators ? addOption(ConfigOption.SPACE_AROUND_OPERATORS) : removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        wrappedConfiguration = spaceAroundOperators ? addOption(ConfigOption.SPACE_AROUND_OPERATORS) : removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         return this;
     }
 
     public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
-        wrapped = columnAlignParameters ? addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS) : removeOption(ConfigOption.COLUMN_ALIGN_PARAMETERS);
+        wrappedConfiguration = columnAlignParameters ? addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS) : removeOption(ConfigOption.COLUMN_ALIGN_PARAMETERS);
         return this;
     }
 
     public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
-        wrapped = columnAlignFirstMethodChain ? addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN) : removeOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN);
+        wrappedConfiguration = columnAlignFirstMethodChain ? addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN) : removeOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN);
         return this;
     }
 
     public PrettyPrinterConfiguration setIndentCaseInSwitch(boolean indentInSwitch) {
-        wrapped = indentInSwitch ? addOption(ConfigOption.INDENT_CASE_IN_SWITCH) : removeOption(ConfigOption.INDENT_CASE_IN_SWITCH);
+        wrappedConfiguration = indentInSwitch ? addOption(ConfigOption.INDENT_CASE_IN_SWITCH) : removeOption(ConfigOption.INDENT_CASE_IN_SWITCH);
         return this;
     }
 
@@ -232,7 +232,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * When true, orders imports by alphabetically.
      */
     public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
-        wrapped = orderImports ? addOption(ConfigOption.ORDER_IMPORTS) : removeOption(ConfigOption.ORDER_IMPORTS);
+        wrappedConfiguration = orderImports ? addOption(ConfigOption.ORDER_IMPORTS) : removeOption(ConfigOption.ORDER_IMPORTS);
         return this;
     }
 
@@ -272,26 +272,26 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
 
     @Override
     public ConfigurablePrinter addOption(ConfigOption option) {
-        return wrapped.addOption(option);
+        return wrappedConfiguration.addOption(option);
     }
 
     @Override
     public boolean isActivated(ConfigOption option) {
-        return wrapped.isActivated(option);
+        return wrappedConfiguration.isActivated(option);
     }
 
     @Override
     public Optional<ConfigOption> get(ConfigOption option) {
-        return wrapped.get(option);
+        return wrappedConfiguration.get(option);
     }
 
     @Override
     public Set<ConfigOption> get() {
-        return wrapped.get();
+        return wrappedConfiguration.get();
     }
 
     @Override
     public ConfigurablePrinter removeOption(ConfigOption option) {
-        return wrapped.removeOption(option);
+        return wrappedConfiguration.removeOption(option);
     }
 }
