@@ -36,6 +36,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOp
  * Configuration options for the {@link PrettyPrinter}.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
  * <p> Use {@link ConfigurablePrinter interface or PrinterConfiguration default implementation } instead.
+ * @deprecated This class could be removed in a future version. Use default PrinterConfiguration.
  */
 @Deprecated
 public class PrettyPrinterConfiguration implements ConfigurablePrinter {

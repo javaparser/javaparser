@@ -157,8 +157,8 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
  * <p> Use {@link PrintableVisitor default implementation } instead.
  * @author Julio Vilmar Gesser
- * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link PrintableVisitor default implementation } instead.
+ * @deprecated This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation. 
+ * This class could be removed in a future version. Use default PrintableVisitor.
  */
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
