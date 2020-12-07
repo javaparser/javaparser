@@ -4,15 +4,15 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.configuration.ConfigurablePrinter;
 
 /**
- * Printable interface defines the API for a printer.
+ * Printer interface defines the API for a printer.
  * A printer outputs the AST as formatted Java source code. 
  *
  */
-public interface Printable {
+public interface Printer {
 
     String print(Node node);
 
-    Printable setConfiguration(ConfigurablePrinter configuration);
+    Printer setConfiguration(ConfigurablePrinter configuration);
     
     ConfigurablePrinter getConfiguration();
 

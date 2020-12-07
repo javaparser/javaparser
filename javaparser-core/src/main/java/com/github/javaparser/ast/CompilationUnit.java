@@ -64,7 +64,7 @@ import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Printer;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -102,7 +102,7 @@ public class CompilationUnit extends Node {
     private Storage storage;
     
     // printer used to print the node
-    private Printable printer;
+    private Printer printer;
 
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
@@ -145,7 +145,7 @@ public class CompilationUnit extends Node {
     /**
      * Declare a specific printer
      */
-    public CompilationUnit printer(Printable printer) {
+    public CompilationUnit printer(Printer printer) {
         this.printer = printer;
         return this;
     }
@@ -154,7 +154,7 @@ public class CompilationUnit extends Node {
      * If there is no declared printer, returns a new default printer else returns a new printer with the current configuration
      */
     @Override
-    public Printable getPrinter() {
+    public Printer getPrinter() {
         if (printer == null) {
             printer = createDefaultPrinter();
         }

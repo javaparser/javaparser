@@ -31,7 +31,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 
 import org.jbehave.core.annotations.Alias;
@@ -63,7 +63,7 @@ public class CommentParsingSteps {
     private CommentsCollection commentsCollection;
     private String sourceUnderTest;
     private ParserConfiguration configuration = new ParserConfiguration();
-    private Printable prettyPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+    private Printer prettyPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
 
     @Given("the class:$classSrc")
     public void givenTheClass(String classSrc) {

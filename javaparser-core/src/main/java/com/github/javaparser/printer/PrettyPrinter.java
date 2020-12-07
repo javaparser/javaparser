@@ -31,11 +31,11 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 /**
  * Pretty printer for AST nodes.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link Printable interface or PrettyPrintable default implementation } instead.
+ * <p> Use {@link Printer interface or PrettyPrintable default implementation } instead.
  * @deprecated This class could be removed in a future version. Use default DefaultPrettyPrinter.
  */
 @Deprecated
-public class PrettyPrinter implements Printable {
+public class PrettyPrinter implements Printer {
     
     private ConfigurablePrinter configuration;
     
@@ -64,7 +64,7 @@ public class PrettyPrinter implements Printable {
     /*
      * set or update the PrettyPrinter configuration
      */
-    public Printable setConfiguration(ConfigurablePrinter configuration) {
+    public Printer setConfiguration(ConfigurablePrinter configuration) {
         if (!(configuration instanceof PrettyPrinterConfiguration))
             throw new IllegalArgumentException("PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
         this.configuration = configuration;

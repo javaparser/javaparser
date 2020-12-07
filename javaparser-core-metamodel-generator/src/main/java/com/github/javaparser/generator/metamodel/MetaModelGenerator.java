@@ -40,7 +40,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.PrettyPrintable;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.ConfigurablePrinter;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
@@ -200,7 +200,7 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
         ConfigurablePrinter config = new PrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n"));
-        Printable printer = new PrettyPrintable(config);
+        Printer printer = new PrettyPrintable(config);
         sourceRoot.setPrinter(printer::print);
         StaticJavaParser.setConfiguration(parserConfiguration);
 

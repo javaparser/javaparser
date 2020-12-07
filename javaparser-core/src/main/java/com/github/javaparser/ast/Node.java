@@ -67,7 +67,7 @@ import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrintable;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.ConfigurablePrinter;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
@@ -207,7 +207,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * If there is a printer defined in CompilationUnit, returns it
      * else create a new PrettyPrintable with default parameters
      */
-    protected Printable getPrinter() {
+    protected Printer getPrinter() {
         Optional<CompilationUnit> cu = findCompilationUnit();
         if (!cu.isPresent()) {
             return createDefaultPrinter();
@@ -218,11 +218,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /*
      * Return the printer initialized with the specified configuration
      */
-    protected Printable getPrinter(ConfigurablePrinter configuration) {
+    protected Printer getPrinter(ConfigurablePrinter configuration) {
         return getPrinter().setConfiguration(configuration);
     }
     
-    protected Printable createDefaultPrinter() {
+    protected Printer createDefaultPrinter() {
         ConfigurablePrinter configuration = getDefaultPrinterConfiguration();
         return new PrettyPrintable(configuration);
     }

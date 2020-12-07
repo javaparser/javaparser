@@ -54,12 +54,12 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOp
 
 class PrettyPrintableTest {
     
-    private Printable getDefaultPrinter() {
+    private Printer getDefaultPrinter() {
         ConfigurablePrinter configuration = new PrinterConfiguration();
         return new PrettyPrintable(configuration);
     }
     
-    private Printable getDefaultPrinter(ConfigurablePrinter configuration) {
+    private Printer getDefaultPrinter(ConfigurablePrinter configuration) {
         return new PrettyPrintable(configuration);
     }
 

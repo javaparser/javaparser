@@ -31,7 +31,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 /**
  * Pretty printer for AST nodes.
  */
-public class PrettyPrintable implements Printable {
+public class PrettyPrintable implements Printer {
     
     private ConfigurablePrinter configuration;
     
@@ -92,7 +92,7 @@ public class PrettyPrintable implements Printable {
     /*
      * set or update the PrettyPrinter configuration
      */
-    public Printable setConfiguration(ConfigurablePrinter configuration) {
+    public Printer setConfiguration(ConfigurablePrinter configuration) {
         this.configuration = configuration;
         return this;
     }

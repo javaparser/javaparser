@@ -110,7 +110,7 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         ConfigurablePrinter configuration = new PrinterConfiguration();
         Function<ConfigurablePrinter, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new DefaultPrintableSource(config));
-        Printable printer = new PrettyPrintable(visitorFactory, configuration);
+        Printer printer = new PrettyPrintable(visitorFactory, configuration);
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
 
