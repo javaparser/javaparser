@@ -35,14 +35,14 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 /**
  * Configuration options for the {@link PrettyPrinter}.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link ConfigurationPrinter interface or DefaultPrinterConfiguration default implementation } instead.
+ * <p> Use {@link PrinterConfiguration interface or DefaultPrinterConfiguration default implementation } instead.
  * @deprecated This class could be removed in a future version. Use default DefaultPrinterConfiguration.
  */
 @Deprecated
-public class PrettyPrinterConfiguration implements ConfigurationPrinter {
+public class PrettyPrinterConfiguration implements PrinterConfiguration {
     
     
-    ConfigurationPrinter wrappedConfiguration;
+    PrinterConfiguration wrappedConfiguration;
     
     /**
      * Indent the case when it is true, don't if false
@@ -271,7 +271,7 @@ public class PrettyPrinterConfiguration implements ConfigurationPrinter {
     }
 
     @Override
-    public ConfigurationPrinter addOption(ConfigOption option) {
+    public PrinterConfiguration addOption(ConfigOption option) {
         return wrappedConfiguration.addOption(option);
     }
 
@@ -291,7 +291,7 @@ public class PrettyPrinterConfiguration implements ConfigurationPrinter {
     }
 
     @Override
-    public ConfigurationPrinter removeOption(ConfigOption option) {
+    public PrinterConfiguration removeOption(ConfigOption option) {
         return wrappedConfiguration.removeOption(option);
     }
 }

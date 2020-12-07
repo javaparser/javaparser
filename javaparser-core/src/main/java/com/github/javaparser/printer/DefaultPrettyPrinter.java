@@ -25,7 +25,7 @@ import java.util.function.Function;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 
 /**
@@ -33,23 +33,23 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
  */
 public class DefaultPrettyPrinter implements Printer {
     
-    private ConfigurationPrinter configuration;
+    private PrinterConfiguration configuration;
     
     // visitor factory
-    Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory;
+    Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory;
     
     // static methods 
     
-    private static Function<ConfigurationPrinter, VoidVisitor<Void>> createDefaultVisitor() {
-        ConfigurationPrinter configuration = createDefaultConfiguration();
+    private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor() {
+        PrinterConfiguration configuration = createDefaultConfiguration();
         return createDefaultVisitor(configuration);
     }
     
-    private static Function<ConfigurationPrinter, VoidVisitor<Void>> createDefaultVisitor(ConfigurationPrinter configuration) {
+    private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor(PrinterConfiguration configuration) {
         return (config) -> new DefaultPrettyPrinterVisitor(config, new SourcePrinter(config));
     }
     
-    private static ConfigurationPrinter createDefaultConfiguration() {
+    private static PrinterConfiguration createDefaultConfiguration() {
         return new DefaultPrinterConfiguration();
     }
     
@@ -66,7 +66,7 @@ public class DefaultPrettyPrinter implements Printer {
      * Build a new DefaultPrettyPrinter with a configuration and a default factory
      * @param configuration
      */
-    public DefaultPrettyPrinter(ConfigurationPrinter configuration) {
+    public DefaultPrettyPrinter(PrinterConfiguration configuration) {
         this(createDefaultVisitor(configuration), configuration );
     }
     
@@ -75,7 +75,7 @@ public class DefaultPrettyPrinter implements Printer {
      * @param visitorFactory 
      * @param configuration Configuration to apply
      */
-    public DefaultPrettyPrinter(Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory, ConfigurationPrinter configuration) {
+    public DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
@@ -85,14 +85,14 @@ public class DefaultPrettyPrinter implements Printer {
     /*
      * Returns the Printer configuration
      */
-    public ConfigurationPrinter getConfiguration() {
+    public PrinterConfiguration getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public Printer setConfiguration(ConfigurationPrinter configuration) {
+    public Printer setConfiguration(PrinterConfiguration configuration) {
         this.configuration = configuration;
         return this;
     }

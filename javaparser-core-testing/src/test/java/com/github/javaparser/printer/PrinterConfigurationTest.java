@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.utils.Utils;
@@ -16,7 +16,7 @@ class PrinterConfigurationTest {
 
     @Test
     void testDefaultConfigurationAndValue() {
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         assertTrue(config.get(ConfigOption.PRINT_COMMENTS).isPresent());
         assertTrue(config.get(ConfigOption.PRINT_JAVADOC).isPresent());
         assertTrue(config.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent());
@@ -35,7 +35,7 @@ class PrinterConfigurationTest {
 
     @Test
     void testConfigurationError() {
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         // verify configuration error case
         assertThrows(IllegalArgumentException.class, () -> {
             config.get(ConfigOption.PRINT_COMMENTS).get().asValue();
@@ -49,7 +49,7 @@ class PrinterConfigurationTest {
     
     @Test
     void testUpdatedConfigurationOption() {
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         // change the default value of the MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY option
         config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().value(2);
         // verify the value is updated
@@ -58,7 +58,7 @@ class PrinterConfigurationTest {
     
     @Test
     void testRemoveOption() {
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         assertTrue(config.get(ConfigOption.PRINT_COMMENTS).isPresent());
         assertTrue(config.get(ConfigOption.END_OF_LINE_CHARACTER).isPresent());
         // remove option PRINT_COMMENTS

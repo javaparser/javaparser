@@ -50,7 +50,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation;
@@ -108,8 +108,8 @@ class PrettyPrinterTest {
 
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = parse(code);
-        ConfigurationPrinter configuration = new DefaultPrinterConfiguration();
-        Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new SourcePrinter(config));
+        PrinterConfiguration configuration = new DefaultPrinterConfiguration();
+        Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new SourcePrinter(config));
         Printer printer = new DefaultPrettyPrinter(visitorFactory, configuration);
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
@@ -123,7 +123,7 @@ class PrettyPrinterTest {
 
     @Test
     void prettyColumnAlignParameters_enabled() {
-        ConfigurationPrinter config = new DefaultPrinterConfiguration().addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS);
+        PrinterConfiguration config = new DefaultPrinterConfiguration().addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS);
         final String EOL = config.get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
         
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
@@ -145,7 +145,7 @@ class PrettyPrinterTest {
     @Test
     void prettyColumnAlignParameters_disabled() {
         
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         final String EOL = config.get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
@@ -163,7 +163,7 @@ class PrettyPrinterTest {
     @Test
     void prettyAlignMethodCallChains_enabled() {
         
-        ConfigurationPrinter config = new DefaultPrinterConfiguration().addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN);
+        PrinterConfiguration config = new DefaultPrinterConfiguration().addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN);
         final String EOL = config.get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
         String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
@@ -185,7 +185,7 @@ class PrettyPrinterTest {
     @Test
     void prettyAlignMethodCallChains_disabled() {
         
-        ConfigurationPrinter config = new DefaultPrinterConfiguration();
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
         final String EOL = config.get(ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
         String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
@@ -235,7 +235,7 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
         Indentation indentation = new Indentation(TABS_WITH_SPACE_ALIGN, 1);
 
-        ConfigurationPrinter config = new DefaultPrinterConfiguration()
+        PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN)
                 .addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)
                 .setIndentation(indentation);

@@ -68,7 +68,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -162,7 +162,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    protected static final ConfigurationPrinter prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(ConfigOption.PRINT_COMMENTS);
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(ConfigOption.PRINT_COMMENTS);
     
     @InternalProperty
     private Range range;
@@ -218,19 +218,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /*
      * Return the printer initialized with the specified configuration
      */
-    protected Printer getPrinter(ConfigurationPrinter configuration) {
+    protected Printer getPrinter(PrinterConfiguration configuration) {
         return getPrinter().setConfiguration(configuration);
     }
     
     protected Printer createDefaultPrinter() {
-        ConfigurationPrinter configuration = getDefaultPrinterConfiguration();
+        PrinterConfiguration configuration = getDefaultPrinterConfiguration();
         return new DefaultPrettyPrinter(configuration);
     }
     
     /*
      * returns a default printer configuration
      */
-    protected  ConfigurationPrinter getDefaultPrinterConfiguration() {
+    protected  PrinterConfiguration getDefaultPrinterConfiguration() {
         return new DefaultPrinterConfiguration();
     }
 
@@ -326,7 +326,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public final String toString() {
         if (containsData(LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            ConfigurationPrinter config = getDefaultPrinterConfiguration();
+            PrinterConfiguration config = getDefaultPrinterConfiguration();
             config.addOption(ConfigOption.END_OF_LINE_CHARACTER.value(lineSeparator.asRawString()));
             return getPrinter(config).print(this);
         }
@@ -335,9 +335,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with parameter ConfigurationPrinter.
+     * Formatting can be configured with parameter PrinterConfiguration.
      */
-    public final String toString(ConfigurationPrinter configuration) {
+    public final String toString(PrinterConfiguration configuration) {
         return getPrinter(configuration).print(this);
     }
 

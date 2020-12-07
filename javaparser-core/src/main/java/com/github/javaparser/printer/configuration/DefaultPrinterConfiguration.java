@@ -32,7 +32,7 @@ import com.github.javaparser.utils.Utils;
 /**
  * Configuration options for the {@link Printer}.
  */
-public class DefaultPrinterConfiguration implements ConfigurationPrinter {
+public class DefaultPrinterConfiguration implements PrinterConfiguration {
     
     public enum ConfigOption {
         /**
@@ -173,7 +173,7 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
      * add the specified option if it does not exist or replace the existing option
      */
     @Override
-    public ConfigurationPrinter addOption(ConfigOption option) {
+    public PrinterConfiguration addOption(ConfigOption option) {
         removeOption(option);
         options.add(option);
         return this;
@@ -183,7 +183,7 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
      * remove the specified option
      */
     @Override
-    public ConfigurationPrinter removeOption(ConfigOption option) {
+    public PrinterConfiguration removeOption(ConfigOption option) {
         options.remove(option);
         return this;
     }
@@ -221,7 +221,7 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
     }
     
     @Override
-    public ConfigurationPrinter setIndentation(Indentation indentation) {
+    public PrinterConfiguration setIndentation(Indentation indentation) {
         this.indentation = indentation;
         return this;
     }

@@ -36,14 +36,14 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 
 class CommentTest {
 
-    private static final ConfigurationPrinter PRETTY_PRINTER_CONFIG_TWO_INDENT = new DefaultPrinterConfiguration().setIndentation(new Indentation(IndentType.SPACES, 2));
+    private static final PrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new DefaultPrinterConfiguration().setIndentation(new Indentation(IndentType.SPACES, 2));
 
     @Test
     void removeOrphanComment() {

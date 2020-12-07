@@ -25,7 +25,7 @@ import java.util.function.Function;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 
 /**
@@ -37,7 +37,7 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 @Deprecated
 public class PrettyPrinter implements Printer {
     
-    private ConfigurationPrinter configuration;
+    private PrinterConfiguration configuration;
     
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory;
 
@@ -57,14 +57,14 @@ public class PrettyPrinter implements Printer {
     /*
      * Returns the PrettyPrinter configuration
      */
-    public ConfigurationPrinter getConfiguration() {
+    public PrinterConfiguration getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public Printer setConfiguration(ConfigurationPrinter configuration) {
+    public Printer setConfiguration(PrinterConfiguration configuration) {
         if (!(configuration instanceof PrettyPrinterConfiguration))
             throw new IllegalArgumentException("PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
         this.configuration = configuration;

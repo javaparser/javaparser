@@ -25,7 +25,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation;
@@ -55,7 +55,7 @@ public class SourcePrinter {
         this(configuration.getIndentation(), configuration.getEndOfLineCharacter());
     }
 
-    SourcePrinter(final ConfigurationPrinter configuration) {
+    SourcePrinter(final PrinterConfiguration configuration) {
         this(configuration.getIndentation(), configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
     }
     

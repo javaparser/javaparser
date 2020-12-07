@@ -9,17 +9,17 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
  * This interface defines the API for printer configuration.
  * An option can be added or removed from the configuration. An indentation can also be added to it.
  */
-public interface ConfigurationPrinter {
+public interface PrinterConfiguration {
 
     /*
      * add or update an option
      */
-    ConfigurationPrinter addOption(ConfigOption option);
+    PrinterConfiguration addOption(ConfigOption option);
     
     /*
      * Remove an option
      */
-    ConfigurationPrinter removeOption(ConfigOption option);
+    PrinterConfiguration removeOption(ConfigOption option);
 
     /*
      * True if an option is activated
@@ -41,6 +41,6 @@ public interface ConfigurationPrinter {
      */
     Indentation getIndentation();
 
-    ConfigurationPrinter setIndentation(Indentation indentation);
+    PrinterConfiguration setIndentation(Indentation indentation);
 
 }
