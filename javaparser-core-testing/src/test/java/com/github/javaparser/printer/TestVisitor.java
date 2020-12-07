@@ -24,7 +24,7 @@ package com.github.javaparser.printer;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.printer.configuration.ConfigurationPrinter;
 
-public class TestVisitor extends PrintableVisitor {
+public class TestVisitor extends DefaultPrettyPrinterVisitor {
 
     public TestVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
         super(configuration, printer);

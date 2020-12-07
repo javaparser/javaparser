@@ -155,10 +155,10 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 /**
  * Outputs the AST as formatted Java source code.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link PrintableVisitor default implementation } instead.
+ * <p> Use {@link DefaultPrettyPrinterVisitor default implementation } instead.
  * @author Julio Vilmar Gesser
  * @deprecated This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation. 
- * This class could be removed in a future version. Use default PrintableVisitor.
+ * This class could be removed in a future version. Use default DefaultPrettyPrinterVisitor.
  */
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {

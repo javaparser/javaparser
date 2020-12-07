@@ -156,15 +156,15 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
  * Outputs the AST as formatted Java source code.
  *
  */
-public class PrintableVisitor implements VoidVisitor<Void> {
+public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     protected final ConfigurationPrinter configuration;
     protected final PrintableSource printer;
 
-    public PrintableVisitor(ConfigurationPrinter configuration) {
+    public DefaultPrettyPrinterVisitor(ConfigurationPrinter configuration) {
         this(configuration, new DefaultPrintableSource(configuration));
     }
     
-    public PrintableVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
+    public DefaultPrettyPrinterVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
         this.configuration = configuration;
         this.printer = printer;
     }
