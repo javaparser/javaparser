@@ -21,14 +21,14 @@ class PrinterConfigurationTest {
         assertTrue(config.get(ConfigOption.PRINT_JAVADOC).isPresent());
         assertTrue(config.get(ConfigOption.SPACE_AROUND_OPERATORS).isPresent());
         assertTrue(config.get(ConfigOption.INDENT_CASE_IN_SWITCH).isPresent());
-        assertTrue(config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).isPresent());
+        assertTrue(config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).isPresent());
         assertTrue(config.get(ConfigOption.END_OF_LINE_CHARACTER).isPresent());
         // values
-        assertEquals(config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(),
+        assertEquals(config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(),
                 Integer.valueOf(5));
-        assertEquals(config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(),
+        assertEquals(config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(),
                 Integer.valueOf(5));
-        assertTrue(config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue() ==
+        assertTrue(config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue() ==
                 Integer.valueOf(5));
         assertEquals(config.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString(), Utils.SYSTEM_EOL);
     }
@@ -40,15 +40,20 @@ class PrinterConfigurationTest {
         assertThrows(IllegalArgumentException.class, () -> {
             config.get(ConfigOption.PRINT_COMMENTS).get().asValue();
         });
+        
+        // verify value assignment: example we cannot assign a string to a boolean
+        assertThrows(IllegalArgumentException.class, () -> {
+            config.addOption(ConfigOption.PRINT_COMMENTS.value("1"));
+        });
     }
     
     @Test
     void testUpdatedConfigurationOption() {
         ConfigurationPrinter config = new DefaultPrinterConfiguration();
-        // change the default value of the DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY option
-        config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().value(2);
+        // change the default value of the MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY option
+        config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().value(2);
         // verify the value is updated
-        assertEquals(config.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(), Integer.valueOf(2));
+        assertEquals(config.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(), Integer.valueOf(2));
     }
     
     @Test

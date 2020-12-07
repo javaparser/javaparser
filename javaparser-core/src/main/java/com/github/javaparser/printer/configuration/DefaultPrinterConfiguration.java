@@ -85,20 +85,21 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
          * Set it to a very large number (e.g. {@code Integer.MAX_VALUE} to always align horizontally.
          * Set it to 1 or less to always align vertically.
          */
-        DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.valueOf(5)),
-        END_OF_LINE_CHARACTER(Utils.SYSTEM_EOL);
+        MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.class, Integer.valueOf(5)),
+        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL);
         
         Object value;
         
         Class type;
         
         // Option without value
-        <T> ConfigOption(Class clazz) {
+        ConfigOption(Class clazz) {
             this.type = clazz;
         }
         
         // Option with initial value
-        ConfigOption(Object value) {
+        ConfigOption(Class clazz, Object value) {
+            this.type = clazz;
             value(value);
         }
         
@@ -108,7 +109,10 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
         public ConfigOption value(Object value) {
             Utils.assertNotNull(value);
             this.value = value;
-            this.type = value.getClass();
+            // verify the value's type
+            if (!(this.type.isAssignableFrom(value.getClass()))) {
+                throw new IllegalArgumentException(String.format("%s is not an instance of %s", value, type.getName()));
+            }
             return this;
         }
         
@@ -116,7 +120,7 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
          * returns True if the option has a value
          */
         public boolean hasValue() {
-            return value != null;
+            return this.value != null;
         }
         
         /*
@@ -159,7 +163,7 @@ public class DefaultPrinterConfiguration implements ConfigurationPrinter {
             ConfigOption.PRINT_JAVADOC, 
             ConfigOption.SPACE_AROUND_OPERATORS,
             ConfigOption.INDENT_CASE_IN_SWITCH,
-            ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(Integer.valueOf(5)),
+            ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(Integer.valueOf(5)),
             ConfigOption.END_OF_LINE_CHARACTER.value(Utils.SYSTEM_EOL)
             ));
 

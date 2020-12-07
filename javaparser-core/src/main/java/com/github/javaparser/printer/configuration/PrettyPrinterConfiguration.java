@@ -239,7 +239,7 @@ public class PrettyPrinterConfiguration implements ConfigurationPrinter {
 
 
     public int getMaxEnumConstantsToAlignHorizontally() {
-        return get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger();
+        return get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger();
     }
 
     /**
@@ -266,7 +266,7 @@ public class PrettyPrinterConfiguration implements ConfigurationPrinter {
      * Set it to 1 or less to always align vertically.
      */
     public PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
-        addOption(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(maxEnumConstantsToAlignHorizontally));
+        addOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(maxEnumConstantsToAlignHorizontally));
         return this;
     }
 

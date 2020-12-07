@@ -1386,7 +1386,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (n.getEntries().isNonEmpty()) {
             final boolean alignVertically =
                     // Either we hit the constant amount limit in the configurations, or...
-                    n.getEntries().size() > configuration.get(ConfigOption.DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() ||
+                    n.getEntries().size() > configuration.get(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() ||
                             // any of the constants has a comment.
                             n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
