@@ -52,7 +52,7 @@ import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 
-class PrettyPrintableTest {
+class DefaultPrettyPrinterTest {
     
     private Printer getDefaultPrinter() {
         ConfigurationPrinter configuration = new DefaultPrinterConfiguration();

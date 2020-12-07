@@ -51,10 +51,10 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.ConfigurationPrinter;
-import com.github.javaparser.printer.configuration.Indentation;
-import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
 
 class PrettyPrinterTest {
 
@@ -109,7 +109,7 @@ class PrettyPrinterTest {
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = parse(code);
         ConfigurationPrinter configuration = new DefaultPrinterConfiguration();
-        Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new DefaultPrintableSource(config));
+        Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new SourcePrinter(config));
         Printer printer = new DefaultPrettyPrinter(visitorFactory, configuration);
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }

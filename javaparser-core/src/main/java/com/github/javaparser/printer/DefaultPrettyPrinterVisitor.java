@@ -158,13 +158,13 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     protected final ConfigurationPrinter configuration;
-    protected final PrintableSource printer;
+    protected final SourcePrinter printer;
 
     public DefaultPrettyPrinterVisitor(ConfigurationPrinter configuration) {
-        this(configuration, new DefaultPrintableSource(configuration));
+        this(configuration, new SourcePrinter(configuration));
     }
     
-    public DefaultPrettyPrinterVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
+    public DefaultPrettyPrinterVisitor(ConfigurationPrinter configuration, SourcePrinter printer) {
         this.configuration = configuration;
         this.printer = printer;
     }

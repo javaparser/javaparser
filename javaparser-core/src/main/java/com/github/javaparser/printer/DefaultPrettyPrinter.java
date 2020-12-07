@@ -46,7 +46,7 @@ public class DefaultPrettyPrinter implements Printer {
     }
     
     private static Function<ConfigurationPrinter, VoidVisitor<Void>> createDefaultVisitor(ConfigurationPrinter configuration) {
-        return (config) -> new DefaultPrettyPrinterVisitor(config, new DefaultPrintableSource(config));
+        return (config) -> new DefaultPrettyPrinterVisitor(config, new SourcePrinter(config));
     }
     
     private static ConfigurationPrinter createDefaultConfiguration() {
