@@ -150,4 +150,9 @@ public class Indentation {
         }
         formattedIndentation = indentString.toString();
     }
+    
+    @Override
+    public String toString() {
+        return type.name() + " size=" + size ;
+    }
 }

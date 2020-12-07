@@ -69,7 +69,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          *        A, B, C, D
          *     }
          * }<pre>
-         * until the amount of constants passes this value (5 by default).
+         * until the amount of constants passes this currentValue (5 by default).
          * Then they get aligned like this:
          * <pre>{@code
          *     enum X {
@@ -86,96 +86,55 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Set it to 1 or less to always align vertically.
          */
         MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.class, Integer.valueOf(5)),
-        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL);
+        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL),
+        /**
+         * Indentation proprerty
+         */
+        INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4));
         
-        Object value;
+        Object defaultValue;
         
         Class type;
         
-        // Option without value
+        // ConfigurationOption without currentValue
         ConfigOption(Class clazz) {
             this.type = clazz;
         }
         
-        // Option with initial value
+        // ConfigurationOption with initial currentValue
         ConfigOption(Class clazz, Object value) {
             this.type = clazz;
-            value(value);
-        }
-        
-       /* 
-        * Set a value to an option
-        */
-        public ConfigOption value(Object value) {
-            Utils.assertNotNull(value);
-            this.value = value;
-            // verify the value's type
             if (!(this.type.isAssignableFrom(value.getClass()))) {
                 throw new IllegalArgumentException(String.format("%s is not an instance of %s", value, type.getName()));
             }
-            return this;
+            this.defaultValue = value;
         }
         
-        /*
-         * returns True if the option has a value
-         */
-        public boolean hasValue() {
-            return this.value != null;
-        }
-        
-        /*
-         * returns the value as an Integer
-         */
-        public Integer asInteger() {
-            return cast(); 
-        }
-        
-        /*
-         * returns the value as a String
-         */
-        public String asString() {
-            return cast(); 
-        }
-        
-        /*
-         * returns the value as a Boolean
-         */
-        public Boolean asBoolean() {
-            return cast(); 
-        }
-        
-        public <T extends Object> T asValue() {
-            return cast(); 
-        }
-        
-        private <T extends Object> T cast() {
-            if (!hasValue()) throw new IllegalArgumentException(String.format("The option %s has no value", this.name()));
-            if (type.isAssignableFrom(value.getClass()))
-                return (T) type.cast(value);
-            throw new IllegalArgumentException(String.format("%s cannot be cast to %s", value, type.getName()));
-        }
+       
     }
-
+    
     // contains all available options
     // an option contained in the set is considered as activated
-    private Set<ConfigOption> options = new HashSet<ConfigOption>(Arrays.asList(
-            ConfigOption.PRINT_COMMENTS, 
-            ConfigOption.PRINT_JAVADOC, 
-            ConfigOption.SPACE_AROUND_OPERATORS,
-            ConfigOption.INDENT_CASE_IN_SWITCH,
-            ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.value(Integer.valueOf(5)),
-            ConfigOption.END_OF_LINE_CHARACTER.value(Utils.SYSTEM_EOL)
+    private Set<ConfigurableOption> defaultOptions = new HashSet<>(Arrays.asList(
+            new ConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue),
+            new ConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue),
+            new ConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue),
+            new ConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue),
+            new ConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue),
+            new ConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue),
+            new ConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)
             ));
 
-    private Indentation indentation = new Indentation(IndentType.SPACES, 4);
+    public DefaultPrinterConfiguration() {
+    }
     
     /*
      * add the specified option if it does not exist or replace the existing option
      */
     @Override
-    public PrinterConfiguration addOption(ConfigOption option) {
+    public PrinterConfiguration addOption(ConfigurableOption option) {
         removeOption(option);
-        options.add(option);
+        defaultOptions.add(option);
         return this;
     }
     
@@ -183,8 +142,8 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
      * remove the specified option
      */
     @Override
-    public PrinterConfiguration removeOption(ConfigOption option) {
-        options.remove(option);
+    public PrinterConfiguration removeOption(ConfigurableOption option) {
+        defaultOptions.remove(option);
         return this;
     }
     
@@ -192,38 +151,24 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
      * True if an option is activated
      */
     @Override
-    public boolean isActivated(ConfigOption option) {
-        return options.contains(option);
+    public boolean isActivated(ConfigurableOption option) {
+        return defaultOptions.contains(option);
     }
     
     /*
      * returns the specified option
      */
     @Override
-    public Optional<ConfigOption> get(ConfigOption option) {
-        return options.stream().filter(o-> o.equals(option)).findFirst();
-    }
-    
-    /*
-     * returns all activated options
-     */
-    @Override
-    public Set<ConfigOption> get() {
-        return options;
-    }
-    
-    /*
-     * returns the indentation parameters
-     */
-    @Override
-    public Indentation getIndentation() {
-        return indentation;
-    }
-    
-    @Override
-    public PrinterConfiguration setIndentation(Indentation indentation) {
-        this.indentation = indentation;
-        return this;
+    public Optional<ConfigurableOption> get(ConfigurableOption option) {
+        return defaultOptions.stream().filter(o-> o.equals(option)).findFirst();
     }
 
+    /**
+     * returns all options configured
+     */
+    @Override
+    public Set<ConfigurableOption> get() {
+        return defaultOptions;
+    }
+    
 }

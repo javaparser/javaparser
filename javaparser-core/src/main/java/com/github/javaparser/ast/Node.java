@@ -68,9 +68,10 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
@@ -162,7 +163,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(ConfigOption.PRINT_COMMENTS);
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new ConfigurationOption(ConfigOption.PRINT_COMMENTS));
     
     @InternalProperty
     private Range range;
@@ -208,22 +209,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * else create a new DefaultPrettyPrinter with default parameters
      */
     protected Printer getPrinter() {
-        Optional<CompilationUnit> cu = findCompilationUnit();
-        if (!cu.isPresent()) {
-            return createDefaultPrinter();
-        }
-        return cu.get().getPrinter();
+        return findCompilationUnit().map(c-> c.getPrinter()).orElse(createDefaultPrinter());
     }
     
     /*
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return getPrinter().setConfiguration(configuration);
+        return findCompilationUnit().map(c-> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
     }
     
     protected Printer createDefaultPrinter() {
-        PrinterConfiguration configuration = getDefaultPrinterConfiguration();
+        return createDefaultPrinter(getDefaultPrinterConfiguration());
+    }
+    
+    protected Printer createDefaultPrinter(PrinterConfiguration configuration) {
         return new DefaultPrettyPrinter(configuration);
     }
     
@@ -233,7 +233,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     protected  PrinterConfiguration getDefaultPrinterConfiguration() {
         return new DefaultPrinterConfiguration();
     }
-
+    
     /**
      * This is a comment associated with this node.
      *
@@ -327,7 +327,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (containsData(LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
             PrinterConfiguration config = getDefaultPrinterConfiguration();
-            config.addOption(ConfigOption.END_OF_LINE_CHARACTER.value(lineSeparator.asRawString()));
+            config.addOption(new ConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
             return getPrinter(config).print(this);
         }
         return getPrinter().print(this);

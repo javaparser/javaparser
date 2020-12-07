@@ -3,8 +3,6 @@ package com.github.javaparser.printer.configuration;
 import java.util.Optional;
 import java.util.Set;
 
-import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
-
 /**
  * This interface defines the API for printer configuration.
  * An option can be added or removed from the configuration. An indentation can also be added to it.
@@ -14,33 +12,26 @@ public interface PrinterConfiguration {
     /*
      * add or update an option
      */
-    PrinterConfiguration addOption(ConfigOption option);
+    PrinterConfiguration addOption(ConfigurableOption option);
     
     /*
      * Remove an option
      */
-    PrinterConfiguration removeOption(ConfigOption option);
+    PrinterConfiguration removeOption(ConfigurableOption option);
 
     /*
      * True if an option is activated
      */
-    boolean isActivated(ConfigOption option);
+    boolean isActivated(ConfigurableOption option);
 
     /*
      * returns the specified option
      */
-    Optional<ConfigOption> get(ConfigOption option);
+    Optional<ConfigurableOption> get(ConfigurableOption option);
 
     /*
      * returns all activated options
      */
-    Set<ConfigOption> get();
-
-    /*
-     * returns the indentation parameters
-     */
-    Indentation getIndentation();
-
-    PrinterConfiguration setIndentation(Indentation indentation);
+    Set<ConfigurableOption> get();
 
 }

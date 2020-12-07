@@ -65,6 +65,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -154,10 +155,19 @@ public class CompilationUnit extends Node {
      * If there is no declared printer, returns a new default printer else returns a new printer with the current configuration
      */
     @Override
-    public Printer getPrinter() {
+    protected Printer getPrinter() {
         if (printer == null) {
             printer = createDefaultPrinter();
         }
+        return printer;
+    }
+    
+    /*
+     * Return the printer initialized with the specified configuration
+     */
+    @Override
+    protected Printer getPrinter(PrinterConfiguration config) {
+        printer = getPrinter().setConfiguration(config);
         return printer;
     }
 
