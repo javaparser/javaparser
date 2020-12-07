@@ -43,9 +43,9 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 
 class PrettyPrintVisitorTest {
 
@@ -74,7 +74,7 @@ class PrettyPrintVisitorTest {
         return new PrettyPrintable().print(node);
     }
 
-    private String print(Node node, ConfigurablePrinter conf) {
+    private String print(Node node, ConfigurationPrinter conf) {
         return new PrettyPrintable(conf).print(node);
     }
 
@@ -91,7 +91,7 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR0(){
-        ConfigurablePrinter conf1 = new PrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf1 = new DefaultPrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
     }
@@ -128,19 +128,19 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR2(){
-        ConfigurablePrinter conf1 = new PrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf1 = new DefaultPrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
 
-        ConfigurablePrinter conf2 = new PrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf2 = new DefaultPrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement2 = parseStatement("a=1+1;");
         assertEquals("a=1+1;", print(statement2, conf2));
 
-        ConfigurablePrinter conf3 = new PrinterConfiguration().addOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf3 = new DefaultPrinterConfiguration().addOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement3 = parseStatement("a = 1 + 1;");
         assertEquals("a = 1 + 1;", print(statement3, conf3));
 
-        ConfigurablePrinter conf4 = new PrinterConfiguration().addOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf4 = new DefaultPrinterConfiguration().addOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement4 = parseStatement("a=1+1;");
         assertEquals("a = 1 + 1;", print(statement4, conf4));
 
@@ -148,7 +148,7 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printOperatorA(){
-        ConfigurablePrinter conf = new PrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter conf = new DefaultPrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
         assertEquals("if (1>2&&1<3||1<3) {" + SYSTEM_EOL
                 + "}", print(statement6, conf));
@@ -157,7 +157,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printOperator2(){
         Expression expression = parseExpression("1+1");
-        ConfigurablePrinter spaces = new PrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
+        ConfigurationPrinter spaces = new DefaultPrinterConfiguration().removeOption(ConfigOption.SPACE_AROUND_OPERATORS);
         assertEquals("1+1", print(expression, spaces));
     }
 
@@ -234,7 +234,7 @@ class PrettyPrintVisitorTest {
     void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", SYSTEM_EOL, SYSTEM_EOL);
         CompilationUnit cu = parse(code);
-        ConfigurablePrinter ignoreJavaDoc = new PrinterConfiguration().removeOption(ConfigOption.PRINT_JAVADOC);
+        ConfigurationPrinter ignoreJavaDoc = new DefaultPrinterConfiguration().removeOption(ConfigOption.PRINT_JAVADOC);
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", SYSTEM_EOL, SYSTEM_EOL, SYSTEM_EOL), content);
     }
@@ -256,7 +256,7 @@ class PrettyPrintVisitorTest {
     void printImportsOrdered() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = parse(code);
-        ConfigurablePrinter orderImports = new PrinterConfiguration().addOption(ConfigOption.ORDER_IMPORTS);
+        ConfigurationPrinter orderImports = new DefaultPrinterConfiguration().addOption(ConfigOption.ORDER_IMPORTS);
         String content = cu.toString(orderImports);
         assertEqualsStringIgnoringEol("import static b.c.d;\n" +
                 "import a.b.c;\n" +

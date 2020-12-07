@@ -22,11 +22,11 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
 
 public class TestVisitor extends PrintableVisitor {
 
-    public TestVisitor(ConfigurablePrinter configuration, PrintableSource printer) {
+    public TestVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
         super(configuration, printer);
     }
     

@@ -26,10 +26,10 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.utils.Utils;
 
 /**
@@ -46,7 +46,7 @@ public class DefaultPrintableSource implements PrintableSource {
     private Position cursor = new Position(Position.FIRST_LINE, Position.FIRST_COLUMN - 1); // Start before the first column
     private boolean indented = false;
 
-    public DefaultPrintableSource(final ConfigurablePrinter configuration) {
+    public DefaultPrintableSource(final ConfigurationPrinter configuration) {
         indentation = configuration.getIndentation();
         endOfLineCharacter = configuration.get(ConfigOption.END_OF_LINE_CHARACTER).get().asString();
         indents.push("");

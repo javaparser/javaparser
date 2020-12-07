@@ -149,22 +149,22 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
-import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 
 /**
  * Outputs the AST as formatted Java source code.
  *
  */
 public class PrintableVisitor implements VoidVisitor<Void> {
-    protected final ConfigurablePrinter configuration;
+    protected final ConfigurationPrinter configuration;
     protected final PrintableSource printer;
 
-    public PrintableVisitor(ConfigurablePrinter configuration) {
+    public PrintableVisitor(ConfigurationPrinter configuration) {
         this(configuration, new DefaultPrintableSource(configuration));
     }
     
-    public PrintableVisitor(ConfigurablePrinter configuration, PrintableSource printer) {
+    public PrintableVisitor(ConfigurationPrinter configuration, PrintableSource printer) {
         this.configuration = configuration;
         this.printer = printer;
     }

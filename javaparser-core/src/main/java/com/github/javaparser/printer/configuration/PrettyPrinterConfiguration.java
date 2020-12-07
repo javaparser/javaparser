@@ -30,19 +30,19 @@ import java.util.Set;
 
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 
 /**
  * Configuration options for the {@link PrettyPrinter}.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link ConfigurablePrinter interface or PrinterConfiguration default implementation } instead.
- * @deprecated This class could be removed in a future version. Use default PrinterConfiguration.
+ * <p> Use {@link ConfigurationPrinter interface or DefaultPrinterConfiguration default implementation } instead.
+ * @deprecated This class could be removed in a future version. Use default DefaultPrinterConfiguration.
  */
 @Deprecated
-public class PrettyPrinterConfiguration implements ConfigurablePrinter {
+public class PrettyPrinterConfiguration implements ConfigurationPrinter {
     
     
-    ConfigurablePrinter wrappedConfiguration;
+    ConfigurationPrinter wrappedConfiguration;
     
     /**
      * Indent the case when it is true, don't if false
@@ -59,7 +59,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
      * Default constructor
      */
     public PrettyPrinterConfiguration() {
-        this.wrappedConfiguration = new PrinterConfiguration();
+        this.wrappedConfiguration = new DefaultPrinterConfiguration();
         this.indentation = new Indentation(IndentType.SPACES, 4);
     }
     
@@ -271,7 +271,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
     }
 
     @Override
-    public ConfigurablePrinter addOption(ConfigOption option) {
+    public ConfigurationPrinter addOption(ConfigOption option) {
         return wrappedConfiguration.addOption(option);
     }
 
@@ -291,7 +291,7 @@ public class PrettyPrinterConfiguration implements ConfigurablePrinter {
     }
 
     @Override
-    public ConfigurablePrinter removeOption(ConfigOption option) {
+    public ConfigurationPrinter removeOption(ConfigOption option) {
         return wrappedConfiguration.removeOption(option);
     }
 }

@@ -41,9 +41,9 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.PrettyPrintable;
 import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import com.github.javaparser.printer.configuration.PrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.utils.SourceRoot;
 
 public class MetaModelGenerator extends AbstractGenerator {
@@ -199,7 +199,7 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        ConfigurablePrinter config = new PrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n"));
+        ConfigurationPrinter config = new DefaultPrinterConfiguration().addOption(ConfigOption.END_OF_LINE_CHARACTER.value("\n"));
         Printer printer = new PrettyPrintable(config);
         sourceRoot.setPrinter(printer::print);
         StaticJavaParser.setConfiguration(parserConfiguration);

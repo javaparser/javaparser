@@ -1,7 +1,7 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
 
 /**
  * Printer interface defines the API for a printer.
@@ -12,8 +12,8 @@ public interface Printer {
 
     String print(Node node);
 
-    Printer setConfiguration(ConfigurablePrinter configuration);
+    Printer setConfiguration(ConfigurationPrinter configuration);
     
-    ConfigurablePrinter getConfiguration();
+    ConfigurationPrinter getConfiguration();
 
 }

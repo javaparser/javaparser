@@ -25,32 +25,32 @@ import java.util.function.Function;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurablePrinter;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.configuration.ConfigurationPrinter;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 
 /**
  * Pretty printer for AST nodes.
  */
 public class PrettyPrintable implements Printer {
     
-    private ConfigurablePrinter configuration;
+    private ConfigurationPrinter configuration;
     
     // visitor factory
-    Function<ConfigurablePrinter, VoidVisitor<Void>> visitorFactory;
+    Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory;
     
     // static methods 
     
-    private static Function<ConfigurablePrinter, VoidVisitor<Void>> createDefaultVisitor() {
-        ConfigurablePrinter configuration = createDefaultConfiguration();
+    private static Function<ConfigurationPrinter, VoidVisitor<Void>> createDefaultVisitor() {
+        ConfigurationPrinter configuration = createDefaultConfiguration();
         return createDefaultVisitor(configuration);
     }
     
-    private static Function<ConfigurablePrinter, VoidVisitor<Void>> createDefaultVisitor(ConfigurablePrinter configuration) {
+    private static Function<ConfigurationPrinter, VoidVisitor<Void>> createDefaultVisitor(ConfigurationPrinter configuration) {
         return (config) -> new PrintableVisitor(config, new DefaultPrintableSource(config));
     }
     
-    private static ConfigurablePrinter createDefaultConfiguration() {
-        return new PrinterConfiguration();
+    private static ConfigurationPrinter createDefaultConfiguration() {
+        return new DefaultPrinterConfiguration();
     }
     
     // Constructors
@@ -66,7 +66,7 @@ public class PrettyPrintable implements Printer {
      * Build a new PrettyPrintable with a configuration and a default factory
      * @param configuration
      */
-    public PrettyPrintable(ConfigurablePrinter configuration) {
+    public PrettyPrintable(ConfigurationPrinter configuration) {
         this(createDefaultVisitor(configuration), configuration );
     }
     
@@ -75,7 +75,7 @@ public class PrettyPrintable implements Printer {
      * @param visitorFactory 
      * @param configuration Configuration to apply
      */
-    public PrettyPrintable(Function<ConfigurablePrinter, VoidVisitor<Void>> visitorFactory, ConfigurablePrinter configuration) {
+    public PrettyPrintable(Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory, ConfigurationPrinter configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
@@ -85,14 +85,14 @@ public class PrettyPrintable implements Printer {
     /*
      * Returns the Printer configuration
      */
-    public ConfigurablePrinter getConfiguration() {
+    public ConfigurationPrinter getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public Printer setConfiguration(ConfigurablePrinter configuration) {
+    public Printer setConfiguration(ConfigurationPrinter configuration) {
         this.configuration = configuration;
         return this;
     }
