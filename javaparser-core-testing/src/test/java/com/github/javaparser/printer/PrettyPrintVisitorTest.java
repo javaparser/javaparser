@@ -71,11 +71,11 @@ class PrettyPrintVisitorTest {
     }
 
     private String print(Node node) {
-        return new PrettyPrintable().print(node);
+        return new DefaultPrettyPrinter().print(node);
     }
 
     private String print(Node node, ConfigurationPrinter conf) {
-        return new PrettyPrintable(conf).print(node);
+        return new DefaultPrettyPrinter(conf).print(node);
     }
 
 

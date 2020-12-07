@@ -31,7 +31,7 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 /**
  * Pretty printer for AST nodes.
  */
-public class PrettyPrintable implements Printer {
+public class DefaultPrettyPrinter implements Printer {
     
     private ConfigurationPrinter configuration;
     
@@ -56,26 +56,26 @@ public class PrettyPrintable implements Printer {
     // Constructors
 
     /**
-     * Build a new PrettyPrintable with a default configuration and a default factory
+     * Build a new DefaultPrettyPrinter with a default configuration and a default factory
      */
-    public PrettyPrintable() {
+    public DefaultPrettyPrinter() {
         this(createDefaultVisitor(), createDefaultConfiguration() );
     }
     
     /**
-     * Build a new PrettyPrintable with a configuration and a default factory
+     * Build a new DefaultPrettyPrinter with a configuration and a default factory
      * @param configuration
      */
-    public PrettyPrintable(ConfigurationPrinter configuration) {
+    public DefaultPrettyPrinter(ConfigurationPrinter configuration) {
         this(createDefaultVisitor(configuration), configuration );
     }
     
     /**
-     * Build a new PrettyPrintable with a configuration and a factory to create a visitor to browse the nodes of the AST
+     * Build a new DefaultPrettyPrinter with a configuration and a factory to create a visitor to browse the nodes of the AST
      * @param visitorFactory 
      * @param configuration Configuration to apply
      */
-    public PrettyPrintable(Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory, ConfigurationPrinter configuration) {
+    public DefaultPrettyPrinter(Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory, ConfigurationPrinter configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }

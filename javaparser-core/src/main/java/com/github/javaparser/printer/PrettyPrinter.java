@@ -31,7 +31,7 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 /**
  * Pretty printer for AST nodes.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
- * <p> Use {@link Printer interface or PrettyPrintable default implementation } instead.
+ * <p> Use {@link Printer interface or DefaultPrettyPrinter default implementation } instead.
  * @deprecated This class could be removed in a future version. Use default DefaultPrettyPrinter.
  */
 @Deprecated

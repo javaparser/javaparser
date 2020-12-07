@@ -56,11 +56,11 @@ class PrettyPrintableTest {
     
     private Printer getDefaultPrinter() {
         ConfigurationPrinter configuration = new DefaultPrinterConfiguration();
-        return new PrettyPrintable(configuration);
+        return new DefaultPrettyPrinter(configuration);
     }
     
     private Printer getDefaultPrinter(ConfigurationPrinter configuration) {
-        return new PrettyPrintable(configuration);
+        return new DefaultPrettyPrinter(configuration);
     }
 
     private String prettyPrintField(String code) {
@@ -214,13 +214,13 @@ class PrettyPrintableTest {
     @Test
     void enumConstantsHorizontally() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E}");
-        assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrintable().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
     void enumConstantsVertically() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
-        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrintable().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test

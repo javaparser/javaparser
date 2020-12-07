@@ -60,12 +60,12 @@ class PrettyPrinterTest {
 
     private String prettyPrintField(String code) {
         CompilationUnit cu = parse(code);
-        return new PrettyPrintable().print(cu.findFirst(FieldDeclaration.class).get());
+        return new DefaultPrettyPrinter().print(cu.findFirst(FieldDeclaration.class).get());
     }
 
     private String prettyPrintVar(String code) {
         CompilationUnit cu = parse(code);
-        return new PrettyPrintable().print(cu.findAll(VariableDeclarationExpr.class).get(0));
+        return new DefaultPrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
     @Test
@@ -110,7 +110,7 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         ConfigurationPrinter configuration = new DefaultPrinterConfiguration();
         Function<ConfigurationPrinter, VoidVisitor<Void>> visitorFactory = (config) -> new TestVisitor(config, new DefaultPrintableSource(config));
-        Printer printer = new PrettyPrintable(visitorFactory, configuration);
+        Printer printer = new DefaultPrettyPrinter(visitorFactory, configuration);
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
 
@@ -139,7 +139,7 @@ class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrintable(config).print(parse(code)));
+        assertEquals(expected, new DefaultPrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -157,7 +157,7 @@ class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrintable(config).print(parse(code)));
+        assertEquals(expected, new DefaultPrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -179,7 +179,7 @@ class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrintable(config).print(parse(code)));
+        assertEquals(expected, new DefaultPrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -197,7 +197,7 @@ class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        String printed = new PrettyPrintable(config).print(parse(code));
+        String printed = new DefaultPrettyPrinter(config).print(parse(code));
         
         assertEquals(expected, printed);
     }
@@ -205,13 +205,13 @@ class PrettyPrinterTest {
     @Test
     void enumConstantsHorizontally() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E}");
-        assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrintable().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
     void enumConstantsVertically() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
-        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrintable().print(cu));
+        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
@@ -240,7 +240,7 @@ class PrettyPrinterTest {
                 .addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)
                 .setIndentation(indentation);
         
-        String printed = new PrettyPrintable(config).print(cu);
+        String printed = new DefaultPrettyPrinter(config).print(cu);
         
         assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
@@ -281,7 +281,7 @@ class PrettyPrinterTest {
     void noChainsIndentsInIf() {
         Statement cu = parseStatement("if (x.y().z()) { boo().baa().bee(); }");
 
-        String printed = new PrettyPrintable(new DefaultPrinterConfiguration()
+        String printed = new DefaultPrettyPrinter(new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .print(cu);
 
@@ -295,7 +295,7 @@ class PrettyPrinterTest {
     void noChainsIndentsInFor() {
         Statement cu = parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
 
-        String printed = new PrettyPrintable(new DefaultPrinterConfiguration()
+        String printed = new DefaultPrettyPrinter(new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .print(cu);
 
@@ -309,7 +309,7 @@ class PrettyPrinterTest {
     void noChainsIndentsInWhile() {
         Statement cu = parseStatement("while(x.y().z()) { boo().baa().bee(); }");
 
-        String printed = new PrettyPrintable(new DefaultPrinterConfiguration()
+        String printed = new DefaultPrettyPrinter(new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .print(cu);
 
@@ -324,7 +324,7 @@ class PrettyPrinterTest {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
         Indentation indentation = new Indentation(TABS, 1);
-        String printed = new PrettyPrintable(new DefaultPrinterConfiguration()
+        String printed = new DefaultPrettyPrinter(new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN)
                 .addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)
                 .setIndentation(indentation))
@@ -350,7 +350,7 @@ class PrettyPrinterTest {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
         Indentation indentation = new Indentation(TABS_WITH_SPACE_ALIGN, 1);
-        String printed = new PrettyPrintable(new DefaultPrinterConfiguration()
+        String printed = new DefaultPrettyPrinter(new DefaultPrinterConfiguration()
                 .addOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN)
                 .addOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)
                 .setIndentation(indentation))
@@ -438,7 +438,7 @@ class PrettyPrinterTest {
             throw new ParseProblemException(parseResult.getProblems());
         }
         CompilationUnit cu = parseResult.getResult().orElseThrow(AssertionError::new);
-        String printed = new PrettyPrintable().print(cu);
+        String printed = new DefaultPrettyPrinter().print(cu);
 
         assertEqualsStringIgnoringEol("@Documented\n" +
                 "@Repeatable\n" +

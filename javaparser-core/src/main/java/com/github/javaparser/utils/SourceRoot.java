@@ -53,7 +53,7 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.printer.PrettyPrintable;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory
@@ -83,7 +83,7 @@ public class SourceRoot {
     private final Path root;
     private final Map<Path, ParseResult<CompilationUnit>> cache = new ConcurrentHashMap<>();
     private ParserConfiguration parserConfiguration = new ParserConfiguration();
-    private Function<CompilationUnit, String> printer = new PrettyPrintable()::print;
+    private Function<CompilationUnit, String> printer = new DefaultPrettyPrinter()::print;
     private static final Pattern JAVA_IDENTIFIER = Pattern.compile("\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*");
 
     /**
