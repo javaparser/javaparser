@@ -9,8 +9,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.printer.configuration.ConfigurableOption;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
@@ -18,8 +18,8 @@ import com.github.javaparser.utils.Utils;
 
 class PrinterConfigurationTest {
     
-    private Optional<ConfigurableOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
-        return config.get(new ConfigurationOption(cOption));
+    private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
+        return config.get(new DefaultConfigurationOption(cOption));
     }
 
     @Test
@@ -51,7 +51,7 @@ class PrinterConfigurationTest {
         
         // verify currentValue assignment: example we cannot assign a string to a boolean
         assertThrows(IllegalArgumentException.class, () -> {
-            config.addOption(new ConfigurationOption(ConfigOption.PRINT_COMMENTS, "1"));
+            config.addOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, "1"));
         });
     }
     
@@ -70,10 +70,10 @@ class PrinterConfigurationTest {
         assertTrue(getOption(config, ConfigOption.PRINT_COMMENTS).isPresent());
         assertTrue(getOption(config, ConfigOption.END_OF_LINE_CHARACTER).isPresent());
         // remove option PRINT_COMMENTS
-        config.removeOption(new ConfigurationOption(ConfigOption.PRINT_COMMENTS));
+        config.removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
         assertFalse(getOption(config, ConfigOption.PRINT_COMMENTS).isPresent());
         // remove option with currentValue
-        config.removeOption(new ConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, "\n"));
+        config.removeOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, "\n"));
         assertFalse(getOption(config, ConfigOption.END_OF_LINE_CHARACTER).isPresent());
     }
 

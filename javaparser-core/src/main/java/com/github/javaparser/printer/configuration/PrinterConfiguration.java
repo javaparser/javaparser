@@ -12,26 +12,26 @@ public interface PrinterConfiguration {
     /*
      * add or update an option
      */
-    PrinterConfiguration addOption(ConfigurableOption option);
+    PrinterConfiguration addOption(ConfigurationOption option);
     
     /*
      * Remove an option
      */
-    PrinterConfiguration removeOption(ConfigurableOption option);
+    PrinterConfiguration removeOption(ConfigurationOption option);
 
     /*
      * True if an option is activated
      */
-    boolean isActivated(ConfigurableOption option);
+    boolean isActivated(ConfigurationOption option);
 
     /*
      * returns the specified option
      */
-    Optional<ConfigurableOption> get(ConfigurableOption option);
+    Optional<ConfigurationOption> get(ConfigurationOption option);
 
     /*
      * returns all activated options
      */
-    Set<ConfigurableOption> get();
+    Set<ConfigurationOption> get();
 
 }

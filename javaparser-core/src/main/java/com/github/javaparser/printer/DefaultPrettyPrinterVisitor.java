@@ -149,8 +149,8 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurableOption;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
@@ -1945,7 +1945,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
     
     
-    private Optional<ConfigurableOption> getOption(ConfigOption cOption) {
-        return configuration.get(new ConfigurationOption(cOption));
+    private Optional<ConfigurationOption> getOption(ConfigOption cOption) {
+        return configuration.get(new DefaultConfigurationOption(cOption));
     }
 }
