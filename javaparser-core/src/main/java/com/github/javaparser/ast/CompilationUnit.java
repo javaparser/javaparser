@@ -102,9 +102,6 @@ public class CompilationUnit extends Node {
     @InternalProperty
     private Storage storage;
     
-    // printer used to print the node
-    private Printer printer;
-
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
@@ -147,7 +144,7 @@ public class CompilationUnit extends Node {
      * Declare a specific printer
      */
     public CompilationUnit printer(Printer printer) {
-        this.printer = printer;
+        setData(PRINTER_KEY, printer);
         return this;
     }
     
@@ -156,10 +153,12 @@ public class CompilationUnit extends Node {
      */
     @Override
     protected Printer getPrinter() {
-        if (printer == null) {
-            printer = createDefaultPrinter();
+        if (!containsData(PRINTER_KEY)) {
+           // create a default printer
+            Printer printer = createDefaultPrinter();
+            printer(printer);
         }
-        return printer;
+        return getData(PRINTER_KEY);
     }
     
     /*
@@ -167,7 +166,8 @@ public class CompilationUnit extends Node {
      */
     @Override
     protected Printer getPrinter(PrinterConfiguration config) {
-        printer = getPrinter().setConfiguration(config);
+        Printer printer = getPrinter().setConfiguration(config);
+        printer(printer);
         return printer;
     }
 

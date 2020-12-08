@@ -801,6 +801,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
     };
+    
+    protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
+    };
 
     public enum TreeTraversal {
 
