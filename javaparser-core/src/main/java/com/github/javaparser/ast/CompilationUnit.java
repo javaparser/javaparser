@@ -29,6 +29,7 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -39,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -62,8 +64,8 @@ import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -99,7 +101,7 @@ public class CompilationUnit extends Node {
 
     @InternalProperty
     private Storage storage;
-
+    
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
@@ -136,6 +138,37 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+    
+    /**
+     * Declare a specific printer
+     */
+    public CompilationUnit printer(Printer printer) {
+        setData(PRINTER_KEY, printer);
+        return this;
+    }
+    
+    /*
+     * If there is no declared printer, returns a new default printer else returns a new printer with the current configuration
+     */
+    @Override
+    protected Printer getPrinter() {
+        if (!containsData(PRINTER_KEY)) {
+           // create a default printer
+            Printer printer = createDefaultPrinter();
+            printer(printer);
+        }
+        return getData(PRINTER_KEY);
+    }
+    
+    /*
+     * Return the printer initialized with the specified configuration
+     */
+    @Override
+    protected Printer getPrinter(PrinterConfiguration config) {
+        Printer printer = getPrinter().setConfiguration(config);
+        printer(printer);
+        return printer;
     }
 
     /**
@@ -684,8 +717,6 @@ public class CompilationUnit extends Node {
 
         private final Charset encoding;
 
-        private Printable printer;
-
         private Storage(CompilationUnit compilationUnit, Path path) {
             this(compilationUnit, path, UTF8);
         }
@@ -694,22 +725,6 @@ public class CompilationUnit extends Node {
             this.compilationUnit = compilationUnit;
             this.path = path.toAbsolutePath();
             this.encoding = encoding;
-            // default printer
-            this.printer = new PrettyPrinter();
-        }
-
-        /**
-         * Set a new printer
-         */
-        public void setPrinter(Printable printer) {
-            this.printer = printer;
-        }
-
-        /**
-         * Returns the internal printer
-         */
-        public Printable getPrinter() {
-            return this.printer;
         }
 
         /**
@@ -755,7 +770,7 @@ public class CompilationUnit extends Node {
          * Saves the compilation unit to its original location
          */
         public void save() {
-            save(cu -> printer.print(cu));
+            save(cu -> compilationUnit.getPrinter().print(cu));
         }
 
         /**

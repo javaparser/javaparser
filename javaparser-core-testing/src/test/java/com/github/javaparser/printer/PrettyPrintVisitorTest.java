@@ -31,6 +31,8 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -43,8 +45,17 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.printer.configuration.ConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 class PrettyPrintVisitorTest {
+    
+    private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
+        return config.get(new DefaultConfigurationOption(cOption));
+    }
 
     @Test
     void getMaximumCommonTypeWithoutAnnotations() {
@@ -68,11 +79,11 @@ class PrettyPrintVisitorTest {
     }
 
     private String print(Node node) {
-        return new PrettyPrinter().print(node);
+        return new DefaultPrettyPrinter().print(node);
     }
 
-    private String print(Node node, PrettyPrinterConfiguration conf) {
-        return new PrettyPrinter(conf).print(node);
+    private String print(Node node, PrinterConfiguration conf) {
+        return new DefaultPrettyPrinter(conf).print(node);
     }
 
 
@@ -88,7 +99,7 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR0(){
-        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
+        PrinterConfiguration conf1 = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
     }
@@ -125,19 +136,19 @@ class PrettyPrintVisitorTest {
      */
     @Test
     void printOperatorsR2(){
-        PrettyPrinterConfiguration conf1 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
+        PrinterConfiguration conf1 = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
 
-        PrettyPrinterConfiguration conf2 = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
+        PrinterConfiguration conf2 = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement2 = parseStatement("a=1+1;");
         assertEquals("a=1+1;", print(statement2, conf2));
 
-        PrettyPrinterConfiguration conf3 = new PrettyPrinterConfiguration().setSpaceAroundOperators(true);
+        PrinterConfiguration conf3 = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement3 = parseStatement("a = 1 + 1;");
         assertEquals("a = 1 + 1;", print(statement3, conf3));
 
-        PrettyPrinterConfiguration conf4 = new PrettyPrinterConfiguration().setSpaceAroundOperators(true);
+        PrinterConfiguration conf4 = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement4 = parseStatement("a=1+1;");
         assertEquals("a = 1 + 1;", print(statement4, conf4));
 
@@ -145,7 +156,7 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printOperatorA(){
-        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
+        PrinterConfiguration conf = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
         assertEquals("if (1>2&&1<3||1<3) {" + SYSTEM_EOL
                 + "}", print(statement6, conf));
@@ -154,7 +165,7 @@ class PrettyPrintVisitorTest {
     @Test
     void printOperator2(){
         Expression expression = parseExpression("1+1");
-        PrettyPrinterConfiguration spaces = new PrettyPrinterConfiguration().setSpaceAroundOperators(false);
+        PrinterConfiguration spaces = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         assertEquals("1+1", print(expression, spaces));
     }
 
@@ -231,7 +242,7 @@ class PrettyPrintVisitorTest {
     void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", SYSTEM_EOL, SYSTEM_EOL);
         CompilationUnit cu = parse(code);
-        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
+        PrinterConfiguration ignoreJavaDoc = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", SYSTEM_EOL, SYSTEM_EOL, SYSTEM_EOL), content);
     }
@@ -253,7 +264,7 @@ class PrettyPrintVisitorTest {
     void printImportsOrdered() {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = parse(code);
-        PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
+        PrinterConfiguration orderImports = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.ORDER_IMPORTS));
         String content = cu.toString(orderImports);
         assertEqualsStringIgnoringEol("import static b.c.d;\n" +
                 "import a.b.c;\n" +

@@ -20,13 +20,13 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.HasParentNode;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -44,6 +44,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
@@ -64,8 +66,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
@@ -157,10 +163,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    private static PrettyPrinterConfiguration toStringPrettyPrinterConfiguration = new PrettyPrinterConfiguration();
-
-    protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
-
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    
     @InternalProperty
     private Range range;
 
@@ -199,7 +203,37 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     protected void customInitialization() {
     }
-
+    
+    /*
+     * If there is a printer defined in CompilationUnit, returns it
+     * else create a new DefaultPrettyPrinter with default parameters
+     */
+    protected Printer getPrinter() {
+        return findCompilationUnit().map(c-> c.getPrinter()).orElse(createDefaultPrinter());
+    }
+    
+    /*
+     * Return the printer initialized with the specified configuration
+     */
+    protected Printer getPrinter(PrinterConfiguration configuration) {
+        return findCompilationUnit().map(c-> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+    }
+    
+    protected Printer createDefaultPrinter() {
+        return createDefaultPrinter(getDefaultPrinterConfiguration());
+    }
+    
+    protected Printer createDefaultPrinter(PrinterConfiguration configuration) {
+        return new DefaultPrettyPrinter(configuration);
+    }
+    
+    /*
+     * returns a default printer configuration
+     */
+    protected  PrinterConfiguration getDefaultPrinterConfiguration() {
+        return new DefaultPrinterConfiguration();
+    }
+    
     /**
      * This is a comment associated with this node.
      *
@@ -287,23 +321,24 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
      */
     @Override
     public final String toString() {
         if (containsData(LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.asRawString());
+            PrinterConfiguration config = getDefaultPrinterConfiguration();
+            config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+            return getPrinter(config).print(this);
         }
-        return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
+        return getPrinter().print(this);
     }
 
     /**
      * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with parameter prettyPrinterConfiguration.
+     * Formatting can be configured with parameter PrinterConfiguration.
      */
-    public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
-        return new PrettyPrinter(prettyPrinterConfiguration).print(this);
+    public final String toString(PrinterConfiguration configuration) {
+        return getPrinter(configuration).print(this);
     }
 
     @Override
@@ -690,14 +725,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return this;
     }
 
-    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
-        return toStringPrettyPrinterConfiguration;
-    }
-
-    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
-        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
@@ -773,6 +800,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     };
 
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
+    };
+    
+    protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
     };
 
     public enum TreeTraversal {

@@ -25,16 +25,21 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.github.javaparser.Position;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.Utils;
 
 /**
  * A support class for code that outputs formatted source code.
  */
 public class SourcePrinter {
-    private final String endOfLineCharacter;
-    private final Indentation indentation;
+    private String endOfLineCharacter;
+    private Indentation indentation;
 
     private final Deque<String> indents = new LinkedList<>();
     private final Deque<String> reindentedIndents = new LinkedList<>();
@@ -44,12 +49,21 @@ public class SourcePrinter {
     private boolean indented = false;
 
     SourcePrinter() {
-        this(new PrettyPrinterConfiguration());
+        this(new DefaultPrinterConfiguration());
+    }
+    
+    SourcePrinter(final PrettyPrinterConfiguration configuration) {
+        this(configuration.getIndentation(), configuration.getEndOfLineCharacter());
     }
 
-    SourcePrinter(final PrettyPrinterConfiguration configuration) {
-        indentation = configuration.getIndentation();
-        endOfLineCharacter = configuration.getEndOfLineCharacter();
+    SourcePrinter(final PrinterConfiguration configuration) {
+        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), 
+                configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
+    }
+    
+    SourcePrinter(Indentation indentation, String eol) {
+        this.indentation = indentation;
+        this.endOfLineCharacter = eol;
         indents.push("");
     }
 

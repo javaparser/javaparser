@@ -22,13 +22,14 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
-public class TestVisitor extends PrettyPrintVisitor {
+public class TestVisitor extends DefaultPrettyPrinterVisitor {
 
-    public TestVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
-        super(prettyPrinterConfiguration);
+    public TestVisitor(PrinterConfiguration configuration, SourcePrinter printer) {
+        super(configuration, printer);
     }
-
+    
     @Override
     public void visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         printer.print("test");
