@@ -20,27 +20,28 @@
  */
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A type parameter. Examples:
@@ -174,6 +175,12 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         StringBuilder str = new StringBuilder(getNameAsString());
         getTypeBound().ifNonEmpty(l -> str.append(l.stream().map(ClassOrInterfaceType::asString).collect(joining("&", " extends ", ""))));
         return str.toString();
+    }
+    
+    
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", resolve().qualifiedName());
     }
 
     @Override

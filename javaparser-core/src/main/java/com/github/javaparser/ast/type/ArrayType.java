@@ -20,8 +20,17 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -34,13 +43,6 @@ import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.utils.Pair;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -242,6 +244,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public String asString() {
         return componentType.asString() + "[]";
+    }
+    
+    @Override
+    public String toDescriptor() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        sb.append(componentType.toDescriptor());
+        return sb.toString();
     }
 
     @Override

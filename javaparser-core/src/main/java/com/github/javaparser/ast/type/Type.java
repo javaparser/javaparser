@@ -20,7 +20,15 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -28,14 +36,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.ast.Generated;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import java.util.Optional;
 
 /**
  * Base class for types.
@@ -110,6 +112,10 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
         } else {
             return 0;
         }
+    }
+    
+    public String toDescriptor() {
+        return "";
     }
 
     @Override
