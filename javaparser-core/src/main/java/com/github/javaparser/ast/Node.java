@@ -325,10 +325,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @Override
     public final String toString() {
         if (containsData(LINE_SEPARATOR_KEY)) {
+            Printer printer = getPrinter();
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            PrinterConfiguration config = getDefaultPrinterConfiguration();
+            PrinterConfiguration config = printer.getConfiguration();
             config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
-            return getPrinter(config).print(this);
+            printer.setConfiguration(config);
+            return printer.print(this);
         }
         return getPrinter().print(this);
     }
