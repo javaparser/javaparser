@@ -21,8 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import java.util.List;
+
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -30,8 +38,6 @@ import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.List;
 
 /**
  * @author Federico Tomassetti
@@ -51,8 +57,10 @@ public class ExpressionHelper {
      * @return
      */
     public static boolean isPolyExpression(Expression expression) {
+        // On Parenthesized Expressions, if the contained expression is a poly expression (§15.2), the parenthesized expression is also a poly expression. Otherwise, it is a standalone expression.
+        // (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.8.5)
         if (expression instanceof EnclosedExpr) {
-            throw new UnsupportedOperationException(expression.toString());
+            return isPolyExpression(((EnclosedExpr) expression).getInner());
         }
         if (expression instanceof ObjectCreationExpr) {
             // A class instance creation expression is a poly expression (§15.2) if it uses the diamond form for type
@@ -92,12 +100,14 @@ public class ExpressionHelper {
             // Otherwise, the method invocation expression is a standalone expression.
             //return true;
         }
+        //  Method reference expressions are always poly expressions (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)
         if (expression instanceof MethodReferenceExpr) {
-            throw new UnsupportedOperationException(expression.toString());
+            return true;
         }
         if (expression instanceof ConditionalExpr) {
             throw new UnsupportedOperationException(expression.toString());
         }
+        //  Lambda expressions are always poly expressions
         if (expression instanceof LambdaExpr) {
             return true;
         }
