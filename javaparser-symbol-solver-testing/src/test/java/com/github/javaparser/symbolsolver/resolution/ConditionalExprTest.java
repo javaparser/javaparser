@@ -36,7 +36,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 class ConditionalExprTest extends AbstractResolutionTest {
 
     private TypeSolver ts;
-    private ResolvedType stringType;
 
     @BeforeEach
     void setup() {
