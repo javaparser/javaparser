@@ -86,13 +86,6 @@ public class TypeHelper {
         }
         throw new UnsupportedOperationException(type.toString());
     }
-    
-    /*
-     * Returns true if the ResolvedType is a numeric
-     */
-    public static boolean isNumericType(ResolvedType type) {
-        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(type));
-    }
 
     /**
      * see https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
@@ -153,8 +146,8 @@ public class TypeHelper {
 
         // - an unboxing conversion (§5.1.8) optionally followed by a widening primitive conversion
 
-        if (isUnboxable(s) && s.isReferenceType() && t.isPrimitive() &&
-                areCompatibleThroughWideningPrimitiveConversion(toUnboxedType(s.asReferenceType()), t)) {
+        if (s.isReferenceType() && s.asReferenceType().isUnboxable() && t.isPrimitive() &&
+                areCompatibleThroughWideningPrimitiveConversion(s.asReferenceType().toUnboxedType().get(), t)) {
             return true;
         }
 
@@ -169,26 +162,6 @@ public class TypeHelper {
         //throw new UnsupportedOperationException("isCompatibleInALooseInvocationContext unable to decide on s=" + s + ", t=" + t);
         // TODO FIXME
         return t.isAssignableBy(s);
-    }
-
-    public static boolean isUnboxable(ResolvedType referenceType) {
-        if (!referenceType.isReferenceType()) {
-            return false;
-        }
-        return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
-    }
-    
-    /*
-     * Returns true if the reference type can be unboxed to the primitive type
-     * For example : Integer to int
-     */
-    public static boolean isUnboxableTo(ResolvedPrimitiveType primitiveType, ResolvedReferenceType referenceType) {
-        return primitiveType.getBoxTypeQName().equals(referenceType.asReferenceType().describe());
-    }
-
-    public static ResolvedPrimitiveType toUnboxedType(ResolvedReferenceType referenceType) {
-        // perhaps we have to verify that the referenceType is unboxable ?
-        return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> referenceType.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst().get();
     }
 
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
@@ -211,12 +184,8 @@ public class TypeHelper {
         }
     }
 
-    public static boolean isInferenceVariable(ResolvedType type) {
-        return type instanceof InferenceVariable;
-    }
-
     public static Set<InferenceVariable> usedInferenceVariables(ResolvedType type) {
-        if (isInferenceVariable(type)) {
+        if (type.isInferenceVariable()) {
             return new HashSet<>(Arrays.asList((InferenceVariable) type));
         }
         if (type.isReferenceType()) {
