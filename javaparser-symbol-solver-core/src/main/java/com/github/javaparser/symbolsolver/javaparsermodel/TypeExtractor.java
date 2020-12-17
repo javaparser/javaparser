@@ -89,6 +89,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -194,9 +195,148 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
     }
 
+    /*
+     * The conditional operator has three operand expressions. ? appears between the first and second expressions, and
+     * : appears between the second and third expressions.
+     * There are three kinds of conditional expressions, classified according to the second and third operand
+     * expressions: boolean conditional expressions, numeric conditional expressions, and reference conditional
+     * expressions.
+     * The classification rules are as follows:
+     * 1/ If both the second and the third operand expressions are boolean expressions, the conditional expression is a
+     * boolean conditional expression.
+     * 2/ If both the second and the third operand expressions are numeric expressions, the conditional expression is a
+     * numeric conditional expression.
+     * 3/ Otherwise, the conditional expression is a reference conditional expression
+     */
     @Override
     public ResolvedType visit(ConditionalExpr node, Boolean solveLambdas) {
+        ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
+        ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
+        
+        // manage null expression
+        if ( thenExpr.isNull()) {
+            return  elseExpr;
+        }
+        if ( elseExpr.isNull()) {
+            return  thenExpr;
+        }
+        /*
+         * Boolean conditional expressions are standalone expressions
+         * The type of a boolean conditional expression is determined as follows:
+         * If the second and third operands are both of type Boolean, the conditional expression has type Boolean.
+         * Otherwise, the conditional expression has type boolean.
+         */
+        if ( thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN) 
+                && elseExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)) {
+            if (thenExpr.isReferenceType() && elseExpr.isReferenceType()) {
+                return thenExpr.asReferenceType();
+            }
+            return thenExpr.isPrimitive() ? thenExpr : elseExpr;
+        }
+        
+        /*
+         * Numeric conditional expressions are standalone expressions (§15.2).
+         * The type of a numeric conditional expression is determined as follows:
+         * If the second and third operands have the same type, then that is the type of the conditional expression.
+         * If one of the second and third operands is of primitive type T, and the type of the other is the result of
+         * applying boxing conversion (§5.1.7) to T, then the type of the conditional expression is T.
+         * If one of the operands is of type byte or Byte and the other is of type short or Short, then the type of the
+         * conditional expression is short.
+         * If one of the operands is of type T where T is byte, short, or char, and the other operand is a constant
+         * expression (§15.28) of type int whose value is representable in type T, then the type of the conditional
+         * expression is T.
+         * If one of the operands is of type T, where T is Byte, Short, or Character, and the other operand is a
+         * constant expression of type int whose value is representable in the type U which is the result of applying
+         * unboxing conversion to T, then the type of the conditional expression is U.
+         * Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types, and the type of the
+         * conditional expression is the promoted type of the second and third operands.
+         */
+        if (TypeHelper.isNumericType(thenExpr) && TypeHelper.isNumericType(elseExpr)) {
+            ResolvedPrimitiveType[] resolvedPrimitiveTypeSubList = new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR};
+            /*
+             *  If the second and third operands have the same type, then that is the type of the conditional expression.
+             */
+            String qnameTypeThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive().describe()
+                    : thenExpr.asReferenceType().describe();
+            String qnameTypeElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive().describe()
+                    : elseExpr.asReferenceType().describe();
+            if (qnameTypeThenExpr.equals(qnameTypeElseExpr)) {
+                return thenExpr;
+            }
+            /*
+             * If one of the second and third operands is of primitive type T, and the type of the other is the result of
+             * applying boxing conversion (§5.1.7) to T, then the type of the conditional expression is T.
+             */
+            else if ((thenExpr.isPrimitive() && elseExpr.isReferenceType()
+                    && isCompatible(elseExpr.asReferenceType(), thenExpr.asPrimitive()))) {
+                return thenExpr;
+            } else if ((elseExpr.isPrimitive() && thenExpr.isReferenceType()
+                    && isCompatible(thenExpr.asReferenceType(), elseExpr.asPrimitive()))) {
+                return elseExpr;
+            }
+            /*
+             * If one of the operands is of type byte or Byte and the other is of type short or Short, then the type of the
+             * conditional expression is short.
+             */
+            else if ((isCompatible(thenExpr, ResolvedPrimitiveType.BYTE) && isCompatible(elseExpr, ResolvedPrimitiveType.SHORT))
+                    || (isCompatible(elseExpr, ResolvedPrimitiveType.BYTE) && isCompatible(thenExpr, ResolvedPrimitiveType.SHORT))) {
+                return ResolvedPrimitiveType.SHORT;
+            }
+            /*
+             *  If one of the operands is of type T where T is byte, short, or char, and the
+             *  other operand is a constant expression (§15.28) of type int whose value is
+             *  representable in type T, then the type of the conditional expression is T
+             *  How can we know if the constant expression of type int is representable in type T ?
+             *  "The constant expression of type int is representable in type T" is a runtime decision!
+             */
+            else if (thenExpr.isPrimitive() && elseExpr.isPrimitive()) {
+                if (((ResolvedPrimitiveType)thenExpr).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
+                    return thenExpr;
+                } else if (((ResolvedPrimitiveType)elseExpr).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
+                    return elseExpr;
+                }
+            }
+             /*  If one of the operands is of type T, where T is Byte, Short, or Character,
+             * and the other operand is a constant expression of type int whose value is
+             * representable in the type U which is the result of applying unboxing
+             * conversion to T, then the type of the conditional expression is U.
+             * A priori this is a runtime decision!
+             */
+            else if (thenExpr.isReference() && elseExpr.isPrimitive()
+                    && TypeHelper.toUnboxedType(thenExpr.asReferenceType()).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
+                return TypeHelper.toUnboxedType(thenExpr.asReferenceType());
+            } else if (elseExpr.isReference() && thenExpr.isPrimitive()
+                    && TypeHelper.toUnboxedType(elseExpr.asReferenceType()).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
+                return TypeHelper.toUnboxedType(elseExpr.asReferenceType());
+            }
+             
+            /* Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
+             * and the type of the conditional expression is the promoted type of the second
+             * and third operands.
+             */
+            ResolvedPrimitiveType PrimitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
+                    : TypeHelper.toUnboxedType(thenExpr.asReferenceType());
+            ResolvedPrimitiveType PrimitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
+                    : TypeHelper.toUnboxedType(elseExpr.asReferenceType());
+            return PrimitiveThenExpr.bnp(PrimitiveElseExpr);
+        }
+        
+        /*
+         * Otherwise, the conditional expression is a reference conditional expression.
+         * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3). 
+         * Otherwise, it is a standalone expression.
+         * TODO : must be implemented
+         */
         return node.getThenExpr().accept(this, solveLambdas);
+    }
+    
+    private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
+        return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
+        || (resolvedType.isReferenceType() && TypeHelper.isUnboxableTo(primitiveType, resolvedType.asReferenceType()));
     }
 
     @Override
