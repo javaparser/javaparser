@@ -572,10 +572,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * For example : Integer to int
      */
     public boolean isUnboxable() {
-        if (!this.isReferenceType()) {
-            return false;
-        }
-        return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> this.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName()));
+        return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> getQualifiedName().equals(pt.getBoxTypeQName()));
     }
     
     /*

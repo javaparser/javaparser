@@ -111,15 +111,19 @@ class ConditionalExprTest extends AbstractResolutionTest {
         code = "class A { public void m() { char r =  true ? Character.valueOf(Character.MIN_VALUE) : 1;}}";
         ResolvedType rt11 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
         assertEquals("char", rt11.describe());
+        // reverse position of the reference type parameter
+        code = "class A { public void m() { char r =  true ? 1 : Character.valueOf(Character.MIN_VALUE);}}";
+        ResolvedType rt12 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("char", rt12.describe());
         // Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
         // and the type of the conditional expression is the promoted type of the second
         // and third operands.
         code = "class A { public void m() { long r = true ? 1L : 1;}}";
-        ResolvedType rt12 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-        assertEquals("long", rt12.describe());
-        code = "class A { public void m() { long r = true ? 1.0 : 1F;}}";
         ResolvedType rt13 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-        assertEquals("double", rt13.describe());
+        assertEquals("long", rt13.describe());
+        code = "class A { public void m() { long r = true ? 1.0 : 1F;}}";
+        ResolvedType rt14 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("double", rt14.describe());
         
     }
 
