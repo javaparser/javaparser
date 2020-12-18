@@ -89,7 +89,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -251,7 +250,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
          * Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types, and the type of the
          * conditional expression is the promoted type of the second and third operands.
          */
-        if (TypeHelper.isNumericType(thenExpr) && TypeHelper.isNumericType(elseExpr)) {
+        if (thenExpr.isNumericType() && elseExpr.isNumericType()) {
             ResolvedPrimitiveType[] resolvedPrimitiveTypeSubList = new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR};
             /*
              *  If the second and third operands have the same type, then that is the type of the conditional expression.
@@ -305,13 +304,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              * A priori this is a runtime decision!
              */
             else if (thenExpr.isReference() && elseExpr.isPrimitive()
-                    && TypeHelper.toUnboxedType(thenExpr.asReferenceType()).in(resolvedPrimitiveTypeSubList)
+                    && thenExpr.asReferenceType().isUnboxable()
+                    && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
                     && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
-                return TypeHelper.toUnboxedType(thenExpr.asReferenceType());
+                return thenExpr.asReferenceType().toUnboxedType().get();
             } else if (elseExpr.isReference() && thenExpr.isPrimitive()
-                    && TypeHelper.toUnboxedType(elseExpr.asReferenceType()).in(resolvedPrimitiveTypeSubList)
+                    && elseExpr.asReferenceType().isUnboxable()
+                    && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
                     && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
-                return TypeHelper.toUnboxedType(elseExpr.asReferenceType());
+                return elseExpr.asReferenceType().toUnboxedType().get();
             }
              
             /* Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
@@ -319,9 +320,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              * and third operands.
              */
             ResolvedPrimitiveType PrimitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
-                    : TypeHelper.toUnboxedType(thenExpr.asReferenceType());
+                    : thenExpr.asReferenceType().toUnboxedType().get();
             ResolvedPrimitiveType PrimitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
-                    : TypeHelper.toUnboxedType(elseExpr.asReferenceType());
+                    : elseExpr.asReferenceType().toUnboxedType().get();
             return PrimitiveThenExpr.bnp(PrimitiveElseExpr);
         }
         
@@ -336,7 +337,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
         return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
-        || (resolvedType.isReferenceType() && TypeHelper.isUnboxableTo(primitiveType, resolvedType.asReferenceType()));
+        || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
     }
 
     @Override

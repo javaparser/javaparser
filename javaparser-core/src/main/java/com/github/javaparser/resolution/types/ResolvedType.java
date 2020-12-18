@@ -21,11 +21,12 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * <p>A resolved type. </p>
@@ -124,6 +125,10 @@ public interface ResolvedType {
     default boolean isWildcard() {
         return false;
     }
+    
+    default boolean isInferenceVariable() {
+        return false;
+    }
 
     ///
     /// Downcasting
@@ -202,5 +207,12 @@ public interface ResolvedType {
      * This method checks if ThisType t = new OtherType() would compile.
      */
     boolean isAssignableBy(ResolvedType other);
-
+    
+    /*
+     * Returns true if the ResolvedType is a numeric
+     */
+    default boolean isNumericType() {
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(this));
+    }
+    
 }

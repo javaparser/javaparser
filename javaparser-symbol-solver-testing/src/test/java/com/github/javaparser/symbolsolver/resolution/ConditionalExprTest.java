@@ -30,13 +30,9 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 class ConditionalExprTest extends AbstractResolutionTest {
-
-    private TypeSolver ts;
-    private ResolvedType stringType;
 
     @BeforeEach
     void setup() {
