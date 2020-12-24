@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -38,11 +43,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
+import com.github.javaparser.symbolsolver.utils.Cacheable;
 
 /**
  * @author Federico Tomassetti
@@ -187,6 +188,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         return super.solveWithAsValue(symbolDeclarator, name);
     }
 
+    @Cacheable
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
 
