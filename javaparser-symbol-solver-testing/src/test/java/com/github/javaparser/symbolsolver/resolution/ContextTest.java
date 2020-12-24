@@ -21,6 +21,22 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -35,8 +51,25 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
@@ -58,22 +91,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.github.javaparser.symbolsolver.utils.ProxyCacheHandler;
 
 class ContextTest extends AbstractSymbolResolutionTest {
 
@@ -1437,6 +1455,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertEquals(2, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)
+                    clearCache();
                     MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
@@ -1445,6 +1464,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
@@ -1475,6 +1495,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertEquals(4, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)
+                    clearCache();
                     MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
@@ -1483,6 +1504,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
@@ -1490,6 +1512,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertTrue(s_string.getCorrespondingDeclaration().isPattern());
 
                     // The third one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
@@ -1497,6 +1520,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
@@ -1527,6 +1551,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertEquals(4, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)
+                    clearCache();
                     MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
@@ -1534,6 +1559,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertFalse(s_list.getCorrespondingDeclaration().isPattern());
 
                     // The second one should resolve to the standard variable (the list).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
@@ -1541,6 +1567,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertFalse(s_string.getCorrespondingDeclaration().isPattern());
 
                     // The third one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
@@ -1548,6 +1575,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
+                    clearCache();
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
@@ -1557,6 +1585,10 @@ class ContextTest extends AbstractSymbolResolutionTest {
             }
         }
 
+    }
+    
+    private void clearCache() {
+        ProxyCacheHandler.clearCache();
     }
 
 }
