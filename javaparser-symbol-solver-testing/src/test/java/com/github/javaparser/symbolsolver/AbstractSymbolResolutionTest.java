@@ -29,6 +29,7 @@ import org.junit.jupiter.api.AfterEach;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.symbolsolver.utils.ProxyCacheHandler;
 import com.github.javaparser.utils.CodeGenerationUtils;
 
 public abstract class AbstractSymbolResolutionTest {
@@ -38,6 +39,8 @@ public abstract class AbstractSymbolResolutionTest {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
         StaticJavaParser.setConfiguration(new ParserConfiguration());
+        // clear a per thread local cache
+        ProxyCacheHandler.clearCache();
     }
     
     /**
